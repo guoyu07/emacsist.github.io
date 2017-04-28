@@ -1,0 +1,850 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="postgresql," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="PostgreSQL获取部分结果集中再获取最大值最小值的结果集假设表结构如下。想要获取create_at在某时间范围的内的，最大的以及最小的use_id的值的所有结果. 1234567891011121314151617181920212223242526272829[local]:5432 sky@sky=# \d wb_status">
+<meta name="keywords" content="postgresql">
+<meta property="og:type" content="article">
+<meta property="og:title" content=" PostgreSQL获取部分结果集中再获取最大值最小值的结果集">
+<meta property="og:url" content="https://emacsist.github.io/2016/08/19/archives/PostgreSQL获取部分结果集中再获取最大值最小值的结果集/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="PostgreSQL获取部分结果集中再获取最大值最小值的结果集假设表结构如下。想要获取create_at在某时间范围的内的，最大的以及最小的use_id的值的所有结果. 1234567891011121314151617181920212223242526272829[local]:5432 sky@sky=# \d wb_status">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content=" PostgreSQL获取部分结果集中再获取最大值最小值的结果集">
+<meta name="twitter:description" content="PostgreSQL获取部分结果集中再获取最大值最小值的结果集假设表结构如下。想要获取create_at在某时间范围的内的，最大的以及最小的use_id的值的所有结果. 1234567891011121314151617181920212223242526272829[local]:5432 sky@sky=# \d wb_status">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: false,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://emacsist.github.io/2016/08/19/archives/PostgreSQL获取部分结果集中再获取最大值最小值的结果集/"/>
+
+
+
+
+
+  <title> PostgreSQL获取部分结果集中再获取最大值最小值的结果集 | emacsist</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">emacsist</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heart"></i> <br />
+            
+            书
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://emacsist.github.io/2016/08/19/archives/PostgreSQL获取部分结果集中再获取最大值最小值的结果集/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="emacsist">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="emacsist">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                 PostgreSQL获取部分结果集中再获取最大值最小值的结果集
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-19T14:37:14+08:00">
+                2016-08-19
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2016-11-11T21:42:33+08:00">
+                2016-11-11
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/postgresql/" itemprop="url" rel="index">
+                    <span itemprop="name">postgresql</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/postgresql/database/" itemprop="url" rel="index">
+                    <span itemprop="name">database</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="PostgreSQL获取部分结果集中再获取最大值最小值的结果集"><a href="#PostgreSQL获取部分结果集中再获取最大值最小值的结果集" class="headerlink" title="PostgreSQL获取部分结果集中再获取最大值最小值的结果集"></a>PostgreSQL获取部分结果集中再获取最大值最小值的结果集</h2><p>假设表结构如下。想要获取<code>create_at</code>在某时间范围的内的，最大的以及最小的<code>use_id</code>的值的所有结果.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># \d wb_status</span></div><div class="line">                                           Table <span class="string">"public.wb_status"</span></div><div class="line">         Column         |            Type             |                       Modifiers                        </div><div class="line">------------------------+-----------------------------+--------------------------------------------------------</div><div class="line"> id                     | <span class="built_in">integer</span>                     | not null default nextval(<span class="string">'wb_status_id_seq'</span>::regclass)</div><div class="line"> sid                    | bigint                      | not null default <span class="string">'0'</span>::bigint</div><div class="line"> idstr                  | character varying(64)       | not null default <span class="string">''</span>::character varying</div><div class="line"> mid                    | bigint                      | default <span class="string">'0'</span>::bigint</div><div class="line"> user_id                | bigint                      | </div><div class="line"> user_screen_name       | character varying(32)       | not null default <span class="string">''</span>::character varying</div><div class="line"> user_profile_image_url | character varying(128)      | not null default <span class="string">''</span>::character varying</div><div class="line"> text                   | character varying(512)      | not null default <span class="string">''</span>::character varying</div><div class="line"> <span class="built_in">source</span>                 | character varying(256)      | not null default <span class="string">''</span>::character varying</div><div class="line"> thumbnail_pic          | character varying(256)      | not null default <span class="string">''</span>::character varying</div><div class="line"> bmiddle_pic            | character varying(256)      | not null default <span class="string">''</span>::character varying</div><div class="line"> original_pic           | character varying(256)      | not null default <span class="string">''</span>::character varying</div><div class="line"> retweeted_status_id    | character varying(32)       | not null default <span class="string">''</span>::character varying</div><div class="line"> geo                    | character varying(256)      | default <span class="string">''</span>::character varying</div><div class="line"> reposts_count          | <span class="built_in">integer</span>                     | default 0</div><div class="line"> comments_count         | <span class="built_in">integer</span>                     | default 0</div><div class="line"> attitudes_count        | <span class="built_in">integer</span>                     | default 0</div><div class="line"> visible                | character varying(64)       | not null default <span class="string">''</span>::character varying</div><div class="line"> pic_urls               | character varying(1024)     | not null default <span class="string">''</span>::character varying</div><div class="line"> create_at              | timestamp without time zone | not null default now()</div><div class="line"> update_at              | timestamp without time zone | not null default now()</div><div class="line"> ad                     | character varying(256)      | not null default <span class="string">''</span>::character varying</div><div class="line"> is_deleted             | smallint                    | not null default <span class="string">'0'</span>::smallint</div><div class="line"></div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<h3 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># with tmp as (SELECT * from wb_status where create_at &gt;= '2015-03-15' and create_at &lt; '2015-03-16'), r as (select max(user_id) as mx, min(user_id) as mi from tmp) select * from tmp inner join r on tmp.user_id = r.mx or tmp.user_id = r.mi;</span></div><div class="line">Time: 128.032 ms</div><div class="line"></div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># explain (analyze, verbose, buffers) with tmp as (SELECT * from wb_status where create_at &gt;= '2015-03-15' and create_at &lt; '2015-03-16'), r as (select max(user_id) as mx, min(user_id) as mi from tmp) select * from tmp inner join r on tmp.user_id = r.mx or tmp.user_id = r.mi;</span></div><div class="line">                                                                                                                                                                                                                                                           QUERY PLAN                                                                                                                                                                                                                                                            </div><div class="line">---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</div><div class="line"> Nested Loop  (cost=83681.38..83694.49 rows=4 width=4932) (actual time=123.466..123.573 rows=2 loops=1)</div><div class="line">   Output: tmp.id, tmp.sid, tmp.idstr, tmp.mid, tmp.user_id, tmp.user_screen_name, tmp.user_profile_image_url, tmp.text, tmp.source, tmp.thumbnail_pic, tmp.bmiddle_pic, tmp.original_pic, tmp.retweeted_status_id, tmp.geo, tmp.reposts_count, tmp.comments_count, tmp.attitudes_count, tmp.visible, tmp.pic_urls, tmp.create_at, tmp.update_at, tmp.ad, tmp.is_deleted, r.mx, r.mi</div><div class="line">   Join Filter: ((tmp.user_id = r.mx) OR (tmp.user_id = r.mi))</div><div class="line">   Rows Removed by Join Filter: 763</div><div class="line">   Buffers: shared hit=2031 <span class="built_in">read</span>=71628</div><div class="line">   CTE tmp</div><div class="line">     -&gt;  Gather  (cost=1000.00..83672.02 rows=374 width=372) (actual time=0.156..122.751 rows=765 loops=1)</div><div class="line">           Output: wb_status.id, wb_status.sid, wb_status.idstr, wb_status.mid, wb_status.user_id, wb_status.user_screen_name, wb_status.user_profile_image_url, wb_status.text, wb_status.source, wb_status.thumbnail_pic, wb_status.bmiddle_pic, wb_status.original_pic, wb_status.retweeted_status_id, wb_status.geo, wb_status.reposts_count, wb_status.comments_count, wb_status.attitudes_count, wb_status.visible, wb_status.pic_urls, wb_status.create_at, wb_status.update_at, wb_status.ad, wb_status.is_deleted</div><div class="line">           Workers Planned: 2</div><div class="line">           Workers Launched: 2</div><div class="line">           Buffers: shared hit=2031 <span class="built_in">read</span>=71628</div><div class="line">           -&gt;  Parallel Seq Scan on public.wb_status  (cost=0.00..82634.62 rows=156 width=372) (actual time=0.359..120.620 rows=255 loops=3)</div><div class="line">                 Output: wb_status.id, wb_status.sid, wb_status.idstr, wb_status.mid, wb_status.user_id, wb_status.user_screen_name, wb_status.user_profile_image_url, wb_status.text, wb_status.source, wb_status.thumbnail_pic, wb_status.bmiddle_pic, wb_status.original_pic, wb_status.retweeted_status_id, wb_status.geo, wb_status.reposts_count, wb_status.comments_count, wb_status.attitudes_count, wb_status.visible, wb_status.pic_urls, wb_status.create_at, wb_status.update_at, wb_status.ad, wb_status.is_deleted</div><div class="line">                 Filter: ((wb_status.create_at &gt;= <span class="string">'2015-03-15 00:00:00'</span>::timestamp without time zone) AND (wb_status.create_at &lt; <span class="string">'2015-03-16 00:00:00'</span>::timestamp without time zone))</div><div class="line">                 Rows Removed by Filter: 456744</div><div class="line">                 Buffers: shared hit=1825 <span class="built_in">read</span>=71628</div><div class="line">                 Worker 0: actual time=0.215..118.234 rows=71 loops=1</div><div class="line">                   Buffers: shared hit=566 <span class="built_in">read</span>=23219</div><div class="line">                 Worker 1: actual time=0.855..121.365 rows=658 loops=1</div><div class="line">                   Buffers: shared hit=575 <span class="built_in">read</span>=24297</div><div class="line">   CTE r</div><div class="line">     -&gt;  Aggregate  (cost=9.35..9.36 rows=1 width=16) (actual time=123.370..123.370 rows=1 loops=1)</div><div class="line">           Output: max(tmp_1.user_id), min(tmp_1.user_id)</div><div class="line">           Buffers: shared hit=2031 <span class="built_in">read</span>=71628</div><div class="line">           -&gt;  CTE Scan on tmp tmp_1  (cost=0.00..7.48 rows=374 width=8) (actual time=0.159..123.271 rows=765 loops=1)</div><div class="line">                 Output: tmp_1.id, tmp_1.sid, tmp_1.idstr, tmp_1.mid, tmp_1.user_id, tmp_1.user_screen_name, tmp_1.user_profile_image_url, tmp_1.text, tmp_1.source, tmp_1.thumbnail_pic, tmp_1.bmiddle_pic, tmp_1.original_pic, tmp_1.retweeted_status_id, tmp_1.geo, tmp_1.reposts_count, tmp_1.comments_count, tmp_1.attitudes_count, tmp_1.visible, tmp_1.pic_urls, tmp_1.create_at, tmp_1.update_at, tmp_1.ad, tmp_1.is_deleted</div><div class="line">                 Buffers: shared hit=2031 <span class="built_in">read</span>=71628</div><div class="line">   -&gt;  CTE Scan on r  (cost=0.00..0.02 rows=1 width=16) (actual time=123.372..123.372 rows=1 loops=1)</div><div class="line">         Output: r.mx, r.mi</div><div class="line">         Buffers: shared hit=2031 <span class="built_in">read</span>=71628</div><div class="line">   -&gt;  CTE Scan on tmp  (cost=0.00..7.48 rows=374 width=4916) (actual time=0.001..0.118 rows=765 loops=1)</div><div class="line">         Output: tmp.id, tmp.sid, tmp.idstr, tmp.mid, tmp.user_id, tmp.user_screen_name, tmp.user_profile_image_url, tmp.text, tmp.source, tmp.thumbnail_pic, tmp.bmiddle_pic, tmp.original_pic, tmp.retweeted_status_id, tmp.geo, tmp.reposts_count, tmp.comments_count, tmp.attitudes_count, tmp.visible, tmp.pic_urls, tmp.create_at, tmp.update_at, tmp.ad, tmp.is_deleted</div><div class="line"> Planning time: 0.108 ms</div><div class="line"> Execution time: 124.163 ms</div><div class="line">(34 rows)</div><div class="line"></div><div class="line">(END)</div><div class="line"></div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># SELECT count(1) from wb_status;</span></div><div class="line">  count  </div><div class="line">---------</div><div class="line"> 1370996</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 91.415 ms</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      emacsist
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://emacsist.github.io/2016/08/19/archives/PostgreSQL获取部分结果集中再获取最大值最小值的结果集/" title=" PostgreSQL获取部分结果集中再获取最大值最小值的结果集">https://emacsist.github.io/2016/08/19/archives/PostgreSQL获取部分结果集中再获取最大值最小值的结果集/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/postgresql/" rel="tag"># postgresql</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/22/archives/Terminator启动时恢复layout并执行初始命令/" rel="next" title="Terminator启动时恢复layout并执行初始命令">
+                <i class="fa fa-chevron-left"></i> Terminator启动时恢复layout并执行初始命令
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/08/18/archives/PostgreSQL9-6并行查询/" rel="prev" title=" PostgreSQL9.6并行查询">
+                 PostgreSQL9.6并行查询 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/avatar.png"
+               alt="emacsist" />
+          <p class="site-author-name" itemprop="name">emacsist</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">295</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">69</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">142</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emacsist" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/emacist" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#PostgreSQL获取部分结果集中再获取最大值最小值的结果集"><span class="nav-number">1.</span> <span class="nav-text">PostgreSQL获取部分结果集中再获取最大值最小值的结果集</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL"><span class="nav-number">1.1.</span> <span class="nav-text">SQL</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">emacsist</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2132003"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

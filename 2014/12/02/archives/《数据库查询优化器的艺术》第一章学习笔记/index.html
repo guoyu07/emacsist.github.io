@@ -1,0 +1,907 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="postgresql,database," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="数据库管理系统数据定义 数据操纵 数据库的运行管理 数据库的建立和维护等 查询优化的目标使查询优化引擎生成一个执行策略的过程，尽量使查询的总开销（IO，CPU，网络传输等）达到最小。 查询优化技术（广义）查询重用技术 查询重写规则 查询算法优化技术 并行查询优化技术 分布式查询优化技术 其他方面（如框架结构）的优化技术 查询优化技术（狭义）查询重写规则 查询算法优化 代数优化（逻辑优化）主要依据关">
+<meta name="keywords" content="postgresql,database">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《数据库查询优化器的艺术》第一章学习笔记">
+<meta property="og:url" content="https://emacsist.github.io/2014/12/02/archives/《数据库查询优化器的艺术》第一章学习笔记/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="数据库管理系统数据定义 数据操纵 数据库的运行管理 数据库的建立和维护等 查询优化的目标使查询优化引擎生成一个执行策略的过程，尽量使查询的总开销（IO，CPU，网络传输等）达到最小。 查询优化技术（广义）查询重用技术 查询重写规则 查询算法优化技术 并行查询优化技术 分布式查询优化技术 其他方面（如框架结构）的优化技术 查询优化技术（狭义）查询重写规则 查询算法优化 代数优化（逻辑优化）主要依据关">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《数据库查询优化器的艺术》第一章学习笔记">
+<meta name="twitter:description" content="数据库管理系统数据定义 数据操纵 数据库的运行管理 数据库的建立和维护等 查询优化的目标使查询优化引擎生成一个执行策略的过程，尽量使查询的总开销（IO，CPU，网络传输等）达到最小。 查询优化技术（广义）查询重用技术 查询重写规则 查询算法优化技术 并行查询优化技术 分布式查询优化技术 其他方面（如框架结构）的优化技术 查询优化技术（狭义）查询重写规则 查询算法优化 代数优化（逻辑优化）主要依据关">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: false,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://emacsist.github.io/2014/12/02/archives/《数据库查询优化器的艺术》第一章学习笔记/"/>
+
+
+
+
+
+  <title>《数据库查询优化器的艺术》第一章学习笔记 | emacsist</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">emacsist</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heart"></i> <br />
+            
+            书
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://emacsist.github.io/2014/12/02/archives/《数据库查询优化器的艺术》第一章学习笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="emacsist">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="emacsist">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                《数据库查询优化器的艺术》第一章学习笔记
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-12-02T19:05:02+08:00">
+                2014-12-02
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2016-11-11T21:42:33+08:00">
+                2016-11-11
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/postgresql/" itemprop="url" rel="index">
+                    <span itemprop="name">postgresql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="数据库管理系统"><a href="#数据库管理系统" class="headerlink" title="数据库管理系统"></a>数据库管理系统</h1><pre><code>数据定义
+数据操纵
+数据库的运行管理
+数据库的建立和维护等
+</code></pre><h1 id="查询优化的目标"><a href="#查询优化的目标" class="headerlink" title="查询优化的目标"></a>查询优化的目标</h1><pre><code>使查询优化引擎生成一个执行策略的过程，尽量使查询的总开销（IO，CPU，网络传输等）达到最小。
+</code></pre><h1 id="查询优化技术（广义）"><a href="#查询优化技术（广义）" class="headerlink" title="查询优化技术（广义）"></a>查询优化技术（广义）</h1><pre><code>查询重用技术
+查询重写规则
+查询算法优化技术
+并行查询优化技术
+分布式查询优化技术
+其他方面（如框架结构）的优化技术
+</code></pre><h1 id="查询优化技术（狭义）"><a href="#查询优化技术（狭义）" class="headerlink" title="查询优化技术（狭义）"></a>查询优化技术（狭义）</h1><pre><code>查询重写规则
+查询算法优化
+</code></pre><h1 id="代数优化（逻辑优化）"><a href="#代数优化（逻辑优化）" class="headerlink" title="代数优化（逻辑优化）"></a>代数优化（逻辑优化）</h1><pre><code>主要依据关系代数的等价变换做一些逻辑变换。查询重写规则属于逻辑优化。
+</code></pre><h1 id="非代数优化（物理优化）"><a href="#非代数优化（物理优化）" class="headerlink" title="非代数优化（物理优化）"></a>非代数优化（物理优化）</h1><pre><code>主要根据数据读取，表连接方式，表连接顺序，排序等技术对查询进行优化。查询算法优化，属于物理优化。运用了基于代价估算的多表连接算法求解最小花费的技术。
+</code></pre><h1 id="数据库调优"><a href="#数据库调优" class="headerlink" title="数据库调优"></a>数据库调优</h1><pre><code>目标是使数据库有更高的吞吐量以及更短的响应时间。它是全局的。而查询优化技术是SQL层面的，局部的优化。
+</code></pre><h1 id="查询重用"><a href="#查询重用" class="headerlink" title="查询重用"></a>查询重用</h1><pre><code>指尽可能利用先前的执行结果，以达到节约查询计算全过程的时间并减少资源消耗的目的。
+（1）查询结果的重用
+在缓冲区分配一块缓冲块，存放该SQL语句文本和最后的结果集，当遇到同样的SQL输入时，可直接把结果返回。它节约了查询计划生成时间和查询执行过程的时间，减少了查询执行全过程的资源消耗。
+
+（2）查询计划的重用
+缓存一条查询语句的执行计划及其相应语法树结构。查询计划的重用技术减少了查询计划生成的时间和资源消耗
+</code></pre><h1 id="查询重写规则"><a href="#查询重写规则" class="headerlink" title="查询重写规则"></a>查询重写规则</h1><pre><code>它是一种等价转换。即对于任何相关模式的任意状态都会产生相同的结果。目标：
+（1）将查询转换为等价的，效率更高的形式。
+（2）尽量将查询重写为等价，简单且不受表顺序限制的形式，为物理查询优化阶段提供更多的选择。如：视图的重写，子查询的合并转换等。
+重写的主要依据是关系代数。它是查询重写规则的理论支持。
+它有3个角度，第4个是物理优化。
+（1）语法级
+（2）代数级
+（3）语义级
+（4）物理级：即基于代价估算模型，比较得出代价最小的，是从连接路径中选择代价最小的路径的过程。
+
+主要思路：
+1）将过程性查询转换为描述性的查询，如视图重写
+2）将复杂的查询（嵌套子查询，外连接，嵌套连接）尽可能转换为多表连接查询
+3）将效率低的谓词转换为等价的效率高的谓词（如等价谓词重写）
+4）利用等式和不等式的性质，简化 WHERE， HAVING 和 ON 条件
+
+核心是：等价转换，只有等价才能转换。
+</code></pre><h1 id="查询算法优化"><a href="#查询算法优化" class="headerlink" title="查询算法优化"></a>查询算法优化</h1><pre><code>查询优化即求解给定查询语句的高效执行计划的过程。
+
+单表结点获取数据的方式有：
+（1）直接通过IO获取
+（2）通过索引获取数据
+（3）通过索引定位数据的位置再经IO到数据块中获取数据
+这是从物理存储到内存解析成逻辑字段的过程。
+
+查询计划的策略：
+（1）基于规则优化
+（2）基于代价优化。
+PG和MySQL采取了基于规则和代价估算的查询优化策略。
+</code></pre><h1 id="多表连接优化算法"><a href="#多表连接优化算法" class="headerlink" title="多表连接优化算法"></a>多表连接优化算法</h1><pre><code>SYSTEM-R算法
+启发式搜索算法 
+贪婪算法 
+动态规划算法
+遗传算法
+</code></pre><h1 id="并行查询优化"><a href="#并行查询优化" class="headerlink" title="并行查询优化"></a>并行查询优化</h1><pre><code>单机：找到查询的一个具有最小执行花费的执行计划
+并行：寻找具有最小响应时间的查询执行计划
+
+并行查询：
+（1）操作内并行：将同一操作，如单表扫描操作，两表连接操作，排序操作等分解成多个独立的子操作，由不同的CPU同时执行。
+（2）操作间并行：一条SQL查询语句可以分解成多个子操作，由多个CPU执行。
+</code></pre><h1 id="分布式查询优化"><a href="#分布式查询优化" class="headerlink" title="分布式查询优化"></a>分布式查询优化</h1><pre><code>查询策略优化（主要是数据传输策略）和局部处理优化（传统的单结点数据库的查询优化技术）是查询优化的重点。
+
+主要目标：
+减少传输的次数和数据量
+
+分布式代价估算模型
+总代价 = IO代价 + CPU代价 + 通信代价
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      emacsist
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://emacsist.github.io/2014/12/02/archives/《数据库查询优化器的艺术》第一章学习笔记/" title="《数据库查询优化器的艺术》第一章学习笔记">https://emacsist.github.io/2014/12/02/archives/《数据库查询优化器的艺术》第一章学习笔记/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/postgresql/" rel="tag"># postgresql</a>
+          
+            <a href="/tags/database/" rel="tag"># database</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/12/02/archives/自行测试的1亿条数据中PostgreSQL性能/" rel="next" title="自行测试的1亿条数据中PostgreSQL性能">
+                <i class="fa fa-chevron-left"></i> 自行测试的1亿条数据中PostgreSQL性能
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/12/01/archives/翻译-PostgreSQL中的死锁/" rel="prev" title="[翻译]PostgreSQL中的死锁">
+                [翻译]PostgreSQL中的死锁 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/avatar.png"
+               alt="emacsist" />
+          <p class="site-author-name" itemprop="name">emacsist</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">295</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">69</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">142</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emacsist" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/emacist" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据库管理系统"><span class="nav-number">1.</span> <span class="nav-text">数据库管理系统</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查询优化的目标"><span class="nav-number">2.</span> <span class="nav-text">查询优化的目标</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查询优化技术（广义）"><span class="nav-number">3.</span> <span class="nav-text">查询优化技术（广义）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查询优化技术（狭义）"><span class="nav-number">4.</span> <span class="nav-text">查询优化技术（狭义）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代数优化（逻辑优化）"><span class="nav-number">5.</span> <span class="nav-text">代数优化（逻辑优化）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#非代数优化（物理优化）"><span class="nav-number">6.</span> <span class="nav-text">非代数优化（物理优化）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据库调优"><span class="nav-number">7.</span> <span class="nav-text">数据库调优</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查询重用"><span class="nav-number">8.</span> <span class="nav-text">查询重用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查询重写规则"><span class="nav-number">9.</span> <span class="nav-text">查询重写规则</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查询算法优化"><span class="nav-number">10.</span> <span class="nav-text">查询算法优化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#多表连接优化算法"><span class="nav-number">11.</span> <span class="nav-text">多表连接优化算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#并行查询优化"><span class="nav-number">12.</span> <span class="nav-text">并行查询优化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分布式查询优化"><span class="nav-number">13.</span> <span class="nav-text">分布式查询优化</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">emacsist</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2132003"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

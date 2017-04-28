@@ -1,0 +1,904 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,spring,spring-boot," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="官方建议的代码目录 1234567891011121314com +- example     +- myproject         +- Application.java         |         +- domain         |   +- Customer.java         |   +- CustomerRepository.java         |">
+<meta name="keywords" content="java,spring,spring-boot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Boot 学习之基本概念及使用">
+<meta property="og:url" content="https://emacsist.github.io/2016/02/14/archives/Spring Boot 学习之基本概念及使用/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="官方建议的代码目录 1234567891011121314com +- example     +- myproject         +- Application.java         |         +- domain         |   +- Customer.java         |   +- CustomerRepository.java         |">
+<meta property="og:updated_time" content="2017-03-07T04:24:24.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring Boot 学习之基本概念及使用">
+<meta name="twitter:description" content="官方建议的代码目录 1234567891011121314com +- example     +- myproject         +- Application.java         |         +- domain         |   +- Customer.java         |   +- CustomerRepository.java         |">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: false,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://emacsist.github.io/2016/02/14/archives/Spring Boot 学习之基本概念及使用/"/>
+
+
+
+
+
+  <title>Spring Boot 学习之基本概念及使用 | emacsist</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">emacsist</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heart"></i> <br />
+            
+            书
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://emacsist.github.io/2016/02/14/archives/Spring Boot 学习之基本概念及使用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="emacsist">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="emacsist">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Spring Boot 学习之基本概念及使用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-02-14T12:11:59+08:00">
+                2016-02-14
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2017-03-07T12:24:24+08:00">
+                2017-03-07
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>官方建议的代码目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">com</div><div class="line"> +- example</div><div class="line">     +- myproject</div><div class="line">         +- Application.java</div><div class="line">         |</div><div class="line">         +- domain</div><div class="line">         |   +- Customer.java</div><div class="line">         |   +- CustomerRepository.java</div><div class="line">         |</div><div class="line">         +- service</div><div class="line">         |   +- CustomerService.java</div><div class="line">         |</div><div class="line">         +- web</div><div class="line">             +- CustomerController.java</div></pre></td></tr></table></figure>
+<h2 id="Application-java-典型的代码"><a href="#Application-java-典型的代码" class="headerlink" title="Application.java 典型的代码"></a>Application.java 典型的代码</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">package com.example.myproject;</div><div class="line"></div><div class="line">import org.springframework.boot.SpringApplication;</div><div class="line">import org.springframework.boot.autoconfigure.EnableAutoConfiguration;</div><div class="line">import org.springframework.context.annotation.ComponentScan;</div><div class="line">import org.springframework.context.annotation.Configuration;</div><div class="line"></div><div class="line">@Configuration</div><div class="line">@EnableAutoConfiguration</div><div class="line">@ComponentScan</div><div class="line">public class Application &#123;</div><div class="line"></div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        SpringApplication.run(Application.class, args);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="ComponentScan"><a href="#ComponentScan" class="headerlink" title="@ComponentScan"></a>@ComponentScan</h2><p>它会扫描(@Component, @Service, @Repository, @Controller）等这些注解，并自动注册为Spring Bean</p>
+<h2 id="SpringBootApplication"><a href="#SpringBootApplication" class="headerlink" title="@SpringBootApplication"></a>@SpringBootApplication</h2><p>等同于同时使用(@Configuration, @EnableAutoConfiguration, @Componentscan)这些注解.</p>
+<h2 id="运行Spring-Boot"><a href="#运行Spring-Boot" class="headerlink" title="运行Spring Boot"></a>运行Spring Boot</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">java -jar target/myproject-0.0.1-SNAPSHOT.jar</div><div class="line"></div><div class="line">或者</div><div class="line">java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,<span class="built_in">suspend</span>=n -jar target/myproject-0.0.1-SNAPSHOT.jar</div><div class="line"></div><div class="line">或者</div><div class="line"><span class="built_in">export</span> MAVEN_OPTS=-Xmx1024m -XX:MaxPermSize=128M -Djava.security.egd=file:/dev/./urandom</div><div class="line">mvn spring-boot:run</div><div class="line"></div><div class="line">或者</div></pre></td></tr></table></figure>
+<h2 id="默认的配置文件名"><a href="#默认的配置文件名" class="headerlink" title="默认的配置文件名"></a>默认的配置文件名</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">application.properties</div></pre></td></tr></table></figure>
+<h2 id="父，子容器设置"><a href="#父，子容器设置" class="headerlink" title="父，子容器设置"></a>父，子容器设置</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">new SpringApplicationBuilder()</div><div class="line">    .bannerMode(Banner.Mode.OFF)</div><div class="line">    .sources(Parent.class)</div><div class="line">    .child(Application.class)</div><div class="line">    .run(args);</div></pre></td></tr></table></figure>
+<h2 id="Spring-boot-中事件监听"><a href="#Spring-boot-中事件监听" class="headerlink" title="Spring boot 中事件监听"></a>Spring boot 中事件监听</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">SpringApplication.addListeners(…​)</div></pre></td></tr></table></figure>
+<p>通过注册监听器，来监听相应的事件</p>
+<h2 id="访问应用参数"><a href="#访问应用参数" class="headerlink" title="访问应用参数"></a>访问应用参数</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">@Component</div><div class="line">public class MyBean &#123;</div><div class="line"></div><div class="line">    @Autowired</div><div class="line">    public MyBean(ApplicationArguments args) &#123;</div><div class="line">        boolean debug = args.containsOption(<span class="string">"debug"</span>);</div><div class="line">        List&lt;String&gt; files = args.getNonOptionArgs();</div><div class="line">        // <span class="keyword">if</span> run with <span class="string">"--debug logfile.txt"</span> debug=<span class="literal">true</span>, files=[<span class="string">"logfile.txt"</span>]</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="Spring-Boot-监控"><a href="#Spring-Boot-监控" class="headerlink" title="Spring Boot 监控"></a>Spring Boot 监控</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
+<p>添加这个依赖，然后就可以看到启动时加载的信息了:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">troller.error(javax.servlet.http.HttpServletRequest)</div><div class="line">2016-02-14 15:38:21.371  INFO 30028 --- [           main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped URL path [/webjars/**] onto handler of <span class="built_in">type</span> [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]</div><div class="line">2016-02-14 15:38:21.371  INFO 30028 --- [           main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped URL path [/**] onto handler of <span class="built_in">type</span> [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]</div><div class="line">2016-02-14 15:38:21.405  INFO 30028 --- [           main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped URL path [/**/favicon.ico] onto handler of <span class="built_in">type</span> [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]</div><div class="line">2016-02-14 15:38:21.884  INFO 30028 --- [           main] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped <span class="string">"&#123;[/autoconfig || /autoconfig.json],methods=[GET],produces=[application/json]&#125;"</span> onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()</div><div class="line">2016-02-14 15:38:21.884  INFO 30028 --- [           main] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped <span class="string">"&#123;[/dump || /dump.json],methods=[GET],produces=[application/json]&#125;"</span> onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()</div><div class="line">2016-02-14 15:38:21.885  INFO 30028 --- [           main] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped <span class="string">"&#123;[/env/&#123;name:.*&#125;],methods=[GET],produces=[application/json]&#125;"</span> onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EnvironmentMvcEndpoint.value(java.lang.String)</div><div class="line">2016-02-14 15:38:21.885  INFO 30028 --- [           main] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped <span class="string">"&#123;[/env || /env.json],methods=[GET],produces=[application/json]&#125;"</span> onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()</div><div class="line">2016-02-14 15:38:21.886  INFO 30028 --- [           main] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped <span class="string">"&#123;[/health || /health.json],produces=[application/json]&#125;"</span> onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.HealthMvcEndpoint.invoke(java.security.Principal)</div><div class="line">2016-02-14 15:38:21.888  INFO 30028 --- [           main] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped <span class="string">"&#123;[/metrics/&#123;name:.*&#125;],methods=[GET],produces=[application/json]&#125;"</span> onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.MetricsMvcEndpoint.value(java.lang.String)</div><div class="line">2016-02-14 15:38:21.888  INFO 30028 --- [           main] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped <span class="string">"&#123;[/metrics || /metrics.json],methods=[GET],produces=[application/json]&#125;"</span> onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()</div><div class="line">2016-02-14 15:38:21.890  INFO 30028 --- [           main] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped <span class="string">"&#123;[/beans || /beans.json],methods=[GET],produces=[application/json]&#125;"</span> onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()</div><div class="line">2016-02-14 15:38:21.890  INFO 30028 --- [           main] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped <span class="string">"&#123;[/mappings || /mappings.json],methods=[GET],produces=[application/json]&#125;"</span> onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()</div><div class="line">2016-02-14 15:38:21.890  INFO 30028 --- [           main] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped <span class="string">"&#123;[/configprops || /configprops.json],methods=[GET],produces=[application/json]&#125;"</span> onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()</div><div class="line">2016-02-14 15:38:21.891  INFO 30028 --- [           main] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped <span class="string">"&#123;[/info || /info.json],methods=[GET],produces=[application/json]&#125;"</span> onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()</div><div class="line">2016-02-14 15:38:21.891  INFO 30028 --- [           main] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped <span class="string">"&#123;[/trace || /trace.json],methods=[GET],produces=[application/json]&#125;"</span> onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()</div></pre></td></tr></table></figure>
+<p>修改前缀</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">management.contextPath=/my/manager</div></pre></td></tr></table></figure>
+<p>这样子，就要通过<code>/my/manager/health</code>这样子来访问了.</p>
+<h2 id="Spring-Admin"><a href="#Spring-Admin" class="headerlink" title="Spring Admin"></a>Spring Admin</h2><p>maven的依赖</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;de.codecentric&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;spring-boot-admin-server&lt;/artifactId&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;de.codecentric&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;spring-boot-admin-server-ui&lt;/artifactId&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
+<p>在配置文件里添加</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">spring.application.name=Spring Boot Admin Web</div><div class="line">spring.boot.admin.url=http://localhost:<span class="variable">$&#123;server.port&#125;</span>/admin</div><div class="line">spring.boot.admin.context-path=/admin</div></pre></td></tr></table></figure>
+<p>然后访问: <a href="http://localhost:8080/admin/" target="_blank" rel="external">Go</a></p>
+<h2 id="根据不同环境使用-properties"><a href="#根据不同环境使用-properties" class="headerlink" title="根据不同环境使用 properties"></a>根据不同环境使用 properties</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">application.properties</div><div class="line">application-dev.properties</div><div class="line">application-pro.properties</div></pre></td></tr></table></figure>
+<p>然后设置<code>spring.profiles.active=xxx</code>，就可以使用相应的配置文件了.(-Dspring.profiles.active=production)<br>注意，这里是有继承关系的.即<code>application.properties</code>是公共的，即无论在哪种环境，它都会加载的.<br>如果<code>spring.profiles.active=default</code>，就只会加载<code>application.properties</code>.<br>如果<code>spring.profiles.active=dev</code>，就会加载<code>application.properties</code>，然后再加载<code>application-dev.properties</code>.而且<code>application-dev.properties</code>的属性，会覆盖<code>application.properties</code>的.</p>
+<p>而且，还可以向前引用变量。比如这样子:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">hello.world=def</div><div class="line">hello.world.parent=<span class="variable">$&#123;hello.world&#125;</span> from parent</div></pre></td></tr></table></figure>
+<p>使用 Bean 来映射properties文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">@Component</div><div class="line">@ConfigurationProperties(prefix=<span class="string">"person"</span>)</div><div class="line">public class ConnectionSettings &#123;</div><div class="line"></div><div class="line">    private String firstName;</div><div class="line"></div><div class="line">    public String <span class="function"><span class="title">getFirstName</span></span>() &#123;</div><div class="line">        <span class="built_in">return</span> this.firstName;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void <span class="built_in">set</span>FirstName(String firstName) &#123;</div><div class="line">        this.firstName = firstName;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后 <code>properties</code> 文件 里可以这样子写</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">person.firstName=xxx</div><div class="line"></div><div class="line">或者</div><div class="line">person.first-name=xxx</div><div class="line"></div><div class="line">或者</div><div class="line">PERSON_FIRST_NAME=xxx</div></pre></td></tr></table></figure>
+<h3 id="在-Java-代码里根据不同的环境来加载不同的-Bean"><a href="#在-Java-代码里根据不同的环境来加载不同的-Bean" class="headerlink" title="在 Java 代码里根据不同的环境来加载不同的 Bean"></a>在 Java 代码里根据不同的环境来加载不同的 Bean</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@Configuration</div><div class="line">@Import(&#123;Development.class, Production.class&#125;)</div><div class="line">public class MyApplicationConfiguration &#123;&#125;</div><div class="line"></div><div class="line">@Configuration</div><div class="line">@Profile(<span class="string">"development"</span>)</div><div class="line">public class Development &#123;&#125;</div><div class="line"></div><div class="line">@Configuration</div><div class="line">@Profile // The default</div><div class="line">public class Production &#123;&#125;</div><div class="line"></div><div class="line"></div><div class="line">@Configuration</div><div class="line">public class MyApplicationConfiguration &#123;</div><div class="line"></div><div class="line">    @Bean</div><div class="line">    @Profile(<span class="string">"development"</span>)</div><div class="line">    public static PropertySourcesPlaceholderConfigurer <span class="function"><span class="title">developmentPropertyPlaceholderConfigurer</span></span>() &#123;</div><div class="line">        // instantiate and <span class="built_in">return</span> configurer...</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Bean</div><div class="line">    @Profile // The default</div><div class="line">    public static PropertySourcesPlaceholderConfigurer <span class="function"><span class="title">propertyPlaceholderConfigurer</span></span>() &#123;</div><div class="line">        // instantiate and <span class="built_in">return</span> configurer...</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="在-XML-文件里根据不同的环境加载不同的-Bean"><a href="#在-XML-文件里根据不同的环境加载不同的-Bean" class="headerlink" title="在 XML 文件里根据不同的环境加载不同的 Bean"></a>在 XML 文件里根据不同的环境加载不同的 Bean</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</div><div class="line">&lt;beans xmlns=<span class="string">"http://www.springframework.org/schema/beans"</span></div><div class="line">  xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span> </div><div class="line">  xmlns:beans=<span class="string">"http://www.springframework.org/schema/beans"</span></div><div class="line">  xmlns:context=<span class="string">"http://www.springframework.org/schema/context"</span> </div><div class="line">  xsi:schemaLocation=<span class="string">"</span></div><div class="line">    http://www.springframework.org/schema/beans </div><div class="line">    http://www.springframework.org/schema/beans/spring-beans.xsd </div><div class="line">    http://www.springframework.org/schema/context </div><div class="line">    http://www.springframework.org/schema/context/spring-context.xsd"&gt;</div><div class="line"></div><div class="line">  &lt;!-- ======================================= --&gt;</div><div class="line">  &lt;!-- use varibles <span class="keyword">in</span> bean definition  --&gt;</div><div class="line">  &lt;!-- ======================================= --&gt;</div><div class="line">  &lt;bean id=<span class="string">"dataSource"</span> class=<span class="string">"org.apache.commons.dbcp.BasicDataSource"</span></div><div class="line">    destroy-method=<span class="string">"close"</span>&gt;</div><div class="line">    &lt;property name=<span class="string">"driverClassName"</span> value=<span class="string">"<span class="variable">$&#123;jdbc.driver&#125;</span>"</span> /&gt;</div><div class="line">    &lt;property name=<span class="string">"url"</span> value=<span class="string">"<span class="variable">$&#123;jdbc.url&#125;</span>"</span> /&gt;</div><div class="line">    &lt;property name=<span class="string">"username"</span> value=<span class="string">"<span class="variable">$&#123;jdbc.username&#125;</span>"</span> /&gt;</div><div class="line">    &lt;property name=<span class="string">"password"</span> value=<span class="string">"<span class="variable">$&#123;jdbc.password&#125;</span>"</span> /&gt;</div><div class="line">  &lt;/bean&gt;</div><div class="line">  </div><div class="line">  &lt;bean class=<span class="string">"com.shengwang.demo.HelloWorldBean"</span>&gt;</div><div class="line">    &lt;constructor-arg value=<span class="string">"<span class="variable">$&#123;hellow.world.name&#125;</span>"</span> /&gt;</div><div class="line">  &lt;/bean&gt;</div><div class="line"></div><div class="line">  </div><div class="line">  &lt;!-- ====================================================== --&gt;</div><div class="line">  &lt;!-- import different variables according to active profile --&gt;</div><div class="line">  &lt;!-- ====================================================== --&gt;</div><div class="line">  &lt;beans profile=<span class="string">"development"</span>&gt;</div><div class="line">    &lt;context:property-placeholder</div><div class="line">      ignore-resource-not-found=<span class="string">"true"</span></div><div class="line">      location=<span class="string">"classpath*:/META-INF/development.properties"</span> /&gt;</div><div class="line">  &lt;/beans&gt;</div><div class="line">  </div><div class="line">  &lt;beans profile=<span class="string">"test"</span>&gt;</div><div class="line">    &lt;context:property-placeholder</div><div class="line">      ignore-resource-not-found=<span class="string">"true"</span></div><div class="line">      location=<span class="string">"classpath*:/META-INF/test.properties"</span> /&gt;</div><div class="line">  &lt;/beans&gt;</div><div class="line"></div><div class="line">  &lt;beans profile=<span class="string">"production"</span>&gt;</div><div class="line">    &lt;context:property-placeholder</div><div class="line">      ignore-resource-not-found=<span class="string">"true"</span></div><div class="line">      location=<span class="string">"classpath*:/META-INF/production.properties"</span> /&gt;</div><div class="line">  &lt;/beans&gt;</div><div class="line"></div><div class="line">&lt;/beans&gt;</div></pre></td></tr></table></figure>
+<h2 id="配置自定义Bean"><a href="#配置自定义Bean" class="headerlink" title="配置自定义Bean"></a>配置自定义Bean</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">@Configuration</div><div class="line">public class MyConfiguration &#123;</div><div class="line"></div><div class="line">    @Bean</div><div class="line">    public HttpMessageConverters <span class="function"><span class="title">customConverters</span></span>() &#123;</div><div class="line">        HttpMessageConverter&lt;?&gt; additional = ...</div><div class="line">        HttpMessageConverter&lt;?&gt; another = ...</div><div class="line">        <span class="built_in">return</span> new HttpMessageConverters(additional, another);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="关于静态资源的处理"><a href="#关于静态资源的处理" class="headerlink" title="关于静态资源的处理"></a>关于静态资源的处理</h2><blockquote>
+<p>这是Spring boot 默认情况下配置.</p>
+</blockquote>
+<p>默认情况下，在classpath路径下的<code>/static (or /public or /resources or /META-INF/resources)</code>这些目录，是被看作是静态资源的存放路径的.<br>也可以通过<code>spring.resources.staticLocations</code>参数来指定.</p>
+<h2 id="打包为普通的-war-包形式"><a href="#打包为普通的-war-包形式" class="headerlink" title="打包为普通的 war 包形式"></a>打包为普通的 war 包形式</h2><p><code>HelloWorldSpringBoot.java</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> org.emacsist;</div><div class="line"></div><div class="line"><span class="keyword">import</span> de.codecentric.boot.admin.config.EnableAdminServer;</div><div class="line"><span class="keyword">import</span> org.springframework.boot.SpringApplication;</div><div class="line"><span class="keyword">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;</div><div class="line"><span class="keyword">import</span> org.springframework.boot.builder.SpringApplicationBuilder;</div><div class="line"><span class="keyword">import</span> org.springframework.boot.context.web.SpringBootServletInitializer;</div><div class="line"><span class="keyword">import</span> org.springframework.cloud.client.discovery.EnableDiscoveryClient;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Created by sky on 16-2-14.</div><div class="line"> */</div><div class="line"><span class="meta">@SpringBootApplication</span></div><div class="line"><span class="meta">@EnableAdminServer</span></div><div class="line"><span class="meta">@EnableDiscoveryClient</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorldSpringBoot</span> <span class="keyword">extends</span> <span class="title">SpringBootServletInitializer</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> SpringApplicationBuilder <span class="title">configure</span><span class="params">(SpringApplicationBuilder builder)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> builder.sources(HelloWorldSpringBoot.class);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">        SpringApplication app = <span class="keyword">new</span> SpringApplication(HelloWorldSpringBoot.class);</div><div class="line">        app.run(args);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>修改<code>pom</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;packaging&gt;war&lt;/packaging&gt;</div><div class="line"></div><div class="line"></div><div class="line">&lt;properties&gt;</div><div class="line">        &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;</div><div class="line">        &lt;start-class&gt;org.emacsist.HelloWorldSpringBoot&lt;/start-class&gt;</div><div class="line">        &lt;java.version&gt;1.8&lt;/java.version&gt;</div><div class="line">&lt;/properties&gt;</div><div class="line"></div><div class="line">&lt;dependency&gt;</div><div class="line">        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">        &lt;artifactId&gt;spring-boot-starter-tomcat&lt;/artifactId&gt;</div><div class="line">        &lt;scope&gt;provided&lt;/scope&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
+<p>项目的目录结构改为</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">src |</div><div class="line">    |-main</div><div class="line">        |-webapp</div><div class="line">            |-WEB-INF</div><div class="line"></div><div class="line">其他的按普通的项目目录处理即可.</div></pre></td></tr></table></figure>
+<h2 id="优雅关闭-Spring-Boot"><a href="#优雅关闭-Spring-Boot" class="headerlink" title="优雅关闭 Spring Boot"></a>优雅关闭 Spring Boot</h2><p>在<code>application.properties</code>里添加以下配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">endpoints.shutdown.enabled=<span class="literal">true</span></div></pre></td></tr></table></figure>
+<p>启动时就可以看到以下加载信息了</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Mapped <span class="string">"&#123;[/shutdown || /shutdown.json],methods=[POST]&#125;"</span> onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.ShutdownMvcEndpoint.invoke()</div></pre></td></tr></table></figure>
+<p>然后可以这样子关闭:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">╭─sky@sky-linux ~</div><div class="line">╰─➤  curl <span class="_">-d</span> <span class="string">""</span>  http://localhost:8080/shutdown</div><div class="line">&#123;<span class="string">"message"</span>:<span class="string">"Shutting down, bye..."</span>&#125;%</div></pre></td></tr></table></figure>
+<h2 id="自定义监控"><a href="#自定义监控" class="headerlink" title="自定义监控"></a>自定义监控</h2><h3 id="health"><a href="#health" class="headerlink" title="health"></a>health</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">@Component</div><div class="line">public class ExecutorHeal implements HealthIndicator &#123;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public Health <span class="function"><span class="title">health</span></span>() &#123;</div><div class="line">        Object dataSource = null;</div><div class="line">        <span class="keyword">if</span> (dataSource == null) &#123;</div><div class="line">            <span class="built_in">return</span> Health.down().status(<span class="string">"DOWN"</span>).outOfService().withDetail(<span class="string">"msg"</span>, <span class="string">"datasource is null"</span>).build();</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="built_in">return</span> Health.up().status(<span class="string">"UP"</span>).withDetail(<span class="string">"max connections"</span>, <span class="string">"100"</span>).build();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Metrics"><a href="#Metrics" class="headerlink" title="Metrics"></a>Metrics</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">package org.emacsist;</div><div class="line"></div><div class="line">import org.springframework.beans.factory.annotation.Autowired;</div><div class="line">import org.springframework.boot.actuate.metrics.CounterService;</div><div class="line">import org.springframework.boot.actuate.metrics.GaugeService;</div><div class="line">import org.springframework.stereotype.Component;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by sky on 16-2-16.</div><div class="line"> */</div><div class="line">@Component</div><div class="line">public class MyMetric &#123;</div><div class="line"></div><div class="line">    private final CounterService counterService;</div><div class="line">    private final GaugeService gaugeService;</div><div class="line"></div><div class="line">    @Autowired</div><div class="line">    public MyMetric(CounterService counterService, GaugeService gaugeService) &#123;</div><div class="line">        this.counterService = counterService;</div><div class="line">        this.gaugeService = gaugeService;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void <span class="function"><span class="title">loginCounter</span></span>() &#123;</div><div class="line">        this.counterService.increment(<span class="string">"login.count"</span>);</div><div class="line">        // reset each minute</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void <span class="function"><span class="title">cacheGauge</span></span>() &#123;</div><div class="line">        this.gaugeService.submit(<span class="string">"cache.hit"</span>, 80.0);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="spring-中使用-logback根据不同的环境，配置不同的日志方式"><a href="#spring-中使用-logback根据不同的环境，配置不同的日志方式" class="headerlink" title="spring 中使用 logback根据不同的环境，配置不同的日志方式"></a>spring 中使用 logback根据不同的环境，配置不同的日志方式</h2><p>文件名是<code>logback-spring.xml</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&lt;springProfile name=<span class="string">"staging"</span>&gt;</div><div class="line">    &lt;!-- configuration to be enabled when the <span class="string">"staging"</span> profile is active --&gt;</div><div class="line">&lt;/springProfile&gt;</div><div class="line"></div><div class="line">&lt;springProfile name=<span class="string">"dev, staging"</span>&gt;</div><div class="line">    &lt;!-- configuration to be enabled when the <span class="string">"dev"</span> or <span class="string">"staging"</span> profiles are active --&gt;</div><div class="line">&lt;/springProfile&gt;</div><div class="line"></div><div class="line">&lt;springProfile name=<span class="string">"!production"</span>&gt;</div><div class="line">    &lt;!-- configuration to be enabled when the <span class="string">"production"</span> profile is not active --&gt;</div><div class="line">&lt;/springProfile&gt;</div></pre></td></tr></table></figure>
+<h2 id="spring-非-web-以守护进程方式启动"><a href="#spring-非-web-以守护进程方式启动" class="headerlink" title="spring 非 web 以守护进程方式启动"></a>spring 非 web 以守护进程方式启动</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">package com.compay.wxsdk.listener;</div><div class="line"></div><div class="line">import org.springframework.boot.CommandLineRunner;</div><div class="line">import org.springframework.boot.autoconfigure.EnableAutoConfiguration;</div><div class="line">import org.springframework.boot.autoconfigure.SpringBootApplication;</div><div class="line">import org.springframework.boot.autoconfigure.velocity.VelocityAutoConfiguration;</div><div class="line">import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;</div><div class="line">import org.springframework.boot.builder.SpringApplicationBuilder;</div><div class="line">import org.springframework.context.ConfigurableApplicationContext;</div><div class="line">import org.springframework.context.annotation.Bean;</div><div class="line">import org.springframework.context.annotation.ComponentScan;</div><div class="line">import org.springframework.context.annotation.Configuration;</div><div class="line"></div><div class="line">import java.io.IOException;</div><div class="line">import java.util.concurrent.CountDownLatch;</div><div class="line"></div><div class="line">@SpringBootApplication</div><div class="line">@ComponentScan(<span class="string">"com.compay.wxsdk"</span>)</div><div class="line">@EnableAutoConfiguration(exclude = &#123;WebMvcAutoConfiguration.class, VelocityAutoConfiguration.class&#125;)</div><div class="line">@Configuration</div><div class="line">public class ListenerApplication implements CommandLineRunner &#123;</div><div class="line"></div><div class="line">    public static void main(String[] args) throws IOException, InterruptedException &#123;</div><div class="line"></div><div class="line">//        Enumeration&lt;URL&gt; roots = WebApplication.class.getClassLoader().getResources(<span class="string">""</span>);</div><div class="line">//        <span class="keyword">while</span> (roots.hasMoreElements()) &#123;</div><div class="line">//            URL url = roots.nextElement();</div><div class="line">//            File root = new File(url.getPath());</div><div class="line">//            <span class="keyword">for</span> (File file : root.listFiles()) &#123;</div><div class="line">//                System.out.println(file.getAbsolutePath() + <span class="string">" ==&gt; "</span> + file.getName());</div><div class="line">//            &#125;</div><div class="line">//        &#125;</div><div class="line">        System.out.println(<span class="string">"start ....listener app"</span>);</div><div class="line">        ConfigurableApplicationContext configurableApplicationContext = new SpringApplicationBuilder(ListenerApplication.class).web(<span class="literal">false</span>).run(args);</div><div class="line">        configurableApplicationContext.registerShutdownHook();</div><div class="line">        configurableApplicationContext.start();</div><div class="line">        final CountDownLatch closeLatch = configurableApplicationContext.getBean(CountDownLatch.class);</div><div class="line"></div><div class="line">        Runtime.getRuntime().addShutdownHook(new <span class="function"><span class="title">Thread</span></span>() &#123;</div><div class="line">            @Override</div><div class="line">            public void <span class="function"><span class="title">run</span></span>() &#123;</div><div class="line">                closeLatch.countDown();</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line"></div><div class="line">        closeLatch.await();</div><div class="line">        System.out.println(<span class="string">"shutdown...."</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void run(String... strings) throws Exception &#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Bean</div><div class="line">    public CountDownLatch <span class="function"><span class="title">closeLatch</span></span>() &#123;</div><div class="line">        <span class="built_in">return</span> new CountDownLatch(1);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="Spring-boot自定义Error-Page-以及记录异常日志"><a href="#Spring-boot自定义Error-Page-以及记录异常日志" class="headerlink" title="Spring boot自定义Error Page 以及记录异常日志"></a>Spring boot自定义Error Page 以及记录异常日志</h2><h3 id="自定义ErrorPgae"><a href="#自定义ErrorPgae" class="headerlink" title="自定义ErrorPgae"></a>自定义ErrorPgae</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">package com;</div><div class="line"></div><div class="line">import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;</div><div class="line">import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;</div><div class="line">import org.springframework.boot.web.servlet.ErrorPage;</div><div class="line">import org.springframework.context.annotation.Bean;</div><div class="line">import org.springframework.context.annotation.Configuration;</div><div class="line">import org.springframework.http.HttpStatus;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by emacsist on 2017/3/7.</div><div class="line"> */</div><div class="line">@Configuration</div><div class="line">public class MvcConfiguration &#123;</div><div class="line">    @Bean</div><div class="line">    public EmbeddedServletContainerCustomizer <span class="function"><span class="title">containerCustomizer</span></span>() &#123;</div><div class="line">        <span class="built_in">return</span> new <span class="function"><span class="title">EmbeddedServletContainerCustomizer</span></span>() &#123;</div><div class="line">            @Override</div><div class="line">            public void customize(ConfigurableEmbeddedServletContainer container) &#123;</div><div class="line">                container.addErrorPages(new ErrorPage(HttpStatus.BAD_REQUEST, <span class="string">"/400"</span>));</div><div class="line">                container.addErrorPages(new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, <span class="string">"/500"</span>));</div><div class="line">                container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, <span class="string">"/404"</span>));</div><div class="line">            &#125;</div><div class="line">        &#125;;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="记录异常日志"><a href="#记录异常日志" class="headerlink" title="记录异常日志"></a>记录异常日志</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">package com;</div><div class="line"></div><div class="line">import com.utils.Loggers;</div><div class="line">import org.springframework.web.bind.annotation.ControllerAdvice;</div><div class="line">import org.springframework.web.bind.annotation.ExceptionHandler;</div><div class="line"></div><div class="line">import javax.servlet.http.HttpServletRequest;</div><div class="line">import javax.servlet.http.HttpServletResponse;</div><div class="line">import java.io.ByteArrayOutputStream;</div><div class="line">import java.io.PrintWriter;</div><div class="line">import java.nio.charset.StandardCharsets;</div><div class="line">import java.util.Enumeration;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Controller 统一异常、错误处理</div><div class="line"> * Created by emacsist on 2017/3/7.</div><div class="line"> */</div><div class="line">@ControllerAdvice</div><div class="line">public class GlobalControllerExceptionHandler &#123;</div><div class="line"></div><div class="line">    @ExceptionHandler(value = Exception.class)</div><div class="line">    public String defaultErrorHandler(HttpServletRequest request, HttpServletResponse response, Exception e) throws Exception &#123;</div><div class="line">        ByteArrayOutputStream bao = new ByteArrayOutputStream(1024);</div><div class="line">        PrintWriter <span class="built_in">print</span>Writer = new PrintWriter(bao);</div><div class="line">        <span class="built_in">print</span>Writer.append(getRequestInfo(request));</div><div class="line">        e.printStackTrace(<span class="built_in">print</span>Writer);</div><div class="line">        <span class="built_in">print</span>Writer.flush();</div><div class="line">        String stack = bao.toString(StandardCharsets.UTF_8.name());</div><div class="line">        Loggers.ERROR_LOGGER.error(<span class="string">"&#123;&#125;"</span>, stack);</div><div class="line">        <span class="built_in">return</span> <span class="string">"forward:/500"</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private String getRequestInfo(HttpServletRequest request)&#123;</div><div class="line">        String lineSepartor = System.getProperty(<span class="string">"line.separator"</span>);</div><div class="line">        StringBuilder sb = new StringBuilder(1024);</div><div class="line">        sb.append(<span class="string">"Request URL : "</span>).append(request.getRequestURL()).append(lineSepartor);</div><div class="line">        sb.append(<span class="string">"Request Method: "</span>).append(request.getMethod()).append(lineSepartor);</div><div class="line">        sb.append(<span class="string">"Request Paramter: "</span>).append(lineSepartor);</div><div class="line">        Enumeration params = request.getParameterNames();</div><div class="line">        <span class="keyword">while</span>(params.hasMoreElements())&#123;</div><div class="line">            String paramName = (String)params.nextElement();</div><div class="line">            sb.append(paramName).append(<span class="string">"="</span>).append(request.getParameter(paramName)).append(lineSepartor);</div><div class="line">        &#125;</div><div class="line">        <span class="built_in">return</span> sb.toString();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><p><a href="http://docs.spring.io/spring-boot/docs/1.3.2.RELEASE/reference/htmlsingle/" target="_blank" rel="external">Spring Boot</a></p>
+</li>
+<li><p><a href="http://www.ithao123.cn/content-8856592.html" target="_blank" rel="external">ithao123</a></p>
+</li>
+<li><p><a href="https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-logging.html" target="_blank" rel="external">spring-boot logging</a></p>
+</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      emacsist
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://emacsist.github.io/2016/02/14/archives/Spring Boot 学习之基本概念及使用/" title="Spring Boot 学习之基本概念及使用">https://emacsist.github.io/2016/02/14/archives/Spring Boot 学习之基本概念及使用/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/spring/" rel="tag"># spring</a>
+          
+            <a href="/tags/spring-boot/" rel="tag"># spring-boot</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/02/14/archives/Java中关于数组转换成List的注意事项/" rel="next" title="Java中关于数组转换成List的注意事项">
+                <i class="fa fa-chevron-left"></i> Java中关于数组转换成List的注意事项
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/02/14/archives/Spring-Boot-学习之Hello-World（一）/" rel="prev" title="Spring Boot 学习之Hello World（一）">
+                Spring Boot 学习之Hello World（一） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/avatar.png"
+               alt="emacsist" />
+          <p class="site-author-name" itemprop="name">emacsist</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">295</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">69</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">142</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emacsist" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/emacist" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Application-java-典型的代码"><span class="nav-number">1.</span> <span class="nav-text">Application.java 典型的代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ComponentScan"><span class="nav-number">2.</span> <span class="nav-text">@ComponentScan</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringBootApplication"><span class="nav-number">3.</span> <span class="nav-text">@SpringBootApplication</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行Spring-Boot"><span class="nav-number">4.</span> <span class="nav-text">运行Spring Boot</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#默认的配置文件名"><span class="nav-number">5.</span> <span class="nav-text">默认的配置文件名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#父，子容器设置"><span class="nav-number">6.</span> <span class="nav-text">父，子容器设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-boot-中事件监听"><span class="nav-number">7.</span> <span class="nav-text">Spring boot 中事件监听</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#访问应用参数"><span class="nav-number">8.</span> <span class="nav-text">访问应用参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Boot-监控"><span class="nav-number">9.</span> <span class="nav-text">Spring Boot 监控</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Admin"><span class="nav-number">10.</span> <span class="nav-text">Spring Admin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#根据不同环境使用-properties"><span class="nav-number">11.</span> <span class="nav-text">根据不同环境使用 properties</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#在-Java-代码里根据不同的环境来加载不同的-Bean"><span class="nav-number">11.1.</span> <span class="nav-text">在 Java 代码里根据不同的环境来加载不同的 Bean</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在-XML-文件里根据不同的环境加载不同的-Bean"><span class="nav-number">11.2.</span> <span class="nav-text">在 XML 文件里根据不同的环境加载不同的 Bean</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置自定义Bean"><span class="nav-number">12.</span> <span class="nav-text">配置自定义Bean</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于静态资源的处理"><span class="nav-number">13.</span> <span class="nav-text">关于静态资源的处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#打包为普通的-war-包形式"><span class="nav-number">14.</span> <span class="nav-text">打包为普通的 war 包形式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优雅关闭-Spring-Boot"><span class="nav-number">15.</span> <span class="nav-text">优雅关闭 Spring Boot</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义监控"><span class="nav-number">16.</span> <span class="nav-text">自定义监控</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#health"><span class="nav-number">16.1.</span> <span class="nav-text">health</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Metrics"><span class="nav-number">16.2.</span> <span class="nav-text">Metrics</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spring-中使用-logback根据不同的环境，配置不同的日志方式"><span class="nav-number">17.</span> <span class="nav-text">spring 中使用 logback根据不同的环境，配置不同的日志方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spring-非-web-以守护进程方式启动"><span class="nav-number">18.</span> <span class="nav-text">spring 非 web 以守护进程方式启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-boot自定义Error-Page-以及记录异常日志"><span class="nav-number">19.</span> <span class="nav-text">Spring boot自定义Error Page 以及记录异常日志</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义ErrorPgae"><span class="nav-number">19.1.</span> <span class="nav-text">自定义ErrorPgae</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#记录异常日志"><span class="nav-number">19.2.</span> <span class="nav-text">记录异常日志</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">20.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">emacsist</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2132003"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,895 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="mysql,mybatis,Java,batch," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="公司的DSP 项目,有个模块就是插入 RabbitMQ 里的 BID 的对象到 MySQL 然后再统计数据的业务. 但是, 发现这个 BID 批量插入的性能, 低得有点吓人. 平均 1K/s 的速度. 而这些日志, 每天有时可产生好几千 W 条 BID 的数据.  环境MyBatis3.1 + Spring4.3.2 + shardbatis 分表插件 原因本地测试时, 每次批量插入 1K 条数">
+<meta name="keywords" content="mysql,mybatis,Java,batch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记录一次 MySQL 批量插入的优化">
+<meta property="og:url" content="https://emacsist.github.io/2017/01/11/archives/记录一次 MySQL 批量插入的优化/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="公司的DSP 项目,有个模块就是插入 RabbitMQ 里的 BID 的对象到 MySQL 然后再统计数据的业务. 但是, 发现这个 BID 批量插入的性能, 低得有点吓人. 平均 1K/s 的速度. 而这些日志, 每天有时可产生好几千 W 条 BID 的数据.  环境MyBatis3.1 + Spring4.3.2 + shardbatis 分表插件 原因本地测试时, 每次批量插入 1K 条数">
+<meta property="og:image" content="https://emacsist.github.io/img/mysql-batch-insert-analyze.png">
+<meta property="og:image" content="https://emacsist.github.io/img/mybatis-batch-insert-client.png">
+<meta property="og:image" content="https://emacsist.github.io/img/jdbc-batch-insert-no-url.png">
+<meta property="og:image" content="https://emacsist.github.io/img/jdbc-batch-insert-with-url.png">
+<meta property="og:image" content="https://emacsist.github.io/img/mybatis-parse-sql-cost.png">
+<meta property="og:image" content="https://emacsist.github.io/img/mybatis-parse-sql.jpg">
+<meta property="og:image" content="https://emacsist.github.io/img/mybatis-parse-result.jpeg">
+<meta property="og:updated_time" content="2017-01-11T08:54:24.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="记录一次 MySQL 批量插入的优化">
+<meta name="twitter:description" content="公司的DSP 项目,有个模块就是插入 RabbitMQ 里的 BID 的对象到 MySQL 然后再统计数据的业务. 但是, 发现这个 BID 批量插入的性能, 低得有点吓人. 平均 1K/s 的速度. 而这些日志, 每天有时可产生好几千 W 条 BID 的数据.  环境MyBatis3.1 + Spring4.3.2 + shardbatis 分表插件 原因本地测试时, 每次批量插入 1K 条数">
+<meta name="twitter:image" content="https://emacsist.github.io/img/mysql-batch-insert-analyze.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: false,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://emacsist.github.io/2017/01/11/archives/记录一次 MySQL 批量插入的优化/"/>
+
+
+
+
+
+  <title>记录一次 MySQL 批量插入的优化 | emacsist</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">emacsist</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heart"></i> <br />
+            
+            书
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://emacsist.github.io/2017/01/11/archives/记录一次 MySQL 批量插入的优化/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="emacsist">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="emacsist">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                记录一次 MySQL 批量插入的优化
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-11T12:21:23+08:00">
+                2017-01-11
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2017-01-11T16:54:24+08:00">
+                2017-01-11
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>公司的DSP 项目,有个模块就是插入 RabbitMQ 里的 BID 的对象到 MySQL 然后再统计数据的业务. 但是, 发现这个 BID 批量插入的性能, 低得有点吓人. 平均 1K/s 的速度. 而这些日志, 每天有时可产生好几千 W 条 BID 的数据.</p>
+</blockquote>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>MyBatis3.1 + Spring4.3.2 + shardbatis 分表插件</p>
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>本地测试时, 每次批量插入 1K 条数据性能:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">bid insert time = 2506 ms</div><div class="line">bid insert time = 2546 ms</div><div class="line">bid insert time = 2632 ms</div></pre></td></tr></table></figure>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="初始版本代码"><a href="#初始版本代码" class="headerlink" title="初始版本代码"></a>初始版本代码</h3><p>Java里的代码:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">public int bidInsertBatch(List&lt;TaskBidLog&gt; logs, int userid) throws SQLException &#123;</div><div class="line">    <span class="keyword">if</span> (logs.size() &gt; 0) &#123;</div><div class="line">        <span class="built_in">return</span> taskBidLogMapper.bidInsertBatch(logs, userid);</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">return</span> 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Mapper 的 XML:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div></pre></td><td class="code"><pre><div class="line">&lt;insert id=<span class="string">"bidInsertBatch"</span>&gt;</div><div class="line">		insert into </div><div class="line">			task_bid_log </div><div class="line">		(</div><div class="line">  		bid_id, </div><div class="line">  		imp_id, </div><div class="line">     	task_id, </div><div class="line">     	bid_price, </div><div class="line">     	win_price, </div><div class="line">     	is_won, </div><div class="line">    	    age, </div><div class="line">    	    gender,</div><div class="line">    	    location, </div><div class="line">    	    con_type, </div><div class="line">    	    os, </div><div class="line">    	    osv, </div><div class="line">    	    brand, </div><div class="line">    	    geo,</div><div class="line">    	    ip,</div><div class="line">    	    idfa, </div><div class="line">    	    wax_user_id,  </div><div class="line">     	create_time, </div><div class="line">     	update_time </div><div class="line">    ) </div><div class="line">   values</div><div class="line">  &lt;foreach collection=<span class="string">"list"</span> item=<span class="string">"log"</span> separator=<span class="string">","</span> index=<span class="string">"index"</span>&gt;</div><div class="line">  	(</div><div class="line">  		<span class="comment">#&#123;log.bidId&#125;, </span></div><div class="line">   	<span class="comment">#&#123;log.impId&#125;, </span></div><div class="line">     	<span class="comment">#&#123;log.taskId&#125;, </span></div><div class="line">     	<span class="comment">#&#123;log.bidPrice&#125;, </span></div><div class="line">     	<span class="comment">#&#123;log.winPrice&#125;, </span></div><div class="line">     	<span class="comment">#&#123;log.isWon&#125;, </span></div><div class="line">     	<span class="comment">#&#123;log.age&#125;, </span></div><div class="line">       <span class="comment">#&#123;log.gender&#125;, </span></div><div class="line">     	<span class="comment">#&#123;log.location&#125;, </span></div><div class="line">   	    <span class="comment">#&#123;log.conType&#125;, </span></div><div class="line">   	    <span class="comment">#&#123;log.os&#125;, </span></div><div class="line">   	    <span class="comment">#&#123;log.osv&#125;,</span></div><div class="line">    LEFT(<span class="comment">#&#123;log.brand&#125;, 64),</span></div><div class="line">   	    <span class="comment">#&#123;log.geo&#125;,</span></div><div class="line">   	    <span class="comment">#&#123;log.ip&#125;,</span></div><div class="line">   	    <span class="comment">#&#123;log.idfa&#125;, </span></div><div class="line">   	    <span class="comment">#&#123;log.waxUserid&#125;, </span></div><div class="line">     	<span class="comment">#&#123;log.createTime&#125;, </span></div><div class="line">     	<span class="comment">#&#123;log.updateTime&#125;</span></div><div class="line">     )</div><div class="line">  &lt;/foreach&gt;</div><div class="line">  ON DUPLICATE KEY UPDATE</div><div class="line">     	bid_price = values(bid_price),</div><div class="line">     	age = values(age),</div><div class="line">     	gender = values(gender),</div><div class="line">     	location = values(location),</div><div class="line">     	con_type = values(con_type),</div><div class="line">     	os = values(os),</div><div class="line">     	osv = values(osv),</div><div class="line">     	brand = values(brand),</div><div class="line">     	ip = values(ip),</div><div class="line">     	idfa = values(idfa),</div><div class="line">     	wax_user_id = values(wax_user_id),</div><div class="line">     	create_time = values(create_time)</div><div class="line">&lt;/insert&gt;</div></pre></td></tr></table></figure>
+<h3 id="记录实际执行时间"><a href="#记录实际执行时间" class="headerlink" title="记录实际执行时间"></a>记录实际执行时间</h3><h4 id="JDBC-的连接信息"><a href="#JDBC-的连接信息" class="headerlink" title="JDBC 的连接信息"></a>JDBC 的连接信息</h4><p><a href="http://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-configuration-properties.html" target="_blank" rel="external">mysql connector configuration properties</a></p>
+<p>看官方文档, 可以看到可以记录 SQL 实际执行的各种时间, 即在 JDBC 的连接 URL 上加上如下代码:</p>
+<p><code>profileSQL=true&amp;gatherPerfMetrics=true&amp;reportMetricsIntervalMillis=500&amp;</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jdbc:mysql://10.0.0.40:3308/unidsp?profileSQL=<span class="literal">true</span>&amp;gatherPerfMetrics=<span class="literal">true</span>&amp;reportMetricsIntervalMillis=500&amp;useUnicode=<span class="literal">true</span>&amp;zeroDateTimeBehavior=convertToNull&amp;allowMultiQueries=<span class="literal">true</span>&amp;characterEncoding=UTF-8</div></pre></td></tr></table></figure>
+<p>调试结果:</p>
+<p><img src="/img/mysql-batch-insert-analyze.png" alt="img"></p>
+<p>结果数据分析耗时及结论:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">51 ms execute, </div><div class="line">45 ms commit,</div><div class="line">1590 ms : mapper 那条语句 (这里包括上面两个时间了)</div><div class="line">1664ms 是整个方法</div></pre></td></tr></table></figure>
+<h4 id="在-MySQL-客户端操作"><a href="#在-MySQL-客户端操作" class="headerlink" title="在 MySQL 客户端操作"></a>在 MySQL 客户端操作</h4><p>用 <code>root</code> 用户登录 MySQL, 然后使用 <code>show full process list</code> 命令捕获线程执行的完整 SQL, 然后再在客户端直接执行, 发现执行的时间是<code>119 ms</code>:</p>
+<p><img src="/img/mybatis-batch-insert-client.png" alt="img"></p>
+<p>这个与上面的 <code>51 ms execute, 45 ms commit</code> 这个记录的数据很接近了.</p>
+<p>所以, 可以排除是 DB 服务自身的问题, 而是在 Java 代码层出现了问题.</p>
+<h3 id="使用原生的-JDBC-来操作"><a href="#使用原生的-JDBC-来操作" class="headerlink" title="使用原生的 JDBC 来操作"></a>使用原生的 JDBC 来操作</h3><p>Java代码:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">String sql = <span class="string">"insert into task_bid_log_2 (bid_id,imp_id,task_id,bid_price,win_price,is_won,age, gender,location,con_type,os,osv,brand,geo,ip,idfa,wax_user_id,create_time,update_time) values  (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE bid_price = values(bid_price),age = values(age),gender = values(gender),location = values(location),con_type = values(con_type),os = values(os),osv = values(osv),brand = values(brand),ip = values(ip),idfa = values(idfa),wax_user_id = values(wax_user_id),create_time = values(create_time)"</span>;</div><div class="line"></div><div class="line">PreparedStatement pstmt = connection.prepareStatement(sql);</div><div class="line"></div><div class="line"><span class="keyword">for</span> (TaskBidLog <span class="built_in">log</span> : logs) &#123;</div><div class="line">	pstmt.setString(1, log.getBidId());</div><div class="line">	pstmt.setString(2, log.getImpId());</div><div class="line">	pstmt.setString(3, log.getTaskId());</div><div class="line">	pstmt.setInt(4, log.getBidPrice());</div><div class="line">	pstmt.setInt(5, log.getW<span class="keyword">in</span>Price());</div><div class="line">	pstmt.setInt(6, log.getIsWon());</div><div class="line">	pstmt.setInt(7, log.getAge());</div><div class="line">	pstmt.setString(8, log.getGender());</div><div class="line">	pstmt.setString(9, log.getLocation());</div><div class="line">	pstmt.setString(10, log.getConType());</div><div class="line">	pstmt.setString(11, log.getOs());</div><div class="line">	pstmt.setString(12, log.getOsv());</div><div class="line">	pstmt.setString(13, log.getBrand());</div><div class="line">	pstmt.setString(14, log.getGeo());</div><div class="line">	pstmt.setString(15, log.getIp());</div><div class="line">	pstmt.setString(16, log.getIdfa());</div><div class="line">	pstmt.setString(17, log.getWaxUserid());</div><div class="line">	pstmt.setTimestamp(18, new Timestamp(log.getCreateTime().getTime()));</div><div class="line">	pstmt.setTimestamp(19, new Timestamp(log.getUpdateTime().getTime()));</div><div class="line">	pstmt.addBatch();</div><div class="line">&#125;</div><div class="line"></div><div class="line">// Execute the batch</div><div class="line">int [] updateCounts = pstmt.executeBatch();</div><div class="line">System.out.append(<span class="string">"inserted "</span>+updateCounts.length);</div></pre></td></tr></table></figure>
+<p>执行情况跟踪(按上面的 JDBC 连接上加上那些记录时间的参数)</p>
+<p><img src="/img/jdbc-batch-insert-no-url.png" alt="img"></p>
+<p>!!!惊呆了, 发现批量执行时, 它是每一条 SQL 发送一次给 MySQL 服务器的. 导致整个耗时为 <code>47058ms</code>, 即 47.058 秒了…</p>
+<p>查了下资料, 这种情况下, 还要修改 JDBC 连接的 URL 的参数, 即加上以下参数:</p>
+<p><code>useServerPrepStmts=false&amp;rewriteBatchedStatements=true&amp;useCompression=true</code></p>
+<p>这时, 可以看到整个耗时为:</p>
+<p><img src="/img/jdbc-batch-insert-with-url.png" alt="img"></p>
+<p>只要<code>191 ms</code>了.</p>
+<h3 id="使用-Mybatis-事件循环插入"><a href="#使用-Mybatis-事件循环插入" class="headerlink" title="使用 Mybatis + 事件循环插入"></a>使用 Mybatis + 事件循环插入</h3><p>Java 代码:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@Transactional</div><div class="line">public int bidInsertBatch(List&lt;TaskBidLog&gt; logs, int userid) throws SQLException &#123;</div><div class="line">    int rs = 0;</div><div class="line">    <span class="keyword">for</span> (TaskBidLog <span class="built_in">log</span> : logs) &#123;</div><div class="line">        rs += taskBidLogMapper.insert(<span class="built_in">log</span>, userid);</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">return</span> rs;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这种耗时, 也是非常久的. 通过按上面的参数的跟踪发送 SQL 的情况下发现, 虽然整体是一个事务, 但是 SQL 上, 是每一条 SQL 发送一次给 MySQL 服务器的.最后统一提交事务的.</p>
+<p>加不加以下参数, 都是一样的:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">useServerPrepStmts=<span class="literal">false</span>&amp;rewriteBatchedStatements=<span class="literal">true</span>&amp;useCompression=<span class="literal">true</span></div></pre></td></tr></table></figure>
+<h2 id="MyBatis-的问题"><a href="#MyBatis-的问题" class="headerlink" title="MyBatis 的问题"></a>MyBatis 的问题</h2><p>经过同事在另一边的 debug, 发现 MyBatis 在解析大量SQL 的时候, 耗时非常严重. </p>
+<p><img src="/img/mybatis-parse-sql-cost.png" alt="img"></p>
+<p>看来 Mybatis 并不是我们想像中的那样完美.</p>
+<h3 id="MyBatis-解析-SQL"><a href="#MyBatis-解析-SQL" class="headerlink" title="MyBatis 解析 SQL"></a>MyBatis 解析 SQL</h3><p>解析 XML 里的语句得到 <code>originalSql</code>, 以及参数的类型 <code>Class&lt;?&gt; parameterType</code>, 这时得到的是带有<code>#{xxx}</code>类似的 SQL 的语句, 然后 MyBatis 再将<code>#{}</code> 替换为<code>?</code>,<br>最后再将<code>parameterType</code> 的值替换到<code>?</code> 所对应的位置里.</p>
+<p><img src="/img/mybatis-parse-sql.jpg" alt="img"></p>
+<p>将<code>#{}</code>替换为<code>?</code>, 结果如下:</p>
+<p><img src="/img/mybatis-parse-result.jpeg" alt="img"></p>
+<p>就是这解析的步骤, 在批量大的时候, 性能是非常低的…</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>批量插入的情况下, 最理想的速度经测试, 应该是<code>JDBC + executeBatch</code> + <code>JDBC url 加上参数 : useServerPrepStmts=false&amp;rewriteBatchedStatements=true&amp;useCompression=true</code></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      emacsist
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://emacsist.github.io/2017/01/11/archives/记录一次 MySQL 批量插入的优化/" title="记录一次 MySQL 批量插入的优化">https://emacsist.github.io/2017/01/11/archives/记录一次 MySQL 批量插入的优化/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mysql/" rel="tag"># mysql</a>
+          
+            <a href="/tags/mybatis/" rel="tag"># mybatis</a>
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/batch/" rel="tag"># batch</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/01/19/archives/[翻译]清楚地理解 JavaScript 中的 this, 并且掌握它/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/07/archives/MySQL不重启添加slow-log慢查询日志/" rel="prev" title="MySQL不重启添加slow log慢查询日志">
+                MySQL不重启添加slow log慢查询日志 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/avatar.png"
+               alt="emacsist" />
+          <p class="site-author-name" itemprop="name">emacsist</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">295</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">69</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">142</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emacsist" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/emacist" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境"><span class="nav-number">1.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原因"><span class="nav-number">2.</span> <span class="nav-text">原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码"><span class="nav-number">3.</span> <span class="nav-text">代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初始版本代码"><span class="nav-number">3.1.</span> <span class="nav-text">初始版本代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#记录实际执行时间"><span class="nav-number">3.2.</span> <span class="nav-text">记录实际执行时间</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#JDBC-的连接信息"><span class="nav-number">3.2.1.</span> <span class="nav-text">JDBC 的连接信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在-MySQL-客户端操作"><span class="nav-number">3.2.2.</span> <span class="nav-text">在 MySQL 客户端操作</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用原生的-JDBC-来操作"><span class="nav-number">3.3.</span> <span class="nav-text">使用原生的 JDBC 来操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-Mybatis-事件循环插入"><span class="nav-number">3.4.</span> <span class="nav-text">使用 Mybatis + 事件循环插入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MyBatis-的问题"><span class="nav-number">4.</span> <span class="nav-text">MyBatis 的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MyBatis-解析-SQL"><span class="nav-number">4.1.</span> <span class="nav-text">MyBatis 解析 SQL</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">emacsist</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2132003"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

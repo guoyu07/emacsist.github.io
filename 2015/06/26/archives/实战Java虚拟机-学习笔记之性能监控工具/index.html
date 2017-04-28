@@ -1,0 +1,917 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,jvm," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="topvmstatiostatpidstat查看某进程及某线程占用CPU的例子 jps: 列出java进程,找到pid. pidstat -p pid -u 1 3 -u -t: 查看pid的进程所有线程的cpu使用情况. jstack -l pid &amp;gt; /tmp/thread.txt: 导出指定Java应用的所有线程.  然后查看 nid=xxx(即第二步里线程号的线程),即可定位到某段代">
+<meta name="keywords" content="java,jvm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="<实战Java虚拟机>学习笔记之性能监控工具">
+<meta property="og:url" content="https://emacsist.github.io/2015/06/26/archives/实战Java虚拟机-学习笔记之性能监控工具/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="topvmstatiostatpidstat查看某进程及某线程占用CPU的例子 jps: 列出java进程,找到pid. pidstat -p pid -u 1 3 -u -t: 查看pid的进程所有线程的cpu使用情况. jstack -l pid &amp;gt; /tmp/thread.txt: 导出指定Java应用的所有线程.  然后查看 nid=xxx(即第二步里线程号的线程),即可定位到某段代">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="<实战Java虚拟机>学习笔记之性能监控工具">
+<meta name="twitter:description" content="topvmstatiostatpidstat查看某进程及某线程占用CPU的例子 jps: 列出java进程,找到pid. pidstat -p pid -u 1 3 -u -t: 查看pid的进程所有线程的cpu使用情况. jstack -l pid &amp;gt; /tmp/thread.txt: 导出指定Java应用的所有线程.  然后查看 nid=xxx(即第二步里线程号的线程),即可定位到某段代">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: false,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://emacsist.github.io/2015/06/26/archives/实战Java虚拟机-学习笔记之性能监控工具/"/>
+
+
+
+
+
+  <title><实战Java虚拟机>学习笔记之性能监控工具 | emacsist</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">emacsist</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heart"></i> <br />
+            
+            书
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://emacsist.github.io/2015/06/26/archives/实战Java虚拟机-学习笔记之性能监控工具/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="emacsist">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="emacsist">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                <实战Java虚拟机>学习笔记之性能监控工具
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-06-26T00:00:49+08:00">
+                2015-06-26
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2016-11-11T21:42:33+08:00">
+                2016-11-11
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/jvm/" itemprop="url" rel="index">
+                    <span itemprop="name">jvm</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="top"><a href="#top" class="headerlink" title="top"></a>top</h2><h2 id="vmstat"><a href="#vmstat" class="headerlink" title="vmstat"></a>vmstat</h2><h2 id="iostat"><a href="#iostat" class="headerlink" title="iostat"></a>iostat</h2><h2 id="pidstat"><a href="#pidstat" class="headerlink" title="pidstat"></a>pidstat</h2><h3 id="查看某进程及某线程占用CPU的例子"><a href="#查看某进程及某线程占用CPU的例子" class="headerlink" title="查看某进程及某线程占用CPU的例子"></a>查看某进程及某线程占用CPU的例子</h3><ul>
+<li><code>jps</code>: 列出java进程,找到pid.</li>
+<li><code>pidstat -p pid -u 1 3 -u -t</code>: 查看pid的进程所有线程的cpu使用情况.</li>
+<li><code>jstack -l pid &gt; /tmp/thread.txt</code>: 导出指定Java应用的所有线程.</li>
+</ul>
+<p>然后查看 <code>nid=xxx</code>(即第二步里线程号的线程),即可定位到某段代码.</p>
+<h3 id="查看某进程及某线程占用IO的例子"><a href="#查看某进程及某线程占用IO的例子" class="headerlink" title="查看某进程及某线程占用IO的例子"></a>查看某进程及某线程占用IO的例子</h3><ul>
+<li><code>jps</code>: 列出java进程,找到pid.</li>
+<li><code>pidstat -p pid -u 1 3 -d -t</code>: 查看pid的进程所有线程的IO使用情况.</li>
+<li><code>jstack -l pid &gt; /tmp/thread.txt</code>: 导出指定Java应用的所有线程.</li>
+</ul>
+<p>然后查看 <code>nid=xxx</code>(即第二步里线程号的线程),即可定位到某段代码.</p>
+<h4 id="内存监控"><a href="#内存监控" class="headerlink" title="内存监控"></a>内存监控</h4><ul>
+<li><code>pidstat -r -p pid 1 5</code>:查看某pid进程的内存.</li>
+</ul>
+<h2 id="jps-查看Java进程"><a href="#jps-查看Java进程" class="headerlink" title="jps 查看Java进程"></a>jps 查看Java进程</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jps -mlv</div></pre></td></tr></table></figure>
+<h2 id="jstat-查看堆运行时信息"><a href="#jstat-查看堆运行时信息" class="headerlink" title="jstat 查看堆运行时信息"></a>jstat 查看堆运行时信息</h2><blockquote>
+<p>格式:<br><code>jstat -&lt;option&gt; [-t] [-h&lt;lines&gt;] &lt;vmid JVM进程ID&gt; [&lt;interval 每次统计间隔时间&gt; [&lt;count 统计次数&gt;] ]</code></p>
+</blockquote>
+<h3 id="option-列表"><a href="#option-列表" class="headerlink" title="option 列表"></a>option 列表</h3><ul>
+<li>class (类加载器)</li>
+<li>compiler (JIT)</li>
+<li>gc (GC堆状态)</li>
+<li>gccapacity (各区大小)</li>
+<li>gccause (最近一次GC统计和原因)</li>
+<li>gcnew (新区统计)</li>
+<li>gcnewcapacity (新区大小)</li>
+<li>gcold (老区统计)</li>
+<li>gcoldcapacity (老区大小)</li>
+<li>gcpermcapacity (永久区大小)</li>
+<li>gcutil (GC统计汇总)</li>
+<li>printcompilation (HotSpot编译统计)</li>
+</ul>
+<h2 id="jinfo-查看虚拟机参数"><a href="#jinfo-查看虚拟机参数" class="headerlink" title="jinfo 查看虚拟机参数"></a>jinfo 查看虚拟机参数</h2><p>查看或者修改正在运行的虚拟机参数.</p>
+<blockquote>
+<p>格式:<br>jinfo <option> <pid></pid></option></p>
+</blockquote>
+<h3 id="option-列表-1"><a href="#option-列表-1" class="headerlink" title="option 列表"></a>option 列表</h3><ul>
+<li><code>-flag &lt;name&gt;</code> : 查看名为<code>name</code>的虚拟机参数</li>
+</ul>
+<blockquote>
+<p>例如: <code>jinfo -flag MaxThenuringThreshold 111</code></p>
+</blockquote>
+<ul>
+<li><p><code>-flag +|-name</code>:设置指定虚拟机参数的布尔值</p>
+</li>
+<li><p><code>-flag &lt;name&gt;=&lt;value&gt;</code>:设置指定虚拟机参数的值</p>
+</li>
+</ul>
+<h2 id="jmap-导出堆到文件"><a href="#jmap-导出堆到文件" class="headerlink" title="jmap 导出堆到文件"></a>jmap 导出堆到文件</h2><h3 id="统计对象信息"><a href="#统计对象信息" class="headerlink" title="统计对象信息"></a>统计对象信息</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jmap -histo pid &gt; /tmp/heap.txt</div></pre></td></tr></table></figure>
+<h3 id="导出当前堆快照"><a href="#导出当前堆快照" class="headerlink" title="导出当前堆快照"></a>导出当前堆快照</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jmap -dump:format=b,file=/tmp/heap.hprof pid</div></pre></td></tr></table></figure>
+<h3 id="查看-ClassLoader-信息"><a href="#查看-ClassLoader-信息" class="headerlink" title="查看 ClassLoader 信息"></a>查看 ClassLoader 信息</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jmap -permstat pid</div></pre></td></tr></table></figure>
+<h3 id="查看-finalizer-队列中的对象"><a href="#查看-finalizer-队列中的对象" class="headerlink" title="查看 finalizer 队列中的对象"></a>查看 finalizer 队列中的对象</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jmap -finalizerinfo pid</div></pre></td></tr></table></figure>
+<h3 id="查看内存各区的大小信息"><a href="#查看内存各区的大小信息" class="headerlink" title="查看内存各区的大小信息"></a>查看内存各区的大小信息</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jmap -heap pid</div></pre></td></tr></table></figure>
+<h2 id="jhat-自带的堆分析工具"><a href="#jhat-自带的堆分析工具" class="headerlink" title="jhat 自带的堆分析工具"></a>jhat 自带的堆分析工具</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jhat /tmp/heap.hprof</div></pre></td></tr></table></figure>
+<p>然后打开浏览器访问 <a href="http://127.0.0.1:7000" target="_blank" rel="external">localhost:7000</a></p>
+<h2 id="jstack-查看线程堆栈"><a href="#jstack-查看线程堆栈" class="headerlink" title="jstack 查看线程堆栈"></a>jstack 查看线程堆栈</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jstack [<span class="_">-l</span>] &lt;pid&gt; &gt; /tmp.stack.txt</div></pre></td></tr></table></figure>
+<h2 id="jcmd-多功能命令行-JDK-7自带"><a href="#jcmd-多功能命令行-JDK-7自带" class="headerlink" title="jcmd 多功能命令行[JDK 7自带]"></a>jcmd 多功能命令行[JDK 7自带]</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#相当于 jps</span></div><div class="line">jcmd <span class="_">-l</span></div><div class="line"></div><div class="line"><span class="comment">#查看启动时间</span></div><div class="line">jcm pid VM.uptime</div><div class="line"></div><div class="line">...</div><div class="line">更多请使用 jcmd &lt;pid&gt; <span class="built_in">help</span> 看所支持的命令.</div></pre></td></tr></table></figure>
+<h2 id="hprof-性能统计工具"><a href="#hprof-性能统计工具" class="headerlink" title="hprof 性能统计工具"></a>hprof 性能统计工具</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">查看帮助:</div><div class="line"></div><div class="line">java -agentlib:hprof=<span class="built_in">help</span></div></pre></td></tr></table></figure>
+<ul>
+<li>查看函数执行时间</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">执行Java程序时,添加上以下参数</div><div class="line"></div><div class="line">-agentlib:hprof=cpu=<span class="built_in">times</span>,interval=10</div></pre></td></tr></table></figure>
+<h2 id="图形化监控工具-jConsole"><a href="#图形化监控工具-jConsole" class="headerlink" title="图形化监控工具 jConsole"></a>图形化监控工具 jConsole</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">远程配置:</div><div class="line"></div><div class="line">-Djava.rmi.server.hostname=127.0.0.1</div><div class="line">-Dcom.sun.management.jmxremote</div><div class="line">-Dcom.sun.management.jmxremote.port=8888</div><div class="line">-Dcom.sun.management.jmxremote.authenticate=<span class="literal">false</span></div><div class="line">-Dcom.sun.management.jmxremote.ssl=<span class="literal">false</span></div></pre></td></tr></table></figure>
+<h2 id="多合一工具-Visual-VM"><a href="#多合一工具-Visual-VM" class="headerlink" title="多合一工具 Visual VM"></a>多合一工具 Visual VM</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">远程配置:</div><div class="line"></div><div class="line">-Djava.rmi.server.hostname=127.0.0.1</div><div class="line">-Dcom.sun.management.jmxremote</div><div class="line">-Dcom.sun.management.jmxremote.port=8888</div><div class="line">-Dcom.sun.management.jmxremote.authenticate=<span class="literal">false</span></div><div class="line">-Dcom.sun.management.jmxremote.ssl=<span class="literal">false</span></div></pre></td></tr></table></figure>
+<h2 id="Mission-Control"><a href="#Mission-Control" class="headerlink" title="Mission Control"></a>Mission Control</h2><blockquote>
+<p>该工具在 JDK Update 40 之后. 在bin目录下的 <code>jmc.exe</code>.</p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      emacsist
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://emacsist.github.io/2015/06/26/archives/实战Java虚拟机-学习笔记之性能监控工具/" title="<实战Java虚拟机>学习笔记之性能监控工具">https://emacsist.github.io/2015/06/26/archives/实战Java虚拟机-学习笔记之性能监控工具/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/jvm/" rel="tag"># jvm</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/06/27/archives/实战Java虚拟机-学习笔记之分析堆/" rel="next" title="<实战Java虚拟机>学习笔记之分析堆">
+                <i class="fa fa-chevron-left"></i> <实战Java虚拟机>学习笔记之分析堆
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/06/25/archives/实战Java虚拟机-学习笔记之垃圾收集器参数/" rel="prev" title="<实战Java虚拟机>学习笔记之垃圾收集器参数">
+                <实战Java虚拟机>学习笔记之垃圾收集器参数 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/avatar.png"
+               alt="emacsist" />
+          <p class="site-author-name" itemprop="name">emacsist</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">295</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">69</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">142</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emacsist" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/emacist" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#top"><span class="nav-number">1.</span> <span class="nav-text">top</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vmstat"><span class="nav-number">2.</span> <span class="nav-text">vmstat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iostat"><span class="nav-number">3.</span> <span class="nav-text">iostat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pidstat"><span class="nav-number">4.</span> <span class="nav-text">pidstat</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看某进程及某线程占用CPU的例子"><span class="nav-number">4.1.</span> <span class="nav-text">查看某进程及某线程占用CPU的例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看某进程及某线程占用IO的例子"><span class="nav-number">4.2.</span> <span class="nav-text">查看某进程及某线程占用IO的例子</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#内存监控"><span class="nav-number">4.2.1.</span> <span class="nav-text">内存监控</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jps-查看Java进程"><span class="nav-number">5.</span> <span class="nav-text">jps 查看Java进程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jstat-查看堆运行时信息"><span class="nav-number">6.</span> <span class="nav-text">jstat 查看堆运行时信息</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#option-列表"><span class="nav-number">6.1.</span> <span class="nav-text">option 列表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jinfo-查看虚拟机参数"><span class="nav-number">7.</span> <span class="nav-text">jinfo 查看虚拟机参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#option-列表-1"><span class="nav-number">7.1.</span> <span class="nav-text">option 列表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jmap-导出堆到文件"><span class="nav-number">8.</span> <span class="nav-text">jmap 导出堆到文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#统计对象信息"><span class="nav-number">8.1.</span> <span class="nav-text">统计对象信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#导出当前堆快照"><span class="nav-number">8.2.</span> <span class="nav-text">导出当前堆快照</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看-ClassLoader-信息"><span class="nav-number">8.3.</span> <span class="nav-text">查看 ClassLoader 信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看-finalizer-队列中的对象"><span class="nav-number">8.4.</span> <span class="nav-text">查看 finalizer 队列中的对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看内存各区的大小信息"><span class="nav-number">8.5.</span> <span class="nav-text">查看内存各区的大小信息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jhat-自带的堆分析工具"><span class="nav-number">9.</span> <span class="nav-text">jhat 自带的堆分析工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jstack-查看线程堆栈"><span class="nav-number">10.</span> <span class="nav-text">jstack 查看线程堆栈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jcmd-多功能命令行-JDK-7自带"><span class="nav-number">11.</span> <span class="nav-text">jcmd 多功能命令行[JDK 7自带]</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hprof-性能统计工具"><span class="nav-number">12.</span> <span class="nav-text">hprof 性能统计工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图形化监控工具-jConsole"><span class="nav-number">13.</span> <span class="nav-text">图形化监控工具 jConsole</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多合一工具-Visual-VM"><span class="nav-number">14.</span> <span class="nav-text">多合一工具 Visual VM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mission-Control"><span class="nav-number">15.</span> <span class="nav-text">Mission Control</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">emacsist</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2132003"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

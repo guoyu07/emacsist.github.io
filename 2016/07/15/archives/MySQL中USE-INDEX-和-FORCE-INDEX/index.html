@@ -1,0 +1,852 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="database,mysql," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="问题在一次生产环境排查性能问题时, 发现有个请求在一些用户的数据量比较大的情况下, 最高耗时差不多要3s. 而且还是一个轮询的请求. 原因在排查问题时, 定位到是执行某条SQL时在用户的数据比较大的情况下, SQL执行耗时要1.5s. 1234567891011121314151617mysql&amp;gt; SELECT count(1)    -&amp;gt; FROM    -&amp;gt;   cc_ses">
+<meta name="keywords" content="database,mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL中USE INDEX 和 FORCE INDEX">
+<meta property="og:url" content="https://emacsist.github.io/2016/07/15/archives/MySQL中USE-INDEX-和-FORCE-INDEX/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="问题在一次生产环境排查性能问题时, 发现有个请求在一些用户的数据量比较大的情况下, 最高耗时差不多要3s. 而且还是一个轮询的请求. 原因在排查问题时, 定位到是执行某条SQL时在用户的数据比较大的情况下, SQL执行耗时要1.5s. 1234567891011121314151617mysql&amp;gt; SELECT count(1)    -&amp;gt; FROM    -&amp;gt;   cc_ses">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL中USE INDEX 和 FORCE INDEX">
+<meta name="twitter:description" content="问题在一次生产环境排查性能问题时, 发现有个请求在一些用户的数据量比较大的情况下, 最高耗时差不多要3s. 而且还是一个轮询的请求. 原因在排查问题时, 定位到是执行某条SQL时在用户的数据比较大的情况下, SQL执行耗时要1.5s. 1234567891011121314151617mysql&amp;gt; SELECT count(1)    -&amp;gt; FROM    -&amp;gt;   cc_ses">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: false,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://emacsist.github.io/2016/07/15/archives/MySQL中USE-INDEX-和-FORCE-INDEX/"/>
+
+
+
+
+
+  <title>MySQL中USE INDEX 和 FORCE INDEX | emacsist</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">emacsist</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heart"></i> <br />
+            
+            书
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://emacsist.github.io/2016/07/15/archives/MySQL中USE-INDEX-和-FORCE-INDEX/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="emacsist">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="emacsist">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                MySQL中USE INDEX 和 FORCE INDEX
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-15T11:40:37+08:00">
+                2016-07-15
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2016-11-11T21:42:33+08:00">
+                2016-11-11
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>在一次生产环境排查性能问题时, 发现有个请求在一些用户的数据量比较大的情况下, 最高耗时差不多要3s. 而且还是一个轮询的请求.</p>
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>在排查问题时, 定位到是执行某条SQL时在用户的数据比较大的情况下, SQL执行耗时要<code>1.5s</code>.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">mysql&gt; SELECT count(1)</div><div class="line">    -&gt; FROM</div><div class="line">    -&gt;   cc_session cs</div><div class="line">    -&gt;   LEFT JOIN users_platform cp ON cs.user_id = cp.user_id</div><div class="line">    -&gt;                                  AND cs.to_openid = cp.open_id</div><div class="line">    -&gt; WHERE</div><div class="line">    -&gt;   cs.`status` = 0</div><div class="line">    -&gt;   AND cs.user_id = 219</div><div class="line">    -&gt;   AND cs.agent_user_id = 219</div><div class="line">    -&gt;   AND cs.create_time &lt; DATE_SUB(now(), INTERVAL 10 MINUTE)</div><div class="line">    -&gt; AND cp.cc_open = 1;</div><div class="line">+----------+</div><div class="line">| count(1) |</div><div class="line">+----------+</div><div class="line">|        0 |</div><div class="line">+----------+</div><div class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (1.50 sec)</div></pre></td></tr></table></figure>
+<p>它的执行计划如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">mysql&gt; explain SELECT count(1)        FROM   cc_session cs     LEFT JOIN users_platform cp             ON cs.user_id = cp.user_id                                   AND cs.to_openid = cp.open_id  WHERE    cs.`status` = 0    AND cs.user_id = 219    AND cs.agent_user_id = 219    AND cs.create_time &lt; DATE_SUB(now(), INTERVAL 10 MINUTE)  AND cp.cc_open = 1;</div><div class="line"></div><div class="line">+----+-------------+-------+------+---------------------------------------+---------------------+---------+------------------------+------+------------------------------------+</div><div class="line">| id | select_type | table | <span class="built_in">type</span> | possible_keys                         | key                 | key_len | ref                    | rows | Extra                              |</div><div class="line">+----+-------------+-------+------+---------------------------------------+---------------------+---------+------------------------+------+------------------------------------+</div><div class="line">|  1 | SIMPLE      | cp    | ref  | uid_opid                              | uid_opid            | 4       | const                  |   50 | Using index condition; Using <span class="built_in">where</span> |</div><div class="line">|  1 | SIMPLE      | cs    | ref  | id_from_to_close_uq,idx_user_agent_id | id_from_to_close_uq | 194     | uniweibo_v2.cp.open_id |  127 | Using index condition; Using <span class="built_in">where</span> |</div><div class="line">+----+-------------+-------+------+---------------------------------------+---------------------+---------+------------------------+------+------------------------------------+</div><div class="line">2 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div></pre></td></tr></table></figure>
+<p>两张表的索引如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show index from cc_session;</div><div class="line">+------------+------------+---------------------+--------------+---------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</div><div class="line">| Table      | Non_unique | Key_name            | Seq_in_index | Column_name   | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |</div><div class="line">+------------+------------+---------------------+--------------+---------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</div><div class="line">| cc_session |          0 | PRIMARY             |            1 | id            | A         |     3279492 |     NULL | NULL   |      | BTREE      |         |               |</div><div class="line">| cc_session |          0 | id_from_to_close_uq |            1 | to_openid     | A         |       25822 |     NULL | NULL   |      | BTREE      |         |               |</div><div class="line">| cc_session |          0 | id_from_to_close_uq |            2 | from_openid   | A         |     3279492 |     NULL | NULL   |      | BTREE      |         |               |</div><div class="line">| cc_session |          0 | id_from_to_close_uq |            3 | closed_time   | A         |     3279492 |     NULL | NULL   |      | BTREE      |         |               |</div><div class="line">| cc_session |          1 | idx_user_agent_id   |            1 | user_id       | A         |         513 |     NULL | NULL   |      | BTREE      |         |               |</div><div class="line">| cc_session |          1 | idx_user_agent_id   |            2 | agent_user_id | A         |        1886 |     NULL | NULL   |      | BTREE      |         |               |</div><div class="line">+------------+------------+---------------------+--------------+---------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</div><div class="line">6 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; show index from users_platform;</div><div class="line">+----------------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</div><div class="line">| Table          | Non_unique | Key_name | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |</div><div class="line">+----------------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</div><div class="line">| users_platform |          0 | PRIMARY  |            1 | id          | A         |         373 |     NULL | NULL   |      | BTREE      |         |               |</div><div class="line">| users_platform |          1 | uid_opid |            1 | user_id     | A         |         373 |     NULL | NULL   |      | BTREE      |         |               |</div><div class="line">| users_platform |          1 | uid_opid |            2 | open_id     | A         |         373 |     NULL | NULL   |      | BTREE      |         |               |</div><div class="line">+----------------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</div><div class="line">3 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
+<p>由执行计划可知,它分别使用了<code>cc_session</code>表的<code>id_from_to_close_uq</code>索引, 和<code>users_platform</code>表中的<code>uid_opid</code>索引.</p>
+<h2 id="使用-use-index-建议MySQL使用其他索引"><a href="#使用-use-index-建议MySQL使用其他索引" class="headerlink" title="使用 use index 建议MySQL使用其他索引"></a>使用 use index 建议MySQL使用其他索引</h2><p>修改之后的SQL如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">mysql&gt; SELECT count(1)</div><div class="line">    -&gt;        FROM</div><div class="line">    -&gt;   cc_session cs use index (idx_user_agent_id)</div><div class="line">    -&gt;    LEFT JOIN users_platform cp use INDEX (uid_opid)</div><div class="line">    -&gt;            ON cs.user_id = cp.user_id</div><div class="line">    -&gt;                                   AND cs.to_openid = cp.open_id</div><div class="line">    -&gt;  WHERE</div><div class="line">    -&gt;    cs.`status` = 0</div><div class="line">    -&gt;    AND cs.user_id = 219</div><div class="line">    -&gt;    AND cs.agent_user_id = 219</div><div class="line">    -&gt;    AND cs.create_time &lt; DATE_SUB(now(), INTERVAL 10 MINUTE)</div><div class="line">    -&gt;  AND cp.cc_open = 1;</div><div class="line">+----------+</div><div class="line">| count(1) |</div><div class="line">+----------+</div><div class="line">|        0 |</div><div class="line">+----------+</div><div class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.01 sec)</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
+<p>耗时从<code>1.5秒</code>,降低到<code>0.01秒</code></p>
+<p>执行计划如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">mysql&gt; explain SELECT count(1)</div><div class="line">    -&gt;        FROM</div><div class="line">    -&gt;   cc_session cs use index (idx_user_agent_id)</div><div class="line">    -&gt;    LEFT JOIN users_platform cp use INDEX (uid_opid)</div><div class="line">    -&gt;            ON cs.user_id = cp.user_id</div><div class="line">    -&gt;                                   AND cs.to_openid = cp.open_id</div><div class="line">    -&gt;  WHERE</div><div class="line">    -&gt;    cs.`status` = 0</div><div class="line">    -&gt;    AND cs.user_id = 219</div><div class="line">    -&gt;    AND cs.agent_user_id = 219</div><div class="line">    -&gt;    AND cs.create_time &lt; DATE_SUB(now(), INTERVAL 10 MINUTE)</div><div class="line">    -&gt;  AND cp.cc_open = 1;</div><div class="line">+----+-------------+-------+------+-------------------+-------------------+---------+--------------------------------+-------+------------------------------------+</div><div class="line">| id | select_type | table | <span class="built_in">type</span> | possible_keys     | key               | key_len | ref                            | rows  | Extra                              |</div><div class="line">+----+-------------+-------+------+-------------------+-------------------+---------+--------------------------------+-------+------------------------------------+</div><div class="line">|  1 | SIMPLE      | cs    | ref  | idx_user_agent_id | idx_user_agent_id | 8       | const,const                    | 22966 | Using <span class="built_in">where</span>                        |</div><div class="line">|  1 | SIMPLE      | cp    | ref  | uid_opid          | uid_opid          | 180     | const,uniweibo_v2.cs.to_openid |     1 | Using index condition; Using <span class="built_in">where</span> |</div><div class="line">+----+-------------+-------+------+-------------------+-------------------+---------+--------------------------------+-------+------------------------------------+</div><div class="line">2 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
+<h2 id="use-index-和-force-index"><a href="#use-index-和-force-index" class="headerlink" title="use index 和 force index"></a>use index 和 force index</h2><p>use index : 是建议MySQL去使用这个索引.最后到底是用不用, 还是由MySQL来决定. 如果MySQL还是觉得全表扫描来得快, 那即使是有索引, 它还是会使用全表扫描.<br>force index : 是强制MySQL去使用这个索引. 如果用不上, 就全表. 如果能用上, 就一定会使用该索引.</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      emacsist
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://emacsist.github.io/2016/07/15/archives/MySQL中USE-INDEX-和-FORCE-INDEX/" title="MySQL中USE INDEX 和 FORCE INDEX">https://emacsist.github.io/2016/07/15/archives/MySQL中USE-INDEX-和-FORCE-INDEX/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/database/" rel="tag"># database</a>
+          
+            <a href="/tags/mysql/" rel="tag"># mysql</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/15/archives/JVM性能排查神器-greys-anatomy/" rel="next" title="JVM性能排查神器 greys-anatomy">
+                <i class="fa fa-chevron-left"></i> JVM性能排查神器 greys-anatomy
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/13/archives/Git自动化部署项目/" rel="prev" title="Git自动化部署项目">
+                Git自动化部署项目 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/avatar.png"
+               alt="emacsist" />
+          <p class="site-author-name" itemprop="name">emacsist</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">295</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">69</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">142</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emacsist" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/emacist" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原因"><span class="nav-number">2.</span> <span class="nav-text">原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-use-index-建议MySQL使用其他索引"><span class="nav-number">3.</span> <span class="nav-text">使用 use index 建议MySQL使用其他索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#use-index-和-force-index"><span class="nav-number">4.</span> <span class="nav-text">use index 和 force index</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">emacsist</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2132003"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

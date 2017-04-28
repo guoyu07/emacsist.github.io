@@ -1,0 +1,889 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,jvm," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="串行回收器参数 -XX:+UseSerialGC: 在新生代和年老代使用串行收集器 -XX:SurvivorRatio: 设置eden和survivor区大小的比例 -XX:PretenureSizeThreshold: 设置大对象直接进入老年代的阈值.当对象的大小,超过这个值时,直接在年老代分配. -XX:MaxTenuringThreshold: 设置对象进入老年代的年龄最大值.每一次Mino">
+<meta name="keywords" content="java,jvm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="<实战Java虚拟机>学习笔记之垃圾收集器参数">
+<meta property="og:url" content="https://emacsist.github.io/2015/06/25/archives/实战Java虚拟机-学习笔记之垃圾收集器参数/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="串行回收器参数 -XX:+UseSerialGC: 在新生代和年老代使用串行收集器 -XX:SurvivorRatio: 设置eden和survivor区大小的比例 -XX:PretenureSizeThreshold: 设置大对象直接进入老年代的阈值.当对象的大小,超过这个值时,直接在年老代分配. -XX:MaxTenuringThreshold: 设置对象进入老年代的年龄最大值.每一次Mino">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="<实战Java虚拟机>学习笔记之垃圾收集器参数">
+<meta name="twitter:description" content="串行回收器参数 -XX:+UseSerialGC: 在新生代和年老代使用串行收集器 -XX:SurvivorRatio: 设置eden和survivor区大小的比例 -XX:PretenureSizeThreshold: 设置大对象直接进入老年代的阈值.当对象的大小,超过这个值时,直接在年老代分配. -XX:MaxTenuringThreshold: 设置对象进入老年代的年龄最大值.每一次Mino">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: false,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://emacsist.github.io/2015/06/25/archives/实战Java虚拟机-学习笔记之垃圾收集器参数/"/>
+
+
+
+
+
+  <title><实战Java虚拟机>学习笔记之垃圾收集器参数 | emacsist</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">emacsist</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heart"></i> <br />
+            
+            书
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://emacsist.github.io/2015/06/25/archives/实战Java虚拟机-学习笔记之垃圾收集器参数/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="emacsist">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="emacsist">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                <实战Java虚拟机>学习笔记之垃圾收集器参数
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-06-25T23:10:35+08:00">
+                2015-06-25
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2016-11-11T21:42:33+08:00">
+                2016-11-11
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/jvm/" itemprop="url" rel="index">
+                    <span itemprop="name">jvm</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="串行回收器参数"><a href="#串行回收器参数" class="headerlink" title="串行回收器参数"></a>串行回收器参数</h2><ul>
+<li><code>-XX:+UseSerialGC</code>: 在新生代和年老代使用串行收集器</li>
+<li><code>-XX:SurvivorRatio</code>: 设置<code>eden</code>和<code>survivor</code>区大小的比例</li>
+<li><code>-XX:PretenureSizeThreshold</code>: 设置大对象直接进入老年代的阈值.当对象的大小,超过这个值时,直接在年老代分配.</li>
+<li><code>-XX:MaxTenuringThreshold</code>: 设置对象进入老年代的年龄最大值.每一次<code>Minor GC</code>后,对象年龄就会加1, 任何大于该值的对象, 就一定会进入老年代.</li>
+</ul>
+<h2 id="并行GC相关参数"><a href="#并行GC相关参数" class="headerlink" title="并行GC相关参数"></a>并行GC相关参数</h2><ul>
+<li><code>-XX:+UseParNewGC</code>: 在新生代使用并行收集器</li>
+<li><code>-XX:+UseParallelOldGC</code>: 老年代使用并行收集器</li>
+<li><code>-XX:ParallelGCThreads</code>: 垃圾回收的线程数.一般情况下和CPU数量相等.</li>
+<li><code>-XX:MaxGCPauseMillis</code>: 最大垃圾收集停顿时间. 它的值是一个大于0的整数.</li>
+<li><code>-XX:GCTimeRatio</code>: 设置吞吐量大小. 它的值是一个0到100之间的整数.假设为N,则系统将花费不超过<code>1/(1+N)</code>的时间用于垃圾收集.</li>
+<li><code>-XX:+UseAdaptiveSizePolicy</code>:打开自适应GC策略.它会自动调整新生代大小,eden, survivor的比例,晋升年老对象年龄等来达到平衡点.</li>
+</ul>
+<h2 id="与CMS回收器相关参数"><a href="#与CMS回收器相关参数" class="headerlink" title="与CMS回收器相关参数"></a>与CMS回收器相关参数</h2><ul>
+<li><code>-XX:+UseConcMarkSweepGC</code>:新生代使用并行收集器,老年代使用CMS+串行收集器.</li>
+<li><code>-XX:ParallelCMSThreads</code>:设置CMS线程数量</li>
+<li><code>-XX:CMSInitiatingOccupancyFraction</code>:设置CMS在老年代空间被使用多少后触发.默认为68%.</li>
+<li><code>-XX:+UseCMSCompactAtFullCollection</code>:设置CMS收集器在完成垃圾收集后是否进行一次内存碎片整理.</li>
+<li><code>-XX:CMSFullGCsBeforeCompaction</code>:设定进行多少次CMS垃圾回收后, 进行一次内存压缩.</li>
+<li><code>-XX:+CMSClassUnloadingEnabled</code>:允许对类元数据区进行回收</li>
+<li><code>-XX:CMSInitiatingPermOccupancyFraction</code>:当永久区占用率达到这一百分比时,启动CMS回收.(前提是<code>-XX:+CMSClassUnloadingEnabled</code>启用了)</li>
+<li><code>-XX:UseCMSInitiatingOccupancyOnly</code>:表示只在到达阈值的时候才进行CMS回收.</li>
+<li><code>-XX:+CMSIncrementalMode</code>:使用增量模式.比较适合单CPU. 在JDK 8中标记为废弃, 并且将在JDK 9中彻底移除.</li>
+</ul>
+<h2 id="与G1回收器相关参数"><a href="#与G1回收器相关参数" class="headerlink" title="与G1回收器相关参数"></a>与G1回收器相关参数</h2><ul>
+<li><code>-XX:+UseG1GC</code>:启用G1回收器</li>
+<li><code>-XX:MaxGCPauseMillis</code>: 最大垃圾收集停顿时间</li>
+<li><code>-XX:GCPauseIntervalMillis</code>: 设置停顿间隔时间</li>
+</ul>
+<h2 id="TLAB-相关"><a href="#TLAB-相关" class="headerlink" title="TLAB 相关"></a>TLAB 相关</h2><ul>
+<li><code>-XX:+UseTLAB</code>:开启TLAB分配</li>
+<li><code>-XX:+PrintTLAB</code>: 打印TLAB相关分配信息</li>
+<li><code>-XX:TLABSize</code>: 设置TLAB大小</li>
+<li><code>-XX:+ResizeTLAB</code>: 自动调整TLAB大小</li>
+</ul>
+<h2 id="其他参数"><a href="#其他参数" class="headerlink" title="其他参数"></a>其他参数</h2><ul>
+<li><code>-XX:+DisableExplicitGC</code>:禁用显式调用GC</li>
+<li><code>-XX:+ExplicitGCInvokesConcurrent</code>:使用并发方式处理显式GC</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      emacsist
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://emacsist.github.io/2015/06/25/archives/实战Java虚拟机-学习笔记之垃圾收集器参数/" title="<实战Java虚拟机>学习笔记之垃圾收集器参数">https://emacsist.github.io/2015/06/25/archives/实战Java虚拟机-学习笔记之垃圾收集器参数/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/jvm/" rel="tag"># jvm</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/06/26/archives/实战Java虚拟机-学习笔记之性能监控工具/" rel="next" title="<实战Java虚拟机>学习笔记之性能监控工具">
+                <i class="fa fa-chevron-left"></i> <实战Java虚拟机>学习笔记之性能监控工具
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/06/25/archives/Jackson-JSON-库使用例子/" rel="prev" title="Jackson JSON 库使用例子">
+                Jackson JSON 库使用例子 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/avatar.png"
+               alt="emacsist" />
+          <p class="site-author-name" itemprop="name">emacsist</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">295</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">69</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">142</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emacsist" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/emacist" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#串行回收器参数"><span class="nav-number">1.</span> <span class="nav-text">串行回收器参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#并行GC相关参数"><span class="nav-number">2.</span> <span class="nav-text">并行GC相关参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#与CMS回收器相关参数"><span class="nav-number">3.</span> <span class="nav-text">与CMS回收器相关参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#与G1回收器相关参数"><span class="nav-number">4.</span> <span class="nav-text">与G1回收器相关参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TLAB-相关"><span class="nav-number">5.</span> <span class="nav-text">TLAB 相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他参数"><span class="nav-number">6.</span> <span class="nav-text">其他参数</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">emacsist</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2132003"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

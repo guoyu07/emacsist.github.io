@@ -1,0 +1,861 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,java web,java ee,spring,ssh," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="以下这些都只是从工作中，思考出来的，只是在下自己的拙见。一个好的包设计， 可以让项目更加清晰具体。  com.company.dao.pojo这里存放的是与数据库对应的表的POJO com.company.dao这里存放最原子的数据库操作的代码，每一个类的操作，都有一张与之对应的表。它只向 com.company.dao.service 层提供服务。 com.company.dao.servic">
+<meta name="keywords" content="java,java web,java ee,spring,ssh">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java Web 项目包建议设计">
+<meta property="og:url" content="https://emacsist.github.io/2015/07/21/archives/Java-Web-项目包建议设计/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="以下这些都只是从工作中，思考出来的，只是在下自己的拙见。一个好的包设计， 可以让项目更加清晰具体。  com.company.dao.pojo这里存放的是与数据库对应的表的POJO com.company.dao这里存放最原子的数据库操作的代码，每一个类的操作，都有一张与之对应的表。它只向 com.company.dao.service 层提供服务。 com.company.dao.servic">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java Web 项目包建议设计">
+<meta name="twitter:description" content="以下这些都只是从工作中，思考出来的，只是在下自己的拙见。一个好的包设计， 可以让项目更加清晰具体。  com.company.dao.pojo这里存放的是与数据库对应的表的POJO com.company.dao这里存放最原子的数据库操作的代码，每一个类的操作，都有一张与之对应的表。它只向 com.company.dao.service 层提供服务。 com.company.dao.servic">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: false,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://emacsist.github.io/2015/07/21/archives/Java-Web-项目包建议设计/"/>
+
+
+
+
+
+  <title>Java Web 项目包建议设计 | emacsist</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">emacsist</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heart"></i> <br />
+            
+            书
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://emacsist.github.io/2015/07/21/archives/Java-Web-项目包建议设计/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="emacsist">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="emacsist">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Java Web 项目包建议设计
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-07-21T17:51:06+08:00">
+                2015-07-21
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2016-11-11T21:42:33+08:00">
+                2016-11-11
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>以下这些都只是从工作中，思考出来的，只是在下自己的拙见。一个好的包设计， 可以让项目更加清晰具体。</p>
+</blockquote>
+<h2 id="com-company-dao-pojo"><a href="#com-company-dao-pojo" class="headerlink" title="com.company.dao.pojo"></a>com.company.dao.pojo</h2><p>这里存放的是与数据库对应的表的POJO</p>
+<h2 id="com-company-dao"><a href="#com-company-dao" class="headerlink" title="com.company.dao"></a>com.company.dao</h2><p>这里存放最原子的数据库操作的代码，每一个类的操作，都有一张与之对应的表。它只向 <code>com.company.dao.service</code> 层提供服务。</p>
+<h2 id="com-company-dao-service"><a href="#com-company-dao-service" class="headerlink" title="com.company.dao.service"></a>com.company.dao.service</h2><p>这里存放的是对 <code>com.company.dao</code> 的管理服层，因为有些关系不是只是操作一张表的， 可能要对两张或以上的表进行事务操作。这时， 就应该把这些操作放在这里。</p>
+<h2 id="com-company-controller"><a href="#com-company-controller" class="headerlink" title="com.company.controller"></a>com.company.controller</h2><p>这里存放的是所有 <code>controller</code> 的类，即<code>Restful API</code>层。前端可以直接访问的方法就放在这里。</p>
+<h2 id="com-company-task"><a href="#com-company-task" class="headerlink" title="com.company.task"></a>com.company.task</h2><p>这里存放的是所有与task相关的类。比如用了<code>spring task</code>的服务的类都放在这里。（如果有的话）</p>
+<h2 id="com-company-rabbitmq-queue"><a href="#com-company-rabbitmq-queue" class="headerlink" title="com.company.rabbitmq.queue"></a>com.company.rabbitmq.queue</h2><p>这里存放的是所有与消息队列进队相关的类。</p>
+<h2 id="com-company-rabbitmq-listener"><a href="#com-company-rabbitmq-listener" class="headerlink" title="com.company.rabbitmq.listener"></a>com.company.rabbitmq.listener</h2><p>这里存放的是所有与消息队列出队相关的监听器的类</p>
+<h2 id="com-company-utils"><a href="#com-company-utils" class="headerlink" title="com.company.utils"></a>com.company.utils</h2><p>这里存放的是所有与工具类相关的类</p>
+<h2 id="com-company-pojo"><a href="#com-company-pojo" class="headerlink" title="com.company.pojo"></a>com.company.pojo</h2><p>这里存放的是除了DB的映射关系的POJO以外的POJO</p>
+<h2 id="com-company-constants"><a href="#com-company-constants" class="headerlink" title="com.company.constants"></a>com.company.constants</h2><p>这里存放的是与常量有关的类</p>
+<h2 id="com-company-redis"><a href="#com-company-redis" class="headerlink" title="com.company.redis"></a>com.company.redis</h2><p>这里存放的是所有与redis操作相关的类</p>
+<h2 id="com-company-filter"><a href="#com-company-filter" class="headerlink" title="com.company.filter"></a>com.company.filter</h2><p>这里存放所有filter类</p>
+<h2 id="com-company-inteceptor"><a href="#com-company-inteceptor" class="headerlink" title="com.company.inteceptor"></a>com.company.inteceptor</h2><p>这里存放所有interceptor类</p>
+<h2 id="com-company-service"><a href="#com-company-service" class="headerlink" title="com.company.service"></a>com.company.service</h2><p>为其他类提供的服务类，因为有些时候，使用Utils静态工具类，无法注入Spring的依赖，这时可以使用<code>@service</code>来注解某个服务类，为其他类提供服务，又可以使用Spring的DI优点。<br>因为Spring默认下是对象是单例的。所以不必担心对象实例化过多的问题。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      emacsist
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://emacsist.github.io/2015/07/21/archives/Java-Web-项目包建议设计/" title="Java Web 项目包建议设计">https://emacsist.github.io/2015/07/21/archives/Java-Web-项目包建议设计/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/java-web/" rel="tag"># java web</a>
+          
+            <a href="/tags/java-ee/" rel="tag"># java ee</a>
+          
+            <a href="/tags/spring/" rel="tag"># spring</a>
+          
+            <a href="/tags/ssh/" rel="tag"># ssh</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/07/23/archives/Java-日志实践/" rel="next" title="Java 日志实践">
+                <i class="fa fa-chevron-left"></i> Java 日志实践
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/07/16/archives/Spring中的事务回滚/" rel="prev" title="Spring中的事务回滚">
+                Spring中的事务回滚 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/avatar.png"
+               alt="emacsist" />
+          <p class="site-author-name" itemprop="name">emacsist</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">295</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">69</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">142</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emacsist" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/emacist" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#com-company-dao-pojo"><span class="nav-number">1.</span> <span class="nav-text">com.company.dao.pojo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#com-company-dao"><span class="nav-number">2.</span> <span class="nav-text">com.company.dao</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#com-company-dao-service"><span class="nav-number">3.</span> <span class="nav-text">com.company.dao.service</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#com-company-controller"><span class="nav-number">4.</span> <span class="nav-text">com.company.controller</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#com-company-task"><span class="nav-number">5.</span> <span class="nav-text">com.company.task</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#com-company-rabbitmq-queue"><span class="nav-number">6.</span> <span class="nav-text">com.company.rabbitmq.queue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#com-company-rabbitmq-listener"><span class="nav-number">7.</span> <span class="nav-text">com.company.rabbitmq.listener</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#com-company-utils"><span class="nav-number">8.</span> <span class="nav-text">com.company.utils</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#com-company-pojo"><span class="nav-number">9.</span> <span class="nav-text">com.company.pojo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#com-company-constants"><span class="nav-number">10.</span> <span class="nav-text">com.company.constants</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#com-company-redis"><span class="nav-number">11.</span> <span class="nav-text">com.company.redis</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#com-company-filter"><span class="nav-number">12.</span> <span class="nav-text">com.company.filter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#com-company-inteceptor"><span class="nav-number">13.</span> <span class="nav-text">com.company.inteceptor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#com-company-service"><span class="nav-number">14.</span> <span class="nav-text">com.company.service</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">emacsist</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2132003"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

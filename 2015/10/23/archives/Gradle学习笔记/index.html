@@ -1,0 +1,885 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,maven,gradle," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="gradle 设置代理123456systemProp.http.proxyHost=代理服务器地址systemProp.http.proxyPort=代理服务器端口systemProp.http.proxyUser=代理服务器登录用户名systemProp.http.proxyPassword=代理服务器登录密码systemProp.http.nonProxyHosts=*.nonproxyre">
+<meta name="keywords" content="java,maven,gradle">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gradle学习笔记">
+<meta property="og:url" content="https://emacsist.github.io/2015/10/23/archives/Gradle学习笔记/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="gradle 设置代理123456systemProp.http.proxyHost=代理服务器地址systemProp.http.proxyPort=代理服务器端口systemProp.http.proxyUser=代理服务器登录用户名systemProp.http.proxyPassword=代理服务器登录密码systemProp.http.nonProxyHosts=*.nonproxyre">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Gradle学习笔记">
+<meta name="twitter:description" content="gradle 设置代理123456systemProp.http.proxyHost=代理服务器地址systemProp.http.proxyPort=代理服务器端口systemProp.http.proxyUser=代理服务器登录用户名systemProp.http.proxyPassword=代理服务器登录密码systemProp.http.nonProxyHosts=*.nonproxyre">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: false,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://emacsist.github.io/2015/10/23/archives/Gradle学习笔记/"/>
+
+
+
+
+
+  <title>Gradle学习笔记 | emacsist</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">emacsist</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heart"></i> <br />
+            
+            书
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://emacsist.github.io/2015/10/23/archives/Gradle学习笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="emacsist">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="emacsist">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Gradle学习笔记
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-10-23T00:06:55+08:00">
+                2015-10-23
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2016-11-11T21:42:33+08:00">
+                2016-11-11
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="gradle-设置代理"><a href="#gradle-设置代理" class="headerlink" title="gradle 设置代理"></a>gradle 设置代理</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">systemProp.http.proxyHost=代理服务器地址</div><div class="line">systemProp.http.proxyPort=代理服务器端口</div><div class="line">systemProp.http.proxyUser=代理服务器登录用户名</div><div class="line">systemProp.http.proxyPassword=代理服务器登录密码</div><div class="line">systemProp.http.nonProxyHosts=*.nonproxyrepos.com|localhost|不需要代理的地址</div></pre></td></tr></table></figure>
+<h2 id="以守护进程方式运行Gradle加速"><a href="#以守护进程方式运行Gradle加速" class="headerlink" title="以守护进程方式运行Gradle加速"></a>以守护进程方式运行Gradle加速</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">在以下目录中</div><div class="line">/home/&lt;username&gt;/.gradle/ (Linux)</div><div class="line">/Users/&lt;username&gt;/.gradle/ (Mac)</div><div class="line">C:Users&lt;username&gt;.gradle (Windows)</div><div class="line"></div><div class="line">创建或修改文件名为 gradle.properties 的文件.</div><div class="line">添加以下一行:</div><div class="line"></div><div class="line">org.gradle.daemon=<span class="literal">true</span></div></pre></td></tr></table></figure>
+<h2 id="Gradle-环境变量"><a href="#Gradle-环境变量" class="headerlink" title="Gradle 环境变量"></a>Gradle 环境变量</h2><h3 id="GRADLE-OPS"><a href="#GRADLE-OPS" class="headerlink" title="GRADLE_OPS"></a>GRADLE_OPS</h3><p>对gradle进程,进行设置JVM参数.如 <code>GRADLE_OPTS=&quot;-Xmx1024m</code></p>
+<h3 id="GRADLE-HOME"><a href="#GRADLE-HOME" class="headerlink" title="GRADLE_HOME"></a>GRADLE_HOME</h3><p>Gradle的安装目录位置.配置完,注意也要配置下<code>PATH</code>环境变量.如:</p>
+<p><code>PATH=$GRADLE_HOME/bin:$PATH</code></p>
+<h2 id="Gradle-常用命令"><a href="#Gradle-常用命令" class="headerlink" title="Gradle 常用命令"></a>Gradle 常用命令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div></pre></td><td class="code"><pre><div class="line"><span class="comment">### 将项目转换成Gradle</span></div><div class="line"></div><div class="line">`gradle init`</div><div class="line"></div><div class="line"><span class="comment">### 执行某个指定任务</span></div><div class="line"></div><div class="line">`gradle [-q] 任务名`</div><div class="line"></div><div class="line"><span class="comment">### 构建项目</span></div><div class="line"></div><div class="line">`gradle build`</div><div class="line"></div><div class="line"><span class="comment">### 清除构建后的文件</span></div><div class="line"></div><div class="line">`gradle clean`</div><div class="line"></div><div class="line"><span class="comment">### 显示的有任务</span></div><div class="line"></div><div class="line">`gradle tasks`</div><div class="line"></div><div class="line"><span class="comment">### 构建项目但不执行测试任务</span></div><div class="line"></div><div class="line">`gradle assemble`</div><div class="line"></div><div class="line"><span class="comment">### 只编译源码</span></div><div class="line"></div><div class="line">`gradle compileJava`</div><div class="line"></div><div class="line"><span class="comment">### 编译和测试代码,但不打包</span></div><div class="line"></div><div class="line">`gradle check`</div><div class="line"></div><div class="line"><span class="comment">### 查看所有属性</span></div><div class="line"></div><div class="line">`gradle properties`</div><div class="line"></div><div class="line"><span class="comment">### 列出所有项目</span></div><div class="line"></div><div class="line">`gradle -q projects`</div><div class="line"></div><div class="line"><span class="comment">### 搜索任务</span></div><div class="line"></div><div class="line">`gradle -q <span class="built_in">help</span> --task 要搜索的任务名 `</div><div class="line"></div><div class="line"><span class="comment">### 列出项目依赖</span></div><div class="line"></div><div class="line">`gradle -q dependencies`</div><div class="line"></div><div class="line"><span class="comment">### 模拟执行过程</span></div><div class="line"></div><div class="line">`gradle -m clean`</div><div class="line"></div><div class="line"><span class="comment">### 启动Gradle的GUI</span></div><div class="line"></div><div class="line">`gradle --gui`</div><div class="line"></div><div class="line"><span class="comment">### 强制刷新依赖</span></div><div class="line"></div><div class="line">`gradle build --refresh-dependencies`</div><div class="line"></div><div class="line"><span class="comment">### 命令行创建java 标准项目</span></div><div class="line">`gradle init --type java-library`</div></pre></td></tr></table></figure>
+<h2 id="task"><a href="#task" class="headerlink" title="task"></a>task</h2><h3 id="定义一个task"><a href="#定义一个task" class="headerlink" title="定义一个task"></a>定义一个task</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">task helloWorld &lt;&lt; &#123;</div><div class="line">    println <span class="string">"Hello World, Gradle!"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后执行 <code>gradle helloWorld</code> 即可看到如下输出.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">➜  java  gradle helloWorld</div><div class="line">:helloWorld</div><div class="line">Hello World, Gradle!</div><div class="line"></div><div class="line">BUILD SUCCESSFUL</div><div class="line"></div><div class="line">Total time: 0.465 secs</div><div class="line">➜  java</div></pre></td></tr></table></figure>
+<h3 id="扩展task属性"><a href="#扩展task属性" class="headerlink" title="扩展task属性"></a>扩展task属性</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">class fuckTask extends DefaultTask &#123;</div><div class="line">    @Input</div><div class="line">    def inputProperty</div><div class="line">&#125;</div><div class="line"></div><div class="line">task fun(<span class="built_in">type</span>:fuckTask) &#123;</div><div class="line">	inputProperty = <span class="string">"hello world"</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">引用</div><div class="line"></div><div class="line">task fuck &#123;</div><div class="line">   println <span class="string">"I'm from --&gt; <span class="variable">$fun</span>.inputProperty"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>输出如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">I<span class="string">'m from --&gt; hello world</span></div><div class="line">:fuck UP-TO-DATE</div><div class="line"></div><div class="line">BUILD SUCCESSFUL</div><div class="line"></div><div class="line">Total time: 0.479 secs</div></pre></td></tr></table></figure>
+<h3 id="声明属性"><a href="#声明属性" class="headerlink" title="声明属性"></a>声明属性</h3><h4 id="在-gradle-目录下-gradle-properties"><a href="#在-gradle-目录下-gradle-properties" class="headerlink" title="在 /.gradle/ 目录下 gradle.properties"></a>在 <user_home>/.gradle/ 目录下 <code>gradle.properties</code></user_home></h4><p>注意,只能在该目录下有一个属性文件. 在这里配置的,对所有项目都是可见的.在项目里引用:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">方法一:</div><div class="line">project.属性名</div><div class="line"></div><div class="line">方法二:</div><div class="line">task <span class="built_in">print</span>P &lt;&lt; &#123;</div><div class="line">    println <span class="string">"$属性名"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="项目属性"><a href="#项目属性" class="headerlink" title="项目属性"></a>项目属性</h4><p>通过命令行 <code>-P</code> 来提供</p>
+<p><code>gradle -Pkey=value</code></p>
+<p>在gradle文件里引用,可直接使用:</p>
+<p><code>$key</code></p>
+<h4 id="系统属性"><a href="#系统属性" class="headerlink" title="系统属性"></a>系统属性</h4><p>通过命令行 <code>-D</code> 来提供</p>
+<p><code>gradle -Dkey=value</code></p>
+<p>在gradle里使用:</p>
+<p>`System.properties[‘key’]</p>
+<h4 id="环境属性"><a href="#环境属性" class="headerlink" title="环境属性"></a>环境属性</h4><p>所有以<code>ORG_GRADLE_PROJECT_</code>开头的,相当于<code>-P</code><br>例如:<br><code>ORG_GRADLE_PROJECT_key=value</code></p>
+<p>或者所有以<br><code>org.gradle.project.</code>开头的,也相当于<code>-P</code></p>
+<p>例如:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">➜  gradle  gradle -Penv=dev  -q task</div><div class="line">Hello dev</div><div class="line">➜  gradle  gradle -Dorg.gradle.project.env=dev -q task</div><div class="line">Hello dev</div><div class="line">➜  gradle</div></pre></td></tr></table></figure>
+<h4 id="在项目下的-gradle-properties-声明属性"><a href="#在项目下的-gradle-properties-声明属性" class="headerlink" title="在项目下的 gradle.properties 声明属性"></a>在项目下的 <code>gradle.properties</code> 声明属性</h4><p><code>key=value</code></p>
+<h3 id="默认-task"><a href="#默认-task" class="headerlink" title="默认 task"></a>默认 task</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">defaultTasks <span class="string">'hello'</span>, <span class="string">'helloTask2'</span></div></pre></td></tr></table></figure>
+<p>指定了默认任务, 这样子执行 <code>gradle -q</code> 时它就会执行指定默认的任务 <code>hello</code>, <code>helloTask2</code>.</p>
+<h3 id="排除执行某个task"><a href="#排除执行某个task" class="headerlink" title="排除执行某个task"></a>排除执行某个task</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">task fu1 &lt;&lt; &#123;</div><div class="line">	println <span class="string">"fu1"</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">task fu2 &lt;&lt; &#123;</div><div class="line">	println <span class="string">"fu2"</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">fu2.dependsOn fu1</div></pre></td></tr></table></figure>
+<p>fu2依赖于fu1，但在执行时，可以排除他不执行fu1.<br>默认情况下是：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">➜  java  gradle fu2</div><div class="line">:fu1</div><div class="line">fu1</div><div class="line">:fu2</div><div class="line">fu2</div><div class="line"></div><div class="line">BUILD SUCCESSFUL</div><div class="line"></div><div class="line">Total time: 0.463 secs</div></pre></td></tr></table></figure>
+<p>排除执行的情况是:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">➜  java  gradle fu2 -x fu1</div><div class="line">:fu2</div><div class="line">fu2</div><div class="line"></div><div class="line">BUILD SUCCESSFUL</div><div class="line"></div><div class="line">Total time: 0.459 secs</div></pre></td></tr></table></figure>
+<h2 id="可执行Jar包"><a href="#可执行Jar包" class="headerlink" title="可执行Jar包"></a>可执行Jar包</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">apply plugin: <span class="string">'java'</span></div><div class="line"></div><div class="line">jar &#123;</div><div class="line">    manifest &#123;</div><div class="line">        attributes <span class="string">'Main-Class'</span>: <span class="string">'net.petrikainulainen.gradle.HelloWorld'</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="依赖管理"><a href="#依赖管理" class="headerlink" title="依赖管理"></a>依赖管理</h2><h3 id="配置仓库"><a href="#配置仓库" class="headerlink" title="配置仓库"></a>配置仓库</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">repositories&#123;</div><div class="line">        mavenCentral()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="配置依赖"><a href="#配置依赖" class="headerlink" title="配置依赖"></a>配置依赖</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">dependencies &#123;</div><div class="line">        compile group:<span class="string">'commons-collections'</span>,name:<span class="string">'commons-collections'</span>,version:<span class="string">'3.2'</span></div><div class="line">        <span class="built_in">test</span>Compile group:<span class="string">'junit'</span>,name:<span class="string">'junit'</span>,version:<span class="string">'4.0+'</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="将项目转换成-eclipse-项目"><a href="#将项目转换成-eclipse-项目" class="headerlink" title="将项目转换成 eclipse 项目"></a>将项目转换成 eclipse 项目</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apply plugin: <span class="string">'eclipse'</span></div></pre></td></tr></table></figure>
+<p>然后执行 <code>gradle eclipse</code></p>
+<h2 id="设置源码级别和编译输出级别"><a href="#设置源码级别和编译输出级别" class="headerlink" title="设置源码级别和编译输出级别"></a>设置源码级别和编译输出级别</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">源码级别</div><div class="line"><span class="built_in">source</span>Compatibility = 1.7</div><div class="line"></div><div class="line">编译输出级别</div><div class="line">targetCompatibility = 1.7</div></pre></td></tr></table></figure>
+<h2 id="Gradle对应Maven的坐标默认值"><a href="#Gradle对应Maven的坐标默认值" class="headerlink" title="Gradle对应Maven的坐标默认值"></a>Gradle对应Maven的坐标默认值</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">groupId --&gt; project.group</div><div class="line">artifactId --&gt; uploadTask.repositories.mavenDeployer.pom.artifactId (<span class="keyword">if</span> <span class="built_in">set</span>) or archiveTask.baseName.</div><div class="line">version --&gt; project.version</div><div class="line">packaging --&gt; archiveTask.extension</div></pre></td></tr></table></figure>
+<h2 id="打包源码"><a href="#打包源码" class="headerlink" title="打包源码"></a>打包源码</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">ext.artifactBaseName=<span class="string">"org-emacist"</span></div><div class="line"></div><div class="line">task sourcesJar(<span class="built_in">type</span>: Jar) &#123;</div><div class="line">    baseName artifactBaseName</div><div class="line">    classifier <span class="string">'sources'</span></div><div class="line">    from <span class="built_in">source</span>Sets.main.allSource</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="不同环境打包"><a href="#不同环境打包" class="headerlink" title="不同环境打包"></a>不同环境打包</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">if</span> (!hasProperty(<span class="string">"env"</span>)) &#123;</div><div class="line">   project.ext.env = <span class="string">"default"</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="built_in">source</span>Sets &#123;</div><div class="line">    main &#123;</div><div class="line">        resources &#123;</div><div class="line">            srcDirs = [<span class="string">"src/main/resources/public"</span>,<span class="string">"src/main/resources/<span class="variable">$env</span>"</span>]</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="创建一个web项目"><a href="#创建一个web项目" class="headerlink" title="创建一个web项目"></a>创建一个web项目</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /path/to/project/root/dir</div><div class="line">gradle init --type java-library</div><div class="line"></div><div class="line">然后编辑`build.gradle`文件添加以下内容:</div><div class="line"></div><div class="line">apply plugin: <span class="string">'idea'</span></div><div class="line">apply plugin: <span class="string">'eclipse'</span></div><div class="line">apply plugin: <span class="string">'war'</span></div><div class="line">// 这指定Web目录名字，默认为`src/main/webapp`</div><div class="line">webAppDirName = <span class="string">'WebContent'</span></div><div class="line"></div><div class="line">然后再创建IDE的配置文件</div><div class="line">gradle idea</div><div class="line"></div><div class="line">然后导入即可</div></pre></td></tr></table></figure>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://www.infoq.com/cn/articles/Gradle-application-in-large-Java-projects" target="_blank" rel="external">InfoQ</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      emacsist
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://emacsist.github.io/2015/10/23/archives/Gradle学习笔记/" title="Gradle学习笔记">https://emacsist.github.io/2015/10/23/archives/Gradle学习笔记/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/maven/" rel="tag"># maven</a>
+          
+            <a href="/tags/gradle/" rel="tag"># gradle</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/10/27/archives/Findbugs-报-May-expose-internal-representation-by-returning-reference-to-mutable-object/" rel="next" title="Findbugs 报 May expose internal representation by returning reference to mutable object">
+                <i class="fa fa-chevron-left"></i> Findbugs 报 May expose internal representation by returning reference to mutable object
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/10/16/archives/Maven-与-Spring-结合进行模块化开发实践/" rel="prev" title="Maven 与 Spring 结合进行模块化开发实践">
+                Maven 与 Spring 结合进行模块化开发实践 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/avatar.png"
+               alt="emacsist" />
+          <p class="site-author-name" itemprop="name">emacsist</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">295</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">69</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">142</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emacsist" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/emacist" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#gradle-设置代理"><span class="nav-number">1.</span> <span class="nav-text">gradle 设置代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#以守护进程方式运行Gradle加速"><span class="nav-number">2.</span> <span class="nav-text">以守护进程方式运行Gradle加速</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gradle-环境变量"><span class="nav-number">3.</span> <span class="nav-text">Gradle 环境变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GRADLE-OPS"><span class="nav-number">3.1.</span> <span class="nav-text">GRADLE_OPS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GRADLE-HOME"><span class="nav-number">3.2.</span> <span class="nav-text">GRADLE_HOME</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gradle-常用命令"><span class="nav-number">4.</span> <span class="nav-text">Gradle 常用命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#task"><span class="nav-number">5.</span> <span class="nav-text">task</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定义一个task"><span class="nav-number">5.1.</span> <span class="nav-text">定义一个task</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扩展task属性"><span class="nav-number">5.2.</span> <span class="nav-text">扩展task属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#声明属性"><span class="nav-number">5.3.</span> <span class="nav-text">声明属性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#在-gradle-目录下-gradle-properties"><span class="nav-number">5.3.1.</span> <span class="nav-text">在 /.gradle/ 目录下 gradle.properties</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#项目属性"><span class="nav-number">5.3.2.</span> <span class="nav-text">项目属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#系统属性"><span class="nav-number">5.3.3.</span> <span class="nav-text">系统属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#环境属性"><span class="nav-number">5.3.4.</span> <span class="nav-text">环境属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在项目下的-gradle-properties-声明属性"><span class="nav-number">5.3.5.</span> <span class="nav-text">在项目下的 gradle.properties 声明属性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#默认-task"><span class="nav-number">5.4.</span> <span class="nav-text">默认 task</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#排除执行某个task"><span class="nav-number">5.5.</span> <span class="nav-text">排除执行某个task</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可执行Jar包"><span class="nav-number">6.</span> <span class="nav-text">可执行Jar包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#依赖管理"><span class="nav-number">7.</span> <span class="nav-text">依赖管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置仓库"><span class="nav-number">7.1.</span> <span class="nav-text">配置仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置依赖"><span class="nav-number">7.2.</span> <span class="nav-text">配置依赖</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#将项目转换成-eclipse-项目"><span class="nav-number">8.</span> <span class="nav-text">将项目转换成 eclipse 项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置源码级别和编译输出级别"><span class="nav-number">9.</span> <span class="nav-text">设置源码级别和编译输出级别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gradle对应Maven的坐标默认值"><span class="nav-number">10.</span> <span class="nav-text">Gradle对应Maven的坐标默认值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#打包源码"><span class="nav-number">11.</span> <span class="nav-text">打包源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不同环境打包"><span class="nav-number">12.</span> <span class="nav-text">不同环境打包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建一个web项目"><span class="nav-number">13.</span> <span class="nav-text">创建一个web项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">14.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">emacsist</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2132003"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
