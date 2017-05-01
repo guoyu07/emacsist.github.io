@@ -1,0 +1,884 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="http,tcp,header," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="HTTP 请求头 Range 请求资源的部分内容(不包括响应头的大小), 单位是byte,即字节,从0开始.  如果服务器能够正常响应的话，服务器会返回206 Partial Content的状态码及说明.如果不能处理这种Range的话，就会返回整个资源以及响应状态码为200 OK.（这个要注意，要分段下载时，要先判断这个） 比如：类似下面的 123456789101112131415161718">
+<meta name="keywords" content="http,tcp,header">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Http 协议中的Range请求头例子">
+<meta property="og:url" content="https://emacsist.github.io/2015/12/29/Http-协议中的Range请求头例子/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="HTTP 请求头 Range 请求资源的部分内容(不包括响应头的大小), 单位是byte,即字节,从0开始.  如果服务器能够正常响应的话，服务器会返回206 Partial Content的状态码及说明.如果不能处理这种Range的话，就会返回整个资源以及响应状态码为200 OK.（这个要注意，要分段下载时，要先判断这个） 比如：类似下面的 123456789101112131415161718">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Http 协议中的Range请求头例子">
+<meta name="twitter:description" content="HTTP 请求头 Range 请求资源的部分内容(不包括响应头的大小), 单位是byte,即字节,从0开始.  如果服务器能够正常响应的话，服务器会返回206 Partial Content的状态码及说明.如果不能处理这种Range的话，就会返回整个资源以及响应状态码为200 OK.（这个要注意，要分段下载时，要先判断这个） 比如：类似下面的 123456789101112131415161718">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: false,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://emacsist.github.io/2015/12/29/Http-协议中的Range请求头例子/"/>
+
+
+
+
+
+  <title>Http 协议中的Range请求头例子 | emacsist</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">emacsist</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heart"></i> <br />
+            
+            书
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://emacsist.github.io/2015/12/29/Http-协议中的Range请求头例子/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="emacsist">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="emacsist">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Http 协议中的Range请求头例子
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-12-29T17:11:48+08:00">
+                2015-12-29
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2016-11-11T21:42:33+08:00">
+                2016-11-11
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/http/" itemprop="url" rel="index">
+                    <span itemprop="name">http</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  1,322
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  7
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="HTTP-请求头-Range"><a href="#HTTP-请求头-Range" class="headerlink" title="HTTP 请求头 Range"></a>HTTP 请求头 <code>Range</code></h2><blockquote>
+<p>请求资源的部分内容(不包括响应头的大小), 单位是byte,即字节,从0开始.</p>
+</blockquote>
+<p>如果服务器能够正常响应的话，服务器会返回<code>206 Partial Content</code>的状态码及说明.<br>如果不能处理这种Range的话，就会返回整个资源以及响应状态码为<code>200 OK</code>.（这个要注意，要分段下载时，要先判断这个）</p>
+<p>比如：类似下面的</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">➜  /tmp  curl -H <span class="string">"Range: bytes=0-10"</span> http://127.0.0.1:8180/<span class="built_in">bg</span>-upper.png -v</div><div class="line">* Hostname was NOT found <span class="keyword">in</span> DNS cache</div><div class="line">*   Trying 127.0.0.1...</div><div class="line">* Connected to 127.0.0.1 (127.0.0.1) port 8180 (<span class="comment">#0)</span></div><div class="line">&gt; GET /<span class="built_in">bg</span>-upper.png HTTP/1.1</div><div class="line">&gt; User-Agent: curl/7.35.0</div><div class="line">&gt; Host: 127.0.0.1:8180</div><div class="line">&gt; Accept: */*</div><div class="line">&gt; Range: bytes=0-10</div><div class="line">&gt;</div><div class="line">&lt; HTTP/1.1 206 Partial Content</div><div class="line">* Server Apache-Coyote/1.1 is not blacklisted</div><div class="line">&lt; Server: Apache-Coyote/1.1</div><div class="line">&lt; Accept-Ranges: bytes</div><div class="line">&lt; ETag: W/<span class="string">"3103-1435633968000"</span></div><div class="line">&lt; Last-Modified: Tue, 30 Jun 2015 03:12:48 GMT</div><div class="line">&lt; Content-Range: bytes 0-10/3103</div><div class="line">&lt; Content-Type: image/png</div><div class="line">&lt; Content-Length: 11</div><div class="line">&lt; Date: Tue, 29 Dec 2015 09:18:36 GMT</div><div class="line">&lt;</div><div class="line">PNG</div><div class="line"></div><div class="line">* Connection <span class="comment">#0 to host 127.0.0.1 left intact</span></div><div class="line">➜</div></pre></td></tr></table></figure>
+<p>响应头就是<code>HTTP/1.1 206 Partial Content</code></p>
+<h3 id="Range-请求头格式"><a href="#Range-请求头格式" class="headerlink" title="Range 请求头格式"></a>Range 请求头格式</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Range: bytes=start-end</div></pre></td></tr></table></figure>
+<p>例如：</p>
+<p><code>Range: bytes=10-</code>：第10个字节及最后个字节的数据<br><code>Range: bytes=40-100</code>：第40个字节到第100个字节之间的数据.</p>
+<p><em>注意，这个表示[start,end]，即是包含请求头的start及end字节的，所以，下一个请求，应该是上一个请求的[end+1, nextEnd]</em></p>
+<h3 id="响应头"><a href="#响应头" class="headerlink" title="响应头"></a>响应头</h3><h4 id="Content-Range"><a href="#Content-Range" class="headerlink" title="Content-Range"></a>Content-Range</h4><p><code>Content-Range: bytes 0-10/3103</code></p>
+<p>这个表示，服务器响应了前(0-10)个字节的数据，该资源一共有(3103)个字节大小。</p>
+<h4 id="Content-Type"><a href="#Content-Type" class="headerlink" title="Content-Type"></a>Content-Type</h4><p><code>Content-Type: image/png</code></p>
+<p>表示这个资源的类型</p>
+<h4 id="Content-Length"><a href="#Content-Length" class="headerlink" title="Content-Length"></a>Content-Length</h4><p><code>Content-Length: 11</code></p>
+<p>表示这次服务器响应了11个字节的数据（0-10）</p>
+<h4 id="Last-Modified"><a href="#Last-Modified" class="headerlink" title="Last-Modified"></a>Last-Modified</h4><p><code>Last-Modified: Tue, 30 Jun 2015 03:12:48 GMT</code></p>
+<p>表示资源最近修改的时间（分段下载时要注意这个东西，因为如果修改了，分段下载可能就要重新下载了）</p>
+<h4 id="ETag"><a href="#ETag" class="headerlink" title="ETag"></a>ETag</h4><p><code>ETag: W/&quot;3103-1435633968000&quot;</code></p>
+<p>这个响应头表示资源版本的标识符，通常是消息摘要(类似MD5一样）（分段下载时要注意这个东西，或者缓存控制也要注意这个东西）</p>
+<p><em>注意，每种服务器对生成ETag的算法不同，这个要特别注意</em> 如果使用分布式缓存，要特别要保证每台服务器生成的ETag算法是一致的.</p>
+<p>缓存的过期，要同时结合(ETag + Last-Modified)这两个响应头来判断.</p>
+<h5 id="强ETag"><a href="#强ETag" class="headerlink" title="强ETag"></a>强ETag</h5><p>只要实体发生任何改变，都会改变ETag值.如:</p>
+<p><code>ETag: &quot;1234234234&quot;</code></p>
+<h5 id="弱ETag"><a href="#弱ETag" class="headerlink" title="弱ETag"></a>弱ETag</h5><p>它在前面会有个<code>W/</code>，如：</p>
+<p><code>ETag: W/&quot;12342423&quot;</code></p>
+<h2 id="分段下载"><a href="#分段下载" class="headerlink" title="分段下载"></a>分段下载</h2><p>利用这个特点，我们可以使用分段下载（多线程下载，分布式下载）</p>
+<p>思想:先请求一个<code>HEAD</code>方法的请求，获取总文件大小：</p>
+<h3 id="HEAD-请求"><a href="#HEAD-请求" class="headerlink" title="HEAD 请求"></a>HEAD 请求</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">➜  /tmp  curl -X HEAD http://127.0.0.1:8180/<span class="built_in">bg</span>-upper.png -v</div><div class="line">* Hostname was NOT found <span class="keyword">in</span> DNS cache</div><div class="line">*   Trying 127.0.0.1...</div><div class="line">* Connected to 127.0.0.1 (127.0.0.1) port 8180 (<span class="comment">#0)</span></div><div class="line">&gt; HEAD /<span class="built_in">bg</span>-upper.png HTTP/1.1</div><div class="line">&gt; User-Agent: curl/7.35.0</div><div class="line">&gt; Host: 127.0.0.1:8180</div><div class="line">&gt; Accept: */*</div><div class="line">&gt;</div><div class="line">&lt; HTTP/1.1 200 OK</div><div class="line">* Server Apache-Coyote/1.1 is not blacklisted</div><div class="line">&lt; Server: Apache-Coyote/1.1</div><div class="line">&lt; Accept-Ranges: bytes</div><div class="line">&lt; ETag: W/<span class="string">"3103-1435633968000"</span></div><div class="line">&lt; Last-Modified: Tue, 30 Jun 2015 03:12:48 GMT</div><div class="line">&lt; Content-Type: image/png</div><div class="line">&lt; Content-Length: 3103</div><div class="line">&lt; Date: Tue, 29 Dec 2015 10:16:16 GMT</div><div class="line">&lt;</div><div class="line">* transfer closed with 3103 bytes remaining to <span class="built_in">read</span></div><div class="line">* Closing connection 0</div><div class="line">curl: (18) transfer closed with 3103 bytes remaining to <span class="built_in">read</span></div><div class="line">➜  /tmp</div></pre></td></tr></table></figure>
+<p>那个响应头的<code>Content-Length</code>就是总字节大小了（3103）字节.</p>
+<h3 id="多线程下载"><a href="#多线程下载" class="headerlink" title="多线程下载"></a>多线程下载</h3><p>假设分2条线程</p>
+<h4 id="线程1-下载"><a href="#线程1-下载" class="headerlink" title="线程1 下载"></a>线程1 下载</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">3103 / 2 = 1551</div><div class="line"></div><div class="line">➜  /tmp  curl -H <span class="string">"Range: bytes=0-1551"</span> http://127.0.0.1:8180/<span class="built_in">bg</span>-upper.png -v -o 0-1151.png</div><div class="line">* Hostname was NOT found <span class="keyword">in</span> DNS cache</div><div class="line">*   Trying 127.0.0.1...</div><div class="line">  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</div><div class="line">                                 Dload  Upload   Total   Spent    Left  Speed</div><div class="line">  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* Connected to 127.0.0.1 (127.0.0.1) port 8180 (<span class="comment">#0)</span></div><div class="line">&gt; GET /<span class="built_in">bg</span>-upper.png HTTP/1.1</div><div class="line">&gt; User-Agent: curl/7.35.0</div><div class="line">&gt; Host: 127.0.0.1:8180</div><div class="line">&gt; Accept: */*</div><div class="line">&gt; Range: bytes=0-1551</div><div class="line">&gt;</div><div class="line">&lt; HTTP/1.1 206 Partial Content</div><div class="line">* Server Apache-Coyote/1.1 is not blacklisted</div><div class="line">&lt; Server: Apache-Coyote/1.1</div><div class="line">&lt; Accept-Ranges: bytes</div><div class="line">&lt; ETag: W/<span class="string">"3103-1435633968000"</span></div><div class="line">&lt; Last-Modified: Tue, 30 Jun 2015 03:12:48 GMT</div><div class="line">&lt; Content-Range: bytes 0-1551/3103</div><div class="line">&lt; Content-Type: image/png</div><div class="line">&lt; Content-Length: 1552</div><div class="line">&lt; Date: Tue, 29 Dec 2015 10:19:43 GMT</div><div class="line">&lt;</div><div class="line">&#123; [data not shown]</div><div class="line">100  1552  100  1552    0     0  1376k      0 --:--:-- --:--:-- --:--:-- 1515k</div><div class="line">* Connection <span class="comment">#0 to host 127.0.0.1 left intact</span></div><div class="line">➜  /tmp</div></pre></td></tr></table></figure>
+<p>这样子，线程1就下载了（0-1551）字节的数据了.</p>
+<h4 id="线程2-下载"><a href="#线程2-下载" class="headerlink" title="线程2 下载"></a>线程2 下载</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">➜  /tmp  curl -H <span class="string">"Range: bytes=1552-3103"</span> http://127.0.0.1:8180/<span class="built_in">bg</span>-upper.png -v -o 1552-end.png</div><div class="line">* Hostname was NOT found <span class="keyword">in</span> DNS cache</div><div class="line">*   Trying 127.0.0.1...</div><div class="line">  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</div><div class="line">                                 Dload  Upload   Total   Spent    Left  Speed</div><div class="line">  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* Connected to 127.0.0.1 (127.0.0.1) port 8180 (<span class="comment">#0)</span></div><div class="line">&gt; GET /<span class="built_in">bg</span>-upper.png HTTP/1.1</div><div class="line">&gt; User-Agent: curl/7.35.0</div><div class="line">&gt; Host: 127.0.0.1:8180</div><div class="line">&gt; Accept: */*</div><div class="line">&gt; Range: bytes=1552</div><div class="line">&gt;</div><div class="line">&lt; HTTP/1.1 416 Requested Range Not Satisfiable</div><div class="line">* Server Apache-Coyote/1.1 is not blacklisted</div><div class="line">&lt; Server: Apache-Coyote/1.1</div><div class="line">&lt; Accept-Ranges: bytes</div><div class="line">&lt; Content-Range: bytes */3103</div><div class="line">&lt; Content-Type: text/html;charset=utf-8</div><div class="line">&lt; Content-Language: en</div><div class="line">&lt; Content-Length: 954</div><div class="line">&lt; Date: Tue, 29 Dec 2015 10:26:18 GMT</div><div class="line">&lt;</div><div class="line">&#123; [data not shown]</div><div class="line">100   954  100   954    0     0   457k      0 --:--:-- --:--:-- --:--:--  931k</div><div class="line">* Connection <span class="comment">#0 to host 127.0.0.1 left intact</span></div><div class="line">➜  /tmp</div></pre></td></tr></table></figure>
+<h4 id="合并"><a href="#合并" class="headerlink" title="合并"></a>合并</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat 0-1151.png 1552-end.png &gt; filename.png</div></pre></td></tr></table></figure>
+<p>这样子就OK了.</p>
+<h2 id="HTTP-请求头注意"><a href="#HTTP-请求头注意" class="headerlink" title="HTTP 请求头注意"></a>HTTP 请求头注意</h2><p>根据HTTP规范，HTTP的消息头部的字段名，是不区分大小写的.</p>
+<blockquote>
+<p>3.2.  Header Fields</p>
+<p>  Each header field consists of a case-insensitive field name followed<br>  by a colon (“:”), optional leading whitespace, the field value, and<br>  optional trailing whitespace.</p>
+</blockquote>
+<p><a href="https://tools.ietf.org/html/rfc7230#appendix-A.2" target="_blank" rel="external">RFC7230</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      emacsist
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://emacsist.github.io/2015/12/29/Http-协议中的Range请求头例子/" title="Http 协议中的Range请求头例子">https://emacsist.github.io/2015/12/29/Http-协议中的Range请求头例子/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/http/" rel="tag"># http</a>
+          
+            <a href="/tags/tcp/" rel="tag"># tcp</a>
+          
+            <a href="/tags/header/" rel="tag"># header</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/12/31/Java使用Javassist修改class文件/" rel="next" title="Java使用Javassist修改class文件">
+                <i class="fa fa-chevron-left"></i> Java使用Javassist修改class文件
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/12/28/Tomcat-基本概念/" rel="prev" title="Tomcat 基本概念">
+                Tomcat 基本概念 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/avatar.png"
+               alt="emacsist" />
+          <p class="site-author-name" itemprop="name">emacsist</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">296</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">146</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emacsist" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/emacist" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-请求头-Range"><span class="nav-number">1.</span> <span class="nav-text">HTTP 请求头 Range</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Range-请求头格式"><span class="nav-number">1.1.</span> <span class="nav-text">Range 请求头格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#响应头"><span class="nav-number">1.2.</span> <span class="nav-text">响应头</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Content-Range"><span class="nav-number">1.2.1.</span> <span class="nav-text">Content-Range</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Content-Type"><span class="nav-number">1.2.2.</span> <span class="nav-text">Content-Type</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Content-Length"><span class="nav-number">1.2.3.</span> <span class="nav-text">Content-Length</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Last-Modified"><span class="nav-number">1.2.4.</span> <span class="nav-text">Last-Modified</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ETag"><span class="nav-number">1.2.5.</span> <span class="nav-text">ETag</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#强ETag"><span class="nav-number">1.2.5.1.</span> <span class="nav-text">强ETag</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#弱ETag"><span class="nav-number">1.2.5.2.</span> <span class="nav-text">弱ETag</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分段下载"><span class="nav-number">2.</span> <span class="nav-text">分段下载</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HEAD-请求"><span class="nav-number">2.1.</span> <span class="nav-text">HEAD 请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程下载"><span class="nav-number">2.2.</span> <span class="nav-text">多线程下载</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#线程1-下载"><span class="nav-number">2.2.1.</span> <span class="nav-text">线程1 下载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程2-下载"><span class="nav-number">2.2.2.</span> <span class="nav-text">线程2 下载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#合并"><span class="nav-number">2.2.3.</span> <span class="nav-text">合并</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-请求头注意"><span class="nav-number">3.</span> <span class="nav-text">HTTP 请求头注意</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">emacsist</span>
+  <span class="post-count">共263.4k字</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动 
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2132003"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

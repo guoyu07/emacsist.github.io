@@ -1,0 +1,960 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="redis,nosql," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="版本规则x.y.z X: 大版本号Y: 如果是偶数, 则是稳定版; 否则为不稳定版Z: 修补号 安装(Linux)最新稳定版: 1wget http://download.redis.io/redis-stable.tar.gz 编译及安装到指定目录(默认情况下,它会安装到 /usr/local/bin 目录下). 12makemake PREFIX=/some/other/directory i">
+<meta name="keywords" content="redis,nosql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis入门指南--读书笔记">
+<meta property="og:url" content="https://emacsist.github.io/2015/07/26/Redis入门指南--读书笔记/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="版本规则x.y.z X: 大版本号Y: 如果是偶数, 则是稳定版; 否则为不稳定版Z: 修补号 安装(Linux)最新稳定版: 1wget http://download.redis.io/redis-stable.tar.gz 编译及安装到指定目录(默认情况下,它会安装到 /usr/local/bin 目录下). 12makemake PREFIX=/some/other/directory i">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis入门指南--读书笔记">
+<meta name="twitter:description" content="版本规则x.y.z X: 大版本号Y: 如果是偶数, 则是稳定版; 否则为不稳定版Z: 修补号 安装(Linux)最新稳定版: 1wget http://download.redis.io/redis-stable.tar.gz 编译及安装到指定目录(默认情况下,它会安装到 /usr/local/bin 目录下). 12makemake PREFIX=/some/other/directory i">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: false,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://emacsist.github.io/2015/07/26/Redis入门指南--读书笔记/"/>
+
+
+
+
+
+  <title>Redis入门指南--读书笔记 | emacsist</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">emacsist</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heart"></i> <br />
+            
+            书
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://emacsist.github.io/2015/07/26/Redis入门指南--读书笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="emacsist">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="emacsist">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Redis入门指南--读书笔记
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-07-26T15:05:17+08:00">
+                2015-07-26
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2016-11-11T21:42:33+08:00">
+                2016-11-11
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/nosql/" itemprop="url" rel="index">
+                    <span itemprop="name">nosql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  1,769
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  7
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="版本规则"><a href="#版本规则" class="headerlink" title="版本规则"></a>版本规则</h2><p>x.y.z</p>
+<p>X: 大版本号<br>Y: 如果是偶数, 则是稳定版; 否则为不稳定版<br>Z: 修补号</p>
+<h2 id="安装-Linux"><a href="#安装-Linux" class="headerlink" title="安装(Linux)"></a>安装(Linux)</h2><p>最新稳定版:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget http://download.redis.io/redis-stable.tar.gz</div></pre></td></tr></table></figure>
+<p>编译及安装到指定目录(默认情况下,它会安装到 <code>/usr/local/bin</code> 目录下).</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">make</div><div class="line">make PREFIX=/some/other/directory install</div></pre></td></tr></table></figure>
+<h2 id="启动和停止Redis"><a href="#启动和停止Redis" class="headerlink" title="启动和停止Redis"></a>启动和停止Redis</h2><p>Redis中的可用命令行工具及说明</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">名称</th>
+<th style="text-align:right">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">redis-server</td>
+<td style="text-align:right">Redis服务器</td>
+</tr>
+<tr>
+<td style="text-align:right">redis-cli</td>
+<td style="text-align:right">Redis命令行客户端</td>
+</tr>
+<tr>
+<td style="text-align:right">redis-benchmark</td>
+<td style="text-align:right">Redis 性能测试工具</td>
+</tr>
+<tr>
+<td style="text-align:right">redis-check-aof</td>
+<td style="text-align:right">AOF 文件修复工具</td>
+</tr>
+<tr>
+<td style="text-align:right">redis-check-dump</td>
+<td style="text-align:right">RDB 文件检测工具</td>
+</tr>
+<tr>
+<td style="text-align:right">redis-sentinel</td>
+<td style="text-align:right">Sentinel 服务器 (2.8之后)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="开发环境中启动"><a href="#开发环境中启动" class="headerlink" title="开发环境中启动"></a>开发环境中启动</h3><p>直接运行 redis-server, 默认情况下会以<code>6379</code>的端口来启动. 也可以通过<code>--port N</code>来指定端口.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">1) redis-server --port 6379</div><div class="line"></div><div class="line">指定某个配置文件来指定</div><div class="line"></div><div class="line">redis-server /path/to/config.file</div></pre></td></tr></table></figure>
+<blockquote>
+<p>Redis 源码目录里, 有一个名为<code>redis.conf</code>的文件, 它是配置文件的模板.</p>
+</blockquote>
+<h3 id="通过脚本来初始化"><a href="#通过脚本来初始化" class="headerlink" title="通过脚本来初始化"></a>通过脚本来初始化</h3><p>在Redis源码的<code>utils</code>文件夹下, 有一个名为 <code>redis_init_script</code>的初始化脚本文件.</p>
+<p>然后按需修改相应的文件配置.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">参数名       值       说明</div><div class="line">daemonize   yes		以守护进程模式运行</div><div class="line">pidfile     /var/run/redis_端口号.pid  PID文件位置</div><div class="line">port        端口号</div><div class="line">dir         /var/redis/端口号   设置持久化文件存放位置</div><div class="line">databases    数字       支持的数据数量(0~N-1)</div></pre></td></tr></table></figure>
+<h3 id="停止redis"><a href="#停止redis" class="headerlink" title="停止redis"></a>停止redis</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">redis-cli SHUTDOWN</div></pre></td></tr></table></figure>
+<h2 id="Redis-命令行客户端"><a href="#Redis-命令行客户端" class="headerlink" title="Redis 命令行客户端"></a>Redis 命令行客户端</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">redis-clie -h 127.0.0.1 -p 6379</div></pre></td></tr></table></figure>
+<h2 id="多数据库"><a href="#多数据库" class="headerlink" title="多数据库"></a>多数据库</h2><p>这不是像真正的多个实例的数据库, 而是类似不同的命名空间的数据库.而且只能以数字来进行选择(0~N-1)</p>
+<h2 id="Redis-的-glob-pattern-风格"><a href="#Redis-的-glob-pattern-风格" class="headerlink" title="Redis 的 glob pattern 风格"></a>Redis 的 glob pattern 风格</h2><table>
+<thead>
+<tr>
+<th style="text-align:right">字符</th>
+<th style="text-align:right">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">?</td>
+<td style="text-align:right">匹配一个字符</td>
+</tr>
+<tr>
+<td style="text-align:right">*</td>
+<td style="text-align:right">匹配任意个(包括0个)字符</td>
+</tr>
+<tr>
+<td style="text-align:right">[]</td>
+<td style="text-align:right">匹配括号间的任一个字符.可以用<code>-</code>表示区间.</td>
+</tr>
+<tr>
+<td style="text-align:right">\x</td>
+<td style="text-align:right">匹配字符<code>x</code>,如:要匹配<code>?</code>,就需要用 <code>\?</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="KEYS-pattern"><a href="#KEYS-pattern" class="headerlink" title="KEYS pattern"></a>KEYS pattern</h2><p>注意, KEYS 命令需要遍历Redis中的所有键, 当键的数量较多时会影响性能. 所以不建议在生产环境中使用.</p>
+<p>Redis不区分命令的大小写.</p>
+<h2 id="Redis-常见命令"><a href="#Redis-常见命令" class="headerlink" title="Redis 常见命令"></a>Redis 常见命令</h2><h3 id="KEYS-pattern-1"><a href="#KEYS-pattern-1" class="headerlink" title="KEYS pattern"></a>KEYS pattern</h3><p>获取符合规则的键名列表</p>
+<h3 id="EXISTS-key"><a href="#EXISTS-key" class="headerlink" title="EXISTS key"></a>EXISTS key</h3><p>判断是否存在某个键. 返回1则存在, 0则不存在.</p>
+<h3 id="DEL-key-key2…"><a href="#DEL-key-key2…" class="headerlink" title="DEL key [key2…]"></a>DEL key [key2…]</h3><p>删除一个或多个键</p>
+<h4 id="删除多个符合规则的键"><a href="#删除多个符合规则的键" class="headerlink" title="删除多个符合规则的键"></a>删除多个符合规则的键</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">redis-clie -h 127.0.0.1 -p 6379 -n 0 KEYS <span class="string">"user:*"</span> | xargs redis-cli -h 127.0.0.1 -p 6379 -n 0 DEL</div><div class="line"></div><div class="line">或者</div><div class="line"></div><div class="line">redis-cli -h 127.0.0.1 -p 6379 -n 0 DEL `redis-cli -h 127.0.0.1 -p 6379 -n 0 KYES <span class="string">"user:*"</span>`</div></pre></td></tr></table></figure>
+<h3 id="TYPE-key"><a href="#TYPE-key" class="headerlink" title="TYPE key"></a>TYPE key</h3><p>获取键值的类型.返回值可能是: string, hash, list, set, zset.</p>
+<h2 id="Redis-数据类型"><a href="#Redis-数据类型" class="headerlink" title="Redis 数据类型"></a>Redis 数据类型</h2><h3 id="字符串-String"><a href="#字符串-String" class="headerlink" title="字符串, String"></a>字符串, String</h3><p>它可以存储任何形式的字符串, 包括二进制数据. 你可以用其存储用户的邮箱, JSON化的对象,甚至是一张图片.</p>
+<p>一个字符串类型键,允许存储的数据的最大容量是 <code>512MB</code></p>
+<p>字符串类型,是其他数据类型的基础.从某种角度来说, 它们只是组织字符串的形式不同.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">设置值</div><div class="line">SET key value</div><div class="line"></div><div class="line">获取值</div><div class="line">GET key</div></pre></td></tr></table></figure>
+<p><code>递增数字.</code></p>
+<blockquote>
+<p>如果存储的字符串是整数形式时, Redis提供了一个实用的命令 INCR.</p>
+</blockquote>
+<p><code>自增ID</code></p>
+<blockquote>
+<p>可以通过 INCR 命令建立的键初始化为1.(设置起始值为0,然后获取其自增ID时, 它会自动加1.这样子就可以实现自增ID了)</p>
+</blockquote>
+<h3 id="列表-List"><a href="#列表-List" class="headerlink" title="列表, List"></a>列表, List</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 如果index为负数, 则从右边开始,最右边的为-1.但最左边是从0开始的.</span></div><div class="line">LINDEX key index</div><div class="line"></div><div class="line"></div><div class="line">LSET key index value</div><div class="line"></div><div class="line"><span class="comment"># 只保留指定片段.结合 LPUSH,可以限制列表的大小.每次调用LPUSH后, 再调用下面的命令即可.</span></div><div class="line">LTRIM key start end</div><div class="line"></div><div class="line"><span class="comment"># 从左到右查找值为 pivot 的元素,然后根据第二个参数 BEFORE 还是 AFTER 来决定将value放到pivot的前面还是后面.</span></div><div class="line">LINSERT key BEFORE | AFTER pivot value</div><div class="line"></div><div class="line"><span class="comment"># 将元素从一个列表转到另一个列表</span></div><div class="line">RPOPLPUSH <span class="built_in">source</span> destination</div></pre></td></tr></table></figure>
+<h3 id="集合-Set"><a href="#集合-Set" class="headerlink" title="集合, Set"></a>集合, Set</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">SADD key member [member ...]</div><div class="line"></div><div class="line">SREM key member [member ...]</div><div class="line"></div><div class="line"><span class="comment"># 获取集合中的所有元素</span></div><div class="line">SMEMBERS key</div><div class="line"></div><div class="line"><span class="comment"># 获取集合中元素个数</span></div><div class="line">SCARD key</div><div class="line"></div><div class="line"><span class="comment"># 判断元素是否存在集合中</span></div><div class="line">SISMEMBER key member</div><div class="line"></div><div class="line"><span class="comment"># 集合间的运行</span></div><div class="line">SDIFF key [key ...]</div><div class="line">SINTER key [key ...]</div><div class="line">SUNION key [key ...]</div><div class="line"></div><div class="line"><span class="comment"># 进行集合运算,并将结果存储</span></div><div class="line">SDIFFSTORE destination key [key ...]</div><div class="line">SINTERSTORE destination key [key ...]</div><div class="line">SUNIONSTORE destination key [key ...]</div><div class="line"></div><div class="line"><span class="comment"># 随机获取集合中的元素</span></div><div class="line">SRANDMEMBER key [count]</div><div class="line"></div><div class="line">count&gt;0, 则取出cont个不重复的元素</div><div class="line">count&lt;0, 则取出|count|个元素,但有可能重复</div></pre></td></tr></table></figure>
+<h3 id="有序集合-Zset"><a href="#有序集合-Zset" class="headerlink" title="有序集合, Zset"></a>有序集合, Zset</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">ZADD key score member [score member ...]</div><div class="line"></div><div class="line">ZSCORE key member</div><div class="line"></div><div class="line"><span class="comment"># 按score, 从小到大返回</span></div><div class="line">ZRANGE key start stop [WITHSCORES]</div><div class="line"></div><div class="line"><span class="comment"># 按score, 从大到小返回</span></div><div class="line">ZREVRANGE key start stop [WITHSCORES]</div></pre></td></tr></table></figure>
+<h2 id="Redis中的事务"><a href="#Redis中的事务" class="headerlink" title="Redis中的事务"></a>Redis中的事务</h2><p>在 redis-cli 中执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">multi</div><div class="line"></div><div class="line">cmd1</div><div class="line">cmd2</div><div class="line"></div><div class="line"><span class="built_in">exec</span></div></pre></td></tr></table></figure>
+<h2 id="过期时间"><a href="#过期时间" class="headerlink" title="过期时间"></a>过期时间</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">EXPIRE key seconds</div><div class="line">PEXPIRE key millis</div><div class="line"></div><div class="line"><span class="comment">#查看还有多久过期,当键不存在时返回-2.(如果没有设置过期时间,则永不过期, 这时返回的是 -1).</span></div><div class="line">TTL key</div><div class="line"></div><div class="line"><span class="comment">#取消过期时间,让它成为永久的</span></div><div class="line">PERSIST key</div></pre></td></tr></table></figure>
+<h2 id="用Redis实现队列"><a href="#用Redis实现队列" class="headerlink" title="用Redis实现队列"></a>用Redis实现队列</h2><p>伪代码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">loop</div><div class="line"><span class="variable">$task</span> = BRPOP queue, 0</div><div class="line">execute(<span class="variable">$task</span>[1])</div></pre></td></tr></table></figure>
+<p><code>BRPOP</code>命令接受两个参数, 第一个是键名, 第二个是超时时间,单位是秒.如果为0,则不限制等待时间.即如果没有元素,会一直阻塞下去.</p>
+<p>它返回两个值.第一个是键名, 第二个是元素值.</p>
+<h2 id="用Redis实现优先级队列"><a href="#用Redis实现优先级队列" class="headerlink" title="用Redis实现优先级队列"></a>用Redis实现优先级队列</h2><blockquote>
+<p>因为 <code>BRPOP</code> 命令可以同时接受多个键, 其完整的命令格式为:</p>
+</blockquote>
+<p><code>BRPOP key [key...] timout</code></p>
+<p>如果所有键都没有元素,则阻塞.如果其中一个键有元素,则会从该键中弹出.<br>如果多个键都有元素,则按照从左到右的顺序取第一个键中的一个元素.</p>
+<h2 id="用Redis实现”发布-订阅”模式"><a href="#用Redis实现”发布-订阅”模式" class="headerlink" title="用Redis实现”发布/订阅”模式"></a>用Redis实现”发布/订阅”模式</h2><h3 id="发布者"><a href="#发布者" class="headerlink" title="发布者"></a>发布者</h3><p>它使用<code>PUBLISH</code>命令, <code>PUBLISH channel message</code>, 发布一条消息.<br>注意,发出去的消息,不会被持久化. 所以,后续的订阅者只能接收后续发布的消息,之前的是接收不到的.</p>
+<h3 id="订阅者"><a href="#订阅者" class="headerlink" title="订阅者"></a>订阅者</h3><p>它使用<code>SUBSCRIBE</code>命令,可以同时订阅多个频道,用法是:<code>SUBSCRIBE channel1 [channel2 ...]</code></p>
+<h3 id="按规则订阅"><a href="#按规则订阅" class="headerlink" title="按规则订阅"></a>按规则订阅</h3><p><code>PSUBSCRIBE</code> ,它支持glob风格通配符格式. 这与上面的两个是独立的. 即可能会重复匹配消息(如果执行这条,之前又执行了上面的,并且这条的匹配规则也匹配了上面的订阅的channel,不过这时返回的消息类型是不同的,不过消息是一样的)</p>
+<h2 id="复制"><a href="#复制" class="headerlink" title="复制"></a>复制</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">master:</div><div class="line">redis-server</div><div class="line"></div><div class="line">slave:</div><div class="line">redis-server ---port 6380 --slaveof 127.0.0.1 6379</div></pre></td></tr></table></figure>
+<p>这样, 6380(slave)端口的redis,就会同步6379(master)的redis了.默认情况下slave是只读的.</p>
+<h2 id="redis中转义"><a href="#redis中转义" class="headerlink" title="redis中转义"></a>redis中转义</h2><p>默认情况下，redis会将中文进行转义然后再输出，例如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">127.0.0.1:6379&gt; get fffffffhello-by-test</div><div class="line"><span class="string">"\xe6\x88\x91\xe4\xba\x86\xe4\xb8\xaa\xe5\x8e\xbb"</span></div></pre></td></tr></table></figure>
+<p>想让它输出原始数据，可以如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">uniweibo@uniweibo40:~$ ~/redis/redis-2.8.17/src/redis-cli  -p 6379 --raw</div><div class="line">127.0.0.1:6379&gt; get fffffffhello-by-test</div><div class="line">我了个去</div><div class="line">127.0.0.1:6379&gt;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      emacsist
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://emacsist.github.io/2015/07/26/Redis入门指南--读书笔记/" title="Redis入门指南--读书笔记">https://emacsist.github.io/2015/07/26/Redis入门指南--读书笔记/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/redis/" rel="tag"># redis</a>
+          
+            <a href="/tags/nosql/" rel="tag"># nosql</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/07/27/Java中的Comparator使用/" rel="next" title="Java中的Comparator使用">
+                <i class="fa fa-chevron-left"></i> Java中的Comparator使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/07/23/Java-日志实践/" rel="prev" title="Java 日志实践">
+                Java 日志实践 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/avatar.png"
+               alt="emacsist" />
+          <p class="site-author-name" itemprop="name">emacsist</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">296</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">146</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emacsist" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/emacist" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#版本规则"><span class="nav-number">1.</span> <span class="nav-text">版本规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装-Linux"><span class="nav-number">2.</span> <span class="nav-text">安装(Linux)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动和停止Redis"><span class="nav-number">3.</span> <span class="nav-text">启动和停止Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#开发环境中启动"><span class="nav-number">3.1.</span> <span class="nav-text">开发环境中启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过脚本来初始化"><span class="nav-number">3.2.</span> <span class="nav-text">通过脚本来初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#停止redis"><span class="nav-number">3.3.</span> <span class="nav-text">停止redis</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-命令行客户端"><span class="nav-number">4.</span> <span class="nav-text">Redis 命令行客户端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多数据库"><span class="nav-number">5.</span> <span class="nav-text">多数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-的-glob-pattern-风格"><span class="nav-number">6.</span> <span class="nav-text">Redis 的 glob pattern 风格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KEYS-pattern"><span class="nav-number">7.</span> <span class="nav-text">KEYS pattern</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-常见命令"><span class="nav-number">8.</span> <span class="nav-text">Redis 常见命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#KEYS-pattern-1"><span class="nav-number">8.1.</span> <span class="nav-text">KEYS pattern</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#EXISTS-key"><span class="nav-number">8.2.</span> <span class="nav-text">EXISTS key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DEL-key-key2…"><span class="nav-number">8.3.</span> <span class="nav-text">DEL key [key2…]</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#删除多个符合规则的键"><span class="nav-number">8.3.1.</span> <span class="nav-text">删除多个符合规则的键</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TYPE-key"><span class="nav-number">8.4.</span> <span class="nav-text">TYPE key</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-数据类型"><span class="nav-number">9.</span> <span class="nav-text">Redis 数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串-String"><span class="nav-number">9.1.</span> <span class="nav-text">字符串, String</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#列表-List"><span class="nav-number">9.2.</span> <span class="nav-text">列表, List</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#集合-Set"><span class="nav-number">9.3.</span> <span class="nav-text">集合, Set</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#有序集合-Zset"><span class="nav-number">9.4.</span> <span class="nav-text">有序集合, Zset</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis中的事务"><span class="nav-number">10.</span> <span class="nav-text">Redis中的事务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#过期时间"><span class="nav-number">11.</span> <span class="nav-text">过期时间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用Redis实现队列"><span class="nav-number">12.</span> <span class="nav-text">用Redis实现队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用Redis实现优先级队列"><span class="nav-number">13.</span> <span class="nav-text">用Redis实现优先级队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用Redis实现”发布-订阅”模式"><span class="nav-number">14.</span> <span class="nav-text">用Redis实现”发布/订阅”模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#发布者"><span class="nav-number">14.1.</span> <span class="nav-text">发布者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#订阅者"><span class="nav-number">14.2.</span> <span class="nav-text">订阅者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#按规则订阅"><span class="nav-number">14.3.</span> <span class="nav-text">按规则订阅</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#复制"><span class="nav-number">15.</span> <span class="nav-text">复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis中转义"><span class="nav-number">16.</span> <span class="nav-text">redis中转义</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">emacsist</span>
+  <span class="post-count">共263.4k字</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动 
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2132003"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

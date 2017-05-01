@@ -1,0 +1,864 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="emacs,ubuntu," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="安装必要的编译环境sudo apt-get update &amp;amp;&amp;amp; sudo apt-get install libcurl4-gnutls-dev libexpat1-dev gettext libz-dev libssl-dev build-essential 安装从这里打开终端sudo apt-get install nautilus-open-terminal 安装Chrome">
+<meta name="keywords" content="emacs,ubuntu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ubuntu 开发环境配置">
+<meta property="og:url" content="https://emacsist.github.io/2015/08/04/ubuntu-开发环境配置/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="安装必要的编译环境sudo apt-get update &amp;amp;&amp;amp; sudo apt-get install libcurl4-gnutls-dev libexpat1-dev gettext libz-dev libssl-dev build-essential 安装从这里打开终端sudo apt-get install nautilus-open-terminal 安装Chrome">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ubuntu 开发环境配置">
+<meta name="twitter:description" content="安装必要的编译环境sudo apt-get update &amp;amp;&amp;amp; sudo apt-get install libcurl4-gnutls-dev libexpat1-dev gettext libz-dev libssl-dev build-essential 安装从这里打开终端sudo apt-get install nautilus-open-terminal 安装Chrome">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: false,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://emacsist.github.io/2015/08/04/ubuntu-开发环境配置/"/>
+
+
+
+
+
+  <title>ubuntu 开发环境配置 | emacsist</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">emacsist</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heart"></i> <br />
+            
+            书
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://emacsist.github.io/2015/08/04/ubuntu-开发环境配置/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="emacsist">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="emacsist">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                ubuntu 开发环境配置
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-08-04T18:08:42+08:00">
+                2015-08-04
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2016-11-11T21:42:33+08:00">
+                2016-11-11
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ubuntu/" itemprop="url" rel="index">
+                    <span itemprop="name">ubuntu</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  714
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  4
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="安装必要的编译环境"><a href="#安装必要的编译环境" class="headerlink" title="安装必要的编译环境"></a>安装必要的编译环境</h2><p><code>sudo apt-get update &amp;&amp; sudo apt-get install libcurl4-gnutls-dev libexpat1-dev gettext libz-dev libssl-dev build-essential</code></p>
+<h2 id="安装从这里打开终端"><a href="#安装从这里打开终端" class="headerlink" title="安装从这里打开终端"></a>安装从这里打开终端</h2><p><code>sudo apt-get install nautilus-open-terminal</code></p>
+<h2 id="安装Chrome"><a href="#安装Chrome" class="headerlink" title="安装Chrome"></a>安装Chrome</h2><p><code>wget -c https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb</code></p>
+<h2 id="源码安装Emacs"><a href="#源码安装Emacs" class="headerlink" title="源码安装Emacs"></a>源码安装Emacs</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">sudo apt-get build-dep emacs24</div><div class="line">wget -c http://mirror.rise.ph/gnu/emacs/emacs-24.5.tar.gz</div><div class="line">tar -xvf emacs-24.5.tar.gz</div><div class="line">mkdir /usr/<span class="built_in">local</span>/emacs-24.5/</div><div class="line">sudo chown -R yang:yang /usr/<span class="built_in">local</span>/emacs-24.5</div><div class="line">./configure --prefix=/usr/<span class="built_in">local</span>/emacs-24.5/</div><div class="line">make -j 8</div><div class="line">make install</div><div class="line">sudo chown -R yang:yang /usr/<span class="built_in">local</span>/emacs-24.5</div><div class="line">sudo ln <span class="_">-s</span> /usr/<span class="built_in">local</span>/emacs-24.5/ /usr/<span class="built_in">local</span>/emacs</div><div class="line">sudo chown -R yang:yang /usr/<span class="built_in">local</span>/emacs</div></pre></td></tr></table></figure>
+<p>添加到环境变量</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">export</span> PATH=/usr/<span class="built_in">local</span>/emacs/bin:<span class="variable">$PATH</span></div><div class="line"></div><div class="line"><span class="comment"># for emacs</span></div><div class="line"><span class="built_in">alias</span> e=<span class="string">'emacsclient -t'</span></div><div class="line"><span class="built_in">alias</span> ec=<span class="string">'nohup emacsclient -c &lt;/dev/null &amp;&gt;/dev/null &amp;'</span></div><div class="line"><span class="built_in">alias</span> vim=<span class="string">'emacsclient -t'</span></div><div class="line"><span class="built_in">alias</span> vi=<span class="string">'emacsclient -t'</span></div></pre></td></tr></table></figure>
+<p>开机自动启动守护进程</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">ec /etc/init.d/rc.local</div><div class="line"></div><div class="line">在最后添加</div><div class="line"></div><div class="line">emacs --deamon</div><div class="line"></div><div class="line">即可</div></pre></td></tr></table></figure>
+<h2 id="配置系统的locale"><a href="#配置系统的locale" class="headerlink" title="配置系统的locale"></a>配置系统的locale</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">LANG=en_US.UTF-8</div><div class="line">LANGUAGE=en_US.UTF-8</div><div class="line">LC_CTYPE=zh_CN.UTF-8</div><div class="line">LC_NUMERIC=zh_CN.UTF-8</div><div class="line">LC_TIME=zh_CN.UTF-8</div><div class="line">LC_COLLATE=zh_CN.UTF-8</div><div class="line">LC_MONETARY=zh_CN.UTF-8</div><div class="line">LC_MESSAGES=zh_CN.UTF-8</div><div class="line">LC_PAPER=zh_CN.UTF-8</div><div class="line">LC_NAME=zh_CN.UTF-8</div><div class="line">LC_ADDRESS=zh_CN.UTF-8</div><div class="line">LC_TELEPHONE=zh_CN.UTF-8</div><div class="line">LC_MEASUREMENT=zh_CN.UTF-8</div><div class="line">LC_IDENTIFICATION=zh_CN.UTF-8</div><div class="line">LC_ALL=</div></pre></td></tr></table></figure>
+<h2 id="源码安装git"><a href="#源码安装git" class="headerlink" title="源码安装git"></a>源码安装git</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install libcurl4-gnutls-dev libexpat1-dev gettext libz-dev libssl-dev</div><div class="line">sudo apt-get install asciidoc xmlto docbook2x</div><div class="line"></div><div class="line">wget -c https://codeload.github.com/git/git/zip/v2.5.0</div><div class="line"></div><div class="line">unzip v2.5.0</div><div class="line"></div><div class="line"><span class="built_in">cd</span> git-2.5.0</div><div class="line"></div><div class="line">make configure</div><div class="line"></div><div class="line">mkdir /usr/<span class="built_in">local</span>/git-2.5</div><div class="line">sudo chown yang:yang /usr/<span class="built_in">local</span>/git-2.5</div><div class="line"></div><div class="line">./configure --prefix=/usr/<span class="built_in">local</span>/git-2.5</div><div class="line"></div><div class="line">make all doc info</div><div class="line"></div><div class="line">sudo make install install-doc install-html install-info</div><div class="line"></div><div class="line">sudo chown -R yang:yang /usr/<span class="built_in">local</span>/git-2.5</div><div class="line"></div><div class="line">sudo ln <span class="_">-s</span> /usr/<span class="built_in">local</span>/git-2.5 /usr/<span class="built_in">local</span>/git</div><div class="line"></div><div class="line">sudo chown -R yang:yang /usr/<span class="built_in">local</span>/git</div></pre></td></tr></table></figure>
+<p>添加到环境变量</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># for git</span></div><div class="line"><span class="built_in">export</span> PATH=/usr/<span class="built_in">local</span>/git/bin:<span class="variable">$PATH</span></div></pre></td></tr></table></figure>
+<p>配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">git config --global user.name <span class="string">"Zhiyong Yang"</span></div><div class="line">git config --global user.email dreamers.yzy@gmail.com</div><div class="line"></div><div class="line"></div><div class="line"><span class="built_in">echo</span> <span class="string">"export LESSCHARSET=utf-8"</span> &gt; <span class="variable">$HOME</span>/.profile</div><div class="line">git config --global gui.encoding utf-8</div><div class="line">git config --global i18n.commitencoding utf-8</div><div class="line">git config --global i18n.logoutputencoding utf-8</div><div class="line"></div><div class="line"><span class="comment"># 全局编辑器，提交时将COMMIT_EDITMSG编码转换成UTF-8可避免乱码</span></div><div class="line">git config --global core.editor e</div></pre></td></tr></table></figure>
+<h2 id="apt安装最新git"><a href="#apt安装最新git" class="headerlink" title="apt安装最新git"></a>apt安装最新git</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo add-apt-repository ppa:git-core/ppa</div><div class="line">sudo apt-get update</div><div class="line">sudo apt-get install git</div></pre></td></tr></table></figure>
+<h2 id="安装Java及Eclipse及Maven"><a href="#安装Java及Eclipse及Maven" class="headerlink" title="安装Java及Eclipse及Maven"></a>安装Java及Eclipse及Maven</h2><p><a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_blank" rel="external">JDK</a><br><a href="https://www.eclipse.org/downloads/" target="_blank" rel="external">Eclipse</a><br><a href="https://maven.apache.org/download.cgi" target="_blank" rel="external">Maven</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#这里也使用了软链接，将current指向某个具体版本的JDK目录即可</span></div><div class="line"><span class="built_in">export</span> JAVA_HOME=/home/yang/Java/current</div><div class="line"><span class="built_in">export</span> PATH=<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$PATH</span></div><div class="line"><span class="built_in">export</span> PATH=/home/yang/Java/apache-maven-3.3.3/bin:<span class="variable">$PAT</span></div></pre></td></tr></table></figure>
+<h2 id="安装五笔输入法"><a href="#安装五笔输入法" class="headerlink" title="安装五笔输入法"></a>安装五笔输入法</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install fcitx-table-wubi</div></pre></td></tr></table></figure>
+<p>安装完成后，进入<code>System Settings</code> –&gt; <code>Language Support</code> –&gt; <code>Keyboard input method system</code> 中选择 <code>fcitx</code></p>
+<p>还有，在桌面的右上角，离网络图标左边的那个图标（即配置输入法），点击选择<code>Configure Current Input Method</code> –&gt; 点击左下角的<code>+</code>号，添加<code>Wubi</code> –&gt; 点击<code>OK</code> 即可。</p>
+<h2 id="安装zsh-oh-my-zsh"><a href="#安装zsh-oh-my-zsh" class="headerlink" title="安装zsh + oh my zsh"></a>安装zsh + oh my zsh</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install zsh</div><div class="line">wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh</div><div class="line">chsh <span class="_">-s</span> `<span class="built_in">which</span> zsh`</div></pre></td></tr></table></figure>
+<h2 id="去掉Alt键触发快捷命令"><a href="#去掉Alt键触发快捷命令" class="headerlink" title="去掉Alt键触发快捷命令"></a>去掉Alt键触发快捷命令</h2><p>在右上角选择–&gt; <code>System Settings &gt; Keyboard &gt; Shortcuts &gt; Launchers</code></p>
+<p>找到选项<code>Key to show the HUD</code>，然后按下<code>Backspace</code>键清空即可.</p>
+<h2 id="去掉alt-f触发菜单"><a href="#去掉alt-f触发菜单" class="headerlink" title="去掉alt+f触发菜单"></a>去掉alt+f触发菜单</h2><p>打开<code>terminal</code> -&gt; <code>edit</code> -&gt; <code>Keyboard Shortcuts</code> and <code>check Disable all menu access keys (such as Alt+f to open File Menu)</code></p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>注销下系统，重新登录桌面环境即可。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      emacsist
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://emacsist.github.io/2015/08/04/ubuntu-开发环境配置/" title="ubuntu 开发环境配置">https://emacsist.github.io/2015/08/04/ubuntu-开发环境配置/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/emacs/" rel="tag"># emacs</a>
+          
+            <a href="/tags/ubuntu/" rel="tag"># ubuntu</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/08/06/Eclipse遇到Unable-to-load-the-mojo错误/" rel="next" title="Eclipse遇到Unable to load the mojo错误">
+                <i class="fa fa-chevron-left"></i> Eclipse遇到Unable to load the mojo错误
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/08/03/Ubuntu下SSD优化/" rel="prev" title="Ubuntu下SSD优化">
+                Ubuntu下SSD优化 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/avatar.png"
+               alt="emacsist" />
+          <p class="site-author-name" itemprop="name">emacsist</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">296</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">146</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emacsist" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/emacist" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装必要的编译环境"><span class="nav-number">1.</span> <span class="nav-text">安装必要的编译环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装从这里打开终端"><span class="nav-number">2.</span> <span class="nav-text">安装从这里打开终端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装Chrome"><span class="nav-number">3.</span> <span class="nav-text">安装Chrome</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码安装Emacs"><span class="nav-number">4.</span> <span class="nav-text">源码安装Emacs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置系统的locale"><span class="nav-number">5.</span> <span class="nav-text">配置系统的locale</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码安装git"><span class="nav-number">6.</span> <span class="nav-text">源码安装git</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#apt安装最新git"><span class="nav-number">7.</span> <span class="nav-text">apt安装最新git</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装Java及Eclipse及Maven"><span class="nav-number">8.</span> <span class="nav-text">安装Java及Eclipse及Maven</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装五笔输入法"><span class="nav-number">9.</span> <span class="nav-text">安装五笔输入法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装zsh-oh-my-zsh"><span class="nav-number">10.</span> <span class="nav-text">安装zsh + oh my zsh</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#去掉Alt键触发快捷命令"><span class="nav-number">11.</span> <span class="nav-text">去掉Alt键触发快捷命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#去掉alt-f触发菜单"><span class="nav-number">12.</span> <span class="nav-text">去掉alt+f触发菜单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后"><span class="nav-number">13.</span> <span class="nav-text">最后</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">emacsist</span>
+  <span class="post-count">共263.4k字</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动 
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2132003"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,882 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="postgresql,翻译,database," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="[翻译]手把手教你配置流复制原文 尽管许多人知道流复制，这篇博客是为初学者准备的，我将从必要条件和一些关于流复制的介绍开始。:-) 必要条件： 在各自的服务器上安装相同版本的PostgreSQL数据库。  配置”postgres”用户的无密码ssh认证（译注：如使用ssh的公私密匙）  生产环境的服务器必须在postgresql.conf文件配置通过设置archive_mode和archive_c">
+<meta name="keywords" content="postgresql,翻译,database">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[翻译]手把手教你配置流复制">
+<meta property="og:url" content="https://emacsist.github.io/2015/01/24/翻译-手把手教你配置流复制/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="[翻译]手把手教你配置流复制原文 尽管许多人知道流复制，这篇博客是为初学者准备的，我将从必要条件和一些关于流复制的介绍开始。:-) 必要条件： 在各自的服务器上安装相同版本的PostgreSQL数据库。  配置”postgres”用户的无密码ssh认证（译注：如使用ssh的公私密匙）  生产环境的服务器必须在postgresql.conf文件配置通过设置archive_mode和archive_c">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[翻译]手把手教你配置流复制">
+<meta name="twitter:description" content="[翻译]手把手教你配置流复制原文 尽管许多人知道流复制，这篇博客是为初学者准备的，我将从必要条件和一些关于流复制的介绍开始。:-) 必要条件： 在各自的服务器上安装相同版本的PostgreSQL数据库。  配置”postgres”用户的无密码ssh认证（译注：如使用ssh的公私密匙）  生产环境的服务器必须在postgresql.conf文件配置通过设置archive_mode和archive_c">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: false,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://emacsist.github.io/2015/01/24/翻译-手把手教你配置流复制/"/>
+
+
+
+
+
+  <title>[翻译]手把手教你配置流复制 | emacsist</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">emacsist</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heart"></i> <br />
+            
+            书
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://emacsist.github.io/2015/01/24/翻译-手把手教你配置流复制/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="emacsist">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="emacsist">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                [翻译]手把手教你配置流复制
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-01-24T13:24:39+08:00">
+                2015-01-24
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2016-11-11T21:42:33+08:00">
+                2016-11-11
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/postgresql/" itemprop="url" rel="index">
+                    <span itemprop="name">postgresql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  1,965
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  8
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="翻译-手把手教你配置流复制"><a href="#翻译-手把手教你配置流复制" class="headerlink" title="[翻译]手把手教你配置流复制"></a>[翻译]手把手教你配置流复制</h2><p><a href="http://bajis-postgres.blogspot.com/2013/12/step-by-step-guide-to-setup-steaming.html" target="_blank" rel="external">原文</a></p>
+<p>尽管许多人知道流复制，这篇博客是为初学者准备的，我将从必要条件和一些关于流复制的介绍开始。:-)</p>
+<h2 id="必要条件："><a href="#必要条件：" class="headerlink" title="必要条件："></a>必要条件：</h2><ol>
+<li><p>在各自的服务器上安装相同版本的PostgreSQL数据库。</p>
+</li>
+<li><p>配置”postgres”用户的无密码ssh认证（译注：如使用ssh的公私密匙）</p>
+</li>
+<li><p>生产环境的服务器必须在<code>postgresql.conf</code>文件配置通过设置<code>archive_mode</code>和<code>archive_command</code>参数来开启<code>WAL归档模式</code>。</p>
+</li>
+<li><p>生产环境的服务器和备份服务器之间应该一直拥有连接以让归档的<code>WAL</code>文件从生产环境的服务器传输到备份服务器.</p>
+</li>
+<li><p>明确地配置好你的备份机的环境和目录结构要与生产服务器的一样。</p>
+</li>
+</ol>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>它是一个异步机制；所以备机是延迟于主服务器。但不同于其他复制方法，这个延迟是非常短的，可能是一个单事务的延迟，这取决于网速，数据库负载以及流复制配置。此外，在主机上对每个备机的负载是最小的，允许一个主服务器支持多个备机。</p>
+<p>这个特性包含在PostgreSQL 9.0中，伴随的第二个数据库实例（译注：指stand-by是依赖于主服务器的二进制日志，在这期间会标记备机服务器只能接受只读请求）</p>
+<p>这是实践步骤所需命令：</p>
+<p>1.到主服务器，然后创建一个带有复制权限的<code>replication</code>用户。例如：</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ psql  </div><div class="line"></div><div class="line">Password for <span class="keyword">user</span> <span class="title">postgres</span>:  </div><div class="line"></div><div class="line">psql.bin (<span class="number">9.2</span>.<span class="number">1</span>) <span class="keyword">Type</span> <span class="string">"help"</span> for help.  </div><div class="line"></div><div class="line"><span class="attr">postgres=</span><span class="comment"># create user replication with replication password '&lt;password&gt;';</span></div></pre></td></tr></table></figure>
+<p>2.我们需要在主服务器的<code>/opt/PostgreSQL92/data/</code>（译注：就是postgresql的数据目录）目录修改<code>postgresql.conf</code>参数以及<code>pg_hba.conf</code>的验证参数。设置好连接及验证，以让备机服务器可以成功地连接到主服务器的<code>replication</code>这个假的数据库。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta"></span></div><div class="line">$<span class="bash"> <span class="variable">$EDITOR</span> postgresql.conf   </span></div><div class="line">listen_addresses = '*'  </div><div class="line"><span class="meta"></span></div><div class="line">$<span class="bash"> <span class="variable">$EDITOR</span> pg_hba.conf  </span></div><div class="line"><span class="meta">#</span><span class="bash">备机服务器必须有超级用户身份的访问权限</span></div><div class="line"></div><div class="line">host replication replication 10.176.0.0/16 md5</div></pre></td></tr></table></figure>
+<p>3.在主服务器上设置流复制相关的参数。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"> $EDITOR postgresql.conf  </div><div class="line"></div><div class="line"><span class="comment">#为了在备机服务器上开始“只读”查询，wal_level必须设置成“hot_standby”. 但是，如果你一直不会在stand-by模式下连接到备机，你可以选择“archive”  </span></div><div class="line">wal_level = hot_standby  </div><div class="line"></div><div class="line"><span class="comment">#设置允许备机的最大并发连接数  </span></div><div class="line">max_wal_senders = 5   </div><div class="line"></div><div class="line"><span class="comment">#为了防止主服务器在循环利用WAL段文件前移动备机服务器所要求的WAL段文件，设置保留在 pg_xlog 目录里最小的段文件数。   </span></div><div class="line">wal_keep_segments = 32  </div><div class="line"></div><div class="line"><span class="comment">#在主服务器上开启WAL归档到一个归档目录以让备服务器获取。如果"wal_keep_segments"值足够大以保留备机所要求的WAL段文件数，这可能就不必要开启。  </span></div><div class="line">archive_mode    = on   </div><div class="line"></div><div class="line">archive_command = 'cp %p &lt;archive location&gt;%f &amp;&amp; scp %p postgres@10.176.112.189:&lt;archive location&gt;/%f'</div></pre></td></tr></table></figure>
+<p>注意：在 <code>postgresql</code>文件里修改以上参数时，要重启服务器。</p>
+<p>4.在主服务器上重启postgres并检查参数是否生效。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">postgres=<span class="comment"># show archive_command ;  </span></div><div class="line">      archive_command  </div><div class="line">     -----------------  </div><div class="line"> cp %p /var/PG92_Archives/%f  </div><div class="line"></div><div class="line">(1 row)  </div><div class="line"></div><div class="line">postgres=<span class="comment"># show archive_mode ;  </span></div><div class="line"> archive_mode  </div><div class="line">-------------  </div><div class="line"> on  </div><div class="line">(1 row)  </div><div class="line"></div><div class="line">postgres=<span class="comment"># show wal_level ;  </span></div><div class="line">  wal_level  </div><div class="line">------------  </div><div class="line"> hot_standby  </div><div class="line"></div><div class="line">(1 row)  </div><div class="line"></div><div class="line">postgres=<span class="comment"># show max_wal_senders ;  </span></div><div class="line"> max_wal_senders  </div><div class="line">----------------  </div><div class="line"> 5  </div><div class="line">(1 row)  </div><div class="line"></div><div class="line">postgres=<span class="comment"># show wal_keep_segments ;  </span></div><div class="line"> wal_keep_segments  </div><div class="line">------------------  </div><div class="line"> 32</div></pre></td></tr></table></figure>
+<p>5.对主服务器的数据目录做一个基础备份。</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$ </span>psql ­c <span class="string">"SELECT pg_start_backup('label', true)"</span>   </div><div class="line"></div><div class="line"><span class="variable">$ </span>cp /opt/PostgreSQL92/data/* backup/   </div><div class="line"></div><div class="line"><span class="variable">$psql</span> ­c <span class="string">"SELECT pg_stop_backup()"</span>   </div><div class="line"></div><div class="line">-- 打包备份目录并传输到备机的数据目录下  </div><div class="line"></div><div class="line"><span class="variable">$tar</span> ­cvzf backup.tar backup/  </div><div class="line"></div><div class="line"><span class="variable">$scp</span> backup.tar postgres<span class="variable">@10</span>.<span class="number">176.112</span>.<span class="number">189</span><span class="symbol">:/opt/PostgreSQL92/</span></div></pre></td></tr></table></figure>
+<p>6.移动备机的数据内容到其他的位置，解压备份的文件并复制解压后的数据到备机的数据目录。</p>
+<p>7.在备服务器上像主服务器那样设置复制相关的参数，连接以及验证，以便让备服务器在主服务器宕机之后可以切换成主服务器。</p>
+<p>8.在备服务器上开启只读查询。但如果在主服务器上的<code>wal_level</code>参数值是<code>archive</code>，那<code>hot_standby</code>就不需要更改（即是：off）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span><span class="bash"> <span class="variable">$EDITOR</span> postgresql.conf  </span></div><div class="line">hot_standby = on</div></pre></td></tr></table></figure>
+<p>9.在备机服务器上创建一个恢复命令文件，以下参数对于流复制是必需的。、<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">$ $EDITOR recovery.conf  </div><div class="line"><span class="comment"># 指明是否开启服务器作为一个备机。在流复制里，这个参数必须要开启。</span></div><div class="line">standby_mode          = 'on'  </div><div class="line"></div><div class="line"><span class="comment"># 指明用于备服务器连接到主服务器的连接字符串。  </span></div><div class="line">primary_conninfo      = 'host=10.176.112.188 port=5432 user=replication  </div><div class="line">password=&lt;password&gt; application=&lt;app_name&gt;'  </div><div class="line"></div><div class="line"><span class="comment"># 指定一个触发文件让备服务器感觉到它的时候就会停止流复制（即：故障转移）  </span></div><div class="line">trigger_file = '&lt;any path=<span class="string">""</span>&gt;' ===&gt; 不要创建这个文件。当你想主从切换的时候才需要创建它。</div><div class="line"></div><div class="line"><span class="comment"># 指定一个命令从WAL归档中加载归档段文件。如果“wal_keep_segments”是一个足够大的数值以保留WAL段文件满足备机的要求，这可能不是必要的。但一个高负载情况下可能会导致段文件在备服务器完全同步之前就已经循环利用的，这时就要求你重新开始一个新的基础备份。  </span></div><div class="line">restore_command = 'cp &lt;archive_location&gt;%f <span class="string">"%p"</span>'  </div><div class="line">&lt;/archive_location&gt;&lt;/any&gt;</div></pre></td></tr></table></figure></p>
+<p>10.在备服务器上启动postgres。它就会开始流复制并且你会看到像以下的信息：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">LOG:  entering standby mode  </div><div class="line">LOG:  consistent recovery state reached <span class="keyword">at</span> <span class="number">0</span>/<span class="number">1</span>D000078  </div><div class="line">LOG:  <span class="built_in">record</span> <span class="keyword">with</span> zero <span class="built_in">length</span> <span class="keyword">at</span> <span class="number">0</span>/<span class="number">1</span>D000078  </div><div class="line">LOG:  streaming replication successfully connected <span class="keyword">to</span> primary</div></pre></td></tr></table></figure>
+<p>11.你可以通过比较主服务器上的当前的WAL写位置与备服务器上的最新“接收/重做”的WAL位置来计算复制的延迟。它们各自可以通过在主服务器端使用<code>pg_current_xlog_location</code>函数来获取，在备服务器上通过<code>pg_last_xlog_receive_location</code>或者<code>pg_last_xlog_replay_location</code>来获取。<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">$ psql ­c <span class="string">"SELECT pg_current_xlog_location()"</span> ­h192<span class="number">.168</span><span class="number">.0</span><span class="number">.10</span>  </div><div class="line">(primary host)  </div><div class="line"> pg_current_xlog_location  </div><div class="line"> <span class="number">0</span>/<span class="number">2000000</span>  </div><div class="line"></div><div class="line">(<span class="number">1</span> row)  </div><div class="line"></div><div class="line">$ psql ­c <span class="string">"select pg_last_xlog_receive_location()"</span> ­h192<span class="number">.168</span><span class="number">.0</span><span class="number">.20</span>  </div><div class="line">(standby host)  </div><div class="line"> pg_last_xlog_receive_location  </div><div class="line"> <span class="number">0</span>/<span class="number">2000000</span>  </div><div class="line">(<span class="number">1</span> row)  </div><div class="line"></div><div class="line">$ psql ­c <span class="string">"select pg_last_xlog_replay_location()"</span> ­h192<span class="number">.168</span><span class="number">.0</span><span class="number">.20</span>  </div><div class="line">(standby host)  </div><div class="line"> pg_last_xlog_replay_location  </div><div class="line"> <span class="number">0</span>/<span class="number">2000000</span>  </div><div class="line"></div><div class="line">(<span class="number">1</span> row)</div></pre></td></tr></table></figure></p>
+<p>12.其他检查流复制的方法有：最简单的方法是在备服务器上执行“select now()-pg_last_xact_replay_timestamp();”。<code>pg_last_xact_replay_timestamp()</code>函数给出在恢复期间最近的事务重做的时间戳，这些是在主服务器产生事务产生的提交或中止WAL记录的时间。如果在恢复期间没有事务重做，这个函数就会返回NULL。否则，如果恢复仍然在进行的话，它会一直递增。如果恢复已经完成，这时的值会保留在恢复期间中最近事务重做的值而不会变。当服务器已经正常启动并没有恢复，这个函数就返回NULL.你可以尝试在主服务器上做一些操作，然后检查这个函数的输出。<br>如果你想手工检查主备之间的延迟，那可以做以下步骤：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">步骤1：在主服务器上使用以下命令来创建表。</div><div class="line"><span class="keyword">create</span> <span class="keyword">table</span> stream_delay (tstamp <span class="keyword">timestamp</span> <span class="keyword">without</span> <span class="keyword">time</span> zone );  </div><div class="line"></div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> stream_delay <span class="keyword">select</span> <span class="keyword">now</span>();  </div><div class="line"></div><div class="line">步骤2: 在主服务器上使用调度工具cronjob每分钟执行以下命令。 </div><div class="line"><span class="keyword">update</span> stream_delay <span class="keyword">set</span> tstamp=<span class="string">'now()'</span>;  </div><div class="line"></div><div class="line">步骤3: 通过在备服务器上检索"stream_delay"表来证实延迟。</div><div class="line"></div><div class="line">它应该显示在主服务器上最近更新的时间。这个时间戳和备服务器的当前时间戳之差就是主服务器和备服务器之间的延迟。</div></pre></td></tr></table></figure>
+<p>你也可以通过使用ps命令来检查流复制的进展。显示的”LSNs”位置指明了备服务器已经写到了xlog的字节位置。</p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[primary] $ ps ­ef | grep sender  </div><div class="line">postgres <span class="number"> 6879 </span><span class="number"> 6831 </span><span class="number"> 0 </span>10:31 ?        00:00:00 postgres: wal sender  </div><div class="line">process postgres 127.0.0.1(44663) streaming 0/2000000  </div><div class="line"></div><div class="line">[standby] $ ps ­ef | grep receiver  </div><div class="line"></div><div class="line">postgres <span class="number"> 6878 </span><span class="number"> 6872 </span><span class="number"> 1 </span>10:31 ? receiver process   streaming 0/2000000</div></pre></td></tr></table></figure>
+<p>谢谢大家，请让我知道我是否遗漏了什么。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      emacsist
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://emacsist.github.io/2015/01/24/翻译-手把手教你配置流复制/" title="[翻译]手把手教你配置流复制">https://emacsist.github.io/2015/01/24/翻译-手把手教你配置流复制/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/postgresql/" rel="tag"># postgresql</a>
+          
+            <a href="/tags/翻译/" rel="tag"># 翻译</a>
+          
+            <a href="/tags/database/" rel="tag"># database</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/06/20/Hexo-Github-Pages搭建个人Blog/" rel="next" title="Hexo+Github Pages搭建个人Blog">
+                <i class="fa fa-chevron-left"></i> Hexo+Github Pages搭建个人Blog
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/01/09/-翻译-PostgreSQL-9-0-内存-进程/" rel="prev" title="[翻译]PostgreSQL 9.0 内存 & 进程">
+                [翻译]PostgreSQL 9.0 内存 & 进程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/avatar.png"
+               alt="emacsist" />
+          <p class="site-author-name" itemprop="name">emacsist</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">296</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">146</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emacsist" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/emacist" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#翻译-手把手教你配置流复制"><span class="nav-number">1.</span> <span class="nav-text">[翻译]手把手教你配置流复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#必要条件："><span class="nav-number">2.</span> <span class="nav-text">必要条件：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">3.</span> <span class="nav-text">介绍</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">emacsist</span>
+  <span class="post-count">共263.4k字</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动 
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2132003"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

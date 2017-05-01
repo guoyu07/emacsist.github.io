@@ -1,0 +1,900 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="bash,linux,sort," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="sort 它是一个按行排序的命令行工具.  -b 或者  –ignore-leading-blanks 忽略开头的空格  -d 或者 –dictionary-order 按字典排序  123456789101112131415161718192021➜  sort  cat sort.txt	19	21	20	2112345➜  sort  sort -d sort.txt1	192	20	21">
+<meta name="keywords" content="bash,linux,sort">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux sort 命令详解">
+<meta property="og:url" content="https://emacsist.github.io/2015/12/09/Linux-sort-命令详解/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="sort 它是一个按行排序的命令行工具.  -b 或者  –ignore-leading-blanks 忽略开头的空格  -d 或者 –dictionary-order 按字典排序  123456789101112131415161718192021➜  sort  cat sort.txt	19	21	20	2112345➜  sort  sort -d sort.txt1	192	20	21">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux sort 命令详解">
+<meta name="twitter:description" content="sort 它是一个按行排序的命令行工具.  -b 或者  –ignore-leading-blanks 忽略开头的空格  -d 或者 –dictionary-order 按字典排序  123456789101112131415161718192021➜  sort  cat sort.txt	19	21	20	2112345➜  sort  sort -d sort.txt1	192	20	21">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: false,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://emacsist.github.io/2015/12/09/Linux-sort-命令详解/"/>
+
+
+
+
+
+  <title>Linux sort 命令详解 | emacsist</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">emacsist</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heart"></i> <br />
+            
+            书
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://emacsist.github.io/2015/12/09/Linux-sort-命令详解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="emacsist">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="emacsist">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Linux sort 命令详解
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-12-09T12:18:04+08:00">
+                2015-12-09
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2016-11-11T21:42:33+08:00">
+                2016-11-11
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  290
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  1
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="sort"><a href="#sort" class="headerlink" title="sort"></a>sort</h2><blockquote>
+<p>它是一个按行排序的命令行工具.</p>
+</blockquote>
+<h3 id="b-或者-–ignore-leading-blanks"><a href="#b-或者-–ignore-leading-blanks" class="headerlink" title="-b 或者  –ignore-leading-blanks"></a>-b 或者  –ignore-leading-blanks</h3><blockquote>
+<p>忽略开头的空格</p>
+</blockquote>
+<h3 id="d-或者-–dictionary-order"><a href="#d-或者-–dictionary-order" class="headerlink" title="-d 或者 –dictionary-order"></a>-d 或者 –dictionary-order</h3><blockquote>
+<p>按字典排序</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">➜  sort  cat sort.txt</div><div class="line">	19</div><div class="line">	21</div><div class="line">	20</div><div class="line">	21</div><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">➜  sort  sort <span class="_">-d</span> sort.txt</div><div class="line">1</div><div class="line">	19</div><div class="line">2</div><div class="line">	20</div><div class="line">	21</div><div class="line">	21</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">➜  sort</div></pre></td></tr></table></figure>
+<h3 id="f-或者-–ignore-case"><a href="#f-或者-–ignore-case" class="headerlink" title="-f 或者 –ignore-case"></a>-f 或者 –ignore-case</h3><blockquote>
+<p>忽略大小写</p>
+</blockquote>
+<h3 id="g-或者-–general-numeric-sort"><a href="#g-或者-–general-numeric-sort" class="headerlink" title="-g 或者 –general-numeric-sort"></a>-g 或者 –general-numeric-sort</h3><blockquote>
+<p>按通常的数字比较</p>
+</blockquote>
+<h3 id="i-或者-–ignore-nonprinting"><a href="#i-或者-–ignore-nonprinting" class="headerlink" title="-i 或者 –ignore-nonprinting"></a>-i 或者 –ignore-nonprinting</h3><blockquote>
+<p>只考虑可打印字符</p>
+</blockquote>
+<h3 id="M-或者-–month-sort"><a href="#M-或者-–month-sort" class="headerlink" title="-M 或者 –month-sort"></a>-M 或者 –month-sort</h3><blockquote>
+<p>按月份比较</p>
+</blockquote>
+<h3 id="h-或者-–human-numeric-sort"><a href="#h-或者-–human-numeric-sort" class="headerlink" title="-h 或者 –human-numeric-sort"></a>-h 或者 –human-numeric-sort</h3><blockquote>
+<p>比较人性化的数字表示（比如1K 2G）</p>
+</blockquote>
+<h3 id="n-或者-–numeric-sort"><a href="#n-或者-–numeric-sort" class="headerlink" title="-n 或者 –numeric-sort"></a>-n 或者 –numeric-sort</h3><blockquote>
+<p>将字符串的数字当用普通数值来比较</p>
+</blockquote>
+<h3 id="R-或者-–random-sort"><a href="#R-或者-–random-sort" class="headerlink" title="-R 或者 –random-sort"></a>-R 或者 –random-sort</h3><blockquote>
+<p>根据 keys 的随机 hash来排序</p>
+</blockquote>
+<h3 id="r-或者-–reverse"><a href="#r-或者-–reverse" class="headerlink" title="-r 或者 –reverse"></a>-r 或者 –reverse</h3><blockquote>
+<p>降序</p>
+</blockquote>
+<h3 id="V-或者-–version-sort"><a href="#V-或者-–version-sort" class="headerlink" title="-V 或者 –version-sort"></a>-V 或者 –version-sort</h3><blockquote>
+<p>根据版本号排序</p>
+</blockquote>
+<h3 id="t-或者-–field-separator-SEP"><a href="#t-或者-–field-separator-SEP" class="headerlink" title="-t 或者 –field-separator=SEP"></a>-t 或者 –field-separator=SEP</h3><blockquote>
+<p>项分隔符</p>
+</blockquote>
+<h3 id="–parallel-N"><a href="#–parallel-N" class="headerlink" title="–parallel=N"></a>–parallel=N</h3><blockquote>
+<p>并发处理</p>
+</blockquote>
+<h3 id="u-或者-–unique"><a href="#u-或者-–unique" class="headerlink" title="-u 或者 –unique"></a>-u 或者 –unique</h3><blockquote>
+<p>去重</p>
+</blockquote>
+<h3 id="z-或者-–zero-terminated"><a href="#z-或者-–zero-terminated" class="headerlink" title="-z 或者 –zero-terminated"></a>-z 或者 –zero-terminated</h3><blockquote>
+<p>以 0 byte 为行结尾，而不是换行符</p>
+</blockquote>
+<h3 id="S-或者-–buffer-size-SIZE"><a href="#S-或者-–buffer-size-SIZE" class="headerlink" title="-S 或者 –buffer-size=SIZE"></a>-S 或者 –buffer-size=SIZE</h3><blockquote>
+<p>内存缓存大小</p>
+</blockquote>
+<h3 id="o-或者-–output-FILE"><a href="#o-或者-–output-FILE" class="headerlink" title="-o 或者 –output=FILE"></a>-o 或者 –output=FILE</h3><blockquote>
+<p>输出到指定文件</p>
+</blockquote>
+<h3 id="k-或者-–key-KEYEF"><a href="#k-或者-–key-KEYEF" class="headerlink" title="-k 或者 –key=KEYEF"></a>-k 或者 –key=KEYEF</h3><blockquote>
+<p>根据指定key排序（即指定项排序）</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">➜  sort  cat sort.txt</div><div class="line">19	1</div><div class="line">21	3</div><div class="line">20	2</div><div class="line">21	4</div><div class="line">1	5</div><div class="line">2	23</div><div class="line">3	15</div><div class="line">4	651</div><div class="line">5	23</div><div class="line">➜  sort  sort -n -k2 sort.txt</div><div class="line">19	1</div><div class="line">20	2</div><div class="line">21	3</div><div class="line">21	4</div><div class="line">1	5</div><div class="line">3	15</div><div class="line">2	23</div><div class="line">5	23</div><div class="line">4	651</div><div class="line">➜  sort</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      emacsist
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://emacsist.github.io/2015/12/09/Linux-sort-命令详解/" title="Linux sort 命令详解">https://emacsist.github.io/2015/12/09/Linux-sort-命令详解/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/bash/" rel="tag"># bash</a>
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+            <a href="/tags/sort/" rel="tag"># sort</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/12/10/tomcat-远程调试/" rel="next" title="tomcat 远程调试">
+                <i class="fa fa-chevron-left"></i> tomcat 远程调试
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/12/09/etc-hostname-和-etc-hosts-详解/" rel="prev" title="/etc/hostname 和 /etc/hosts 详解">
+                /etc/hostname 和 /etc/hosts 详解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/avatar.png"
+               alt="emacsist" />
+          <p class="site-author-name" itemprop="name">emacsist</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">296</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">146</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emacsist" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/emacist" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#sort"><span class="nav-number">1.</span> <span class="nav-text">sort</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#b-或者-–ignore-leading-blanks"><span class="nav-number">1.1.</span> <span class="nav-text">-b 或者  –ignore-leading-blanks</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#d-或者-–dictionary-order"><span class="nav-number">1.2.</span> <span class="nav-text">-d 或者 –dictionary-order</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#f-或者-–ignore-case"><span class="nav-number">1.3.</span> <span class="nav-text">-f 或者 –ignore-case</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#g-或者-–general-numeric-sort"><span class="nav-number">1.4.</span> <span class="nav-text">-g 或者 –general-numeric-sort</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#i-或者-–ignore-nonprinting"><span class="nav-number">1.5.</span> <span class="nav-text">-i 或者 –ignore-nonprinting</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#M-或者-–month-sort"><span class="nav-number">1.6.</span> <span class="nav-text">-M 或者 –month-sort</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#h-或者-–human-numeric-sort"><span class="nav-number">1.7.</span> <span class="nav-text">-h 或者 –human-numeric-sort</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#n-或者-–numeric-sort"><span class="nav-number">1.8.</span> <span class="nav-text">-n 或者 –numeric-sort</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#R-或者-–random-sort"><span class="nav-number">1.9.</span> <span class="nav-text">-R 或者 –random-sort</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#r-或者-–reverse"><span class="nav-number">1.10.</span> <span class="nav-text">-r 或者 –reverse</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#V-或者-–version-sort"><span class="nav-number">1.11.</span> <span class="nav-text">-V 或者 –version-sort</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#t-或者-–field-separator-SEP"><span class="nav-number">1.12.</span> <span class="nav-text">-t 或者 –field-separator=SEP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#–parallel-N"><span class="nav-number">1.13.</span> <span class="nav-text">–parallel=N</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u-或者-–unique"><span class="nav-number">1.14.</span> <span class="nav-text">-u 或者 –unique</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#z-或者-–zero-terminated"><span class="nav-number">1.15.</span> <span class="nav-text">-z 或者 –zero-terminated</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#S-或者-–buffer-size-SIZE"><span class="nav-number">1.16.</span> <span class="nav-text">-S 或者 –buffer-size=SIZE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#o-或者-–output-FILE"><span class="nav-number">1.17.</span> <span class="nav-text">-o 或者 –output=FILE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#k-或者-–key-KEYEF"><span class="nav-number">1.18.</span> <span class="nav-text">-k 或者 –key=KEYEF</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">emacsist</span>
+  <span class="post-count">共263.4k字</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动 
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2132003"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

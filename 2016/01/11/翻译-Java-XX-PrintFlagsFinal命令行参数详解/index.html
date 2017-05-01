@@ -1,0 +1,890 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="翻译,java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="原文出处  可能要翻墙…你懂的…   昨天在Google了一些与GC调优相关的资料后, 我无意中发现一些JVM标识是我从来没有见到过的. -XX:+PrintFlagsFinal 所以,我尝试了一下我能想到的最简单的Java命令: java -XX:+PrintFlagsFinal -version 我不打算贴出这条命令的输出结果, 因为它几乎有700多行. 除了打印标准版本的信息之外,它还可以打">
+<meta name="keywords" content="翻译,java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[翻译]Java -XX:+PrintFlagsFinal命令行参数详解">
+<meta property="og:url" content="https://emacsist.github.io/2016/01/11/翻译-Java-XX-PrintFlagsFinal命令行参数详解/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="原文出处  可能要翻墙…你懂的…   昨天在Google了一些与GC调优相关的资料后, 我无意中发现一些JVM标识是我从来没有见到过的. -XX:+PrintFlagsFinal 所以,我尝试了一下我能想到的最简单的Java命令: java -XX:+PrintFlagsFinal -version 我不打算贴出这条命令的输出结果, 因为它几乎有700多行. 除了打印标准版本的信息之外,它还可以打">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[翻译]Java -XX:+PrintFlagsFinal命令行参数详解">
+<meta name="twitter:description" content="原文出处  可能要翻墙…你懂的…   昨天在Google了一些与GC调优相关的资料后, 我无意中发现一些JVM标识是我从来没有见到过的. -XX:+PrintFlagsFinal 所以,我尝试了一下我能想到的最简单的Java命令: java -XX:+PrintFlagsFinal -version 我不打算贴出这条命令的输出结果, 因为它几乎有700多行. 除了打印标准版本的信息之外,它还可以打">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: false,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://emacsist.github.io/2016/01/11/翻译-Java-XX-PrintFlagsFinal命令行参数详解/"/>
+
+
+
+
+
+  <title>[翻译]Java -XX:+PrintFlagsFinal命令行参数详解 | emacsist</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">emacsist</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heart"></i> <br />
+            
+            书
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://emacsist.github.io/2016/01/11/翻译-Java-XX-PrintFlagsFinal命令行参数详解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="emacsist">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="emacsist">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                [翻译]Java -XX:+PrintFlagsFinal命令行参数详解
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-01-11T20:49:41+08:00">
+                2016-01-11
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2016-11-11T21:42:33+08:00">
+                2016-11-11
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  1,053
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  5
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="http://javabraindump.blogspot.sg/2012/12/xxprintflagsfinal.html" target="_blank" rel="external">原文出处</a></p>
+<blockquote>
+<p>可能要翻墙…你懂的…</p>
+</blockquote>
+<hr>
+<p>昨天在Google了一些与GC调优相关的资料后, 我无意中发现一些JVM标识是我从来没有见到过的.</p>
+<p><code>-XX:+PrintFlagsFinal</code></p>
+<p>所以,我尝试了一下我能想到的最简单的Java命令:</p>
+<p><code>java -XX:+PrintFlagsFinal -version</code></p>
+<p>我不打算贴出这条命令的输出结果, 因为它几乎有700多行. 除了打印标准版本的信息之外,它还可以打印一个几乎是你JDK构建的版本的所有JVM参数列表,它是一个拥有5列的表格, 这是我这篇文章所要讲解的.</p>
+<p><code>Type | Name | Operator | Value | Application</code></p>
+<p>来看单个参数的例子</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">java -XX:+PrintFlagsFinal -version | grep UseConcMarkSweepGC</div><div class="line"></div><div class="line">bool UseConcMarkSweepGC                       := <span class="literal">true</span>            &#123;product&#125;</div></pre></td></tr></table></figure>
+<p>你可以看到 <em>boolean</em> 标识, <em>UseConcMarkSweepGC</em>, 它的值被修改为 <em>true</em> 并且它适用于所有情况.</p>
+<p>利用一些 <code>*nix</code> 魔术, 我们可以看到每一列的唯一的值</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">java -XX:+PrintFlagsFinal -version | awk <span class="string">'&#123;if (NR!=1) &#123;print $1&#125;&#125;'</span> | sort | uniq</div><div class="line"></div><div class="line">bool</div><div class="line">ccstr</div><div class="line">ccstrlist</div><div class="line">double</div><div class="line">int</div><div class="line">intx</div><div class="line">uint64_t</div><div class="line">uintx</div></pre></td></tr></table></figure>
+<p>这些类型(<code>type</code>列)是自解释的. 修改上面的命令中的<code>$1</code>为<code>$2</code>,你会获取所有可用的没带有想着元信息的标识名.</p>
+<p>继续修改为<code>$3</code>, 结果只有以下两行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">:=</div><div class="line">=</div></pre></td></tr></table></figure>
+<p><code>:=</code>意味着值是被修改的, <code>=</code>表示默认值.</p>
+<p>只获取唯一值的列表是没什么用的, 所以我会继续用一个特定的适用的参数. 由于空格是不规则的, 我们需要一个稍微不同的方式:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">java -XX:+PrintFlagsFinal -version | awk -F <span class="string">'\\&#123;'</span> <span class="string">'&#123;if(NR!=1) &#123;print "\&#123;"$2&#125;&#125;'</span> | sort | uniq</div><div class="line"></div><div class="line">&#123;C1 pd product&#125;</div><div class="line">&#123;C1 product&#125;</div><div class="line">&#123;C2 diagnostic&#125;</div><div class="line">&#123;C2 pd product&#125;</div><div class="line">&#123;C2 product&#125;</div><div class="line">&#123;lp64_product&#125;</div><div class="line">&#123;manageable&#125;</div><div class="line">&#123;pd product&#125;</div><div class="line">&#123;product rw&#125;</div><div class="line">&#123;product&#125;</div></pre></td></tr></table></figure>
+<p>这些目录是由 <code>复合标识符</code> 来描述一个给定的标识符的适用情况.在进行一些深入挖掘后, <a href="http://hg.openjdk.java.net/jdk6/jdk6/hotspot/file/tip/src/share/vm/runtime/globals.hpp" target="_blank" rel="external">我在源码里发现它们的意思</a></p>
+<ul>
+<li><p>product – 官方支持, JVM内部选项</p>
+</li>
+<li><p>rw – 可动态写入的.</p>
+</li>
+<li><p>C1 – Client JIT 编译器</p>
+</li>
+<li><p>C2 – Server JIT 编译器</p>
+</li>
+<li><p>pd – platform Dependent 平台独立</p>
+</li>
+<li><p>lp64 – 仅 64 位JVM</p>
+</li>
+<li><p>manageable – 外部定义的并且是可动态写入的.</p>
+</li>
+<li><p>diagnostic – 用于虚拟机debug的</p>
+</li>
+<li><p>experimental – 非官方支持的</p>
+</li>
+</ul>
+<p>有了这些新知识, 你可以开始看看<code>client</code>与<code>server</code>虚拟机的不同之处:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">diff &lt;(java -XX:+PrintFlagsFinal -server -version) &lt;(java -XX:+PrintFlagsFinal -client -version)</div><div class="line"></div><div class="line"></div><div class="line">&lt;      bool CMSCleanOnEnter                           = <span class="literal">true</span>            &#123;product&#125;</div><div class="line">&gt;      bool CMSCleanOnEnter                           = <span class="literal">false</span>           &#123;product&#125;</div><div class="line">&lt;     uintx ConcGCThreads                             = 0               &#123;product&#125;</div><div class="line">&gt;     uintx ConcGCThreads                             = 2               &#123;product&#125;</div><div class="line">&lt;     uintx InitialHeapSize                          := 268435456       &#123;product&#125;</div><div class="line">&gt;     uintx InitialHeapSize                           = 0               &#123;product&#125;</div><div class="line">&lt;     uintx MaxHeapSize                              := 4294967296      &#123;product&#125;</div><div class="line">&gt;     uintx MaxHeapSize                               = 132120576       &#123;product&#125;</div><div class="line">&lt;     uintx MaxNewSize                                = 18446744073709486080&#123;product&#125;</div><div class="line">&gt;     uintx MaxNewSize                               := 174456832       &#123;product&#125;</div><div class="line">&lt;      intx MaxTenuringThreshold                      = 15              &#123;product&#125;</div><div class="line">&gt;      intx MaxTenuringThreshold                     := 4               &#123;product&#125;</div><div class="line">&lt;      intx NewRatio                                  = 2               &#123;product&#125;</div><div class="line">&lt;     uintx NewSize                                   = 1310720         &#123;product&#125;</div><div class="line">&gt;      intx NewRatio                                 := 7               &#123;product&#125;</div><div class="line">&gt;     uintx NewSize                                  := 21757952        &#123;product&#125;</div><div class="line">&lt;     uintx OldPLABSize                               = 1024            &#123;product&#125;</div><div class="line">&gt;     uintx OldPLABSize                              := 16              &#123;product&#125;</div><div class="line">&lt;     uintx OldSize                                   = 5439488         &#123;product&#125;</div><div class="line">&gt;     uintx OldSize                                  := 65404928        &#123;product&#125;</div><div class="line">&lt;      bool ParGCUseLocalOverflow                     = <span class="literal">false</span>           &#123;product&#125;</div><div class="line">&gt;      bool ParGCUseLocalOverflow                     = <span class="literal">true</span>            &#123;product&#125;</div><div class="line">&lt;     uintx ParallelGCThreads                        := 8               &#123;product&#125;</div><div class="line">&gt;     uintx ParallelGCThreads                         = 8               &#123;product&#125;</div><div class="line">&lt;      bool UseAdaptiveSizePolicy                     = <span class="literal">true</span>            &#123;product&#125;</div><div class="line">&gt;      bool UseAdaptiveSizePolicy                     = <span class="literal">false</span>           &#123;product&#125;</div><div class="line">&lt;      bool UseConcMarkSweepGC                        = <span class="literal">false</span>           &#123;product&#125;</div><div class="line">&gt;      bool UseConcMarkSweepGC                       := <span class="literal">true</span>            &#123;product&#125;</div><div class="line">&lt;      bool UseParNewGC                               = <span class="literal">false</span>           &#123;product&#125;</div><div class="line">&gt;      bool UseParNewGC                              := <span class="literal">true</span>            &#123;product&#125;</div><div class="line">&lt;      bool UseParallelGC                            := <span class="literal">true</span>            &#123;product&#125;</div><div class="line">&gt;      bool UseParallelGC                             = <span class="literal">false</span>           &#123;product&#125;</div><div class="line">&lt;     uintx YoungPLABSize                             = 4096            &#123;product&#125;</div><div class="line">&gt;     uintx YoungPLABSize                             = 1024            &#123;product&#125;</div></pre></td></tr></table></figure>
+<p>或者在我的例子里, 我可以看到当<code>-XX:+AggressiveOpts</code>参数设置时,导致的参数更改. 这是在Google搜索时使我使用了这条途径:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">diff &lt;(java -XX:+PrintFlagsFinal -XX:+AggressiveOpts -version) &lt;(java -XX:+PrintFlagsFinal -version) | grep <span class="string">"&gt;\|&lt;"</span></div><div class="line"></div><div class="line">&lt;      bool AggressiveOpts                           := <span class="literal">true</span>            &#123;product&#125;</div><div class="line">&gt;      bool AggressiveOpts                            = <span class="literal">false</span>           &#123;product&#125;</div><div class="line">&lt;      intx AutoBoxCacheMax                           = 20000           &#123;C2 product&#125;</div><div class="line">&gt;      intx AutoBoxCacheMax                           = 128             &#123;C2 product&#125;</div><div class="line">&lt;      intx BiasedLockingStartupDelay                 = 500             &#123;product&#125;</div><div class="line">&gt;      intx BiasedLockingStartupDelay                 = 4000            &#123;product&#125;</div><div class="line">&lt;      bool EliminateAutoBox                          = <span class="literal">true</span>            &#123;C2 diagnostic&#125;</div><div class="line">&gt;      bool EliminateAutoBox                          = <span class="literal">false</span>           &#123;C2 diagnostic&#125;</div><div class="line">&lt;      bool OptimizeFill                              = <span class="literal">true</span>            &#123;C2 product&#125;</div><div class="line">&lt;      bool OptimizeStringConcat                      = <span class="literal">true</span>            &#123;C2 product&#125;</div><div class="line">&gt;      bool OptimizeFill                              = <span class="literal">false</span>           &#123;C2 product&#125;</div><div class="line">&gt;      bool OptimizeStringConcat                      = <span class="literal">false</span>           &#123;C2 product&#125;</div><div class="line">&lt;      bool UseFPUForSpilling                         = <span class="literal">true</span>            &#123;C2 product&#125;</div><div class="line">&gt;      bool UseFPUForSpilling                         = <span class="literal">false</span>           &#123;C2 product&#125;</div></pre></td></tr></table></figure>
+<p>要切记的是 <code>AggressiveOpts</code> 参数在每一个Java的<code>minor</code>(次)版本中都可能是不同的.</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>以上的命令, 我自己也亲自运行了一次, 都是可以执行的. 实践才出真知, 不然翻译出来, 别人发现运行不了这些命令就不好了. 注意,  以上的命令是基于<code>*nix</code>系统的.在我的Mac上的例子如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">yangzhiyong@yangzhiyongdeMacBook-Pro:~</div><div class="line">&gt; diff &lt;(java -XX:+PrintFlagsFinal -XX:+AggressiveOpts -version) &lt;(java -XX:+PrintFlagsFinal -version) | grep <span class="string">"&gt;\|&lt;"</span></div><div class="line">java version <span class="string">"1.8.0_31"</span></div><div class="line">Java(TM) SE Runtime Environment (build 1.8.0_31-b13)</div><div class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.31-b07, mixed mode)</div><div class="line">java version <span class="string">"1.8.0_31"</span></div><div class="line">Java(TM) SE Runtime Environment (build 1.8.0_31-b13)</div><div class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.31-b07, mixed mode)</div><div class="line">&lt;      bool AggressiveOpts                           := <span class="literal">true</span>                                &#123;product&#125;</div><div class="line">&gt;      bool AggressiveOpts                            = <span class="literal">false</span>                               &#123;product&#125;</div><div class="line">&lt;      intx AutoBoxCacheMax                           = 20000                               &#123;C2 product&#125;</div><div class="line">&gt;      intx AutoBoxCacheMax                           = 128                                 &#123;C2 product&#125;</div><div class="line">&lt;      intx BiasedLockingStartupDelay                 = 500                                 &#123;product&#125;</div><div class="line">&gt;      intx BiasedLockingStartupDelay                 = 4000                                &#123;product&#125;</div><div class="line">&lt;      bool UseFPUForSpilling                         = <span class="literal">true</span>                                &#123;C2 product&#125;</div><div class="line">&gt;      bool UseFPUForSpilling                         = <span class="literal">false</span>                               &#123;C2 product&#125;</div><div class="line"></div><div class="line">yangzhiyong@yangzhiyongdeMacBook-Pro:~</div><div class="line">&gt;</div></pre></td></tr></table></figure>
+<p><code>java -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+PrintFlagsFinal</code>：这条命令可以解放隐藏的参数。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      emacsist
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://emacsist.github.io/2016/01/11/翻译-Java-XX-PrintFlagsFinal命令行参数详解/" title="[翻译]Java -XX:+PrintFlagsFinal命令行参数详解">https://emacsist.github.io/2016/01/11/翻译-Java-XX-PrintFlagsFinal命令行参数详解/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/翻译/" rel="tag"># 翻译</a>
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/01/12/源码安装PostgreSQL-9-5/" rel="next" title="源码安装PostgreSQL 9.5">
+                <i class="fa fa-chevron-left"></i> 源码安装PostgreSQL 9.5
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/01/11/生产环境部署Tomcat配置/" rel="prev" title="生产环境部署Tomcat配置">
+                生产环境部署Tomcat配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/avatar.png"
+               alt="emacsist" />
+          <p class="site-author-name" itemprop="name">emacsist</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">296</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">146</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emacsist" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/emacist" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#后记"><span class="nav-number">1.</span> <span class="nav-text">后记</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">emacsist</span>
+  <span class="post-count">共263.4k字</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动 
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2132003"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

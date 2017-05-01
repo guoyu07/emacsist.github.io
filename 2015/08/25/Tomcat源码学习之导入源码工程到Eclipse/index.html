@@ -1,0 +1,848 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="tomcat," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="测试环境为：Ubuntu 14.04 LTS + Tomcat 7.0.63 下载Tomcat源码1234cd ~/Downloadswget -c http://mirror.bit.edu.cn/apache/tomcat/tomcat-7/v7.0.63/src/apache-tomcat-7.0.63-src.tar.gztar -xvf apache-tomcat-7.0.63-src.">
+<meta name="keywords" content="tomcat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tomcat源码学习之导入源码工程到Eclipse">
+<meta property="og:url" content="https://emacsist.github.io/2015/08/25/Tomcat源码学习之导入源码工程到Eclipse/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="测试环境为：Ubuntu 14.04 LTS + Tomcat 7.0.63 下载Tomcat源码1234cd ~/Downloadswget -c http://mirror.bit.edu.cn/apache/tomcat/tomcat-7/v7.0.63/src/apache-tomcat-7.0.63-src.tar.gztar -xvf apache-tomcat-7.0.63-src.">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tomcat源码学习之导入源码工程到Eclipse">
+<meta name="twitter:description" content="测试环境为：Ubuntu 14.04 LTS + Tomcat 7.0.63 下载Tomcat源码1234cd ~/Downloadswget -c http://mirror.bit.edu.cn/apache/tomcat/tomcat-7/v7.0.63/src/apache-tomcat-7.0.63-src.tar.gztar -xvf apache-tomcat-7.0.63-src.">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: false,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://emacsist.github.io/2015/08/25/Tomcat源码学习之导入源码工程到Eclipse/"/>
+
+
+
+
+
+  <title>Tomcat源码学习之导入源码工程到Eclipse | emacsist</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">emacsist</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heart"></i> <br />
+            
+            书
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://emacsist.github.io/2015/08/25/Tomcat源码学习之导入源码工程到Eclipse/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="emacsist">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="emacsist">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Tomcat源码学习之导入源码工程到Eclipse
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-08-25T14:33:18+08:00">
+                2015-08-25
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2016-11-11T21:42:33+08:00">
+                2016-11-11
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tomcat/" itemprop="url" rel="index">
+                    <span itemprop="name">tomcat</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  1,875
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  11
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>测试环境为：Ubuntu 14.04 LTS + Tomcat 7.0.63</p>
+<h2 id="下载Tomcat源码"><a href="#下载Tomcat源码" class="headerlink" title="下载Tomcat源码"></a>下载Tomcat源码</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ~/Downloads</div><div class="line">wget -c http://mirror.bit.edu.cn/apache/tomcat/tomcat-7/v7.0.63/src/apache-tomcat-7.0.63-src.tar.gz</div><div class="line">tar -xvf apache-tomcat-7.0.63-src.tar.gz</div><div class="line"><span class="built_in">cd</span> apache-tomcat-7.0.63-src</div></pre></td></tr></table></figure>
+<h2 id="转换成Maven工程"><a href="#转换成Maven工程" class="headerlink" title="转换成Maven工程"></a>转换成Maven工程</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ~/Downloads/apache-tomcat-7.0.63-src</div><div class="line">touch pom.xml</div></pre></td></tr></table></figure>
+<p><em>pom.xml</em> 文件内容如下</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span><span class="meta">?&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">"http://maven.apache.org/POM/4.0.0"</span></span></div><div class="line">         <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></div><div class="line">         <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span>&gt;</div><div class="line"></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.tomcat<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>Tomcat7.0<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>Tomcat7.0<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>7.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">build</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">finalName</span>&gt;</span>Tomcat7.0<span class="tag">&lt;/<span class="name">finalName</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">sourceDirectory</span>&gt;</span>java<span class="tag">&lt;/<span class="name">sourceDirectory</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">testSourceDirectory</span>&gt;</span>test<span class="tag">&lt;/<span class="name">testSourceDirectory</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">resources</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">resource</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">directory</span>&gt;</span>java<span class="tag">&lt;/<span class="name">directory</span>&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="name">resource</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">resources</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">testResources</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">testResource</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">directory</span>&gt;</span>test<span class="tag">&lt;/<span class="name">directory</span>&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="name">testResource</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">testResources</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-compiler-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line"></div><div class="line">                <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;<span class="name">encoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">encoding</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;<span class="name">source</span>&gt;</span>1.6<span class="tag">&lt;/<span class="name">source</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;<span class="name">target</span>&gt;</span>1.6<span class="tag">&lt;/<span class="name">target</span>&gt;</span></div><div class="line">                <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">build</span>&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.11<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>ant<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>ant<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>wsdl4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>wsdl4j<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.6.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>javax.xml<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jaxrpc<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.eclipse.jdt.core.compiler<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>ecj<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.4.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>注意点：当你使用不同版本的Tomcat时，修改一下<code>dependencies</code>里相应的依赖版本即可，版本请参考Tomcat源码目录的<code>build.properties.default</code>文件里相应依赖的版本作修改即可。</p>
+<h2 id="导入到Eclipse"><a href="#导入到Eclipse" class="headerlink" title="导入到Eclipse"></a>导入到Eclipse</h2><p><code>File</code> -&gt; <code>import</code> -&gt; <code>Maven</code> -&gt; <code>Existing Maven Projects</code> 然后定位到 <code>~/Downloads/apache-tomcat-7.0.63-src</code>目录即可</p>
+<h2 id="启动Tomcat"><a href="#启动Tomcat" class="headerlink" title="启动Tomcat"></a>启动Tomcat</h2><p>打开<code>org.apache.catalina.startup.Bootstrap</code>这个启动类，然后右键选择<code>Run As</code> -&gt; <code>Run Configurations</code> -&gt; <code>Arguments</code> -&gt; <code>VM arguments</code> 输入以下参数（相应的目录，请自己作修改）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">-Dcatalina.home=/home/yang/Downloads/apache-tomcat-7.0.63-src  -Dcatalina.base=/home/yang/Downloads/apache-tomcat-7.0.63-src</div><div class="line">-Djava.endorsed.dirs=/home/yang/Downloads/apache-tomcat-7.0.63-src/endorsed -Djava.io.tmpdir=/home/yang/Downloads/apache-tomcat-7.0.63-src/temp</div><div class="line">-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager</div><div class="line">-Djava.util.logging.config.file=/home/yang/Downloads/apache-tomcat-7.0.63-src/conf/logging.properties</div></pre></td></tr></table></figure>
+<h2 id="OK"><a href="#OK" class="headerlink" title="OK"></a>OK</h2><p>一切都没有问题时，启动的结果，类似如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div></pre></td><td class="code"><pre><div class="line">Aug 25, 2015 2:32:09 PM org.apache.catalina.startup.ClassLoaderFactory validateFile</div><div class="line">WARNING: Problem with directory [/home/yang/Downloads/apache-tomcat-7.0.63-src/lib], exists: [<span class="literal">false</span>], isDirectory: [<span class="literal">false</span>], canRead: [<span class="literal">false</span>]</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.catalina.startup.ClassLoaderFactory validateFile</div><div class="line">WARNING: Problem with directory [/home/yang/Downloads/apache-tomcat-7.0.63-src/lib], exists: [<span class="literal">false</span>], isDirectory: [<span class="literal">false</span>], canRead: [<span class="literal">false</span>]</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.catalina.startup.ClassLoaderFactory validateFile</div><div class="line">WARNING: Problem with directory [/home/yang/Downloads/apache-tomcat-7.0.63-src/lib], exists: [<span class="literal">false</span>], isDirectory: [<span class="literal">false</span>], canRead: [<span class="literal">false</span>]</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.catalina.startup.ClassLoaderFactory validateFile</div><div class="line">WARNING: Problem with directory [/home/yang/Downloads/apache-tomcat-7.0.63-src/lib], exists: [<span class="literal">false</span>], isDirectory: [<span class="literal">false</span>], canRead: [<span class="literal">false</span>]</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.catalina.startup.Catalina initDirs</div><div class="line">SEVERE: Cannot find specified temporary folder at /home/yang/Downloads/apache-tomcat-7.0.63-src/temp</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.catalina.startup.VersionLoggerListener <span class="built_in">log</span></div><div class="line">INFO: Server version:        Apache Tomcat/@VERSION@</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.catalina.startup.VersionLoggerListener <span class="built_in">log</span></div><div class="line">INFO: Server built:          @VERSION_BUILT@</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.catalina.startup.VersionLoggerListener <span class="built_in">log</span></div><div class="line">INFO: Server number:         @VERSION_NUMBER@</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.catalina.startup.VersionLoggerListener <span class="built_in">log</span></div><div class="line">INFO: OS Name:               Linux</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.catalina.startup.VersionLoggerListener <span class="built_in">log</span></div><div class="line">INFO: OS Version:            3.16.0-30-generic</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.catalina.startup.VersionLoggerListener <span class="built_in">log</span></div><div class="line">INFO: Architecture:          amd64</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.catalina.startup.VersionLoggerListener <span class="built_in">log</span></div><div class="line">INFO: Java Home:             /home/yang/Java/jdk1.8.0_51/jre</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.catalina.startup.VersionLoggerListener <span class="built_in">log</span></div><div class="line">INFO: JVM Version:           1.8.0_51-b16</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.catalina.startup.VersionLoggerListener <span class="built_in">log</span></div><div class="line">INFO: JVM Vendor:            Oracle Corporation</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.catalina.startup.VersionLoggerListener <span class="built_in">log</span></div><div class="line">INFO: CATALINA_BASE:         /home/yang/Downloads/apache-tomcat-7.0.63-src</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.catalina.startup.VersionLoggerListener <span class="built_in">log</span></div><div class="line">INFO: CATALINA_HOME:         /home/yang/Downloads/apache-tomcat-7.0.63-src</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.catalina.startup.VersionLoggerListener <span class="built_in">log</span></div><div class="line">INFO: Command line argument: -Dcatalina.home=/home/yang/Downloads/apache-tomcat-7.0.63-src</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.catalina.startup.VersionLoggerListener <span class="built_in">log</span></div><div class="line">INFO: Command line argument: -Dcatalina.base=/home/yang/Downloads/apache-tomcat-7.0.63-src</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.catalina.startup.VersionLoggerListener <span class="built_in">log</span></div><div class="line">INFO: Command line argument: -Djava.endorsed.dirs=/home/yang/Downloads/apache-tomcat-7.0.63-src/endorsed</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.catalina.startup.VersionLoggerListener <span class="built_in">log</span></div><div class="line">INFO: Command line argument: -Djava.io.tmpdir=/home/yang/Downloads/apache-tomcat-7.0.63-src/temp</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.catalina.startup.VersionLoggerListener <span class="built_in">log</span></div><div class="line">INFO: Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.catalina.startup.VersionLoggerListener <span class="built_in">log</span></div><div class="line">INFO: Command line argument: -Djava.util.logging.config.file=/home/yang/Downloads/apache-tomcat-7.0.63-src/conf/logging.properties</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.catalina.startup.VersionLoggerListener <span class="built_in">log</span></div><div class="line">INFO: Command line argument: -Dfile.encoding=UTF-8</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.catalina.core.AprLifecycleListener lifecycleEvent</div><div class="line">INFO: The APR based Apache Tomcat Native library <span class="built_in">which</span> allows optimal performance <span class="keyword">in</span> production environments was not found on the java.library.path: /usr/java/packages/lib/amd64:/usr/lib64:/lib64:/lib:/usr/lib</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.coyote.AbstractProtocol init</div><div class="line">INFO: Initializing ProtocolHandler [<span class="string">"http-bio-8090"</span>]</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.coyote.AbstractProtocol init</div><div class="line">INFO: Initializing ProtocolHandler [<span class="string">"ajp-bio-8019"</span>]</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.catalina.startup.Catalina load</div><div class="line">INFO: Initialization processed <span class="keyword">in</span> 355 ms</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.catalina.core.StandardService startInternal</div><div class="line">INFO: Starting service Catalina</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.catalina.core.StandardEngine startInternal</div><div class="line">INFO: Starting Servlet Engine: Apache Tomcat/@VERSION@</div><div class="line">Aug 25, 2015 2:32:09 PM org.apache.catalina.startup.HostConfig deployDirectory</div><div class="line">INFO: Deploying web application directory /home/yang/Downloads/apache-tomcat-7.0.63-src/webapps/manager</div><div class="line">Aug 25, 2015 2:32:10 PM org.apache.catalina.startup.TldConfig execute</div><div class="line">INFO: At least one JAR was scanned <span class="keyword">for</span> TLDs yet contained no TLDs. Enable debug logging <span class="keyword">for</span> this logger <span class="keyword">for</span> a complete list of JARs that were scanned but no TLDs were found <span class="keyword">in</span> them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.</div><div class="line">Aug 25, 2015 2:32:10 PM org.apache.catalina.startup.HostConfig deployDirectory</div><div class="line">INFO: Deployment of web application directory /home/yang/Downloads/apache-tomcat-7.0.63-src/webapps/manager has finished <span class="keyword">in</span> 159 ms</div><div class="line">Aug 25, 2015 2:32:10 PM org.apache.catalina.startup.HostConfig deployDirectory</div><div class="line">INFO: Deploying web application directory /home/yang/Downloads/apache-tomcat-7.0.63-src/webapps/examples</div><div class="line">Aug 25, 2015 2:32:10 PM org.apache.catalina.startup.TldConfig execute</div><div class="line">INFO: At least one JAR was scanned <span class="keyword">for</span> TLDs yet contained no TLDs. Enable debug logging <span class="keyword">for</span> this logger <span class="keyword">for</span> a complete list of JARs that were scanned but no TLDs were found <span class="keyword">in</span> them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.</div><div class="line">Aug 25, 2015 2:32:10 PM org.apache.catalina.core.StandardContext startInternal</div><div class="line">SEVERE: One or more listeners failed to start. Full details will be found <span class="keyword">in</span> the appropriate container <span class="built_in">log</span> file</div><div class="line">Aug 25, 2015 2:32:10 PM org.apache.catalina.core.StandardContext startInternal</div><div class="line">SEVERE: Context [/examples] startup failed due to previous errors</div><div class="line">Aug 25, 2015 2:32:10 PM org.apache.catalina.startup.HostConfig deployDirectory</div><div class="line">INFO: Deployment of web application directory /home/yang/Downloads/apache-tomcat-7.0.63-src/webapps/examples has finished <span class="keyword">in</span> 99 ms</div><div class="line">Aug 25, 2015 2:32:10 PM org.apache.catalina.startup.HostConfig deployDirectory</div><div class="line">INFO: Deploying web application directory /home/yang/Downloads/apache-tomcat-7.0.63-src/webapps/docs</div><div class="line">Aug 25, 2015 2:32:10 PM org.apache.catalina.startup.TldConfig execute</div><div class="line">INFO: At least one JAR was scanned <span class="keyword">for</span> TLDs yet contained no TLDs. Enable debug logging <span class="keyword">for</span> this logger <span class="keyword">for</span> a complete list of JARs that were scanned but no TLDs were found <span class="keyword">in</span> them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.</div><div class="line">Aug 25, 2015 2:32:10 PM org.apache.catalina.startup.HostConfig deployDirectory</div><div class="line">INFO: Deployment of web application directory /home/yang/Downloads/apache-tomcat-7.0.63-src/webapps/docs has finished <span class="keyword">in</span> 20 ms</div><div class="line">Aug 25, 2015 2:32:10 PM org.apache.catalina.startup.HostConfig deployDirectory</div><div class="line">INFO: Deploying web application directory /home/yang/Downloads/apache-tomcat-7.0.63-src/webapps/ROOT</div><div class="line">Aug 25, 2015 2:32:10 PM org.apache.catalina.startup.TldConfig execute</div><div class="line">INFO: At least one JAR was scanned <span class="keyword">for</span> TLDs yet contained no TLDs. Enable debug logging <span class="keyword">for</span> this logger <span class="keyword">for</span> a complete list of JARs that were scanned but no TLDs were found <span class="keyword">in</span> them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.</div><div class="line">Aug 25, 2015 2:32:10 PM org.apache.catalina.startup.HostConfig deployDirectory</div><div class="line">INFO: Deployment of web application directory /home/yang/Downloads/apache-tomcat-7.0.63-src/webapps/ROOT has finished <span class="keyword">in</span> 24 ms</div><div class="line">Aug 25, 2015 2:32:10 PM org.apache.catalina.startup.HostConfig deployDirectory</div><div class="line">INFO: Deploying web application directory /home/yang/Downloads/apache-tomcat-7.0.63-src/webapps/host-manager</div><div class="line">Aug 25, 2015 2:32:10 PM org.apache.catalina.startup.TldConfig execute</div><div class="line">INFO: At least one JAR was scanned <span class="keyword">for</span> TLDs yet contained no TLDs. Enable debug logging <span class="keyword">for</span> this logger <span class="keyword">for</span> a complete list of JARs that were scanned but no TLDs were found <span class="keyword">in</span> them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.</div><div class="line">Aug 25, 2015 2:32:10 PM org.apache.catalina.startup.HostConfig deployDirectory</div><div class="line">INFO: Deployment of web application directory /home/yang/Downloads/apache-tomcat-7.0.63-src/webapps/host-manager has finished <span class="keyword">in</span> 19 ms</div><div class="line">Aug 25, 2015 2:32:10 PM org.apache.coyote.AbstractProtocol start</div><div class="line">INFO: Starting ProtocolHandler [<span class="string">"http-bio-8090"</span>]</div><div class="line">Aug 25, 2015 2:32:10 PM org.apache.coyote.AbstractProtocol start</div><div class="line">INFO: Starting ProtocolHandler [<span class="string">"ajp-bio-8019"</span>]</div><div class="line">Aug 25, 2015 2:32:10 PM org.apache.catalina.startup.Catalina start</div><div class="line">INFO: Server startup <span class="keyword">in</span> 370 ms</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      emacsist
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://emacsist.github.io/2015/08/25/Tomcat源码学习之导入源码工程到Eclipse/" title="Tomcat源码学习之导入源码工程到Eclipse">https://emacsist.github.io/2015/08/25/Tomcat源码学习之导入源码工程到Eclipse/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/tomcat/" rel="tag"># tomcat</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/08/28/Tomcat报java-lang-ClassNotFoundException-1catalina-org-apache-juli-FileHandler/" rel="next" title="Tomcat报java.lang.ClassNotFoundException: 1catalina.org.apache.juli.FileHandler">
+                <i class="fa fa-chevron-left"></i> Tomcat报java.lang.ClassNotFoundException: 1catalina.org.apache.juli.FileHandler
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/08/25/Linux技巧收集/" rel="prev" title="Linux技巧收集">
+                Linux技巧收集 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/avatar.png"
+               alt="emacsist" />
+          <p class="site-author-name" itemprop="name">emacsist</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">296</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">146</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emacsist" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/emacist" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#下载Tomcat源码"><span class="nav-number">1.</span> <span class="nav-text">下载Tomcat源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#转换成Maven工程"><span class="nav-number">2.</span> <span class="nav-text">转换成Maven工程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#导入到Eclipse"><span class="nav-number">3.</span> <span class="nav-text">导入到Eclipse</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动Tomcat"><span class="nav-number">4.</span> <span class="nav-text">启动Tomcat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OK"><span class="nav-number">5.</span> <span class="nav-text">OK</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">emacsist</span>
+  <span class="post-count">共263.4k字</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动 
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2132003"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
