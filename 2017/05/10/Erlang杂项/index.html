@@ -1,0 +1,805 @@
+<!doctype html>
+
+
+
+
+<html class="theme-next mist" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="erlang," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="erlang 启动参数说明+ : 它是 emulator flag 它控制模拟器的行为(即虚拟机)。(emulator flag).可以通过 erlang:system_info(…) 来获取。所有选项名有: system_info - : 这种参数是传递给 runtime system ，特别是 init system 来处理的。可以通过 init:get_argument/1 函数来获取这些参">
+<meta name="keywords" content="erlang">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Erlang杂项">
+<meta property="og:url" content="https://emacsist.github.io/2017/05/10/Erlang杂项/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="erlang 启动参数说明+ : 它是 emulator flag 它控制模拟器的行为(即虚拟机)。(emulator flag).可以通过 erlang:system_info(…) 来获取。所有选项名有: system_info - : 这种参数是传递给 runtime system ，特别是 init system 来处理的。可以通过 init:get_argument/1 函数来获取这些参">
+<meta property="og:updated_time" content="2017-05-10T03:43:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Erlang杂项">
+<meta name="twitter:description" content="erlang 启动参数说明+ : 它是 emulator flag 它控制模拟器的行为(即虚拟机)。(emulator flag).可以通过 erlang:system_info(…) 来获取。所有选项名有: system_info - : 这种参数是传递给 runtime system ，特别是 init system 来处理的。可以通过 init:get_argument/1 函数来获取这些参">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: false,
+    motion: false,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://emacsist.github.io/2017/05/10/Erlang杂项/"/>
+
+
+
+
+
+  <title>Erlang杂项 | emacsist</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">emacsist</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heart"></i> <br />
+            
+            书
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://emacsist.github.io/2017/05/10/Erlang杂项/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="emacsist">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="emacsist">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Erlang杂项
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-10T11:00:21+08:00">
+                2017-05-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/erlang/" itemprop="url" rel="index">
+                    <span itemprop="name">erlang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="erlang-启动参数说明"><a href="#erlang-启动参数说明" class="headerlink" title="erlang 启动参数说明"></a>erlang 启动参数说明</h1><p><em>+</em> : 它是 <em>emulator flag</em> 它控制模拟器的行为(即虚拟机)。(emulator flag).可以通过 <em>erlang:system_info(…)</em> 来获取。所有选项名有: <a href="http://erlang.org/doc/man/erlang.html#system_info_allocator_tags" target="_blank" rel="external">system_info</a></p>
+<p><em>-</em> : 这种参数是传递给 <em>runtime system</em> ，特别是 <em>init system</em> 来处理的。可以通过 <em>init:get_argument/1</em> 函数来获取这些参数，<em>init:get_arguments().</em> 会列出所有。 (flag)</p>
+<p><em>plain argument</em> : 它可以出现在第一个 (flag) 之前，或者在 <em>–</em> flag 后面。又或者是 <em>-extra</em> flag 后面。可以通过 <em>init:get_plain_arguments().</em> 来获取</p>
+<h1 id="让-Erlang-接受的信号说明"><a href="#让-Erlang-接受的信号说明" class="headerlink" title="让 Erlang 接受的信号说明"></a>让 Erlang 接受的信号说明</h1><p><em>SIGUSR1</em> ： 它会导致Erlang强制产生一个 crash dump 文件。<br><em>SIGTERM</em> ： 它会产生一个 <em>stop</em> 的消息给 <em>init</em> 进程。即等同于调用 <em>init:stop/0</em><br><em>SIGUSR2</em> ： 它保留Erlang内部使用。</p>
+<h1 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h1><h2 id="ERL-CRASH-DUMP"><a href="#ERL-CRASH-DUMP" class="headerlink" title="ERL_CRASH_DUMP"></a>ERL_CRASH_DUMP</h2><p>这个是 <em>crash_dump</em> 的文件名。如果没设置，它就是在当前目录下的，crash dump 的文件名为 <em>erl_crash.dump</em> </p>
+<h2 id="ERL-CRASH-DUMP-NICE"><a href="#ERL-CRASH-DUMP-NICE" class="headerlink" title="ERL_CRASH_DUMP_NICE"></a>ERL_CRASH_DUMP_NICE</h2><p>当模拟器需要写crash dump文件时，这个值就是该进程的 <em>nice value</em> 。有效范围是 1-39 。数值越大，优先级越低。</p>
+<h2 id="ERL-CRASH-DUMP-SECONDS"><a href="#ERL-CRASH-DUMP-SECONDS" class="headerlink" title="ERL_CRASH_DUMP_SECONDS"></a>ERL_CRASH_DUMP_SECONDS</h2><p>即花费在写 crash dump 文件允许耗时的秒数。当超过了这个秒数，模拟器就会被 <em>SIGALRM</em> 信号终止。</p>
+<p>如果它没有设置，或者设置为0( <em>ERL_CRASH_DUMP_SECONDS=0</em> )，运行时系统甚至不会尝试写 crash dump 文件。它仅仅只是终止掉。<br>如果它为负数，比如 <em>ERL_CRASH_DUMP_SECONDS=-1</em> ，则运行时系统会无限等待，直到 crash dump 文件已经被写到文件了。</p>
+<h2 id="ERL-CRASH-DUMP-BYTES"><a href="#ERL-CRASH-DUMP-BYTES" class="headerlink" title="ERL_CRASH_DUMP_BYTES"></a>ERL_CRASH_DUMP_BYTES</h2><p>crash dump 文件最大的字节数，超出时它会被截断。如果没有设置，则表示没有限制。如果设置为0，则不会尝试写 crash dump 文件。</p>
+<h2 id="ERL-AFLAGS"><a href="#ERL-AFLAGS" class="headerlink" title="ERL_AFLAGS"></a>ERL_AFLAGS</h2><p>这个值的内容，会被添加到 <em>erl</em> 命令行的开头。但如果有 <em>-extra</em> 则比较特殊，这部分要放在该值的结尾，然后它会被放到正式命令行的 <em>-extra</em> 后面。</p>
+<h2 id="ERL-ZFLAGS-and-ERL-FLAGS"><a href="#ERL-ZFLAGS-and-ERL-FLAGS" class="headerlink" title="ERL_ZFLAGS and ERL_FLAGS"></a>ERL_ZFLAGS and ERL_FLAGS</h2><p>这两个环境变量的值，会被追加到 <em>erl</em> 命令行的结尾。同样，如果是含有 <em>-extra</em> 也会特别处理。（同上）</p>
+<h2 id="ERL-LIBS"><a href="#ERL-LIBS" class="headerlink" title="ERL_LIBS"></a>ERL_LIBS</h2><p>它包含额外的库目录，它会被添加到 <em>code path</em> 。</p>
+<h2 id="ERL-EPMD-ADDRESS"><a href="#ERL-EPMD-ADDRESS" class="headerlink" title="ERL_EPMD_ADDRESS"></a>ERL_EPMD_ADDRESS</h2><p>可以设置为逗号分隔的IP地址列表，表示 <em>epmd</em> 进程监听的地址。（loopback 地址是一直会被监听的，无论它有没有显式指明）</p>
+<h2 id="ERL-EPMD-PORT"><a href="#ERL-EPMD-PORT" class="headerlink" title="ERL_EPMD_PORT"></a>ERL_EPMD_PORT</h2><p><em>epmd</em> 进程监听的端口。</p>
+<blockquote>
+<p>注意，在一个集群中的所有节点，它们的 epmd 端口必须是相同的！！！</p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      emacsist
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://emacsist.github.io/2017/05/10/Erlang杂项/" title="Erlang杂项">https://emacsist.github.io/2017/05/10/Erlang杂项/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/erlang/" rel="tag"># erlang</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/10/翻译-RabbitMQ中的消费者确认和发布者确认/" rel="next" title="[翻译]RabbitMQ中的消费者确认和发布者确认">
+                <i class="fa fa-chevron-left"></i> [翻译]RabbitMQ中的消费者确认和发布者确认
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/08/IDA-pro-杂项/" rel="prev" title="IDA pro 杂项">
+                IDA pro 杂项 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/avatar.png"
+               alt="emacsist" />
+          <p class="site-author-name" itemprop="name">emacsist</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">300</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">148</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emacsist" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/emacist" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#erlang-启动参数说明"><span class="nav-text">erlang 启动参数说明</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#让-Erlang-接受的信号说明"><span class="nav-text">让 Erlang 接受的信号说明</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#环境变量"><span class="nav-text">环境变量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ERL-CRASH-DUMP"><span class="nav-text">ERL_CRASH_DUMP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ERL-CRASH-DUMP-NICE"><span class="nav-text">ERL_CRASH_DUMP_NICE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ERL-CRASH-DUMP-SECONDS"><span class="nav-text">ERL_CRASH_DUMP_SECONDS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ERL-CRASH-DUMP-BYTES"><span class="nav-text">ERL_CRASH_DUMP_BYTES</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ERL-AFLAGS"><span class="nav-text">ERL_AFLAGS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ERL-ZFLAGS-and-ERL-FLAGS"><span class="nav-text">ERL_ZFLAGS and ERL_FLAGS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ERL-LIBS"><span class="nav-text">ERL_LIBS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ERL-EPMD-ADDRESS"><span class="nav-text">ERL_EPMD_ADDRESS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ERL-EPMD-PORT"><span class="nav-text">ERL_EPMD_PORT</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">emacsist</span>
+  <span class="post-count">共269.2k字</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动 
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2132003"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

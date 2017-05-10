@@ -2,20 +2,14 @@
 
 
 
-  
 
-
-<html class="theme-next mist use-motion" lang="zh-Hans">
+<html class="theme-next mist" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
 
-
-  
-  
-  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
 
 
 
@@ -113,7 +107,7 @@
     scheme: 'Mist',
     sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: false,
-    motion: true,
+    motion: false,
     duoshuo: {
       userId: '0',
       author: '博主'
@@ -337,19 +331,7 @@
             
 
             
-              <span class="post-meta-divider">|</span>
-            
 
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">更新于</span>
-              
-              <time title="更新于" itemprop="dateModified" datetime="2016-11-11T21:42:33+08:00">
-                2016-11-11
-              </time>
             
           </span>
 
@@ -387,37 +369,6 @@
           
 
           
-            <div class="post-wordcount">
-              
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计</span>
-                
-                <span title="字数统计">
-                  1,953
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长</span>
-                
-                <span title="阅读时长">
-                  8
-                </span>
-              
-            </div>
-          
 
           
 
@@ -425,7 +376,7 @@
       </header>
     
 
-    <div class="post-body han-init-context" itemprop="articleBody">
+    <div class="post-body" itemprop="articleBody">
 
       
       
@@ -699,7 +650,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">296</span>
+                <span class="site-state-item-count">300</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -721,7 +672,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">146</span>
+                <span class="site-state-item-count">148</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -776,7 +727,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#PG对各表的统计信息：pg-stats"><span class="nav-number">1.</span> <span class="nav-text">PG对各表的统计信息：pg_stats</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#成本因子"><span class="nav-number">2.</span> <span class="nav-text">成本因子</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#关于-effective-cache-size-特别说明一下"><span class="nav-number">2.0.1.</span> <span class="nav-text">关于 effective_cache_size 特别说明一下</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#explain-输出及详解"><span class="nav-number">3.</span> <span class="nav-text">explain 输出及详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#注意"><span class="nav-number">3.0.1.</span> <span class="nav-text">注意</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#估算成本的计算公式"><span class="nav-number">4.</span> <span class="nav-text">估算成本的计算公式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#全表扫描时计算："><span class="nav-number">4.0.1.</span> <span class="nav-text">全表扫描时计算：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#全表顺序扫描并过滤，代价公式为"><span class="nav-number">5.</span> <span class="nav-text">全表顺序扫描并过滤，代价公式为:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#扫描的方式"><span class="nav-number">6.</span> <span class="nav-text">扫描的方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#补充"><span class="nav-number">7.</span> <span class="nav-text">补充</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#PG对各表的统计信息：pg-stats"><span class="nav-text">PG对各表的统计信息：pg_stats</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#成本因子"><span class="nav-text">成本因子</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#关于-effective-cache-size-特别说明一下"><span class="nav-text">关于 effective_cache_size 特别说明一下</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#explain-输出及详解"><span class="nav-text">explain 输出及详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#注意"><span class="nav-text">注意</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#估算成本的计算公式"><span class="nav-text">估算成本的计算公式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#全表扫描时计算："><span class="nav-text">全表扫描时计算：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#全表顺序扫描并过滤，代价公式为"><span class="nav-text">全表顺序扫描并过滤，代价公式为:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#扫描的方式"><span class="nav-text">扫描的方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#补充"><span class="nav-text">补充</span></a></li></ol></div>
             
 
           </div>
@@ -804,7 +755,7 @@
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">emacsist</span>
-  <span class="post-count">共263.4k字</span>
+  <span class="post-count">共269.2k字</span>
 </div>
 
 
