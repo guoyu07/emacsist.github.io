@@ -12,11 +12,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="postgresql,database,翻译," />
+    <meta name="keywords" content="postgresql,翻译,database," />
   
 
   <meta name="description" content="原文 本文经过原作者Dan Robinson同意翻译。（我在twitter发送推文和他互动）  你知道PostgreSQL支持表的部分索引吗？这使得读取部分索引是非常快速的，几乎没有什么索引开销。如果你想重复地分析那些匹配给定的 WHERE 子句的行数据，那部分索引是最好的索引数据的方式。这使得PostgreSQL非常适合于那种涉及预聚集额外的特别分析的工作流。在这一点上，我将通过一个非常适合使用">
-<meta name="keywords" content="postgresql,database,翻译">
+<meta name="keywords" content="postgresql,翻译,database">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[翻译]使用部分索引来加速PostgreSQL">
 <meta property="og:url" content="https://emacsist.github.io/2015/01/04/-翻译-使用部分索引来加速PostgreSQL/index.html">
@@ -154,42 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post--翻译-使用部分索引来加速PostgreSQL" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">[翻译]使用部分索引来加速PostgreSQL</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            [翻译]使用部分索引来加速PostgreSQL
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.01.04</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/postgresql/">postgresql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <p><a href="http://blog.heapanalytics.com/speeding-up-postgresql-queries-with-partial-indexes/" target="_blank" rel="external">原文</a></p>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#翻译">
+        <span class="tag-name">翻译</span>
+    <span class="tag-size">( 20 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p><a href="http://blog.heapanalytics.com/speeding-up-postgresql-queries-with-partial-indexes/" target="_blank" rel="external">原文</a></p>
 <p>本文经过原作者<code>Dan Robinson</code>同意翻译。（我在twitter发送推文和他互动）</p>
 <hr>
 <p>你知道PostgreSQL支持表的部分索引吗？这使得读取部分索引是非常快速的，几乎没有什么索引开销。如果你想重复地分析那些匹配给定的 WHERE 子句的行数据，那部分索引是最好的索引数据的方式。这使得PostgreSQL非常适合于那种涉及预聚集额外的特别分析的工作流。在这一点上，我将通过一个非常适合使用部分索引的查询优化示例来实践下。</p>
@@ -245,10 +262,9 @@
 </ul>
 <figure class="highlight lasso"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">                                                  QUERY PLAN                                                  </div><div class="line">---------------------------------------------------------------------------------------------------------------</div><div class="line"> Aggregate  (cost=<span class="number">820866.05</span>.<span class="number">.820866</span><span class="number">.06</span> <span class="keyword">rows</span>=<span class="number">1</span> width=<span class="number">0</span>)</div><div class="line">   -&gt;  Index Scan using event_signup_time <span class="keyword">on</span> event  (cost=<span class="number">0.43</span>.<span class="number">.820865</span><span class="number">.99</span> <span class="keyword">rows</span>=<span class="number">27</span> width=<span class="number">0</span>)</div><div class="line">         Index Cond: ((<span class="string">"time"</span> &gt;= <span class="number">1409554800000</span><span class="type">::bigint</span>) <span class="literal">AND</span> (<span class="string">"time"</span> &lt;= <span class="number">1410159600000</span><span class="type">::bigint</span>))</div><div class="line">         Filter: (((<span class="built_in">data</span> -&gt;&gt; <span class="string">'type'</span><span class="type">::text</span>) = <span class="string">'submit'</span><span class="type">::text</span>) <span class="literal">AND</span> ((<span class="built_in">data</span> -&gt;&gt; <span class="string">'path'</span><span class="type">::text</span>) = <span class="string">'/signup/'</span><span class="type">::text</span>))</div><div class="line">(<span class="number">4</span> <span class="keyword">rows</span>)</div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-SQL-以另一张表的值来设置某表的值" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">SQL 以另一张表的值来设置某表的值</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            SQL 以另一张表的值来设置某表的值
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.01.07</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/database/">database</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><h3 id="表1"><a href="#表1" class="headerlink" title="表1"></a>表1</h3><p>table: h1<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">id  name</div><div class="line">1	hello1</div><div class="line">2	hello2</div><div class="line">3	hello11</div><div class="line">4	hello22</div></pre></td></tr></table></figure></p>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><h3 id="表1"><a href="#表1" class="headerlink" title="表1"></a>表1</h3><p>table: h1<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">id  name</div><div class="line">1	hello1</div><div class="line">2	hello2</div><div class="line">3	hello11</div><div class="line">4	hello22</div></pre></td></tr></table></figure></p>
 <h3 id="表2"><a href="#表2" class="headerlink" title="表2"></a>表2</h3><p>table: h2</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">h1_id  name</div><div class="line">1</div><div class="line">2</div><div class="line">1</div><div class="line">3</div><div class="line">3</div><div class="line">2</div><div class="line">4</div></pre></td></tr></table></figure>
 <h3 id="想要的结果"><a href="#想要的结果" class="headerlink" title="想要的结果"></a>想要的结果</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">h1_id name</div><div class="line">1	hello1</div><div class="line">2	hello2</div><div class="line">1	hello1</div><div class="line">3	hello11</div><div class="line">3	hello11</div><div class="line">2	hello2</div><div class="line">4	hello22</div></pre></td></tr></table></figure>
@@ -203,10 +215,9 @@
 <h3 id="MySQL-1"><a href="#MySQL-1" class="headerlink" title="MySQL"></a>MySQL</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">UPDATE h2 INNER JOIN h1 on h1.id = h2.h1_id <span class="built_in">set</span> h2.name = h1.name <span class="built_in">where</span> h2.h1_id &gt;=0 and  h2.h1_id &lt;= 1000;</div></pre></td></tr></table></figure>
 <h3 id="PostgreSQL-1"><a href="#PostgreSQL-1" class="headerlink" title="PostgreSQL"></a>PostgreSQL</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">update h2 <span class="built_in">set</span> name = h1.name from h1 <span class="built_in">where</span> h1.id = h1_id and h1_id &gt;=0 and h1_id &lt;= 1000;</div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

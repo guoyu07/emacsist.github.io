@@ -154,42 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-MySQL获取分组后每组最大的数据" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">MySQL获取分组后每组最大的数据</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            MySQL获取分组后每组最大的数据
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.01.07</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/database/">database</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>获取分组后每组数据中，ID最大的数据</p>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#group by">
+        <span class="tag-name">group by</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>获取分组后每组数据中，ID最大的数据</p>
 <h2 id="表数据"><a href="#表数据" class="headerlink" title="表数据"></a>表数据</h2><p>table: hhh</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">id  name</div><div class="line">1	hello</div><div class="line">2	hello1</div><div class="line">3	hello2</div><div class="line">4	hello</div><div class="line">5	hello2</div><div class="line">6	hello3</div><div class="line">7	hello1</div></pre></td></tr></table></figure>
 <h2 id="想要的结果"><a href="#想要的结果" class="headerlink" title="想要的结果"></a>想要的结果</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">id  name</div><div class="line">4	hello</div><div class="line">5	hello2</div><div class="line">6	hello3</div><div class="line">7	hello1</div></pre></td></tr></table></figure>
@@ -201,10 +218,9 @@
 <h3 id="实现2"><a href="#实现2" class="headerlink" title="实现2"></a>实现2</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">SELECT * from hhh WHERE id <span class="keyword">in</span> (</div><div class="line">  select max(id) from hhh GROUP BY name</div><div class="line">);</div></pre></td></tr></table></figure>
 <p>这种只能实现最大，或者最小。</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

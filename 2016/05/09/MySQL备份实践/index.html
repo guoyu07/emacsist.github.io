@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-MySQL备份实践" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">MySQL备份实践</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            MySQL备份实践
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.05.09</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/mysql/">mysql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="binlog"><a href="#binlog" class="headerlink" title="binlog"></a>binlog</h2><h3 id="查看是否开启了binlog"><a href="#查看是否开启了binlog" class="headerlink" title="查看是否开启了binlog"></a>查看是否开启了binlog</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show variables like <span class="string">'log_bin'</span>;</div><div class="line">+---------------+-------+</div><div class="line">| Variable_name | Value |</div><div class="line">+---------------+-------+</div><div class="line">| log_bin       | OFF   |</div><div class="line">+---------------+-------+</div><div class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#backup">
+        <span class="tag-name">backup</span>
+    <span class="tag-size">( 2 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="binlog"><a href="#binlog" class="headerlink" title="binlog"></a>binlog</h2><h3 id="查看是否开启了binlog"><a href="#查看是否开启了binlog" class="headerlink" title="查看是否开启了binlog"></a>查看是否开启了binlog</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show variables like <span class="string">'log_bin'</span>;</div><div class="line">+---------------+-------+</div><div class="line">| Variable_name | Value |</div><div class="line">+---------------+-------+</div><div class="line">| log_bin       | OFF   |</div><div class="line">+---------------+-------+</div><div class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
 <h3 id="开启binlog"><a href="#开启binlog" class="headerlink" title="开启binlog"></a>开启binlog</h3><p>在配置文件my.cnf里添加以下内容，然后重启mysql即可.</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">log</span>-bin=mysql-bin</div></pre></td></tr></table></figure>
 <p>mysql-bin就是文件名前缀，可以写绝对路径，或相对路径.<br>其他与binlog相关的参数及说明:</p>
@@ -279,10 +291,9 @@
 <p><em>charset</em>：千万要记得加上，这个要与自己DB里使用的一致.因为公司主要经营微博等社交服务多，所以这里填写<code>utf8mb4</code>!!</p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://www.percona.com/doc/percona-toolkit/2.2/pt-table-checksum.html" target="_blank" rel="external">percona</a><br><a href="https://segmentfault.com/a/1190000004309169" target="_blank" rel="external">segmentfault</a><br><a href="http://blog.sina.com.cn/s/blog_53b13d950101dgow.html" target="_blank" rel="external">sina blog</a></p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

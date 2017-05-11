@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-深入浅出MySQL-读书笔记" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">&lt;深入浅出MySQL&gt;读书笔记</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            &lt;深入浅出MySQL&gt;读书笔记
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.03.05</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/mysql/">mysql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="mysql命令行使用"><a href="#mysql命令行使用" class="headerlink" title="mysql命令行使用"></a>mysql命令行使用</h2><ul>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="mysql命令行使用"><a href="#mysql命令行使用" class="headerlink" title="mysql命令行使用"></a>mysql命令行使用</h2><ul>
 <li><p>命令的结束符，用“;”或者“\g”结束</p>
 </li>
 <li><p>通过<code>help;</code>或者<code>\h</code>命令来显示帮助内容，通过<code>\c</code>命令来清除命令行buffer</p>
@@ -228,10 +240,9 @@
 <h3 id="enum"><a href="#enum" class="headerlink" title="enum"></a>enum</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">mysql&gt; create table t (gender enum(<span class="string">'M'</span>, <span class="string">'F'</span>));</div><div class="line">Query OK, 0 rows affected (0.04 sec)</div><div class="line"></div><div class="line">mysql&gt; insert into t values (<span class="string">'M'</span>), (<span class="string">'1'</span>), (<span class="string">'f'</span>) , (null);</div><div class="line">Query OK, 4 rows affected (0.01 sec)</div><div class="line">Records: 4  Duplicates: 0  Warnings: 0</div><div class="line"></div><div class="line">mysql&gt; select * from t;</div><div class="line">+--------+</div><div class="line">| gender |</div><div class="line">+--------+</div><div class="line">| M      |</div><div class="line">| M      |</div><div class="line">| F      |</div><div class="line">| NULL   |</div><div class="line">+--------+</div><div class="line">4 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div></pre></td></tr></table></figure>
 <p>从上面的例子中，可以看出ENUM类型是忽略大小写的，在存储“M”、“f”时将它们都转成了大写，还可以看出对于插入不在 ENUM 指定范围内的值时，并没有返回警告，而是插入了enum(‘M’,’F’)的第一个值“M”，这点用户在使用时要特别注意</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

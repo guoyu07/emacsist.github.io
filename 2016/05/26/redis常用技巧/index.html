@@ -154,48 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-redis常用技巧" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">redis常用技巧</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            redis常用技巧
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.05.26</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/redis/">redis</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="批量删除key"><a href="#批量删除key" class="headerlink" title="批量删除key"></a>批量删除key</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat /tmp/keys.txst | xargs -I&#123;&#125; -P 3 -t  -n 10 ./redis-cli -p 6379 -n 0 del &#123;&#125;</div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#nosql">
+        <span class="tag-name">nosql</span>
+    <span class="tag-size">( 8 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#redis">
+        <span class="tag-name">redis</span>
+    <span class="tag-size">( 12 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="批量删除key"><a href="#批量删除key" class="headerlink" title="批量删除key"></a>批量删除key</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat /tmp/keys.txst | xargs -I&#123;&#125; -P 3 -t  -n 10 ./redis-cli -p 6379 -n 0 del &#123;&#125;</div></pre></td></tr></table></figure>
 <h2 id="查询QPS"><a href="#查询QPS" class="headerlink" title="查询QPS"></a>查询QPS</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">watch -n 60 <span class="string">'/home/redis/bin/redis-cli -h 10.*.*.* -p 6379  info |grep total_commands_processe &gt;&gt; /tmp/qps2.txt &amp;&amp; date &gt;&gt; /tmp/qps2.txt'</span></div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

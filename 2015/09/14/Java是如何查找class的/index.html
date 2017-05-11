@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-Java是如何查找class的" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Java是如何查找class的?</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Java是如何查找class的?
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.09.14</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <p>Java中的三种类型class</p>
+      <a class="tag-item" href="/tags/#classloader">
+        <span class="tag-name">classloader</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p>Java中的三种类型class</p>
 <h2 id="Bootstrap-classes"><a href="#Bootstrap-classes" class="headerlink" title="Bootstrap classes"></a>Bootstrap classes</h2><p>这些是核心class,即Java平台最基础的class. 它放在 <code>rt.jar</code>(runtime),以及其他一些非常重要的jar包里.</p>
 <p>它是通过参数<code>sun.boot.class.path</code>来决定的.也有一个非标准的JVM参数来决定这些class:<code>-Xbootclasspath</code>.例子:</p>
 <p><code>java -Dsun.boot.class.path=/path/to/xx1.jar:/path/to/xx2.jar</code>(注意,不同的操作系统,分隔符不同,*unix下是<code>:</code>,Windows下的是<code>;</code>)</p>
@@ -209,10 +221,9 @@
 <p><code>.</code>:意味着这些class在当前目录或者子目录(如果有package)吧.<br><code>CLASSPATH</code>: 如果有这个环境变量,它就会<code>覆盖</code>默认的值.<br><code>-cp</code>或者<code>-classpath</code>: 它会覆盖默认的值,以及<code>CLASSPATH</code>环境变量的值.<br>通过<code>-jar</code>来启动的: 所有的class,都必须包含在jar文件里.(即它会忽略<code>CLASSPATH</code>以及<code>-cp</code>或<code>-classpath</code>的值).</p>
 <h2 id="在OSGi中使用注意"><a href="#在OSGi中使用注意" class="headerlink" title="在OSGi中使用注意"></a>在OSGi中使用注意</h2><p>可以参考这篇<a href="http://emacsist.github.io/2015/09/14/Apache-Felix-OSGi-%E4%BD%BF%E7%94%A8%E9%9D%9Ebundle-jar%E5%8C%85%E5%85%B1%E4%BA%AB%E5%88%B0%E5%85%B6%E4%BB%96%E6%89%80%E6%9C%89bundle/">Apache-Felix-OSGi-使用非bundle-jar包共享到其他所有bundle</a></p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

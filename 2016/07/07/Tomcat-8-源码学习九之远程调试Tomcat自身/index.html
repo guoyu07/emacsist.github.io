@@ -154,42 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-Tomcat-8-源码学习九之远程调试Tomcat自身" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Tomcat 8 源码学习九之远程调试Tomcat自身</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Tomcat 8 源码学习九之远程调试Tomcat自身
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.07.07</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <p>如果我们想要在远程服务器上, 来调试Tomcat自身的话, 那应该如何做呢. 今天本想为Tomcat添加一个功能时, 发现配置一直没生效, 而且Tomcat一直就打印<code>Found no logging.properties</code>. 实在没办法, 就想到远程调试一下Tomcat自身.</p>
+      <a class="tag-item" href="/tags/#Tomcat源码">
+        <span class="tag-name">Tomcat源码</span>
+    <span class="tag-size">( 9 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#tomcat">
+        <span class="tag-name">tomcat</span>
+    <span class="tag-size">( 20 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p>如果我们想要在远程服务器上, 来调试Tomcat自身的话, 那应该如何做呢. 今天本想为Tomcat添加一个功能时, 发现配置一直没生效, 而且Tomcat一直就打印<code>Found no logging.properties</code>. 实在没办法, 就想到远程调试一下Tomcat自身.</p>
 <h2 id="修改启动参数"><a href="#修改启动参数" class="headerlink" title="修改启动参数"></a>修改启动参数</h2><p>复制一个<code>startup.sh</code>, 假设复制后的文件名为<code>debug.startup.sh</code></p>
 <p>将原文件的</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">exec</span> <span class="string">"<span class="variable">$PRGDIR</span>"</span>/<span class="string">"<span class="variable">$EXECUTABLE</span>"</span> start <span class="string">"<span class="variable">$@</span>"</span></div></pre></td></tr></table></figure>
@@ -203,10 +220,9 @@
 <p>关于如何将Tomcat源码导入到IDE中, 可以参考<a href="/2016/06/27/Tomcat-8-源码学习一之导入到IDEA/">/2016/06/27/Tomcat-8-源码学习一之导入到IDEA/</a></p>
 <p>这时就可以进行你的debug了. 这样子,Tomcat出现的问题, 都可以非常清楚地通过Debug来详细了解Tomcat内部的处理情况了.</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

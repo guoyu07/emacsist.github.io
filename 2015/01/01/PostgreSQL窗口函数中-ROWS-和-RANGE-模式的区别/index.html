@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-PostgreSQL窗口函数中-ROWS-和-RANGE-模式的区别" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">PostgreSQL窗口函数中 ROWS 和 RANGE 模式的区别</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            PostgreSQL窗口函数中 ROWS 和 RANGE 模式的区别
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.01.01</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/postgresql/">postgresql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="示例表数据如下："><a href="#示例表数据如下：" class="headerlink" title="示例表数据如下："></a>示例表数据如下：</h2><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">test=# select * from tcost ;</div><div class="line"> path | cost </div><div class="line">------+-------</div><div class="line">  <span class="number">111</span> |  <span class="number">23.3</span></div><div class="line">  <span class="number">111</span> |  <span class="number">33.4</span></div><div class="line">  <span class="number">111</span> |   <span class="number">3.4</span></div><div class="line">  <span class="number">222</span> |   <span class="number">3.4</span></div><div class="line">  <span class="number">222</span> |  <span class="number">33.4</span></div><div class="line">  <span class="number">222</span> | <span class="number">333.4</span></div><div class="line">   <span class="number">32</span> |   <span class="number">3.4</span></div><div class="line">   <span class="number">32</span> |   <span class="number">0.4</span></div><div class="line">   <span class="number">32</span> |  <span class="number">0.04</span></div><div class="line">(<span class="number">9</span> rows)</div><div class="line"> </div><div class="line">test=#</div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="示例表数据如下："><a href="#示例表数据如下：" class="headerlink" title="示例表数据如下："></a>示例表数据如下：</h2><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">test=# select * from tcost ;</div><div class="line"> path | cost </div><div class="line">------+-------</div><div class="line">  <span class="number">111</span> |  <span class="number">23.3</span></div><div class="line">  <span class="number">111</span> |  <span class="number">33.4</span></div><div class="line">  <span class="number">111</span> |   <span class="number">3.4</span></div><div class="line">  <span class="number">222</span> |   <span class="number">3.4</span></div><div class="line">  <span class="number">222</span> |  <span class="number">33.4</span></div><div class="line">  <span class="number">222</span> | <span class="number">333.4</span></div><div class="line">   <span class="number">32</span> |   <span class="number">3.4</span></div><div class="line">   <span class="number">32</span> |   <span class="number">0.4</span></div><div class="line">   <span class="number">32</span> |  <span class="number">0.04</span></div><div class="line">(<span class="number">9</span> rows)</div><div class="line"> </div><div class="line">test=#</div></pre></td></tr></table></figure>
 <h2 id="ROWS"><a href="#ROWS" class="headerlink" title="ROWS"></a>ROWS</h2><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">test=# select path, cost, sum(cost) over (order by cost desc) as sum_cost, sum(cost) over (order by cost desc rows between current row and <span class="number">2</span> following ) as row from tcost;</div><div class="line"> path | cost  | sum_cost |  row </div><div class="line">------+-------+----------+-------</div><div class="line">  <span class="number">222</span> | <span class="number">333.4</span> |    <span class="number">333.4</span> | <span class="number">400.2</span></div><div class="line">  <span class="number">111</span> |  <span class="number">33.4</span> |    <span class="number">400.2</span> |  <span class="number">90.1</span></div><div class="line">  <span class="number">222</span> |  <span class="number">33.4</span> |    <span class="number">400.2</span> |  <span class="number">60.1</span></div><div class="line">  <span class="number">111</span> |  <span class="number">23.3</span> |    <span class="number">423.5</span> |  <span class="number">30.1</span></div><div class="line">  <span class="number">111</span> |   <span class="number">3.4</span> |    <span class="number">433.7</span> |  <span class="number">10.2</span></div><div class="line">   <span class="number">32</span> |   <span class="number">3.4</span> |    <span class="number">433.7</span> |   <span class="number">7.2</span></div><div class="line">  <span class="number">222</span> |   <span class="number">3.4</span> |    <span class="number">433.7</span> |  <span class="number">3.84</span></div><div class="line">   <span class="number">32</span> |   <span class="number">0.4</span> |    <span class="number">434.1</span> |  <span class="number">0.44</span></div><div class="line">   <span class="number">32</span> |  <span class="number">0.04</span> |   <span class="number">434.14</span> |  <span class="number">0.04</span></div><div class="line">(<span class="number">9</span> rows)</div><div class="line"> </div><div class="line">test=#</div></pre></td></tr></table></figure>
 <p>可以看到 max2 的值都是由 current row （当前行） and 2 following(紧接着2行）的sum()结果出来的。<br>即<br>400.2 = 333.4 + 33.4 + 33.4 得出的。<br>90.1 = 33.4 + 33.4 + 23.3 得出的。</p>
 <p>注意，上面那条SQL没有写 partition by ，那默认情况下就是以整个表来表示窗口化的，即只有一个窗口。现在试着，添加上partition by 语句的结果看看：</p>
@@ -207,10 +219,9 @@
 <h5 id="没有ORDER-BY，-那么就是当前分区的所有行都包含在框架中，因为所有行都会成为当前行的相同行。"><a href="#没有ORDER-BY，-那么就是当前分区的所有行都包含在框架中，因为所有行都会成为当前行的相同行。" class="headerlink" title="没有ORDER BY， 那么就是当前分区的所有行都包含在框架中，因为所有行都会成为当前行的相同行。"></a>没有ORDER BY， 那么就是当前分区的所有行都包含在框架中，因为所有行都会成为当前行的相同行。</h5><h2 id="ROWS时，请注意有没有-order-by-的区别"><a href="#ROWS时，请注意有没有-order-by-的区别" class="headerlink" title="ROWS时，请注意有没有 order by 的区别"></a>ROWS时，请注意有没有 order by 的区别</h2><figure class="highlight coq"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">test=# select path, cost, <span class="built_in">sum</span>(cost) over (order <span class="built_in">by</span> cost desc) <span class="built_in">as</span> sum_cost, <span class="built_in">sum</span>(cost) over (rows  between current row and  UNBOUNDED  following ) <span class="built_in">as</span> no_order_by_rows,<span class="built_in">sum</span>(cost) over (order <span class="built_in">by</span> cost desc rows between current row and UNBOUNDED  following ) <span class="built_in">as</span> has_order_by_rows from tcost;</div><div class="line"> path | <span class="type">cost</span>  | <span class="type">sum_cost</span> | <span class="type">no_order_by_rows</span> | <span class="type">has_order_by_rows</span></div><div class="line">------+-------+----------+------------------+-------------------</div><div class="line">  <span class="number">222</span> | <span class="type">333</span><span class="number">.4</span> |    <span class="type">333</span><span class="number">.4</span> |           <span class="type">434</span><span class="number">.14</span> |            <span class="type">434</span><span class="number">.14</span></div><div class="line">  <span class="number">111</span> |  <span class="type">33</span><span class="number">.4</span> |    <span class="type">400</span><span class="number">.2</span> |           <span class="type">100</span><span class="number">.74</span> |            <span class="type">100</span><span class="number">.74</span></div><div class="line">  <span class="number">222</span> |  <span class="type">33</span><span class="number">.4</span> |    <span class="type">400</span><span class="number">.2</span> |            <span class="type">67</span><span class="number">.34</span> |             <span class="type">67</span><span class="number">.34</span></div><div class="line">  <span class="number">111</span> |  <span class="type">23</span><span class="number">.3</span> |    <span class="type">423</span><span class="number">.5</span> |            <span class="type">33</span><span class="number">.94</span> |             <span class="type">33</span><span class="number">.94</span></div><div class="line">  <span class="number">111</span> |   <span class="type">3</span><span class="number">.4</span> |    <span class="type">433</span><span class="number">.7</span> |            <span class="type">10</span><span class="number">.64</span> |             <span class="type">10</span><span class="number">.64</span></div><div class="line">   <span class="number">32</span> |   <span class="type">3</span><span class="number">.4</span> |    <span class="type">433</span><span class="number">.7</span> |             <span class="type">7</span><span class="number">.24</span> |              <span class="type">7</span><span class="number">.24</span></div><div class="line">  <span class="number">222</span> |   <span class="type">3</span><span class="number">.4</span> |    <span class="type">433</span><span class="number">.7</span> |             <span class="type">3</span><span class="number">.84</span> |              <span class="type">3</span><span class="number">.84</span></div><div class="line">   <span class="number">32</span> |   <span class="type">0</span><span class="number">.4</span> |    <span class="type">434</span><span class="number">.1</span> |             <span class="type">0</span><span class="number">.44</span> |              <span class="type">0</span><span class="number">.44</span></div><div class="line">   <span class="number">32</span> |  <span class="type">0</span><span class="number">.04</span> |   <span class="type">434</span><span class="number">.14</span> |             <span class="type">0</span><span class="number">.04</span> |              <span class="type">0</span><span class="number">.04</span></div><div class="line">(<span class="number">9</span> rows)</div><div class="line"> </div><div class="line">test=#</div></pre></td></tr></table></figure>
 <h4 id="有没有ORDER-BY，都是一样的，因为ROWS是按物理分行的，而不是按逻辑分行的。"><a href="#有没有ORDER-BY，都是一样的，因为ROWS是按物理分行的，而不是按逻辑分行的。" class="headerlink" title="有没有ORDER BY，都是一样的，因为ROWS是按物理分行的，而不是按逻辑分行的。"></a>有没有ORDER BY，都是一样的，因为ROWS是按物理分行的，而不是按逻辑分行的。</h4><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">ROWS：是按物理行来进行窗口级别里再次进行范围选择的。</div><div class="line">RANGE：是按逻辑行来进行窗口级别里再次进行范围选择的。RANGE时，相同行会被合并成同一条数据再进行计算，相同行窗口计算时的结果也是相同的。</div><div class="line">是否是相同行，是根据<span class="keyword">ORDER</span> <span class="title">BY</span>排序时的结果决定的。</div><div class="line">有<span class="keyword">ORDER</span> <span class="title">BY</span>时：同行是说在<span class="keyword">ORDER</span> <span class="title">BY</span>排序时不唯一的行。【即具有相同数值的行】</div><div class="line">             不同行是说<span class="keyword">ORDER</span> <span class="title">BY</span>排序时具有不同的数值的行。</div><div class="line"></div><div class="line">没有<span class="keyword">ORDER</span> <span class="title">BY</span>：那么就是当前分区的所有行都包含在框架中，因为所有行都会成为当前行的相同行。【特别要注意最后一句的意思】</div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

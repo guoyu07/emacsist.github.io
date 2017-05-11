@@ -154,42 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-PostgreSQL-PITR实践" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">PostgreSQL PITR实践</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            PostgreSQL PITR实践
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.09.19</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/postgresql/">postgresql</a> / <a class="article-category-link" href="/categories/postgresql/database/">database</a> / <a class="article-category-link" href="/categories/postgresql/database/pitr/">pitr</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="初始化示例数据库"><a href="#初始化示例数据库" class="headerlink" title="初始化示例数据库"></a>初始化示例数据库</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">┌─[sky@sky-linux] - [/ihome/db/postgresql] - [2016-09-19 03:22:35]</div><div class="line">└─[0] &lt;&gt; mkdir pitr-data</div><div class="line">┌─[sky@sky-linux] - [/ihome/db/postgresql] - [2016-09-19 03:22:47]</div><div class="line">└─[0] &lt;&gt; initdb -D pitr-data </div><div class="line">The files belonging to this database system will be owned by user <span class="string">"sky"</span>.</div><div class="line">This user must also own the server process.</div><div class="line"></div><div class="line">The database cluster will be initialized with locale <span class="string">"zh_CN.UTF-8"</span>.</div><div class="line">The default database encoding has accordingly been <span class="built_in">set</span> to <span class="string">"UTF8"</span>.</div><div class="line">initdb: could not find suitable text search configuration <span class="keyword">for</span> locale <span class="string">"zh_CN.UTF-8"</span></div><div class="line">The default text search configuration will be <span class="built_in">set</span> to <span class="string">"simple"</span>.</div><div class="line"></div><div class="line">Data page checksums are disabled.</div><div class="line"></div><div class="line">fixing permissions on existing directory pitr-data ... ok</div><div class="line">creating subdirectories ... ok</div><div class="line">selecting default max_connections ... 100</div><div class="line">selecting default shared_buffers ... 128MB</div><div class="line">selecting dynamic shared memory implementation ... posix</div><div class="line">creating configuration files ... ok</div><div class="line">running bootstrap script ... ok</div><div class="line">performing post-bootstrap initialization ... ok</div><div class="line">syncing data to disk ... ok</div><div class="line"></div><div class="line">WARNING: enabling <span class="string">"trust"</span> authentication <span class="keyword">for</span> <span class="built_in">local</span> connections</div><div class="line">You can change this by editing pg_hba.conf or using the option -A, or</div><div class="line">--auth-local and --auth-host, the next time you run initdb.</div><div class="line"></div><div class="line">Success. You can now start the database server using:</div><div class="line"></div><div class="line">    pg_ctl -D pitr-data <span class="_">-l</span> logfile start</div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#pitr">
+        <span class="tag-name">pitr</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="初始化示例数据库"><a href="#初始化示例数据库" class="headerlink" title="初始化示例数据库"></a>初始化示例数据库</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">┌─[sky@sky-linux] - [/ihome/db/postgresql] - [2016-09-19 03:22:35]</div><div class="line">└─[0] &lt;&gt; mkdir pitr-data</div><div class="line">┌─[sky@sky-linux] - [/ihome/db/postgresql] - [2016-09-19 03:22:47]</div><div class="line">└─[0] &lt;&gt; initdb -D pitr-data </div><div class="line">The files belonging to this database system will be owned by user <span class="string">"sky"</span>.</div><div class="line">This user must also own the server process.</div><div class="line"></div><div class="line">The database cluster will be initialized with locale <span class="string">"zh_CN.UTF-8"</span>.</div><div class="line">The default database encoding has accordingly been <span class="built_in">set</span> to <span class="string">"UTF8"</span>.</div><div class="line">initdb: could not find suitable text search configuration <span class="keyword">for</span> locale <span class="string">"zh_CN.UTF-8"</span></div><div class="line">The default text search configuration will be <span class="built_in">set</span> to <span class="string">"simple"</span>.</div><div class="line"></div><div class="line">Data page checksums are disabled.</div><div class="line"></div><div class="line">fixing permissions on existing directory pitr-data ... ok</div><div class="line">creating subdirectories ... ok</div><div class="line">selecting default max_connections ... 100</div><div class="line">selecting default shared_buffers ... 128MB</div><div class="line">selecting dynamic shared memory implementation ... posix</div><div class="line">creating configuration files ... ok</div><div class="line">running bootstrap script ... ok</div><div class="line">performing post-bootstrap initialization ... ok</div><div class="line">syncing data to disk ... ok</div><div class="line"></div><div class="line">WARNING: enabling <span class="string">"trust"</span> authentication <span class="keyword">for</span> <span class="built_in">local</span> connections</div><div class="line">You can change this by editing pg_hba.conf or using the option -A, or</div><div class="line">--auth-local and --auth-host, the next time you run initdb.</div><div class="line"></div><div class="line">Success. You can now start the database server using:</div><div class="line"></div><div class="line">    pg_ctl -D pitr-data <span class="_">-l</span> logfile start</div></pre></td></tr></table></figure>
 <h3 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h3><p>创建一个保存归档文件的目录：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">┌─[sky@sky-linux] - [/ihome/db/postgresql/pitr-data] - [2016-09-19 03:31:47]</div><div class="line">└─[0] &lt;&gt; mkdir archive_logs</div><div class="line">┌─[sky@sky-linux] - [/ihome/db/postgresql/pitr-data] - [2016-09-19 03:31:59]</div><div class="line">└─[0] &lt;&gt; <span class="built_in">pwd</span></div><div class="line">/ihome/db/postgresql/pitr-data</div></pre></td></tr></table></figure>
 <p>修改配置文件<code>postgresql.conf</code></p>
@@ -220,10 +237,9 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">local</span>]:5432 sky@postgres=<span class="comment"># SELECT * from test_pitr ;</span></div><div class="line"> id  </div><div class="line">-----</div><div class="line">   1</div><div class="line">   2</div><div class="line">   3</div><div class="line"> 111</div><div class="line"> 222</div><div class="line"> 333</div><div class="line">(6 rows)</div><div class="line"></div><div class="line">Time: 0.224 ms</div><div class="line">[<span class="built_in">local</span>]:5432 sky@postgres=<span class="comment">#</span></div></pre></td></tr></table></figure>
 <p>可以看到<code>1111, 2222, 3333</code>这数据并没有了.</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

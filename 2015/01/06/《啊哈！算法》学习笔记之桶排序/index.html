@@ -154,49 +154,60 @@
 
 <div class="content content-post LEFT">
    <article id="post-《啊哈！算法》学习笔记之桶排序" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">《啊哈！算法》学习笔记之桶排序</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            《啊哈！算法》学习笔记之桶排序
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.01.06</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/编程/">编程</a> / <a class="article-category-link" href="/categories/编程/算法/">算法</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="时间复杂度：O-M-N"><a href="#时间复杂度：O-M-N" class="headerlink" title="时间复杂度：O(M+N)"></a>时间复杂度：O(M+N)</h2><p>M:桶的个数（也是该数值的最大数）<br>N:待排序个数</p>
+      <a class="tag-item" href="/tags/#啊哈！算法">
+        <span class="tag-name">啊哈！算法</span>
+    <span class="tag-size">( 5 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#算法">
+        <span class="tag-name">算法</span>
+    <span class="tag-size">( 5 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="时间复杂度：O-M-N"><a href="#时间复杂度：O-M-N" class="headerlink" title="时间复杂度：O(M+N)"></a>时间复杂度：O(M+N)</h2><p>M:桶的个数（也是该数值的最大数）<br>N:待排序个数</p>
 <h2 id="Java实现"><a href="#Java实现" class="headerlink" title="Java实现"></a>Java实现</h2><p>随便输入N个不大于M的数字，然后从小到大输出：（从大到小，作一下小修改即可）<br><figure class="highlight vbscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> static void main(<span class="built_in">String</span>[] args) &#123;</div><div class="line">    <span class="built_in">int</span> M= <span class="number">100</span>;</div><div class="line">    <span class="built_in">int</span> N = <span class="number">5</span>;</div><div class="line">    <span class="built_in">int</span>[] <span class="built_in">array</span> = <span class="keyword">new</span> <span class="built_in">int</span>[M+ <span class="number">1</span>];</div><div class="line">    Scanner scan = <span class="keyword">new</span> Scanner(System.<span class="keyword">in</span>);</div><div class="line">    <span class="built_in">int</span> <span class="keyword">in</span> = <span class="number">0</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; N; i++) &#123;</div><div class="line">        <span class="keyword">in</span> = scan.nextInt();</div><div class="line">        <span class="built_in">array</span>[<span class="keyword">in</span>] = <span class="built_in">array</span>[<span class="keyword">in</span>] + <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; <span class="built_in">array</span>.length; i++) &#123;</div><div class="line">        <span class="keyword">for</span> (<span class="built_in">int</span> j = <span class="number">0</span>; j &lt; <span class="built_in">array</span>[i]; j++) &#123;</div><div class="line">            System.out.println(i);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <h2 id="个人总结"><a href="#个人总结" class="headerlink" title="个人总结"></a>个人总结</h2><p>这种算法适合于范围比较小的排序，并且是需要知道输入的最大值。不然就不适用了。</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

@@ -154,42 +154,49 @@
 
 <div class="content content-post LEFT">
    <article id="post-git笔记" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">git笔记</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            git笔记
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.11.13</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/git/">git</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="命令补全"><a href="#命令补全" class="headerlink" title="命令补全"></a>命令补全</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">cp contrib/completion/git-completion.bash /etc/bash_completion.d/</div><div class="line"></div><div class="line">. /etc/bash_completion</div><div class="line"></div><div class="line">在/etc/profile和~/.bashrc 添加以下内容</div><div class="line"></div><div class="line"><span class="keyword">if</span> [ <span class="_">-f</span> /etc/bash_completion ]; <span class="keyword">then</span></div><div class="line">    . /etc/bash_completion</div><div class="line"><span class="keyword">fi</span></div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#git">
+        <span class="tag-name">git</span>
+    <span class="tag-size">( 6 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="命令补全"><a href="#命令补全" class="headerlink" title="命令补全"></a>命令补全</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">cp contrib/completion/git-completion.bash /etc/bash_completion.d/</div><div class="line"></div><div class="line">. /etc/bash_completion</div><div class="line"></div><div class="line">在/etc/profile和~/.bashrc 添加以下内容</div><div class="line"></div><div class="line"><span class="keyword">if</span> [ <span class="_">-f</span> /etc/bash_completion ]; <span class="keyword">then</span></div><div class="line">    . /etc/bash_completion</div><div class="line"><span class="keyword">fi</span></div></pre></td></tr></table></figure>
 <h2 id="中文乱码"><a href="#中文乱码" class="headerlink" title="中文乱码"></a>中文乱码</h2><h3 id="UTF-8-字符集时"><a href="#UTF-8-字符集时" class="headerlink" title="UTF-8 字符集时"></a>UTF-8 字符集时</h3><p><code>git config --global core.quotepath false</code></p>
 <h3 id="GBK字符集时"><a href="#GBK字符集时" class="headerlink" title="GBK字符集时"></a>GBK字符集时</h3><p><code>git config --global i18n.logOutputEncoding gbk</code><br><code>git config --global i18n.commitEncoding gbk</code></p>
 <h2 id="配置用户"><a href="#配置用户" class="headerlink" title="配置用户"></a>配置用户</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git config --global user.name <span class="string">"your name"</span></div><div class="line">git config --global user.email <span class="string">"your email"</span></div><div class="line">git config --global color.ui <span class="literal">true</span></div></pre></td></tr></table></figure>
@@ -241,10 +248,9 @@
 <p>步骤:</p>
 <p><code>git bisect start 坏提交的commitid 好提交的commitid</code><br><code>git bisect run ./test.sh</code>：执行测试脚本.正常时返回0, 如果是125,则被跳过，1到127（除了125）就是bad.</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

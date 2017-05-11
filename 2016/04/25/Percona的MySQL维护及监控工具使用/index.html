@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-Percona的MySQL维护及监控工具使用" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Percona的MySQL维护及监控工具使用</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Percona的MySQL维护及监控工具使用
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.04.25</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/mysql/">mysql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p><a href="https://www.percona.com/doc/percona-toolkit/2.2/installation.html" target="_blank" rel="external">Doc</a></p>
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#percona">
+        <span class="tag-name">percona</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p><a href="https://www.percona.com/doc/percona-toolkit/2.2/installation.html" target="_blank" rel="external">Doc</a></p>
 <h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="pt-mysql-summary"><a href="#pt-mysql-summary" class="headerlink" title="pt-mysql-summary"></a>pt-mysql-summary</h3><p><code>pt-mysql-summary --host=127.0.0.1 --port=6606 --password=xxx</code></p>
 <p>说明： 显示MySQL服务器的概况.</p>
 <h3 id="pt-align"><a href="#pt-align" class="headerlink" title="pt-align"></a>pt-align</h3><p>将输出的文本对齐.</p>
@@ -239,10 +251,9 @@
 <h3 id="pt-visual-explain"><a href="#pt-visual-explain" class="headerlink" title="pt-visual-explain"></a>pt-visual-explain</h3><p>可视化explain</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">mysql -h127.0.0.1 -uroot -p -P6606 -D yourDbName <span class="_">-e</span> <span class="string">"explain select * from users limit 1"</span> | pt-visual-explain </div><div class="line">Enter password: </div><div class="line"></div><div class="line">Table scan</div><div class="line">rows           422</div><div class="line">+- Table</div><div class="line">   table          users</div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

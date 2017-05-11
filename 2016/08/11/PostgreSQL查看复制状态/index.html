@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-PostgreSQL查看复制状态" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">PostgreSQL查看复制状态</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            PostgreSQL查看复制状态
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.08.11</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/postgresql/">postgresql</a> / <a class="article-category-link" href="/categories/postgresql/database/">database</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="查看复制状态"><a href="#查看复制状态" class="headerlink" title="查看复制状态"></a>查看复制状态</h2><p>在<code>master</code>上执行</p>
+      <a class="tag-item" href="/tags/#databasse">
+        <span class="tag-name">databasse</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="查看复制状态"><a href="#查看复制状态" class="headerlink" title="查看复制状态"></a>查看复制状态</h2><p>在<code>master</code>上执行</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># select * from pg_stat_replication;</span></div><div class="line">-[ RECORD 1 ]----+------------------------------</div><div class="line">pid              | 13321</div><div class="line">usesysid         | 17019</div><div class="line">usename          | replication</div><div class="line">application_name | walreceiver</div><div class="line">client_addr      | 10.0.0.81</div><div class="line">client_hostname  | </div><div class="line">client_port      | 42809</div><div class="line">backend_start    | 2016-08-11 10:57:35.856289+08</div><div class="line">backend_xmin     | </div><div class="line">state            | streaming</div><div class="line">sent_location    | 1/E0CE9750</div><div class="line">write_location   | 1/E0CE9750</div><div class="line">flush_location   | 1/E0CE9750</div><div class="line">replay_location  | 1/E0CE9750</div><div class="line">sync_priority    | 0</div><div class="line">sync_state       | async</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
 <p><code>pid</code>：　master的<code>sender</code>进程：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">╭─sky@sky-linux /ihome/db/postgresql  </div><div class="line">╰─➤  ps aux | grep 13321</div><div class="line">sky      13321  0.1  0.0 172320  2992 ?        Ss   10:57   0:03 postgres: wal sender process replication 10.0.0.81(42809) streaming 1/E0CE9750</div></pre></td></tr></table></figure>
@@ -231,10 +243,9 @@
 <p>如果处于复制模式的话, <code>select pg_last_xact_replay_timestamp();</code>和<code>select pg_last_xlog_replay_location();</code>会一直增加.</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">select pg_last_xact_replay_timestamp();</div><div class="line"></div><div class="line">select pg_last_xlog_replay_location();</div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

@@ -154,52 +154,63 @@
 
 <div class="content content-post LEFT">
    <article id="post-Terminator启动时恢复layout并执行初始命令" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Terminator启动时恢复layout并执行初始命令</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Terminator启动时恢复layout并执行初始命令
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.08.22</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/bash/">bash</a> / <a class="article-category-link" href="/categories/bash/linux/">linux</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <p>因为平时工作中要经常打开多个窗口，然后SSH登录服务器。最后发现到一个神器:<code>Terminator</code>，它可以分割窗口。平时都是一个一个分割窗口，然后再登录远程服务器。所以在想，能不能保存这些窗口布局，以便下次打开时，就不用每次都这样子执行这些重复的动作了。</p>
+      <a class="tag-item" href="/tags/#bash">
+        <span class="tag-name">bash</span>
+    <span class="tag-size">( 6 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#linux">
+        <span class="tag-name">linux</span>
+    <span class="tag-size">( 14 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p>因为平时工作中要经常打开多个窗口，然后SSH登录服务器。最后发现到一个神器:<code>Terminator</code>，它可以分割窗口。平时都是一个一个分割窗口，然后再登录远程服务器。所以在想，能不能保存这些窗口布局，以便下次打开时，就不用每次都这样子执行这些重复的动作了。</p>
 <h2 id="保存layout"><a href="#保存layout" class="headerlink" title="保存layout"></a>保存layout</h2><p>先打开<code>Terminator</code>，然后分割成自己想要的布局。然后右键打开菜单选择<code>Preferences</code>-&gt;<code>Layouts</code>-&gt;<code>add</code>，然后填写自己的title，最后<code>save</code>-&gt;<code>close</code>即可。</p>
 <h2 id="每个窗口启动时执行自定义命令"><a href="#每个窗口启动时执行自定义命令" class="headerlink" title="每个窗口启动时执行自定义命令"></a>每个窗口启动时执行自定义命令</h2><p>又打开<code>Preferences</code>-&gt;<code>layouts</code> -&gt; 在中间的<code>Tpe</code>类型中选择<code>Terminal</code>类型的，然后再在最右边的<code>Custom command</code>中填写启动时需要执行的命令。</p>
 <p>这时千万要注意命令的格式是类似：<code>df -h; zsh</code>，即以<code>;</code>分隔，后面跟着你使用的<code>shell</code>类型.即可.</p>
 <h2 id="更详细配置"><a href="#更详细配置" class="headerlink" title="更详细配置"></a>更详细配置</h2><p><code>vim ~/.config/terminator/config</code>，然后在类似以下节点中编辑你自定义的title等信息即可：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[[[terminal8]]]</div><div class="line">      <span class="built_in">command</span> = 想要执行的命令;zsh</div><div class="line">      order = 1</div><div class="line">      parent = child6</div><div class="line">      profile = defautlt</div><div class="line">      title = 你的标题</div><div class="line">      <span class="built_in">type</span> = Terminal</div><div class="line">      uuid = 350106f3-ab2c-4b3b<span class="_">-a</span>970<span class="_">-f</span>22bf43478f1</div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

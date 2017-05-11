@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post--翻译-为什么在Java里不能将Integer强制转换成String" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">[翻译]为什么在Java里不能将Integer强制转换成String</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            [翻译]为什么在Java里不能将Integer强制转换成String
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2014.12.22</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/编程/">编程</a> / <a class="article-category-link" href="/categories/编程/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="为何Integer不能转换为String"><a href="#为何Integer不能转换为String" class="headerlink" title="为何Integer不能转换为String"></a>为何Integer不能转换为String</h2><p><a href="http://stackoverflow.com/a/8973685/3815425" target="_blank" rel="external">原文</a></p>
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#java 基础学习">
+        <span class="tag-name">java 基础学习</span>
+    <span class="tag-size">( 3 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="为何Integer不能转换为String"><a href="#为何Integer不能转换为String" class="headerlink" title="为何Integer不能转换为String"></a>为何Integer不能转换为String</h2><p><a href="http://stackoverflow.com/a/8973685/3815425" target="_blank" rel="external">原文</a></p>
 <p>因为 <code>String</code> 和 <code>Integer</code> 不是在同一个对象阶层。</p>
 <figure class="highlight vbnet"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">      <span class="built_in">Object</span></div><div class="line">     /      \</div><div class="line">    /        \</div><div class="line"><span class="built_in">String</span>     <span class="built_in">Integer</span></div></pre></td></tr></table></figure>
 <p>当你尝试强制转换时，仅仅会在同一个对象阶层转换。比如：</p>
@@ -200,10 +212,9 @@
 <hr>
 <p>写代码过程中，居然遇到这种错误（在使用Spring 来操作 Redis 经常出现，但百思不得其姐。和同事讨论时才发现，原来Redis在底层永远是保存String的，即使在写代码的时候是写成 set(String, Object)。这时，如果get这个缓存出来，而且想要的是整型时，就会报<code>java.lang.ClassCastException: java.lang.Integer cannot be cast to java.lang.String</code>错误。），出来工作差不多2年了，这种错误的本质原因，直到今天才明白。实在是太惭愧了。很可能是被所有对象可以以字符串的形式表示而导致的，以为所有的对象在使用 <code>(String)obj</code>时，会使用 <code>obj.toString()</code>，所以才造成这种认为理所当然的错觉。</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

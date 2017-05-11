@@ -162,42 +162,64 @@
 
 <div class="content content-post LEFT">
    <article id="post-记录一次 MySQL 批量插入的优化" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">记录一次 MySQL 批量插入的优化</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            记录一次 MySQL 批量插入的优化
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2017.01.11</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/mysql/">mysql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <blockquote>
+      <a class="tag-item" href="/tags/#Java">
+        <span class="tag-name">Java</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#batch">
+        <span class="tag-name">batch</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#mybatis">
+        <span class="tag-name">mybatis</span>
+    <span class="tag-size">( 3 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <blockquote>
 <p>公司的DSP 项目,有个模块就是插入 RabbitMQ 里的 BID 的对象到 MySQL 然后再统计数据的业务. 但是, 发现这个 BID 批量插入的性能, 低得有点吓人. 平均 1K/s 的速度. 而这些日志, 每天有时可产生好几千 W 条 BID 的数据.</p>
 </blockquote>
 <h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>MyBatis3.1 + Spring4.3.2 + shardbatis 分表插件</p>
@@ -243,10 +265,9 @@
 <p>就是这解析的步骤, 在批量大的时候, 性能是非常低的…</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>批量插入的情况下, 最理想的速度经测试, 应该是<code>JDBC + executeBatch</code> + <code>JDBC url 加上参数 : useServerPrepStmts=false&amp;rewriteBatchedStatements=true&amp;useCompression=true</code></p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

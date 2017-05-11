@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-Go学习" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Go学习</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Go学习
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.10.18</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/golang/">golang</a> / <a class="article-category-link" href="/categories/golang/go/">go</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="安装多个版本的-go"><a href="#安装多个版本的-go" class="headerlink" title="安装多个版本的 go"></a>安装多个版本的 go</h2><p><a href="https://github.com/moovweb/gvm" target="_blank" rel="external">GVM</a></p>
+      <a class="tag-item" href="/tags/#go">
+        <span class="tag-name">go</span>
+    <span class="tag-size">( 15 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#golang">
+        <span class="tag-name">golang</span>
+    <span class="tag-size">( 15 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="安装多个版本的-go"><a href="#安装多个版本的-go" class="headerlink" title="安装多个版本的 go"></a>安装多个版本的 go</h2><p><a href="https://github.com/moovweb/gvm" target="_blank" rel="external">GVM</a></p>
 <h2 id="Go依赖管理与-GOPATH-的关系"><a href="#Go依赖管理与-GOPATH-的关系" class="headerlink" title="Go依赖管理与 GOPATH 的关系."></a>Go依赖管理与 GOPATH 的关系.</h2><p><code>GOPATH</code>环境变量中可以包含多个目录。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">go get</div></pre></td></tr></table></figure>
 <p>这种方式，它会将依赖下载在<code>$GOPATH</code>环境变量中的第一个目录中.</p>
@@ -301,10 +313,9 @@
 <h2 id="Golang1-8-中的优雅关闭-http"><a href="#Golang1-8-中的优雅关闭-http" class="headerlink" title="Golang1.8 中的优雅关闭 http"></a>Golang1.8 中的优雅关闭 http</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">s := &amp;http.Server&#123;</div><div class="line">	Addr: <span class="string">":9090"</span>,</div><div class="line">&#125;</div><div class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</div><div class="line">	log.Infof(<span class="string">"%s"</span>, s.ListenAndServe())</div><div class="line">&#125;()</div><div class="line"><span class="comment">// Handle SIGINT and SIGTERM.</span></div><div class="line">ch := <span class="built_in">make</span>(<span class="keyword">chan</span> os.Signal)</div><div class="line">signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)</div><div class="line">log.Println(&lt;-ch)</div><div class="line"></div><div class="line">log.Println(<span class="string">"http server gracefully stopping..."</span>)</div><div class="line"><span class="comment">// Stop the service gracefully.</span></div><div class="line">s.Shutdown(context.Background())</div><div class="line">log.Println(<span class="string">"http server gracefully shutdown done..."</span>)</div></pre></td></tr></table></figure>
 <h2 id="按-github-风格的项目组织结构"><a href="#按-github-风格的项目组织结构" class="headerlink" title="按 github 风格的项目组织结构"></a>按 github 风格的项目组织结构</h2><p><a href="https://github.com/golang/go/wiki/GithubCodeLayout" target="_blank" rel="external">github code layout</a></p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

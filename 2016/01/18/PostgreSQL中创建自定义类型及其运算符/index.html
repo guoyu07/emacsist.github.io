@@ -154,52 +154,63 @@
 
 <div class="content content-post LEFT">
    <article id="post-PostgreSQL中创建自定义类型及其运算符" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">PostgreSQL中创建自定义类型及其运算符</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            PostgreSQL中创建自定义类型及其运算符
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.01.18</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/database/">database</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="创建一个person的数据类型"><a href="#创建一个person的数据类型" class="headerlink" title="创建一个person的数据类型"></a>创建一个<code>person</code>的数据类型</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># create type person as (name varchar(10), age int);</span></div><div class="line">CREATE TYPE</div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="创建一个person的数据类型"><a href="#创建一个person的数据类型" class="headerlink" title="创建一个person的数据类型"></a>创建一个<code>person</code>的数据类型</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># create type person as (name varchar(10), age int);</span></div><div class="line">CREATE TYPE</div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
 <h2 id="使用person这个数据类型"><a href="#使用person这个数据类型" class="headerlink" title="使用person这个数据类型"></a>使用<code>person</code>这个数据类型</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># create table use_person (id serial, o person);</span></div><div class="line">CREATE TABLE</div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
 <h2 id="插入示例数据"><a href="#插入示例数据" class="headerlink" title="插入示例数据"></a>插入示例数据</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># insert into use_person (o) values (row('yzy', 18));</span></div><div class="line">INSERT 0 1</div><div class="line">sky=<span class="comment"># insert into use_person (o) values (row('girl', 19));</span></div><div class="line">INSERT 0 1</div><div class="line">sky=<span class="comment"># select * from use_person;</span></div><div class="line"> id |     o</div><div class="line">----+-----------</div><div class="line">  1 | (yzy,18)</div><div class="line">  2 | (girl,19)</div><div class="line">(2 rows)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
 <h2 id="定义比较运算符"><a href="#定义比较运算符" class="headerlink" title="定义比较运算符"></a>定义比较运算符</h2><p>这里只定义一种，就是<code>&lt;</code>比较运算符。定义如下:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">CREATE OR REPLACE FUNCTION person_age_smaller(left_o person, right_o person) RETURNS BOOLEAN AS</div><div class="line">$$</div><div class="line">  SELECT (left_o).age &lt; (right_o).age</div><div class="line">$$</div><div class="line">LANGUAGE sql;</div><div class="line"></div><div class="line">CREATE OPERATOR &lt;(PROCEDURE = person_age_smaller, LEFTARG = person, RIGHTARG = person, COMMUTATOR = &lt;);</div></pre></td></tr></table></figure>
 <h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># SELECT (SELECT o from use_person WHERE id = 1) &lt; (SELECT o from use_person WHERE id = 2);</span></div><div class="line"> ?column?</div><div class="line">----------</div><div class="line"> t</div><div class="line">(1 row)</div><div class="line"></div><div class="line">sky=<span class="comment"># SELECT (SELECT o from use_person WHERE id = 2) &lt; (SELECT o from use_person WHERE id = 1);</span></div><div class="line"> ?column?</div><div class="line">----------</div><div class="line"> f</div><div class="line">(1 row)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

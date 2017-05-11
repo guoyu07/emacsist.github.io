@@ -154,42 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-RabbitMQ 出队发送邮件注意事项" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">RabbitMQ 出队发送邮件注意事项</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            RabbitMQ 出队发送邮件注意事项
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2017.02.22</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/rabbitmq/">rabbitmq</a> / <a class="article-category-link" href="/categories/rabbitmq/javamail/">javamail</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <blockquote>
+      <a class="tag-item" href="/tags/#javamail">
+        <span class="tag-name">javamail</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#rabbitmq">
+        <span class="tag-name">rabbitmq</span>
+    <span class="tag-size">( 15 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#tcp">
+        <span class="tag-name">tcp</span>
+    <span class="tag-size">( 2 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <blockquote>
 <p>线上一个发送邮件的系统，通过 RabbitMQ 出队发送系统中的邮件时，发现虽然 consumer 连接在那里，但是日志中却没有任何输出相关的成功或失败或抛出异常的信息。</p>
 </blockquote>
 <p>这种情况下，我的解决思路如下</p>
@@ -211,10 +228,9 @@
 <h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">## 连接超时</span></div><div class="line">mail.smtp.connectiontimeout</div><div class="line"></div><div class="line"><span class="comment">## 读取数据超时</span></div><div class="line">mail.smtp.timeout	</div><div class="line"></div><div class="line"><span class="comment">## 写入数据超时</span></div><div class="line">mail.smtp.writetimeout</div></pre></td></tr></table></figure>
 <p>加上这三个属性，设置适合的超时时间。超时后，重新进队再继续重试即可。</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

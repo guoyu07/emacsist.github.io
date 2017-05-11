@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-翻译-RabbitMQ中的消费者确认和发布者确认" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">[翻译]RabbitMQ中的消费者确认和发布者确认</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            [翻译]RabbitMQ中的消费者确认和发布者确认
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2017.05.10</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/rabbitmq/">rabbitmq</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <p><a href="https://www.rabbitmq.com/confirms.html" target="_blank" rel="external">原文</a></p>
+      <a class="tag-item" href="/tags/#rabbitmq">
+        <span class="tag-name">rabbitmq</span>
+    <span class="tag-size">( 15 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#翻译">
+        <span class="tag-name">翻译</span>
+    <span class="tag-size">( 20 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p><a href="https://www.rabbitmq.com/confirms.html" target="_blank" rel="external">原文</a></p>
 <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>使用消息 Broker 的系统，例如 RabbitMQ 是被定义为分布式的。由于协议的方法（消息）的发送并不能保证到达对应目的地或者被成功地处理掉这些消息，因此，发布者和消费者都需要一个进行分发和处理的确认机制。RabbitMQ 支持的几种消息协议都支持这种特性。本指南介绍了AMQP 0-9-1的功能，但其他协议（STOMP，MQTT等）的思想基本相同。</p>
 <p>消费者对RabbitMQ的分发处理确认称为 AMQP 0-9-1 说明中的确认；<br>Broker 对发布者的确认是一种协议扩展，称为发布者确认。</p>
 <h2 id="消费者分发确认"><a href="#消费者分发确认" class="headerlink" title="消费者分发确认"></a>消费者分发确认</h2><p>当 RabbitMQ 分发一条消息给消费者时，它需要知道什么时候认为消息已经被成功发送了。至于是什么样的逻辑优化，取决于系统。因此主要由应用层来决定。在 AMQP 0-9-1 中，它是通过当消费者使用 <em>basic.consume</em> 方法来注册或者通过 <em>basic.get</em> 方法按需获取消息时实现的。</p>
@@ -233,10 +245,9 @@
 <h1 id="限制"><a href="#限制" class="headerlink" title="限制"></a>限制</h1><p>最大的分发标签(maximum delivery tag)</p>
 <p>分发标签是一个 64位的长整型数值，因此它的最大值为 9223372036854775807 。由于分发标签是 Channel 私有的，因此在实践中，发布者或消费者不太可能会运行到这个值。</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

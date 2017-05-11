@@ -154,42 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-Maven-与-Spring-结合进行模块化开发实践" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Maven 与 Spring 结合进行模块化开发实践</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Maven 与 Spring 结合进行模块化开发实践
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.10.16</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="模块化的解决方案"><a href="#模块化的解决方案" class="headerlink" title="模块化的解决方案"></a>模块化的解决方案</h2><h3 id="OSGi"><a href="#OSGi" class="headerlink" title="OSGi"></a>OSGi</h3><p>是一种模块化标准。是真正意义的上模块化，Eclipse 就是基于OSGi进行开发的。热插拔，每个模块都有自己的classLoader，不同classLoader之间，通过服务来进行通信。</p>
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#maven">
+        <span class="tag-name">maven</span>
+    <span class="tag-size">( 7 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#modular">
+        <span class="tag-name">modular</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="模块化的解决方案"><a href="#模块化的解决方案" class="headerlink" title="模块化的解决方案"></a>模块化的解决方案</h2><h3 id="OSGi"><a href="#OSGi" class="headerlink" title="OSGi"></a>OSGi</h3><p>是一种模块化标准。是真正意义的上模块化，Eclipse 就是基于OSGi进行开发的。热插拔，每个模块都有自己的classLoader，不同classLoader之间，通过服务来进行通信。</p>
 <h3 id="Maven"><a href="#Maven" class="headerlink" title="Maven"></a>Maven</h3><p>使用maven的方式来进行模块化，主要是代码组织，以及代码重用度角度来进行模块化。</p>
 <h2 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h2><h3 id="emacsist-project"><a href="#emacsist-project" class="headerlink" title="emacsist-project"></a>emacsist-project</h3><p>创建该项目，用于被继承，以及聚合各个模块。</p>
 <p>它的<code>pom.xml</code>内容如下：</p>
@@ -218,10 +235,9 @@
 <p>成功的话，输出类似：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">[INFO]</div><div class="line">[INFO] emacsist-project ................................... SUCCESS [  0.112 s]</div><div class="line">[INFO] emacsist-kit ....................................... SUCCESS [  1.186 s]</div><div class="line">[INFO] emacsist-email ..................................... SUCCESS [  0.177 s]</div><div class="line">[INFO] emacsist-http ...................................... SUCCESS [  0.093 s]</div><div class="line">[INFO] emacsist-redis ..................................... SUCCESS [  0.130 s]</div><div class="line">[INFO] weibosdk-base ...................................... SUCCESS [  0.337 s]</div><div class="line">[INFO] common-pojo ........................................ SUCCESS [  0.065 s]</div><div class="line">[INFO] weibosdk-dao ....................................... SUCCESS [  0.231 s]</div><div class="line">[INFO] weibosdk-service ................................... SUCCESS [  0.084 s]</div><div class="line">[INFO] weibosdk-redis ..................................... SUCCESS [  0.137 s]</div><div class="line">[INFO] weibosdk-rabbitmq .................................. SUCCESS [  0.200 s]</div><div class="line">[INFO] weibosdk-web ....................................... SUCCESS [  0.845 s]</div><div class="line">[INFO] weibosdk-interceptor ............................... SUCCESS [  0.148 s]</div><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line">[INFO] BUILD SUCCESS</div><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line">[INFO] Total time: 4.010 s</div><div class="line">[INFO] Finished at: 2015-10-16T17:23:27+08:00</div><div class="line">[INFO] Final Memory: 33M/314M</div><div class="line">[INFO] ------------------------------------------------------------------------</div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

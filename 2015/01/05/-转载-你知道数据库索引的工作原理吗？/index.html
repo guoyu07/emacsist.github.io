@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post--转载-你知道数据库索引的工作原理吗？" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">[转载]你知道数据库索引的工作原理吗？</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            [转载]你知道数据库索引的工作原理吗？
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.01.05</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/postgresql/">postgresql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <p>转载自：<a href="http://www.ituring.com.cn/article/986" target="_blank" rel="external">http://www.ituring.com.cn/article/986</a><br>作者：李松峰</p>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p>转载自：<a href="http://www.ituring.com.cn/article/986" target="_blank" rel="external">http://www.ituring.com.cn/article/986</a><br>作者：李松峰</p>
 <h2 id="发表于-2012-02-04-11-43"><a href="#发表于-2012-02-04-11-43" class="headerlink" title="发表于 2012-02-04 11:43"></a>发表于 2012-02-04 11:43</h2><blockquote>
 <p>译者按：今天在翻译时无意中搜索到StackOverflow中的这篇文章（问答），觉得有必要翻译出来。不仅因为文章本身写得精彩，更重要的是它昭示了一个写文章（特别是技术文章）的重要法则——5W1H。 原文在此 How does database indexing work?（作者：Xenph Yan）</p>
 </blockquote>
@@ -214,10 +226,9 @@
 <p>由于索引只能提高搜索记录中某个匹配字段的速度，因此在执行插入和删除操作的情况下，仅为输出结果而为字段建立索引，就纯粹是浪费磁盘空间和处理时间了；这种情况下不用建立索引。另外，由于二分查找的原因，数据的基数性（cardinality）或唯一性也非常重要。对基数性为2的字段建立索引，会将数据一分为二，而对基数性为1000的字段，则同样会返回大约1000条记录。在这么低的基数性下，索引的效率将减低至线性查找的水平，而查询优化器会在基数性小于记录数的30%时放弃索引，实际上等于索引纯粹只会浪费空间。</p>
 <h2 id="查询优化器的原理"><a href="#查询优化器的原理" class="headerlink" title="查询优化器的原理"></a>查询优化器的原理</h2><p>查询优化中最核心的问题就是精确估算不同查询计划的成本。优化器在估算查询计划的成本时，会使用一个数学模型，该模型又依赖于对每个查询计划中涉及的最大数据量的基数性（或者叫重数）的估算。而对基数性的估算又依赖于对查询中谓词选择因数<code>（selection factor of predicates）</code>的估算。过去，数据库系统在估算选择性时，要使用每个字段中值的分布情况的详尽统计信息，比如直方图。这种技术对于估算孤立谓词的选择符效果很好。然而，很多查询的谓词是相互关联的，例如 <code>select count(*) from R where R.make=&#39;Honda&#39; and R.model=&#39;Accord&#39;</code>。查询谓词经常会高度关联（比如，<code>model=&#39;Accord&#39;</code>的前提条件是<code>make=&#39;Honda&#39;</code>），而估计这种关联的选择性非常困难。查询优化器之所以会选择低劣的查询计划，一方面是因为对基数性估算不准，另一方面就是因为遗漏了很多关联性。而这也是为什么数据库管理员应该经常更新数据库统计信息（特别是在重要的数据加载和卸载之后）的原因。（译自维基百科：<a href="http://en.wikipedia.org/wiki/Query_optimizer。）" target="_blank" rel="external">http://en.wikipedia.org/wiki/Query_optimizer。）</a></p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

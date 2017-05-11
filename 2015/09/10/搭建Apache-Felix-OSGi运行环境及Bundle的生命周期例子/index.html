@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-搭建Apache-Felix-OSGi运行环境及Bundle的生命周期例子" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">搭建Apache Felix OSGi运行环境及Bundle的生命周期例子</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            搭建Apache Felix OSGi运行环境及Bundle的生命周期例子
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.09.10</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="运行环境"><a href="#运行环境" class="headerlink" title="运行环境"></a>运行环境</h2><p>配置好Java这些基础环境就忽略了。</p>
+      <a class="tag-item" href="/tags/#OSGi">
+        <span class="tag-name">OSGi</span>
+    <span class="tag-size">( 8 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="运行环境"><a href="#运行环境" class="headerlink" title="运行环境"></a>运行环境</h2><p>配置好Java这些基础环境就忽略了。</p>
 <p><a href="http://felix.apache.org/downloads.cgi" target="_blank" rel="external">下载Felix</a></p>
 <p>假设下载到<code>~/Downloads</code>目录，然后解压</p>
 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd ~/Downloads</div><div class="line">tar -xvf org<span class="selector-class">.apache</span><span class="selector-class">.felix</span><span class="selector-class">.main</span><span class="selector-class">.distribution-5</span>.<span class="number">2.0</span><span class="selector-class">.tar</span><span class="selector-class">.gz</span></div><div class="line">cd felix-framework-<span class="number">5.2</span>.<span class="number">0</span></div></pre></td></tr></table></figure>
@@ -214,10 +226,9 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">g! lb</div><div class="line">START LEVEL 1</div><div class="line">   ID|State      |Level|Name</div><div class="line">    0|Active     |    0|System Bundle (5.2.0)</div><div class="line">    1|Active     |    1|Apache Felix Bundle Repository (2.0.4)</div><div class="line">    2|Active     |    1|Apache Felix Gogo Command (0.14.0)</div><div class="line">    3|Active     |    1|Apache Felix Gogo Runtime (0.16.2)</div><div class="line">    4|Active     |    1|Apache Felix Gogo Shell (0.10.0)</div><div class="line">    6|Resolved   |    1|Example1 (1.0.0)</div><div class="line">    7|Active     |    1|Example2 (1.0.0)</div><div class="line">g! stop 7</div><div class="line">g! start 6</div><div class="line">启动Bundle</div><div class="line">g! lb</div><div class="line">START LEVEL 1</div><div class="line">   ID|State      |Level|Name</div><div class="line">    0|Active     |    0|System Bundle (5.2.0)</div><div class="line">    1|Active     |    1|Apache Felix Bundle Repository (2.0.4)</div><div class="line">    2|Active     |    1|Apache Felix Gogo Command (0.14.0)</div><div class="line">    3|Active     |    1|Apache Felix Gogo Runtime (0.16.2)</div><div class="line">    4|Active     |    1|Apache Felix Gogo Shell (0.10.0)</div><div class="line">    6|Active     |    1|Example1 (1.0.0)</div><div class="line">    7|Resolved   |    1|Example2 (1.0.0)</div><div class="line">g! start 7</div><div class="line">服务类型为: example2.service.SayHelloService 已经注册.</div><div class="line">g!</div></pre></td></tr></table></figure>
 <p>这样，就完成了服务注册及其监听器的小例子了。开启OSGi之路吧！</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

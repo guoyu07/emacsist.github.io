@@ -154,42 +154,49 @@
 
 <div class="content content-post LEFT">
    <article id="post-PostgreSQL的psql配置" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">PostgreSQL的psql配置</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            PostgreSQL的psql配置
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.08.18</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/postgresql/">postgresql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="psqlrc"><a href="#psqlrc" class="headerlink" title="~/.psqlrc"></a><code>~/.psqlrc</code></h2><p>内容如下:</p>
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="psqlrc"><a href="#psqlrc" class="headerlink" title="~/.psqlrc"></a><code>~/.psqlrc</code></h2><p>内容如下:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">-- Found this on thoughtbot here:</div><div class="line">-- https://robots.thoughtbot.com/improving-the-command-line-postgres-experience</div><div class="line">-- and it fixes problems with psql, some I didn<span class="string">'t even know I had.</span></div><div class="line">--</div><div class="line">-- Set up a nice friendly prompt</div><div class="line">\set PROMPT1 '%[%033[1m%]%M %n@%/%R%[%033[0m%]%<span class="comment"># '</span></div><div class="line">\<span class="built_in">set</span> PROMPT2 <span class="string">'[more] %R &gt; '</span></div><div class="line">-- By default, NULL displays as an empty space. Is it actually an empty</div><div class="line">-- string, or is it null? This makes that distinction visible.</div><div class="line">\pset null <span class="string">'[NULL]'</span></div><div class="line">-- Use table format (with headers across the top) by default, but switch to</div><div class="line">-- expanded table format when there<span class="string">'s a lot of data, which makes it much</span></div><div class="line">-- easier to read.</div><div class="line">\x auto</div><div class="line">-- Verbose error reports.</div><div class="line">\set VERBOSITY verbose</div><div class="line">-- Use a separate history file per-database.</div><div class="line">\set HISTFILE ~/.psql_history- :DBNAME</div><div class="line">-- If a command is run more than once in a row, only store it once in the</div><div class="line">-- history.</div><div class="line">\set HISTCONTROL ignoredups</div><div class="line">-- Autocomplete keywords (like SELECT) in upper-case, even if you started</div><div class="line">-- typing them in lower case.</div><div class="line">\set COMP_KEYWORD_CASE upper</div><div class="line">\timing</div></pre></td></tr></table></figure>
 <p>上面设置完的<code>psql</code>提示样式如下:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">10.0.0.81 sky@sky=<span class="comment"># SELECT * from hello limit 1;</span></div><div class="line">               name               </div><div class="line">----------------------------------</div><div class="line"> c4ca4238a0b923820dcc509a6f75849b</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.226 ms</div><div class="line">10.0.0.81 sky@sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
@@ -198,10 +205,9 @@
 <p><code>psql</code>提示样式如下:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">╭─sky@sky-linux /ihome/nodejs/blog  </div><div class="line">╰─➤  psql -U sky -W -h 10.0.0.81</div><div class="line">Password <span class="keyword">for</span> user sky: </div><div class="line">Welcome to PostgreSQL! </div><div class="line"></div><div class="line">Type :version to see the PostgreSQL version. </div><div class="line"></div><div class="line">Type :extensions to see the available extensions. </div><div class="line"></div><div class="line">Type \q to exit. </div><div class="line"></div><div class="line">psql (9.5.0)</div><div class="line">Type <span class="string">"help"</span> <span class="keyword">for</span> help.</div><div class="line"></div><div class="line">10.0.0.81:5432 sky@sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

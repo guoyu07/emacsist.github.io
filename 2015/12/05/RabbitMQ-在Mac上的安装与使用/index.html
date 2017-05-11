@@ -154,42 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-RabbitMQ-在Mac上的安装与使用" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">RabbitMQ 在Mac上的安装与使用</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            RabbitMQ 在Mac上的安装与使用
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.12.05</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">brew update</div><div class="line">brew install rabbitmq</div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#mac">
+        <span class="tag-name">mac</span>
+    <span class="tag-size">( 4 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#rabbitmq">
+        <span class="tag-name">rabbitmq</span>
+    <span class="tag-size">( 15 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">brew update</div><div class="line">brew install rabbitmq</div></pre></td></tr></table></figure>
 <p>这样子安装的话, RabbitMQ的脚本是安装到<code>/usr/local/sbin</code>这个目录里的.并且不会自动添加到你的<code>PATH</code>里,所以,要添加下先:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#根据你的shell类型选择</span></div><div class="line">open <span class="_">-e</span> ~/.zshrc 或者 open <span class="_">-e</span> ~/.bash_profile 或者 open <span class="_">-e</span> ~/.profile</div><div class="line"></div><div class="line">然后添加以下语句:</div><div class="line"></div><div class="line">PATH=<span class="variable">$PATH</span>:/usr/<span class="built_in">local</span>/sbin</div></pre></td></tr></table></figure>
 <p>这些脚本,可以不必使用<code>sudo</code>来运行.</p>
@@ -235,10 +252,9 @@
 <p><a href="https://www.rabbitmq.com/management.html" target="_blank" rel="external">RabbitMQ management</a></p>
 <h2 id="设置权限"><a href="#设置权限" class="headerlink" title="设置权限"></a>设置权限</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">rabbitmqctl set_permissions -p vhostName yourName <span class="string">".*"</span> <span class="string">".*"</span> <span class="string">".*"</span></div><div class="line"></div><div class="line">例如:</div><div class="line"></div><div class="line">➜  rabbitmq git:(master) rabbitmqctl set_permissions -p / yang <span class="string">".*"</span> <span class="string">".*"</span> <span class="string">".*"</span></div><div class="line">Setting permissions <span class="keyword">for</span> user <span class="string">"yang"</span> <span class="keyword">in</span> vhost <span class="string">"/"</span> ...</div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

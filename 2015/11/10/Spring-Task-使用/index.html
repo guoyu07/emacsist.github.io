@@ -154,42 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-Spring-Task-使用" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Spring Task 使用</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Spring Task 使用
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.11.10</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">   &lt;bean id=<span class="string">"updateRsstask"</span> class=<span class="string">"xxxx.xxx.xx"</span> /&gt;</div><div class="line">&lt;task:executor id=<span class="string">"myexecutor"</span> pool-size=<span class="string">"10"</span> /&gt;</div><div class="line">&lt;task:scheduler id=<span class="string">"myscheduler"</span> pool-size=<span class="string">"10"</span> /&gt;</div><div class="line"></div><div class="line">&lt;task:scheduled-tasks scheduler=<span class="string">"myscheduler"</span>&gt;</div><div class="line"></div><div class="line">	&lt;!-- 每隔一个小时更新rss --&gt;</div><div class="line">	&lt;task:scheduled ref=<span class="string">"updateRssTask"</span> method=<span class="string">"execute"</span> cron=<span class="string">"0 0 * * * *"</span> /&gt;</div><div class="line"></div><div class="line">&lt;/task:scheduled-tasks&gt;</div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#spring">
+        <span class="tag-name">spring</span>
+    <span class="tag-size">( 27 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#task">
+        <span class="tag-name">task</span>
+    <span class="tag-size">( 3 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">   &lt;bean id=<span class="string">"updateRsstask"</span> class=<span class="string">"xxxx.xxx.xx"</span> /&gt;</div><div class="line">&lt;task:executor id=<span class="string">"myexecutor"</span> pool-size=<span class="string">"10"</span> /&gt;</div><div class="line">&lt;task:scheduler id=<span class="string">"myscheduler"</span> pool-size=<span class="string">"10"</span> /&gt;</div><div class="line"></div><div class="line">&lt;task:scheduled-tasks scheduler=<span class="string">"myscheduler"</span>&gt;</div><div class="line"></div><div class="line">	&lt;!-- 每隔一个小时更新rss --&gt;</div><div class="line">	&lt;task:scheduled ref=<span class="string">"updateRssTask"</span> method=<span class="string">"execute"</span> cron=<span class="string">"0 0 * * * *"</span> /&gt;</div><div class="line"></div><div class="line">&lt;/task:scheduled-tasks&gt;</div></pre></td></tr></table></figure>
 <h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p><code>&lt;task:schedule-tasks scheduler=&quot;myscheduler&quot;&gt;</code> 这里的<code>scheduler</code>必须显式指定，否则它只会使用默认的值，默认为单线程的。</p>
 <h2 id="lt-task-scheduler-id-quot-scheduler-quot-pool-size-quot-10-quot-gt"><a href="#lt-task-scheduler-id-quot-scheduler-quot-pool-size-quot-10-quot-gt" class="headerlink" title="&lt;task:scheduler id=&quot;scheduler&quot; pool-size=&quot;10&quot;/&gt;"></a><code>&lt;task:scheduler id=&quot;scheduler&quot; pool-size=&quot;10&quot;/&gt;</code></h2><p>如果在xml里这样子配置<code>scheduler</code>，则使用的是<code>ThreadPoolTaskScheduler</code>.</p>
 <h2 id="lt-task-executor-id-quot-executor-quot-pool-size-quot-10-quot-gt"><a href="#lt-task-executor-id-quot-executor-quot-pool-size-quot-10-quot-gt" class="headerlink" title="&lt;task:executor id=&quot;executor&quot; pool-size=&quot;10&quot;/&gt;"></a><code>&lt;task:executor id=&quot;executor&quot; pool-size=&quot;10&quot;/&gt;</code></h2><p>如果在xml里这样子配置<code>executor</code>，则使用的是<code>ThreadPoolTaskExecutor</code></p>
@@ -200,10 +217,9 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">private int corePoolSize = 1;</div><div class="line"></div><div class="line">private int maxPoolSize = Integer.MAX_VALUE;</div><div class="line"></div><div class="line">private int keepAliveSeconds = 60;</div><div class="line"></div><div class="line">private boolean allowCoreThreadTimeOut = <span class="literal">false</span>;</div><div class="line"></div><div class="line">private int queueCapacity = Integer.MAX_VALUE;</div></pre></td></tr></table></figure>
 <h2 id="task异常处理器使用"><a href="#task异常处理器使用" class="headerlink" title="task异常处理器使用"></a>task异常处理器使用</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=<span class="string">"scheduler"</span> class=<span class="string">"org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler"</span>&gt;</div><div class="line">    &lt;property name=<span class="string">"poolSize"</span> value=<span class="string">"5"</span> /&gt;</div><div class="line">    &lt;property name=<span class="string">"errorHandler"</span> ref=<span class="string">"scheduledTaskErrorHandler"</span> /&gt;</div><div class="line">&lt;/bean&gt;</div><div class="line"></div><div class="line">&lt;bean id=<span class="string">"scheduledTaskErrorHandler"</span> class=<span class="string">"boo.ScheduledTaskErrorHandler"</span> /&gt;</div><div class="line"></div><div class="line">public class ScheduledTaskErrorHandler implements ErrorHandler &#123;</div><div class="line"></div><div class="line">@Override</div><div class="line">public void handleError(Throwable t) &#123;</div><div class="line">        // <span class="keyword">do</span> something, like shutdown the scheduler</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

@@ -154,42 +154,49 @@
 
 <div class="content content-post LEFT">
    <article id="post-Git自动化部署项目" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Git自动化部署项目</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Git自动化部署项目
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.07.13</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/git/">git</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h2><h3 id="创建一个裸仓库"><a href="#创建一个裸仓库" class="headerlink" title="创建一个裸仓库"></a>创建一个裸仓库</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mkdir /home/sky/auto/git</div><div class="line"><span class="built_in">cd</span> /home/sky/auto/git</div><div class="line">git init --bare .</div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#git">
+        <span class="tag-name">git</span>
+    <span class="tag-size">( 6 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h2><h3 id="创建一个裸仓库"><a href="#创建一个裸仓库" class="headerlink" title="创建一个裸仓库"></a>创建一个裸仓库</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mkdir /home/sky/auto/git</div><div class="line"><span class="built_in">cd</span> /home/sky/auto/git</div><div class="line">git init --bare .</div></pre></td></tr></table></figure>
 <h3 id="添加一个git勾子-就是执行提交代码后的脚本-这里可以用来执行你部署的脚本就完成自动部署啦"><a href="#添加一个git勾子-就是执行提交代码后的脚本-这里可以用来执行你部署的脚本就完成自动部署啦" class="headerlink" title="添加一个git勾子(就是执行提交代码后的脚本, 这里可以用来执行你部署的脚本就完成自动部署啦.)"></a>添加一个git勾子(就是执行提交代码后的脚本, 这里可以用来执行你部署的脚本就完成自动部署啦.)</h3><p>创建完裸仓库后, 里有一个<code>hooks</code>的目录. </p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /home/sky/auto/git/hooks</div></pre></td></tr></table></figure>
 <p>创建一个文件名为<code>post-receive</code>, 并且添加一个可执行的权限给它, 内容如下:</p>
@@ -199,10 +206,9 @@
 <h3 id="提交代码时-自动部署"><a href="#提交代码时-自动部署" class="headerlink" title="提交代码时,自动部署"></a>提交代码时,自动部署</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git push auto-deploy 本地要部署的分支:master --force</div></pre></td></tr></table></figure>
 <p>这样子提交到裸仓库的远程地址时,就会触发<code>post-receive</code>脚本,然后在该脚本里进行自动化部署即可了.</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

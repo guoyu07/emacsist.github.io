@@ -154,42 +154,49 @@
 
 <div class="content content-post LEFT">
    <article id="post-关于Tomcat关闭时注意的问题" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">关于Tomcat关闭时注意的问题</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            关于Tomcat关闭时注意的问题
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.06.17</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <p>测试环境: Spring Boot MVC + RabbitMQ + Task + Tomcat</p>
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p>测试环境: Spring Boot MVC + RabbitMQ + Task + Tomcat</p>
 <h2 id="Controller层"><a href="#Controller层" class="headerlink" title="Controller层"></a>Controller层</h2><p>测试代码</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(<span class="string">"/world"</span>)</div><div class="line">   @ResponseBody</div><div class="line">   public String hello() throws InterruptedException &#123;</div><div class="line">       System.out.println(<span class="string">"in controller"</span>);</div><div class="line">       <span class="keyword">for</span>(int i=0; i&lt;100000000; i++)&#123;</div><div class="line">           System.out.println(<span class="string">"in "</span> + i + <span class="string">" hehe"</span>);</div><div class="line">       &#125;</div><div class="line">       System.out.println(<span class="string">"out controller"</span>);</div><div class="line">       <span class="built_in">return</span> <span class="string">"OK."</span>;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
 <p>关闭方式：</p>
@@ -213,10 +220,9 @@
 <p>没有执行到<code>out listener</code>程序就退出了</p>
 <h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>最好停止Tomcat的方式是: 通过Nginx加负载均衡，在Nginx上停用某个Tomcat的连接（upstream)，然后过一段时间后，再调用Tomcat的<code>shutdown.sh</code>，以尽可能减少数据的丢失。<br>其他的方式来停止Tomcat，都会有风险。</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

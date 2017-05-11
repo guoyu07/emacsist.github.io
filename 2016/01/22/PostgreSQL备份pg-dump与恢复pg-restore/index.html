@@ -154,42 +154,64 @@
 
 <div class="content content-post LEFT">
    <article id="post-PostgreSQL备份pg-dump与恢复pg-restore" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">PostgreSQL备份pg_dump与恢复pg_restore</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            PostgreSQL备份pg_dump与恢复pg_restore
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.01.22</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/postgresql/">postgresql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="备份某个数据库"><a href="#备份某个数据库" class="headerlink" title="备份某个数据库"></a>备份某个数据库</h2><h3 id="pg-dump"><a href="#pg-dump" class="headerlink" title="pg_dump"></a><code>pg_dump</code></h3><p><code>-a</code>或者<code>--data-only</code>： 只备份数据，不备份schema（即数据定义，包括表，序列，自定义数据类型等）</p>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#pg_dump">
+        <span class="tag-name">pg_dump</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#pg_retore">
+        <span class="tag-name">pg_retore</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="备份某个数据库"><a href="#备份某个数据库" class="headerlink" title="备份某个数据库"></a>备份某个数据库</h2><h3 id="pg-dump"><a href="#pg-dump" class="headerlink" title="pg_dump"></a><code>pg_dump</code></h3><p><code>-a</code>或者<code>--data-only</code>： 只备份数据，不备份schema（即数据定义，包括表，序列，自定义数据类型等）</p>
 <p><code>-b</code>或者<code>--blobs</code>：dump时包括大对象，除了指定<code>--schema</code>, <code>--table</code>或者<code>--schema-only</code>这些选项外，它默认包括大对象的.</p>
 <p><code>-c</code>或者<code>--clean</code>：先删除对象，然后再创建新的（除非指定<code>--if-exists</code>，否则在恢复的时候，如果不存在任何一个数据库中的对象时，可能会产生一些错误消息）。 <em>注意，这个选项只有对于 plain-text 格式的备份才有效</em>。对于<code>archive</code>格式，当你调用<code>pg_restore</code>时，可以指定这些选项.</p>
 <p><code>-C</code>或者<code>--create</code>： 在开始输出命令时，创建数据库本身，然后重新连接到这个指定的数据库。这个选择只对<code>plain-text</code>格式有效。对于<code>archive</code>格式，你可以在调用<code>pg_restore</code>时指定选项.</p>
@@ -262,10 +284,9 @@
 <p><code>--no-tablespaces</code>：</p>
 <p><code>--section=sectionname</code>：</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

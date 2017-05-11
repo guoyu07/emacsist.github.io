@@ -154,49 +154,60 @@
 
 <div class="content content-post LEFT">
    <article id="post-PostgreSQL最可靠的升级方案-实践" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">PostgreSQL最可靠的升级方案[实践]</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            PostgreSQL最可靠的升级方案[实践]
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2014.12.20</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/postgresql/">postgresql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">1. 如果原先的数据库安装了第三方的扩展，请在升级的新版本服务器上也先安装好这些第三方扩展(contrib)</div><div class="line">2. 相应的表空间配置也要与原先的一致</div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">1. 如果原先的数据库安装了第三方的扩展，请在升级的新版本服务器上也先安装好这些第三方扩展(contrib)</div><div class="line">2. 相应的表空间配置也要与原先的一致</div></pre></td></tr></table></figure>
 <h2 id="升级步骤"><a href="#升级步骤" class="headerlink" title="升级步骤"></a>升级步骤</h2><figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">1. 以PG管理员的身份运行以下命令来备份所有数据库信息（包括用户，角色，等）</div><div class="line">    pg_dumpall &gt; <span class="keyword">outfile</span></div><div class="line"></div><div class="line">2. 恢复<span class="keyword">DB</span>（记得将最新版本的<span class="keyword">DB</span>服务器运行起来先），运行以下命令</div><div class="line">    psql -f <span class="keyword">outfile</span> postgres</div></pre></td></tr></table></figure>
 <p>打完收工。</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

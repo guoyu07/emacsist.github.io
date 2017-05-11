@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-Redis升级" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Redis升级</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Redis升级
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.11.23</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/nosql/">nosql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="创建一个新的实例"><a href="#创建一个新的实例" class="headerlink" title="创建一个新的实例"></a>创建一个新的实例</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">wget http://download.redis.io/redis-stable.tar.gz</div><div class="line"></div><div class="line">tar -xvf redis-stable.tar.gz</div><div class="line"><span class="built_in">cd</span> redis-stable</div><div class="line">make</div><div class="line">make PREFIX=/some/other/directory install</div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#nosql">
+        <span class="tag-name">nosql</span>
+    <span class="tag-size">( 8 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#redis">
+        <span class="tag-name">redis</span>
+    <span class="tag-size">( 12 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="创建一个新的实例"><a href="#创建一个新的实例" class="headerlink" title="创建一个新的实例"></a>创建一个新的实例</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">wget http://download.redis.io/redis-stable.tar.gz</div><div class="line"></div><div class="line">tar -xvf redis-stable.tar.gz</div><div class="line"><span class="built_in">cd</span> redis-stable</div><div class="line">make</div><div class="line">make PREFIX=/some/other/directory install</div></pre></td></tr></table></figure>
 <p>启动slave实例</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/some/other/directory/bin/redis-server /path/to/redis/redis.conf</div></pre></td></tr></table></figure>
 <h2 id="开启复制"><a href="#开启复制" class="headerlink" title="开启复制"></a>开启复制</h2><p>如果master要认证的话，要先认证下先,在slave的实例中的redis-cli启动后，输入以下命令</p>
@@ -206,10 +218,9 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">SLAVEOF NO ONE</div></pre></td></tr></table></figure>
 <p>即可关闭复制，成为主实例.</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

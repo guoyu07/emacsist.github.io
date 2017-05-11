@@ -154,42 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-Jackson-JSON-库使用例子" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Jackson JSON 库使用例子</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Jackson JSON 库使用例子
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.06.25</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="ObjectMapper"><a href="#ObjectMapper" class="headerlink" title="ObjectMapper"></a>ObjectMapper</h2><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">它是线程安全的，所以建议使用它时，作为单例使用：</div><div class="line"></div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ObjectMapper mapper = <span class="keyword">new</span> ObjectMapper();</div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#jackson">
+        <span class="tag-name">jackson</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#json">
+        <span class="tag-name">json</span>
+    <span class="tag-size">( 3 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="ObjectMapper"><a href="#ObjectMapper" class="headerlink" title="ObjectMapper"></a>ObjectMapper</h2><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">它是线程安全的，所以建议使用它时，作为单例使用：</div><div class="line"></div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ObjectMapper mapper = <span class="keyword">new</span> ObjectMapper();</div></pre></td></tr></table></figure>
 <h2 id="Quick-Parsing"><a href="#Quick-Parsing" class="headerlink" title="Quick Parsing"></a>Quick Parsing</h2><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">String jsonString = <span class="string">"&#123;<span class="subst">\"</span>k1<span class="subst">\"</span>:<span class="subst">\"</span>v1<span class="subst">\"</span>,<span class="subst">\"</span>k2<span class="subst">\"</span>:<span class="subst">\"</span>v2<span class="subst">\"</span>&#125;"</span>;</div><div class="line">ObjectMapper mapper = new ObjectMapper();</div><div class="line">JsonNode actualObj = mapper.readTree(jsonString);</div><div class="line">assertNotNull(actualObj);</div></pre></td></tr></table></figure>
 <h2 id="Convert-JSON-to-Java-Map"><a href="#Convert-JSON-to-Java-Map" class="headerlink" title="Convert JSON to Java Map"></a>Convert JSON to Java Map</h2><figure class="highlight processing"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">JsonFactory factory = <span class="keyword">new</span> JsonFactory();</div><div class="line">ObjectMapper mapper = <span class="keyword">new</span> ObjectMapper(factory);</div><div class="line">File from = <span class="keyword">new</span> File(<span class="string">"albumnList.txt"</span>);</div><div class="line">TypeReference&lt;<span class="keyword">HashMap</span>&lt;<span class="keyword">String</span>,<span class="keyword">Object</span>&gt;&gt; typeRef = <span class="keyword">new</span> TypeReference&lt;<span class="keyword">HashMap</span>&lt;<span class="keyword">String</span>,<span class="keyword">Object</span>&gt;&gt;() &#123;&#125;;</div><div class="line"><span class="keyword">HashMap</span>&lt;<span class="keyword">String</span>,<span class="keyword">Object</span>&gt; o = mapper.readValue(from, typeRef);</div><div class="line">System.out.<span class="built_in">println</span>(<span class="string">"Got "</span> + o);</div></pre></td></tr></table></figure>
 <h2 id="Convert-JSON-to-Java-List"><a href="#Convert-JSON-to-Java-List" class="headerlink" title="Convert JSON to Java List"></a>Convert JSON to Java List</h2><figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">String</span> value = <span class="string">"&#123;json string&#125;"</span></div><div class="line">ObjectMapper om = <span class="keyword">new</span> ObjectMapper();</div><div class="line"><span class="built_in">List</span>&lt;Integer&gt; agentList = om.readValue(value, om.getTypeFactory().constructCollectionType(<span class="built_in">List</span>.<span class="keyword">class</span>, Integer.<span class="keyword">class</span>));</div></pre></td></tr></table></figure>
@@ -200,10 +217,9 @@
 <h2 id="timestamp解析-string-–-gt-timestamp"><a href="#timestamp解析-string-–-gt-timestamp" class="headerlink" title="timestamp解析, string –&gt; timestamp"></a>timestamp解析, string –&gt; timestamp</h2><p><a href="http://stackoverflow.com/questions/20635698/how-do-i-deserialize-timestamps-that-are-in-seconds-with-jackson" target="_blank" rel="external">stackoverflow</a></p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">UnixTimestampDeserializer</span> <span class="keyword">extends</span> <span class="title">JsonDeserializer&lt;DateTime&gt;</span> </span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TimestampThing</span> </span>&#123;</div><div class="line">    <span class="meta">@JsonDeserialize</span>(using = <span class="type">UnixTimestampDeserializer</span>.<span class="keyword">class</span>)</div><div class="line">    <span class="type">DateTime</span> timestamp</div><div class="line"> </div><div class="line">    <span class="meta">@JsonCreator</span></div><div class="line">    public <span class="type">TimestampThing</span>(<span class="meta">@JsonProperty</span>(<span class="symbol">'timestam</span>p') <span class="type">DateTime</span> timestamp) &#123;</div><div class="line">        <span class="keyword">this</span>.timestamp = timestamp</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

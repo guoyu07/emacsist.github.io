@@ -154,48 +154,64 @@
 
 <div class="content content-post LEFT">
    <article id="post-批量操作中数据库死锁的解决方法" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">批量操作中数据库死锁的解决方法</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            批量操作中数据库死锁的解决方法
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.08.08</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/mysql/">mysql</a> / <a class="article-category-link" href="/categories/mysql/database/">database</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>在生产环境中, 发现数据库经常报死锁.排查问题后,发现是由于RabbitMQ监听器, 批量处理SQL: <code>insert ... on duplicate key update ...</code> 这类SQL引起.</p>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>在生产环境中, 发现数据库经常报死锁.排查问题后,发现是由于RabbitMQ监听器, 批量处理SQL: <code>insert ... on duplicate key update ...</code> 这类SQL引起.</p>
 <h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>在添加到队列之前(或出队之后), 进行重处理再进行批量操作.(比如,通过Redis缓存进行唯一键去重).</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

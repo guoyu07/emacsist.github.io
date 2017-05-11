@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-使用PostgreSQL无限递归-SELECT-评论系统" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">使用PostgreSQL无限递归 SELECT 评论系统</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            使用PostgreSQL无限递归 SELECT 评论系统
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.01.05</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/postgresql/">postgresql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <p>假设有个评论系统，要求支持无限层级的回复，就像一棵树那样</p>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p>假设有个评论系统，要求支持无限层级的回复，就像一棵树那样</p>
 <figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">       文章</div><div class="line">     /      \</div><div class="line">    /        \</div><div class="line">评论<span class="number">1</span>     评论<span class="number">2</span></div><div class="line">....</div></pre></td></tr></table></figure>
 <p>注意可以有任意个子树以及做任意个叶子</p>
 <h2 id="大意的表结构"><a href="#大意的表结构" class="headerlink" title="大意的表结构"></a>大意的表结构</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">create</span> <span class="keyword">table</span> comments (</div><div class="line">    comment_id <span class="built_in">serial</span> primary <span class="keyword">key</span>,</div><div class="line">    parent_id <span class="built_in">bigint</span>,</div><div class="line">    bug_id <span class="built_in">bigint</span> <span class="keyword">not</span> <span class="literal">null</span>,</div><div class="line">    author <span class="built_in">varchar</span>(<span class="number">20</span>) <span class="keyword">not</span> <span class="literal">null</span>,</div><div class="line">    <span class="keyword">comment</span> <span class="built_in">text</span> <span class="keyword">not</span> <span class="literal">null</span>,</div><div class="line">    foreign <span class="keyword">key</span> (parent_id) <span class="keyword">references</span> comments(comment_id)</div><div class="line">);</div></pre></td></tr></table></figure>
@@ -199,10 +211,9 @@
 <p>注意PostgreSQL里，必须加 RECURSIVE 才能支持递归。</p>
 <p>内容来源资料：<br>[1]《SQL反模式》</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

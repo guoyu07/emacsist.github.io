@@ -12,11 +12,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="postgresql,database,翻译," />
+    <meta name="keywords" content="postgresql,翻译,database," />
   
 
   <meta name="description" content="ps aux | grep postgres123456postgres 31964  0.0  0.3 162180 12436 pts/0    S    18:09   0:00 /usr/local/pg/bin/postgres -D /usr/local/pg/datapostgres 31966  0.0  0.0 162312  2192 ?        Ss   18:09">
-<meta name="keywords" content="postgresql,database,翻译">
+<meta name="keywords" content="postgresql,翻译,database">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[翻译]PostgreSQL 进程构架">
 <meta property="og:url" content="https://emacsist.github.io/2014/12/04/-翻译-PostgreSQL-进程构架/index.html">
@@ -156,49 +156,65 @@
 
 <div class="content content-post LEFT">
    <article id="post--翻译-PostgreSQL-进程构架" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">[翻译]PostgreSQL 进程构架</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            [翻译]PostgreSQL 进程构架
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2014.12.04</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/postgresql/">postgresql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h1 id="ps-aux-grep-postgres"><a href="#ps-aux-grep-postgres" class="headerlink" title="ps aux | grep postgres"></a>ps aux | grep <strong>postgres</strong></h1><figure class="highlight tap"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">postgres<span class="number"> 31964 </span> 0.0  0.3<span class="number"> 162180 </span>12436 pts/0    S    18:09   0:00 /usr/local/pg/bin/postgres -D /usr/local/pg/data</div><div class="line">postgres<span class="number"> 31966 </span> 0.0  0.0<span class="number"> 162312 </span><span class="number"> 2192 </span>?        Ss   18:09   0:00 postgres: checkpointer process                  </div><div class="line">postgres<span class="number"> 31967 </span> 0.0  0.0<span class="number"> 162180 </span><span class="number"> 1820 </span>?        Ss   18:09   0:00 postgres: writer process                       </div><div class="line">postgres<span class="number"> 31968 </span> 0.0  0.0<span class="number"> 162180 </span> <span class="number"> 960 </span>?        Ss   18:09   0:00 postgres: wal writer process                   </div><div class="line">postgres<span class="number"> 31969 </span> 0.0  0.0<span class="number"> 163032 </span><span class="number"> 2064 </span>?        Ss   18:09   0:00 postgres: autovacuum launcher process           </div><div class="line">postgres<span class="number"> 31970 </span> 0.0  0.0 <span class="number"> 18000 </span> <span class="number"> 948 </span>?        Ss   18:09   0:00 postgres: stats collector process</div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#翻译">
+        <span class="tag-name">翻译</span>
+    <span class="tag-size">( 20 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h1 id="ps-aux-grep-postgres"><a href="#ps-aux-grep-postgres" class="headerlink" title="ps aux | grep postgres"></a>ps aux | grep <strong>postgres</strong></h1><figure class="highlight tap"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">postgres<span class="number"> 31964 </span> 0.0  0.3<span class="number"> 162180 </span>12436 pts/0    S    18:09   0:00 /usr/local/pg/bin/postgres -D /usr/local/pg/data</div><div class="line">postgres<span class="number"> 31966 </span> 0.0  0.0<span class="number"> 162312 </span><span class="number"> 2192 </span>?        Ss   18:09   0:00 postgres: checkpointer process                  </div><div class="line">postgres<span class="number"> 31967 </span> 0.0  0.0<span class="number"> 162180 </span><span class="number"> 1820 </span>?        Ss   18:09   0:00 postgres: writer process                       </div><div class="line">postgres<span class="number"> 31968 </span> 0.0  0.0<span class="number"> 162180 </span> <span class="number"> 960 </span>?        Ss   18:09   0:00 postgres: wal writer process                   </div><div class="line">postgres<span class="number"> 31969 </span> 0.0  0.0<span class="number"> 163032 </span><span class="number"> 2064 </span>?        Ss   18:09   0:00 postgres: autovacuum launcher process           </div><div class="line">postgres<span class="number"> 31970 </span> 0.0  0.0 <span class="number"> 18000 </span> <span class="number"> 948 </span>?        Ss   18:09   0:00 postgres: stats collector process</div></pre></td></tr></table></figure>
 <figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="string">postgres:</span> logger <span class="string">process:</span>  在PostgreSQL中称为SysLogger(<span class="number">8.0</span>)，用于整个系统的日志输出；</div><div class="line"><span class="string">postgres:</span> checkpointer <span class="string">process:</span>  在PostgreSQL中称为Checkpointer(<span class="number">9.2</span>），用于处理checkpoints；</div><div class="line"><span class="string">postgres:</span> writer <span class="string">process:</span>  在PostgreSQL中称为BgWriter，用于将脏页刷出到磁盘；</div><div class="line"><span class="string">postgres:</span> wal writer <span class="string">process:</span>  在PostgreSQL中称为WalWriter(<span class="number">8.3</span>)，处理预写日志输出；</div><div class="line"><span class="string">postgres:</span> autovacuum launcher <span class="string">process:</span>   在PostgreSQL中称为AutoVacuum(<span class="number">8.1</span>)，用于系统的自动清理；</div><div class="line"><span class="string">postgres:</span> archiver <span class="string">process:</span>  在PostgreSQL中称为PgArch，用于预写日志归档；</div><div class="line"><span class="string">postgres:</span> stats collector <span class="string">process:</span>  在PostgreSQL中称为PgStat，用于统计数据收集。</div></pre></td></tr></table></figure>
 <p><img src="/img/postgres-process-arch.png" alt=""></p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

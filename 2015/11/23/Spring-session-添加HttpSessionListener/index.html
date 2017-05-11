@@ -154,42 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-Spring-session-添加HttpSessionListener" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Spring session 添加HttpSessionListener</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Spring session 添加HttpSessionListener
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.11.23</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <p>这时介绍的版本，是基于以下版本:</p>
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#session">
+        <span class="tag-name">session</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#spring">
+        <span class="tag-name">spring</span>
+    <span class="tag-size">( 27 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p>这时介绍的版本，是基于以下版本:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">          &lt;groupId&gt;org.springframework.session&lt;/groupId&gt;</div><div class="line">          &lt;artifactId&gt;spring-session&lt;/artifactId&gt;</div><div class="line">          &lt;version&gt;1.1.0.M1&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
 <h2 id="先上示例demo"><a href="#先上示例demo" class="headerlink" title="先上示例demo"></a>先上示例demo</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</div><div class="line">&lt;beans xmlns=<span class="string">"http://www.springframework.org/schema/beans"</span></div><div class="line">       xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></div><div class="line">       xmlns:p=<span class="string">"http://www.springframework.org/schema/p"</span></div><div class="line">       xmlns:context=<span class="string">"http://www.springframework.org/schema/context"</span></div><div class="line"></div><div class="line">       xsi:schemaLocation=<span class="string">"http://www.springframework.org/schema/beans</span></div><div class="line">			http://www.springframework.org/schema/beans/spring-beans-3.2.xsd</div><div class="line">			  http://www.springframework.org/schema/context</div><div class="line">        http://www.springframework.org/schema/context/spring-context-3.2.xsd"&gt;</div><div class="line"></div><div class="line"></div><div class="line">    &lt;context:annotation-config /&gt;</div><div class="line"></div><div class="line">    &lt;bean id=<span class="string">"v2redisConnectionFactory"</span> class=<span class="string">"org.springframework.data.redis.connection.jedis.JedisConnectionFactory"</span></div><div class="line">          p:host-name=<span class="string">"<span class="variable">$&#123;config.redis.host&#125;</span>"</span> p:port=<span class="string">"<span class="variable">$&#123;redis.port&#125;</span>"</span> p:use-pool=<span class="string">"true"</span> p:database=<span class="string">"<span class="variable">$&#123;redis.database&#125;</span>"</span></div><div class="line">          p:password=<span class="string">"<span class="variable">$&#123;config.redis.password&#125;</span>"</span></div><div class="line">            /&gt;</div><div class="line"></div><div class="line">    &lt;bean id=<span class="string">"stringRedisSerializer"</span></div><div class="line">          class=<span class="string">"org.springframework.data.redis.serializer.StringRedisSerializer"</span>/&gt;</div><div class="line"></div><div class="line">    &lt;bean id=<span class="string">"genericToStringSerializer"</span> class=<span class="string">"org.springframework.data.redis.serializer.GenericToStringSerializer"</span>&gt;</div><div class="line">        &lt;constructor-arg <span class="built_in">type</span>=<span class="string">"java.lang.Class"</span> value=<span class="string">"java.lang.Object"</span>&gt;&lt;/constructor-arg&gt;</div><div class="line">    &lt;/bean&gt;</div><div class="line"></div><div class="line">    &lt;bean id=<span class="string">"object"</span> class=<span class="string">"java.lang.Object"</span>/&gt;</div><div class="line"></div><div class="line">    &lt;bean id=<span class="string">"v2redisTemplate"</span> class=<span class="string">"org.springframework.data.redis.core.RedisTemplate"</span></div><div class="line">          p:connection-factory-ref=<span class="string">"v2redisConnectionFactory"</span></div><div class="line">          p:keySerializer-ref=<span class="string">"stringRedisSerializer"</span></div><div class="line">          p:valueSerializer-ref=<span class="string">"genericToStringSerializer"</span></div><div class="line">          p:<span class="built_in">hash</span>KeySerializer-ref=<span class="string">"stringRedisSerializer"</span></div><div class="line">          p:<span class="built_in">hash</span>ValueSerializer-ref=<span class="string">"genericToStringSerializer"</span>/&gt;</div><div class="line"></div><div class="line">    &lt;bean class=<span class="string">"org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration"</span>/&gt;</div><div class="line">    </div><div class="line">    &lt;!-- 2017-2-13 更新： --&gt;</div><div class="line">    &lt;!-- YourHttpSessionListener 加上 @Component 注解即可，不需要下面的配置了，因为上面 RedisHttpSessionConfiguration 会自动将实现了</div><div class="line">    HttpSessionListener 的 bean 注册 ，下面再注册的话，就会执行多次了 --&gt;</div><div class="line">    &lt;!-- Http session Listener Start --&gt;</div><div class="line">    &lt;!--&lt;bean id=<span class="string">"l"</span> class=<span class="string">"org.springframework.session.web.http.SessionEventHttpSessionListenerAdapter"</span>&gt;--&gt;</div><div class="line">        &lt;!--&lt;constructor-arg&gt;--&gt;</div><div class="line">            &lt;!--&lt;list&gt;--&gt;</div><div class="line">                &lt;!--&lt;ref bean=<span class="string">"webHttpSessionListener"</span> /&gt;--&gt;</div><div class="line">            &lt;!--&lt;/list&gt;--&gt;</div><div class="line">        &lt;!--&lt;/constructor-arg&gt;--&gt;</div><div class="line">    &lt;!--&lt;/bean&gt;--&gt;</div><div class="line"></div><div class="line">    &lt;!--&lt;bean class=<span class="string">"org.springframework.security.web.session.HttpSessionEventPublisher"</span>/&gt;--&gt;</div><div class="line">    &lt;!-- END --&gt;</div><div class="line">&lt;/beans&gt;</div></pre></td></tr></table></figure>
 <h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><h3 id="事件类型"><a href="#事件类型" class="headerlink" title="事件类型"></a>事件类型</h3><p>通过查看源码，可知在包<code>org.springframework.session.events</code>下，有4个session生命周期的类型，比默认的<code>javax.servlet.http.HttpSessionListener</code>还多了两个.<br>分别是以下四种事件类型：</p>
@@ -228,10 +245,9 @@
 </ol>
 <h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>使用 Spring-session ，它会将 Session 的生命周期的事件，发布给所有集群中的 Tomcat 的，所以，如果你需要监听这些事件，而且事件的动作，只需要执行一次的话，那就要进行额外的处理了（比如，一个用户退出时，插入一条日志到数据库，如果不进行额外的处理的话，那你的集群里有多少个 Tomcat，就会插入多少条日志了，这可能并不是我们想要的）</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

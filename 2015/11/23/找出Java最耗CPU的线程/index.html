@@ -154,42 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-找出Java最耗CPU的线程" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">找出Java最耗CPU或IO的线程</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            找出Java最耗CPU或IO的线程
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.11.23</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="查看某进程及某线程占用CPU的例子"><a href="#查看某进程及某线程占用CPU的例子" class="headerlink" title="查看某进程及某线程占用CPU的例子"></a>查看某进程及某线程占用CPU的例子</h2><ul>
+      <a class="tag-item" href="/tags/#cpu">
+        <span class="tag-name">cpu</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#性能">
+        <span class="tag-name">性能</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="查看某进程及某线程占用CPU的例子"><a href="#查看某进程及某线程占用CPU的例子" class="headerlink" title="查看某进程及某线程占用CPU的例子"></a>查看某进程及某线程占用CPU的例子</h2><ul>
 <li><code>jps</code>: 列出java进程,找到pid.</li>
 <li><code>pidstat -p pid -u 1 3 -u -t</code>: 查看pid的进程所有线程的cpu使用情况.</li>
 <li><code>jstack -l pid &gt; /tmp/thread.txt</code>: 导出指定Java应用的所有线程.</li>
@@ -205,10 +222,9 @@
 <h3 id="十六进制转换十进制"><a href="#十六进制转换十进制" class="headerlink" title="十六进制转换十进制"></a>十六进制转换十进制</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">echo</span> $((0x十六进制数字))</div></pre></td></tr></table></figure>
 <h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">➜  ~  <span class="built_in">printf</span> <span class="string">"%x\n"</span> 20202</div><div class="line">4eea</div><div class="line">➜  ~  <span class="built_in">echo</span> $((0x4eea))</div><div class="line">20202</div><div class="line">➜  ~</div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

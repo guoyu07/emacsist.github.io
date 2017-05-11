@@ -154,42 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-Spring-Rabbit使用" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Spring Rabbit使用</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Spring Rabbit使用
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.11.30</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</div><div class="line">&lt;beans xmlns=<span class="string">"http://www.springframework.org/schema/beans"</span></div><div class="line">	xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span> xmlns:context=<span class="string">"http://www.springframework.org/schema/context"</span></div><div class="line">	xmlns:task=<span class="string">"http://www.springframework.org/schema/task"</span> xmlns:aop=<span class="string">"http://www.springframework.org/schema/aop"</span></div><div class="line">	   xmlns:rabbit=<span class="string">"http://www.springframework.org/schema/rabbit"</span></div><div class="line">	xmlns:tx=<span class="string">"http://www.springframework.org/schema/tx"</span> xmlns:p=<span class="string">"http://www.springframework.org/schema/p"</span></div><div class="line">	xmlns:mvc=<span class="string">"http://www.springframework.org/schema/mvc"</span></div><div class="line">	xsi:schemaLocation=<span class="string">"</span></div><div class="line">			http://www.springframework.org/schema/rabbit</div><div class="line">                           http://www.springframework.org/schema/rabbit/spring-rabbit-1.1.xsd</div><div class="line">			http://www.springframework.org/schema/beans</div><div class="line">			http://www.springframework.org/schema/beans/spring-beans-3.2.xsd</div><div class="line">			http://www.springframework.org/schema/context</div><div class="line">			http://www.springframework.org/schema/context/spring-context-3.2.xsd</div><div class="line">			http://www.springframework.org/schema/task</div><div class="line">			http://www.springframework.org/schema/task/spring-task-3.2.xsd</div><div class="line">			http://www.springframework.org/schema/aop</div><div class="line">			http://www.springframework.org/schema/aop/spring-aop-3.2.xsd</div><div class="line">			http://www.springframework.org/schema/tx</div><div class="line">			http://www.springframework.org/schema/tx/spring-tx-3.2.xsd</div><div class="line">			http://www.springframework.org/schema/mvc</div><div class="line">			http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd"&gt;</div><div class="line"></div><div class="line">	&lt;bean id=<span class="string">"rabbitConnectionFactory"</span></div><div class="line">		  class=<span class="string">"org.springframework.amqp.rabbit.connection.CachingConnectionFactory"</span>&gt;</div><div class="line">		&lt;constructor-arg value=<span class="string">"10.0.0.11"</span>/&gt;</div><div class="line">		&lt;property name=<span class="string">"username"</span> value=<span class="string">"guest"</span>/&gt;</div><div class="line">		&lt;property name=<span class="string">"password"</span> value=<span class="string">"guest"</span>/&gt;</div><div class="line">	&lt;/bean&gt;</div><div class="line"></div><div class="line">	&lt;bean id=<span class="string">"converter"</span></div><div class="line">		  class=<span class="string">"org.springframework.amqp.support.converter.JsonMessageConverter"</span>&gt;</div><div class="line">		&lt;property name=<span class="string">"defaultCharset"</span> value=<span class="string">"UTF-8"</span>/&gt;</div><div class="line">	&lt;/bean&gt;</div><div class="line"></div><div class="line">	&lt;rabbit:template id=<span class="string">"rabbitTemplate"</span></div><div class="line">					 connection-factory=<span class="string">"rabbitConnectionFactory"</span> message-converter=<span class="string">"converter"</span> /&gt;</div><div class="line"></div><div class="line">	&lt;rabbit:admin connection-factory=<span class="string">"rabbitConnectionFactory"</span>/&gt;</div><div class="line"></div><div class="line">	&lt;rabbit:queue name=<span class="string">"ttt.ttt.tt.tt"</span>/&gt;</div><div class="line"></div><div class="line">&lt;/beans&gt;</div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#rabbitmq">
+        <span class="tag-name">rabbitmq</span>
+    <span class="tag-size">( 15 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#spring">
+        <span class="tag-name">spring</span>
+    <span class="tag-size">( 27 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</div><div class="line">&lt;beans xmlns=<span class="string">"http://www.springframework.org/schema/beans"</span></div><div class="line">	xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span> xmlns:context=<span class="string">"http://www.springframework.org/schema/context"</span></div><div class="line">	xmlns:task=<span class="string">"http://www.springframework.org/schema/task"</span> xmlns:aop=<span class="string">"http://www.springframework.org/schema/aop"</span></div><div class="line">	   xmlns:rabbit=<span class="string">"http://www.springframework.org/schema/rabbit"</span></div><div class="line">	xmlns:tx=<span class="string">"http://www.springframework.org/schema/tx"</span> xmlns:p=<span class="string">"http://www.springframework.org/schema/p"</span></div><div class="line">	xmlns:mvc=<span class="string">"http://www.springframework.org/schema/mvc"</span></div><div class="line">	xsi:schemaLocation=<span class="string">"</span></div><div class="line">			http://www.springframework.org/schema/rabbit</div><div class="line">                           http://www.springframework.org/schema/rabbit/spring-rabbit-1.1.xsd</div><div class="line">			http://www.springframework.org/schema/beans</div><div class="line">			http://www.springframework.org/schema/beans/spring-beans-3.2.xsd</div><div class="line">			http://www.springframework.org/schema/context</div><div class="line">			http://www.springframework.org/schema/context/spring-context-3.2.xsd</div><div class="line">			http://www.springframework.org/schema/task</div><div class="line">			http://www.springframework.org/schema/task/spring-task-3.2.xsd</div><div class="line">			http://www.springframework.org/schema/aop</div><div class="line">			http://www.springframework.org/schema/aop/spring-aop-3.2.xsd</div><div class="line">			http://www.springframework.org/schema/tx</div><div class="line">			http://www.springframework.org/schema/tx/spring-tx-3.2.xsd</div><div class="line">			http://www.springframework.org/schema/mvc</div><div class="line">			http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd"&gt;</div><div class="line"></div><div class="line">	&lt;bean id=<span class="string">"rabbitConnectionFactory"</span></div><div class="line">		  class=<span class="string">"org.springframework.amqp.rabbit.connection.CachingConnectionFactory"</span>&gt;</div><div class="line">		&lt;constructor-arg value=<span class="string">"10.0.0.11"</span>/&gt;</div><div class="line">		&lt;property name=<span class="string">"username"</span> value=<span class="string">"guest"</span>/&gt;</div><div class="line">		&lt;property name=<span class="string">"password"</span> value=<span class="string">"guest"</span>/&gt;</div><div class="line">	&lt;/bean&gt;</div><div class="line"></div><div class="line">	&lt;bean id=<span class="string">"converter"</span></div><div class="line">		  class=<span class="string">"org.springframework.amqp.support.converter.JsonMessageConverter"</span>&gt;</div><div class="line">		&lt;property name=<span class="string">"defaultCharset"</span> value=<span class="string">"UTF-8"</span>/&gt;</div><div class="line">	&lt;/bean&gt;</div><div class="line"></div><div class="line">	&lt;rabbit:template id=<span class="string">"rabbitTemplate"</span></div><div class="line">					 connection-factory=<span class="string">"rabbitConnectionFactory"</span> message-converter=<span class="string">"converter"</span> /&gt;</div><div class="line"></div><div class="line">	&lt;rabbit:admin connection-factory=<span class="string">"rabbitConnectionFactory"</span>/&gt;</div><div class="line"></div><div class="line">	&lt;rabbit:queue name=<span class="string">"ttt.ttt.tt.tt"</span>/&gt;</div><div class="line"></div><div class="line">&lt;/beans&gt;</div></pre></td></tr></table></figure>
 <p>Java文件</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">package yourcompany;</div><div class="line"></div><div class="line">import com.yourcompany.pojo.ParamsPojo;</div><div class="line">import org.junit.Test;</div><div class="line">import org.junit.runner.RunWith;</div><div class="line">import org.springframework.amqp.rabbit.core.RabbitTemplate;</div><div class="line">import org.springframework.beans.factory.annotation.Autowired;</div><div class="line">import org.springframework.test.context.ContextConfiguration;</div><div class="line">import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by yang on 15-11-9.</div><div class="line"> */</div><div class="line">@RunWith(SpringJUnit4ClassRunner.class)</div><div class="line">@ContextConfiguration(<span class="string">"classpath:spring-test.xml"</span>)</div><div class="line"></div><div class="line">public class HelloTest &#123;</div><div class="line"></div><div class="line">    @Autowired</div><div class="line">    private RabbitTemplate template;</div><div class="line"></div><div class="line">    @Test</div><div class="line">    public void <span class="function"><span class="title">run</span></span>() &#123;</div><div class="line">        ParamsPojo pp = new ParamsPojo();</div><div class="line">        pp.setCuid(222222222);</div><div class="line">        template.convertAndSend(<span class="string">"ttt.ttt.tt.tt"</span>, pp);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Test</div><div class="line">    public void <span class="function"><span class="title">run2</span></span>() &#123;</div><div class="line">        ParamsPojo pp = (ParamsPojo) template.receiveAndConvert(<span class="string">"ttt.ttt.tt.tt"</span>);</div><div class="line">        System.out.println(pp.getCuid());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="关于序列化的选择问题"><a href="#关于序列化的选择问题" class="headerlink" title="关于序列化的选择问题"></a>关于序列化的选择问题</h2><p><code>&lt;rabbit:template id=&quot;rabbitTemplate&quot; connection-factory=&quot;rabbitConnectionFactory&quot; message-converter=&quot;converter&quot; /&gt;</code></p>
@@ -206,10 +223,9 @@
 <p>它必须要实现<code>Serializable</code>接口.</p>
 <h2 id="建议"><a href="#建议" class="headerlink" title="建议"></a>建议</h2><p>使用JSON的方式来进行序列化Message，这样子通过RabbitMQ管理后台，也可以了解队列的内容。如果用JDK自带的方式来序列化，这样子可查找问题的时候，难以定位数据.</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

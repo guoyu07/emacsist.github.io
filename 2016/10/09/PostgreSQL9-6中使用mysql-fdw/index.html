@@ -154,42 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-PostgreSQL9-6中使用mysql-fdw" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">PostgreSQL9.6中使用mysql_fdw</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            PostgreSQL9.6中使用mysql_fdw
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.10.09</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/postgresql/">postgresql</a> / <a class="article-category-link" href="/categories/postgresql/mysql/">mysql</a> / <a class="article-category-link" href="/categories/postgresql/mysql/fdw/">fdw</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p><a href="https://github.com/EnterpriseDB/mysql_fdw" target="_blank" rel="external">mysql_fdw</a></p>
+      <a class="tag-item" href="/tags/#fdw">
+        <span class="tag-name">fdw</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p><a href="https://github.com/EnterpriseDB/mysql_fdw" target="_blank" rel="external">mysql_fdw</a></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">SELECT * from pg_available_extensions <span class="built_in">where</span> name like <span class="string">'%fdw%'</span>;</div><div class="line">     name     | default_version | installed_version |                      comment                       </div><div class="line">--------------+-----------------+-------------------+----------------------------------------------------</div><div class="line"> file_fdw     | 1.0             | [null]            | foreign-data wrapper <span class="keyword">for</span> flat file access</div><div class="line"> mysql_fdw    | 1.0             | [null]            | Foreign data wrapper <span class="keyword">for</span> querying a MySQL server</div><div class="line"> postgres_fdw | 1.0             | [null]            | foreign-data wrapper <span class="keyword">for</span> remote PostgreSQL servers</div><div class="line">(3 rows)</div><div class="line"></div><div class="line">Time: 1.742 ms</div></pre></td></tr></table></figure>
 <h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CREATE EXTENSION mysql_fdw;</div></pre></td></tr></table></figure>
 <p>如果是源码编译安装的MySQL，如果没有设置<code>LD_LIBRARY_PATH</code>，会报如下的错误:</p>
@@ -202,10 +219,9 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">CREATE SERVER mysql_server_beta FOREIGN DATA WRAPPER mysql_fdw OPTIONS (host <span class="string">'your_ip_address'</span>, port <span class="string">'your_mysql_port'</span>);</div><div class="line">CREATE USER MAPPING FOR 你的pg的用户名 SERVER mysql_server_beta OPTIONS (username <span class="string">'your_mysql_user_name'</span>, password <span class="string">'your_mysql_passwd'</span>);</div><div class="line"></div><div class="line">CREATE FOREIGN TABLE wb_status_ft (</div><div class="line">    id int,</div><div class="line">    sid bigint,</div><div class="line">	idstr varchar(64),</div><div class="line">	mid bigint,</div><div class="line">	user_id bigint,</div><div class="line">	user_screen_name varchar(40),</div><div class="line">	user_profile_image_url varchar(128),</div><div class="line">	text varchar(1024),</div><div class="line">	<span class="built_in">source</span> varchar(256),</div><div class="line">	thumbnail_pic varchar(256),</div><div class="line">	bmiddle_pic varchar(256),</div><div class="line">	original_pic varchar(256),</div><div class="line">	retweeted_status_id varchar(64),</div><div class="line">	geo varchar(256),</div><div class="line">	reposts_count int,</div><div class="line">	comments_count int,</div><div class="line">	attitudes_count int,</div><div class="line">	visible varchar(64),</div><div class="line">	pic_urls varchar(1024),</div><div class="line">	create_at timestamp,</div><div class="line">	update_at timestamp,</div><div class="line">	ad varchar(256),</div><div class="line">	is_deleted smallint</div><div class="line">) SERVER mysql_server_beta OPTIONS (dbname <span class="string">'原mysql的数据库名'</span>, table_name <span class="string">'原mysql的表名'</span>);</div></pre></td></tr></table></figure>
 <p>done.</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

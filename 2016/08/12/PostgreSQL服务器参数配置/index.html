@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-PostgreSQL服务器参数配置" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">PostgreSQL服务器参数配置</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            PostgreSQL服务器参数配置
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.08.12</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/postgresql/">postgresql</a> / <a class="article-category-link" href="/categories/postgresql/database/">database</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="内存相关"><a href="#内存相关" class="headerlink" title="内存相关"></a>内存相关</h2><h3 id="shared-buffers"><a href="#shared-buffers" class="headerlink" title="shared_buffers"></a>shared_buffers</h3><p>这个参数决定了有多少内存将用于PostgreSQL的数据缓存.当多个会话从同一张表中请求相同数据时，<code>shared_buffers</code>保证了不需要在内在保留数据集的多个副本。这种方法减少了物理I/O。它在启动时被分配。PostgreSQL9.3以上为默认为<code>128MB</code>, 旧版为<code>32MB</code>. 这个参数对性能有显著的影响，因为直接影响服务器上物理I/O的使用量.</p>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="内存相关"><a href="#内存相关" class="headerlink" title="内存相关"></a>内存相关</h2><h3 id="shared-buffers"><a href="#shared-buffers" class="headerlink" title="shared_buffers"></a>shared_buffers</h3><p>这个参数决定了有多少内存将用于PostgreSQL的数据缓存.当多个会话从同一张表中请求相同数据时，<code>shared_buffers</code>保证了不需要在内在保留数据集的多个副本。这种方法减少了物理I/O。它在启动时被分配。PostgreSQL9.3以上为默认为<code>128MB</code>, 旧版为<code>32MB</code>. 这个参数对性能有显著的影响，因为直接影响服务器上物理I/O的使用量.</p>
 <p>推荐为<code>RAM的40%</code></p>
 <h3 id="effective-cache-size"><a href="#effective-cache-size" class="headerlink" title="effective_cache_size"></a>effective_cache_size</h3><p>这个值告诉PostgreSQL大约有多少内存可用于缓存机制（<code>shared_buffers</code> + 文件系统缓存）。</p>
 <p>这个不是分配的。而是用于查询规划器进行查询预估的。并发的查询，将共享可用的空间。</p>
@@ -250,10 +262,9 @@
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://www.depesz.com/2010/11/03/checkpoint_completion_target/" target="_blank" rel="external">depesz</a></p>
 <p><a href="https://www.postgresql.org/docs/9.5/static/runtime-config-autovacuum.html" target="_blank" rel="external">runtime-config-autovacuum</a></p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

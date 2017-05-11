@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-LinuxMint下使用VS-code" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">LinuxMint下使用VS code</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            LinuxMint下使用VS code
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.10.14</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/linux/">linux</a> / <a class="article-category-link" href="/categories/linux/vscode/">vscode</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="LinuxMint下禁用按键"><a href="#LinuxMint下禁用按键" class="headerlink" title="LinuxMint下禁用按键"></a>LinuxMint下禁用按键</h2><p><code>Menu-&gt;Control Center-&gt;Windows-&gt;Behaviour</code>中选择<code>Movement Key</code>中的<code>Super</code>.</p>
+      <a class="tag-item" href="/tags/#linux">
+        <span class="tag-name">linux</span>
+    <span class="tag-size">( 14 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#vscode">
+        <span class="tag-name">vscode</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="LinuxMint下禁用按键"><a href="#LinuxMint下禁用按键" class="headerlink" title="LinuxMint下禁用按键"></a>LinuxMint下禁用按键</h2><p><code>Menu-&gt;Control Center-&gt;Windows-&gt;Behaviour</code>中选择<code>Movement Key</code>中的<code>Super</code>.</p>
 <h2 id="安装VS-code"><a href="#安装VS-code" class="headerlink" title="安装VS code"></a>安装VS code</h2><p><a href="https://code.visualstudio.com/" target="_blank" rel="external">VSCode</a></p>
 <h2 id="开启列编辑"><a href="#开启列编辑" class="headerlink" title="开启列编辑"></a>开启列编辑</h2><p>打开<code>vscode</code>. <code>File-&gt;Preferences-&gt;Keyboard Shortcuts</code>，在<code>Keybindings.json</code>中添加:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">// Place your key bindings <span class="keyword">in</span> this file to overwrite the defaults</div><div class="line">[</div><div class="line">    &#123;</div><div class="line">        <span class="string">"key"</span>: <span class="string">"shift+alt+down"</span>,</div><div class="line">        <span class="string">"command"</span>: <span class="string">"cursorColumnSelectDown"</span>,</div><div class="line">        <span class="string">"when"</span>: <span class="string">"editorTextFocus"</span></div><div class="line">    &#125;,</div><div class="line">    &#123;</div><div class="line">        <span class="string">"key"</span>: <span class="string">"shift+alt+left"</span>,</div><div class="line">        <span class="string">"command"</span>: <span class="string">"cursorColumnSelectLeft"</span>,</div><div class="line">        <span class="string">"when"</span>: <span class="string">"editorTextFocus"</span></div><div class="line">    &#125;,</div><div class="line">    &#123;</div><div class="line">        <span class="string">"key"</span>: <span class="string">"shift+alt+pagedown"</span>,</div><div class="line">        <span class="string">"command"</span>: <span class="string">"cursorColumnSelectPageDown"</span>,</div><div class="line">        <span class="string">"when"</span>: <span class="string">"editorTextFocus"</span></div><div class="line">    &#125;,</div><div class="line">    &#123;</div><div class="line">        <span class="string">"key"</span>: <span class="string">"shift+alt+pageup"</span>,</div><div class="line">        <span class="string">"command"</span>: <span class="string">"cursorColumnSelectPageUp"</span>,</div><div class="line">        <span class="string">"when"</span>: <span class="string">"editorTextFocus"</span></div><div class="line">    &#125;,</div><div class="line">    &#123;</div><div class="line">        <span class="string">"key"</span>: <span class="string">"shift+alt+right"</span>,</div><div class="line">        <span class="string">"command"</span>: <span class="string">"cursorColumnSelectRight"</span>,</div><div class="line">        <span class="string">"when"</span>: <span class="string">"editorTextFocus"</span></div><div class="line">    &#125;,</div><div class="line">    &#123;</div><div class="line">        <span class="string">"key"</span>: <span class="string">"shift+alt+up"</span>,</div><div class="line">        <span class="string">"command"</span>: <span class="string">"cursorColumnSelectUp"</span>,</div><div class="line">        <span class="string">"when"</span>: <span class="string">"editorTextFocus"</span></div><div class="line">    &#125;</div><div class="line">]</div></pre></td></tr></table></figure>
@@ -200,10 +212,9 @@
 <h2 id="光标的移动"><a href="#光标的移动" class="headerlink" title="光标的移动"></a>光标的移动</h2><h3 id="对称匹配符之间的移动（括号，大括号，中括号等）"><a href="#对称匹配符之间的移动（括号，大括号，中括号等）" class="headerlink" title="对称匹配符之间的移动（括号，大括号，中括号等）"></a>对称匹配符之间的移动（括号，大括号，中括号等）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">⇧⌘\</div></pre></td></tr></table></figure>
 <h3 id="将当前光标所在的字符串进行多光标编辑"><a href="#将当前光标所在的字符串进行多光标编辑" class="headerlink" title="将当前光标所在的字符串进行多光标编辑"></a>将当前光标所在的字符串进行多光标编辑</h3><p>将光标移动到你所想进行文件中的所有与当前光标所在字符串相同的进行多光标编辑</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">⇧⌘L</div></pre></td></tr></table></figure>
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

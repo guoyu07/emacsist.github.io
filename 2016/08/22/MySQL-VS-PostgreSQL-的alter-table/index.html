@@ -154,42 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-MySQL-VS-PostgreSQL-的alter-table" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">MySQL VS PostgreSQL 的alter table</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            MySQL VS PostgreSQL 的alter table
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.08.22</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/postgresql/">postgresql</a> / <a class="article-category-link" href="/categories/postgresql/mysql/">mysql</a> / <a class="article-category-link" href="/categories/postgresql/mysql/database/">database</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h2><h3 id="PostgreSQL"><a href="#PostgreSQL" class="headerlink" title="PostgreSQL"></a>PostgreSQL</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># select version();</span></div><div class="line">                                                  version                                                  </div><div class="line">-----------------------------------------------------------------------------------------------------------</div><div class="line"> PostgreSQL 9.6beta4 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 4.8.4-2ubuntu1~14.04.3) 4.8.4, 64-bit</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.407 ms</div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h2><h3 id="PostgreSQL"><a href="#PostgreSQL" class="headerlink" title="PostgreSQL"></a>PostgreSQL</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># select version();</span></div><div class="line">                                                  version                                                  </div><div class="line">-----------------------------------------------------------------------------------------------------------</div><div class="line"> PostgreSQL 9.6beta4 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 4.8.4-2ubuntu1~14.04.3) 4.8.4, 64-bit</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.407 ms</div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
 <h3 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a>MySQL</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">mysql&gt; select version();</div><div class="line">+-------------------------------------+</div><div class="line">| version()                           |</div><div class="line">+-------------------------------------+</div><div class="line">| 5.7.12-1~exp1+deb.sury.org~trusty+1 |</div><div class="line">+-------------------------------------+</div><div class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
 <h2 id="测试表"><a href="#测试表" class="headerlink" title="测试表"></a>测试表</h2><p>PostgreSQL:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># \d wb_status;</span></div><div class="line">                                           Table <span class="string">"public.wb_status"</span></div><div class="line">         Column         |            Type             |                       Modifiers                        </div><div class="line">------------------------+-----------------------------+--------------------------------------------------------</div><div class="line"> id                     | <span class="built_in">integer</span>                     | not null default nextval(<span class="string">'wb_status_id_seq'</span>::regclass)</div><div class="line"> sid                    | bigint                      | not null default <span class="string">'0'</span>::bigint</div><div class="line"> idstr                  | character varying(64)       | not null default <span class="string">''</span>::character varying</div><div class="line"> mid                    | bigint                      | default <span class="string">'0'</span>::bigint</div><div class="line"> user_id                | bigint                      | </div><div class="line"> user_screen_name       | character varying(32)       | not null default <span class="string">''</span>::character varying</div><div class="line"> user_profile_image_url | character varying(128)      | not null default <span class="string">''</span>::character varying</div><div class="line"> text                   | character varying(512)      | not null default <span class="string">''</span>::character varying</div><div class="line"> <span class="built_in">source</span>                 | character varying(256)      | not null default <span class="string">''</span>::character varying</div><div class="line"> thumbnail_pic          | character varying(256)      | not null default <span class="string">''</span>::character varying</div><div class="line"> bmiddle_pic            | character varying(256)      | not null default <span class="string">''</span>::character varying</div><div class="line"> original_pic           | character varying(256)      | not null default <span class="string">''</span>::character varying</div><div class="line"> retweeted_status_id    | character varying(32)       | not null default <span class="string">''</span>::character varying</div><div class="line"> geo                    | character varying(256)      | default <span class="string">''</span>::character varying</div><div class="line"> reposts_count          | <span class="built_in">integer</span>                     | default 0</div><div class="line"> comments_count         | <span class="built_in">integer</span>                     | default 0</div><div class="line"> attitudes_count        | <span class="built_in">integer</span>                     | default 0</div><div class="line"> visible                | character varying(64)       | not null default <span class="string">''</span>::character varying</div><div class="line"> pic_urls               | character varying(1024)     | not null default <span class="string">''</span>::character varying</div><div class="line"> create_at              | timestamp without time zone | not null default now()</div><div class="line"> update_at              | timestamp without time zone | not null default now()</div><div class="line"> ad                     | character varying(256)      | not null default <span class="string">''</span>::character varying</div><div class="line"> is_deleted             | smallint                    | not null default <span class="string">'0'</span>::smallint</div><div class="line"> </div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># SELECT count(1) from wb_status;</span></div><div class="line">  count  </div><div class="line">---------</div><div class="line"> 1370996</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 84.686 ms</div></pre></td></tr></table></figure>
@@ -203,10 +220,9 @@
 <h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p><code>alter table xx add column</code>如果不加<code>default</code>默认值，则PG是最快的。只需要在字典里添加一条数据，而对MySQL来说无论有没有，它都要重写整个表及数据.</p>
 <p>不过，即使有<code>not null default</code>，PostgreSQL相对于MySQL来说，也是很快的.</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

@@ -149,47 +149,58 @@
 
 <div class="content content-post LEFT">
    <article id="post-MySQL-为生产环境在线添加字段" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">MySQL 为生产环境在线添加字段</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            MySQL 为生产环境在线添加字段
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.04.11</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/mysql/">mysql</a>
-  </span>
+    
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
 
+        </span>
+        
 
+                        
 
-      
+                                
 
-      
+                                        
 
-      
-      
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">create table new_table_name like old_table_name;</div><div class="line">alter table new_table_name add column new_column int not null default 0 comment <span class="string">'your comment'</span>;</div><div class="line"></div><div class="line">insert into new_table_name (col1, col2, col3...) select (col1, col2, col3...) from old_table_name <span class="built_in">where</span> id &lt; xxxx;</div><div class="line"></div><div class="line">begin;</div><div class="line">insert into new_table_name (col1, col2, col3...) select (col1, col2, col3...) from old_table_name <span class="built_in">where</span> id &gt;= xxxx</div><div class="line">rename old_table_name to old_table_bak, new_table_name to old_table_name;</div><div class="line">commit;</div></pre></td></tr></table></figure>
+
+                                
     </div>
-  </header>
-
-  <div class="article-content">
-    
-      <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">create table new_table_name like old_table_name;</div><div class="line">alter table new_table_name add column new_column int not null default 0 comment <span class="string">'your comment'</span>;</div><div class="line"></div><div class="line">insert into new_table_name (col1, col2, col3...) select (col1, col2, col3...) from old_table_name <span class="built_in">where</span> id &lt; xxxx;</div><div class="line"></div><div class="line">begin;</div><div class="line">insert into new_table_name (col1, col2, col3...) select (col1, col2, col3...) from old_table_name <span class="built_in">where</span> id &gt;= xxxx</div><div class="line">rename old_table_name to old_table_bak, new_table_name to old_table_name;</div><div class="line">commit;</div></pre></td></tr></table></figure>
-
-    
-  </div>
 </article>
-
 
    
   <div class="text-center donation">

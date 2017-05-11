@@ -149,48 +149,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-基于Redis分布式锁Redisson使用例子" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">基于Redis分布式锁Redisson使用例子</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            基于Redis分布式锁Redisson使用例子
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.05.06</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a> / <a class="article-category-link" href="/categories/java/redis/">redis</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">@Test</div><div class="line">public void <span class="built_in">test</span>DistributeLock() throws InterruptedException &#123;</div><div class="line">    final CountDownLatch cdl = new CountDownLatch(10);</div><div class="line">    long time = System.currentTimeMillis();</div><div class="line">    RedissonClient redisson = Redisson.create();</div><div class="line">    final RLock rLock = redisson.getLock(<span class="string">"hello-lock"</span>);</div><div class="line">    final Map&lt;String, Integer&gt; map = new HashMap&lt;&gt;(1);</div><div class="line">    map.put(<span class="string">"hello"</span>, 0);</div><div class="line">    <span class="keyword">for</span> (int i = 0; i &lt; 10; i++) &#123;</div><div class="line">        new Thread(new <span class="function"><span class="title">Runnable</span></span>() &#123;</div><div class="line">            @Override</div><div class="line">            public void <span class="function"><span class="title">run</span></span>() &#123;</div><div class="line">                rLock.lock(10, TimeUnit.SECONDS);</div><div class="line">                map.put(<span class="string">"hello"</span>, map.get(<span class="string">"hello"</span>) + 1);</div><div class="line">                rLock.unlock();</div><div class="line">                cdl.countDown();</div><div class="line">            &#125;</div><div class="line">        &#125;).start();</div><div class="line">    &#125;</div><div class="line">    cdl.await();</div><div class="line">    System.out.println(<span class="string">"result -&gt;"</span> + map.get(<span class="string">"hello"</span>));</div><div class="line">    System.out.println(System.currentTimeMillis() - time);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#redis">
+        <span class="tag-name">redis</span>
+    <span class="tag-size">( 12 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#分布式锁">
+        <span class="tag-name">分布式锁</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">@Test</div><div class="line">public void <span class="built_in">test</span>DistributeLock() throws InterruptedException &#123;</div><div class="line">    final CountDownLatch cdl = new CountDownLatch(10);</div><div class="line">    long time = System.currentTimeMillis();</div><div class="line">    RedissonClient redisson = Redisson.create();</div><div class="line">    final RLock rLock = redisson.getLock(<span class="string">"hello-lock"</span>);</div><div class="line">    final Map&lt;String, Integer&gt; map = new HashMap&lt;&gt;(1);</div><div class="line">    map.put(<span class="string">"hello"</span>, 0);</div><div class="line">    <span class="keyword">for</span> (int i = 0; i &lt; 10; i++) &#123;</div><div class="line">        new Thread(new <span class="function"><span class="title">Runnable</span></span>() &#123;</div><div class="line">            @Override</div><div class="line">            public void <span class="function"><span class="title">run</span></span>() &#123;</div><div class="line">                rLock.lock(10, TimeUnit.SECONDS);</div><div class="line">                map.put(<span class="string">"hello"</span>, map.get(<span class="string">"hello"</span>) + 1);</div><div class="line">                rLock.unlock();</div><div class="line">                cdl.countDown();</div><div class="line">            &#125;</div><div class="line">        &#125;).start();</div><div class="line">    &#125;</div><div class="line">    cdl.await();</div><div class="line">    System.out.println(<span class="string">"result -&gt;"</span> + map.get(<span class="string">"hello"</span>));</div><div class="line">    System.out.println(System.currentTimeMillis() - time);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p><a href="https://github.com/mrniko/redisson/wiki/5.-distributed-objects#54-lock" target="_blank" rel="external">redisson lock</a></p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

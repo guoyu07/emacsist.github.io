@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-《数据库查询优化器的艺术》第三章物理查询优化学习笔记" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">《数据库查询优化器的艺术》第三章物理查询优化学习笔记</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            《数据库查询优化器的艺术》第三章物理查询优化学习笔记
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2014.12.03</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/postgresql/">postgresql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h1 id="代价模型"><a href="#代价模型" class="headerlink" title="代价模型"></a>代价模型</h1><pre><code>总代价 = IO 代价 + CPU 代价
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h1 id="代价模型"><a href="#代价模型" class="headerlink" title="代价模型"></a>代价模型</h1><pre><code>总代价 = IO 代价 + CPU 代价
 COST = P * a_page_cpu_time + W * T
 
 P：计划运行时访问的页数，a_page_cpu_time 是每个页读取的时间花费，其积反映了IO代价
@@ -265,10 +277,9 @@ N_page_index：索引作用下的可用元组数。N_page_index = N_tuple * 索�
 <p>是指表的一个或多个列作为索引的关键字，以关键字的具体值为依据，把所有具有相同值的元组连续放在外存上。当从磁盘扫描读取的块进入内存时，相同值的其他元组在内存中的概率增大，能有效减少IO。即：聚簇索引确定表中数据的物理顺序。聚簇索引对于那些经常要搜索范围值的列特别有效。使用聚簇索引找到包含第一个值的行后，便可以确保包含后续索引值的行在物理相邻。</p>
 </blockquote>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

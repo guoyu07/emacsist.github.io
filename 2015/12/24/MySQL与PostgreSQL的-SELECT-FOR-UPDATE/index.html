@@ -154,42 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-MySQL与PostgreSQL的-SELECT-FOR-UPDATE" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">MySQL与PostgreSQL的 SELECT FOR UPDATE</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            MySQL与PostgreSQL的 SELECT FOR UPDATE
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.12.24</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/database/">database</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="MySQL的行级锁"><a href="#MySQL的行级锁" class="headerlink" title="MySQL的行级锁"></a>MySQL的行级锁</h2><p>MySQL 版本:</p>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="MySQL的行级锁"><a href="#MySQL的行级锁" class="headerlink" title="MySQL的行级锁"></a>MySQL的行级锁</h2><p>MySQL 版本:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">mysql&gt; select version();</div><div class="line">+------------+</div><div class="line">| version()  |</div><div class="line">+------------+</div><div class="line">| 5.6.17-log |</div><div class="line">+------------+</div><div class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
 <h3 id="创建测试表"><a href="#创建测试表" class="headerlink" title="创建测试表"></a>创建测试表</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">CREATE TABLE `shortlink` (</div><div class="line">`id`  bigint(20) NOT NULL AUTO_INCREMENT ,</div><div class="line">`long_url`  varchar(6000) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,</div><div class="line">`create_time`  timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ,</div><div class="line">`update_time`  timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,</div><div class="line">PRIMARY KEY (`id`)</div><div class="line">)</div><div class="line">ENGINE=InnoDB</div><div class="line">DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci</div><div class="line">ROW_FORMAT=COMPACT</div><div class="line">;</div></pre></td></tr></table></figure>
 <h3 id="插入测试数据"><a href="#插入测试数据" class="headerlink" title="插入测试数据"></a>插入测试数据</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">INSERT INTO `<span class="built_in">test</span>`.`shortlink` (`id`, `long_url`, `create_time`, `update_time`) VALUES (<span class="string">'1'</span>, <span class="string">'long1'</span>, <span class="string">'2015-12-21 15:03:41'</span>, <span class="string">'2015-12-21 15:03:41'</span>);</div><div class="line">INSERT INTO `<span class="built_in">test</span>`.`shortlink` (`id`, `long_url`, `create_time`, `update_time`) VALUES (<span class="string">'2'</span>, <span class="string">'long2'</span>, <span class="string">'2015-12-21 15:30:56'</span>, <span class="string">'2015-12-21 15:30:56'</span>);</div><div class="line">INSERT INTO `<span class="built_in">test</span>`.`shortlink` (`id`, `long_url`, `create_time`, `update_time`) VALUES (<span class="string">'3'</span>, <span class="string">'long3'</span>, <span class="string">'2015-12-21 15:35:48'</span>, <span class="string">'2015-12-21 15:35:48'</span>);</div></pre></td></tr></table></figure>
@@ -244,10 +261,9 @@
 </li>
 </ol>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

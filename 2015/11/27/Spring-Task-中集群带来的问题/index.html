@@ -154,50 +154,71 @@
 
 <div class="content content-post LEFT">
    <article id="post-Spring-Task-中集群带来的问题" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Spring Task 中集群带来的问题</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Spring Task 中集群带来的问题
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.11.27</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>当多台Tomcat同时进行调度时，如果没有处理好并发的问题，就会出现本应只是执行一次的Task，执行了两次（比如修改DB）。</p>
+      <a class="tag-item" href="/tags/#concurrency">
+        <span class="tag-name">concurrency</span>
+    <span class="tag-size">( 3 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#spring">
+        <span class="tag-name">spring</span>
+    <span class="tag-size">( 27 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#task">
+        <span class="tag-name">task</span>
+    <span class="tag-size">( 3 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>当多台Tomcat同时进行调度时，如果没有处理好并发的问题，就会出现本应只是执行一次的Task，执行了两次（比如修改DB）。</p>
 <h3 id="DB解决办法"><a href="#DB解决办法" class="headerlink" title="DB解决办法"></a>DB解决办法</h3><p>在执行DB修改操作的方法上，添加上<code>@Transactional</code>（即添加事务处理）。<br>如果想提高并发的话，减小事务锁的行数（这里是基于支持事务和行级锁的DB来说的，只支持全表锁的DB，可以忽略这行为），然后进行分批处理.</p>
 <h3 id="利用Redis的单线程处理机制"><a href="#利用Redis的单线程处理机制" class="headerlink" title="利用Redis的单线程处理机制"></a>利用Redis的单线程处理机制</h3><p>利用redis的单线程处理机制，实现类似<em>跨JVM锁</em>的功能。合理控制好大范围并发，局部顺序执行（减小锁的范围）。</p>
 <p>注：DB的话，最好还是由DB自身的MVCC特性来保证.</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

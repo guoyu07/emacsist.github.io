@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-源码安装PostgreSQL-9-5" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">源码安装PostgreSQL 9.5</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            源码安装PostgreSQL 9.5
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.01.12</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/database/">database</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="下载源码"><a href="#下载源码" class="headerlink" title="下载源码"></a>下载源码</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 安装目录</span></div><div class="line">mkdir -p /ihome/db/postgresql/postgresql-9.5.0</div><div class="line"><span class="comment"># 存放解压源码的目录</span></div><div class="line">mkdir -p /ihome/db/postgresql/build</div><div class="line"></div><div class="line"><span class="built_in">cd</span> /ihome/db/postgresql</div><div class="line">wget -c https://ftp.postgresql.org/pub/<span class="built_in">source</span>/v9.5.0/postgresql-9.5.0.tar.bz2</div><div class="line">tar -xvf /ihome/db/postgresql/postgresql-9.5.0.tar.bz2 -C /ihome/db/postgresql/build</div><div class="line"></div><div class="line"><span class="built_in">cd</span> /ihome/db/postgresql/build/postgresql-9.5.0</div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="下载源码"><a href="#下载源码" class="headerlink" title="下载源码"></a>下载源码</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 安装目录</span></div><div class="line">mkdir -p /ihome/db/postgresql/postgresql-9.5.0</div><div class="line"><span class="comment"># 存放解压源码的目录</span></div><div class="line">mkdir -p /ihome/db/postgresql/build</div><div class="line"></div><div class="line"><span class="built_in">cd</span> /ihome/db/postgresql</div><div class="line">wget -c https://ftp.postgresql.org/pub/<span class="built_in">source</span>/v9.5.0/postgresql-9.5.0.tar.bz2</div><div class="line">tar -xvf /ihome/db/postgresql/postgresql-9.5.0.tar.bz2 -C /ihome/db/postgresql/build</div><div class="line"></div><div class="line"><span class="built_in">cd</span> /ihome/db/postgresql/build/postgresql-9.5.0</div></pre></td></tr></table></figure>
 <h2 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install libreadline-dev</div></pre></td></tr></table></figure>
 <h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">./configure --prefix=/ihome/db/postgresql/postgresql-9.5.0</div><div class="line">make -j 8</div></pre></td></tr></table></figure>
 <p>成功后，会提示如下:</p>
@@ -213,10 +225,9 @@
 <h2 id="安装所有扩展包"><a href="#安装所有扩展包" class="headerlink" title="安装所有扩展包"></a>安装所有扩展包</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /ihome/db/postgresql/build/postgresql-9.5.0/contrib</div><div class="line"></div><div class="line">ls <span class="_">-d</span> */ | xargs -n 1 -P 0 sh -c <span class="string">'cd &#123;&#125;; make ; make install;'</span></div></pre></td></tr></table></figure>
 <p>哈哈，就一条命令，就可以执行所有的扩展包的安装啦。<code>*nix</code>的工具，真的是神器….大爱.</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

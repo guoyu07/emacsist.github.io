@@ -149,51 +149,62 @@
 
 <div class="content content-post LEFT">
    <article id="post-Java乱码解决方案" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Java乱码解决方案</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Java乱码解决方案
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2014.12.29</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/编程/">编程</a> / <a class="article-category-link" href="/categories/编程/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <figure class="highlight sqf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line">    <span class="number">1</span>.Tomcat配置：</div><div class="line">         &lt;Connector port=<span class="string">"8080"</span> protocol=<span class="string">"HTTP/1.1"</span></div><div class="line">                   connectionTimeout=<span class="string">"20000"</span></div><div class="line">                   redirectPort=<span class="string">"8443"</span>  URIEncoding=<span class="string">"UTF-8"</span>  useBodyEncodingForURI=<span class="string">"true"</span>/&gt;</div><div class="line">    </div><div class="line">    <span class="number">2</span>.文件：必须设置统一编码</div><div class="line">         JSP：&lt;%@ page <span class="built_in">language</span>=<span class="string">"java"</span> pageEncoding=<span class="string">"UTF-8"</span>%&gt;</div><div class="line">    </div><div class="line">         HTML：&lt;meta http-equiv=<span class="string">"Content-Type"</span> content=<span class="string">"text/html;charset=utf-8"</span>&gt;</div><div class="line">    </div><div class="line">         ServletRequest:</div><div class="line">         request.setCharacterEncoding(<span class="string">"UTF-8"</span>)是把提交内容的字符集设为UTF－<span class="number">8</span></div><div class="line">    </div><div class="line">         ServletResponse:</div><div class="line">         response.setCharacterEncoding(<span class="string">"UTF-8"</span>)</div><div class="line">    </div><div class="line">    <span class="number">3</span>. MySQL</div><div class="line">         <span class="keyword">default</span>-character-<span class="built_in">set</span>=utf-<span class="number">8</span></div><div class="line">    </div><div class="line">         mysql里数据库和表也都设为utf8_unicode_ci</div><div class="line">    </div><div class="line">         jdbc:mysql:<span class="comment">//localhost/mydb?useUnicode=true&amp;characterEncoding=utf-8</span></div><div class="line">    </div><div class="line">    <span class="number">4</span>. PostgreSQL</div><div class="line">         postgresql.conf文件中的client_encoding改成UTF-<span class="number">8</span>,</div><div class="line">    </div><div class="line">    <span class="number">5</span>. 注意：使用 FileInputStream 读取文件时，使用的是系统默认的字符编码。如果用在UTF-<span class="number">8</span>系统中，很容易出现问题。</div><div class="line">         这时，可以使用：</div><div class="line">         FileInputStream  <span class="built_in">in</span>  =  new  FileInputStream(<span class="string">"g:\\yufa.txt"</span>);</div><div class="line">         InputStreamReader reader = new InputStreamReader (<span class="built_in">in</span>,<span class="string">"GBK"</span>); <span class="comment">// 用这个方法读取，并指定编码</span></div><div class="line">         </div><div class="line">    <span class="number">6</span>. Java中的 properties 文件，如果是使用 utf-<span class="number">8</span> 文件格式的，这个格式是无 BOM 格式的UTF-<span class="number">8</span>的。切记</div><div class="line"></div><div class="line">    <span class="number">7</span>. Spring</div><div class="line">     </div><div class="line">    &lt;filter&gt;</div><div class="line">        &lt;filter-<span class="built_in">name</span>&gt;CharacterEncodingFilter&lt;/filter-<span class="built_in">name</span>&gt;</div><div class="line">        &lt;filter-class&gt;org.springframework.web.filter.CharacterEncodingFilter&lt;/filter-class&gt;</div><div class="line">        &lt;init-<span class="built_in">param</span>&gt;</div><div class="line">            &lt;<span class="built_in">param</span>-<span class="built_in">name</span>&gt;encoding&lt;/<span class="built_in">param</span>-<span class="built_in">name</span>&gt;</div><div class="line">            &lt;<span class="built_in">param</span>-value&gt;utf-<span class="number">8</span>&lt;/<span class="built_in">param</span>-value&gt;</div><div class="line">        &lt;/init-<span class="built_in">param</span>&gt;</div><div class="line">        &lt;init-<span class="built_in">param</span>&gt;</div><div class="line">            &lt;<span class="built_in">param</span>-<span class="built_in">name</span>&gt;forceEncoding&lt;/<span class="built_in">param</span>-<span class="built_in">name</span>&gt;</div><div class="line">            &lt;<span class="built_in">param</span>-value&gt;<span class="literal">true</span>&lt;/<span class="built_in">param</span>-value&gt;</div><div class="line">        &lt;/init-<span class="built_in">param</span>&gt;</div><div class="line">    &lt;/filter&gt;</div><div class="line">    </div><div class="line">    &lt;filter-mapping&gt;</div><div class="line">        &lt;filter-<span class="built_in">name</span>&gt;CharacterEncodingFilter&lt;/filter-<span class="built_in">name</span>&gt;</div><div class="line">        &lt;url-pattern&gt;<span class="comment">/*&lt;/url-pattern&gt;</span></div><div class="line">    &lt;/filter-mapping&gt;</div><div class="line">   </div><div class="line"></div><div class="line">``` </div><div class="line"> </div><div class="line"></div><div class="line">#response.setCharacterEncoding()，response.setContentType()区别</div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#java 基础学习">
+        <span class="tag-name">java 基础学习</span>
+    <span class="tag-size">( 3 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <figure class="highlight sqf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line">    <span class="number">1</span>.Tomcat配置：</div><div class="line">         &lt;Connector port=<span class="string">"8080"</span> protocol=<span class="string">"HTTP/1.1"</span></div><div class="line">                   connectionTimeout=<span class="string">"20000"</span></div><div class="line">                   redirectPort=<span class="string">"8443"</span>  URIEncoding=<span class="string">"UTF-8"</span>  useBodyEncodingForURI=<span class="string">"true"</span>/&gt;</div><div class="line">    </div><div class="line">    <span class="number">2</span>.文件：必须设置统一编码</div><div class="line">         JSP：&lt;%@ page <span class="built_in">language</span>=<span class="string">"java"</span> pageEncoding=<span class="string">"UTF-8"</span>%&gt;</div><div class="line">    </div><div class="line">         HTML：&lt;meta http-equiv=<span class="string">"Content-Type"</span> content=<span class="string">"text/html;charset=utf-8"</span>&gt;</div><div class="line">    </div><div class="line">         ServletRequest:</div><div class="line">         request.setCharacterEncoding(<span class="string">"UTF-8"</span>)是把提交内容的字符集设为UTF－<span class="number">8</span></div><div class="line">    </div><div class="line">         ServletResponse:</div><div class="line">         response.setCharacterEncoding(<span class="string">"UTF-8"</span>)</div><div class="line">    </div><div class="line">    <span class="number">3</span>. MySQL</div><div class="line">         <span class="keyword">default</span>-character-<span class="built_in">set</span>=utf-<span class="number">8</span></div><div class="line">    </div><div class="line">         mysql里数据库和表也都设为utf8_unicode_ci</div><div class="line">    </div><div class="line">         jdbc:mysql:<span class="comment">//localhost/mydb?useUnicode=true&amp;characterEncoding=utf-8</span></div><div class="line">    </div><div class="line">    <span class="number">4</span>. PostgreSQL</div><div class="line">         postgresql.conf文件中的client_encoding改成UTF-<span class="number">8</span>,</div><div class="line">    </div><div class="line">    <span class="number">5</span>. 注意：使用 FileInputStream 读取文件时，使用的是系统默认的字符编码。如果用在UTF-<span class="number">8</span>系统中，很容易出现问题。</div><div class="line">         这时，可以使用：</div><div class="line">         FileInputStream  <span class="built_in">in</span>  =  new  FileInputStream(<span class="string">"g:\\yufa.txt"</span>);</div><div class="line">         InputStreamReader reader = new InputStreamReader (<span class="built_in">in</span>,<span class="string">"GBK"</span>); <span class="comment">// 用这个方法读取，并指定编码</span></div><div class="line">         </div><div class="line">    <span class="number">6</span>. Java中的 properties 文件，如果是使用 utf-<span class="number">8</span> 文件格式的，这个格式是无 BOM 格式的UTF-<span class="number">8</span>的。切记</div><div class="line"></div><div class="line">    <span class="number">7</span>. Spring</div><div class="line">     </div><div class="line">    &lt;filter&gt;</div><div class="line">        &lt;filter-<span class="built_in">name</span>&gt;CharacterEncodingFilter&lt;/filter-<span class="built_in">name</span>&gt;</div><div class="line">        &lt;filter-class&gt;org.springframework.web.filter.CharacterEncodingFilter&lt;/filter-class&gt;</div><div class="line">        &lt;init-<span class="built_in">param</span>&gt;</div><div class="line">            &lt;<span class="built_in">param</span>-<span class="built_in">name</span>&gt;encoding&lt;/<span class="built_in">param</span>-<span class="built_in">name</span>&gt;</div><div class="line">            &lt;<span class="built_in">param</span>-value&gt;utf-<span class="number">8</span>&lt;/<span class="built_in">param</span>-value&gt;</div><div class="line">        &lt;/init-<span class="built_in">param</span>&gt;</div><div class="line">        &lt;init-<span class="built_in">param</span>&gt;</div><div class="line">            &lt;<span class="built_in">param</span>-<span class="built_in">name</span>&gt;forceEncoding&lt;/<span class="built_in">param</span>-<span class="built_in">name</span>&gt;</div><div class="line">            &lt;<span class="built_in">param</span>-value&gt;<span class="literal">true</span>&lt;/<span class="built_in">param</span>-value&gt;</div><div class="line">        &lt;/init-<span class="built_in">param</span>&gt;</div><div class="line">    &lt;/filter&gt;</div><div class="line">    </div><div class="line">    &lt;filter-mapping&gt;</div><div class="line">        &lt;filter-<span class="built_in">name</span>&gt;CharacterEncodingFilter&lt;/filter-<span class="built_in">name</span>&gt;</div><div class="line">        &lt;url-pattern&gt;<span class="comment">/*&lt;/url-pattern&gt;</span></div><div class="line">    &lt;/filter-mapping&gt;</div><div class="line">   </div><div class="line"></div><div class="line">``` </div><div class="line"> </div><div class="line"></div><div class="line">#response.setCharacterEncoding()，response.setContentType()区别</div></pre></td></tr></table></figure>
 <pre><code>response.setContentType指定 HTTP 响应的编码,同时指定了浏览器显示的编码.
 
 response.setCharacterEncoding设置HTTP 响应的编码,如果之前使用response.setContentType设置了编码格式,则使用response.setCharacterEncoding指定的编码格式覆盖之前的设置.与response.setContentType相同的是,调用此方法,必须在getWriter执行之前或者response被提交之前.
 </code></pre><p>```</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

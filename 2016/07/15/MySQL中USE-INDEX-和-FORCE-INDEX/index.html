@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-MySQL中USE-INDEX-和-FORCE-INDEX" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">MySQL中USE INDEX 和 FORCE INDEX</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            MySQL中USE INDEX 和 FORCE INDEX
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.07.15</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/mysql/">mysql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>在一次生产环境排查性能问题时, 发现有个请求在一些用户的数据量比较大的情况下, 最高耗时差不多要3s. 而且还是一个轮询的请求.</p>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>在一次生产环境排查性能问题时, 发现有个请求在一些用户的数据量比较大的情况下, 最高耗时差不多要3s. 而且还是一个轮询的请求.</p>
 <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>在排查问题时, 定位到是执行某条SQL时在用户的数据比较大的情况下, SQL执行耗时要<code>1.5s</code>.</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">mysql&gt; SELECT count(1)</div><div class="line">    -&gt; FROM</div><div class="line">    -&gt;   cc_session cs</div><div class="line">    -&gt;   LEFT JOIN users_platform cp ON cs.user_id = cp.user_id</div><div class="line">    -&gt;                                  AND cs.to_openid = cp.open_id</div><div class="line">    -&gt; WHERE</div><div class="line">    -&gt;   cs.`status` = 0</div><div class="line">    -&gt;   AND cs.user_id = 219</div><div class="line">    -&gt;   AND cs.agent_user_id = 219</div><div class="line">    -&gt;   AND cs.create_time &lt; DATE_SUB(now(), INTERVAL 10 MINUTE)</div><div class="line">    -&gt; AND cp.cc_open = 1;</div><div class="line">+----------+</div><div class="line">| count(1) |</div><div class="line">+----------+</div><div class="line">|        0 |</div><div class="line">+----------+</div><div class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (1.50 sec)</div></pre></td></tr></table></figure>
 <p>它的执行计划如下:</p>
@@ -204,10 +216,9 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">mysql&gt; explain SELECT count(1)</div><div class="line">    -&gt;        FROM</div><div class="line">    -&gt;   cc_session cs use index (idx_user_agent_id)</div><div class="line">    -&gt;    LEFT JOIN users_platform cp use INDEX (uid_opid)</div><div class="line">    -&gt;            ON cs.user_id = cp.user_id</div><div class="line">    -&gt;                                   AND cs.to_openid = cp.open_id</div><div class="line">    -&gt;  WHERE</div><div class="line">    -&gt;    cs.`status` = 0</div><div class="line">    -&gt;    AND cs.user_id = 219</div><div class="line">    -&gt;    AND cs.agent_user_id = 219</div><div class="line">    -&gt;    AND cs.create_time &lt; DATE_SUB(now(), INTERVAL 10 MINUTE)</div><div class="line">    -&gt;  AND cp.cc_open = 1;</div><div class="line">+----+-------------+-------+------+-------------------+-------------------+---------+--------------------------------+-------+------------------------------------+</div><div class="line">| id | select_type | table | <span class="built_in">type</span> | possible_keys     | key               | key_len | ref                            | rows  | Extra                              |</div><div class="line">+----+-------------+-------+------+-------------------+-------------------+---------+--------------------------------+-------+------------------------------------+</div><div class="line">|  1 | SIMPLE      | cs    | ref  | idx_user_agent_id | idx_user_agent_id | 8       | const,const                    | 22966 | Using <span class="built_in">where</span>                        |</div><div class="line">|  1 | SIMPLE      | cp    | ref  | uid_opid          | uid_opid          | 180     | const,uniweibo_v2.cs.to_openid |     1 | Using index condition; Using <span class="built_in">where</span> |</div><div class="line">+----+-------------+-------+------+-------------------+-------------------+---------+--------------------------------+-------+------------------------------------+</div><div class="line">2 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
 <h2 id="use-index-和-force-index"><a href="#use-index-和-force-index" class="headerlink" title="use index 和 force index"></a>use index 和 force index</h2><p>use index : 是建议MySQL去使用这个索引.最后到底是用不用, 还是由MySQL来决定. 如果MySQL还是觉得全表扫描来得快, 那即使是有索引, 它还是会使用全表扫描.<br>force index : 是强制MySQL去使用这个索引. 如果用不上, 就全表. 如果能用上, 就一定会使用该索引.</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

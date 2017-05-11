@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-Maven为不同环境打包war" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Maven为不同环境打包war</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Maven为不同环境打包war
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.07.30</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="Maven为生产环境，测试环境（或者更多）的不同而使用不同的配置文件"><a href="#Maven为生产环境，测试环境（或者更多）的不同而使用不同的配置文件" class="headerlink" title="Maven为生产环境，测试环境（或者更多）的不同而使用不同的配置文件"></a>Maven为生产环境，测试环境（或者更多）的不同而使用不同的配置文件</h2><p>首先，为项目准备好不同的环境存放的配置文件的目录比如</p>
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#maven">
+        <span class="tag-name">maven</span>
+    <span class="tag-size">( 7 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="Maven为生产环境，测试环境（或者更多）的不同而使用不同的配置文件"><a href="#Maven为生产环境，测试环境（或者更多）的不同而使用不同的配置文件" class="headerlink" title="Maven为生产环境，测试环境（或者更多）的不同而使用不同的配置文件"></a>Maven为生产环境，测试环境（或者更多）的不同而使用不同的配置文件</h2><p>首先，为项目准备好不同的环境存放的配置文件的目录比如</p>
 <p>存放测试环境的配置文件<br><code>src/main/env/dev</code></p>
 <p>存放生产环境的配置文件<br><code>src/main/env/product</code></p>
 <p>详细情况如下:</p>
@@ -198,10 +210,9 @@
 <h2 id="打包"><a href="#打包" class="headerlink" title="打包"></a>打包</h2><h3 id="开发环境"><a href="#开发环境" class="headerlink" title="开发环境"></a>开发环境</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#如果打包时需要调用测试代码，就去掉最后的参数，这里为了加快编译，直接去掉了测试代码。</span></div><div class="line"><span class="comment">#因为默认情况下就是开发环境，所以不需要特别添加参数</span></div><div class="line">mvn clean package  -Dmaven.test.skip=<span class="literal">true</span></div></pre></td></tr></table></figure>
 <h3 id="生产环境"><a href="#生产环境" class="headerlink" title="生产环境"></a>生产环境</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#如果打包时需要调用测试代码，就去掉最后的参数，这里为了加快编译，直接去掉了测试代码。</span></div><div class="line"><span class="comment">#用 `-P` 指定环境参数</span></div><div class="line">mvn clean package -Pproduct -Dmaven.test.skip=<span class="literal">true</span></div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

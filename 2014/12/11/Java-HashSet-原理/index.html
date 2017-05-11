@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-Java-HashSet-原理" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Java HashSet HashMap 原理</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Java HashSet HashMap 原理
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2014.12.11</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="HashSet"><a href="#HashSet" class="headerlink" title="HashSet"></a>HashSet</h2><p>看其源码<code>java.util.HashSet</code>，它的构造函数内部，是使用<code>java.util.HashMap</code>来实现的.</p>
+      <a class="tag-item" href="/tags/#hashset">
+        <span class="tag-name">hashset</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="HashSet"><a href="#HashSet" class="headerlink" title="HashSet"></a>HashSet</h2><p>看其源码<code>java.util.HashSet</code>，它的构造函数内部，是使用<code>java.util.HashMap</code>来实现的.</p>
 <p>默认的容量大小，以及扩容因子大小分别为:</p>
 <p><code>Initial Capacity</code>： <code>16</code><br><code>Load Factor</code>: <code>0.75</code></p>
 <h2 id="HashSet-实现集合的原理"><a href="#HashSet-实现集合的原理" class="headerlink" title="HashSet 实现集合的原理"></a>HashSet 实现集合的原理</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public boolean add(E e) &#123;</div><div class="line">    <span class="built_in">return</span> map.put(e, PRESENT)==null;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -205,10 +217,9 @@
 <p>可以看出，只有同一对象，或者<code>key.equals(key1) 并且 value.equals(value1)</code>才会为真.</p>
 <h3 id="Node的-key的-hashCode计算"><a href="#Node的-key的-hashCode计算" class="headerlink" title="Node的 key的 hashCode计算"></a>Node的 key的 hashCode计算</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">static final int <span class="built_in">hash</span>(Object key) &#123;</div><div class="line">    int h;</div><div class="line">    <span class="built_in">return</span> (key == null) ? 0 : (h = key.hashCode()) ^ (h &gt;&gt;&gt; 16);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

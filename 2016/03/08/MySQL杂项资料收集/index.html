@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-MySQL杂项资料收集" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">MySQL杂项资料收集</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            MySQL杂项资料收集
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.03.08</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/mysql/">mysql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="关于-MySQL-5-6-ICP"><a href="#关于-MySQL-5-6-ICP" class="headerlink" title="关于 MySQL 5.6 ICP"></a>关于 MySQL 5.6 ICP</h2><blockquote>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="关于-MySQL-5-6-ICP"><a href="#关于-MySQL-5-6-ICP" class="headerlink" title="关于 MySQL 5.6 ICP"></a>关于 MySQL 5.6 ICP</h2><blockquote>
 <p>ICP（index condition pushdown）</p>
 </blockquote>
 <p>参考资料:</p>
@@ -216,10 +228,9 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">-- index is NOT used. WTF?</div><div class="line">EXPLAIN SELECT * FROM a_table WHERE str_column = 1;</div></pre></td></tr></table></figure>
 <p>再次，它又将<code>string</code>转换为<code>numbers</code>。然而，这次，它必须将表列的数据进行转换。事实上，你就像执行类似 <code>cast(str_column as int) = 1</code>的查询。这意味着，你不能再通过索引来查询了，所以不能使用到索引。</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-tomcat-远程调试" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">tomcat 远程调试</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            tomcat 远程调试
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.12.10</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="配置tomcat环境变量"><a href="#配置tomcat环境变量" class="headerlink" title="配置tomcat环境变量"></a>配置tomcat环境变量</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> <span class="variable">$TOMCAT_HOME</span>/bin/</div><div class="line"></div><div class="line">添加或编辑`setenv.sh`</div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#tomcat">
+        <span class="tag-name">tomcat</span>
+    <span class="tag-size">( 20 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="配置tomcat环境变量"><a href="#配置tomcat环境变量" class="headerlink" title="配置tomcat环境变量"></a>配置tomcat环境变量</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> <span class="variable">$TOMCAT_HOME</span>/bin/</div><div class="line"></div><div class="line">添加或编辑`setenv.sh`</div></pre></td></tr></table></figure>
 <h3 id="setenv-sh-文件内容"><a href="#setenv-sh-文件内容" class="headerlink" title="setenv.sh 文件内容"></a>setenv.sh 文件内容</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line"></div><div class="line">CATALINA_OPTS=<span class="string">"-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -XX:+PrintGCDetails -Xloggc:gc.log -XX:+DisableExplicitGC -Xdebug -Xrunjdwp:transport=dt_socket,address=8888,server=y,suspend=n"</span></div></pre></td></tr></table></figure>
 <h3 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明"></a>参数说明</h3><h3 id="Xdebug"><a href="#Xdebug" class="headerlink" title="-Xdebug"></a>-Xdebug</h3><p>表示开启debug</p>
 <h4 id="address"><a href="#address" class="headerlink" title="address"></a>address</h4><blockquote>
@@ -221,10 +233,9 @@
 </ol>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">➜  ~  java -agentlib:jdwp=<span class="built_in">help</span></div><div class="line">               Java Debugger JDWP Agent Library</div><div class="line">               --------------------------------</div><div class="line"></div><div class="line">  (see http://java.sun.com/products/jpda <span class="keyword">for</span> more information)</div><div class="line"></div><div class="line">jdwp usage: java -agentlib:jdwp=[<span class="built_in">help</span>]|[&lt;option&gt;=&lt;value&gt;, ...]</div><div class="line"></div><div class="line">Option Name and Value            Description                       Default</div><div class="line">---------------------            -----------                       -------</div><div class="line"><span class="built_in">suspend</span>=y|n                      <span class="built_in">wait</span> on startup?                  y</div><div class="line">transport=&lt;name&gt;                 transport spec                    none</div><div class="line">address=&lt;listen/attach address&gt;  transport spec                    <span class="string">""</span></div><div class="line">server=y|n                       listen <span class="keyword">for</span> debugger?              n</div><div class="line">launch=&lt;<span class="built_in">command</span> line&gt;            run debugger on event             none</div><div class="line">onthrow=&lt;exception name&gt;         debug on throw                    none</div><div class="line">onuncaught=y|n                   debug on any uncaught?            n</div><div class="line">timeout=&lt;timeout value&gt;          <span class="keyword">for</span> listen/attach <span class="keyword">in</span> milliseconds n</div><div class="line">mutf8=y|n                        output modified utf-8             n</div><div class="line">quiet=y|n                        control over terminal messages    n</div><div class="line"></div><div class="line">Obsolete Options</div><div class="line">----------------</div><div class="line">strict=y|n</div><div class="line">stdalloc=y|n</div><div class="line"></div><div class="line">Examples</div><div class="line">--------</div><div class="line">  - Using sockets connect to a debugger at a specific address:</div><div class="line">    java -agentlib:jdwp=transport=dt_socket,address=localhost:8000 ...</div><div class="line">  - Using sockets listen <span class="keyword">for</span> a debugger to attach:</div><div class="line">    java -agentlib:jdwp=transport=dt_socket,server=y,<span class="built_in">suspend</span>=y ...</div><div class="line"></div><div class="line">Notes</div><div class="line">-----</div><div class="line">  - A timeout value of 0 (the default) is no timeout.</div><div class="line"></div><div class="line">Warnings</div><div class="line">--------</div><div class="line">  - The older -Xrunjdwp interface can still be used, but will be removed <span class="keyword">in</span></div><div class="line">    a future release, <span class="keyword">for</span> example:</div><div class="line">        java -Xdebug -Xrunjdwp:[<span class="built_in">help</span>]|[&lt;option&gt;=&lt;value&gt;, ...]</div><div class="line"></div><div class="line">➜  ~</div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

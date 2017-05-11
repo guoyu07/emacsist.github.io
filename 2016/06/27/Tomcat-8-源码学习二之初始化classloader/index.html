@@ -154,42 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-Tomcat-8-源码学习二之初始化classloader" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Tomcat 8 源码学习二之初始化classloader</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Tomcat 8 源码学习二之初始化classloader
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.06.27</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="Main函数启动"><a href="#Main函数启动" class="headerlink" title="Main函数启动"></a>Main函数启动</h2><p>源码<code>org.apache.catalina.startup.Bootstrap</code>这个是启动类，<code>main函数</code>就在这个类中.</p>
+      <a class="tag-item" href="/tags/#Tomcat源码">
+        <span class="tag-name">Tomcat源码</span>
+    <span class="tag-size">( 9 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#tomcat">
+        <span class="tag-name">tomcat</span>
+    <span class="tag-size">( 20 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="Main函数启动"><a href="#Main函数启动" class="headerlink" title="Main函数启动"></a>Main函数启动</h2><p>源码<code>org.apache.catalina.startup.Bootstrap</code>这个是启动类，<code>main函数</code>就在这个类中.</p>
 <p>第一件事，就是调用<code>Bootstrap.init()</code>方法，我们来看看这个方法做了什么处理.</p>
 <ol>
 <li><p>首先初始化它的静态块代码，设置<code>catalina.home</code>, <code>catalina.base</code>等相应的环境变量.</p>
@@ -222,10 +239,9 @@
 <h4 id="sharedLoader"><a href="#sharedLoader" class="headerlink" title="sharedLoader"></a>sharedLoader</h4><p>可以看到，该loader的父loader是<code>commonLoader</code>.所以通过<code>sharedLoader</code>加载的类，都会让<code>commonLoader</code>先尝试加载。</p>
 <p>该loader加载的是<code>shared.loader=</code>这个配置指定的路径的.可以看到，默认情况下它是空的</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

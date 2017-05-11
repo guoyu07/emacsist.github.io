@@ -154,52 +154,63 @@
 
 <div class="content content-post LEFT">
    <article id="post-MySQL 删除大表中的大部分数据的方式" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">MySQL 删除大表中的大部分数据的方式</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            MySQL 删除大表中的大部分数据的方式
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2017.02.09</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/mysql/">mysql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <blockquote>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <blockquote>
 <p>昨晚要删除一张原有 2 亿多条日志表的数据，只保留 今年 2017 及之后的数据，删除之前的，以释放磁盘空间，发现 delete from t where id &lt; 2亿; 发现这样子删除实在是太慢了，而且效率性能低下</p>
 </blockquote>
 <h2 id="创建一个中间表"><a href="#创建一个中间表" class="headerlink" title="创建一个中间表"></a>创建一个中间表</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">create table t_copy like 原表名;</div></pre></td></tr></table></figure>
 <h2 id="不删除的数据复制到中间表"><a href="#不删除的数据复制到中间表" class="headerlink" title="不删除的数据复制到中间表"></a>不删除的数据复制到中间表</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">insert into t_copy select * from 原表名 <span class="built_in">where</span> ...</div></pre></td></tr></table></figure>
 <h2 id="重命名表"><a href="#重命名表" class="headerlink" title="重命名表"></a>重命名表</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">rename table 原表名 to t_old, t_copy to 原表名;</div></pre></td></tr></table></figure>
 <h2 id="删除整张表"><a href="#删除整张表" class="headerlink" title="删除整张表"></a>删除整张表</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">drop table t_old</div></pre></td></tr></table></figure>
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-数据库索引设计与优化-读书笔记二" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">&lt;数据库索引设计与优化&gt;读书笔记二</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            &lt;数据库索引设计与优化&gt;读书笔记二
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.08.14</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/sql/">sql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="索引片及匹配列"><a href="#索引片及匹配列" class="headerlink" title="索引片及匹配列"></a>索引片及匹配列</h2><p>访问路径(即执行计划)的成本很大程序上取决于索引片的厚度, 即谓词表达式确定的值域范围.索引片越厚,需要顺序扫描的索引页就越多,需要处理的索引页记录也越多, 而最大开销还是来自于增加对表的<code>同步读</code>操作.相反, 如果索引片比较窄, 就会显著减少索引访问的那部分开销,但主要的成本节省还是在更少的对表的<code>同步读</code>上.</p>
+      <a class="tag-item" href="/tags/#sql">
+        <span class="tag-name">sql</span>
+    <span class="tag-size">( 3 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#索引">
+        <span class="tag-name">索引</span>
+    <span class="tag-size">( 2 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="索引片及匹配列"><a href="#索引片及匹配列" class="headerlink" title="索引片及匹配列"></a>索引片及匹配列</h2><p>访问路径(即执行计划)的成本很大程序上取决于索引片的厚度, 即谓词表达式确定的值域范围.索引片越厚,需要顺序扫描的索引页就越多,需要处理的索引页记录也越多, 而最大开销还是来自于增加对表的<code>同步读</code>操作.相反, 如果索引片比较窄, 就会显著减少索引访问的那部分开销,但主要的成本节省还是在更少的对表的<code>同步读</code>上.</p>
 <p>另一种广泛的描述索引片的方法是:定义索引匹配列的数量.</p>
 <h2 id="索引过滤及过滤列"><a href="#索引过滤及过滤列" class="headerlink" title="索引过滤及过滤列"></a>索引过滤及过滤列</h2><p>有时候,列可能既存在于 WHERE 子句中,也存在于索引中,但这个列却不能参与索引片的定义. 不过, 这些列仍然能减少对表进行同步读的次数, 也以这些列仍然扮演着很重要的角色, 我们称这些列为<code>过滤列</code>.</p>
 <p>假如有复合索引: A,B,C,D</p>
@@ -213,10 +225,9 @@
 <h2 id="组合谓词过滤因子"><a href="#组合谓词过滤因子" class="headerlink" title="组合谓词过滤因子"></a>组合谓词过滤因子</h2><p>如果谓词A与谓词B没有相关性,那么它们的组合谓词的过滤因子(WHERE A AND B)为 1/A列中不同值的个数 * 1/B列中不同值的个数.</p>
 <p>在设计索引结构的时候, 需要将组合谓词看作一个整体来评估过滤因子, 而不能仅仅基于零相关性进行评估.</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

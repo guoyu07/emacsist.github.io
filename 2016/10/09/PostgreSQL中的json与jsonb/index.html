@@ -154,42 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-PostgreSQL中的json与jsonb" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">PostgreSQL中的json与jsonb</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            PostgreSQL中的json与jsonb
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.10.09</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/postgresql/">postgresql</a> / <a class="article-category-link" href="/categories/postgresql/jsonb/">jsonb</a> / <a class="article-category-link" href="/categories/postgresql/jsonb/json/">json</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="hstore-vs-json-vs-jsonb"><a href="#hstore-vs-json-vs-jsonb" class="headerlink" title="hstore vs json vs jsonb"></a>hstore vs json vs jsonb</h2><p><a href="http://stackoverflow.com/questions/22654170/explanation-of-jsonb-introduced-by-postgresql" target="_blank" rel="external">stackoverflow</a></p>
+      <a class="tag-item" href="/tags/#json">
+        <span class="tag-name">json</span>
+    <span class="tag-size">( 3 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#jsonb">
+        <span class="tag-name">jsonb</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="hstore-vs-json-vs-jsonb"><a href="#hstore-vs-json-vs-jsonb" class="headerlink" title="hstore vs json vs jsonb"></a>hstore vs json vs jsonb</h2><p><a href="http://stackoverflow.com/questions/22654170/explanation-of-jsonb-introduced-by-postgresql" target="_blank" rel="external">stackoverflow</a></p>
 <blockquote>
 <p>首先，<code>hstore</code>是一个扩展模块，它允许你保存<code>key=&gt;values</code>键值对，且键值都只能是<code>text</code>s类型（但是，值也允许sql的NULL）</p>
 <p>json与jsonb 允许你保存一个有效的json值(<a href="http://json.org" target="_blank" rel="external">定义</a>).</p>
@@ -268,10 +285,9 @@
 <p>删除jsonb的某字段</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">localhost:5433 sky@sky=<span class="comment"># UPDATE test_json set hello = (hello - 'hello');</span></div><div class="line">UPDATE 1</div><div class="line">Time: 0.883 ms</div><div class="line">localhost:5433 sky@sky=<span class="comment"># SELECT * from test_json ;</span></div><div class="line">          hello           </div><div class="line">--------------------------</div><div class="line"> &#123;<span class="string">"wolrd"</span>: <span class="string">"world-value"</span>&#125;</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.185 ms</div><div class="line">localhost:5433 sky@sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

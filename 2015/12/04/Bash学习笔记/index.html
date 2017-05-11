@@ -154,42 +154,64 @@
 
 <div class="content content-post LEFT">
    <article id="post-Bash学习笔记" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Bash学习笔记</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Bash学习笔记
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.12.04</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/linux/">linux</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="使脚本更具可移植"><a href="#使脚本更具可移植" class="headerlink" title="使脚本更具可移植"></a>使脚本更具可移植</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="meta">#!/usr/bin/env bash</span></div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#bash">
+        <span class="tag-name">bash</span>
+    <span class="tag-size">( 6 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#linux">
+        <span class="tag-name">linux</span>
+    <span class="tag-size">( 14 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#script">
+        <span class="tag-name">script</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#shell">
+        <span class="tag-name">shell</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="使脚本更具可移植"><a href="#使脚本更具可移植" class="headerlink" title="使脚本更具可移植"></a>使脚本更具可移植</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="meta">#!/usr/bin/env bash</span></div></pre></td></tr></table></figure>
 <h2 id="布尔值"><a href="#布尔值" class="headerlink" title="布尔值"></a>布尔值</h2><p><code>0</code>:表示true<br><code>非0</code>:表示false</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">getB</span></span>()&#123;</div><div class="line">	<span class="built_in">return</span> 0</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">while</span> getB; <span class="keyword">do</span></div><div class="line">	<span class="built_in">echo</span> <span class="string">"fuck"</span></div><div class="line">	sleep 1</div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure>
 <p><em>可以利用return 0表示true，return 1表示false.</em></p>
@@ -227,10 +249,9 @@
 <h4 id="忽略大小写"><a href="#忽略大小写" class="headerlink" title="忽略大小写"></a>忽略大小写</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">shopt</span> <span class="_">-s</span> nocasematch</div><div class="line">[[ <span class="string">"foo"</span> == <span class="string">"Foo"</span> ]] &amp;&amp; <span class="built_in">echo</span> <span class="string">"match"</span> || <span class="built_in">echo</span> <span class="string">"notmatch"</span></div><div class="line"><span class="built_in">shopt</span> -u nocasematch</div></pre></td></tr></table></figure>
 <h2 id="数字前补0"><a href="#数字前补0" class="headerlink" title="数字前补0"></a>数字前补0</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> &#123;01..05&#125;; <span class="keyword">do</span> <span class="built_in">echo</span> <span class="string">"<span class="variable">$i</span>"</span>; <span class="keyword">done</span></div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

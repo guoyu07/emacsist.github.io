@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-PostgreSQL中代替MySQL的内存表方法" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">PostgreSQL中代替MySQL的内存表方法</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            PostgreSQL中代替MySQL的内存表方法
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2014.10.01</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/postgresql/">postgresql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <p>今天在群里发现有人问PostgreSQL里，有没有类似MySQL的内存表（Memory引擎）。</p>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p>今天在群里发现有人问PostgreSQL里，有没有类似MySQL的内存表（Memory引擎）。</p>
 <p>其实在PostgreSQL里，就只有一种表：堆表。不像MySQL那种提供那么多种的表类型（这个是由引擎来决定的，比如InnoDB的是索引组织表等）。<br>​</p>
 <h2 id="替代方法"><a href="#替代方法" class="headerlink" title="替代方法"></a>替代方法</h2><p>1） 使用RAM Disk。创建一个表空间到Ram Disk上，然后建表的时候指定表空间到该 Ram Disk即可。</p>
 <p>2） 如果需要创建那种全局可见的临时表，建表时可以使用<code>UNLOGGED</code>选项来创建表。这种表性能比一般的快。</p>
@@ -201,10 +213,9 @@
 <p>不过，创建在该表空间的表就不能操作了。典型的错误提示如下：<br><figure class="highlight subunit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">test=# select * from ram;</div><div class="line"><span class="keyword">ERROR:  </span>could not open file "pg_tblspc/16718/PG_9.4_201409291/16389/16729": No such file or directory</div><div class="line">test=#</div></pre></td></tr></table></figure></p>
 <p>删除该表就OK了。</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

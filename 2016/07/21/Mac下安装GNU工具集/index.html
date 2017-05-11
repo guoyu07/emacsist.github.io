@@ -154,52 +154,68 @@
 
 <div class="content content-post LEFT">
    <article id="post-Mac下安装GNU工具集" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Mac下安装GNU工具集</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Mac下安装GNU工具集
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.07.21</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/mac/">mac</a> / <a class="article-category-link" href="/categories/mac/linux/">linux</a> / <a class="article-category-link" href="/categories/mac/linux/gnu/">gnu</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="安装-Homebrew"><a href="#安装-Homebrew" class="headerlink" title="安装  Homebrew"></a>安装  Homebrew</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ruby <span class="_">-e</span> <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)</span>"</span></div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#gnu">
+        <span class="tag-name">gnu</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#linux">
+        <span class="tag-name">linux</span>
+    <span class="tag-size">( 14 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#mac">
+        <span class="tag-name">mac</span>
+    <span class="tag-size">( 4 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="安装-Homebrew"><a href="#安装-Homebrew" class="headerlink" title="安装  Homebrew"></a>安装  Homebrew</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ruby <span class="_">-e</span> <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)</span>"</span></div></pre></td></tr></table></figure>
 <h2 id="修改-bashrc-或者-zshrc"><a href="#修改-bashrc-或者-zshrc" class="headerlink" title="修改 .bashrc 或者 .zshrc"></a>修改 <code>.bashrc</code> 或者 <code>.zshrc</code></h2><p>添加以下内容</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">export</span> PATH=<span class="string">"<span class="variable">$(brew --prefix coreutils)</span>/libexec/gnubin:/usr/local/bin:<span class="variable">$PATH</span>"</span></div></pre></td></tr></table></figure>
 <h2 id="安装-GNU-Core-Command-Line-Tools"><a href="#安装-GNU-Core-Command-Line-Tools" class="headerlink" title="安装 GNU Core Command Line Tools"></a>安装 GNU Core Command Line Tools</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">brew install coreutils</div><div class="line"></div><div class="line">brew install binutils</div><div class="line">brew install diffutils</div><div class="line">brew install ed --default-names</div><div class="line">brew install findutils --with-default-names</div><div class="line">brew install gawk</div><div class="line">brew install gnu-indent --with-default-names</div><div class="line">brew install gnu-sed --with-default-names</div><div class="line">brew install gnu-tar --with-default-names</div><div class="line">brew install gnu-which --with-default-names</div><div class="line">brew install gnutls</div><div class="line">brew install grep --with-default-names</div><div class="line">brew install gzip</div><div class="line">brew install screen</div><div class="line">brew install watch</div><div class="line">brew install wdiff --with-gettext</div><div class="line">brew install wget</div><div class="line"></div><div class="line">brew install bash</div><div class="line">brew install emacs</div><div class="line">brew install gdb  <span class="comment"># gdb requires further actions to make it work. See `brew info gdb`.</span></div><div class="line">brew install gpatch</div><div class="line">brew install m4</div><div class="line">brew install make</div><div class="line">brew install nano</div><div class="line"></div><div class="line">brew install file-formula</div><div class="line">brew install git</div><div class="line">brew install less</div><div class="line">brew install openssh</div><div class="line">brew install perl518   <span class="comment"># must run "brew tap homebrew/versions" first!</span></div><div class="line">brew install python</div><div class="line">brew install rsync</div><div class="line">brew install svn</div><div class="line">brew install unzip</div><div class="line">brew install vim --override-system-vi</div><div class="line">brew install macvim --override-system-vim --custom-system-icons</div><div class="line">brew install zsh</div></pre></td></tr></table></figure>
 <h2 id="来源"><a href="#来源" class="headerlink" title="来源"></a>来源</h2><p><a href="https://www.topbug.net/blog/2013/04/14/install-and-use-gnu-command-line-tools-in-mac-os-x/" target="_blank" rel="external">topbug</a></p>
 <p>我这里做多一份来备份.</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

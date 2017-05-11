@@ -154,42 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-Spring里的Executor使用" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Spring里的Executor使用</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Spring里的Executor使用
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.11.26</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <p>在生产环境中，发现我们Tomcat的应用导致超高的CPU（170%)及负载(90+)[Intel(R) Xeon(R) CPU E31230 @ 3.20GHz 四核心，8线程].</p>
+      <a class="tag-item" href="/tags/#executor">
+        <span class="tag-name">executor</span>
+    <span class="tag-size">( 2 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#spring">
+        <span class="tag-name">spring</span>
+    <span class="tag-size">( 27 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p>在生产环境中，发现我们Tomcat的应用导致超高的CPU（170%)及负载(90+)[Intel(R) Xeon(R) CPU E31230 @ 3.20GHz 四核心，8线程].</p>
 <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>经过排查发现，有些线程，占用超高的CPU：</p>
 <p><code>SimpleAsyncTaskExecutor-N</code>，平均每个线程，上下文切换的次数都超过4W+，系统CPU占用率一直在60+。</p>
 <h3 id="查找原因途径"><a href="#查找原因途径" class="headerlink" title="查找原因途径"></a>查找原因途径</h3><p>查看上下文切换情况:</p>
@@ -238,10 +255,9 @@
 </li>
 </ol>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

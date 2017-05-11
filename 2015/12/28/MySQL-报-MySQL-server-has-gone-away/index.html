@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-MySQL-报-MySQL-server-has-gone-away" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">MySQL 报 &#39;MySQL server has gone away&#39;</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            MySQL 报 &#39;MySQL server has gone away&#39;
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.12.28</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/mysql/">mysql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>经常在终端里连接MySQL，它经常报如下问题:</p>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>经常在终端里连接MySQL，它经常报如下问题:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ERROR 2006 (HY000): MySQL server has gone away</div><div class="line">No connection. Trying to reconnect...</div></pre></td></tr></table></figure>
 <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>MySQL服务器超时并且关闭了这次的连接.即相关的超时参数设置得太小.也有可能是你的packet太大，MySQL掉弃该包.</p>
 <h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><h3 id="超时问题"><a href="#超时问题" class="headerlink" title="超时问题"></a>超时问题</h3><h4 id="wait-timeout"><a href="#wait-timeout" class="headerlink" title="wait_timeout"></a>wait_timeout</h4><h5 id="查看当前的wait-timeout值"><a href="#查看当前的wait-timeout值" class="headerlink" title="查看当前的wait_timeout值"></a>查看当前的<code>wait_timeout</code>值</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show variables like <span class="string">'%timeout%'</span>;</div><div class="line">+-----------------------------+----------+</div><div class="line">| Variable_name               | Value    |</div><div class="line">+-----------------------------+----------+</div><div class="line">| connect_timeout             | 10       |</div><div class="line">| delayed_insert_timeout      | 300      |</div><div class="line">| innodb_flush_log_at_timeout | 1        |</div><div class="line">| innodb_lock_wait_timeout    | 30       |</div><div class="line">| innodb_rollback_on_timeout  | OFF      |</div><div class="line">| interactive_timeout         | 120      |</div><div class="line">| lock_wait_timeout           | 600      |</div><div class="line">| net_read_timeout            | 3        |</div><div class="line">| net_write_timeout           | 6        |</div><div class="line">| rpl_stop_slave_timeout      | 31536000 |</div><div class="line">| slave_net_timeout           | 30       |</div><div class="line">| wait_timeout                | 120      |</div><div class="line">+-----------------------------+----------+</div><div class="line">12 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.01 sec)</div></pre></td></tr></table></figure>
@@ -206,10 +218,9 @@
 <li><a href="http://dev.mysql.com/doc/refman/5.7/en/server-system-variables.html#sysvar_wait_timeout" target="_blank" rel="external">MySQL 5.7 官方文档</a></li>
 </ol>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

@@ -154,42 +154,49 @@
 
 <div class="content content-post LEFT">
    <article id="post-RabbitMQ的crash dump文件分析" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">RabbitMQ的crash dump文件分析</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            RabbitMQ的crash dump文件分析
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.12.01</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/rabbitmq/">rabbitmq</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>今天一早来到公司，同事说客户反馈生产上的系统数据没有进来了。所以，就排查了下问题才行。</p>
+      <a class="tag-item" href="/tags/#rabbitmq">
+        <span class="tag-name">rabbitmq</span>
+    <span class="tag-size">( 15 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>今天一早来到公司，同事说客户反馈生产上的系统数据没有进来了。所以，就排查了下问题才行。</p>
 <p>最直接的，先看Tomcat的日志，可以发现到:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Dec 01, 2016 11:01:31 AM org.apache.catalina.core.StandardWrapperValve invoke</div><div class="line">SEVERE: Servlet.service() <span class="keyword">for</span> servlet [ROOT] <span class="keyword">in</span> context with path [] threw exception [Request processing failed; nested exception is org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused] with root cause</div><div class="line">java.net.ConnectException: Connection refused</div><div class="line">	at java.net.PlainSocketImpl.socketConnect(Native Method)</div><div class="line">	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:339)</div><div class="line">	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:200)</div><div class="line">	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:182)</div><div class="line">	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)</div><div class="line">	at java.net.Socket.connect(Socket.java:579)</div></pre></td></tr></table></figure>
 <p>无语，又是<code>RabbitMQ</code>连接不上。</p>
@@ -204,10 +211,9 @@
 <h3 id="增大内存"><a href="#增大内存" class="headerlink" title="增大内存"></a>增大内存</h3><p>因为是使用阿里云，所以，可以动态扩展机器性能</p>
 <h3 id="优化程序"><a href="#优化程序" class="headerlink" title="优化程序"></a>优化程序</h3><p>尽可能不让MQ堆积太多数据，应该及时处理好出入队的速率</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

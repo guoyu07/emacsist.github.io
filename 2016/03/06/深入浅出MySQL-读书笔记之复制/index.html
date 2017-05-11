@@ -149,42 +149,49 @@
 
 <div class="content content-post LEFT">
    <article id="post-深入浅出MySQL-读书笔记之复制" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">&lt;深入浅出MySQL&gt;读书笔记之复制</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            &lt;深入浅出MySQL&gt;读书笔记之复制
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.03.06</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/mysql/">mysql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <p>MySQL通过 3个线程来完成主从库间的数据复制：其中Binlog Dump线程跑在主库上， I/O线程和SQL线程跑在从库上。当在从库上启动复制（START SLAVE）时，首先创建 I/O线程连接主库，主库随后创建Binlog Dump线程读取数据库事件并发送给 I/O线程，I/O线程获取到事件数据后更新到从库的中继日志Relay Log中去，之后从库上的SQL线程读取中继日志Relay Log中更新的数据库事件并应用.</p>
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p>MySQL通过 3个线程来完成主从库间的数据复制：其中Binlog Dump线程跑在主库上， I/O线程和SQL线程跑在从库上。当在从库上启动复制（START SLAVE）时，首先创建 I/O线程连接主库，主库随后创建Binlog Dump线程读取数据库事件并发送给 I/O线程，I/O线程获取到事件数据后更新到从库的中继日志Relay Log中去，之后从库上的SQL线程读取中继日志Relay Log中更新的数据库事件并应用.</p>
 <p><strong>MySQL 的复制是主库主动推送日志到从库去的，是属于“推”日志的方式来做同步</strong></p>
 <p>同样地，在从库上通过SHOW PROCESSLIST可以看到 I/O线程和SQL线程，I/O线程等待主库上的Binlog Dump线程发送事件并更新到中继日志Relay Log，SQL线程读取中继日志Relay Log并应用变更到数据库.</p>
 <p>从MySQL的复制流程可以了解到MySQL的复制是异步的。从库上的数据和主库存在一定的延时。</p>
@@ -194,10 +201,9 @@
 <p>在MySQL 5.5之前的异步复制时，主库执行完 Commit 提交操作后，在主库写入 Binlog 日志后即可成功返回客户端，无需等待Binlog日志传送给从库.</p>
 <p>而半同步复制时，为了保证主库上的每一个 Binlog 事务都能够被可靠的复制到从库上，主库在每次事务成功提交时，并不及时反馈给前端应用用户，而是等待其中一个从库也接收到 Binlog事务并成功写入中继日志后，主库才返回Commit操作成功给客户端。半同步复制保证了事务成功提交后，至少有两份日志记录，一份在主库的 Binlog 日志上，另一份在至少一个从库的中继日志Relay Log上，从而更进一步保证了数据的完整性。</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-PostgreSQL中-copy-和-copy-的区别" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">PostgreSQL中 copy 和 \copy 的区别</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            PostgreSQL中 copy 和 \copy 的区别
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2014.12.26</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/postgresql/">postgresql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="权限"><a href="#权限" class="headerlink" title="权限"></a>权限</h2><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">copy</span><span class="bash"> 必须要以超级用户来运行</span></div><div class="line"></div><div class="line">\<span class="keyword">copy</span><span class="bash"> 则不必</span></div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="权限"><a href="#权限" class="headerlink" title="权限"></a>权限</h2><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">copy</span><span class="bash"> 必须要以超级用户来运行</span></div><div class="line"></div><div class="line">\<span class="keyword">copy</span><span class="bash"> 则不必</span></div></pre></td></tr></table></figure>
 <h2 id="文件位置"><a href="#文件位置" class="headerlink" title="文件位置"></a>文件位置</h2><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">copy</span><span class="bash"> 的文件必须是在服务器端的位置</span></div><div class="line"></div><div class="line">\<span class="keyword">copy</span><span class="bash"> 的则是在客户端的位置。</span></div><div class="line"></div><div class="line">所以，文件的权限方面，<span class="keyword">copy</span><span class="bash">是以服务器的为准，\copy 是以客户端的为准</span></div></pre></td></tr></table></figure>
 <h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p>DB服务器：10.0.0.10<br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">postgres=# \du yang;</div><div class="line"><span class="code">           List of roles</span></div><div class="line"><span class="section"> Role name | Attributes | Member of </span></div><div class="line">-----------+------------+-----------</div><div class="line"><span class="code"> yang      |            | &#123;&#125;</span></div><div class="line"></div><div class="line">postgres=#</div></pre></td></tr></table></figure></p>
 <p>客户端（10.0.0.11）连接到DB服务器（10.0.0.10）<br>客户端运行copy命令（11）：</p>
@@ -204,10 +216,9 @@
 <p>在客户端换成<code>\copy</code>命令看看：<br><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">test=&gt; \<span class="keyword">copy</span><span class="bash"> tcopy from <span class="string">'/tmp/tcopy.txt'</span>;</span></div><div class="line"><span class="keyword">COPY</span><span class="bash"> 3</span></div><div class="line">test=&gt;</div></pre></td></tr></table></figure></p>
 <p>可以发现COPY成功了。</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

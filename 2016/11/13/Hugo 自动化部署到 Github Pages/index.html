@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-Hugo 自动化部署到 Github Pages" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Hugo 自动化部署到 Github Pages</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Hugo 自动化部署到 Github Pages
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.11.13</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/hugo/">hugo</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h2><p>由于将博客从 Hexo 迁移到了 Hugo ， 没有发现好的自动化部署方法，查资料用的什么 Hook 等机制这些又觉得太麻烦。所以，自己动手写了个自动化部署的脚本，从博客内容自动化部署到 Github Pages 和 Coding Pages 上：</p>
+      <a class="tag-item" href="/tags/#blog">
+        <span class="tag-name">blog</span>
+    <span class="tag-size">( 2 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#hugo">
+        <span class="tag-name">hugo</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h2><p>由于将博客从 Hexo 迁移到了 Hugo ， 没有发现好的自动化部署方法，查资料用的什么 Hook 等机制这些又觉得太麻烦。所以，自己动手写了个自动化部署的脚本，从博客内容自动化部署到 Github Pages 和 Coding Pages 上：</p>
 <p>前提：创建一个静态博客的目录，这里假设为<code>/Users/emacsist/public-blog</code>, 用 Hugo 生成的站点目录，这里假设为:<code>/Users/emacsist/git/hugo-blog</code></p>
 <p>然后在你的<code>public-blog</code>上，添加两个远程分支：（自行修改为自己对应的分支路径）</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#Github</span></div><div class="line">git remote add origin http://github.com/emacsist/emacsist.github.io</div><div class="line"></div><div class="line"><span class="comment">#Coding</span></div><div class="line">git remote add coding http://xxxxx</div></pre></td></tr></table></figure>
@@ -198,10 +210,9 @@
 <h2 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">[18:24:23] emacsist:hugo-blog git:(master) $ ./deploy.sh </div><div class="line">Started building sites ...</div><div class="line">Built site <span class="keyword">for</span> language en:</div><div class="line">0 draft content</div><div class="line">0 future content</div><div class="line">0 expired content</div><div class="line">271 pages created</div><div class="line">0 non-page files copied</div><div class="line">220 paginator pages created</div><div class="line">132 tags created</div><div class="line">49 categories created</div><div class="line">total <span class="keyword">in</span> 562 ms</div><div class="line">[master 72b4092] update blog files</div><div class="line"> 32 files changed, 923 insertions(+), 580 deletions(-)</div><div class="line"> create mode 100644 2016/11/13/Github-上发起-Pull-request/index.html</div><div class="line"> create mode 100644 img/first-git-pull-request.png</div><div class="line"> create mode 100644 tags/pull-request/index.html</div><div class="line"> create mode 100644 tags/pull-request/index.xml</div><div class="line"> create mode 100644 tags/pull-request/page/1/index.html</div><div class="line">Username <span class="keyword">for</span> <span class="string">'https://github.com'</span>: xxx</div><div class="line">Password <span class="keyword">for</span> <span class="string">'xxx'</span>: </div><div class="line">Counting objects: 65, done.</div><div class="line">Delta compression using up to 4 threads.</div><div class="line">Compressing objects: 100% (47/47), done.</div><div class="line">Writing objects: 100% (65/65), 277.14 KiB | 0 bytes/s, done.</div><div class="line">Total 65 (delta 34), reused 0 (delta 0)</div><div class="line">remote: Resolving deltas: 100% (34/34), completed with 28 <span class="built_in">local</span> objects.</div><div class="line">To xxxx</div><div class="line">   a298898..72b4092  master -&gt; master</div><div class="line">Counting objects: 65, done.</div><div class="line">Delta compression using up to 4 threads.</div><div class="line">Compressing objects: 100% (47/47), done.</div><div class="line">Writing objects: 100% (65/65), 277.14 KiB | 0 bytes/s, done.</div><div class="line">Total 65 (delta 34), reused 0 (delta 0)</div><div class="line">To xxxx</div><div class="line">   a298898..72b4092  master -&gt; master</div></pre></td></tr></table></figure>
 <p>之前用 Hexo，每次部署一下，都要成分钟。现在 1 秒钟都不用了，飞一般的感觉。Enjoy it ！</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

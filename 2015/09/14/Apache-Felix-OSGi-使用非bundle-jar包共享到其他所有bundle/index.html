@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-Apache-Felix-OSGi-使用非bundle-jar包共享到其他所有bundle" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Apache Felix OSGi 使用非bundle jar包共享到其他所有bundle</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Apache Felix OSGi 使用非bundle jar包共享到其他所有bundle
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.09.14</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="使用-org-osgi-framework-system-packages-参数"><a href="#使用-org-osgi-framework-system-packages-参数" class="headerlink" title="使用 org.osgi.framework.system.packages 参数"></a>使用 <code>org.osgi.framework.system.packages</code> 参数</h2><p>创建一个项目，假设使用了Google的Guava的bundle，但这个库并不是OSGi Bundle。但如果又想共享于其他bundle的话，可以按以下方式来处理。</p>
+      <a class="tag-item" href="/tags/#OSGi">
+        <span class="tag-name">OSGi</span>
+    <span class="tag-size">( 8 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="使用-org-osgi-framework-system-packages-参数"><a href="#使用-org-osgi-framework-system-packages-参数" class="headerlink" title="使用 org.osgi.framework.system.packages 参数"></a>使用 <code>org.osgi.framework.system.packages</code> 参数</h2><p>创建一个项目，假设使用了Google的Guava的bundle，但这个库并不是OSGi Bundle。但如果又想共享于其他bundle的话，可以按以下方式来处理。</p>
 <p>在IDE里，添加<code>buildpath</code>，添加这个Guava类库（为了编译通过，亲）。然后记得在自己的Bundle里，修改<code>MANIFEST.MF</code>文件，<code>Import-Package</code>自己使用了哪些包，比如下面的例子:</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">Manifest-Version: <span class="number">1.0</span></div><div class="line">Bundle-ManifestVersion: <span class="number">2</span></div><div class="line">Bundle-Name: UseGuava</div><div class="line">Bundle-SymbolicName: UseGuava</div><div class="line">Bundle-Version: <span class="number">1.0</span>.0.qualifier</div><div class="line">Bundle-Activator: useguava.Activator</div><div class="line">Bundle-Vendor: yangzhiyong</div><div class="line">Bundle-RequiredExecutionEnvironment: JavaSE-<span class="number">1.8</span></div><div class="line">Import-Package: org.osgi.framework;version=<span class="string">"1.3.0"</span>,</div><div class="line"> com.google.common.base</div></pre></td></tr></table></figure>
 <p>使用Guava的Bundle源码：</p>
@@ -217,10 +229,9 @@
 <p><code>framework</code>: 这个是框架本身的加载地方。没有特别研究过。</p>
 <p><a href="http://docs.oracle.com/javase/7/docs/technotes/tools/findingclasses.html" target="_blank" rel="external">关于java如何找class的官方文档</a></p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

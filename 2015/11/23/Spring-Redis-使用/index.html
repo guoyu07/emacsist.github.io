@@ -154,42 +154,64 @@
 
 <div class="content content-post LEFT">
    <article id="post-Spring-Redis-使用" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Spring Redis 使用</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Spring Redis 使用
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.11.23</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="Pipelining"><a href="#Pipelining" class="headerlink" title="Pipelining"></a>Pipelining</h2><p>共享一条connection，以减少因为网络连接导致的性能问题:</p>
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#nosql">
+        <span class="tag-name">nosql</span>
+    <span class="tag-size">( 8 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#redis">
+        <span class="tag-name">redis</span>
+    <span class="tag-size">( 12 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#spring">
+        <span class="tag-name">spring</span>
+    <span class="tag-size">( 27 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="Pipelining"><a href="#Pipelining" class="headerlink" title="Pipelining"></a>Pipelining</h2><p>共享一条connection，以减少因为网络连接导致的性能问题:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">List&lt;Object&gt; results = stringRedisTemplate.executePipelined(</div><div class="line">  new RedisCallback&lt;Object&gt;() &#123;</div><div class="line">    public Object <span class="keyword">do</span>InRedis(RedisConnection connection) throws DataAccessException &#123;</div><div class="line">      StringRedisConnection stringRedisConn = (StringRedisConnection)connection;</div><div class="line">      <span class="keyword">for</span>(int i=0; i&lt; batchSize; i++) &#123;</div><div class="line">        stringRedisConn.rPop(<span class="string">"myqueue"</span>);</div><div class="line">      &#125;</div><div class="line">    <span class="built_in">return</span> null;</div><div class="line">  &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 <h2 id="transaction"><a href="#transaction" class="headerlink" title="transaction"></a>transaction</h2><p>redis中的事务</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">List&lt;Object&gt; txResults = redisTemplate.execute(new SessionCallback&lt;List&lt;Object&gt;&gt;() &#123;</div><div class="line">  public List&lt;Object&gt; execute(RedisOperations operations) throws DataAccessException &#123;</div><div class="line">    operations.multi();</div><div class="line">    operations.opsForSet().add(<span class="string">"key"</span>, <span class="string">"value1"</span>);</div><div class="line"></div><div class="line">    // This will contain the results of all ops <span class="keyword">in</span> the transaction</div><div class="line">    <span class="built_in">return</span> operations.exec();</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line">System.out.println(<span class="string">"Number of items added to set: "</span> + txResults.get(0));</div></pre></td></tr></table></figure>
@@ -201,10 +223,9 @@
 <li><a href="https://github.com/spring-projects/spring-data-redis/tree/master/src/asciidoc/reference" target="_blank" rel="external">Spring-data-redis</a></li>
 </ol>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

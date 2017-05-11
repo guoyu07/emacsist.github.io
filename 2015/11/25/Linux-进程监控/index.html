@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-Linux-进程监控" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Linux 进程监控</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Linux 进程监控
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.11.25</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/linux/">linux</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="进程监控"><a href="#进程监控" class="headerlink" title="进程监控"></a>进程监控</h2><p><code>pidstat [option] interval [count]</code></p>
+      <a class="tag-item" href="/tags/#linux">
+        <span class="tag-name">linux</span>
+    <span class="tag-size">( 14 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#监控">
+        <span class="tag-name">监控</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="进程监控"><a href="#进程监控" class="headerlink" title="进程监控"></a>进程监控</h2><p><code>pidstat [option] interval [count]</code></p>
 <h3 id="监控进程的内存使用情况"><a href="#监控进程的内存使用情况" class="headerlink" title="监控进程的内存使用情况"></a>监控进程的内存使用情况</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">$ pidstat -r  -p 26092 1 5</div><div class="line">Linux 2.6.32-33-server (pro-srv4) 	Wednesday, November 25, 2015 	_x86_64_	(8 CPU)</div><div class="line"></div><div class="line">11:16:38 HKT       PID  minflt/s  majflt/s     VSZ    RSS   %MEM  Command</div><div class="line">11:16:39 HKT     26092      0.00      0.00 2983032 607484   3.69  java</div><div class="line">11:16:40 HKT     26092      0.00      0.00 2983032 607484   3.69  java</div><div class="line">11:16:41 HKT     26092      0.00      0.00 2983032 607484   3.69  java</div><div class="line">11:16:42 HKT     26092      0.00      0.00 2983032 607484   3.69  java</div><div class="line">11:16:43 HKT     26092      0.00      0.00 2983032 607484   3.69  java</div><div class="line">Average:        26092      0.00      0.00 2983032 607484   3.69  java</div></pre></td></tr></table></figure>
 <p>列说明:</p>
 <p><code>minflt/s</code>: 每秒次缺页错误次数(minor page faults)，次缺页错误次数意即虚拟内存地址映射成物理内存地址产生的page fault次数<br><code>majflt/s</code>: 每秒主缺页错误次数(major page faults)，当虚拟内存地址映射成物理内存地址时，相应的page在swap中，这样的page fault为major page fault，一般在内存使用紧张时产生<br><code>VSZ</code>:      虚拟内存：整个进程使用的虚拟内存（KB）<br><code>RSS</code>:      常驻内存大小，占用的非交换分区的物理内存（KB）<br><code>%MEM</code>:     进程当前占用可用内存的百分比<br><code>Command</code>:  进程对应的命令</p>
@@ -210,10 +222,9 @@
 <p><code>nvcswch/s</code>: 进程非自愿上下文切换次数。当一个进程在CPU时间片内执行期间被强迫放弃CPU时就会出现这种非自愿上下文切换.</p>
 <h3 id="线程的级别"><a href="#线程的级别" class="headerlink" title="线程的级别"></a>线程的级别</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pidstat -t 其他参数和以上相同.</div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

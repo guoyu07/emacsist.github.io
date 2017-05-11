@@ -154,42 +154,49 @@
 
 <div class="content content-post LEFT">
    <article id="post-MySQL中数据丢失概念及解决办法" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">MySQL中数据丢失概念及解决办法</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            MySQL中数据丢失概念及解决办法
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.04.29</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/mysql/">mysql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>即数据库告诉我这次事务成功了，但当我下次读取数据时，却发现数据不正确。这就是<code>数据丢失</code>.</p>
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>即数据库告诉我这次事务成功了，但当我下次读取数据时，却发现数据不正确。这就是<code>数据丢失</code>.</p>
 <h3 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h3><p>看个场景, redo log丢失造成的主从不一致：</p>
 <blockquote>
 <p>bin-log写入所以从库能够执行事务。但主库中trx_prepare的日志没有被写入到ib_logifle中，导致主库不执行事务。这样就会出现主从不一致的情况—主库没执行事务，而从库执行。成的主从不一致</p>
@@ -226,10 +233,9 @@
 <p><a href="http://csrd.aliapp.com/?p=870" target="_blank" rel="external">aliapp</a></p>
 <p><a href="https://yq.aliyun.com/articles/2239" target="_blank" rel="external">aliyun</a></p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

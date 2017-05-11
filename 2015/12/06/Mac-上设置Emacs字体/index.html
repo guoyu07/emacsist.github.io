@@ -149,42 +149,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-Mac-上设置Emacs字体" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Mac 上设置Emacs字体</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Mac 上设置Emacs字体
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.12.06</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/emacs/">emacs</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <p>更新完<code>Mac OS X EI Capitan</code>后,emacs的字体变得惨不忍睹.还以为无救了, 然后试了下重装emacs, 删除<code>~/.emacs.d/</code>,最终都无效果.最后Google到有位同志的修改:</p>
+      <a class="tag-item" href="/tags/#emacs">
+        <span class="tag-name">emacs</span>
+    <span class="tag-size">( 13 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#linux">
+        <span class="tag-name">linux</span>
+    <span class="tag-size">( 14 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#mac">
+        <span class="tag-name">mac</span>
+    <span class="tag-size">( 4 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p>更新完<code>Mac OS X EI Capitan</code>后,emacs的字体变得惨不忍睹.还以为无救了, 然后试了下重装emacs, 删除<code>~/.emacs.d/</code>,最终都无效果.最后Google到有位同志的修改:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">(<span class="built_in">set</span>-frame-font <span class="string">"Monaco:pixelsize=15"</span>)</div><div class="line">(dolist (charset <span class="string">'(han kana symbol cjk-misc bopomofo))</span></div><div class="line">  (set-fontset-font (frame-parameter nil 'font)</div><div class="line">                    charset</div><div class="line">                    (font-spec :family <span class="string">"Hiragino Sans GB"</span> :size 18)</div><div class="line">))</div></pre></td></tr></table></figure>
 <p>因为自己使用的是 <a href="https://github.com/bbatsov/prelude" target="_blank" rel="external">prelude</a>. 需要将这配置文件写到:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">➜  ~  cat ~/.emacs.d/personal/preload/yang.el</div><div class="line">(<span class="built_in">set</span>-frame-font <span class="string">"Monaco:pixelsize=15"</span>)</div><div class="line">(dolist (charset <span class="string">'(han kana symbol cjk-misc bopomofo))</span></div><div class="line">  (set-fontset-font (frame-parameter nil 'font)</div><div class="line">                    charset</div><div class="line">                    (font-spec :family <span class="string">"Hiragino Sans GB"</span> :size 15)</div><div class="line">))</div></pre></td></tr></table></figure>
@@ -192,10 +209,9 @@
 <p>用上了emacs后, 自己的网络ID等,都改为了<code>emacsist</code>. ~_~</p>
 <p>感谢这位仁兄: <a href="https://gist.github.com/liuyix/6849902" target="_blank" rel="external">liuyix gist</a></p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

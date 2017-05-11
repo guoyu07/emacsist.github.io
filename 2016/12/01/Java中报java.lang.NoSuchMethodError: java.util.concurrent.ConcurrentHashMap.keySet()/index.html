@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-Java中报java.lang.NoSuchMethodError: java.util.concurrent.ConcurrentHashMap.keySet()" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Java中报java.lang.NoSuchMethodError: java.util.concurrent.ConcurrentHashMap.keySet()</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Java中报java.lang.NoSuchMethodError: java.util.concurrent.ConcurrentHashMap.keySet()
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.12.01</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>公司某生产环境在Tomcat启动时，报如下错误:</p>
+      <a class="tag-item" href="/tags/#ConcurrentHashMap">
+        <span class="tag-name">ConcurrentHashMap</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>公司某生产环境在Tomcat启动时，报如下错误:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">java.lang.NoSuchMethodError: java.util.concurrent.ConcurrentHashMap.keySet()Ljava/util/concurrent/ConcurrentHashMap<span class="variable">$KeySetView</span>;</div></pre></td></tr></table></figure>
 <p>然后 Google 了下，发现在Github上也有在讨论:</p>
 <p><a href="https://gist.github.com/AlainODea/1375759b8720a3f9f094" target="_blank" rel="external">gist.github.com</a></p>
@@ -204,10 +216,9 @@
 <h3 id="二"><a href="#二" class="headerlink" title="二"></a>二</h3><p>在编译的时候，指定<code>bootclasspath</code>为1.7的，即按上面的gist的处理:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ /usr/lib/jvm/java-8-oracle/bin/javac -source 1.7 -target 1.7 HelloCovariance.java -bootclasspath /usr/lib/jvm/java-1.7.0-openjdk-amd64/jre/lib/rt.jar</div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

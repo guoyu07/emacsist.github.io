@@ -154,51 +154,67 @@
 
 <div class="content content-post LEFT">
    <article id="post-Nginx负载均衡Tomcat切换注意事项" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Nginx负载均衡Tomcat切换注意事项</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Nginx负载均衡Tomcat切换注意事项
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.12.17</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/nginx/">nginx</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <p>在生产环境使用<code>nginx+tomcat</code>做负载均衡。众所周知，tomcat的shutdown在生产环境是很慢的，如果这时候，不先修改nginx的upstream模块，先让要停止的那台tomcat成为shuotdown或者直接注释掉，而直接shutdown了tomcat的话，这样子，如果有刚好请求分配到了这个要停止的tomcat，就会导致用户的连接是一直等待中了.~~</p>
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#nginx">
+        <span class="tag-name">nginx</span>
+    <span class="tag-size">( 8 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#tomcat">
+        <span class="tag-name">tomcat</span>
+    <span class="tag-size">( 20 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p>在生产环境使用<code>nginx+tomcat</code>做负载均衡。众所周知，tomcat的shutdown在生产环境是很慢的，如果这时候，不先修改nginx的upstream模块，先让要停止的那台tomcat成为shuotdown或者直接注释掉，而直接shutdown了tomcat的话，这样子，如果有刚好请求分配到了这个要停止的tomcat，就会导致用户的连接是一直等待中了.~~</p>
 <p>nginx的负载均衡虽然会自动切换，但是默认情况下它会一直等待到那台tomcat完全shutdown了，才会将请求转交给另一台服务器.所以，才会导致用户请求一直在等待中.</p>
 <h2 id="建议"><a href="#建议" class="headerlink" title="建议"></a>建议</h2><p>先在nginx配置文件里，注释掉要停止的tomcat的那台服务器的upstream 的iP配置，然后<code>sudo nginx -s reload</code>一下.</p>
 <h2 id="nginx负载均衡问题"><a href="#nginx负载均衡问题" class="headerlink" title="nginx负载均衡问题"></a>nginx负载均衡问题</h2><p>还有个注意问题，使用<code>ip_hash</code>算法做均衡，还是有比较大问题（如果做了分布式session除外）并且如果没有做session共享，这样子用户会非常容易提示重新登录。</p>
 <p>其实这个要根据网络运营商的具体情况，我自己就测试过所住的地方，IP是几秒钟变一次的，如果这时使用了<code>ip_hash</code>算法，还是很容易导致用户要不停的重新登录（如果没有用session，或者使用了session共享的，可以忽略这个问题）。</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

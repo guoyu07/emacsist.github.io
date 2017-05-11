@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-Golang 中的接口类型与指针" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Golang 中的接口类型与指针</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Golang 中的接口类型与指针
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.11.24</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/golang/">golang</a> / <a class="article-category-link" href="/categories/golang/go/">go</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <blockquote>
+      <a class="tag-item" href="/tags/#go">
+        <span class="tag-name">go</span>
+    <span class="tag-size">( 15 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#golang">
+        <span class="tag-name">golang</span>
+    <span class="tag-size">( 15 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <blockquote>
 <p>这是在Google Golang的Nuts上看到的<br><a href="https://groups.google.com/forum/#!topic/golang-nuts/nUqqdJw9K4I" target="_blank" rel="external">golang-nuts</a></p>
 </blockquote>
 <h2 id="当作为interface类型调用时，指针值没有更新？"><a href="#当作为interface类型调用时，指针值没有更新？" class="headerlink" title="当作为interface类型调用时，指针值没有更新？"></a>当作为interface类型调用时，指针值没有更新？</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">func f(resp interface&#123;&#125;) &#123;</div><div class="line">	resp = <span class="string">"abcd"</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">func <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">	var s string</div><div class="line">	f(&amp;s)</div><div class="line">	fmt.Println(s) //prints blank?</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -197,10 +209,9 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">package main</div><div class="line"></div><div class="line">import (</div><div class="line">	<span class="string">"fmt"</span></div><div class="line">)</div><div class="line"></div><div class="line">func f(resp interface&#123;&#125;) &#123;</div><div class="line">	*resp.(*string) = <span class="string">"abcd"</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">func <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">	var s string</div><div class="line">	f(&amp;s)</div><div class="line">	fmt.Println(s)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p><code>resp.(*string)</code>：转换为<code>string</code>指针<br><code>*resp.(*string)</code>：这个表示指针的内容<br><code>*resp.(*string) = &quot;abcd&quot;</code>：将<code>abcd</code>的值赋给指针的内容.</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

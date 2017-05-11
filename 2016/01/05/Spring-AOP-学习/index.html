@@ -154,42 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-Spring-AOP-学习" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Spring AOP 学习</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Spring AOP 学习
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.01.05</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h2><blockquote>
+      <a class="tag-item" href="/tags/#aop">
+        <span class="tag-name">aop</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#spring">
+        <span class="tag-name">spring</span>
+    <span class="tag-size">( 27 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h2><blockquote>
 <p>面向切面编程.百度百科里的定义是：在软件业，AOP为Aspect Oriented Programming的缩写，意为：面向切面编程，通过预编译方式和运行期动态代理实现程序功能的统一维护的一种技术。AOP是OOP的延续，是软件开发中的一个热点，也是Spring框架中的一个重要内容，是函数式编程的一种衍生范型。利用AOP可以对业务逻辑的各个部分进行隔离，从而使得业务逻辑各部分之间的耦合度降低，提高程序的可重用性，同时提高了开发的效率。</p>
 </blockquote>
 <h2 id="在Spring中使用AOP"><a href="#在Spring中使用AOP" class="headerlink" title="在Spring中使用AOP"></a>在Spring中使用AOP</h2><h3 id="定义一个组件"><a href="#定义一个组件" class="headerlink" title="定义一个组件"></a>定义一个组件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">package com.spring.service.aop;</div><div class="line"></div><div class="line">import org.springframework.stereotype.Component;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by sky on 16-1-5.</div><div class="line"> */</div><div class="line">@Component</div><div class="line">public class Hello &#123;</div><div class="line"></div><div class="line">    public String <span class="function"><span class="title">sayHello</span></span>()&#123;</div><div class="line">        <span class="built_in">return</span> <span class="string">"hello world from hello"</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -211,10 +228,9 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">开启事务</div><div class="line">update db <span class="keyword">for</span> table [hello world]</div><div class="line">提交事务，并关闭连接</div></pre></td></tr></table></figure>
 <p>这样子，我们就完成了一个简单的声明式事务管理啦.当然，还有很多要完善的地方，这里只是演示下，如何实现.</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

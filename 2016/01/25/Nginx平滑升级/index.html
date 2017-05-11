@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-Nginx平滑升级" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Nginx平滑升级</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Nginx平滑升级
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.01.25</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/nginx/">nginx</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="原版本"><a href="#原版本" class="headerlink" title="原版本"></a>原版本</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">╭─sky@sky-linux /ihome/nginx/nginx-1.8</div><div class="line">╰─➤  ./sbin/nginx -V</div><div class="line">nginx version: nginx/1.8.0</div><div class="line">built by gcc 4.8.4 (Ubuntu 4.8.4-2ubuntu1~14.04)</div><div class="line">configure arguments: --prefix=/ihome/nginx/nginx-1.8</div><div class="line">╭─sky@sky-linux /ihome/nginx/nginx-1.8</div><div class="line">╰─➤</div><div class="line"></div><div class="line">╭─sky@sky-linux /ihome/nginx/nginx-1.8</div><div class="line">╰─➤  ps aux | grep <span class="string">"[n]ginx"</span></div><div class="line">root     22369  0.0  0.0  28464   556 ?        Ss   17:00   0:00 nginx: master process ./sbin/nginx</div><div class="line">nobody   22370  0.0  0.0  28888  2684 ?        S    17:00   0:00 nginx: worker process</div><div class="line">╭─sky@sky-linux /ihome/nginx/nginx-1.8</div><div class="line">╰─➤</div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#nginx">
+        <span class="tag-name">nginx</span>
+    <span class="tag-size">( 8 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#server">
+        <span class="tag-name">server</span>
+    <span class="tag-size">( 6 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="原版本"><a href="#原版本" class="headerlink" title="原版本"></a>原版本</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">╭─sky@sky-linux /ihome/nginx/nginx-1.8</div><div class="line">╰─➤  ./sbin/nginx -V</div><div class="line">nginx version: nginx/1.8.0</div><div class="line">built by gcc 4.8.4 (Ubuntu 4.8.4-2ubuntu1~14.04)</div><div class="line">configure arguments: --prefix=/ihome/nginx/nginx-1.8</div><div class="line">╭─sky@sky-linux /ihome/nginx/nginx-1.8</div><div class="line">╰─➤</div><div class="line"></div><div class="line">╭─sky@sky-linux /ihome/nginx/nginx-1.8</div><div class="line">╰─➤  ps aux | grep <span class="string">"[n]ginx"</span></div><div class="line">root     22369  0.0  0.0  28464   556 ?        Ss   17:00   0:00 nginx: master process ./sbin/nginx</div><div class="line">nobody   22370  0.0  0.0  28888  2684 ?        S    17:00   0:00 nginx: worker process</div><div class="line">╭─sky@sky-linux /ihome/nginx/nginx-1.8</div><div class="line">╰─➤</div></pre></td></tr></table></figure>
 <h2 id="编译新版本"><a href="#编译新版本" class="headerlink" title="编译新版本"></a>编译新版本</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">./configure --prefix=旧版本的nginx目录</div><div class="line">make -j 8</div><div class="line"></div><div class="line">将旧版本的nginx二进制文件备份下</div><div class="line">cp /旧版本nginx目录/sbin/nginx /旧版本ningx目录/sbin/nginx.old</div><div class="line"></div><div class="line">将新编译好的nginx二进制文件复制到旧版本的nginx目录sbin下</div><div class="line">cp /新版本编译目录/objs/nginx /旧版本nginx目录/sbin/nginx</div></pre></td></tr></table></figure>
 <h2 id="平滑升级"><a href="#平滑升级" class="headerlink" title="平滑升级"></a>平滑升级</h2><h3 id="切换pid"><a href="#切换pid" class="headerlink" title="切换pid"></a>切换pid</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">╭─sky@sky-linux /ihome/nginx/nginx-current</div><div class="line">╰─➤  sudo <span class="built_in">kill</span> -USR2 `cat logs/nginx.pid`</div><div class="line">╭─sky@sky-linux</div></pre></td></tr></table></figure>
 <p>成功后，就可以看到</p>
@@ -203,10 +215,9 @@
 <h3 id="停止旧nginx的master"><a href="#停止旧nginx的master" class="headerlink" title="停止旧nginx的master"></a>停止旧nginx的master</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">╭─sky@sky-linux /ihome/nginx/nginx-current</div><div class="line">╰─➤  sudo <span class="built_in">kill</span> -QUIT `cat logs/nginx.pid.oldbin`</div><div class="line">╭─sky@sky-linux /ihome/nginx/nginx-current</div><div class="line">╰─➤</div></pre></td></tr></table></figure>
 <p>这样子就OK了.</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

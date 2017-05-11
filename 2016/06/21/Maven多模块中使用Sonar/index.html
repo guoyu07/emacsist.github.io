@@ -154,37 +154,38 @@
 
 <div class="content content-post LEFT">
    <article id="post-Maven多模块中使用Sonar" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Maven多模块中使用Sonar</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Maven多模块中使用Sonar
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.06.21</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
+                    
 
+                        
 
-      
+                                
 
-      
+                                        
 
-      
-      
-    </div>
-  </header>
+        </div>
+    </header>
 
-  <div class="article-content">
-    
-      <h2 id="单模块使用"><a href="#单模块使用" class="headerlink" title="单模块使用"></a>单模块使用</h2><p><code>pom.xml</code>中添加</p>
+    <div class="article-content">
+        
+                            <h2 id="单模块使用"><a href="#单模块使用" class="headerlink" title="单模块使用"></a>单模块使用</h2><p><code>pom.xml</code>中添加</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"> &lt;reporting&gt;</div><div class="line">        &lt;plugins&gt;</div><div class="line">            &lt;plugin&gt;</div><div class="line">                &lt;groupId&gt;org.sonarsource.scanner.maven&lt;/groupId&gt;</div><div class="line">                &lt;artifactId&gt;sonar-maven-plugin&lt;/artifactId&gt;</div><div class="line">                &lt;version&gt;3.0.1&lt;/version&gt;</div><div class="line">            &lt;/plugin&gt;</div><div class="line">        &lt;/plugins&gt;</div><div class="line">    &lt;/reporting&gt;</div><div class="line"></div><div class="line">&lt;properties&gt;</div><div class="line">    &lt;sonar.java.source&gt;1.7&lt;/sonar.java.source&gt;</div><div class="line">&lt;/properties&gt;</div></pre></td></tr></table></figure>
 <p>生成报告:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mvn sonar:sonar -Dsonar.host.url=http://10.0.0.10:9000</div></pre></td></tr></table></figure>
@@ -194,10 +195,9 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mvn package sonar:sonar -Dsonar.host.url=http://10.0.0.10:9000</div></pre></td></tr></table></figure>
 <p>即模块前要添加<code>package</code>即可。</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

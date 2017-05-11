@@ -154,42 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-Spring-与-RabbitMQ-结合配置以及注意事项" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Spring 与 RabbitMQ 结合配置以及注意事项</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Spring 与 RabbitMQ 结合配置以及注意事项
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.12.14</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="主要是listener-container配置"><a href="#主要是listener-container配置" class="headerlink" title="主要是listener-container配置"></a>主要是<code>listener-container</code>配置</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;rabbit:listener-container connection-factory=<span class="string">"rabbitConnectionFactory"</span> error-handler=<span class="string">"MessageErrorHandler"</span> task-executor=<span class="string">"myExecutor"</span> concurrency=<span class="string">"10"</span>&gt;</div><div class="line">&lt;/rabbit:listener-container&gt;</div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#rabbitmq">
+        <span class="tag-name">rabbitmq</span>
+    <span class="tag-size">( 15 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#spring">
+        <span class="tag-name">spring</span>
+    <span class="tag-size">( 27 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="主要是listener-container配置"><a href="#主要是listener-container配置" class="headerlink" title="主要是listener-container配置"></a>主要是<code>listener-container</code>配置</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;rabbit:listener-container connection-factory=<span class="string">"rabbitConnectionFactory"</span> error-handler=<span class="string">"MessageErrorHandler"</span> task-executor=<span class="string">"myExecutor"</span> concurrency=<span class="string">"10"</span>&gt;</div><div class="line">&lt;/rabbit:listener-container&gt;</div></pre></td></tr></table></figure>
 <h3 id="属性说明"><a href="#属性说明" class="headerlink" title="属性说明"></a>属性说明</h3><h4 id="task-executor"><a href="#task-executor" class="headerlink" title="task-executor"></a>task-executor</h4><p>这个属性表示，在执行<code>listener</code>时，使用的线程行为。默认为<code>SimpleAsyncTaskExecutor</code>，即每执行一个<code>listener</code>，都创建一条新的线程。</p>
 <h4 id="concurrency"><a href="#concurrency" class="headerlink" title="concurrency"></a>concurrency</h4><p>这个表示每个<code>listener</code>创建多少个消费者（会创建多少个线程来消费）</p>
 <p>所以，如果想要多线程执行，就要配置<code>concurrency</code>，因为默认情况下，它是<code>1</code>.</p>
@@ -224,10 +241,9 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">try &#123;</div><div class="line">    AMQP.Queue.DeclareOk <span class="built_in">declare</span>Ok = channel.queueDeclare(monitorQueue, <span class="literal">true</span>, <span class="literal">false</span>, <span class="literal">false</span>, null);</div><div class="line">    <span class="keyword">if</span> (<span class="built_in">declare</span>Ok.getMessageCount() == 0) &#123; //over <span class="keyword">if</span> there<span class="string">'s no message in queue</span></div><div class="line">        return;</div><div class="line">    &#125;</div><div class="line">&#125; finally &#123;</div><div class="line">    if (channel != null &amp;&amp; channel.isOpen()) &#123;</div><div class="line">        try &#123;</div><div class="line">            channel.close();</div><div class="line">        &#125; catch (IOException e) &#123;</div><div class="line">            Loggers.ERROR_LOG.error("monitor log dequeue close channel IOException. ", e);</div><div class="line">        &#125; catch (TimeoutException e) &#123;</div><div class="line">            Loggers.ERROR_LOG.error("monitor log dequeue close channel TimeoutException. ", e);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>这样子线上就没有再因为这个原因，而不断报类似上面的异常了。</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

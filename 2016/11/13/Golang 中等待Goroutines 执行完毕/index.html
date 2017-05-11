@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-Golang 中等待Goroutines 执行完毕" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Golang 中等待Goroutines 执行完毕</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Golang 中等待Goroutines 执行完毕
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.11.13</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/golang/">golang</a> / <a class="article-category-link" href="/categories/golang/go/">go</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="方式一"><a href="#方式一" class="headerlink" title="方式一"></a>方式一</h2><p>使用 <code>sync.WaitGroup</code></p>
+      <a class="tag-item" href="/tags/#go">
+        <span class="tag-name">go</span>
+    <span class="tag-size">( 15 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#golang">
+        <span class="tag-name">golang</span>
+    <span class="tag-size">( 15 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="方式一"><a href="#方式一" class="headerlink" title="方式一"></a>方式一</h2><p>使用 <code>sync.WaitGroup</code></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">package main</div><div class="line"></div><div class="line">import (</div><div class="line">	<span class="string">"fmt"</span></div><div class="line">	<span class="string">"math/rand"</span></div><div class="line">	<span class="string">"strconv"</span></div><div class="line">	<span class="string">"sync"</span></div><div class="line">	<span class="string">"time"</span></div><div class="line">)</div><div class="line"></div><div class="line">func <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">	workerNum := 10</div><div class="line">	var wg sync.WaitGroup</div><div class="line">	wg.Add(workerNum)</div><div class="line">	<span class="keyword">for</span> i := 0; i &lt; workerNum; i++ &#123;</div><div class="line">		go worker(i, <span class="string">"Name"</span>+strconv.FormatInt(int64(i), 10), &amp;wg)</div><div class="line">	&#125;</div><div class="line">	wg.Wait()</div><div class="line">&#125;</div><div class="line"></div><div class="line">func worker(id int, hello string, wg *sync.WaitGroup) &#123;</div><div class="line">	time.Sleep(time.Second * time.Duration(rand.Int31n(10)))</div><div class="line">	fmt.Printf(<span class="string">"workerID = %v, Hello %v\n"</span>, id, hello)</div><div class="line">	wg.Done()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>输出的结果:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">[Running] go run <span class="string">"/Users/emacsist/go-project/src/main.go"</span></div><div class="line">workerID = 5, Hello Name5</div><div class="line">workerID = 8, Hello Name8</div><div class="line">workerID = 1, Hello Name1</div><div class="line">workerID = 2, Hello Name2</div><div class="line">workerID = 4, Hello Name4</div><div class="line">workerID = 7, Hello Name7</div><div class="line">workerID = 0, Hello Name0</div><div class="line">workerID = 3, Hello Name3</div><div class="line">workerID = 6, Hello Name6</div><div class="line">workerID = 9, Hello Name9</div><div class="line"></div><div class="line">[Done] exited with code=0 <span class="keyword">in</span> 9.214 seconds</div></pre></td></tr></table></figure>
@@ -197,10 +209,9 @@
 <p>输出的结果类似如下:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">[Running] go run <span class="string">"/Users/emacsist/go-project/src/main.go"</span></div><div class="line">workerID = 4, Hello Name4</div><div class="line">workerID = 4 is finished.</div><div class="line">workerID = 5, Hello Name5</div><div class="line">workerID = 5 is finished.</div><div class="line">workerID = 1, Hello Name1</div><div class="line">workerID = 0, Hello Name0</div><div class="line">workerID = 1 is finished.</div><div class="line">workerID = 0 is finished.</div><div class="line">workerID = 7, Hello Name7</div><div class="line">workerID = 7 is finished.</div><div class="line">workerID = 8, Hello Name8</div><div class="line">workerID = 8 is finished.</div><div class="line">workerID = 3, Hello Name3</div><div class="line">workerID = 9, Hello Name9</div><div class="line">workerID = 3 is finished.</div><div class="line">workerID = 9 is finished.</div><div class="line">workerID = 6, Hello Name6</div><div class="line">workerID = 6 is finished.</div><div class="line">workerID = 2, Hello Name2</div><div class="line">workerID = 2 is finished.</div><div class="line"></div><div class="line">[Done] exited with code=0 <span class="keyword">in</span> 9.251 seconds</div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

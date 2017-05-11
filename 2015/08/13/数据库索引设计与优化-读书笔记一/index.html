@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-数据库索引设计与优化-读书笔记一" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">&lt;数据库索引设计与优化&gt;读书笔记一</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            &lt;数据库索引设计与优化&gt;读书笔记一
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.08.13</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/sql/">sql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="误区和误解"><a href="#误区和误解" class="headerlink" title="误区和误解"></a>误区和误解</h2><h3 id="误区1-索引层级不要超过5层"><a href="#误区1-索引层级不要超过5层" class="headerlink" title="误区1: 索引层级不要超过5层"></a>误区1: 索引层级不要超过5层</h3><p>这个通常基于的假设就是:只有根页是留在内存中的.<br>对于现代的硬件来说,对索引的层数做强制限制是没有什么意义的.</p>
+      <a class="tag-item" href="/tags/#sql">
+        <span class="tag-name">sql</span>
+    <span class="tag-size">( 3 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#索引">
+        <span class="tag-name">索引</span>
+    <span class="tag-size">( 2 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="误区和误解"><a href="#误区和误解" class="headerlink" title="误区和误解"></a>误区和误解</h2><h3 id="误区1-索引层级不要超过5层"><a href="#误区1-索引层级不要超过5层" class="headerlink" title="误区1: 索引层级不要超过5层"></a>误区1: 索引层级不要超过5层</h3><p>这个通常基于的假设就是:只有根页是留在内存中的.<br>对于现代的硬件来说,对索引的层数做强制限制是没有什么意义的.</p>
 <p>现今,我们完全可以假设B树索引的所有非叶子页通常都会留在内存或读缓存中.</p>
 <h3 id="误区2-单表的索引数不要超过6个"><a href="#误区2-单表的索引数不要超过6个" class="headerlink" title="误区2: 单表的索引数不要超过6个"></a>误区2: 单表的索引数不要超过6个</h3><p>保证所有的SQL语句都能够流畅运行是设计的底线.我们总能找到一种方法来达到这一点.如果为了达到这一点需要在表上创建10个索引,那么你就应该在表上建10个索引.</p>
 <h3 id="误区3-不应该索引不稳定的列"><a href="#误区3-不应该索引不稳定的列" class="headerlink" title="误区3: 不应该索引不稳定的列"></a>误区3: 不应该索引不稳定的列</h3><p>这人与误区1相似,也是基于:只有根页是留在内存中的.<br>对于现代的硬件来说,更新一个不稳定的列,只会对该更新操作增加10ms的响应时间.</p>
@@ -271,10 +283,9 @@
 <p>SQL Server中存储表行的索引被称为是聚集的.只有当需要一张索引组织表时才定义一个聚集索引.其余的索引都指向这一聚集索引.</p>
 <p>Oracle中,聚簇一词被用于代表将多个表的行交错存储(聚簇的表).这个词与限定表行顺序的聚簇索引毫不相干.</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

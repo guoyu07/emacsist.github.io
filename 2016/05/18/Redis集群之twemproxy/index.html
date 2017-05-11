@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-Redis集群之twemproxy" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Redis集群之twemproxy</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Redis集群之twemproxy
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.05.18</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/redis/">redis</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">git <span class="built_in">clone</span> https://github.com/twitter/twemproxy.git</div><div class="line"><span class="built_in">cd</span> twemproxy</div><div class="line">autoreconf -fvi</div><div class="line">./configure --enable-debug=full --prefix=/ihome/db/redis/twemproxy</div><div class="line">make -j8</div><div class="line">make install</div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#cluster">
+        <span class="tag-name">cluster</span>
+    <span class="tag-size">( 2 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#redis">
+        <span class="tag-name">redis</span>
+    <span class="tag-size">( 12 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">git <span class="built_in">clone</span> https://github.com/twitter/twemproxy.git</div><div class="line"><span class="built_in">cd</span> twemproxy</div><div class="line">autoreconf -fvi</div><div class="line">./configure --enable-debug=full --prefix=/ihome/db/redis/twemproxy</div><div class="line">make -j8</div><div class="line">make install</div></pre></td></tr></table></figure>
 <p>安装完毕的结构：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">╭─sky@sky-linux /ihome/db/redis/twemproxy  </div><div class="line">╰─➤  tree .</div><div class="line">.</div><div class="line">├── sbin</div><div class="line">│   └── nutcracker</div><div class="line">└── share</div><div class="line">    └── man</div><div class="line">        └── man8</div><div class="line">            └── nutcracker.8</div><div class="line"></div><div class="line">4 directories, 2 files</div></pre></td></tr></table></figure>
 <h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><p>创建一个配置文件在安装目录的<code>conf</code>下，假设为: <code>twemproxy.yml</code>,内容如下:</p>
@@ -204,10 +216,9 @@
 <h2 id="支持和不支持的命令说明"><a href="#支持和不支持的命令说明" class="headerlink" title="支持和不支持的命令说明"></a>支持和不支持的命令说明</h2><p><a href="https://github.com/twitter/twemproxy/blob/master/notes/redis.md" target="_blank" rel="external">Github</a></p>
 <h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>如果集群的redis中有一台挂了，会导致使用不了.</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

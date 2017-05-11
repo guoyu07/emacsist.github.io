@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-linux-xargs-使用" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">linux xargs 使用</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            linux xargs 使用
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.11.25</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/linux/">linux</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <p>使用xargs要特别注意，默认情况下，它是以整行作为[项]的.</p>
+      <a class="tag-item" href="/tags/#bash">
+        <span class="tag-name">bash</span>
+    <span class="tag-size">( 6 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#linux">
+        <span class="tag-name">linux</span>
+    <span class="tag-size">( 14 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p>使用xargs要特别注意，默认情况下，它是以整行作为[项]的.</p>
 <h2 id="a"><a href="#a" class="headerlink" title="-a"></a>-a</h2><p>指定文件来代替标准输入(stdin).</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">➜  xargs  cat hello.txt</div><div class="line">a b c d</div><div class="line">➜  xargs  xargs <span class="_">-a</span> hello.txt</div><div class="line">a b c d</div><div class="line">➜  xargs</div></pre></td></tr></table></figure>
 <h2 id="–null-或者-0"><a href="#–null-或者-0" class="headerlink" title="–null 或者 -0"></a>–null 或者 -0</h2><p><em>输入项</em>，是以null字符结尾的，而不是以白空格（whitespace），引号，反斜杠等（这时，会将这些当作字面值处理）。</p>
@@ -217,10 +229,9 @@
 <p>一次性删除:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">➜  xargs  cat redis.txt</div><div class="line">key1 key2 key3 key4</div><div class="line">➜  xargs</div><div class="line"></div><div class="line">➜  xargs  cat redis.txt | xargs -P 0 redis-cli -p 6379 del</div><div class="line">(<span class="built_in">integer</span>) 3</div><div class="line">➜  xargs</div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

@@ -149,47 +149,58 @@
 
 <div class="content content-post LEFT">
    <article id="post-SpringMVC单元测试controller" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">SpringMVC单元测试controller</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            SpringMVC单元测试controller
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.07.21</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a> / <a class="article-category-link" href="/categories/java/spring/">spring</a>
-  </span>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#spring">
+        <span class="tag-name">spring</span>
+    <span class="tag-size">( 27 )</span>
+    </a>
+    
 
+        </span>
+        
 
+                        
 
-      
+                                
 
-      
+                                        
 
-      
-      
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">import org.junit.Before;</div><div class="line">import org.junit.Test;</div><div class="line">import org.junit.runner.RunWith;</div><div class="line">import org.springframework.beans.factory.annotation.Autowired;</div><div class="line">import org.springframework.http.MediaType;</div><div class="line">import org.springframework.mock.web.MockHttpServletRequest;</div><div class="line">import org.springframework.mock.web.MockHttpSession;</div><div class="line">import org.springframework.test.context.ContextConfiguration;</div><div class="line">import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;</div><div class="line">import org.springframework.test.context.web.WebAppConfiguration;</div><div class="line">import org.springframework.test.web.servlet.MockMvc;</div><div class="line">import org.springframework.test.web.servlet.MvcResult;</div><div class="line">import org.springframework.test.web.servlet.setup.MockMvcBuilders;</div><div class="line">import org.springframework.web.context.WebApplicationContext;</div><div class="line"></div><div class="line">import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;</div><div class="line">import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by sky on 16-7-20.</div><div class="line"> */</div><div class="line">@RunWith(SpringJUnit4ClassRunner.class)</div><div class="line">@WebAppConfiguration</div><div class="line">@ContextConfiguration(<span class="string">"classpath:spring-servlet.xml"</span>)</div><div class="line">public class TestMVC &#123;</div><div class="line"></div><div class="line">    @Autowired</div><div class="line">    WebApplicationContext wac;</div><div class="line">    @Autowired</div><div class="line">    MockHttpSession session;</div><div class="line">    @Autowired</div><div class="line">    MockHttpServletRequest request;</div><div class="line"></div><div class="line">    private MockMvc mockMvc;</div><div class="line"></div><div class="line">    @Before</div><div class="line">    public void <span class="function"><span class="title">setup</span></span>() &#123;</div><div class="line">        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    @Test</div><div class="line">    public void add() throws Exception &#123;</div><div class="line">        Users user = new Users();</div><div class="line">        user.setUserId(44048);</div><div class="line">        session.setAttribute(SessionConstant.CURRENT_USER, user);</div><div class="line"></div><div class="line"></div><div class="line">        MvcResult mvcResult = this.mockMvc.perform(post(<span class="string">"/sales/add"</span>).param(<span class="string">"clientId"</span>, <span class="string">"10"</span>).param(<span class="string">"salesUserId"</span>, <span class="string">"23"</span>).param(<span class="string">"fromOpenid"</span>, <span class="string">"123"</span>).param(<span class="string">"toOpenid"</span>, <span class="string">"456"</span>)</div><div class="line">                .param(<span class="string">"des"</span>, <span class="string">"hello des"</span>)</div><div class="line">                .param(<span class="string">"title"</span>, <span class="string">"title1"</span>)</div><div class="line">                .session(session)</div><div class="line">                .accept(MediaType.APPLICATION_JSON))</div><div class="line">                .andExpect(status().isOk())</div><div class="line">                .andReturn();</div><div class="line">        System.out.println(mvcResult.getResponse().getContentAsString());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+                                
     </div>
-  </header>
-
-  <div class="article-content">
-    
-      <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">import org.junit.Before;</div><div class="line">import org.junit.Test;</div><div class="line">import org.junit.runner.RunWith;</div><div class="line">import org.springframework.beans.factory.annotation.Autowired;</div><div class="line">import org.springframework.http.MediaType;</div><div class="line">import org.springframework.mock.web.MockHttpServletRequest;</div><div class="line">import org.springframework.mock.web.MockHttpSession;</div><div class="line">import org.springframework.test.context.ContextConfiguration;</div><div class="line">import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;</div><div class="line">import org.springframework.test.context.web.WebAppConfiguration;</div><div class="line">import org.springframework.test.web.servlet.MockMvc;</div><div class="line">import org.springframework.test.web.servlet.MvcResult;</div><div class="line">import org.springframework.test.web.servlet.setup.MockMvcBuilders;</div><div class="line">import org.springframework.web.context.WebApplicationContext;</div><div class="line"></div><div class="line">import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;</div><div class="line">import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by sky on 16-7-20.</div><div class="line"> */</div><div class="line">@RunWith(SpringJUnit4ClassRunner.class)</div><div class="line">@WebAppConfiguration</div><div class="line">@ContextConfiguration(<span class="string">"classpath:spring-servlet.xml"</span>)</div><div class="line">public class TestMVC &#123;</div><div class="line"></div><div class="line">    @Autowired</div><div class="line">    WebApplicationContext wac;</div><div class="line">    @Autowired</div><div class="line">    MockHttpSession session;</div><div class="line">    @Autowired</div><div class="line">    MockHttpServletRequest request;</div><div class="line"></div><div class="line">    private MockMvc mockMvc;</div><div class="line"></div><div class="line">    @Before</div><div class="line">    public void <span class="function"><span class="title">setup</span></span>() &#123;</div><div class="line">        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    @Test</div><div class="line">    public void add() throws Exception &#123;</div><div class="line">        Users user = new Users();</div><div class="line">        user.setUserId(44048);</div><div class="line">        session.setAttribute(SessionConstant.CURRENT_USER, user);</div><div class="line"></div><div class="line"></div><div class="line">        MvcResult mvcResult = this.mockMvc.perform(post(<span class="string">"/sales/add"</span>).param(<span class="string">"clientId"</span>, <span class="string">"10"</span>).param(<span class="string">"salesUserId"</span>, <span class="string">"23"</span>).param(<span class="string">"fromOpenid"</span>, <span class="string">"123"</span>).param(<span class="string">"toOpenid"</span>, <span class="string">"456"</span>)</div><div class="line">                .param(<span class="string">"des"</span>, <span class="string">"hello des"</span>)</div><div class="line">                .param(<span class="string">"title"</span>, <span class="string">"title1"</span>)</div><div class="line">                .session(session)</div><div class="line">                .accept(MediaType.APPLICATION_JSON))</div><div class="line">                .andExpect(status().isOk())</div><div class="line">                .andReturn();</div><div class="line">        System.out.println(mvcResult.getResponse().getContentAsString());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-    
-  </div>
 </article>
-
 
    
   <div class="text-center donation">

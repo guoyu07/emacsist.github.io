@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-Golang的检查性能工具" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Golang的检查性能工具</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Golang的检查性能工具
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.11.02</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/golang/">golang</a> / <a class="article-category-link" href="/categories/golang/go/">go</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="Go-自带的-pprof"><a href="#Go-自带的-pprof" class="headerlink" title="Go 自带的 pprof"></a>Go 自带的 pprof</h2><h3 id="Web程序"><a href="#Web程序" class="headerlink" title="Web程序"></a>Web程序</h3><p>只要添加如下代码即可：</p>
+      <a class="tag-item" href="/tags/#go">
+        <span class="tag-name">go</span>
+    <span class="tag-size">( 15 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#golang">
+        <span class="tag-name">golang</span>
+    <span class="tag-size">( 15 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="Go-自带的-pprof"><a href="#Go-自带的-pprof" class="headerlink" title="Go 自带的 pprof"></a>Go 自带的 pprof</h2><h3 id="Web程序"><a href="#Web程序" class="headerlink" title="Web程序"></a>Web程序</h3><p>只要添加如下代码即可：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">package main</div><div class="line"></div><div class="line">import (</div><div class="line">	_ <span class="string">"net/http/pprof"</span></div><div class="line">)</div><div class="line"></div><div class="line"></div><div class="line">func <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>这样子添加后，就可以在 <a href="http://127.0.0.1:8080/debug/pprof" target="_blank" rel="external">http://127.0.0.1:8080/debug/pprof</a> (假设是监听在8080端口)查看性能数据了.</p>
 <h4 id="生成数据"><a href="#生成数据" class="headerlink" title="生成数据"></a>生成数据</h4><p>这个是启动30秒内收集数据的：输入命令后，要停留在收集状态，（这时，可以启动你的压测工具压它），30秒后，就会自动进入交互状态. </p>
@@ -227,10 +239,9 @@
 <h3 id="查看更详细"><a href="#查看更详细" class="headerlink" title="查看更详细"></a>查看更详细</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">GOMAXPROCS=设置你的核数 GODEBUG=schedtrace=1000,scheddetail=1 ./main</div></pre></td></tr></table></figure>
 <p><a href="http://colobu.com/2016/04/19/Scheduler-Tracing-In-Go/" target="_blank" rel="external">参考来源</a></p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

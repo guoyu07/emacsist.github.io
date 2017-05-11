@@ -149,51 +149,62 @@
 
 <div class="content content-post LEFT">
    <article id="post-Golang中接口常见用法" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Golang中接口常见用法</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Golang中接口常见用法
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.11.06</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/golang/">golang</a> / <a class="article-category-link" href="/categories/golang/go/">go</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <blockquote>
+      <a class="tag-item" href="/tags/#go">
+        <span class="tag-name">go</span>
+    <span class="tag-size">( 15 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#golang">
+        <span class="tag-name">golang</span>
+    <span class="tag-size">( 15 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <blockquote>
 <p>Talk is cheap, show me the code ^_^</p>
 </blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">package main</div><div class="line"></div><div class="line">import (</div><div class="line">	<span class="string">"fmt"</span></div><div class="line">)</div><div class="line"></div><div class="line">// PrintString : <span class="built_in">test</span> <span class="keyword">for</span> interface</div><div class="line"><span class="built_in">type</span> PrintString interface &#123;</div><div class="line">	String() string</div><div class="line">&#125;</div><div class="line"></div><div class="line">// Person : <span class="built_in">type</span></div><div class="line"><span class="built_in">type</span> Person struct &#123;</div><div class="line">	Name string</div><div class="line">&#125;</div><div class="line"></div><div class="line">// Animal : <span class="built_in">type</span></div><div class="line"><span class="built_in">type</span> Animal struct &#123;</div><div class="line">	Name string</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (p *Person) String() string &#123;</div><div class="line">	toString := <span class="string">"[Person&lt;name:"</span> + p.Name + <span class="string">"&gt;]"</span></div><div class="line">	<span class="built_in">return</span> toString</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (a *Animal) String() string &#123;</div><div class="line">	toString := <span class="string">"[Animal&lt;name:"</span> + a.Name + <span class="string">"&gt;]"</span></div><div class="line">	<span class="built_in">return</span> toString</div><div class="line">&#125;</div><div class="line"></div><div class="line">// Print : invoke String() from PrintString interface</div><div class="line">func Print(p interface&#123;&#125;) &#123;</div><div class="line">	<span class="keyword">if</span> v, ok := p.(PrintString); ok &#123;</div><div class="line">		fmt.Printf(<span class="string">"%v\n"</span>, v.String())</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">func <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">	p := Person&#123;<span class="string">"emacsist"</span>&#125;</div><div class="line">	a := Animal&#123;<span class="string">"cat"</span>&#125;</div><div class="line"></div><div class="line">	Print(&amp;p)</div><div class="line">	Print(&amp;a)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>输出的结果如下:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[Running] go run <span class="string">"/Users/emacsist/go-project/src/main.go"</span></div><div class="line">[Person&lt;name:emacsist&gt;]</div><div class="line">[Animal&lt;name:cat&gt;]</div><div class="line"></div><div class="line">[Done] exited with code=0 <span class="keyword">in</span> 0.724 seconds</div></pre></td></tr></table></figure>
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

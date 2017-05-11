@@ -149,42 +149,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-用Java实现自定义的线程池" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">“[翻译]用Java实现自定义的线程池”</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            “[翻译]用Java实现自定义的线程池”
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.01.25</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <p><a href="http://oppansource.com/implementing-own-thread-pool-in-java/" target="_blank" rel="external">原文</a></p>
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#thread pool">
+        <span class="tag-name">thread pool</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p><a href="http://oppansource.com/implementing-own-thread-pool-in-java/" target="_blank" rel="external">原文</a></p>
 <p>让我们用Java来实现自定义的线程池.</p>
 <p>让我们首先定义一个类，它拥有两个方法<code>enqueue</code>和<code>dequeue</code>. 这个类的<code>dequeue</code>方法将充当一个阻塞队列。即，当队列里有数据时，阻塞所有调用<code>dequeue</code>方法，否则就一直等待。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.pract.threadpool;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CustomQueue</span>&lt;<span class="title">E</span>&gt;</span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">enqueue</span><span class="params">(E e)</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> E <span class="title">dequeue</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -203,10 +215,9 @@
 <p>以下是输出:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">Taken Item by thread name:9</div><div class="line">Taken Item by thread name:0</div><div class="line"></div><div class="line">Starting Task A....</div><div class="line">Starting Task B....</div><div class="line"></div><div class="line">Task B Completed....</div><div class="line">Task completed of thread:0</div><div class="line"></div><div class="line">Task A Completed....</div><div class="line">Task completed of thread:9</div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

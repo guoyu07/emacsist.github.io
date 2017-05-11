@@ -154,42 +154,64 @@
 
 <div class="content content-post LEFT">
    <article id="post-Nginx-SSL-结合Tomcat-重定向URL变成HTTP的问题" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Nginx SSL 结合Tomcat 重定向URL变成HTTP的问题</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Nginx SSL 结合Tomcat 重定向URL变成HTTP的问题
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.01.19</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/nginx/">nginx</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>由于要配置服务器(Nginx + Tomcat）的SSL的问题（Nginx同时监听<code>HTTP</code>和<code>HTTPS</code>)，但是，如果用户访问的是<code>HTTPS</code>协议，然后Tomcat进行重定向的时候，却变成了<code>HTTP</code>.</p>
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#nginx">
+        <span class="tag-name">nginx</span>
+    <span class="tag-size">( 8 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#ssl">
+        <span class="tag-name">ssl</span>
+    <span class="tag-size">( 2 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#tomcat">
+        <span class="tag-name">tomcat</span>
+    <span class="tag-size">( 20 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>由于要配置服务器(Nginx + Tomcat）的SSL的问题（Nginx同时监听<code>HTTP</code>和<code>HTTPS</code>)，但是，如果用户访问的是<code>HTTPS</code>协议，然后Tomcat进行重定向的时候，却变成了<code>HTTP</code>.</p>
 <h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h2><h3 id="Nginx-配置"><a href="#Nginx-配置" class="headerlink" title="Nginx 配置"></a>Nginx 配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">代理的配置，要添加以下内容</div><div class="line"></div><div class="line">proxy_set_header Host <span class="variable">$host</span>;</div><div class="line">proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</div><div class="line">proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</div><div class="line"></div><div class="line"><span class="comment"># must</span></div><div class="line">proxy_set_header X-Forwarded-Proto  <span class="variable">$scheme</span>;</div></pre></td></tr></table></figure>
 <p>然后重新加载一下配置文件即可<code>sudo nginx -s reload</code></p>
 <h4 id="Tomcat-配置"><a href="#Tomcat-配置" class="headerlink" title="Tomcat 配置"></a>Tomcat 配置</h4><p>在<code>server.xml</code>的<code>Engine</code>模块下面配置多一个以下的<code>Valve</code></p>
@@ -200,10 +222,9 @@
 <li><a href="http://blog.sina.com.cn/s/blog_56d8ea900101hlhv.html" target="_blank" rel="external">Sina Blog</a></li>
 </ul>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

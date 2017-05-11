@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-PostgreSQL上选择MAX（COUNT）的数据出来" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">PostgreSQL上选择MAX（COUNT）的数据出来</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            PostgreSQL上选择MAX（COUNT）的数据出来
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2014.12.23</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/postgresql/">postgresql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <p>昨天晚上，和同事讨论了一个SQL的问题，是如何选择根据某字段分组，然后取出MAX  COUNT(XX) 值的数据出来。例如数据是：</p>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p>昨天晚上，和同事讨论了一个SQL的问题，是如何选择根据某字段分组，然后取出MAX  COUNT(XX) 值的数据出来。例如数据是：</p>
 <figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">test=# select * from tgroup;</div><div class="line">id | age | point</div><div class="line">----+-----+-------</div><div class="line">  <span class="number">1</span> |   <span class="number">1</span> |    <span class="number">11</span></div><div class="line">  <span class="number">2</span> |   <span class="number">1</span> |    <span class="number">32</span></div><div class="line">  <span class="number">3</span> |   <span class="number">2</span> |    <span class="number">32</span></div><div class="line">  <span class="number">4</span> |   <span class="number">2</span> |    <span class="number">13</span></div><div class="line">  <span class="number">5</span> |   <span class="number">2</span> |    <span class="number">33</span></div><div class="line">  <span class="number">6</span> |   <span class="number">2</span> |    <span class="number">38</span></div><div class="line">  <span class="number">7</span> |   <span class="number">3</span> |    <span class="number">38</span></div><div class="line">  <span class="number">8</span> |   <span class="number">2</span> |    <span class="number">38</span></div><div class="line">  <span class="number">9</span> |   <span class="number">2</span> |    <span class="number">38</span></div><div class="line"> <span class="number">10</span> |   <span class="number">2</span> |    <span class="number">38</span></div><div class="line"> <span class="number">11</span> |   <span class="number">2</span> |    <span class="number">38</span></div><div class="line">(<span class="number">11</span> rows)</div><div class="line"> </div><div class="line">test=#</div></pre></td></tr></table></figure>
 <p>现在要选择出根据 POINT 分组里包含个数最大的值。大概意思是：MAX(COUNT(*)) FROM tgroup GROUP BY POINT;<br>所以，一开始，我们的SQL语句是（失败）：</p>
 <figure class="highlight n1ql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">select</span> <span class="built_in">MAX</span>(<span class="built_in">COUNT</span>(*)) <span class="keyword">FROM</span> tgroup <span class="keyword">group</span> <span class="keyword">by</span> point;</div></pre></td></tr></table></figure>
@@ -208,10 +220,9 @@
 <p>其他两种方式，并没有什么变化。看执行计划，其他两种依然是使用Seq Scan的方式，而添加了索引后，CTE的方式使用了 CTE Scan + IndexOnlyScan的方式。<br><figure class="highlight n1ql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">test=# <span class="keyword">explain</span>  <span class="keyword">with</span> cte <span class="keyword">as</span> (<span class="keyword">select</span> <span class="built_in">count</span>(*) <span class="keyword">over</span> (<span class="keyword">partition</span> <span class="keyword">by</span> point) <span class="keyword">from</span> tgroup) <span class="keyword">select</span> <span class="built_in">max</span>(<span class="built_in">count</span>) <span class="keyword">from</span> cte;</div><div class="line">                                                QUERY PLAN                                               </div><div class="line">----------------------------------------------------------------------------------------------------------</div><div class="line"> Aggregate  (cost=955503.54..955503.55 rows=1 width=8)</div><div class="line">   CTE cte</div><div class="line">     -&gt;  WindowAgg  (cost=0.43..695980.98 rows=11534336 width=4)</div><div class="line">           -&gt;  <span class="keyword">Index</span> Only Scan <span class="keyword">using</span> tgroup_point <span class="keyword">on</span> tgroup  (cost=<span class="number">0.43</span>.<span class="number">.522965</span><span class="number">.94</span> rows=<span class="number">11534336</span> width=<span class="number">4</span>)</div><div class="line">   -&gt;  CTE Scan <span class="keyword">on</span> cte  (cost=<span class="number">0.00</span>.<span class="number">.230686</span><span class="number">.72</span> rows=<span class="number">11534336</span> width=<span class="number">8</span>)</div><div class="line">(<span class="number">5</span> rows)</div><div class="line"> </div><div class="line">Time: <span class="number">0.909</span> ms</div></pre></td></tr></table></figure></p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>看来没有 WHERE 或其他条件过滤数据而且数据量非常大的情况下，不适宜使用CTE表达式，因为它本质是一个一次性视图，生成一张这么大的视图，性能也快不到哪里去(可能使用物化视图会好点,不过没有测试过）。在大量数据情况下，还是使用普通的全表扫描比使用生成CTE再全表扫描来得快。这也应验了之前翻译篇文章的强调：CTE表达式的作用，真的不是为了加快查询速度，而仅仅是为了方便。冏 ~~。</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

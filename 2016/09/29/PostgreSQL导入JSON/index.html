@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-PostgreSQL导入JSON" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">PostgreSQL导入JSON</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            PostgreSQL导入JSON
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.09.29</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/postgresql/">postgresql</a> / <a class="article-category-link" href="/categories/postgresql/database/">database</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="过滤Unicode字符"><a href="#过滤Unicode字符" class="headerlink" title="过滤Unicode字符"></a>过滤Unicode字符</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sed -i <span class="string">'s/\u0000//g'</span> json.txt</div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="过滤Unicode字符"><a href="#过滤Unicode字符" class="headerlink" title="过滤Unicode字符"></a>过滤Unicode字符</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sed -i <span class="string">'s/\u0000//g'</span> json.txt</div></pre></td></tr></table></figure>
 <h2 id="使用pgfutter"><a href="#使用pgfutter" class="headerlink" title="使用pgfutter"></a>使用pgfutter</h2><p><a href="https://github.com/lukasmartinelli/pgfutter" target="_blank" rel="external">Github pgfutter</a></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pgfutter --jsonb json 你的json文件</div></pre></td></tr></table></figure>
 <h2 id="创建唯一索引"><a href="#创建唯一索引" class="headerlink" title="创建唯一索引"></a>创建唯一索引</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CREATE UNIQUE INDEX status_id_uniq  ON status ( (data-&gt;&gt;<span class="string">'id'</span>) );</div></pre></td></tr></table></figure>
@@ -202,10 +214,9 @@
 <p>解决办法:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">CREATE OR REPLACE FUNCTION f_to_imts(text)</div><div class="line">  RETURNS timestamptz AS</div><div class="line">$<span class="variable">$SELECT</span> <span class="variable">$1</span>::timestamp with time zone $$</div><div class="line">  LANGUAGE sql IMMUTABLE;</div><div class="line">  </div><div class="line">  </div><div class="line">create index status_created_at on status ( f_to_imts(data-&gt;&gt;<span class="string">'created_at'</span>) );</div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

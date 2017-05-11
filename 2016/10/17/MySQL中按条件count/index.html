@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-MySQL中按条件count" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">MySQL中按条件count</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            MySQL中按条件count
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.10.17</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/mysql/">mysql</a> / <a class="article-category-link" href="/categories/mysql/database/">database</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>产品中有个业务是定时发通知的，现有的逻辑是，只有通知数&gt;0时，才会发通知，现在PM说要修改为无论有没有消息数，都要在定时的时间发送通知。</p>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>产品中有个业务是定时发通知的，现有的逻辑是，只有通知数&gt;0时，才会发通知，现在PM说要修改为无论有没有消息数，都要在定时的时间发送通知。</p>
 <h2 id="原SQL"><a href="#原SQL" class="headerlink" title="原SQL"></a>原SQL</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">SELECT count(1) as total, max(mws.id) as maxRuleStatusId, mwr.user_id as userId, mwr.id as ruleId, mwr.wx_openids as wxOpenIds from micro_warning_status mws INNER JOIN micro_warning_rule as mwr ON mws.micro_warning_rule_id = mwr.id</div><div class="line">WHERE mwr.notice_interval = <span class="comment">#&#123;noticeInterval&#125; AND mws.id &gt; mwr.last_notice_id</span></div><div class="line">group by mwr.user_id, mwr.id;</div></pre></td></tr></table></figure>
 <p>last_notice_id：表示上一次已经通知的id，<code>mws.id &gt; mwr.last_notice_id</code> 表示距离上一次通知后，有多少条新的消息.</p>
 <p>因为这个条件在<code>where</code>里，所以只有在定时的时间内，有新的消息时，此SQL才不会为空。</p>
@@ -197,10 +209,9 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">SELECT sum(<span class="keyword">if</span>(mws.id &gt; mwr.last_notice_id, 1, 0)) as total, max(mws.id) as maxRuleStatusId, mwr.user_id as userId, mwr.id as ruleId, mwr.wx_openids as wxOpenIds from micro_warning_status mws INNER JOIN micro_warning_rule as mwr ON mws.micro_warning_rule_id = mwr.id</div><div class="line">WHERE mwr.notice_interval = <span class="comment">#&#123;noticeInterval&#125;</span></div><div class="line">group by mwr.user_id, mwr.id;</div></pre></td></tr></table></figure>
 <p>通过<code>sum</code>+<code>if</code>来有条件地进行<code>count</code>操作即可达到目的。</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

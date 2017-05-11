@@ -154,42 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-生产环境部署Tomcat配置" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">生产环境部署Tomcat配置</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            生产环境部署Tomcat配置
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.01.11</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="操作系统设置"><a href="#操作系统设置" class="headerlink" title="操作系统设置"></a>操作系统设置</h2><h3 id="limit"><a href="#limit" class="headerlink" title="limit"></a>limit</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">╭─sky@sky-linux ~</div><div class="line">╰─➤  <span class="built_in">ulimit</span> <span class="_">-a</span></div><div class="line">-t: cpu time (seconds)              unlimited</div><div class="line"><span class="_">-f</span>: file size (blocks)              unlimited</div><div class="line"><span class="_">-d</span>: data seg size (kbytes)          unlimited</div><div class="line"><span class="_">-s</span>: stack size (kbytes)             8192</div><div class="line">-c: core file size (blocks)         0</div><div class="line">-m: resident <span class="built_in">set</span> size (kbytes)      unlimited</div><div class="line">-u: processes                       63555</div><div class="line">-n: file descriptors                1024</div><div class="line"><span class="_">-l</span>: locked-in-memory size (kbytes)  64</div><div class="line">-v: address space (kbytes)          unlimited</div><div class="line">-x: file locks                      unlimited</div><div class="line">-i: pending signals                 63555</div><div class="line">-q: bytes <span class="keyword">in</span> POSIX msg queues       819200</div><div class="line"><span class="_">-e</span>: max nice                        0</div><div class="line">-r: max rt priority                 0</div><div class="line">-N 15:                              unlimited</div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#server">
+        <span class="tag-name">server</span>
+    <span class="tag-size">( 6 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#tomcat">
+        <span class="tag-name">tomcat</span>
+    <span class="tag-size">( 20 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="操作系统设置"><a href="#操作系统设置" class="headerlink" title="操作系统设置"></a>操作系统设置</h2><h3 id="limit"><a href="#limit" class="headerlink" title="limit"></a>limit</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">╭─sky@sky-linux ~</div><div class="line">╰─➤  <span class="built_in">ulimit</span> <span class="_">-a</span></div><div class="line">-t: cpu time (seconds)              unlimited</div><div class="line"><span class="_">-f</span>: file size (blocks)              unlimited</div><div class="line"><span class="_">-d</span>: data seg size (kbytes)          unlimited</div><div class="line"><span class="_">-s</span>: stack size (kbytes)             8192</div><div class="line">-c: core file size (blocks)         0</div><div class="line">-m: resident <span class="built_in">set</span> size (kbytes)      unlimited</div><div class="line">-u: processes                       63555</div><div class="line">-n: file descriptors                1024</div><div class="line"><span class="_">-l</span>: locked-in-memory size (kbytes)  64</div><div class="line">-v: address space (kbytes)          unlimited</div><div class="line">-x: file locks                      unlimited</div><div class="line">-i: pending signals                 63555</div><div class="line">-q: bytes <span class="keyword">in</span> POSIX msg queues       819200</div><div class="line"><span class="_">-e</span>: max nice                        0</div><div class="line">-r: max rt priority                 0</div><div class="line">-N 15:                              unlimited</div></pre></td></tr></table></figure>
 <h4 id="会话级别"><a href="#会话级别" class="headerlink" title="会话级别"></a>会话级别</h4><p>如果不想全局设置limit，可以在会话级别设置，即在启动程序之前，设置好limit后再启动程序</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 硬设置</span></div><div class="line"><span class="built_in">ulimit</span> -Hc unlimited</div><div class="line"><span class="built_in">ulimit</span> -Hn 65535</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 软设置</span></div><div class="line"><span class="built_in">ulimit</span> -Sc unlimited</div><div class="line"><span class="built_in">ulimit</span> -Sn 65535</div></pre></td></tr></table></figure>
 <h4 id="全局设置limit"><a href="#全局设置limit" class="headerlink" title="全局设置limit"></a>全局设置limit</h4><p>编辑 <code>/etc/security/limits.conf</code> 文件.添加或修改为如下</p>
@@ -213,10 +230,9 @@
 <p><a href="http://tomcat.apache.org/tomcat-7.0-doc/config/executor.html" target="_blank" rel="external">Tomcat文档</a></p>
 <h3 id="JVM-配置"><a href="#JVM-配置" class="headerlink" title="JVM 配置"></a>JVM 配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line"></div><div class="line">JVM_TYPE = <span class="string">" -server"</span></div><div class="line"></div><div class="line">JVM_GC=<span class="string">" -XX:+PrintGCDateStamps -verbose:gc -XX:+PrintGCDetails -Xloggc:/tmp/gc.log -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=10M"</span></div><div class="line">JVM_DUMP=<span class="string">" -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp/jvm-dump-`date`.hprof"</span></div><div class="line"></div><div class="line">JVM_GC_TYPE=<span class="string">" -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:+UseCMSInitiatingOccupancyOnly -XX:CMSInitiatingOccupancyFraction=90  -XX:+ScavengeBeforeFullGC -XX:+CMSScavengeBeforeRemark"</span></div><div class="line"></div><div class="line"><span class="comment"># 单位：秒</span></div><div class="line">JVM_DNS_CACHE=<span class="string">" -Dsun.net.inetaddr.ttl=60"</span></div><div class="line"></div><div class="line"><span class="comment"># hostname如果为远程，则是外网的IP</span></div><div class="line">JVM_RMI=<span class="string">" -Djava.rmi.server.hostname=127.0.0.1 -Dcom.sun.management.jmxremote.port=8888 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"</span></div><div class="line"></div><div class="line"><span class="comment"># survivorratio = eden / from 的比值</span></div><div class="line"></div><div class="line">JVM_MEM=<span class="string">" -Xms512m -Xmx1024m  -XX:PermSize=512m -XX:MaxPermSize=1024m  -Xmn300m -XX:SurvivorRatio=8"</span></div><div class="line"></div><div class="line"></div><div class="line">JVM_DEBUG=<span class="string">" -Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n"</span></div><div class="line"></div><div class="line">CATALINA_OPTS=<span class="string">" -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager <span class="variable">$&#123;JVM_TYPE&#125;</span> <span class="variable">$&#123;JVM_GC_TYPE&#125;</span> <span class="variable">$&#123;JVM_GC&#125;</span> <span class="variable">$&#123;JVM_DUMP&#125;</span> <span class="variable">$&#123;JVM_DNS_CACHE&#125;</span> <span class="variable">$&#123;JVM_RMI&#125;</span> <span class="variable">$&#123;JVM_MEM&#125;</span> <span class="variable">$&#123;JVM_DEBUG&#125;</span> "</span></div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

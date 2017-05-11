@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-MySQL设置wait-timeout注意事项" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">MySQL设置wait_timeout注意事项</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            MySQL设置wait_timeout注意事项
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.01.04</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/mysql/">mysql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <blockquote>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <blockquote>
 <p>wait_timeout 是服务器等待客户端多久没有活动时，就关闭连接的时间，单位是秒.</p>
 </blockquote>
 <h2 id="查看"><a href="#查看" class="headerlink" title="查看"></a>查看</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">-- global level</div><div class="line"></div><div class="line">mysql&gt; show global variables like <span class="string">'%timeout%'</span>;</div><div class="line">+-----------------------------+----------+</div><div class="line">| Variable_name               | Value    |</div><div class="line">+-----------------------------+----------+</div><div class="line">| connect_timeout             | 10       |</div><div class="line">| delayed_insert_timeout      | 300      |</div><div class="line">| innodb_flush_log_at_timeout | 1        |</div><div class="line">| innodb_lock_wait_timeout    | 30       |</div><div class="line">| innodb_rollback_on_timeout  | OFF      |</div><div class="line">| interactive_timeout         | 120      |</div><div class="line">| lock_wait_timeout           | 600      |</div><div class="line">| net_read_timeout            | 3        |</div><div class="line">| net_write_timeout           | 6        |</div><div class="line">| rpl_stop_slave_timeout      | 31536000 |</div><div class="line">| slave_net_timeout           | 30       |</div><div class="line">| wait_timeout                | 28800    |</div><div class="line">+-----------------------------+----------+</div><div class="line">12 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">-- session level</div><div class="line"></div><div class="line">mysql&gt; show variables like <span class="string">'%timeout%'</span>;</div><div class="line">+-----------------------------+----------+</div><div class="line">| Variable_name               | Value    |</div><div class="line">+-----------------------------+----------+</div><div class="line">| connect_timeout             | 10       |</div><div class="line">| delayed_insert_timeout      | 300      |</div><div class="line">| innodb_flush_log_at_timeout | 1        |</div><div class="line">| innodb_lock_wait_timeout    | 30       |</div><div class="line">| innodb_rollback_on_timeout  | OFF      |</div><div class="line">| interactive_timeout         | 120      |</div><div class="line">| lock_wait_timeout           | 600      |</div><div class="line">| net_read_timeout            | 3        |</div><div class="line">| net_write_timeout           | 6        |</div><div class="line">| rpl_stop_slave_timeout      | 31536000 |</div><div class="line">| slave_net_timeout           | 30       |</div><div class="line">| wait_timeout                | 120      |</div><div class="line">+-----------------------------+----------+</div><div class="line">12 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
@@ -210,10 +222,9 @@
 <p>这样了，新打开的会话的<code>wait_timeout</code>就会是<code>280000</code>了.如：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">-- session level</div><div class="line"></div><div class="line">mysql&gt; show variables like <span class="string">'%timeout%'</span>;</div><div class="line">+-----------------------------+----------+</div><div class="line">| Variable_name               | Value    |</div><div class="line">+-----------------------------+----------+</div><div class="line">| connect_timeout             | 10       |</div><div class="line">| delayed_insert_timeout      | 300      |</div><div class="line">| innodb_flush_log_at_timeout | 1        |</div><div class="line">| innodb_lock_wait_timeout    | 30       |</div><div class="line">| innodb_rollback_on_timeout  | OFF      |</div><div class="line">| interactive_timeout         | 280000   |</div><div class="line">| lock_wait_timeout           | 600      |</div><div class="line">| net_read_timeout            | 3        |</div><div class="line">| net_write_timeout           | 6        |</div><div class="line">| rpl_stop_slave_timeout      | 31536000 |</div><div class="line">| slave_net_timeout           | 30       |</div><div class="line">| wait_timeout                | 280000   |</div><div class="line">+-----------------------------+----------+</div><div class="line">12 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

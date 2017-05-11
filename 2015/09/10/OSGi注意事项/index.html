@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-OSGi注意事项" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">OSGi注意事项</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            OSGi注意事项
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.09.10</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="关于导入的版本处理问题"><a href="#关于导入的版本处理问题" class="headerlink" title="关于导入的版本处理问题"></a>关于导入的版本处理问题</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Import-Package: org.osgi.framework;version=<span class="string">"1.8.0"</span></div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#OSGi">
+        <span class="tag-name">OSGi</span>
+    <span class="tag-size">( 8 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="关于导入的版本处理问题"><a href="#关于导入的版本处理问题" class="headerlink" title="关于导入的版本处理问题"></a>关于导入的版本处理问题</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Import-Package: org.osgi.framework;version=<span class="string">"1.8.0"</span></div></pre></td></tr></table></figure>
 <p>这个表示，只要是<code>org.osgi.framework</code>包的版本，<code>&gt;=1.8.0</code>的都可以。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Import-Package: org.osgi.framework;version=<span class="string">"[1.8.0,1.8.9)"</span></div></pre></td></tr></table></figure>
 <p>这个表示，只要是<code>org.osgi.framework</code>包的版本只能是 <code>1.8.0 &lt;= version &lt; 1.8.9</code>的都可以。其他的则不能.</p>
@@ -206,10 +218,9 @@
 <p>这样子写了Jar包之后，千万不要再使用<code>Import-Package</code>来导入这些第三方包了。不然也会报以上的类似错误。</p>
 <h2 id="关于包的可见性问题"><a href="#关于包的可见性问题" class="headerlink" title="关于包的可见性问题"></a>关于包的可见性问题</h2><p>总之一句话, 除了<code>java.</code>开头的包对于任何的OSGi框架运行时都是可见的, 其他的都应该假设它是不可见的.包括<code>javax.</code>开头的包!!</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

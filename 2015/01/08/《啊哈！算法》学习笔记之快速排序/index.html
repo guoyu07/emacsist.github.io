@@ -154,49 +154,60 @@
 
 <div class="content content-post LEFT">
    <article id="post-《啊哈！算法》学习笔记之快速排序" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">《啊哈！算法》学习笔记之快速排序</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            《啊哈！算法》学习笔记之快速排序
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.01.08</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/编程/">编程</a> / <a class="article-category-link" href="/categories/编程/算法/">算法</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="基本思想"><a href="#基本思想" class="headerlink" title="基本思想"></a>基本思想</h2><p>每次排序的时候设置一个基准点，将小于等于基准点的数全部放到基准点的一边，将大于等于基准点的数全部放到基准点的另一边.</p>
+      <a class="tag-item" href="/tags/#啊哈！算法">
+        <span class="tag-name">啊哈！算法</span>
+    <span class="tag-size">( 5 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#算法">
+        <span class="tag-name">算法</span>
+    <span class="tag-size">( 5 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="基本思想"><a href="#基本思想" class="headerlink" title="基本思想"></a>基本思想</h2><p>每次排序的时候设置一个基准点，将小于等于基准点的数全部放到基准点的一边，将大于等于基准点的数全部放到基准点的另一边.</p>
 <h2 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h2><p>因此快速排序的最差时间复杂度和冒泡排序是一样的，都是 O(N^2 )，它的平均时间复杂度为 O(NlogN)。</p>
 <h2 id="Java实现（从大到小）"><a href="#Java实现（从大到小）" class="headerlink" title="Java实现（从大到小）"></a>Java实现（从大到小）</h2><figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args) &#123;</div><div class="line">    <span class="keyword">int</span> length = <span class="number">20</span>;</div><div class="line">    <span class="keyword">int</span> maxValue = <span class="number">20</span>;</div><div class="line">    <span class="keyword">int</span>[] <span class="keyword">array</span> = <span class="keyword">new</span> <span class="keyword">int</span>[length];</div><div class="line">    Random r = <span class="keyword">new</span> Random();</div><div class="line">    <span class="built_in">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">array</span>.length; i++) &#123;</div><div class="line">        <span class="keyword">array</span>[i] = r.nextInt(maxValue);</div><div class="line">    &#125;</div><div class="line">    System.out.<span class="built_in">println</span>(Arrays.toString(<span class="keyword">array</span>));</div><div class="line">    quickSort(<span class="keyword">array</span>, <span class="number">0</span>, length<span class="number">-1</span>);</div><div class="line">    System.out.<span class="built_in">println</span>(Arrays.toString(<span class="keyword">array</span>));</div><div class="line">&#125;</div><div class="line"> </div><div class="line"> </div><div class="line"><span class="comment">// 假设以左边的为基数，那就要从右边开始移动。左为大于基数，右为小于基数</span></div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> quickSort(<span class="keyword">int</span>[] <span class="keyword">array</span>, <span class="keyword">int</span> leftPoint, <span class="keyword">int</span> rightPoint) &#123;</div><div class="line">    <span class="built_in">if</span> (leftPoint &gt; rightPoint) &#123;</div><div class="line">        <span class="built_in">return</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">int</span> swapTmp = <span class="number">0</span>;</div><div class="line">    <span class="keyword">int</span> baseNumber = <span class="keyword">array</span>[leftPoint];<span class="comment">// 以左边为基准</span></div><div class="line">    <span class="keyword">int</span> i = leftPoint;</div><div class="line">    <span class="keyword">int</span> j = rightPoint;</div><div class="line">    <span class="built_in">while</span> (leftPoint != rightPoint) &#123;</div><div class="line">        <span class="comment">// 从右边开始向左移动，到找第一个大于基数时停止</span></div><div class="line">        <span class="built_in">while</span> (<span class="keyword">array</span>[rightPoint] &lt;= baseNumber &amp;&amp; leftPoint &lt; rightPoint) &#123;</div><div class="line">            rightPoint--;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">// 从左边开始向右移动，到找第一个小于基数时停止</span></div><div class="line">        <span class="built_in">while</span> (<span class="keyword">array</span>[leftPoint] &gt;= baseNumber &amp;&amp; leftPoint &lt; rightPoint) &#123;</div><div class="line">            leftPoint++;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">// 没有相遇时，就交换</span></div><div class="line">        <span class="built_in">if</span> (leftPoint &lt; rightPoint) &#123;</div><div class="line">            swapTmp = <span class="keyword">array</span>[leftPoint];</div><div class="line">            <span class="keyword">array</span>[leftPoint] = <span class="keyword">array</span>[rightPoint];</div><div class="line">            <span class="keyword">array</span>[rightPoint] = swapTmp;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//恢复新一轮的基准，将旧的基准归位，然后又重新定一个新的左边基准位。即将基准数与中间数互换</span></div><div class="line">    <span class="keyword">array</span>[i] = <span class="keyword">array</span>[leftPoint];</div><div class="line">    <span class="keyword">array</span>[leftPoint] = baseNumber;</div><div class="line"> </div><div class="line">    <span class="comment">//递归左，右两边</span></div><div class="line">    quickSort(<span class="keyword">array</span>, i, leftPoint<span class="number">-1</span>);</div><div class="line">    quickSort(<span class="keyword">array</span>, leftPoint+<span class="number">1</span>, j);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

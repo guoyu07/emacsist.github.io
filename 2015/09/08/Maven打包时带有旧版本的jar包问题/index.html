@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-Maven打包时带有旧版本的jar包问题" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Maven打包时带有旧版本的jar包问题</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Maven打包时带有旧版本的jar包问题
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.09.08</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <p>最近发现在修改<code>pom.xl</code>的jar包版本依赖时，每次进行<code>package</code>时，都会发现以前的版本的jar包遗留下来。</p>
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#maven">
+        <span class="tag-name">maven</span>
+    <span class="tag-size">( 7 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p>最近发现在修改<code>pom.xl</code>的jar包版本依赖时，每次进行<code>package</code>时，都会发现以前的版本的jar包遗留下来。</p>
 <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>这是因为我们公司有部分同事，喜欢在Eclipse里配置Tomcat的部署目录直接为项目的目录，而且在<code>pom.xml</code>配置了如下的<code>task</code></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">&lt;plugin&gt;</div><div class="line">	&lt;artifactId&gt;maven-antrun-plugin&lt;/artifactId&gt;</div><div class="line">	&lt;executions&gt;</div><div class="line">		&lt;execution&gt;</div><div class="line">			&lt;id&gt;copy-lib-src-webapps&lt;/id&gt;</div><div class="line">			&lt;phase&gt;package&lt;/phase&gt;</div><div class="line">			&lt;configuration&gt;</div><div class="line">				&lt;tasks&gt;</div><div class="line">					&lt;copy todir=<span class="string">"webroot/WEB-INF/lib"</span>&gt;</div><div class="line">						&lt;fileset dir=<span class="string">"target/ROOT/WEB-INF/lib"</span>&gt;</div><div class="line">							&lt;include name=<span class="string">"*"</span> /&gt;</div><div class="line">						&lt;/fileset&gt;</div><div class="line">					&lt;/copy&gt;</div><div class="line">					&lt;copy todir=<span class="string">"webroot/WEB-INF/classes"</span>&gt;</div><div class="line">						&lt;fileset dir=<span class="string">"target/ROOT/WEB-INF/classes"</span>&gt;</div><div class="line">							&lt;include name=<span class="string">"*"</span> /&gt;</div><div class="line">						&lt;/fileset&gt;</div><div class="line">					&lt;/copy&gt;</div><div class="line">				&lt;/tasks&gt;</div><div class="line">			&lt;/configuration&gt;</div><div class="line">			&lt;goals&gt;</div><div class="line">				&lt;goal&gt;run&lt;/goal&gt;</div><div class="line">			&lt;/goals&gt;</div><div class="line">		&lt;/execution&gt;</div><div class="line">	&lt;/executions&gt;</div><div class="line">&lt;/plugin&gt;</div></pre></td></tr></table></figure>
 <p>关键就是上面的<code>tasks</code>部分，它是直接将<code>target/ROOT/WEB-INF/lib</code>目录，复制到项目工程的<code>webroot/WEB-INF/lib</code>目录下。而<code>target/ROOT/WEB-INF/lib</code>又是在部署时，将<code>webroot/WEB-INF/lib</code>目录复制到该目录的。这样子，就造成了旧版本的<code>JAR</code>包，一直会叠加了。还有<code>classes</code>目录也同理，虽然同名的会覆盖，但删除的java文件，还会保留下来，作为一名处女座，应该不能忍受这种事情。所以，进行了以下改造：</p>
@@ -199,10 +211,9 @@
 <p>这样子，执行命令时，就不会有遗留旧的jar包版本了。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mvn clean package -Dmaven.test.skip=<span class="literal">true</span></div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

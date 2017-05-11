@@ -154,42 +154,49 @@
 
 <div class="content content-post LEFT">
    <article id="post-如果是我startup-JavaWeb项目开发，我会这样子做" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">如果是我startup JavaWeb项目开发，我会这样子做</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            如果是我startup JavaWeb项目开发，我会这样子做
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.04.29</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="Maven-模块化开发"><a href="#Maven-模块化开发" class="headerlink" title="Maven 模块化开发"></a>Maven 模块化开发</h2><p>按功能模块？<br>    如果按功能分模块的话，比较复杂，难免会有代码循环依赖的问题。<br>按分层模块？<br>    这个相对比较简单点。</p>
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="Maven-模块化开发"><a href="#Maven-模块化开发" class="headerlink" title="Maven 模块化开发"></a>Maven 模块化开发</h2><p>按功能模块？<br>    如果按功能分模块的话，比较复杂，难免会有代码循环依赖的问题。<br>按分层模块？<br>    这个相对比较简单点。</p>
 <p>然后还要区分不同的环境下的包（web与非web环境，为以后的task等非web代码部署时，不需要再依赖tomcat等容器）</p>
 <h2 id="日志的统一"><a href="#日志的统一" class="headerlink" title="日志的统一"></a>日志的统一</h2><p>slf4j，不过不能配置将标准输出，重定向到Tomcat的<code>catalina.out</code>里。<br>即不能这样子配置：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;!-- 控制台输出 --&gt;</div><div class="line">	&lt;appender name=<span class="string">"STDOUT"</span> class=<span class="string">"ch.qos.logback.core.ConsoleAppender"</span>&gt;</div><div class="line">		&lt;layout class=<span class="string">"ch.qos.logback.classic.PatternLayout"</span>&gt;</div><div class="line">			&lt;Pattern&gt;%C&#123;50&#125;.%M %L [%date&#123;yyyy-MM-dd HH:mm:ss.SSS&#125;] [%-5level] : %m%ex%n&lt;/Pattern&gt;</div><div class="line">		&lt;/layout&gt;</div><div class="line">	&lt;/appender&gt;</div></pre></td></tr></table></figure>
@@ -232,10 +239,9 @@
 <p>SpringMVC加上如下:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">import org.springframework.beans.factory.annotation.Autowired;</div><div class="line">import org.springframework.web.bind.annotation.ControllerAdvice;</div><div class="line">import org.springframework.web.bind.annotation.ExceptionHandler;</div><div class="line">import org.springframework.web.bind.annotation.ResponseBody;</div><div class="line"></div><div class="line">import javax.servlet.http.HttpServletRequest;</div><div class="line">import java.util.HashMap;</div><div class="line">import java.util.Map;</div><div class="line"></div><div class="line">@ControllerAdvice</div><div class="line">public class ControllerExceptionAdvice &#123;</div><div class="line"></div><div class="line">    @Autowired</div><div class="line">    private RabbitMQService rabbitMQService;</div><div class="line"></div><div class="line">    @ExceptionHandler(value = &#123;Exception.class, RuntimeException.class&#125;)</div><div class="line">    @ResponseBody</div><div class="line">    public Map&lt;String, Object&gt; defaultErrorHandler(HttpServletRequest request, Exception e) &#123;</div><div class="line"></div><div class="line">        String requestUrl = request.getRequestURI();</div><div class="line">        Map&lt;String, String[]&gt; params = request.getParameterMap();</div><div class="line">        String stackMsg = getStack(e);</div><div class="line"></div><div class="line">        rabbitMQService.sendEmail(<span class="string">"yourmail"</span>, <span class="string">"subject"</span>, getFormatText(requestUrl, params, stackMsg));</div><div class="line"></div><div class="line">        Map&lt;String, Object&gt; json = new HashMap&lt;&gt;();</div><div class="line">        json.put(Constants.ERROR_CODE, 500);</div><div class="line">        json.put(Constants.ERROR_MSG, <span class="string">"server interval error."</span>);</div><div class="line">        <span class="built_in">return</span> json;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private String getFormatText(String requestUrl, Map&lt;String, String[]&gt; params, String stackMsg) &#123;</div><div class="line">        <span class="built_in">return</span> String.format(<span class="string">"请求的URL为 %s\n请求的参数为%s\n异常信息为:%s\n"</span>, requestUrl, params, stackMsg);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private String getStack(Exception e) &#123;</div><div class="line">        StackTraceElement[] stackTraceElements = e.getStackTrace();</div><div class="line">        StringBuilder sb = new StringBuilder(e.getMessage());</div><div class="line">        sb.append(<span class="string">"\n"</span>);</div><div class="line">        <span class="keyword">for</span> (StackTraceElement stackTraceElement : stackTraceElements) &#123;</div><div class="line">            String className = stackTraceElement.getClassName();</div><div class="line">            String methodName = stackTraceElement.getMethodName();</div><div class="line">            int lineNum = stackTraceElement.getLineNumber();</div><div class="line">            String fileName = stackTraceElement.getFileName();</div><div class="line">            sb.append(className).append(<span class="string">"."</span>).append(methodName).append(<span class="string">" --&gt; "</span>).append(fileName).append(<span class="string">":"</span>).append(lineNum);</div><div class="line">            sb.append(<span class="string">"\n"</span>);</div><div class="line">        &#125;</div><div class="line">        <span class="built_in">return</span> sb.toString();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

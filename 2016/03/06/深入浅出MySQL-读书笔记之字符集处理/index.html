@@ -154,42 +154,49 @@
 
 <div class="content content-post LEFT">
    <article id="post-深入浅出MySQL-读书笔记之字符集处理" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">&lt;深入浅出MySQL&gt;读书笔记之字符集处理</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            &lt;深入浅出MySQL&gt;读书笔记之字符集处理
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.03.06</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/mysql/">mysql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="字符集"><a href="#字符集" class="headerlink" title="字符集"></a>字符集</h2><ul>
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="字符集"><a href="#字符集" class="headerlink" title="字符集"></a>字符集</h2><ul>
 <li><p>查看支持的字符集: <code>show character set;</code></p>
 </li>
 <li><p>查看校对规则: <code>show collation;</code>, <code>show collation like &#39;xxx&#39;</code>, <code>select * from infomation_schema.collations\G</code></p>
@@ -217,10 +224,9 @@
 <p><code>alter table tbname character set &#39;gbk&#39;</code>: 这个也不能修改已有数据的字符, 只是对新插入的数据生效.<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show create table t_p;</div><div class="line">+-------+------------------------------------------------------------------------------------------------------------------------+</div><div class="line">| Table | Create Table                                                                                                           |</div><div class="line">+-------+------------------------------------------------------------------------------------------------------------------------+</div><div class="line">| t_p   | CREATE TABLE `t_p` (</div><div class="line">  `id` int(11) NOT NULL AUTO_INCREMENT,</div><div class="line">  PRIMARY KEY (`id`)</div><div class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8 |</div><div class="line">+-------+------------------------------------------------------------------------------------------------------------------------+</div><div class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; alter table t_p character <span class="built_in">set</span> <span class="string">'gbk'</span>;</div><div class="line">Query OK, 0 rows affected (0.07 sec)</div><div class="line">Records: 0  Duplicates: 0  Warnings: 0</div><div class="line"></div><div class="line">mysql&gt; show create table t_p;</div><div class="line">+-------+-----------------------------------------------------------------------------------------------------------------------+</div><div class="line">| Table | Create Table                                                                                                          |</div><div class="line">+-------+-----------------------------------------------------------------------------------------------------------------------+</div><div class="line">| t_p   | CREATE TABLE `t_p` (</div><div class="line">  `id` int(11) NOT NULL AUTO_INCREMENT,</div><div class="line">  PRIMARY KEY (`id`)</div><div class="line">) ENGINE=InnoDB DEFAULT CHARSET=gbk |</div><div class="line">+-------+-----------------------------------------------------------------------------------------------------------------------+</div><div class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div></pre></td></tr></table></figure></p>
 <p>如果需要对已有数据进行调整, 需要先将数据导出, 然后按新的字符集再进行导入才行.</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

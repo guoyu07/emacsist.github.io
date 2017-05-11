@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-Spring-中文响应处理" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Spring 中文响应处理</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Spring 中文响应处理
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.12.28</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="为什么-CharacterEncodingFilter-没有生效"><a href="#为什么-CharacterEncodingFilter-没有生效" class="headerlink" title="为什么 CharacterEncodingFilter 没有生效"></a>为什么 <code>CharacterEncodingFilter</code> 没有生效</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">&lt;filter&gt;</div><div class="line">    &lt;filter-name&gt;CharacterEncodingFilter&lt;/filter-name&gt;</div><div class="line">    &lt;filter-class&gt;org.springframework.web.filter.CharacterEncodingFilter&lt;/filter-class&gt;</div><div class="line">    &lt;init-param&gt;</div><div class="line">        &lt;param-name&gt;encoding&lt;/param-name&gt;</div><div class="line">        &lt;param-value&gt;utf-8&lt;/param-value&gt;</div><div class="line">    &lt;/init-param&gt;</div><div class="line">    &lt;init-param&gt;</div><div class="line">        &lt;param-name&gt;forceEncoding&lt;/param-name&gt;</div><div class="line">        &lt;param-value&gt;<span class="literal">true</span>&lt;/param-value&gt;</div><div class="line">    &lt;/init-param&gt;</div><div class="line">&lt;/filter&gt;</div><div class="line"></div><div class="line">&lt;filter-mapping&gt;</div><div class="line">    &lt;filter-name&gt;CharacterEncodingFilter&lt;/filter-name&gt;</div><div class="line">    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;</div><div class="line">&lt;/filter-mapping&gt;</div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#spring">
+        <span class="tag-name">spring</span>
+    <span class="tag-size">( 27 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="为什么-CharacterEncodingFilter-没有生效"><a href="#为什么-CharacterEncodingFilter-没有生效" class="headerlink" title="为什么 CharacterEncodingFilter 没有生效"></a>为什么 <code>CharacterEncodingFilter</code> 没有生效</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">&lt;filter&gt;</div><div class="line">    &lt;filter-name&gt;CharacterEncodingFilter&lt;/filter-name&gt;</div><div class="line">    &lt;filter-class&gt;org.springframework.web.filter.CharacterEncodingFilter&lt;/filter-class&gt;</div><div class="line">    &lt;init-param&gt;</div><div class="line">        &lt;param-name&gt;encoding&lt;/param-name&gt;</div><div class="line">        &lt;param-value&gt;utf-8&lt;/param-value&gt;</div><div class="line">    &lt;/init-param&gt;</div><div class="line">    &lt;init-param&gt;</div><div class="line">        &lt;param-name&gt;forceEncoding&lt;/param-name&gt;</div><div class="line">        &lt;param-value&gt;<span class="literal">true</span>&lt;/param-value&gt;</div><div class="line">    &lt;/init-param&gt;</div><div class="line">&lt;/filter&gt;</div><div class="line"></div><div class="line">&lt;filter-mapping&gt;</div><div class="line">    &lt;filter-name&gt;CharacterEncodingFilter&lt;/filter-name&gt;</div><div class="line">    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;</div><div class="line">&lt;/filter-mapping&gt;</div></pre></td></tr></table></figure>
 <p>这个配置， <em>只有在 Controller 里，调用 HttpServletResponse 直接写数据时才会生效的</em> .如果是直接利用<code>HttpServletResponse</code>，就不能再用<code>@ResponseBody</code>了，例如下面这样子写就会报错:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(<span class="string">"/index"</span>)</div><div class="line">@ResponseBody</div><div class="line">public String index(HttpServletResponse response) throws IOException &#123;</div><div class="line">    response.getWriter().write(<span class="string">"你好，中文"</span>);</div><div class="line">    <span class="built_in">return</span> <span class="string">"中文"</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>错误为：</p>
@@ -226,10 +238,9 @@
 </li>
 </ol>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

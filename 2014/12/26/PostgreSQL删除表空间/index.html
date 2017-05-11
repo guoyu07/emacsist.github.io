@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-PostgreSQL删除表空间" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">PostgreSQL删除表空间</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            PostgreSQL删除表空间
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2014.12.26</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/postgresql/">postgresql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <p>昨天在群里看到有同鞋问：如何删除表空间？因为删除的时候，一直报<br><figure class="highlight subunit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">postgres=# drop tablespace mytmp;</div><div class="line"><span class="keyword">ERROR:  </span>tablespace "mytmp" is not empty</div><div class="line">postgres=#</div></pre></td></tr></table></figure></p>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p>昨天在群里看到有同鞋问：如何删除表空间？因为删除的时候，一直报<br><figure class="highlight subunit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">postgres=# drop tablespace mytmp;</div><div class="line"><span class="keyword">ERROR:  </span>tablespace "mytmp" is not empty</div><div class="line">postgres=#</div></pre></td></tr></table></figure></p>
 <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>想要删除表空间，那么该表空间必须为空（即没有任何其他的对象会使用到该表空间）才能被删除。</p>
 <h2 id="找出有哪些对象使用到了表空间"><a href="#找出有哪些对象使用到了表空间" class="headerlink" title="找出有哪些对象使用到了表空间"></a>找出有哪些对象使用到了表空间</h2><p>SQL语句：<br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">postgres=# SELECT                </div><div class="line"><span class="code">  c.relname,</span></div><div class="line"><span class="code">  t.spcname</span></div><div class="line">FROM</div><div class="line"><span class="code">  pg_class c</span></div><div class="line"><span class="code">    JOIN pg_tablespace t ON c.reltablespace = t.oid</span></div><div class="line">WHERE</div><div class="line"><span class="code">  t.spcname = 'mytmp';</span></div><div class="line"><span class="section">relname | spcname</span></div><div class="line">---------+---------</div><div class="line"><span class="code"> tsp     | mytmp</span></div><div class="line">(1 row)</div><div class="line"><span class="code"> </span></div><div class="line">postgres=#</div></pre></td></tr></table></figure></p>
 <h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><p>找到表空间的使用对象时，这时如果确实要删除表空间，那就要将该表空间下的表对象都删除了最后才能删除表空间。</p>
@@ -197,10 +209,9 @@
 <h4 id="删除该表空间"><a href="#删除该表空间" class="headerlink" title="删除该表空间"></a>删除该表空间</h4><figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">postgres=<span class="comment"># drop tablespace mytmp;</span></div><div class="line">DROP TABLESPACE</div><div class="line">postgres=<span class="comment">#</span></div></pre></td></tr></table></figure>
 <h4 id="再检查一次看看"><a href="#再检查一次看看" class="headerlink" title="再检查一次看看"></a>再检查一次看看</h4><figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">postgres=<span class="comment"># select * from pg_tablespace where spcname = 'mytmp';</span></div><div class="line">spcname | spcowner | spcacl | spcoptions</div><div class="line">---------+----------+--------+------------</div><div class="line">(0 rows)</div><div class="line"> </div><div class="line">postgres=<span class="comment"># </span></div><div class="line"></div><div class="line">postgres=<span class="comment"># SELECT               </span></div><div class="line">postgres-<span class="comment">#   c.relname,</span></div><div class="line">postgres-<span class="comment">#   t.spcname</span></div><div class="line">postgres-<span class="comment"># FROM</span></div><div class="line">postgres-<span class="comment">#   pg_class c</span></div><div class="line">postgres-<span class="comment">#     JOIN pg_tablespace t ON c.reltablespace = t.oid</span></div><div class="line">postgres-<span class="comment"># WHERE</span></div><div class="line">postgres-<span class="comment">#   t.spcname = 'mytmp';</span></div><div class="line">relname | spcname</div><div class="line">---------+---------</div><div class="line">(0 rows)</div><div class="line"> </div><div class="line">postgres=<span class="comment">#</span></div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

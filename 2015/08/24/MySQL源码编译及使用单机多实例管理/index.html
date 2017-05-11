@@ -154,42 +154,49 @@
 
 <div class="content content-post LEFT">
    <article id="post-MySQL源码编译及使用单机多实例管理" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">MySQL源码编译及使用单机多实例管理</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            MySQL源码编译及使用单机多实例管理
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.08.24</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/mysql/">mysql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <p>本文的测试环境为 Ubuntu 14.04.2 LTS 64 bit + MySQL 5.6</p>
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p>本文的测试环境为 Ubuntu 14.04.2 LTS 64 bit + MySQL 5.6</p>
 <h2 id="下载源码并安装及初始化数据库"><a href="#下载源码并安装及初始化数据库" class="headerlink" title="下载源码并安装及初始化数据库"></a>下载源码并安装及初始化数据库</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ~/Downloads</div><div class="line"></div><div class="line">wget -c http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.26.tar.gz</div><div class="line"></div><div class="line">tar -xvf mysql-5.6.26.tar.gz</div><div class="line"></div><div class="line"><span class="built_in">cd</span> mysql-5.6.26</div><div class="line"></div><div class="line">sudo groupadd mysql</div><div class="line"></div><div class="line">sudo useradd -r -g mysql mysql</div><div class="line"></div><div class="line">sudo apt-get install cmake</div><div class="line"></div><div class="line">cmake . -DCMAKE_INSTALL_PREFIX=/usr/<span class="built_in">local</span>/mysql-5.6 -DMYSQL_USER=mysql</div><div class="line"></div><div class="line">sudo mkdir /usr/<span class="built_in">local</span>/mysql-5.6</div><div class="line"></div><div class="line">sudo make install</div><div class="line"></div><div class="line">sudo chown mysql:mysql -R /usr/<span class="built_in">local</span>/mysql-5.6</div><div class="line"></div><div class="line">sudo mkdir /usr/<span class="built_in">local</span>/mysql-data/3306 -p</div><div class="line">sudo mkdir /usr/<span class="built_in">local</span>/mysql-data/3307 -p</div><div class="line"></div><div class="line">sudo chown mysql:mysql /usr/<span class="built_in">local</span>/mysql-data/3306 -R</div><div class="line">sudo chown mysql:mysql /usr/<span class="built_in">local</span>/mysql-data/3307 -R</div><div class="line"></div><div class="line">sudo su</div><div class="line"></div><div class="line">su mysql</div><div class="line"></div><div class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/mysql-5.6</div><div class="line"></div><div class="line">scripts/mysql_install_db --datadir=/usr/<span class="built_in">local</span>/mysql-data/3306 --basedir=/usr/<span class="built_in">local</span>/mysql-5.6 --user=mysql</div><div class="line">scripts/mysql_install_db --datadir=/usr/<span class="built_in">local</span>/mysql-data/3307 --basedir=/usr/<span class="built_in">local</span>/mysql-5.6 --user=mysql</div></pre></td></tr></table></figure>
 <h2 id="配置my-conf"><a href="#配置my-conf" class="headerlink" title="配置my.conf"></a>配置my.conf</h2><p>文件位置： <code>/usr/local/mysql-5.6/my.cnf</code></p>
 <p>内容</p>
@@ -204,10 +211,9 @@
 <h3 id="一次性停止多个实例"><a href="#一次性停止多个实例" class="headerlink" title="一次性停止多个实例"></a>一次性停止多个实例</h3><p><code>mysqld_multi --defaults-file=/usr/local/mysql-5.6/my.cnf stop 1-2</code></p>
 <h2 id="修改默认密码"><a href="#修改默认密码" class="headerlink" title="修改默认密码"></a>修改默认密码</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">/usr/<span class="built_in">local</span>/mysql-5.6/bin/mysqladmin -S /usr/<span class="built_in">local</span>/mysql-data/3306/3306.socket -u root password <span class="string">'yang'</span></div><div class="line">/usr/<span class="built_in">local</span>/mysql-5.6/bin/mysqladmin -S /usr/<span class="built_in">local</span>/mysql-data/3307/3307.socket -u root password <span class="string">'yang'</span></div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

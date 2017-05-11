@@ -154,52 +154,63 @@
 
 <div class="content content-post LEFT">
    <article id="post-Findbugs-报-May-expose-internal-representation-by-returning-reference-to-mutable-object" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Findbugs 报 May expose internal representation by returning reference to mutable object</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Findbugs 报 May expose internal representation by returning reference to mutable object
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.10.27</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <p>运行完一个Findbugs时，发现它报了一个警告： <code>CccFans.getRowCreateTime() may expose internal representation by returning CcFans.rowCreateTime()</code>以及<code>CcFans.setRowCreateTime(Timestamp) may expose internal representation by storing an externally mutable object into CcFans.rowCreateTime</code></p>
+      <a class="tag-item" href="/tags/#findbugs">
+        <span class="tag-name">findbugs</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p>运行完一个Findbugs时，发现它报了一个警告： <code>CccFans.getRowCreateTime() may expose internal representation by returning CcFans.rowCreateTime()</code>以及<code>CcFans.setRowCreateTime(Timestamp) may expose internal representation by storing an externally mutable object into CcFans.rowCreateTime</code></p>
 <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>用例子来说明:</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> org.se;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		Person p = <span class="keyword">new</span> Person();</div><div class="line">		p.setName(<span class="string">"hello"</span>);</div><div class="line">		PersonHolder ph = <span class="keyword">new</span> PersonHolder();</div><div class="line">		ph.setP(p);</div><div class="line">		System.out.println(ph.getP().getName());</div><div class="line">		p.setName(<span class="string">"new Hello"</span>);</div><div class="line">		System.out.println(ph.getP().getName());</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">PersonHolder</span> </span>&#123;</div><div class="line">		<span class="keyword">private</span> Person p;</div><div class="line"></div><div class="line">		<span class="function"><span class="keyword">public</span> Person <span class="title">getP</span><span class="params">()</span> </span>&#123;</div><div class="line">			<span class="keyword">return</span> p;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setP</span><span class="params">(Person p)</span> </span>&#123;</div><div class="line">			<span class="keyword">this</span>.p = p;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</div><div class="line">		<span class="keyword">private</span> String name;</div><div class="line"></div><div class="line">		<span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</div><div class="line">			<span class="keyword">return</span> name;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">			<span class="keyword">this</span>.name = name;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">打印的结果:</div><div class="line">hello</div><div class="line"><span class="keyword">new</span> Hello</div></pre></td></tr></table></figure>
 <p>这里，已经在<code>ph.setP()</code>后，但<code>p</code>后面又修改了自己的数据（p.setName(“new Hello”)<code>，这样子，下次</code>ph<code>使用时，就是新的数据了，而不是使用</code>setP()<code>时的</code>p`的状态时的数据.<br>这只是警告，存在可能的隐患。</p>
 <h2 id="建议"><a href="#建议" class="headerlink" title="建议"></a>建议</h2><p>凡是set一个对象的时候，都应该建议set对象的副本。比如，改进后这样子：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> org.se;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</div><div class="line">		Person p = <span class="keyword">new</span> Person();</div><div class="line">		p.setName(<span class="string">"hello"</span>);</div><div class="line">		PersonHolder ph = <span class="keyword">new</span> PersonHolder();</div><div class="line">		ph.setP(p);</div><div class="line">		System.out.println(ph.getP().getName());</div><div class="line">		p.setName(<span class="string">"new Hello"</span>);</div><div class="line">		System.out.println(ph.getP().getName());</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">PersonHolder</span> </span>&#123;</div><div class="line">		<span class="keyword">private</span> Person p;</div><div class="line"></div><div class="line">		<span class="function"><span class="keyword">public</span> Person <span class="title">getP</span><span class="params">()</span> </span>&#123;</div><div class="line">			<span class="keyword">return</span> p;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setP</span><span class="params">(Person p)</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</div><div class="line">			<span class="keyword">this</span>.p = (Person) p.clone();</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> <span class="keyword">implements</span> <span class="title">Cloneable</span> </span>&#123;</div><div class="line">		<span class="keyword">private</span> String name;</div><div class="line"></div><div class="line">		<span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</div><div class="line">			<span class="keyword">return</span> name;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">			<span class="keyword">this</span>.name = name;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="function"><span class="keyword">protected</span> Object <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</div><div class="line">			Person p = <span class="keyword">new</span> Person();</div><div class="line">			p.name = <span class="keyword">this</span>.name;</div><div class="line">			<span class="keyword">return</span> p;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">打印的结果为:</div><div class="line">hello</div><div class="line">hello</div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

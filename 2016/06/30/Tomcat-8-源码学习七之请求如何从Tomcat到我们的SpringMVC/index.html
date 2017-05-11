@@ -156,42 +156,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-Tomcat-8-源码学习七之请求如何从Tomcat到我们的SpringMVC" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Tomcat 8 源码学习七之请求如何从Tomcat到我们的SpringMVC</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Tomcat 8 源码学习七之请求如何从Tomcat到我们的SpringMVC
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.06.30</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="一次请求的调用栈"><a href="#一次请求的调用栈" class="headerlink" title="一次请求的调用栈"></a>一次请求的调用栈</h2><p><img src="/img/tomcat-source-debug-http.png" alt=""></p>
+      <a class="tag-item" href="/tags/#Tomcat源码">
+        <span class="tag-name">Tomcat源码</span>
+    <span class="tag-size">( 9 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#tomcat">
+        <span class="tag-name">tomcat</span>
+    <span class="tag-size">( 20 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="一次请求的调用栈"><a href="#一次请求的调用栈" class="headerlink" title="一次请求的调用栈"></a>一次请求的调用栈</h2><p><img src="/img/tomcat-source-debug-http.png" alt=""></p>
 <p>从上面的线程调用栈,可以看到一次请求的调用过程.</p>
 <p>注意中间那些以<code>Valve</code>结尾的类,它是Tomcat的里的责任链的组件.每一个组件,在Tomcat里都有自己对请求时可以进行自定义的处理.比如<code>AccessLogValve</code>就是记录访问日志的<code>Valve</code>.Tomcat自带的Valve,可以在包<code>org.apache.catalina.valves</code>下可以看到所有的列表.</p>
 <h2 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h2><h3 id="HelloServlet"><a href="#HelloServlet" class="headerlink" title="HelloServlet"></a>HelloServlet</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">package com.example;</div><div class="line"></div><div class="line">import javax.servlet.ServletException;</div><div class="line">import javax.servlet.http.HttpServlet;</div><div class="line">import javax.servlet.http.HttpServletRequest;</div><div class="line">import javax.servlet.http.HttpServletResponse;</div><div class="line">import java.io.IOException;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by sky on 16-6-30.</div><div class="line"> */</div><div class="line">public class HelloServlet extends HttpServlet &#123;</div><div class="line">    @Override</div><div class="line">    protected void <span class="keyword">do</span>Get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123;</div><div class="line">        resp.getWriter().write(<span class="string">"hello world"</span>);</div><div class="line">        resp.getWriter().flush();</div><div class="line">        resp.getWriter().close();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -203,10 +220,9 @@
 <h2 id="调用相应的责任链"><a href="#调用相应的责任链" class="headerlink" title="调用相应的责任链"></a>调用相应的责任链</h2><p>通过Requset对象,再查找相应的Servlet(应该说是调用链,在Tomcat里,它用<code>StandardWrapper</code>对象表示, 在这里就是<code>hello-servlet</code>)(代码是 <code>StandardWrapper wrapper = (StandardWrapper) getContainer();</code> )<br>最后,Tomcat就会调用名为<code>hello-servlet</code>的Servlet来执行代码了.</p>
 <h2 id="Tomcat到SpringMVC"><a href="#Tomcat到SpringMVC" class="headerlink" title="Tomcat到SpringMVC"></a>Tomcat到SpringMVC</h2><p>上面就已经执行到了我们自定义的<code>hello-servlet</code>了,只要将这个Servlet,替换成Spring的<code>org.springframework.web.servlet.DispatcherServlet</code>即可.它是SpringMVC的总控制及转发器(路由器,因为SpringMVC并不是使用传统的Servlet来对应每一个请求,而是使用Bean的某个方法来处理).</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

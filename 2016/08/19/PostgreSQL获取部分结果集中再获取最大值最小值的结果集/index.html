@@ -154,49 +154,55 @@
 
 <div class="content content-post LEFT">
    <article id="post-PostgreSQL获取部分结果集中再获取最大值最小值的结果集" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title"> PostgreSQL获取部分结果集中再获取最大值最小值的结果集</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+             PostgreSQL获取部分结果集中再获取最大值最小值的结果集
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.08.19</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/postgresql/">postgresql</a> / <a class="article-category-link" href="/categories/postgresql/database/">database</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="PostgreSQL获取部分结果集中再获取最大值最小值的结果集"><a href="#PostgreSQL获取部分结果集中再获取最大值最小值的结果集" class="headerlink" title="PostgreSQL获取部分结果集中再获取最大值最小值的结果集"></a>PostgreSQL获取部分结果集中再获取最大值最小值的结果集</h2><p>假设表结构如下。想要获取<code>create_at</code>在某时间范围的内的，最大的以及最小的<code>use_id</code>的值的所有结果.</p>
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="PostgreSQL获取部分结果集中再获取最大值最小值的结果集"><a href="#PostgreSQL获取部分结果集中再获取最大值最小值的结果集" class="headerlink" title="PostgreSQL获取部分结果集中再获取最大值最小值的结果集"></a>PostgreSQL获取部分结果集中再获取最大值最小值的结果集</h2><p>假设表结构如下。想要获取<code>create_at</code>在某时间范围的内的，最大的以及最小的<code>use_id</code>的值的所有结果.</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># \d wb_status</span></div><div class="line">                                           Table <span class="string">"public.wb_status"</span></div><div class="line">         Column         |            Type             |                       Modifiers                        </div><div class="line">------------------------+-----------------------------+--------------------------------------------------------</div><div class="line"> id                     | <span class="built_in">integer</span>                     | not null default nextval(<span class="string">'wb_status_id_seq'</span>::regclass)</div><div class="line"> sid                    | bigint                      | not null default <span class="string">'0'</span>::bigint</div><div class="line"> idstr                  | character varying(64)       | not null default <span class="string">''</span>::character varying</div><div class="line"> mid                    | bigint                      | default <span class="string">'0'</span>::bigint</div><div class="line"> user_id                | bigint                      | </div><div class="line"> user_screen_name       | character varying(32)       | not null default <span class="string">''</span>::character varying</div><div class="line"> user_profile_image_url | character varying(128)      | not null default <span class="string">''</span>::character varying</div><div class="line"> text                   | character varying(512)      | not null default <span class="string">''</span>::character varying</div><div class="line"> <span class="built_in">source</span>                 | character varying(256)      | not null default <span class="string">''</span>::character varying</div><div class="line"> thumbnail_pic          | character varying(256)      | not null default <span class="string">''</span>::character varying</div><div class="line"> bmiddle_pic            | character varying(256)      | not null default <span class="string">''</span>::character varying</div><div class="line"> original_pic           | character varying(256)      | not null default <span class="string">''</span>::character varying</div><div class="line"> retweeted_status_id    | character varying(32)       | not null default <span class="string">''</span>::character varying</div><div class="line"> geo                    | character varying(256)      | default <span class="string">''</span>::character varying</div><div class="line"> reposts_count          | <span class="built_in">integer</span>                     | default 0</div><div class="line"> comments_count         | <span class="built_in">integer</span>                     | default 0</div><div class="line"> attitudes_count        | <span class="built_in">integer</span>                     | default 0</div><div class="line"> visible                | character varying(64)       | not null default <span class="string">''</span>::character varying</div><div class="line"> pic_urls               | character varying(1024)     | not null default <span class="string">''</span>::character varying</div><div class="line"> create_at              | timestamp without time zone | not null default now()</div><div class="line"> update_at              | timestamp without time zone | not null default now()</div><div class="line"> ad                     | character varying(256)      | not null default <span class="string">''</span>::character varying</div><div class="line"> is_deleted             | smallint                    | not null default <span class="string">'0'</span>::smallint</div><div class="line"></div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
 <h3 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># with tmp as (SELECT * from wb_status where create_at &gt;= '2015-03-15' and create_at &lt; '2015-03-16'), r as (select max(user_id) as mx, min(user_id) as mi from tmp) select * from tmp inner join r on tmp.user_id = r.mx or tmp.user_id = r.mi;</span></div><div class="line">Time: 128.032 ms</div><div class="line"></div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># explain (analyze, verbose, buffers) with tmp as (SELECT * from wb_status where create_at &gt;= '2015-03-15' and create_at &lt; '2015-03-16'), r as (select max(user_id) as mx, min(user_id) as mi from tmp) select * from tmp inner join r on tmp.user_id = r.mx or tmp.user_id = r.mi;</span></div><div class="line">                                                                                                                                                                                                                                                           QUERY PLAN                                                                                                                                                                                                                                                            </div><div class="line">---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</div><div class="line"> Nested Loop  (cost=83681.38..83694.49 rows=4 width=4932) (actual time=123.466..123.573 rows=2 loops=1)</div><div class="line">   Output: tmp.id, tmp.sid, tmp.idstr, tmp.mid, tmp.user_id, tmp.user_screen_name, tmp.user_profile_image_url, tmp.text, tmp.source, tmp.thumbnail_pic, tmp.bmiddle_pic, tmp.original_pic, tmp.retweeted_status_id, tmp.geo, tmp.reposts_count, tmp.comments_count, tmp.attitudes_count, tmp.visible, tmp.pic_urls, tmp.create_at, tmp.update_at, tmp.ad, tmp.is_deleted, r.mx, r.mi</div><div class="line">   Join Filter: ((tmp.user_id = r.mx) OR (tmp.user_id = r.mi))</div><div class="line">   Rows Removed by Join Filter: 763</div><div class="line">   Buffers: shared hit=2031 <span class="built_in">read</span>=71628</div><div class="line">   CTE tmp</div><div class="line">     -&gt;  Gather  (cost=1000.00..83672.02 rows=374 width=372) (actual time=0.156..122.751 rows=765 loops=1)</div><div class="line">           Output: wb_status.id, wb_status.sid, wb_status.idstr, wb_status.mid, wb_status.user_id, wb_status.user_screen_name, wb_status.user_profile_image_url, wb_status.text, wb_status.source, wb_status.thumbnail_pic, wb_status.bmiddle_pic, wb_status.original_pic, wb_status.retweeted_status_id, wb_status.geo, wb_status.reposts_count, wb_status.comments_count, wb_status.attitudes_count, wb_status.visible, wb_status.pic_urls, wb_status.create_at, wb_status.update_at, wb_status.ad, wb_status.is_deleted</div><div class="line">           Workers Planned: 2</div><div class="line">           Workers Launched: 2</div><div class="line">           Buffers: shared hit=2031 <span class="built_in">read</span>=71628</div><div class="line">           -&gt;  Parallel Seq Scan on public.wb_status  (cost=0.00..82634.62 rows=156 width=372) (actual time=0.359..120.620 rows=255 loops=3)</div><div class="line">                 Output: wb_status.id, wb_status.sid, wb_status.idstr, wb_status.mid, wb_status.user_id, wb_status.user_screen_name, wb_status.user_profile_image_url, wb_status.text, wb_status.source, wb_status.thumbnail_pic, wb_status.bmiddle_pic, wb_status.original_pic, wb_status.retweeted_status_id, wb_status.geo, wb_status.reposts_count, wb_status.comments_count, wb_status.attitudes_count, wb_status.visible, wb_status.pic_urls, wb_status.create_at, wb_status.update_at, wb_status.ad, wb_status.is_deleted</div><div class="line">                 Filter: ((wb_status.create_at &gt;= <span class="string">'2015-03-15 00:00:00'</span>::timestamp without time zone) AND (wb_status.create_at &lt; <span class="string">'2015-03-16 00:00:00'</span>::timestamp without time zone))</div><div class="line">                 Rows Removed by Filter: 456744</div><div class="line">                 Buffers: shared hit=1825 <span class="built_in">read</span>=71628</div><div class="line">                 Worker 0: actual time=0.215..118.234 rows=71 loops=1</div><div class="line">                   Buffers: shared hit=566 <span class="built_in">read</span>=23219</div><div class="line">                 Worker 1: actual time=0.855..121.365 rows=658 loops=1</div><div class="line">                   Buffers: shared hit=575 <span class="built_in">read</span>=24297</div><div class="line">   CTE r</div><div class="line">     -&gt;  Aggregate  (cost=9.35..9.36 rows=1 width=16) (actual time=123.370..123.370 rows=1 loops=1)</div><div class="line">           Output: max(tmp_1.user_id), min(tmp_1.user_id)</div><div class="line">           Buffers: shared hit=2031 <span class="built_in">read</span>=71628</div><div class="line">           -&gt;  CTE Scan on tmp tmp_1  (cost=0.00..7.48 rows=374 width=8) (actual time=0.159..123.271 rows=765 loops=1)</div><div class="line">                 Output: tmp_1.id, tmp_1.sid, tmp_1.idstr, tmp_1.mid, tmp_1.user_id, tmp_1.user_screen_name, tmp_1.user_profile_image_url, tmp_1.text, tmp_1.source, tmp_1.thumbnail_pic, tmp_1.bmiddle_pic, tmp_1.original_pic, tmp_1.retweeted_status_id, tmp_1.geo, tmp_1.reposts_count, tmp_1.comments_count, tmp_1.attitudes_count, tmp_1.visible, tmp_1.pic_urls, tmp_1.create_at, tmp_1.update_at, tmp_1.ad, tmp_1.is_deleted</div><div class="line">                 Buffers: shared hit=2031 <span class="built_in">read</span>=71628</div><div class="line">   -&gt;  CTE Scan on r  (cost=0.00..0.02 rows=1 width=16) (actual time=123.372..123.372 rows=1 loops=1)</div><div class="line">         Output: r.mx, r.mi</div><div class="line">         Buffers: shared hit=2031 <span class="built_in">read</span>=71628</div><div class="line">   -&gt;  CTE Scan on tmp  (cost=0.00..7.48 rows=374 width=4916) (actual time=0.001..0.118 rows=765 loops=1)</div><div class="line">         Output: tmp.id, tmp.sid, tmp.idstr, tmp.mid, tmp.user_id, tmp.user_screen_name, tmp.user_profile_image_url, tmp.text, tmp.source, tmp.thumbnail_pic, tmp.bmiddle_pic, tmp.original_pic, tmp.retweeted_status_id, tmp.geo, tmp.reposts_count, tmp.comments_count, tmp.attitudes_count, tmp.visible, tmp.pic_urls, tmp.create_at, tmp.update_at, tmp.ad, tmp.is_deleted</div><div class="line"> Planning time: 0.108 ms</div><div class="line"> Execution time: 124.163 ms</div><div class="line">(34 rows)</div><div class="line"></div><div class="line">(END)</div><div class="line"></div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># SELECT count(1) from wb_status;</span></div><div class="line">  count  </div><div class="line">---------</div><div class="line"> 1370996</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 91.415 ms</div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

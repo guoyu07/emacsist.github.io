@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-Mybatis代码片段" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Mybatis代码片段</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Mybatis代码片段
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.07.21</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a> / <a class="article-category-link" href="/categories/java/mybatis/">mybatis</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="批处理"><a href="#批处理" class="headerlink" title="批处理"></a>批处理</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">&lt;select id=<span class="string">"getAdsByGroupIds"</span> resultMap=<span class="string">"adInfoWithGroupId"</span>&gt;</div><div class="line"> SELECT</div><div class="line">ai.*, gam.group_id</div><div class="line"> FROM</div><div class="line">group_ad_mapping AS gam</div><div class="line"> LEFT JOIN</div><div class="line">ad_info AS ai</div><div class="line"> ON</div><div class="line">gam.creative_id = ai.creative_id</div><div class="line"> WHERE</div><div class="line">gam.group_id <span class="keyword">in</span></div><div class="line"> &lt;foreach collection=<span class="string">"list"</span> item=<span class="string">"item"</span> index=<span class="string">"index"</span> separator=<span class="string">","</span> open=<span class="string">"("</span> close=<span class="string">")"</span>&gt;</div><div class="line">  <span class="comment">#&#123;item&#125;</span></div><div class="line"> &lt;/foreach&gt;</div><div class="line"> ORDER BY</div><div class="line">ai.create_at DESC</div><div class="line">&lt;/select&gt;</div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#mybatis">
+        <span class="tag-name">mybatis</span>
+    <span class="tag-size">( 3 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="批处理"><a href="#批处理" class="headerlink" title="批处理"></a>批处理</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">&lt;select id=<span class="string">"getAdsByGroupIds"</span> resultMap=<span class="string">"adInfoWithGroupId"</span>&gt;</div><div class="line"> SELECT</div><div class="line">ai.*, gam.group_id</div><div class="line"> FROM</div><div class="line">group_ad_mapping AS gam</div><div class="line"> LEFT JOIN</div><div class="line">ad_info AS ai</div><div class="line"> ON</div><div class="line">gam.creative_id = ai.creative_id</div><div class="line"> WHERE</div><div class="line">gam.group_id <span class="keyword">in</span></div><div class="line"> &lt;foreach collection=<span class="string">"list"</span> item=<span class="string">"item"</span> index=<span class="string">"index"</span> separator=<span class="string">","</span> open=<span class="string">"("</span> close=<span class="string">")"</span>&gt;</div><div class="line">  <span class="comment">#&#123;item&#125;</span></div><div class="line"> &lt;/foreach&gt;</div><div class="line"> ORDER BY</div><div class="line">ai.create_at DESC</div><div class="line">&lt;/select&gt;</div></pre></td></tr></table></figure>
 <h2 id="一对多"><a href="#一对多" class="headerlink" title="一对多"></a>一对多</h2><p>java类</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">public class SalesLead &#123;</div><div class="line">    private Long id;</div><div class="line">    private Long clientId;</div><div class="line">    private Integer userId;</div><div class="line">    private Integer salesUserId;</div><div class="line">    private Integer agentUserId;</div><div class="line">    private Integer saleStatus = 0;</div><div class="line">    private Integer isDeal = 0;</div><div class="line">    private Integer isRead = 0;</div><div class="line">    private BigDecimal totalMoney = new BigDecimal(<span class="string">"0"</span>);</div><div class="line">    private BigDecimal prepaid = new BigDecimal(<span class="string">"0"</span>);</div><div class="line">    private String memo = <span class="string">""</span>;</div><div class="line">    private String fromOpenid = <span class="string">""</span>;</div><div class="line">    private String toOpenid = <span class="string">""</span>;</div><div class="line">    private String des = <span class="string">""</span>;</div><div class="line">    private String title = <span class="string">""</span>;</div><div class="line">    private Timestamp createTime = new Timestamp(System.currentTimeMillis());</div><div class="line">    private Timestamp updateTime = new Timestamp(System.currentTimeMillis());</div><div class="line">    private Timestamp closeTime;</div><div class="line"></div><div class="line">    private List&lt;SalesLeadFollow&gt; follows;</div><div class="line">    //getter and settter</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">&lt;resultMap id=<span class="string">"salesLeadMap"</span> <span class="built_in">type</span>=<span class="string">"com.company.sales.pojo.SalesLead"</span>&gt;</div><div class="line">    &lt;id property=<span class="string">"id"</span> column=<span class="string">"id"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"clientId"</span> column=<span class="string">"client_id"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"userId"</span> column=<span class="string">"user_id"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"salesUserId"</span> column=<span class="string">"sales_user_id"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"agentUserId"</span> column=<span class="string">"agent_user_id"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"saleStatus"</span> column=<span class="string">"sale_status"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"isDeal"</span> column=<span class="string">"is_deal"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"isRead"</span> column=<span class="string">"is_read"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"totalMoney"</span> column=<span class="string">"total_money"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"prepaid"</span> column=<span class="string">"prepaid"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"memo"</span> column=<span class="string">"memo"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"fromOpenid"</span> column=<span class="string">"from_openid"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"toOpenid"</span> column=<span class="string">"to_openid"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"des"</span> column=<span class="string">"des"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"title"</span> column=<span class="string">"title"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"createTime"</span> column=<span class="string">"create_time"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"updateTime"</span> column=<span class="string">"update_time"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"closeTime"</span> column=<span class="string">"close_time"</span>/&gt;</div><div class="line">    </div><div class="line">    &lt;collection property=<span class="string">"follows"</span> ofType=<span class="string">"com.company.sales.pojo.SalesLeadFollow"</span> column=<span class="string">"id"</span> select=<span class="string">"selectFollow"</span> /&gt;</div><div class="line">&lt;/resultMap&gt;</div><div class="line"></div><div class="line">&lt;resultMap id=<span class="string">"salesLeadFollowMap"</span> <span class="built_in">type</span>=<span class="string">"com.company.sales.pojo.SalesLeadFollow"</span>&gt;</div><div class="line">    &lt;id property=<span class="string">"id"</span> column=<span class="string">"id"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"userId"</span> column=<span class="string">"user_id"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"followUserId"</span> column=<span class="string">"follow_user_id"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"followType"</span> column=<span class="string">"follow_type"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"salesLeadId"</span> column=<span class="string">"sales_lead_id"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"timeline"</span> column=<span class="string">"timeline"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"createTime"</span> column=<span class="string">"create_time"</span>/&gt;</div><div class="line">&lt;/resultMap&gt;</div><div class="line"></div><div class="line">&lt;select id=<span class="string">"selectFollow"</span> resultMap=<span class="string">"salesLeadFollowMap"</span>&gt;</div><div class="line">    SELECT * from sales_lead_follow WHERE sales_lead_id = <span class="comment">#&#123;id&#125; ORDER BY id DESC</span></div><div class="line">&lt;/select&gt;</div></pre></td></tr></table></figure>
@@ -197,10 +209,9 @@
 <p>Mybatis的代码片段:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">&lt;resultMap id=<span class="string">"wbStatusResultMap"</span> <span class="built_in">type</span>=<span class="string">"com.weibosdk.pojo.WbStatus"</span>&gt;</div><div class="line">    &lt;id property=<span class="string">"id"</span> column=<span class="string">"id"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"sid"</span> column=<span class="string">"sid"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"idstr"</span> column=<span class="string">"idstr"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"mid"</span> column=<span class="string">"mid"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"userId"</span> column=<span class="string">"user_id"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"userScreenName"</span> column=<span class="string">"user_screen_name"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"userProfileImageUrl"</span> column=<span class="string">"user_profile_image_url"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"text"</span> column=<span class="string">"text"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"source"</span> column=<span class="string">"source"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"thumbnailPic"</span> column=<span class="string">"thumbnail_pic"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"bmiddlePic"</span> column=<span class="string">"bmiddle_pic"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"originalPic"</span> column=<span class="string">"original_pic"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"retweetedStatusId"</span> column=<span class="string">"retweeted_status_id"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"geo"</span> column=<span class="string">"geo"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"repostsCount"</span> column=<span class="string">"reposts_count"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"commentsCount"</span> column=<span class="string">"comments_count"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"attitudesCount"</span> column=<span class="string">"attitudes_count"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"visible"</span> column=<span class="string">"visible"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"picUrls"</span> column=<span class="string">"pic_urls"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"createAt"</span> column=<span class="string">"create_at"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"updateAt"</span> column=<span class="string">"update_at"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"ad"</span> column=<span class="string">"ad"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"isDeleted"</span> column=<span class="string">"is_deleted"</span>/&gt;</div><div class="line">    &lt;association property=<span class="string">"wbUser"</span> javaType=<span class="string">"com.weibosdk.pojo.WbUser"</span> select=<span class="string">"selectWbUser"</span> column=<span class="string">"user_id"</span>&gt;</div><div class="line">    &lt;/association&gt;</div><div class="line">&lt;/resultMap&gt;</div><div class="line"></div><div class="line">&lt;select id=<span class="string">"selectWbUser"</span> resultMap=<span class="string">"com.weibosdk.dao.mapper.WbUserMapper.wbUserResultMap"</span>&gt;</div><div class="line">  SELECT * from wb_user WHERE u_id = <span class="comment">#&#123;userId&#125; limit 1</span></div><div class="line">&lt;/select&gt;</div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

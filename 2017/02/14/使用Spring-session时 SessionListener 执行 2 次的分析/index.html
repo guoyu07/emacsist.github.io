@@ -157,42 +157,64 @@
 
 <div class="content content-post LEFT">
    <article id="post-使用Spring-session时 SessionListener 执行 2 次的分析" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">使用Spring session时 SessionListener 执行 2 次的分析</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            使用Spring session时 SessionListener 执行 2 次的分析
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2017.02.14</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <blockquote>
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#nosql">
+        <span class="tag-name">nosql</span>
+    <span class="tag-size">( 8 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#redis">
+        <span class="tag-name">redis</span>
+    <span class="tag-size">( 12 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#spring">
+        <span class="tag-name">spring</span>
+    <span class="tag-size">( 27 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <blockquote>
 <p>项目中使用 Spring-session 这个分布式 session 作为负载均衡的 session 中间件，以便统一 session 的管理。</p>
 </blockquote>
 <p>然后我们自己添加了一个 <code>HttpSessionListener</code>, 但是发现它执行了 2 次，实在是太诡异了。（其实是太菜了）</p>
@@ -208,10 +230,9 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">    &lt;bean id=<span class="string">"l"</span> class=<span class="string">"org.springframework.session.web.http.SessionEventHttpSessionListenerAdapter"</span>&gt;</div><div class="line">            &lt;constructor-arg&gt;</div><div class="line">                &lt;list&gt;</div><div class="line">                    &lt;ref bean=<span class="string">"webHttpSessionListener"</span> /&gt;</div><div class="line">                &lt;/list&gt;</div><div class="line">            &lt;/constructor-arg&gt;</div><div class="line">    &lt;/bean&gt;</div><div class="line">    &lt;bean class=<span class="string">"org.springframework.security.web.session.HttpSessionEventPublisher"</span>/&gt;</div><div class="line"></div><div class="line">`</div></pre></td></tr></table></figure>
 <h2 id="实现监听器-HttpSessionListener"><a href="#实现监听器-HttpSessionListener" class="headerlink" title="实现监听器 HttpSessionListener"></a>实现监听器 HttpSessionListener</h2><p>自定义的类，实现了该接口，并且注册到 Spring 容器，那么它就会自动添加到 SessionListener 容器里的，就不用再进行其他额外的配置了。看来，以前看的文档还不够详细，只是匆匆忙忙赶着能用的态度。没有注意到该 listener 被注册了多次的问题！</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

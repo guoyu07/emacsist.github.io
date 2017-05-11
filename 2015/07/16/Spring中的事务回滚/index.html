@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-Spring中的事务回滚" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Spring中的事务回滚</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Spring中的事务回滚
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.07.16</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a> / <a class="article-category-link" href="/categories/java/spring/">spring</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="开启声明式事务"><a href="#开启声明式事务" class="headerlink" title="开启声明式事务"></a>开启声明式事务</h2><p><code>spring.xml</code>里配置</p>
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#spring">
+        <span class="tag-name">spring</span>
+    <span class="tag-size">( 27 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="开启声明式事务"><a href="#开启声明式事务" class="headerlink" title="开启声明式事务"></a>开启声明式事务</h2><p><code>spring.xml</code>里配置</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=<span class="string">"dataSource"</span> class=<span class="string">"org.apache.commons.dbcp.BasicDataSource"</span>&gt;</div><div class="line">		&lt;property name=<span class="string">"driverClassName"</span> value=<span class="string">"<span class="variable">$&#123;jdbc.driverClassName&#125;</span>"</span> /&gt;</div><div class="line">		&lt;property name=<span class="string">"url"</span> value=<span class="string">"<span class="variable">$&#123;jdbc.url&#125;</span>"</span> /&gt;</div><div class="line">		&lt;property name=<span class="string">"username"</span> value=<span class="string">"<span class="variable">$&#123;jdbc.username&#125;</span>"</span> /&gt;</div><div class="line">		&lt;property name=<span class="string">"password"</span> value=<span class="string">"<span class="variable">$&#123;jdbc.password&#125;</span>"</span> /&gt;</div><div class="line">		&lt;property name=<span class="string">"maxActive"</span>&gt;</div><div class="line">			&lt;value&gt;64&lt;/value&gt;</div><div class="line">		&lt;/property&gt;</div><div class="line">		&lt;property name=<span class="string">"maxIdle"</span>&gt;</div><div class="line">			&lt;value&gt;64&lt;/value&gt;</div><div class="line">		&lt;/property&gt;</div><div class="line">		&lt;property name=<span class="string">"maxWait"</span>&gt;</div><div class="line">			&lt;value&gt;0&lt;/value&gt;</div><div class="line">		&lt;/property&gt;</div><div class="line">		&lt;property name=<span class="string">"validationQuery"</span>&gt;</div><div class="line">			&lt;value&gt;select 1&lt;/value&gt;</div><div class="line">		&lt;/property&gt;</div><div class="line">		&lt;property name=<span class="string">"testWhileIdle"</span>&gt;</div><div class="line">			&lt;value&gt;<span class="literal">true</span>&lt;/value&gt;</div><div class="line">		&lt;/property&gt;</div><div class="line">		&lt;property name=<span class="string">"minEvictableIdleTimeMillis"</span>&gt;</div><div class="line">			&lt;value&gt;20000000&lt;/value&gt;</div><div class="line">		&lt;/property&gt;</div><div class="line">		&lt;property name=<span class="string">"timeBetweenEvictionRunsMillis"</span>&gt;</div><div class="line">			&lt;value&gt;3600000&lt;/value&gt;</div><div class="line">		&lt;/property&gt;</div><div class="line">	&lt;/bean&gt;</div><div class="line"></div><div class="line">	&lt;bean id=<span class="string">"TxManager"</span></div><div class="line">		class=<span class="string">"org.springframework.jdbc.datasource.DataSourceTransactionManager"</span>&gt;</div><div class="line">		&lt;property name=<span class="string">"dataSource"</span> ref=<span class="string">"dataSource"</span> /&gt;</div><div class="line">	&lt;/bean&gt;</div><div class="line">    &lt;tx:annotation-driven transaction-manager=<span class="string">"TxManager"</span></div><div class="line">		proxy-target-class=<span class="string">"true"</span> /&gt;</div></pre></td></tr></table></figure>
 <h2 id="默认情况下Spring对事务回滚策略的处理"><a href="#默认情况下Spring对事务回滚策略的处理" class="headerlink" title="默认情况下Spring对事务回滚策略的处理"></a>默认情况下Spring对事务回滚策略的处理</h2><blockquote>
 <p>在 Spring 的文档里, 可以看到这一句话: <code>Any RuntimeException triggers rollback, and any checked Exception does not.</code></p>
@@ -207,10 +219,9 @@
 <li><a href="http://cn-done.iteye.com/blog/775519" target="_blank" rel="external">ITEye</a></li>
 </ul>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

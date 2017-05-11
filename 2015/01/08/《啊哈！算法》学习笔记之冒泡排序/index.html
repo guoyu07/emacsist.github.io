@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-《啊哈！算法》学习笔记之冒泡排序" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">《啊哈！算法》学习笔记之冒泡排序</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            《啊哈！算法》学习笔记之冒泡排序
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.01.08</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/编程/">编程</a> / <a class="article-category-link" href="/categories/编程/算法/">算法</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="基本思想"><a href="#基本思想" class="headerlink" title="基本思想"></a>基本思想</h2><p>冒泡排序的基本思想是：每次比较两个相邻的元素，如果它们的顺序错误就把它们交换过来。</p>
+      <a class="tag-item" href="/tags/#啊哈！算法">
+        <span class="tag-name">啊哈！算法</span>
+    <span class="tag-size">( 5 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#算法">
+        <span class="tag-name">算法</span>
+    <span class="tag-size">( 5 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="基本思想"><a href="#基本思想" class="headerlink" title="基本思想"></a>基本思想</h2><p>冒泡排序的基本思想是：每次比较两个相邻的元素，如果它们的顺序错误就把它们交换过来。</p>
 <p>以从大到小为例。</p>
 <p>每次都是比较相邻的两个数，如果后面的数比前面的数大，则交换这两个数的位置。一直比较下去直到最后两个数比较完毕后，最小的数就在最后一个了。就如同是一个气泡，一步一步往后“翻滚” ，直到最后一位。所以这个排序的方法有一个很好听的名字“冒泡排序” 。</p>
 <p>每将一个数归位我们将其称为“一趟” 。每一趟，都是将小的归位（先是最小，后次小，次后第三小…）。</p>
@@ -200,10 +212,9 @@
 <figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args) &#123;</div><div class="line">    <span class="keyword">int</span> length = <span class="number">10</span>;</div><div class="line">    <span class="keyword">int</span> maxValue = <span class="number">20</span>;</div><div class="line">    <span class="keyword">int</span>[] <span class="keyword">array</span> = <span class="keyword">new</span> <span class="keyword">int</span>[length];</div><div class="line">    Random r = <span class="keyword">new</span> Random();</div><div class="line">    <span class="built_in">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">array</span>.length; i++) &#123;</div><div class="line">        <span class="keyword">array</span>[i] = r.nextInt(maxValue);</div><div class="line">    &#125;</div><div class="line">    System.out.<span class="built_in">println</span>(<span class="string">"before"</span>);</div><div class="line">    <span class="built_in">print</span>(<span class="keyword">array</span>);</div><div class="line">    bubbleSort(<span class="keyword">array</span>);</div><div class="line">    System.out.<span class="built_in">println</span>(<span class="string">"after"</span>);</div><div class="line">    <span class="built_in">print</span>(<span class="keyword">array</span>);</div><div class="line">&#125;</div><div class="line"> </div><div class="line"> </div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> bubbleSort(<span class="keyword">int</span>[] <span class="keyword">array</span>) &#123;</div><div class="line">    <span class="keyword">int</span> tmp = <span class="number">0</span>;</div><div class="line">    <span class="built_in">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">array</span>.length; i++) &#123;</div><div class="line">        <span class="built_in">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="keyword">array</span>.length<span class="number">-1</span>; j++) &#123;</div><div class="line">            <span class="built_in">if</span> (<span class="keyword">array</span>[j] &lt; <span class="keyword">array</span>[j+<span class="number">1</span>]) &#123;<span class="comment">//如果前一个比后一个小，则进行交换。这样子就可以是从大到小。</span></div><div class="line">                tmp = <span class="keyword">array</span>[j];</div><div class="line">                <span class="keyword">array</span>[j] = <span class="keyword">array</span>[j+<span class="number">1</span>];</div><div class="line">                <span class="keyword">array</span>[j+<span class="number">1</span>] = tmp;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"> </div><div class="line"> </div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="built_in">print</span>(<span class="keyword">int</span>[] <span class="keyword">array</span>) &#123;</div><div class="line">    System.out.<span class="built_in">println</span>(Arrays.toString(<span class="keyword">array</span>));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>冒泡比较耗时</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

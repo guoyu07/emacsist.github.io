@@ -12,11 +12,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="postgresql,database,翻译," />
+    <meta name="keywords" content="postgresql,翻译,database," />
   
 
   <meta name="description" content="[翻译]手把手教你配置流复制原文 尽管许多人知道流复制，这篇博客是为初学者准备的，我将从必要条件和一些关于流复制的介绍开始。:-) 必要条件： 在各自的服务器上安装相同版本的PostgreSQL数据库。  配置”postgres”用户的无密码ssh认证（译注：如使用ssh的公私密匙）  生产环境的服务器必须在postgresql.conf文件配置通过设置archive_mode和archive_c">
-<meta name="keywords" content="postgresql,database,翻译">
+<meta name="keywords" content="postgresql,翻译,database">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[翻译]手把手教你配置流复制">
 <meta property="og:url" content="https://emacsist.github.io/2015/01/24/翻译-手把手教你配置流复制/index.html">
@@ -154,42 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-翻译-手把手教你配置流复制" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">[翻译]手把手教你配置流复制</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            [翻译]手把手教你配置流复制
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.01.24</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/postgresql/">postgresql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="翻译-手把手教你配置流复制"><a href="#翻译-手把手教你配置流复制" class="headerlink" title="[翻译]手把手教你配置流复制"></a>[翻译]手把手教你配置流复制</h2><p><a href="http://bajis-postgres.blogspot.com/2013/12/step-by-step-guide-to-setup-steaming.html" target="_blank" rel="external">原文</a></p>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#翻译">
+        <span class="tag-name">翻译</span>
+    <span class="tag-size">( 20 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="翻译-手把手教你配置流复制"><a href="#翻译-手把手教你配置流复制" class="headerlink" title="[翻译]手把手教你配置流复制"></a>[翻译]手把手教你配置流复制</h2><p><a href="http://bajis-postgres.blogspot.com/2013/12/step-by-step-guide-to-setup-steaming.html" target="_blank" rel="external">原文</a></p>
 <p>尽管许多人知道流复制，这篇博客是为初学者准备的，我将从必要条件和一些关于流复制的介绍开始。:-)</p>
 <h2 id="必要条件："><a href="#必要条件：" class="headerlink" title="必要条件："></a>必要条件：</h2><ol>
 <li><p>在各自的服务器上安装相同版本的PostgreSQL数据库。</p>
@@ -231,10 +248,9 @@
 <figure class="highlight tap"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[primary] $ ps ­ef | grep sender  </div><div class="line">postgres <span class="number"> 6879 </span><span class="number"> 6831 </span><span class="number"> 0 </span>10:31 ?        00:00:00 postgres: wal sender  </div><div class="line">process postgres 127.0.0.1(44663) streaming 0/2000000  </div><div class="line"></div><div class="line">[standby] $ ps ­ef | grep receiver  </div><div class="line"></div><div class="line">postgres <span class="number"> 6878 </span><span class="number"> 6872 </span><span class="number"> 1 </span>10:31 ? receiver process   streaming 0/2000000</div></pre></td></tr></table></figure>
 <p>谢谢大家，请让我知道我是否遗漏了什么。</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-使用Java监控工具出现-Can-t-attach-to-the-process" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">使用Java监控工具出现 Can&#39;t attach to the process</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            使用Java监控工具出现 Can&#39;t attach to the process
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.07.07</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a> / <a class="article-category-link" href="/categories/java/jvm/">jvm</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="问题重现"><a href="#问题重现" class="headerlink" title="问题重现"></a>问题重现</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">➜ jinfo -flags 3032</div><div class="line">Attaching to process ID 3032, please wait...</div><div class="line">Error attaching to process: sun.jvm.hotspot.debugger.DebuggerException: Can<span class="string">'t attach to the process</span></div><div class="line">sun.jvm.hotspot.debugger.DebuggerException: sun.jvm.hotspot.debugger.DebuggerException: Can't attach to the process</div><div class="line">	at sun.jvm.hotspot.debugger.linux.LinuxDebuggerLocal<span class="variable">$LinuxDebuggerLocalWorkerThread</span>.execute(LinuxDebuggerLocal.java:163)</div><div class="line">	at sun.jvm.hotspot.debugger.linux.LinuxDebuggerLocal.attach(LinuxDebuggerLocal.java:278)</div><div class="line">	at sun.jvm.hotspot.HotSpotAgent.attachDebugger(HotSpotAgent.java:671)</div><div class="line">	at sun.jvm.hotspot.HotSpotAgent.setupDebuggerLinux(HotSpotAgent.java:611)</div><div class="line">	at sun.jvm.hotspot.HotSpotAgent.setupDebugger(HotSpotAgent.java:337)</div><div class="line">	at sun.jvm.hotspot.HotSpotAgent.go(HotSpotAgent.java:304)</div><div class="line">	at sun.jvm.hotspot.HotSpotAgent.attach(HotSpotAgent.java:140)</div><div class="line">	at sun.jvm.hotspot.tools.Tool.start(Tool.java:185)</div><div class="line">	at sun.jvm.hotspot.tools.Tool.execute(Tool.java:118)</div><div class="line">	at sun.jvm.hotspot.tools.JInfo.main(JInfo.java:138)</div><div class="line">	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)</div><div class="line">	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)</div><div class="line">	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)</div><div class="line">	at java.lang.reflect.Method.invoke(Method.java:483)</div><div class="line">	at sun.tools.jinfo.JInfo.runTool(JInfo.java:108)</div><div class="line">	at sun.tools.jinfo.JInfo.main(JInfo.java:76)</div><div class="line">Caused by: sun.jvm.hotspot.debugger.DebuggerException: Can<span class="string">'t attach to the process</span></div><div class="line">	at sun.jvm.hotspot.debugger.linux.LinuxDebuggerLocal.attach0(Native Method)</div><div class="line">	at sun.jvm.hotspot.debugger.linux.LinuxDebuggerLocal.access$100(LinuxDebuggerLocal.java:62)</div><div class="line">	at sun.jvm.hotspot.debugger.linux.LinuxDebuggerLocal$1AttachTask.doit(LinuxDebuggerLocal.java:269)</div><div class="line">	at sun.jvm.hotspot.debugger.linux.LinuxDebuggerLocal$LinuxDebuggerLocalWorkerThread.run(LinuxDebuggerLocal.java:138)</div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#jvm">
+        <span class="tag-name">jvm</span>
+    <span class="tag-size">( 11 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="问题重现"><a href="#问题重现" class="headerlink" title="问题重现"></a>问题重现</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">➜ jinfo -flags 3032</div><div class="line">Attaching to process ID 3032, please wait...</div><div class="line">Error attaching to process: sun.jvm.hotspot.debugger.DebuggerException: Can<span class="string">'t attach to the process</span></div><div class="line">sun.jvm.hotspot.debugger.DebuggerException: sun.jvm.hotspot.debugger.DebuggerException: Can't attach to the process</div><div class="line">	at sun.jvm.hotspot.debugger.linux.LinuxDebuggerLocal<span class="variable">$LinuxDebuggerLocalWorkerThread</span>.execute(LinuxDebuggerLocal.java:163)</div><div class="line">	at sun.jvm.hotspot.debugger.linux.LinuxDebuggerLocal.attach(LinuxDebuggerLocal.java:278)</div><div class="line">	at sun.jvm.hotspot.HotSpotAgent.attachDebugger(HotSpotAgent.java:671)</div><div class="line">	at sun.jvm.hotspot.HotSpotAgent.setupDebuggerLinux(HotSpotAgent.java:611)</div><div class="line">	at sun.jvm.hotspot.HotSpotAgent.setupDebugger(HotSpotAgent.java:337)</div><div class="line">	at sun.jvm.hotspot.HotSpotAgent.go(HotSpotAgent.java:304)</div><div class="line">	at sun.jvm.hotspot.HotSpotAgent.attach(HotSpotAgent.java:140)</div><div class="line">	at sun.jvm.hotspot.tools.Tool.start(Tool.java:185)</div><div class="line">	at sun.jvm.hotspot.tools.Tool.execute(Tool.java:118)</div><div class="line">	at sun.jvm.hotspot.tools.JInfo.main(JInfo.java:138)</div><div class="line">	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)</div><div class="line">	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)</div><div class="line">	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)</div><div class="line">	at java.lang.reflect.Method.invoke(Method.java:483)</div><div class="line">	at sun.tools.jinfo.JInfo.runTool(JInfo.java:108)</div><div class="line">	at sun.tools.jinfo.JInfo.main(JInfo.java:76)</div><div class="line">Caused by: sun.jvm.hotspot.debugger.DebuggerException: Can<span class="string">'t attach to the process</span></div><div class="line">	at sun.jvm.hotspot.debugger.linux.LinuxDebuggerLocal.attach0(Native Method)</div><div class="line">	at sun.jvm.hotspot.debugger.linux.LinuxDebuggerLocal.access$100(LinuxDebuggerLocal.java:62)</div><div class="line">	at sun.jvm.hotspot.debugger.linux.LinuxDebuggerLocal$1AttachTask.doit(LinuxDebuggerLocal.java:269)</div><div class="line">	at sun.jvm.hotspot.debugger.linux.LinuxDebuggerLocal$LinuxDebuggerLocalWorkerThread.run(LinuxDebuggerLocal.java:138)</div></pre></td></tr></table></figure>
 <h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">echo</span> 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope</div></pre></td></tr></table></figure>
 <h2 id="再次执行时就可以得到结果了"><a href="#再次执行时就可以得到结果了" class="headerlink" title="再次执行时就可以得到结果了"></a>再次执行时就可以得到结果了</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">➜  jinfo -flags 3032</div><div class="line">Attaching to process ID 3032, please wait...</div><div class="line">Debugger attached successfully.</div><div class="line">Server compiler detected.</div><div class="line">JVM version is 25.5-b02</div><div class="line">Non-default VM flags: -XX:InitialHeapSize=41943040 -XX:MaxHeapSize=536870912 -XX:MaxNewSize=178782208 -XX:M<span class="keyword">in</span>HeapDeltaBytes=524288 -XX:NewSize=1572864 -XX:OldSize=40370176 -XX:+UseCompressedClassPointers -XX:+UseCompressedOops -XX:+UseParallelGC</div><div class="line">Command line:  -Dosgi.requiredJavaVersion=1.6 -XX:MaxPermSize=256m -Xms40m -Xmx512m</div></pre></td></tr></table></figure>
 <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>这是因为新版的Linux系统加入了 <code>ptrace-scope</code> 机制. 这种机制为了防止用户访问当前正在运行的进程的内存和状态, 而一些调试软件本身就是利用 <code>ptrace</code> 来进行获取某进程的内存状态的(包括<code>GDB</code>),所以在新版本的Linux系统, 默认情况下不允许再访问了. 可以临时开启. 如:</p>
@@ -205,10 +217,9 @@
 </li>
 </ol>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

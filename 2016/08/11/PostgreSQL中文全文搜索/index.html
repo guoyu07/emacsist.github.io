@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-PostgreSQL中文全文搜索" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">PostgreSQL中文全文搜索</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            PostgreSQL中文全文搜索
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.08.11</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/postgresql/">postgresql</a> / <a class="article-category-link" href="/categories/postgresql/database/">database</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="安装-zhparser"><a href="#安装-zhparser" class="headerlink" title="安装 zhparser"></a>安装 zhparser</h2><p><a href="https://github.com/amutu/zhparser" target="_blank" rel="external">zhparser</a></p>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="安装-zhparser"><a href="#安装-zhparser" class="headerlink" title="安装 zhparser"></a>安装 zhparser</h2><p><a href="https://github.com/amutu/zhparser" target="_blank" rel="external">zhparser</a></p>
 <h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>创建测试表:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line">create table ts (name varchar(1024));</div><div class="line"></div><div class="line">sky=<span class="comment"># select * from ts limit 50;</span></div><div class="line">             name             </div><div class="line">------------------------------</div><div class="line"> 中国人民</div><div class="line"> 中国人民解放军</div><div class="line"> 中国人民解放军，军队</div><div class="line"> 中国军人</div><div class="line"> 中国军队</div><div class="line"> 中国军队1</div><div class="line"> 中国军队一二三</div><div class="line"> 中国军队一二三四</div><div class="line"> 军队一二三四</div><div class="line"> 中国军队一三四</div><div class="line"> 中国军队一三</div><div class="line"> 中国军队一</div><div class="line"> 中国军队</div><div class="line"> 中国</div><div class="line"> 中</div><div class="line"> 中国军</div><div class="line"> 中国军</div><div class="line"> 为什么</div><div class="line"> 为国</div><div class="line"> 中军队</div><div class="line"> 中军队你</div><div class="line"> 中军队，解放 </div><div class="line"> 中军队，解放军</div><div class="line"> 中军队，解放军队</div><div class="line"> 中军队，解放军军队</div><div class="line"> 中军队，解放军军队呀</div><div class="line"> 中军队，解放军军队呀哈哈</div><div class="line"> 中军队，解放军军队呀哈哈哈</div><div class="line"> 中军队，解放军军队呀哈哈哈哈</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line">....</div><div class="line"></div><div class="line"></div><div class="line">sky=<span class="comment"># select count(1) from ts;</span></div><div class="line"> count </div><div class="line">-------</div><div class="line"> 65565</div><div class="line">(1 row)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
 <p>插入足够多的测试数据。这里是65565条数据。</p>
@@ -203,10 +215,9 @@
 <h2 id="全文搜索-VS-LKIE"><a href="#全文搜索-VS-LKIE" class="headerlink" title="全文搜索 VS LKIE"></a>全文搜索 VS LKIE</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># explain analyze select * from ts where to_tsvector('testzhcfg', name) @@ to_tsquery('testzhcfg', '军队');</span></div><div class="line">                                                     QUERY PLAN                                                      </div><div class="line">---------------------------------------------------------------------------------------------------------------------</div><div class="line"> Bitmap Heap Scan on ts  (cost=10.54..401.46 rows=328 width=7) (actual time=0.010..0.011 rows=20 loops=1)</div><div class="line">   Recheck Cond: (to_tsvector(<span class="string">'testzhcfg'</span>::regconfig, (name)::text) @@ <span class="string">''</span><span class="string">'军队'</span><span class="string">''</span>::tsquery)</div><div class="line">   Heap Blocks: exact=1</div><div class="line">   -&gt;  Bitmap Index Scan on idx_name  (cost=0.00..10.46 rows=328 width=0) (actual time=0.007..0.007 rows=20 loops=1)</div><div class="line">         Index Cond: (to_tsvector(<span class="string">'testzhcfg'</span>::regconfig, (name)::text) @@ <span class="string">''</span><span class="string">'军队'</span><span class="string">''</span>::tsquery)</div><div class="line"> Planning time: 0.071 ms</div><div class="line"> Execution time: 0.026 ms</div><div class="line">(7 rows)</div><div class="line"></div><div class="line">sky=<span class="comment"># </span></div><div class="line"></div><div class="line"></div><div class="line">LIKE:</div><div class="line"></div><div class="line"></div><div class="line">sky=<span class="comment"># explain analyze  select * from ts where name like '%军队%';</span></div><div class="line">                                           QUERY PLAN                                           </div><div class="line">------------------------------------------------------------------------------------------------</div><div class="line"> Seq Scan on ts  (cost=0.00..1110.56 rows=3 width=7) (actual time=0.008..5.212 rows=20 loops=1)</div><div class="line">   Filter: ((name)::text ~~ <span class="string">'%军队%'</span>::text)</div><div class="line">   Rows Removed by Filter: 65545</div><div class="line"> Planning time: 0.042 ms</div><div class="line"> Execution time: 5.223 ms</div><div class="line">(5 rows)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
 <p>看来还是挺不错的.</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

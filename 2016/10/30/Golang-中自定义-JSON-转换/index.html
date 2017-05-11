@@ -154,42 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-Golang-中自定义-JSON-转换" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Golang 中自定义 JSON 转换</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Golang 中自定义 JSON 转换
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.10.30</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/golang/">golang</a> / <a class="article-category-link" href="/categories/golang/go/">go</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>Java 中的 Timestamp 转换为 JSON 是长整型，但在 Golang 中，却是完全不同。因为需要将 Java 的代码转换为 Golang，所以遇到这种相互转换的问题。在 Golang中，默认的转换如下:</p>
+      <a class="tag-item" href="/tags/#go">
+        <span class="tag-name">go</span>
+    <span class="tag-size">( 15 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#golang">
+        <span class="tag-name">golang</span>
+    <span class="tag-size">( 15 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#json">
+        <span class="tag-name">json</span>
+    <span class="tag-size">( 3 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>Java 中的 Timestamp 转换为 JSON 是长整型，但在 Golang 中，却是完全不同。因为需要将 Java 的代码转换为 Golang，所以遇到这种相互转换的问题。在 Golang中，默认的转换如下:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">package main</div><div class="line"></div><div class="line">import (</div><div class="line">	<span class="string">"encoding/json"</span></div><div class="line">	<span class="string">"fmt"</span></div><div class="line">	<span class="string">"time"</span></div><div class="line">)</div><div class="line"></div><div class="line">// Person : <span class="keyword">for</span> <span class="built_in">test</span> struct</div><div class="line"><span class="built_in">type</span> Person struct &#123;</div><div class="line">	Birthday time.Time `json:<span class="string">"birthday"</span>`</div><div class="line">&#125;</div><div class="line"></div><div class="line">func <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">	p := Person&#123;Birthday: time.Date(1991, time.August, 01, 0, 0, 0, 0, time.UTC)&#125;</div><div class="line">	j, _ := json.Marshal(p)</div><div class="line">	fmt.Printf(<span class="string">"json := %v\n"</span>, string(j))</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>输出如下：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[Running] go run <span class="string">"/private/tmp/goooo/src/main.go"</span></div><div class="line">json := &#123;<span class="string">"birthday"</span>:<span class="string">"1991-08-01T00:00:00Z"</span>&#125;</div><div class="line"></div><div class="line">[Done] exited with code=0 <span class="keyword">in</span> 0.271 seconds</div></pre></td></tr></table></figure>
@@ -206,10 +223,9 @@
 <p>因为我们的那两个接口的接收者为<code>(j *JavaTime)</code></p>
 <p>可以自行将这两个方法， 将接收者去掉指针的形式的话， 转换的结果如何。我这时测试的是<code>Go 1.7</code>，发现只能指针的形式及指针的使用才能正常转换。看网上的资料的， 好像将<code>MarshalJSON</code>的接收者不为指针的形式也可以。这个我也没有测试过，因为只想使用最新版的 Go， ^_^.</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

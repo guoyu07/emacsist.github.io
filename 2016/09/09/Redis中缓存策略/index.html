@@ -154,42 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-Redis中缓存策略" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Redis中缓存策略</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Redis中缓存策略
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.09.09</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/redis/">redis</a> / <a class="article-category-link" href="/categories/redis/nosql/">nosql</a> / <a class="article-category-link" href="/categories/redis/nosql/cache/">cache</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="Redis中缓存策略"><a href="#Redis中缓存策略" class="headerlink" title="Redis中缓存策略"></a>Redis中缓存策略</h2><ul>
+      <a class="tag-item" href="/tags/#cache">
+        <span class="tag-name">cache</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#nosql">
+        <span class="tag-name">nosql</span>
+    <span class="tag-size">( 8 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#redis">
+        <span class="tag-name">redis</span>
+    <span class="tag-size">( 12 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="Redis中缓存策略"><a href="#Redis中缓存策略" class="headerlink" title="Redis中缓存策略"></a>Redis中缓存策略</h2><ul>
 <li>volatile-lru：从数据集中，将设置了过期时间的key,按最近最少使用的数据淘汰。</li>
 <li>volatile-ttl：从数据集中，只将设置了过期时间的key，按即将过期时间的最短的优先淘汰。即ttl key，结果最小的优先淘汰。</li>
 <li>volatile-random：从数据集中，只将设置了过期时间的数据按随机淘汰</li>
@@ -208,10 +225,9 @@
 <h3 id="volatile-random"><a href="#volatile-random" class="headerlink" title="volatile-random"></a>volatile-random</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">127.0.0.1:6379&gt; CONFIG SET maxmemory-policy volatile-random</div><div class="line">OK</div><div class="line">127.0.0.1:6379&gt; <span class="built_in">set</span> sdfhe123123123123 wolsdkfasldksdf21342134sdfasdfasdfsafasfasfsadfsdfsdfsdasdfsdfsdfsafsdf</div><div class="line">(error) OOM <span class="built_in">command</span> not allowed when used memory &gt; <span class="string">'maxmemory'</span>.</div><div class="line">127.0.0.1:6379&gt; EXPIRE sdfhe123123123123 360</div><div class="line">(<span class="built_in">integer</span>) 1</div><div class="line">127.0.0.1:6379&gt; <span class="built_in">set</span> h1 wl2</div><div class="line">OK</div></pre></td></tr></table></figure>
 <p>其他的两个<code>volatile-xxx</code>的，也同理，只是一个是最近最少使用，一个是按<code>ttl</code>最短来淘汰.</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

@@ -154,48 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-ZooKeeper之发布-订阅例子" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">ZooKeeper之发布-订阅例子</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            ZooKeeper之发布-订阅例子
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.05.13</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/zookeeper/">zookeeper</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="pubisher"><a href="#pubisher" class="headerlink" title="pubisher"></a>pubisher</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public static void main(String[] args) throws Exception &#123;</div><div class="line">    RetryPolicy retryPolicy = new RetryNTimes(3, 2 * 1000);</div><div class="line"></div><div class="line">    CuratorFramework cf = CuratorFrameworkFactory.newClient(<span class="string">"127.0.0.1:2181"</span>, retryPolicy);</div><div class="line">    cf.start();</div><div class="line">    Stat <span class="built_in">stat</span> = cf.checkExists().forPath(<span class="string">"/topic"</span>);</div><div class="line">    <span class="keyword">if</span> (<span class="built_in">stat</span> == null) &#123;</div><div class="line">        cf.create().forPath(<span class="string">"/topic"</span>);</div><div class="line">    &#125;</div><div class="line">    cf.setData().forPath(<span class="string">"/topic"</span>, <span class="string">"hello new data"</span>.getBytes());</div><div class="line">    cf.close();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#zookeeper">
+        <span class="tag-name">zookeeper</span>
+    <span class="tag-size">( 3 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="pubisher"><a href="#pubisher" class="headerlink" title="pubisher"></a>pubisher</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public static void main(String[] args) throws Exception &#123;</div><div class="line">    RetryPolicy retryPolicy = new RetryNTimes(3, 2 * 1000);</div><div class="line"></div><div class="line">    CuratorFramework cf = CuratorFrameworkFactory.newClient(<span class="string">"127.0.0.1:2181"</span>, retryPolicy);</div><div class="line">    cf.start();</div><div class="line">    Stat <span class="built_in">stat</span> = cf.checkExists().forPath(<span class="string">"/topic"</span>);</div><div class="line">    <span class="keyword">if</span> (<span class="built_in">stat</span> == null) &#123;</div><div class="line">        cf.create().forPath(<span class="string">"/topic"</span>);</div><div class="line">    &#125;</div><div class="line">    cf.setData().forPath(<span class="string">"/topic"</span>, <span class="string">"hello new data"</span>.getBytes());</div><div class="line">    cf.close();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="subscriber"><a href="#subscriber" class="headerlink" title="subscriber"></a>subscriber</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">public static void main(String[] args) throws Exception &#123;</div><div class="line">    RetryPolicy retryPolicy = new RetryNTimes(3, 2 * 1000);</div><div class="line">    CuratorFramework cf = CuratorFrameworkFactory.newClient(<span class="string">"127.0.0.1:2181"</span>, retryPolicy);</div><div class="line"></div><div class="line"></div><div class="line">    cf.getCuratorListenable().addListener(new <span class="function"><span class="title">CuratorListener</span></span>() &#123;</div><div class="line">        @Override</div><div class="line">        public void eventReceived(CuratorFramework client, CuratorEvent event) throws Exception &#123;</div><div class="line">            System.out.println(<span class="string">"root --&gt;"</span> + event);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">    cf.start();</div><div class="line"></div><div class="line">    TreeCache treeCache = new TreeCache(cf, <span class="string">"/topic"</span>);</div><div class="line"></div><div class="line">    treeCache.getListenable().addListener(new <span class="function"><span class="title">TreeCacheListener</span></span>() &#123;</div><div class="line">        @Override</div><div class="line">        public void childEvent(CuratorFramework client, TreeCacheEvent event) throws Exception &#123;</div><div class="line">            System.out.println(<span class="string">"event --&gt;"</span> + event);</div><div class="line">            System.out.println(<span class="string">"change data -&gt; "</span> + new String(event.getData().getData()));</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">    treeCache.start();</div><div class="line">    Thread.sleep(60 * 1000 * 5);</div><div class="line">    System.out.println(<span class="string">"Exit"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

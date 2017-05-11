@@ -154,42 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-Tomcat-8-源码学习四之Catalina类" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Tomcat 8 源码学习四之Catalina类</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Tomcat 8 源码学习四之Catalina类
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.06.28</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="StringManager"><a href="#StringManager" class="headerlink" title="StringManager"></a>StringManager</h2><p>每个包一个StringManager。这样子，对同一个包(以及同一个locale)来说，它只有一个实例的。实现原理:</p>
+      <a class="tag-item" href="/tags/#Tomcat源码">
+        <span class="tag-name">Tomcat源码</span>
+    <span class="tag-size">( 9 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#tomcat">
+        <span class="tag-name">tomcat</span>
+    <span class="tag-size">( 20 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="StringManager"><a href="#StringManager" class="headerlink" title="StringManager"></a>StringManager</h2><p>每个包一个StringManager。这样子，对同一个包(以及同一个locale)来说，它只有一个实例的。实现原理:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">private static final Map&lt;String, Map&lt;Locale,StringManager&gt;&gt; managers = new Hashtable&lt;&gt;();</div></pre></td></tr></table></figure>
 <p>key：就是包名.<br>value：就是它的由locale,StringManager组合的Map</p>
 <p>它的作用，就是实现日志打印的国际化.比如，在包<code>/org/apache/catalina/startup</code>下，可以看到有以下几个国际化的资源文件:</p>
@@ -246,10 +263,9 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">protected void destroyInternal() throws LifecycleException &#123;</div><div class="line">    // Destroy our defined Services</div><div class="line">    <span class="keyword">for</span> (int i = 0; i &lt; services.length; i++) &#123;</div><div class="line">        services[i].destroy();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    globalNamingResources.destroy();</div><div class="line"></div><div class="line">    unregister(onameMBeanFactory);</div><div class="line"></div><div class="line">    unregister(onameStringCache);</div><div class="line"></div><div class="line">    super.destroyInternal();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p><code>server -&gt; service.destroy()</code></p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

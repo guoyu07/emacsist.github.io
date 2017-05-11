@@ -154,42 +154,64 @@
 
 <div class="content content-post LEFT">
    <article id="post-Nginx-Tomcat-Session-共享解决方案" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Nginx + Tomcat + Session 共享解决方案</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Nginx + Tomcat + Session 共享解决方案
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.07.29</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <blockquote>
+      <a class="tag-item" href="/tags/#nginx">
+        <span class="tag-name">nginx</span>
+    <span class="tag-size">( 8 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#session共享">
+        <span class="tag-name">session共享</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#tomcat">
+        <span class="tag-name">tomcat</span>
+    <span class="tag-size">( 20 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#集群">
+        <span class="tag-name">集群</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <blockquote>
 <p>注意， 这里使用的是 <code>Linux</code> + <code>Tomcat 7.x</code> + <code>JDK 7</code> + <code>Nginx</code> + <code>Spring Session</code> 的方式</p>
 </blockquote>
 <h2 id="安装Redis"><a href="#安装Redis" class="headerlink" title="安装Redis"></a>安装Redis</h2><p><a href="http://redis.io" target="_blank" rel="external">Redis.io</a></p>
@@ -224,10 +246,9 @@
 <h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>全部启动完毕后， 每将访问<code>http://localhost/hello/index</code>，就可以看到tomcat的控制台里，打印sessionID的内容了，因为默认情况下是轮询的方式，所以master和slave会循环显示。即第一次请求在一个tomcat的控制台显示，下一次请求就会在另一个Tomcat里显示，如此循环。</p>
 <p>然后可以关闭一个Tomcat（模拟进程死掉，或重新部署项目时，先让一个运行着，升级另一个Tomcat的应用，完成后再切换），可以看到sessionId没有变。当再次启动这个Tomcat时， 发现负载均衡又正常工作了，而且SessionID没有变。</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

@@ -154,42 +154,49 @@
 
 <div class="content content-post LEFT">
    <article id="post-RabbitMQ中的内存与流量控制" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">RabbitMQ中的内存与流量控制</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            RabbitMQ中的内存与流量控制
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.12.01</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/rabbitmq/">rabbitmq</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="相关内存参数"><a href="#相关内存参数" class="headerlink" title="相关内存参数"></a>相关内存参数</h2><h3 id="vm-memory-high-watermark"><a href="#vm-memory-high-watermark" class="headerlink" title="vm_memory_high_watermark"></a>vm_memory_high_watermark</h3><p>这个是与流量控制相关的内存参数.</p>
+      <a class="tag-item" href="/tags/#rabbitmq">
+        <span class="tag-name">rabbitmq</span>
+    <span class="tag-size">( 15 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="相关内存参数"><a href="#相关内存参数" class="headerlink" title="相关内存参数"></a>相关内存参数</h2><h3 id="vm-memory-high-watermark"><a href="#vm-memory-high-watermark" class="headerlink" title="vm_memory_high_watermark"></a>vm_memory_high_watermark</h3><p>这个是与流量控制相关的内存参数.</p>
 <blockquote>
 <p>RabbitMQ会在启动和执行命令<code>rabbitmqctl set_vm_memory_high_watermark 百分比</code>的时候检测系统所安装的内存总量。默认情况沔，当RabbitMQ服务器使用超过<code>40%</code>的内存时，它会引起一个内存报警并且<code>阻塞所有连接</code>。一旦内存报警清除后（例如，由于RabbitMQ服务器将消息页交换到磁盘或者分发到客户端时）就会恢复正常服务了。</p>
 </blockquote>
@@ -218,10 +225,9 @@
 <h3 id="修改-vm-memory-high-watermark-为绝对值"><a href="#修改-vm-memory-high-watermark-为绝对值" class="headerlink" title="修改 vm_memory_high_watermark 为绝对值"></a>修改 vm_memory_high_watermark 为绝对值</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">┌─[sky@sky-linux] - [/ihome/rabbitmq/rabbitmq_server-3.6.1] - [2016-12-01 03:38:10]</div><div class="line">└─[64] &lt;&gt; ./sbin/rabbitmqctl set_vm_memory_high_watermark absolute 10MB</div><div class="line">Setting memory threshold on <span class="string">'rabbit@sky-linux'</span> to 10000000 bytes ...</div><div class="line">┌─[sky@sky-linux] - [/ihome/rabbitmq/rabbitmq_server-3.6.1] - [2016-12-01 03:38:38]</div><div class="line">└─[0] &lt;&gt; ./sbin/rabbitmqctl status                                    </div><div class="line">...</div><div class="line">&#123;vm_memory_high_watermark,&#123;absolute,10000000&#125;&#125;,</div><div class="line"> &#123;vm_memory_limit,10000000&#125;,</div><div class="line"></div><div class="line">...</div></pre></td></tr></table></figure>
 <p>可以看到，它们的值是相等的.</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

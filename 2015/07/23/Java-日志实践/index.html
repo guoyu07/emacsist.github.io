@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-Java-日志实践" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Java 日志实践</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Java 日志实践
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.07.23</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="每个类一个Logger"><a href="#每个类一个Logger" class="headerlink" title="每个类一个Logger"></a>每个类一个Logger</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger LOG = LoggerFactory.getLogger(Your.class);</div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#log">
+        <span class="tag-name">log</span>
+    <span class="tag-size">( 5 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="每个类一个Logger"><a href="#每个类一个Logger" class="headerlink" title="每个类一个Logger"></a>每个类一个Logger</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger LOG = LoggerFactory.getLogger(Your.class);</div></pre></td></tr></table></figure>
 <h2 id="日志级别"><a href="#日志级别" class="headerlink" title="日志级别"></a>日志级别</h2><h3 id="trace"><a href="#trace" class="headerlink" title="trace"></a>trace</h3><p>最详细的日志级别信息</p>
 <h3 id="debug"><a href="#debug" class="headerlink" title="debug"></a>debug</h3><p>调试级别的日志级别信息</p>
 <h3 id="info"><a href="#info" class="headerlink" title="info"></a>info</h3><p>一般的日志级别信息</p>
@@ -199,10 +211,9 @@
 <h2 id="在应用中按需开启不同的级别"><a href="#在应用中按需开启不同的级别" class="headerlink" title="在应用中按需开启不同的级别"></a>在应用中按需开启不同的级别</h2><p>示例日志配置</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</div><div class="line">&lt;configuration &gt;</div><div class="line">	&lt;appender name=<span class="string">"STDOUT"</span> class=<span class="string">"ch.qos.logback.core.ConsoleAppender"</span>&gt;</div><div class="line">		&lt;layout class=<span class="string">"ch.qos.logback.classic.PatternLayout"</span>&gt;</div><div class="line">			&lt;Pattern&gt;%-70(%c&#123;15&#125;.%M[%date&#123;yyyy-MM-dd HH:mm:ss&#125;]) : %m%ex%n&lt;/Pattern&gt;</div><div class="line">		&lt;/layout&gt;</div><div class="line">	&lt;/appender&gt;</div><div class="line">	&lt;root&gt;</div><div class="line">                &lt;!-- 假设是生产环境，可以默认将所有日志级别设置为error级别 --&gt;</div><div class="line">		&lt;level value=<span class="string">"error"</span> /&gt;</div><div class="line">		&lt;appender-ref ref=<span class="string">"STDOUT"</span> /&gt;</div><div class="line">	&lt;/root&gt;</div><div class="line">        &lt;!-- 这里可以将在你程序里，想要将不同的类设置为不同的级别打印消息 --&gt;</div><div class="line">        &lt;logger name=<span class="string">"com.your.packge[.YourClassName]"</span> level=<span class="string">"debug"</span>&gt;</div><div class="line">	   &lt;appender-ref ref=<span class="string">"STDOUT"</span> /&gt;</div><div class="line">	&lt;/logger&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

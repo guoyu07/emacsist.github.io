@@ -154,42 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-翻译-RabbitMQ-持久化配置" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">[翻译]RabbitMQ 持久化配置</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            [翻译]RabbitMQ 持久化配置
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2017.04.27</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/rabbitmq/">rabbitmq</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <p><a href="https://www.rabbitmq.com/persistence-conf.html" target="_blank" rel="external">原文</a></p>
+      <a class="tag-item" href="/tags/#rabbit">
+        <span class="tag-name">rabbit</span>
+    <span class="tag-size">( 3 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#rabbitmq">
+        <span class="tag-name">rabbitmq</span>
+    <span class="tag-size">( 15 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#翻译">
+        <span class="tag-name">翻译</span>
+    <span class="tag-size">( 20 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p><a href="https://www.rabbitmq.com/persistence-conf.html" target="_blank" rel="external">原文</a></p>
 <p>RabbitMQ 持久层旨在在没有配置的情况下在大多数主要场景中给出一个好的结果。然而，一些配置有时比较有用。这篇文章会解释你可以怎样配置它。建议你在开始任何行动之前阅读完它。</p>
 <h1 id="持久层是如何工作的"><a href="#持久层是如何工作的" class="headerlink" title="持久层是如何工作的"></a>持久层是如何工作的</h1><p>首先，一些背景：所有 <em>persistent</em> 和 <em>transient</em> 的消息都可以被刷盘。 <em>Persistent</em> 消息到达消息后会尽可能快地刷盘，而 <em>transient</em> 的消息仅会在内存有压力的情况下被刷盘以便释放内存。当可能时， <em>Persistent</em> 消息也会保持在内存中，并仅会在内存有压力时才会被淘汰。持久层是指将这两种类型的消息( <em>persistent</em> 与 <em>transient</em> )持久化到磁盘的机制。</p>
 <p>在这篇文章中，我们说 <em>队列</em> 是指一个非镜像队列( unmirrored queue )或者是一个主队列( a queue master)又或者是一个从队列(a queue slave)。队列镜像(Queue mirroring) 发生在持久化之上(happen “above”)。</p>
@@ -229,10 +246,9 @@
 <p>异步线程的数量可以如文档<a href="http://www.erlang.org/doc/man/erl.html#async_thread_pool_size" target="_blank" rel="external">这里</a>描述的一样，通过传递 <em>+A</em> 参数给 <em>Erlang</em> 虚拟机来配置，并且典型的情况下是通过环境变量 <em>RABBITMQ_SERVER_ERL_ARGS</em> 来配置。默认值为 <em>+A 64</em> 。改变这个值之前，尝试几个不同的值来验证下比较好。</p>
 <h1 id="替换消息存储索引实现"><a href="#替换消息存储索引实现" class="headerlink" title="替换消息存储索引实现"></a>替换消息存储索引实现</h1><p>正如上面提到，每一条写到消息存储里的消息会为它的索引条目使用小量的内存。在 RabbitMQ 中，消息存储索引是一种可拔插的，其他的实现可以作为插件来使用，这可以移除这个限制。(我们的服务器不带有任何实现的原因是，它们都是使用本地代码的)。注意，这种插件典型情况下会使消息存储运行得更慢。</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

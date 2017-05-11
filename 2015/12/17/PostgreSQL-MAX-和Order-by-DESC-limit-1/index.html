@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-PostgreSQL-MAX-和Order-by-DESC-limit-1" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">PostgreSQL MAX()和Order by DESC limit 1</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            PostgreSQL MAX()和Order by DESC limit 1
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.12.17</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/postgresql/">postgresql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="准备数据"><a href="#准备数据" class="headerlink" title="准备数据"></a>准备数据</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">postgres=<span class="comment"># create table tmax (id int);</span></div><div class="line">CREATE TABLE</div><div class="line">postgres=<span class="comment"># insert into tm</span></div><div class="line">tmax  tmp1</div><div class="line">postgres=<span class="comment"># insert into tmax values (generate_series(1,100000000));</span></div><div class="line">INSERT 0 100000000</div><div class="line">postgres=<span class="comment">#</span></div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="准备数据"><a href="#准备数据" class="headerlink" title="准备数据"></a>准备数据</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">postgres=<span class="comment"># create table tmax (id int);</span></div><div class="line">CREATE TABLE</div><div class="line">postgres=<span class="comment"># insert into tm</span></div><div class="line">tmax  tmp1</div><div class="line">postgres=<span class="comment"># insert into tmax values (generate_series(1,100000000));</span></div><div class="line">INSERT 0 100000000</div><div class="line">postgres=<span class="comment">#</span></div></pre></td></tr></table></figure>
 <h2 id="一亿条无索引"><a href="#一亿条无索引" class="headerlink" title="一亿条无索引"></a>一亿条无索引</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">postgres=<span class="comment"># explain analyze verbose select max(id) from tmax ;</span></div><div class="line">                                                             QUERY PLAN</div><div class="line">-------------------------------------------------------------------------------------------------------------------------------------</div><div class="line"> Aggregate  (cost=1692478.40..1692478.41 rows=1 width=4) (actual time=32215.384..32215.385 rows=1 loops=1)</div><div class="line">   Output: max(id)</div><div class="line">   -&gt;  Seq Scan on public.tmax  (cost=0.00..1442478.32 rows=100000032 width=4) (actual time=4.656..18766.501 rows=100000000 loops=1)</div><div class="line">         Output: id</div><div class="line"> Planning time: 0.132 ms</div><div class="line"> Execution time: 32215.441 ms</div><div class="line">(6 rows)</div><div class="line"></div><div class="line">postgres=<span class="comment"># explain analyze verbose select id from tmax order by id desc limit 1 ;</span></div><div class="line">                                                                 QUERY PLAN</div><div class="line">--------------------------------------------------------------------------------------------------------------------------------------------</div><div class="line"> Limit  (cost=1942478.48..1942478.48 rows=1 width=4) (actual time=32789.641..32789.641 rows=1 loops=1)</div><div class="line">   Output: id</div><div class="line">   -&gt;  Sort  (cost=1942478.48..2192478.56 rows=100000032 width=4) (actual time=32789.640..32789.640 rows=1 loops=1)</div><div class="line">         Output: id</div><div class="line">         Sort Key: tmax.id</div><div class="line">         Sort Method: top-N heapsort  Memory: 25kB</div><div class="line">         -&gt;  Seq Scan on public.tmax  (cost=0.00..1442478.32 rows=100000032 width=4) (actual time=15.948..18095.096 rows=100000000 loops=1)</div><div class="line">               Output: id</div><div class="line"> Planning time: 0.101 ms</div><div class="line"> Execution time: 32789.678 ms</div><div class="line">(10 rows)</div><div class="line"></div><div class="line">postgres=<span class="comment"># explain analyze verbose select max(id) from tmax ;</span></div><div class="line">                                                              QUERY PLAN</div><div class="line">--------------------------------------------------------------------------------------------------------------------------------------</div><div class="line"> Aggregate  (cost=1692478.40..1692478.41 rows=1 width=4) (actual time=32411.383..32411.383 rows=1 loops=1)</div><div class="line">   Output: max(id)</div><div class="line">   -&gt;  Seq Scan on public.tmax  (cost=0.00..1442478.32 rows=100000032 width=4) (actual time=10.210..18996.920 rows=100000000 loops=1)</div><div class="line">         Output: id</div><div class="line"> Planning time: 0.125 ms</div><div class="line"> Execution time: 32411.436 ms</div><div class="line">(6 rows)</div><div class="line"></div><div class="line">postgres=<span class="comment"># explain analyze verbose select id from tmax order by id desc limit 1 ;</span></div><div class="line">                                                                QUERY PLAN</div><div class="line">-------------------------------------------------------------------------------------------------------------------------------------------</div><div class="line"> Limit  (cost=1942478.48..1942478.48 rows=1 width=4) (actual time=33312.476..33312.477 rows=1 loops=1)</div><div class="line">   Output: id</div><div class="line">   -&gt;  Sort  (cost=1942478.48..2192478.56 rows=100000032 width=4) (actual time=33312.474..33312.474 rows=1 loops=1)</div><div class="line">         Output: id</div><div class="line">         Sort Key: tmax.id</div><div class="line">         Sort Method: top-N heapsort  Memory: 25kB</div><div class="line">         -&gt;  Seq Scan on public.tmax  (cost=0.00..1442478.32 rows=100000032 width=4) (actual time=8.584..18551.514 rows=100000000 loops=1)</div><div class="line">               Output: id</div><div class="line"> Planning time: 0.100 ms</div><div class="line"> Execution time: 33312.514 ms</div><div class="line">(10 rows)</div><div class="line"></div><div class="line">postgres=<span class="comment">#</span></div></pre></td></tr></table></figure>
 <p>看执行结果是max快</p>
 <h2 id="一亿条，有索引"><a href="#一亿条，有索引" class="headerlink" title="一亿条，有索引"></a>一亿条，有索引</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">postgres=<span class="comment"># create index id_tmax_index on tmax (id);</span></div><div class="line">CREATE INDEX</div><div class="line">postgres=<span class="comment">#</span></div><div class="line"></div><div class="line">postgres=<span class="comment"># explain analyze verbose select max(id) from tmax ;</span></div><div class="line">                                                                             QUERY PLAN</div><div class="line">---------------------------------------------------------------------------------------------------------------------------------------------------------------------</div><div class="line"> Result  (cost=0.60..0.61 rows=1 width=0) (actual time=0.041..0.042 rows=1 loops=1)</div><div class="line">   Output: <span class="variable">$0</span></div><div class="line">   InitPlan 1 (returns <span class="variable">$0</span>)</div><div class="line">     -&gt;  Limit  (cost=0.57..0.60 rows=1 width=4) (actual time=0.035..0.035 rows=1 loops=1)</div><div class="line">           Output: tmax.id</div><div class="line">           -&gt;  Index Only Scan Backward using id_tmax_index on public.tmax  (cost=0.57..3289257.57 rows=100000000 width=4) (actual time=0.033..0.033 rows=1 loops=1)</div><div class="line">                 Output: tmax.id</div><div class="line">                 Index Cond: (tmax.id IS NOT NULL)</div><div class="line">                 Heap Fetches: 1</div><div class="line"> Planning time: 0.198 ms</div><div class="line"> Execution time: 0.092 ms</div><div class="line">(11 rows)</div><div class="line"></div><div class="line">postgres=<span class="comment"># explain analyze verbose select id from tmax order by id desc limit 1 ;</span></div><div class="line">                                                                         QUERY PLAN</div><div class="line">-------------------------------------------------------------------------------------------------------------------------------------------------------------</div><div class="line"> Limit  (cost=0.57..0.60 rows=1 width=4) (actual time=0.029..0.030 rows=1 loops=1)</div><div class="line">   Output: id</div><div class="line">   -&gt;  Index Only Scan Backward using id_tmax_index on public.tmax  (cost=0.57..3039257.57 rows=100000000 width=4) (actual time=0.027..0.027 rows=1 loops=1)</div><div class="line">         Output: id</div><div class="line">         Heap Fetches: 1</div><div class="line"> Planning time: 0.143 ms</div><div class="line"> Execution time: 0.065 ms</div><div class="line">(7 rows)</div><div class="line"></div><div class="line">postgres=<span class="comment"># explain analyze verbose select max(id) from tmax ;</span></div><div class="line">                                                                             QUERY PLAN</div><div class="line">---------------------------------------------------------------------------------------------------------------------------------------------------------------------</div><div class="line"> Result  (cost=0.60..0.61 rows=1 width=0) (actual time=0.042..0.043 rows=1 loops=1)</div><div class="line">   Output: <span class="variable">$0</span></div><div class="line">   InitPlan 1 (returns <span class="variable">$0</span>)</div><div class="line">     -&gt;  Limit  (cost=0.57..0.60 rows=1 width=4) (actual time=0.036..0.037 rows=1 loops=1)</div><div class="line">           Output: tmax.id</div><div class="line">           -&gt;  Index Only Scan Backward using id_tmax_index on public.tmax  (cost=0.57..3289257.57 rows=100000000 width=4) (actual time=0.034..0.034 rows=1 loops=1)</div><div class="line">                 Output: tmax.id</div><div class="line">                 Index Cond: (tmax.id IS NOT NULL)</div><div class="line">                 Heap Fetches: 1</div><div class="line"> Planning time: 0.199 ms</div><div class="line"> Execution time: 0.092 ms</div><div class="line">(11 rows)</div><div class="line"></div><div class="line">postgres=<span class="comment"># explain analyze verbose select id from tmax order by id desc limit 1 ;</span></div><div class="line">                                                                         QUERY PLAN</div><div class="line">-------------------------------------------------------------------------------------------------------------------------------------------------------------</div><div class="line"> Limit  (cost=0.57..0.60 rows=1 width=4) (actual time=0.030..0.030 rows=1 loops=1)</div><div class="line">   Output: id</div><div class="line">   -&gt;  Index Only Scan Backward using id_tmax_index on public.tmax  (cost=0.57..3039257.57 rows=100000000 width=4) (actual time=0.029..0.029 rows=1 loops=1)</div><div class="line">         Output: id</div><div class="line">         Heap Fetches: 1</div><div class="line"> Planning time: 0.144 ms</div><div class="line"> Execution time: 0.073 ms</div><div class="line">(7 rows)</div><div class="line"></div><div class="line">postgres=<span class="comment">#</span></div></pre></td></tr></table></figure>
@@ -198,10 +210,9 @@
 <p>有索引，并且是倒序索引，也还是order by 快一点点</p>
 <h2 id="推测"><a href="#推测" class="headerlink" title="推测"></a>推测</h2><p>max在无索引，还是有索引，综合好一点，所以统一习惯写max().</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

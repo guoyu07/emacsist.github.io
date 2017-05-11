@@ -154,42 +154,59 @@
 
 <div class="content content-post LEFT">
    <article id="post-Tomcat-8-源码学习三之SecurityClassLoad" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Tomcat 8 源码学习三之SecurityClassLoad</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Tomcat 8 源码学习三之SecurityClassLoad
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.06.27</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="关于Java的-SecurityManager"><a href="#关于Java的-SecurityManager" class="headerlink" title="关于Java的 SecurityManager"></a>关于Java的 SecurityManager</h2><p>默认情况下,JVM是不会启用<code>SecurityManager</code>的，想要开启，则需要在启动时指定<code>-Djava.security.manager</code>，如果还想指定你的应用的策略文件，还可以添加多一个参数<code>-Djava.security.policy=/path/to/my.policy</code></p>
+      <a class="tag-item" href="/tags/#Tomcat源码">
+        <span class="tag-name">Tomcat源码</span>
+    <span class="tag-size">( 9 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#tomcat">
+        <span class="tag-name">tomcat</span>
+    <span class="tag-size">( 20 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="关于Java的-SecurityManager"><a href="#关于Java的-SecurityManager" class="headerlink" title="关于Java的 SecurityManager"></a>关于Java的 SecurityManager</h2><p>默认情况下,JVM是不会启用<code>SecurityManager</code>的，想要开启，则需要在启动时指定<code>-Djava.security.manager</code>，如果还想指定你的应用的策略文件，还可以添加多一个参数<code>-Djava.security.policy=/path/to/my.policy</code></p>
 <h2 id="Tomcat中的-SecurityClassLoad"><a href="#Tomcat中的-SecurityClassLoad" class="headerlink" title="Tomcat中的 SecurityClassLoad"></a>Tomcat中的 SecurityClassLoad</h2><p>为了安全加载类，Tomcat中通过<code>org.apache.catalina.security.SecurityClassLoad</code>来预加载Tomcat自身的核心类（如果启用了<code>SecurityManager</code>的话，通过Tomcat的参数<code>-security</code>来开启），以免在之后触发<code>AccessControlException</code>的<code>RuntimePermission</code>.</p>
 <h2 id="错误"><a href="#错误" class="headerlink" title="错误"></a>错误</h2><p>在调试的时候，开启了<code>-Djava.security.manager</code></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">-Dcatalina.home=/ihome/java/tomcat/apache-tomcat-8.0.36-src</div><div class="line">-Dcatalina.base=/ihome/java/tomcat/apache-tomcat-8.0.36-src</div><div class="line">-Djava.endorsed.dirs=/ihome/java/tomcat/apache-tomcat-8.0.36-src/endorsed</div><div class="line">-Djava.io.tmpdir=/ihome/java/tomcat/apache-tomcat-8.0.36-src/temp</div><div class="line">-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager</div><div class="line">-Djava.util.logging.config.file=/ihome/java/tomcat/apache-tomcat-8.0.36-src/conf/logging.properties</div><div class="line">-Djava.security.manager</div><div class="line">-Djava.security.policy=/ihome/java/tomcat/apache-tomcat-8.0.36-src/conf/catalina.policy</div><div class="line"></div><div class="line">-Didea.launcher.bin.path=/ihome/java/ide/idea-IU-145.258.11/bin</div></pre></td></tr></table></figure>
@@ -211,10 +228,9 @@
 <p><a href="http://www.epubit.com.cn/book/onlinechapter/34422" target="_blank" rel="external">epubit</a></p>
 <p><a href="http://my.oschina.net/xionghui/blog/501225" target="_blank" rel="external">OSC xionghui</a></p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

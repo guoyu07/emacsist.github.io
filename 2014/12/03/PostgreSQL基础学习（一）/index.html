@@ -156,42 +156,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-PostgreSQL基础学习（一）" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">PostgreSQL基础学习（一）</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            PostgreSQL基础学习（一）
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2014.12.03</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/postgresql/">postgresql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><a href="http://www.postgresql.org/" target="_blank" rel="external">PostgreSQL官网</a></p>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><a href="http://www.postgresql.org/" target="_blank" rel="external">PostgreSQL官网</a></p>
 <blockquote>
 <p>PostgreSQL 官网号称：它是最世界最先进的开源数据库（顺便说一下，MySQL官网说它自己是最流行的开源数据库）。我觉得这一句话，也已经非常足够概括 PostgreSQL 了（MySQL 官网的那句话，也概括了它自己的特点，一个是最先进，一个是最流行）。也有号称是 Oracle 的开源版，因为PostgreSQL被经常拿来与Oracle这个重量级的商业数据库比较。的确，PostgreSQL 与 Oracle 兼容性非常强，Oracle 的 DBA 可以非常快地上手 PostgreSQL。在 PostgreSQL 技术群里的大牛大多都是从 Oracle 转到 PostgreSQL，使我印象非常深刻就是 <a href="http://blog.163.com/digoal@126/" target="_blank" rel="external">@德哥</a>，绝对是PostgreSQL的大神级别。我也是跟着德哥的视频一边看，一边学习的。</p>
 </blockquote>
@@ -205,10 +217,9 @@
 <h4 id="PostgreSQL-的-bin-目录常用工具说明"><a href="#PostgreSQL-的-bin-目录常用工具说明" class="headerlink" title="PostgreSQL 的 bin 目录常用工具说明"></a>PostgreSQL 的 bin 目录常用工具说明</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">#clusterdb</span></div><div class="line"> </div><div class="line">     — 对一个PostgreSQL数据库进行建簇</div><div class="line"> </div><div class="line"><span class="comment">#createdb</span></div><div class="line"> </div><div class="line">    — 创建一个新的 PostgreSQL 数据库</div><div class="line"> </div><div class="line"><span class="comment">#createlang</span></div><div class="line"> </div><div class="line">    — 定义一种新的 PostgreSQL 过程语言</div><div class="line"> </div><div class="line"><span class="comment">#createuser</span></div><div class="line"> </div><div class="line">     — 定义一个新的 PostgreSQL 用户帐户</div><div class="line"> </div><div class="line"><span class="comment">#dropdb</span></div><div class="line"> </div><div class="line">     — 删除一个现有 PostgreSQL 数据库</div><div class="line"> </div><div class="line"><span class="comment">#droplang</span></div><div class="line"> </div><div class="line">    — 删除一种 PostgreSQL 过程语言</div><div class="line"> </div><div class="line"><span class="comment">#dropuser</span></div><div class="line"> </div><div class="line">    — 删除一个 PostgreSQL 用户帐户</div><div class="line"> </div><div class="line"><span class="comment">#ecpg</span></div><div class="line"> </div><div class="line">    — 嵌入的 SQL C 预处理器</div><div class="line"> </div><div class="line"><span class="comment">#pg_basebackup</span></div><div class="line"> </div><div class="line">    -- 做一个PostgreSQL集群的基础备份</div><div class="line"> </div><div class="line"><span class="comment">#pg_config</span></div><div class="line"> </div><div class="line">    — 检索已安装版本的 PostgreSQL 的信息</div><div class="line"> </div><div class="line"><span class="comment">#pg_dump</span></div><div class="line"> </div><div class="line">    — 将一个PostgreSQL数据库抽出到一个脚本文件或者其它归档文件中</div><div class="line"> </div><div class="line"><span class="comment">#pg_dumpall</span></div><div class="line"> </div><div class="line">    — 抽出一个 PostgreSQL 数据库集群到脚本文件中</div><div class="line"> </div><div class="line"><span class="comment">#pg_restore</span></div><div class="line"> </div><div class="line">    — 从一个由 pg_dump 创建的备份文件中恢复 PostgreSQL 数据库。</div><div class="line"> </div><div class="line"><span class="comment">#psql</span></div><div class="line"> </div><div class="line">    — PostgreSQL 交互终端</div><div class="line"> </div><div class="line"><span class="comment">#reindexdb</span></div><div class="line"> </div><div class="line">    -- 重新建立一个数据库索引</div><div class="line"> </div><div class="line"><span class="comment">#vacuumdb</span></div><div class="line"> </div><div class="line">    — 收集垃圾并且分析一个PostgreSQL 数据库</div><div class="line"> </div><div class="line"><span class="comment">#pg_receivexlog</span></div><div class="line"> </div><div class="line">    从另一台运行PG的数据库里接收 wal 日志</div><div class="line"> </div><div class="line"><span class="comment">#pg_resetxlog</span></div><div class="line"> </div><div class="line">    重置一个 PostgreSQL 数据库集群的预写日志以及其它控制内容</div></pre></td></tr></table></figure>
 <h4 id="PostgreSQL-的-data-目录说明"><a href="#PostgreSQL-的-data-目录说明" class="headerlink" title="PostgreSQL 的 data 目录说明"></a>PostgreSQL 的 data 目录说明</h4><p><img src="/img/postgresql-data-dir.png" alt=""></p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

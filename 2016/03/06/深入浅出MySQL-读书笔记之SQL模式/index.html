@@ -154,42 +154,54 @@
 
 <div class="content content-post LEFT">
    <article id="post-深入浅出MySQL-读书笔记之SQL模式" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">&lt;深入浅出MySQL&gt;读书笔记之SQL模式</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            &lt;深入浅出MySQL&gt;读书笔记之SQL模式
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2016.03.06</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/mysql/">mysql</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="查看默认的SQL-Mode"><a href="#查看默认的SQL-Mode" class="headerlink" title="查看默认的SQL Mode"></a>查看默认的SQL Mode</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">mysql&gt; select @@sql_mode;</div><div class="line">+-------------------------------------------------------------------------------------------------------------------------------------------+</div><div class="line">| @@sql_mode                                                                                                                                |</div><div class="line">+-------------------------------------------------------------------------------------------------------------------------------------------+</div><div class="line">| ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION |</div><div class="line">+-------------------------------------------------------------------------------------------------------------------------------------------+</div><div class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.01 sec)</div></pre></td></tr></table></figure>
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="查看默认的SQL-Mode"><a href="#查看默认的SQL-Mode" class="headerlink" title="查看默认的SQL Mode"></a>查看默认的SQL Mode</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">mysql&gt; select @@sql_mode;</div><div class="line">+-------------------------------------------------------------------------------------------------------------------------------------------+</div><div class="line">| @@sql_mode                                                                                                                                |</div><div class="line">+-------------------------------------------------------------------------------------------------------------------------------------------+</div><div class="line">| ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION |</div><div class="line">+-------------------------------------------------------------------------------------------------------------------------------------------+</div><div class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.01 sec)</div></pre></td></tr></table></figure>
 <h2 id="设置模式"><a href="#设置模式" class="headerlink" title="设置模式"></a>设置模式</h2><p>SET [SESSION|GLOBAL] sql_mode=’modes’，其中SESSION选项表示只在本次连接中生效；而GLOBAL选项表示在本次连接中并不生效，而对于新的连接则生效，这种方法在MySQL 4.1开始有效。另外，也可以通过使用“–sql-mode=”modes””选项，在MySQL启动时设置sql_mode</p>
 <h2 id="SQL-模式功能"><a href="#SQL-模式功能" class="headerlink" title="SQL 模式功能"></a>SQL 模式功能</h2><ul>
 <li>验证日期的合法性.例如:</li>
@@ -208,10 +220,9 @@
 </ul>
 <p><a href="http://dev.mysql.com/doc/refman/5.7/en/sql-mode.html" target="_blank" rel="external">MySQL SQL-MODE</a></p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">

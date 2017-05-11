@@ -154,42 +154,69 @@
 
 <div class="content content-post LEFT">
    <article id="post-Java-Web-项目包建议设计" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Java Web 项目包建议设计</h1>
+    <header class="article-header">
+        <h1 class="post-title">
+            Java Web 项目包建议设计
+        </h1>
 
-    <div class="article-meta">
-      <span>
+        <div class="article-meta">
+            <span>
         <i class="icon-calendar"></i>
         <span>2015.07.21</span>
-      </span>
+            </span>
 
-      
-        <span class="article-author">
+            
+                <span class="article-author">
           <i class="icon-user"></i>
           <span>emacsist</span>
-        </span>
-      
+                </span>
+                
 
-      
-  <span class="article-category">
+                    
+    <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </span>
-
-
-
-      
-
-      
-
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <blockquote>
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#java ee">
+        <span class="tag-name">java ee</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#java web">
+        <span class="tag-name">java web</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#spring">
+        <span class="tag-name">spring</span>
+    <span class="tag-size">( 27 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#ssh">
+        <span class="tag-name">ssh</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <blockquote>
 <p>以下这些都只是从工作中，思考出来的，只是在下自己的拙见。一个好的包设计， 可以让项目更加清晰具体。</p>
 </blockquote>
 <h2 id="com-company-dao-pojo"><a href="#com-company-dao-pojo" class="headerlink" title="com.company.dao.pojo"></a>com.company.dao.pojo</h2><p>这里存放的是与数据库对应的表的POJO</p>
@@ -207,10 +234,9 @@
 <h2 id="com-company-inteceptor"><a href="#com-company-inteceptor" class="headerlink" title="com.company.inteceptor"></a>com.company.inteceptor</h2><p>这里存放所有interceptor类</p>
 <h2 id="com-company-service"><a href="#com-company-service" class="headerlink" title="com.company.service"></a>com.company.service</h2><p>为其他类提供的服务类，因为有些时候，使用Utils静态工具类，无法注入Spring的依赖，这时可以使用<code>@service</code>来注解某个服务类，为其他类提供服务，又可以使用Spring的DI优点。<br>因为Spring默认下是对象是单例的。所以不必担心对象实例化过多的问题。</p>
 
-    
-  </div>
+                                
+    </div>
 </article>
-
 
    
   <div class="text-center donation">
