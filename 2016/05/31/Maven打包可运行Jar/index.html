@@ -1,90 +1,21 @@
-<!doctype html>
+<!DOCTYPE html>
 
 
+  <html class="light page-post">
 
 
-<html class="theme-next mist" lang="zh-Hans">
 <head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+  <meta charset="utf-8">
+  
+  <title>Maven打包可运行Jar | emacsist</title>
 
-
-
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-  
-  
-  
-
-  
-    
-    
+    <meta name="keywords" content="java,jar," />
   
 
-  
-
-  
-
-  
-
-  
-
-  
-    
-    
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-  
-
-
-
-
-
-
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="java,jar," />
-
-
-
-
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
-
-
-
-
-
-
-<meta name="description" content="1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768&amp;lt;plugins&amp;gt;    &amp;lt;!-- 复制依赖的插件 --&amp;gt;    &amp;lt;plugin&amp;gt;        &amp;lt;gr">
+  <meta name="description" content="1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768&amp;lt;plugins&amp;gt;    &amp;lt;!-- 复制依赖的插件 --&amp;gt;    &amp;lt;plugin&amp;gt;        &amp;lt;gr">
 <meta name="keywords" content="java,jar">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Maven打包可运行Jar">
@@ -96,291 +27,169 @@
 <meta name="twitter:title" content="Maven打包可运行Jar">
 <meta name="twitter:description" content="1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768&amp;lt;plugins&amp;gt;    &amp;lt;!-- 复制依赖的插件 --&amp;gt;    &amp;lt;plugin&amp;gt;        &amp;lt;gr">
 
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
 
 
-<script type="text/javascript" id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Mist',
-    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
-    fancybox: false,
-    motion: false,
-    duoshuo: {
-      userId: '0',
-      author: '博主'
-    },
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
-
-
-
-  <link rel="canonical" href="https://emacsist.github.io/2016/05/31/Maven打包可运行Jar/"/>
-
-
-
-
-
-  <title>Maven打包可运行Jar | emacsist</title>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
 
   
 
-
-
-
-
+  
   <script type="text/javascript">
     var _hmt = _hmt || [];
     (function() {
       var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
       var s = document.getElementsByTagName("script")[0];
       s.parentNode.insertBefore(hm, s);
     })();
   </script>
 
 
-
-
-
-
-
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
 
 
 
   
+
   
-    
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
   
 
-  <div class="container sidebar-position-left page-post-detail ">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
-    
-
-    <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">emacsist</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
       
-        <p class="site-subtitle"></p>
-      
-  </div>
-
-  <div class="site-nav-toggle">
-    <button>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
-</div>
-
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu">
-      
-        
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
-            
-            首页
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
           </a>
         </li>
       
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-books">
-          <a href="/books" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-heart"></i> <br />
-            
-            书
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
-            
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
             标签
           </a>
         </li>
       
-        
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
-            
-            分类
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
           </a>
         </li>
       
-        
-        <li class="menu-item menu-item-about">
-          <a href="/about" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
             关于
           </a>
         </li>
       
-
-      
     </ul>
-  
-
-  
-</nav>
+  </div>
 
 
+</div>
 
- </div>
-    </header>
 
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
-            
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-text">参考资料</span></a></li></ol>
+  </div>
 
-  <div id="posts" class="posts-expand">
-    
 
-  
 
-  
-  
-  
+<div class="content content-post LEFT">
+   <article id="post-Maven打包可运行Jar" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">Maven打包可运行Jar</h1>
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://emacsist.github.io/2016/05/31/Maven打包可运行Jar/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="emacsist">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="emacsist">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                Maven打包可运行Jar
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-31T19:16:56+08:00">
-                2016-05-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2016.05.31</span>
+      </span>
 
       
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+        </span>
       
 
       
-        <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div></pre></td><td class="code"><pre><div class="line">&lt;plugins&gt;</div><div class="line">    &lt;!-- 复制依赖的插件 --&gt;</div><div class="line">    &lt;plugin&gt;</div><div class="line">        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</div><div class="line">        &lt;artifactId&gt;maven-dependency-plugin&lt;/artifactId&gt;</div><div class="line">        &lt;executions&gt;</div><div class="line">            &lt;execution&gt;</div><div class="line">                &lt;id&gt;copy-dependencies&lt;/id&gt;</div><div class="line">                &lt;phase&gt;package&lt;/phase&gt;</div><div class="line">                &lt;goals&gt;</div><div class="line">                    &lt;goal&gt;copy-dependencies&lt;/goal&gt;</div><div class="line">                &lt;/goals&gt;</div><div class="line">                &lt;configuration&gt;</div><div class="line">                    &lt;outputDirectory&gt;<span class="variable">$&#123;project.build.directory&#125;</span>/lib&lt;/outputDirectory&gt;</div><div class="line">                    &lt;overWriteReleases&gt;<span class="literal">false</span>&lt;/overWriteReleases&gt;</div><div class="line">                    &lt;overWriteSnapshots&gt;<span class="literal">true</span>&lt;/overWriteSnapshots&gt;</div><div class="line">                &lt;/configuration&gt;</div><div class="line">            &lt;/execution&gt;</div><div class="line">        &lt;/executions&gt;</div><div class="line">    &lt;/plugin&gt;</div><div class="line">    &lt;plugin&gt;</div><div class="line">        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</div><div class="line">        &lt;artifactId&gt;maven-jar-plugin&lt;/artifactId&gt;</div><div class="line">        &lt;configuration&gt;</div><div class="line">            &lt;archive&gt;</div><div class="line">                &lt;manifest&gt;</div><div class="line">                    &lt;addClasspath&gt;<span class="literal">true</span>&lt;/addClasspath&gt;</div><div class="line">                    &lt;classpathPrefix&gt;lib/&lt;/classpathPrefix&gt;</div><div class="line">                    &lt;mainClass&gt;com.weibosdk.listener.boot.ListenerBootstrap&lt;/mainClass&gt;</div><div class="line">                &lt;/manifest&gt;</div><div class="line">            &lt;/archive&gt;</div><div class="line">        &lt;/configuration&gt;</div><div class="line">    &lt;/plugin&gt;</div><div class="line"></div><div class="line">    &lt;plugin&gt;</div><div class="line">        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</div><div class="line">        &lt;artifactId&gt;maven-shade-plugin&lt;/artifactId&gt;</div><div class="line">        &lt;executions&gt;</div><div class="line">            &lt;execution&gt;</div><div class="line">                &lt;phase&gt;package&lt;/phase&gt;</div><div class="line">                &lt;goals&gt;</div><div class="line">                    &lt;goal&gt;shade&lt;/goal&gt;</div><div class="line">                &lt;/goals&gt;</div><div class="line">                &lt;configuration&gt;</div><div class="line">                    &lt;createDependencyReducedPom&gt;<span class="literal">false</span>&lt;/createDependencyReducedPom&gt;</div><div class="line">                    &lt;transformers&gt;</div><div class="line">                        &lt;transformer</div><div class="line">                                implementation=<span class="string">"org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"</span>&gt;</div><div class="line">                                &lt;!-- Main函数所在类 --&gt;</div><div class="line">                            &lt;mainClass&gt;com.weibosdk.listener.boot.ListenerBootstrap&lt;/mainClass&gt;</div><div class="line">                        &lt;/transformer&gt;</div><div class="line">                        </div><div class="line">                        &lt;!-- Spring相关的文件 --&gt;</div><div class="line">                        &lt;transformer</div><div class="line">                                implementation=<span class="string">"org.apache.maven.plugins.shade.resource.AppendingTransformer"</span>&gt;</div><div class="line">                            &lt;resource&gt;META-INF/spring.handlers&lt;/resource&gt;</div><div class="line">                        &lt;/transformer&gt;</div><div class="line">                        &lt;transformer</div><div class="line">                                implementation=<span class="string">"org.apache.maven.plugins.shade.resource.AppendingTransformer"</span>&gt;</div><div class="line">                            &lt;resource&gt;META-INF/spring.schemas&lt;/resource&gt;</div><div class="line">                        &lt;/transformer&gt;</div><div class="line">                    &lt;/transformers&gt;</div><div class="line">                &lt;/configuration&gt;</div><div class="line">            &lt;/execution&gt;</div><div class="line">        &lt;/executions&gt;</div><div class="line">    &lt;/plugin&gt;</div><div class="line"></div><div class="line">&lt;/plugins&gt;</div></pre></td></tr></table></figure>
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </span>
+
+
+
+      
+
+      
+
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div></pre></td><td class="code"><pre><div class="line">&lt;plugins&gt;</div><div class="line">    &lt;!-- 复制依赖的插件 --&gt;</div><div class="line">    &lt;plugin&gt;</div><div class="line">        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</div><div class="line">        &lt;artifactId&gt;maven-dependency-plugin&lt;/artifactId&gt;</div><div class="line">        &lt;executions&gt;</div><div class="line">            &lt;execution&gt;</div><div class="line">                &lt;id&gt;copy-dependencies&lt;/id&gt;</div><div class="line">                &lt;phase&gt;package&lt;/phase&gt;</div><div class="line">                &lt;goals&gt;</div><div class="line">                    &lt;goal&gt;copy-dependencies&lt;/goal&gt;</div><div class="line">                &lt;/goals&gt;</div><div class="line">                &lt;configuration&gt;</div><div class="line">                    &lt;outputDirectory&gt;<span class="variable">$&#123;project.build.directory&#125;</span>/lib&lt;/outputDirectory&gt;</div><div class="line">                    &lt;overWriteReleases&gt;<span class="literal">false</span>&lt;/overWriteReleases&gt;</div><div class="line">                    &lt;overWriteSnapshots&gt;<span class="literal">true</span>&lt;/overWriteSnapshots&gt;</div><div class="line">                &lt;/configuration&gt;</div><div class="line">            &lt;/execution&gt;</div><div class="line">        &lt;/executions&gt;</div><div class="line">    &lt;/plugin&gt;</div><div class="line">    &lt;plugin&gt;</div><div class="line">        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</div><div class="line">        &lt;artifactId&gt;maven-jar-plugin&lt;/artifactId&gt;</div><div class="line">        &lt;configuration&gt;</div><div class="line">            &lt;archive&gt;</div><div class="line">                &lt;manifest&gt;</div><div class="line">                    &lt;addClasspath&gt;<span class="literal">true</span>&lt;/addClasspath&gt;</div><div class="line">                    &lt;classpathPrefix&gt;lib/&lt;/classpathPrefix&gt;</div><div class="line">                    &lt;mainClass&gt;com.weibosdk.listener.boot.ListenerBootstrap&lt;/mainClass&gt;</div><div class="line">                &lt;/manifest&gt;</div><div class="line">            &lt;/archive&gt;</div><div class="line">        &lt;/configuration&gt;</div><div class="line">    &lt;/plugin&gt;</div><div class="line"></div><div class="line">    &lt;plugin&gt;</div><div class="line">        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</div><div class="line">        &lt;artifactId&gt;maven-shade-plugin&lt;/artifactId&gt;</div><div class="line">        &lt;executions&gt;</div><div class="line">            &lt;execution&gt;</div><div class="line">                &lt;phase&gt;package&lt;/phase&gt;</div><div class="line">                &lt;goals&gt;</div><div class="line">                    &lt;goal&gt;shade&lt;/goal&gt;</div><div class="line">                &lt;/goals&gt;</div><div class="line">                &lt;configuration&gt;</div><div class="line">                    &lt;createDependencyReducedPom&gt;<span class="literal">false</span>&lt;/createDependencyReducedPom&gt;</div><div class="line">                    &lt;transformers&gt;</div><div class="line">                        &lt;transformer</div><div class="line">                                implementation=<span class="string">"org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"</span>&gt;</div><div class="line">                                &lt;!-- Main函数所在类 --&gt;</div><div class="line">                            &lt;mainClass&gt;com.weibosdk.listener.boot.ListenerBootstrap&lt;/mainClass&gt;</div><div class="line">                        &lt;/transformer&gt;</div><div class="line">                        </div><div class="line">                        &lt;!-- Spring相关的文件 --&gt;</div><div class="line">                        &lt;transformer</div><div class="line">                                implementation=<span class="string">"org.apache.maven.plugins.shade.resource.AppendingTransformer"</span>&gt;</div><div class="line">                            &lt;resource&gt;META-INF/spring.handlers&lt;/resource&gt;</div><div class="line">                        &lt;/transformer&gt;</div><div class="line">                        &lt;transformer</div><div class="line">                                implementation=<span class="string">"org.apache.maven.plugins.shade.resource.AppendingTransformer"</span>&gt;</div><div class="line">                            &lt;resource&gt;META-INF/spring.schemas&lt;/resource&gt;</div><div class="line">                        &lt;/transformer&gt;</div><div class="line">                    &lt;/transformers&gt;</div><div class="line">                &lt;/configuration&gt;</div><div class="line">            &lt;/execution&gt;</div><div class="line">        &lt;/executions&gt;</div><div class="line">    &lt;/plugin&gt;</div><div class="line"></div><div class="line">&lt;/plugins&gt;</div></pre></td></tr></table></figure>
 <p>这样子，运行以下命令即可生成两种方式的jar包了。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mvn clean package -Dmaven.test.skip=<span class="literal">true</span></div></pre></td></tr></table></figure>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">╭─sky@sky-linux ~/git/weibosdk/wbsdk-listener/target  ‹pre-release20160525*› </div><div class="line">╰─➤  ls -alh</div><div class="line">total 11M</div><div class="line">drwxr-xr-x 7 sky sky 4.0K  6月  1 12:27 .</div><div class="line">drwxr-xr-x 4 sky sky 4.0K  6月  1 12:27 ..</div><div class="line">drwxr-xr-x 7 sky sky 4.0K  6月  1 12:27 classes</div><div class="line">drwxr-xr-x 3 sky sky 4.0K  6月  1 12:27 generated-sources</div><div class="line">drwxr-xr-x 2 sky sky 4.0K  6月  1 12:27 lib</div><div class="line">drwxr-xr-x 2 sky sky 4.0K  6月  1 12:27 maven-archiver</div><div class="line">drwxr-xr-x 3 sky sky 4.0K  6月  1 12:27 maven-status</div><div class="line">-rw-r--r-- 1 sky sky  58K  6月  1 12:27 original-wbsdk-listener-1.0.0.jar</div><div class="line">-rw-r--r-- 1 sky sky  11M  6月  1 12:27 wbsdk-listener-1.0.0.jar</div></pre></td></tr></table></figure>
@@ -390,410 +199,155 @@
 <p>而<code>original-wbsdk-listener-1.0.0.jar</code>则只是项目的文件，它还会依赖<code>lib</code>目录下的jar包文件。这样子将项目和依赖文件分开打包，好处是部署的时候，如果不更新依赖，就只需要更新项目文件即可（比如快点，不然每次上传几十MB的文件到服务器～～～）</p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://chenzhou123520.iteye.com/blog/1706242" target="_blank" rel="external">chenzhou123520 iteye</a></p>
 
-      
-    </div>
-
-    <div>
-      
-        
-
-      
-    </div>
-
-    <div>
-      
-        
-
-      
-    </div>
-
-    <div>
-      
-        
-  <ul class="post-copyright">
-    <li class="post-copyright-author">
-      <strong>本文作者：</strong>
-      emacsist
-    </li>
-    <li class="post-copyright-link">
-      <strong>本文链接：</strong>
-      <a href="https://emacsist.github.io/2016/05/31/Maven打包可运行Jar/" title="Maven打包可运行Jar">https://emacsist.github.io/2016/05/31/Maven打包可运行Jar/</a>
-    </li>
-    <li class="post-copyright-license">
-      <strong>版权声明： </strong>
-      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
-    </li>
-  </ul>
-
-
-      
-    </div>
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/java/" rel="tag"># java</a>
-          
-            <a href="/tags/jar/" rel="tag"># jar</a>
-          
-        </div>
-      
-
-      
-        
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2016/06/01/Java并发操作MySQL数据库的读写注意/" rel="next" title="Java并发操作MySQL数据库的读写注意">
-                <i class="fa fa-chevron-left"></i> Java并发操作MySQL数据库的读写注意
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/05/26/redis常用技巧/" rel="prev" title="redis常用技巧">
-                redis常用技巧 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </article>
-
-
-
-    <div class="post-spread">
-      
-    </div>
-  </div>
-
-
-          </div>
-          
-
-
-          
-  <div class="comments" id="comments">
-    
-      <div id="uyan_frame"></div>
     
   </div>
+</article>
 
 
-        </div>
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
         
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
           </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
           </li>
+        
         </ul>
-      
+      </div>
+    </div>
+  </div>
 
-      <section class="site-overview sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/avatar.png"
-               alt="emacsist" />
-          <p class="site-author-name" itemprop="name">emacsist</p>
-           
-              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
-          
-        </div>
-        <nav class="site-state motion-element">
 
-          
-            <div class="site-state-item site-state-posts">
-              <a href="/archives">
-                <span class="site-state-item-count">300</span>
-                <span class="site-state-item-name">日志</span>
-              </a>
-            </div>
-          
+   
 
-          
-            
-            
-            <div class="site-state-item site-state-categories">
-              <a href="/categories/index.html">
-                <span class="site-state-item-count">71</span>
-                <span class="site-state-item-name">分类</span>
-              </a>
-            </div>
-          
 
-          
-            
-            
-            <div class="site-state-item site-state-tags">
-              <a href="/tags/index.html">
-                <span class="site-state-item-count">148</span>
-                <span class="site-state-item-name">标签</span>
-              </a>
-            </div>
-          
 
-        </nav>
+</div>
 
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
         
-
-        <div class="links-of-author motion-element">
-          
-            
-              <span class="links-of-author-item">
-                <a href="https://github.com/emacsist" target="_blank" title="GitHub">
-                  
-                    <i class="fa fa-fw fa-github"></i>
-                  
-                  GitHub
-                </a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="https://www.zhihu.com/people/emacist" target="_blank" title="知乎">
-                  
-                    <i class="fa fa-fw fa-globe"></i>
-                  
-                  知乎
-                </a>
-              </span>
-            
-          
-        </div>
-
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
         
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
         
-
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
         
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
         
-
-        
-
-
-      </section>
-
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-text">参考资料</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
-      
-
-      
+      </ul>
 
     </div>
-  </aside>
+  </div>
+</div>
 
 
-        
-      </div>
-    </main>
 
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright" >
   
-  &copy; 
-  <span itemprop="copyrightYear">2017</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">emacsist</span>
-  <span class="post-count">共269.2k字</span>
-</div>
-
-
-<div class="powered-by">
-  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动 
-</div>
-
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Mist
-  </a>
-</div>
-
-
-        
-
-        
-      </div>
-    </footer>
-
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
+      <div class="fexo-comments comments-post">
     
 
+    
+
+
+
+
+    
+
+    
+	
   </div>
 
   
 
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
   }
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-
-  
-  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  
-  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
-
-
-
-  
-  
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
-
-
-
-  
-
-
-  
-
-
-
-
-	
-
-
-
-
-
-  
-
-
-
-
-
-  
-    
-
-    
-      <!-- UY BEGIN -->
-      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2132003"></script>
-      <!-- UY END -->
-    
-  
-
-
-
-
-
-  
-
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-  
-
-  
-
-  
-
-  
 
 </body>
 </html>

@@ -1,90 +1,21 @@
-<!doctype html>
+<!DOCTYPE html>
 
 
+  <html class="light page-post">
 
 
-<html class="theme-next mist" lang="zh-Hans">
 <head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+  <meta charset="utf-8">
+  
+  <title>《Erlang程序设计》学习笔记 | emacsist</title>
 
-
-
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-  
-  
-  
-
-  
-    
-    
+    <meta name="keywords" content="erlang," />
   
 
-  
-
-  
-
-  
-
-  
-
-  
-    
-    
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-  
-
-
-
-
-
-
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="erlang," />
-
-
-
-
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
-
-
-
-
-
-
-<meta name="description" content="动态代码载入每当调用 someModule:someFunction(…) 时，调用的总是最新模块里的最新版函数，哪怕当代码在模块里运行时重新编译了该模块也是如此。 在任一时刻，Erlang允许一个模块的 两个版本 同时运行。 保存预处理的输出1erlc -P some_module.erl 它会生成 some_module.P 文件 表达式和表达式序列任何可以执行并生成一个值的事物，都被称为表达">
+  <meta name="description" content="动态代码载入每当调用 someModule:someFunction(…) 时，调用的总是最新模块里的最新版函数，哪怕当代码在模块里运行时重新编译了该模块也是如此。 在任一时刻，Erlang允许一个模块的 两个版本 同时运行。 保存预处理的输出1erlc -P some_module.erl 它会生成 some_module.P 文件 表达式和表达式序列任何可以执行并生成一个值的事物，都被称为表达">
 <meta name="keywords" content="erlang">
 <meta property="og:type" content="article">
 <meta property="og:title" content="《Erlang程序设计》学习笔记">
@@ -96,291 +27,169 @@
 <meta name="twitter:title" content="《Erlang程序设计》学习笔记">
 <meta name="twitter:description" content="动态代码载入每当调用 someModule:someFunction(…) 时，调用的总是最新模块里的最新版函数，哪怕当代码在模块里运行时重新编译了该模块也是如此。 在任一时刻，Erlang允许一个模块的 两个版本 同时运行。 保存预处理的输出1erlc -P some_module.erl 它会生成 some_module.P 文件 表达式和表达式序列任何可以执行并生成一个值的事物，都被称为表达">
 
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
 
 
-<script type="text/javascript" id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Mist',
-    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
-    fancybox: false,
-    motion: false,
-    duoshuo: {
-      userId: '0',
-      author: '博主'
-    },
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
-
-
-
-  <link rel="canonical" href="https://emacsist.github.io/2017/05/07/《Erlang程序设计》学习笔记/"/>
-
-
-
-
-
-  <title>《Erlang程序设计》学习笔记 | emacsist</title>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
 
   
 
-
-
-
-
+  
   <script type="text/javascript">
     var _hmt = _hmt || [];
     (function() {
       var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
       var s = document.getElementsByTagName("script")[0];
       s.parentNode.insertBefore(hm, s);
     })();
   </script>
 
 
-
-
-
-
-
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
 
 
 
   
+
   
-    
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
   
 
-  <div class="container sidebar-position-left page-post-detail ">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
-    
-
-    <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">emacsist</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
       
-        <p class="site-subtitle"></p>
-      
-  </div>
-
-  <div class="site-nav-toggle">
-    <button>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
-</div>
-
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu">
-      
-        
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
-            
-            首页
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
           </a>
         </li>
       
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-books">
-          <a href="/books" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-heart"></i> <br />
-            
-            书
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
-            
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
             标签
           </a>
         </li>
       
-        
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
-            
-            分类
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
           </a>
         </li>
       
-        
-        <li class="menu-item menu-item-about">
-          <a href="/about" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
             关于
           </a>
         </li>
       
-
-      
     </ul>
-  
-
-  
-</nav>
+  </div>
 
 
+</div>
 
- </div>
-    </header>
 
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
-            
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#动态代码载入"><span class="toc-text">动态代码载入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#保存预处理的输出"><span class="toc-text">保存预处理的输出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#表达式和表达式序列"><span class="toc-text">表达式和表达式序列</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数引用"><span class="toc-text">函数引用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#包含文件"><span class="toc-text">包含文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#列表操作"><span class="toc-text">列表操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-text">++</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#–"><span class="toc-text">–</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#短路布尔表达式"><span class="toc-text">短路布尔表达式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置代码搜索路径"><span class="toc-text">设置代码搜索路径</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#导出所有函数"><span class="toc-text">导出所有函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#系统启动时执行一组命令"><span class="toc-text">系统启动时执行一组命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在命令提示符里编译和运行"><span class="toc-text">在命令提示符里编译和运行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用-Escript-运行"><span class="toc-text">使用 Escript 运行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#停止Erlang"><span class="toc-text">停止Erlang</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分析转储文件-erl-crash-dump"><span class="toc-text">分析转储文件 erl_crash.dump</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取帮助"><span class="toc-text">获取帮助</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本并发函数"><span class="toc-text">基本并发函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#带超时的接收"><span class="toc-text">带超时的接收</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取最大进程限制数"><span class="toc-text">获取最大进程限制数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注册进程"><span class="toc-text">注册进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#并发Erlang的错误处理"><span class="toc-text">并发Erlang的错误处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程链接"><span class="toc-text">进程链接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设立防火墙"><span class="toc-text">设立防火墙</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#监视"><span class="toc-text">监视</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RPC调用"><span class="toc-text">RPC调用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Magic-Cookie"><span class="toc-text">Magic Cookie</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用套接字的分布式模型"><span class="toc-text">使用套接字的分布式模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Erlang中的端口"><span class="toc-text">Erlang中的端口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#相连进程"><span class="toc-text">相连进程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建端口"><span class="toc-text">创建端口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#向端口发送消息"><span class="toc-text">向端口发送消息</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Erlang中调用外部语言代码"><span class="toc-text">Erlang中调用外部语言代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ETS与DETS"><span class="toc-text">ETS与DETS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mnesia数据库"><span class="toc-text">Mnesia数据库</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#初始化"><span class="toc-text">初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#启动"><span class="toc-text">启动</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码性能分析工具"><span class="toc-text">代码性能分析工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码覆盖测试"><span class="toc-text">代码覆盖测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#生成交叉引用"><span class="toc-text">生成交叉引用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#跟踪消息与进程执行"><span class="toc-text">跟踪消息与进程执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置错误记录器"><span class="toc-text">配置错误记录器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#标准错误记录器"><span class="toc-text">标准错误记录器</span></a></li></ol></li></ol>
+  </div>
 
-  <div id="posts" class="posts-expand">
-    
 
-  
 
-  
-  
-  
+<div class="content content-post LEFT">
+   <article id="post-《Erlang程序设计》学习笔记" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">《Erlang程序设计》学习笔记</h1>
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://emacsist.github.io/2017/05/07/《Erlang程序设计》学习笔记/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="emacsist">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="emacsist">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                《Erlang程序设计》学习笔记
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-07T11:06:08+08:00">
-                2017-05-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/erlang/" itemprop="url" rel="index">
-                    <span itemprop="name">erlang</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2017.05.07</span>
+      </span>
 
       
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+        </span>
       
 
       
-        <h2 id="动态代码载入"><a href="#动态代码载入" class="headerlink" title="动态代码载入"></a>动态代码载入</h2><p>每当调用 <em>someModule:someFunction(…)</em> 时，调用的总是最新模块里的最新版函数，哪怕当代码在模块里运行时重新编译了该模块也是如此。</p>
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/erlang/">erlang</a>
+  </span>
+
+
+
+      
+
+      
+
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h2 id="动态代码载入"><a href="#动态代码载入" class="headerlink" title="动态代码载入"></a>动态代码载入</h2><p>每当调用 <em>someModule:someFunction(…)</em> 时，调用的总是最新模块里的最新版函数，哪怕当代码在模块里运行时重新编译了该模块也是如此。</p>
 <p>在任一时刻，Erlang允许一个模块的 <em>两个版本</em> 同时运行。</p>
 <h2 id="保存预处理的输出"><a href="#保存预处理的输出" class="headerlink" title="保存预处理的输出"></a>保存预处理的输出</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">erlc -P some_module.erl</div></pre></td></tr></table></figure>
 <p>它会生成 <em>some_module.P</em> 文件</p>
@@ -508,408 +317,155 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">erl -boot start_sasl</div></pre></td></tr></table></figure>
 <p>它会创建一个适合运行生产系统的环境。</p>
 
-      
-    </div>
-
-    <div>
-      
-        
-
-      
-    </div>
-
-    <div>
-      
-        
-
-      
-    </div>
-
-    <div>
-      
-        
-  <ul class="post-copyright">
-    <li class="post-copyright-author">
-      <strong>本文作者：</strong>
-      emacsist
-    </li>
-    <li class="post-copyright-link">
-      <strong>本文链接：</strong>
-      <a href="https://emacsist.github.io/2017/05/07/《Erlang程序设计》学习笔记/" title="《Erlang程序设计》学习笔记">https://emacsist.github.io/2017/05/07/《Erlang程序设计》学习笔记/</a>
-    </li>
-    <li class="post-copyright-license">
-      <strong>版权声明： </strong>
-      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
-    </li>
-  </ul>
-
-
-      
-    </div>
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/erlang/" rel="tag"># erlang</a>
-          
-        </div>
-      
-
-      
-        
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2017/05/08/IDA-pro-杂项/" rel="next" title="IDA pro 杂项">
-                <i class="fa fa-chevron-left"></i> IDA pro 杂项
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/04/30/《Erlang-OTP-并发编程实战》读书笔记/" rel="prev" title="《Erlang/OTP 并发编程实战》读书笔记">
-                《Erlang/OTP 并发编程实战》读书笔记 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </article>
-
-
-
-    <div class="post-spread">
-      
-    </div>
-  </div>
-
-
-          </div>
-          
-
-
-          
-  <div class="comments" id="comments">
-    
-      <div id="uyan_frame"></div>
     
   </div>
+</article>
 
 
-        </div>
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
         
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
           </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
           </li>
+        
         </ul>
-      
+      </div>
+    </div>
+  </div>
 
-      <section class="site-overview sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/avatar.png"
-               alt="emacsist" />
-          <p class="site-author-name" itemprop="name">emacsist</p>
-           
-              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
-          
-        </div>
-        <nav class="site-state motion-element">
 
-          
-            <div class="site-state-item site-state-posts">
-              <a href="/archives">
-                <span class="site-state-item-count">300</span>
-                <span class="site-state-item-name">日志</span>
-              </a>
-            </div>
-          
+   
 
-          
-            
-            
-            <div class="site-state-item site-state-categories">
-              <a href="/categories/index.html">
-                <span class="site-state-item-count">71</span>
-                <span class="site-state-item-name">分类</span>
-              </a>
-            </div>
-          
 
-          
-            
-            
-            <div class="site-state-item site-state-tags">
-              <a href="/tags/index.html">
-                <span class="site-state-item-count">148</span>
-                <span class="site-state-item-name">标签</span>
-              </a>
-            </div>
-          
 
-        </nav>
+</div>
 
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
         
-
-        <div class="links-of-author motion-element">
-          
-            
-              <span class="links-of-author-item">
-                <a href="https://github.com/emacsist" target="_blank" title="GitHub">
-                  
-                    <i class="fa fa-fw fa-github"></i>
-                  
-                  GitHub
-                </a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="https://www.zhihu.com/people/emacist" target="_blank" title="知乎">
-                  
-                    <i class="fa fa-fw fa-globe"></i>
-                  
-                  知乎
-                </a>
-              </span>
-            
-          
-        </div>
-
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
         
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
         
-
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
         
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
         
-
-        
-
-
-      </section>
-
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#动态代码载入"><span class="nav-text">动态代码载入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#保存预处理的输出"><span class="nav-text">保存预处理的输出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#表达式和表达式序列"><span class="nav-text">表达式和表达式序列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数引用"><span class="nav-text">函数引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#包含文件"><span class="nav-text">包含文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#列表操作"><span class="nav-text">列表操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#"><span class="nav-text">++</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#–"><span class="nav-text">–</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#短路布尔表达式"><span class="nav-text">短路布尔表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置代码搜索路径"><span class="nav-text">设置代码搜索路径</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#导出所有函数"><span class="nav-text">导出所有函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统启动时执行一组命令"><span class="nav-text">系统启动时执行一组命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在命令提示符里编译和运行"><span class="nav-text">在命令提示符里编译和运行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-Escript-运行"><span class="nav-text">使用 Escript 运行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#停止Erlang"><span class="nav-text">停止Erlang</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析转储文件-erl-crash-dump"><span class="nav-text">分析转储文件 erl_crash.dump</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取帮助"><span class="nav-text">获取帮助</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本并发函数"><span class="nav-text">基本并发函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#带超时的接收"><span class="nav-text">带超时的接收</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取最大进程限制数"><span class="nav-text">获取最大进程限制数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注册进程"><span class="nav-text">注册进程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#并发Erlang的错误处理"><span class="nav-text">并发Erlang的错误处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程链接"><span class="nav-text">进程链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设立防火墙"><span class="nav-text">设立防火墙</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#监视"><span class="nav-text">监视</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RPC调用"><span class="nav-text">RPC调用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Magic-Cookie"><span class="nav-text">Magic Cookie</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用套接字的分布式模型"><span class="nav-text">使用套接字的分布式模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Erlang中的端口"><span class="nav-text">Erlang中的端口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#相连进程"><span class="nav-text">相连进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建端口"><span class="nav-text">创建端口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向端口发送消息"><span class="nav-text">向端口发送消息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Erlang中调用外部语言代码"><span class="nav-text">Erlang中调用外部语言代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ETS与DETS"><span class="nav-text">ETS与DETS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mnesia数据库"><span class="nav-text">Mnesia数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化"><span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动"><span class="nav-text">启动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码性能分析工具"><span class="nav-text">代码性能分析工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码覆盖测试"><span class="nav-text">代码覆盖测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成交叉引用"><span class="nav-text">生成交叉引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#跟踪消息与进程执行"><span class="nav-text">跟踪消息与进程执行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置错误记录器"><span class="nav-text">配置错误记录器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#标准错误记录器"><span class="nav-text">标准错误记录器</span></a></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
-      
-
-      
+      </ul>
 
     </div>
-  </aside>
+  </div>
+</div>
 
 
-        
-      </div>
-    </main>
 
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright" >
   
-  &copy; 
-  <span itemprop="copyrightYear">2017</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">emacsist</span>
-  <span class="post-count">共269.2k字</span>
-</div>
-
-
-<div class="powered-by">
-  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动 
-</div>
-
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Mist
-  </a>
-</div>
-
-
-        
-
-        
-      </div>
-    </footer>
-
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
+      <div class="fexo-comments comments-post">
     
 
+    
+
+
+
+
+    
+
+    
+	
   </div>
 
   
 
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
   }
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-
-  
-  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  
-  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
-
-
-
-  
-  
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
-
-
-
-  
-
-
-  
-
-
-
-
-	
-
-
-
-
-
-  
-
-
-
-
-
-  
-    
-
-    
-      <!-- UY BEGIN -->
-      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2132003"></script>
-      <!-- UY END -->
-    
-  
-
-
-
-
-
-  
-
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-  
-
-  
-
-  
-
-  
 
 </body>
 </html>

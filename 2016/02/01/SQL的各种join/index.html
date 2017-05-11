@@ -1,90 +1,21 @@
-<!doctype html>
+<!DOCTYPE html>
 
 
+  <html class="light page-post">
 
 
-<html class="theme-next mist" lang="zh-Hans">
 <head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+  <meta charset="utf-8">
+  
+  <title>SQL的各种join | emacsist</title>
 
-
-
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-  
-  
-  
-
-  
-    
-    
+    <meta name="keywords" content="Golang, Java, PostgreSQL, Postgres, MySQL, emacsist, RabbitMQ, Go, emacs, orgmode" />
   
 
-  
-
-  
-
-  
-
-  
-
-  
-    
-    
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-  
-
-
-
-
-
-
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Golang, Java, PostgreSQL, Postgres, MySQL, emacsist, RabbitMQ, Go, emacs, orgmode, org" />
-
-
-
-
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
-
-
-
-
-
-
-<meta name="description" content="测试表数据t11234567891011121314151617sky=# select * from t1; id | name----+------  1 | n1  2 | n2  3 | n3  4 | n4  5 | n5  6 | n6  7 | n7  8 | n8  9 | n9 10 | n10  1 | n11(11 rows)sky=# t212345678910111213">
+  <meta name="description" content="测试表数据t11234567891011121314151617sky=# select * from t1; id | name----+------  1 | n1  2 | n2  3 | n3  4 | n4  5 | n5  6 | n6  7 | n7  8 | n8  9 | n9 10 | n10  1 | n11(11 rows)sky=# t212345678910111213">
 <meta name="keywords">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SQL的各种join">
@@ -96,671 +27,319 @@
 <meta name="twitter:title" content="SQL的各种join">
 <meta name="twitter:description" content="测试表数据t11234567891011121314151617sky=# select * from t1; id | name----+------  1 | n1  2 | n2  3 | n3  4 | n4  5 | n5  6 | n6  7 | n7  8 | n8  9 | n9 10 | n10  1 | n11(11 rows)sky=# t212345678910111213">
 
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
 
 
-<script type="text/javascript" id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Mist',
-    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
-    fancybox: false,
-    motion: false,
-    duoshuo: {
-      userId: '0',
-      author: '博主'
-    },
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
-
-
-
-  <link rel="canonical" href="https://emacsist.github.io/2016/02/01/SQL的各种join/"/>
-
-
-
-
-
-  <title>SQL的各种join | emacsist</title>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
 
   
 
-
-
-
-
+  
   <script type="text/javascript">
     var _hmt = _hmt || [];
     (function() {
       var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
       var s = document.getElementsByTagName("script")[0];
       s.parentNode.insertBefore(hm, s);
     })();
   </script>
 
 
-
-
-
-
-
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
 
 
 
   
+
   
-    
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
   
 
-  <div class="container sidebar-position-left page-post-detail ">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
-    
-
-    <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">emacsist</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
       
-        <p class="site-subtitle"></p>
-      
-  </div>
-
-  <div class="site-nav-toggle">
-    <button>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
-</div>
-
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu">
-      
-        
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
-            
-            首页
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
           </a>
         </li>
       
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-books">
-          <a href="/books" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-heart"></i> <br />
-            
-            书
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
-            
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
             标签
           </a>
         </li>
       
-        
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
-            
-            分类
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
           </a>
         </li>
       
-        
-        <li class="menu-item menu-item-about">
-          <a href="/about" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
             关于
           </a>
         </li>
       
-
-      
     </ul>
-  
-
-  
-</nav>
+  </div>
 
 
+</div>
 
- </div>
-    </header>
 
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
-            
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#测试表数据"><span class="toc-text">测试表数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#t1"><span class="toc-text">t1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#t2"><span class="toc-text">t2</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#inner-join"><span class="toc-text">inner join</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#left-join"><span class="toc-text">left join</span></a></li></ol>
+  </div>
 
-  <div id="posts" class="posts-expand">
-    
 
-  
 
-  
-  
-  
+<div class="content content-post LEFT">
+   <article id="post-SQL的各种join" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">SQL的各种join</h1>
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://emacsist.github.io/2016/02/01/SQL的各种join/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="emacsist">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="emacsist">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                SQL的各种join
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-02-01T16:21:22+08:00">
-                2016-02-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2016.02.01</span>
+      </span>
 
       
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+        </span>
       
 
       
-        <h2 id="测试表数据"><a href="#测试表数据" class="headerlink" title="测试表数据"></a>测试表数据</h2><h3 id="t1"><a href="#t1" class="headerlink" title="t1"></a>t1</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># select * from t1;</span></div><div class="line"> id | name</div><div class="line">----+------</div><div class="line">  1 | n1</div><div class="line">  2 | n2</div><div class="line">  3 | n3</div><div class="line">  4 | n4</div><div class="line">  5 | n5</div><div class="line">  6 | n6</div><div class="line">  7 | n7</div><div class="line">  8 | n8</div><div class="line">  9 | n9</div><div class="line"> 10 | n10</div><div class="line">  1 | n11</div><div class="line">(11 rows)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+
+
+      
+
+      
+
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h2 id="测试表数据"><a href="#测试表数据" class="headerlink" title="测试表数据"></a>测试表数据</h2><h3 id="t1"><a href="#t1" class="headerlink" title="t1"></a>t1</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># select * from t1;</span></div><div class="line"> id | name</div><div class="line">----+------</div><div class="line">  1 | n1</div><div class="line">  2 | n2</div><div class="line">  3 | n3</div><div class="line">  4 | n4</div><div class="line">  5 | n5</div><div class="line">  6 | n6</div><div class="line">  7 | n7</div><div class="line">  8 | n8</div><div class="line">  9 | n9</div><div class="line"> 10 | n10</div><div class="line">  1 | n11</div><div class="line">(11 rows)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
 <h3 id="t2"><a href="#t2" class="headerlink" title="t2"></a>t2</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># select * from t2;</span></div><div class="line"> id | age | t1_id</div><div class="line">----+-----+-------</div><div class="line">  1 |  11 |     1</div><div class="line">  2 |  12 |     1</div><div class="line">  7 |  17 |     2</div><div class="line">  3 |  13 |     4</div><div class="line">  4 |  14 |     4</div><div class="line">  5 |  15 |     5</div><div class="line">  6 |  16 |     5</div><div class="line">  8 |  18 |     7</div><div class="line">  9 |  19 |     7</div><div class="line"> 10 |  20 |     7</div><div class="line">(10 rows)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
 <h2 id="inner-join"><a href="#inner-join" class="headerlink" title="inner join"></a>inner join</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># explain analyze verbose select * from t1 inner join t2 on t1.id = t2.t1_id;</span></div><div class="line">                                                     QUERY PLAN</div><div class="line">---------------------------------------------------------------------------------------------------------------------</div><div class="line"> Merge Join  (cost=223.19..406.47 rows=11832 width=54) (actual time=0.015..0.018 rows=12 loops=1)</div><div class="line">   Output: t1.id, t1.name, t2.id, t2.age, t2.t1_id</div><div class="line">   Merge Cond: (t1.id = t2.t1_id)</div><div class="line">   -&gt;  Sort  (cost=80.64..83.54 rows=1160 width=42) (actual time=0.010..0.011 rows=9 loops=1)</div><div class="line">         Output: t1.id, t1.name</div><div class="line">         Sort Key: t1.id</div><div class="line">         Sort Method: quicksort  Memory: 25kB</div><div class="line">         -&gt;  Seq Scan on public.t1  (cost=0.00..21.60 rows=1160 width=42) (actual time=0.003..0.005 rows=11 loops=1)</div><div class="line">               Output: t1.id, t1.name</div><div class="line">   -&gt;  Sort  (cost=142.54..147.64 rows=2040 width=12) (actual time=0.003..0.004 rows=12 loops=1)</div><div class="line">         Output: t2.id, t2.age, t2.t1_id</div><div class="line">         Sort Key: t2.t1_id</div><div class="line">         Sort Method: quicksort  Memory: 25kB</div><div class="line">         -&gt;  Seq Scan on public.t2  (cost=0.00..30.40 rows=2040 width=12) (actual time=0.002..0.002 rows=10 loops=1)</div><div class="line">               Output: t2.id, t2.age, t2.t1_id</div><div class="line"> Planning time: 0.055 ms</div><div class="line"> Execution time: 0.035 ms</div><div class="line">(17 rows)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div><div class="line"></div><div class="line">sky=<span class="comment"># explain analyze verbose select * from t1, t2 where t1.id = t2.t1_id;</span></div><div class="line">                                                     QUERY PLAN</div><div class="line">---------------------------------------------------------------------------------------------------------------------</div><div class="line"> Merge Join  (cost=223.19..406.47 rows=11832 width=54) (actual time=0.016..0.020 rows=12 loops=1)</div><div class="line">   Output: t1.id, t1.name, t2.id, t2.age, t2.t1_id</div><div class="line">   Merge Cond: (t1.id = t2.t1_id)</div><div class="line">   -&gt;  Sort  (cost=80.64..83.54 rows=1160 width=42) (actual time=0.009..0.009 rows=9 loops=1)</div><div class="line">         Output: t1.id, t1.name</div><div class="line">         Sort Key: t1.id</div><div class="line">         Sort Method: quicksort  Memory: 25kB</div><div class="line">         -&gt;  Seq Scan on public.t1  (cost=0.00..21.60 rows=1160 width=42) (actual time=0.004..0.005 rows=11 loops=1)</div><div class="line">               Output: t1.id, t1.name</div><div class="line">   -&gt;  Sort  (cost=142.54..147.64 rows=2040 width=12) (actual time=0.004..0.005 rows=12 loops=1)</div><div class="line">         Output: t2.id, t2.age, t2.t1_id</div><div class="line">         Sort Key: t2.t1_id</div><div class="line">         Sort Method: quicksort  Memory: 25kB</div><div class="line">         -&gt;  Seq Scan on public.t2  (cost=0.00..30.40 rows=2040 width=12) (actual time=0.001..0.001 rows=10 loops=1)</div><div class="line">               Output: t2.id, t2.age, t2.t1_id</div><div class="line"> Planning time: 0.052 ms</div><div class="line"> Execution time: 0.036 ms</div><div class="line">(17 rows)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
 <p>由此可知：<code>inner join</code>与<code>from t1,t2 where t1.xx = t2.xx</code>是一样的.</p>
 <p><code>它的结果行数=SUM(t1中的每一行 * t2中的每一行中t2.xx=t1.xx)</code><br>比如，上面的结果()，它就是（结果行数12 = <code>t1中1的为2行，t2中的1也为2行</code>即2<em>2=4,<br><code>t1中的2为1行, t2中的2也为1行</code>，即1</em>1 = 1<br><code>t1中的4为1行，t2中的4为2行</code>,即1<em>2 = 2<br><code>t1中的5为1行，t2中的5为2行</code>，即1</em>2 = 2<br><code>t1中的7为1行，t2中的7为3行</code>，即1*3 = 3<br>所以，总行数=4+1+2+2+3=12行.</p>
 <h2 id="left-join"><a href="#left-join" class="headerlink" title="left join"></a>left join</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># explain analyze verbose select * from t1 left join t2 on t1.id = t2.t1_id;</span></div><div class="line">                                                     QUERY PLAN</div><div class="line">---------------------------------------------------------------------------------------------------------------------</div><div class="line"> Merge Left Join  (cost=223.19..406.47 rows=11832 width=54) (actual time=0.025..0.028 rows=17 loops=1)</div><div class="line">   Output: t1.id, t1.name, t2.id, t2.age, t2.t1_id</div><div class="line">   Merge Cond: (t1.id = t2.t1_id)</div><div class="line">   -&gt;  Sort  (cost=80.64..83.54 rows=1160 width=42) (actual time=0.018..0.018 rows=11 loops=1)</div><div class="line">         Output: t1.id, t1.name</div><div class="line">         Sort Key: t1.id</div><div class="line">         Sort Method: quicksort  Memory: 25kB</div><div class="line">         -&gt;  Seq Scan on public.t1  (cost=0.00..21.60 rows=1160 width=42) (actual time=0.012..0.013 rows=11 loops=1)</div><div class="line">               Output: t1.id, t1.name</div><div class="line">   -&gt;  Sort  (cost=142.54..147.64 rows=2040 width=12) (actual time=0.004..0.004 rows=12 loops=1)</div><div class="line">         Output: t2.id, t2.age, t2.t1_id</div><div class="line">         Sort Key: t2.t1_id</div><div class="line">         Sort Method: quicksort  Memory: 25kB</div><div class="line">         -&gt;  Seq Scan on public.t2  (cost=0.00..30.40 rows=2040 width=12) (actual time=0.002..0.002 rows=10 loops=1)</div><div class="line">               Output: t2.id, t2.age, t2.t1_id</div><div class="line"> Planning time: 0.060 ms</div><div class="line"> Execution time: 0.046 ms</div><div class="line">(17 rows)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
 
-      
-    </div>
-
-    <div>
-      
-        
-
-      
-    </div>
-
-    <div>
-      
-        
-
-      
-    </div>
-
-    <div>
-      
-        
-  <ul class="post-copyright">
-    <li class="post-copyright-author">
-      <strong>本文作者：</strong>
-      emacsist
-    </li>
-    <li class="post-copyright-link">
-      <strong>本文链接：</strong>
-      <a href="https://emacsist.github.io/2016/02/01/SQL的各种join/" title="SQL的各种join">https://emacsist.github.io/2016/02/01/SQL的各种join/</a>
-    </li>
-    <li class="post-copyright-license">
-      <strong>版权声明： </strong>
-      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
-    </li>
-  </ul>
-
-
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-        
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2016/02/14/Spring-Boot-学习之Hello-World（一）/" rel="next" title="Spring Boot 学习之Hello World（一）">
-                <i class="fa fa-chevron-left"></i> Spring Boot 学习之Hello World（一）
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/01/27/一次生产环境Java应用性能排查/" rel="prev" title="一次生产环境Java应用性能排查">
-                一次生产环境Java应用性能排查 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </article>
-
-
-
-    <div class="post-spread">
-      
-    </div>
-  </div>
-
-
-          </div>
-          
-
-
-          
-  <div class="comments" id="comments">
-    
-      <div id="uyan_frame"></div>
     
   </div>
+</article>
 
 
-        </div>
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
         
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
           </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
           </li>
+        
         </ul>
-      
+      </div>
+    </div>
+  </div>
 
-      <section class="site-overview sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/avatar.png"
-               alt="emacsist" />
-          <p class="site-author-name" itemprop="name">emacsist</p>
-           
-              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
-          
-        </div>
-        <nav class="site-state motion-element">
 
-          
-            <div class="site-state-item site-state-posts">
-              <a href="/archives">
-                <span class="site-state-item-count">300</span>
-                <span class="site-state-item-name">日志</span>
-              </a>
-            </div>
-          
+   
 
-          
-            
-            
-            <div class="site-state-item site-state-categories">
-              <a href="/categories/index.html">
-                <span class="site-state-item-count">71</span>
-                <span class="site-state-item-name">分类</span>
-              </a>
-            </div>
-          
 
-          
-            
-            
-            <div class="site-state-item site-state-tags">
-              <a href="/tags/index.html">
-                <span class="site-state-item-count">148</span>
-                <span class="site-state-item-name">标签</span>
-              </a>
-            </div>
-          
 
-        </nav>
+</div>
 
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
         
-
-        <div class="links-of-author motion-element">
-          
-            
-              <span class="links-of-author-item">
-                <a href="https://github.com/emacsist" target="_blank" title="GitHub">
-                  
-                    <i class="fa fa-fw fa-github"></i>
-                  
-                  GitHub
-                </a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="https://www.zhihu.com/people/emacist" target="_blank" title="知乎">
-                  
-                    <i class="fa fa-fw fa-globe"></i>
-                  
-                  知乎
-                </a>
-              </span>
-            
-          
-        </div>
-
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
         
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
         
-
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
         
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
         
-
-        
-
-
-      </section>
-
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#测试表数据"><span class="nav-text">测试表数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#t1"><span class="nav-text">t1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#t2"><span class="nav-text">t2</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#inner-join"><span class="nav-text">inner join</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#left-join"><span class="nav-text">left join</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
-      
-
-      
+      </ul>
 
     </div>
-  </aside>
+  </div>
+</div>
 
 
-        
-      </div>
-    </main>
 
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright" >
   
-  &copy; 
-  <span itemprop="copyrightYear">2017</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">emacsist</span>
-  <span class="post-count">共269.2k字</span>
-</div>
-
-
-<div class="powered-by">
-  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动 
-</div>
-
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Mist
-  </a>
-</div>
-
-
-        
-
-        
-      </div>
-    </footer>
-
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
+      <div class="fexo-comments comments-post">
     
 
+    
+
+
+
+
+    
+
+    
+	
   </div>
 
   
 
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
   }
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-
-  
-  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  
-  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
-
-
-
-  
-  
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
-
-
-
-  
-
-
-  
-
-
-
-
-	
-
-
-
-
-
-  
-
-
-
-
-
-  
-    
-
-    
-      <!-- UY BEGIN -->
-      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2132003"></script>
-      <!-- UY END -->
-    
-  
-
-
-
-
-
-  
-
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-  
-
-  
-
-  
-
-  
 
 </body>
 </html>
