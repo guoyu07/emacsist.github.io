@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>PostgreSQL中文全文搜索 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="postgresql,database," />
+  
+
+  <meta name="description" content="安装 zhparserzhparser 使用创建测试表: 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465create table ts (name varchar(1024));sky=# select">
+<meta name="keywords" content="postgresql,database">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PostgreSQL中文全文搜索">
+<meta property="og:url" content="https://emacsist.github.io/2016/08/11/PostgreSQL中文全文搜索/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="安装 zhparserzhparser 使用创建测试表: 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465create table ts (name varchar(1024));sky=# select">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PostgreSQL中文全文搜索">
+<meta name="twitter:description" content="安装 zhparserzhparser 使用创建测试表: 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465create table ts (name varchar(1024));sky=# select">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装-zhparser"><span class="toc-text">安装 zhparser</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用"><span class="toc-text">使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建索引"><span class="toc-text">创建索引</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#全文搜索-VS-LKIE"><span class="toc-text">全文搜索 VS LKIE</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-PostgreSQL中文全文搜索" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            PostgreSQL中文全文搜索
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2016.08.11</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="安装-zhparser"><a href="#安装-zhparser" class="headerlink" title="安装 zhparser"></a>安装 zhparser</h2><p><a href="https://github.com/amutu/zhparser" target="_blank" rel="external">zhparser</a></p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>创建测试表:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line">create table ts (name varchar(1024));</div><div class="line"></div><div class="line">sky=<span class="comment"># select * from ts limit 50;</span></div><div class="line">             name             </div><div class="line">------------------------------</div><div class="line"> 中国人民</div><div class="line"> 中国人民解放军</div><div class="line"> 中国人民解放军，军队</div><div class="line"> 中国军人</div><div class="line"> 中国军队</div><div class="line"> 中国军队1</div><div class="line"> 中国军队一二三</div><div class="line"> 中国军队一二三四</div><div class="line"> 军队一二三四</div><div class="line"> 中国军队一三四</div><div class="line"> 中国军队一三</div><div class="line"> 中国军队一</div><div class="line"> 中国军队</div><div class="line"> 中国</div><div class="line"> 中</div><div class="line"> 中国军</div><div class="line"> 中国军</div><div class="line"> 为什么</div><div class="line"> 为国</div><div class="line"> 中军队</div><div class="line"> 中军队你</div><div class="line"> 中军队，解放 </div><div class="line"> 中军队，解放军</div><div class="line"> 中军队，解放军队</div><div class="line"> 中军队，解放军军队</div><div class="line"> 中军队，解放军军队呀</div><div class="line"> 中军队，解放军军队呀哈哈</div><div class="line"> 中军队，解放军军队呀哈哈哈</div><div class="line"> 中军队，解放军军队呀哈哈哈哈</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line">....</div><div class="line"></div><div class="line"></div><div class="line">sky=<span class="comment"># select count(1) from ts;</span></div><div class="line"> count </div><div class="line">-------</div><div class="line"> 65565</div><div class="line">(1 row)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<p>插入足够多的测试数据。这里是65565条数据。</p>
+<h3 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h3><blockquote>
+<p>下面假设你已经安装并配置好了<code>zhparser</code>.</p>
+</blockquote>
+<p><code>zhparser.multi_short = on;</code>设置为全局级别后再创建索引.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">alter role all <span class="built_in">set</span> zhparser.multi_short=on;</div></pre></td></tr></table></figure>
+<p>创建索引:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">create index idx_name on ts using gin(to_tsvector(<span class="string">'testzhcfg'</span>, name));</div></pre></td></tr></table></figure>
+<h2 id="全文搜索-VS-LKIE"><a href="#全文搜索-VS-LKIE" class="headerlink" title="全文搜索 VS LKIE"></a>全文搜索 VS LKIE</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># explain analyze select * from ts where to_tsvector('testzhcfg', name) @@ to_tsquery('testzhcfg', '军队');</span></div><div class="line">                                                     QUERY PLAN                                                      </div><div class="line">---------------------------------------------------------------------------------------------------------------------</div><div class="line"> Bitmap Heap Scan on ts  (cost=10.54..401.46 rows=328 width=7) (actual time=0.010..0.011 rows=20 loops=1)</div><div class="line">   Recheck Cond: (to_tsvector(<span class="string">'testzhcfg'</span>::regconfig, (name)::text) @@ <span class="string">''</span><span class="string">'军队'</span><span class="string">''</span>::tsquery)</div><div class="line">   Heap Blocks: exact=1</div><div class="line">   -&gt;  Bitmap Index Scan on idx_name  (cost=0.00..10.46 rows=328 width=0) (actual time=0.007..0.007 rows=20 loops=1)</div><div class="line">         Index Cond: (to_tsvector(<span class="string">'testzhcfg'</span>::regconfig, (name)::text) @@ <span class="string">''</span><span class="string">'军队'</span><span class="string">''</span>::tsquery)</div><div class="line"> Planning time: 0.071 ms</div><div class="line"> Execution time: 0.026 ms</div><div class="line">(7 rows)</div><div class="line"></div><div class="line">sky=<span class="comment"># </span></div><div class="line"></div><div class="line"></div><div class="line">LIKE:</div><div class="line"></div><div class="line"></div><div class="line">sky=<span class="comment"># explain analyze  select * from ts where name like '%军队%';</span></div><div class="line">                                           QUERY PLAN                                           </div><div class="line">------------------------------------------------------------------------------------------------</div><div class="line"> Seq Scan on ts  (cost=0.00..1110.56 rows=3 width=7) (actual time=0.008..5.212 rows=20 loops=1)</div><div class="line">   Filter: ((name)::text ~~ <span class="string">'%军队%'</span>::text)</div><div class="line">   Rows Removed by Filter: 65545</div><div class="line"> Planning time: 0.042 ms</div><div class="line"> Execution time: 5.223 ms</div><div class="line">(5 rows)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<p>看来还是挺不错的.</p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

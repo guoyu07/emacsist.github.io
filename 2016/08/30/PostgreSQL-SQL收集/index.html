@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>PostgreSQL SQL收集 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="postgresql,database," />
+  
+
+  <meta name="description" content="查看是否存在无效索引1SELECT * FROM pg_class, pg_index WHERE pg_index.indisvalid = false AND pg_index.indexrelid = pg_class.oid; 查看大小查看表大小:1\d+ 查看数据库大小:1\l+ 查看表，索引及总大小1234567891011121314151617SELECT    table_nam">
+<meta name="keywords" content="postgresql,database">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PostgreSQL SQL收集">
+<meta property="og:url" content="https://emacsist.github.io/2016/08/30/PostgreSQL-SQL收集/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="查看是否存在无效索引1SELECT * FROM pg_class, pg_index WHERE pg_index.indisvalid = false AND pg_index.indexrelid = pg_class.oid; 查看大小查看表大小:1\d+ 查看数据库大小:1\l+ 查看表，索引及总大小1234567891011121314151617SELECT    table_nam">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PostgreSQL SQL收集">
+<meta name="twitter:description" content="查看是否存在无效索引1SELECT * FROM pg_class, pg_index WHERE pg_index.indisvalid = false AND pg_index.indexrelid = pg_class.oid; 查看大小查看表大小:1\d+ 查看数据库大小:1\l+ 查看表，索引及总大小1234567891011121314151617SELECT    table_nam">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#查看是否存在无效索引"><span class="toc-text">查看是否存在无效索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查看大小"><span class="toc-text">查看大小</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#表访问统计"><span class="toc-text">表访问统计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#表I-O统计"><span class="toc-text">表I/O统计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#索引访问统计"><span class="toc-text">索引访问统计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#索引I-O统计"><span class="toc-text">索引I/O统计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#按索引访问次统计"><span class="toc-text">按索引访问次统计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取用户所属的schema"><span class="toc-text">获取用户所属的schema</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-PostgreSQL-SQL收集" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            PostgreSQL SQL收集
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2016.08.30</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="查看是否存在无效索引"><a href="#查看是否存在无效索引" class="headerlink" title="查看是否存在无效索引"></a>查看是否存在无效索引</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">SELECT * FROM pg_class, pg_index WHERE pg_index.indisvalid = <span class="literal">false</span> AND pg_index.indexrelid = pg_class.oid;</div></pre></td></tr></table></figure>
+<h2 id="查看大小"><a href="#查看大小" class="headerlink" title="查看大小"></a>查看大小</h2><p>查看表大小:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">\d+</div></pre></td></tr></table></figure></p>
+<p>查看数据库大小:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">\l+</div></pre></td></tr></table></figure></p>
+<p>查看表，索引及总大小<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">SELECT</div><div class="line">    table_name,</div><div class="line">    pg_size_pretty(table_size) AS table_size,</div><div class="line">    pg_size_pretty(indexes_size) AS indexes_size,</div><div class="line">    pg_size_pretty(total_size) AS total_size</div><div class="line">FROM (</div><div class="line">    SELECT</div><div class="line">        table_name,</div><div class="line">        pg_table_size(table_name) AS table_size,</div><div class="line">        pg_indexes_size(table_name) AS indexes_size,</div><div class="line">        pg_total_relation_size(table_name) AS total_size</div><div class="line">    FROM (</div><div class="line">        SELECT (&apos;&quot;&apos; || table_schema || &apos;&quot;.&quot;&apos; || table_name || &apos;&quot;&apos;) AS table_name</div><div class="line">        FROM information_schema.tables</div><div class="line">    ) AS all_tables</div><div class="line">    ORDER BY total_size DESC</div><div class="line">) AS pretty_sizes;</div></pre></td></tr></table></figure></p>
+<h2 id="表访问统计"><a href="#表访问统计" class="headerlink" title="表访问统计"></a>表访问统计</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">select schemaname,relname,seq_scan,idx_scan,cast(idx_scan as numeric) / (idx_scan + seq_scan)</div><div class="line"> as idx_scan_pct </div><div class="line"> from pg_stat_user_tables <span class="built_in">where</span> (idx_scan +seq_scan) &gt;0 order by idx_scan_pct;</div></pre></td></tr></table></figure>
+<h2 id="表I-O统计"><a href="#表I-O统计" class="headerlink" title="表I/O统计"></a>表I/O统计</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">select relname,cast(heap_blks_hit as numeric) /(heap_blks_hit +heap_blks_read) </div><div class="line"> as hit_pct,heap_blks_hit,heap_blks_read from pg_statio_user_tables </div><div class="line">  <span class="built_in">where</span> (heap_blks_hit + heap_blks_read) &gt;0 order by hit_pct;</div></pre></td></tr></table></figure>
+<h2 id="索引访问统计"><a href="#索引访问统计" class="headerlink" title="索引访问统计"></a>索引访问统计</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">select relname,cast(idx_blks_hit as numeric) /(idx_blks_hit + idx_blks_read )</div><div class="line">  as hit_pct,idx_blks_hit,idx_blks_read from pg_statio_user_tables </div><div class="line">  <span class="built_in">where</span> (idx_blks_hit +idx_blks_read) &gt;0 order by hit_pct;</div></pre></td></tr></table></figure>
+<h2 id="索引I-O统计"><a href="#索引I-O统计" class="headerlink" title="索引I/O统计"></a>索引I/O统计</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">select indexrelname,cast(idx_blks_hit as numeric) /( idx_blks_hit + idx_blks_read) </div><div class="line"> as hit_pct,idx_blks_hit,idx_blks_read from pg_statio_user_indexes </div><div class="line"> <span class="built_in">where</span> (idx_blks_hit +idx_blks_read)&gt;0 order by hit_pct ;</div></pre></td></tr></table></figure>
+<h2 id="按索引访问次统计"><a href="#按索引访问次统计" class="headerlink" title="按索引访问次统计"></a>按索引访问次统计</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">select schemaname,relname,indexrelname,idx_scan,pg_size_pretty(pg_relation_size(i.indexrelid)) </div><div class="line"> as index_size from pg_stat_user_indexes i join pg_index using (indexrelid)</div><div class="line"> <span class="built_in">where</span> indisunique is <span class="literal">false</span> order by idx_scan,relname;</div></pre></td></tr></table></figure>
+<h2 id="获取用户所属的schema"><a href="#获取用户所属的schema" class="headerlink" title="获取用户所属的schema"></a>获取用户所属的schema</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">\dn+</div></pre></td></tr></table></figure>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

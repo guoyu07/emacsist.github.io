@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Redis升级 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="redis,nosql," />
+  
+
+  <meta name="description" content="创建一个新的实例123456wget http://download.redis.io/redis-stable.tar.gztar -xvf redis-stable.tar.gzcd redis-stablemakemake PREFIX=/some/other/directory install 启动slave实例 1/some/other/directory/bin/redis-serve">
+<meta name="keywords" content="redis,nosql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis升级">
+<meta property="og:url" content="https://emacsist.github.io/2015/11/23/Redis升级/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="创建一个新的实例123456wget http://download.redis.io/redis-stable.tar.gztar -xvf redis-stable.tar.gzcd redis-stablemakemake PREFIX=/some/other/directory install 启动slave实例 1/some/other/directory/bin/redis-serve">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis升级">
+<meta name="twitter:description" content="创建一个新的实例123456wget http://download.redis.io/redis-stable.tar.gztar -xvf redis-stable.tar.gzcd redis-stablemakemake PREFIX=/some/other/directory install 启动slave实例 1/some/other/directory/bin/redis-serve">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#创建一个新的实例"><span class="toc-text">创建一个新的实例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开启复制"><span class="toc-text">开启复制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#检查是否复制完成"><span class="toc-text">检查是否复制完成</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查看主从的INFO信息"><span class="toc-text">查看主从的INFO信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#允许从实例进行写操作"><span class="toc-text">允许从实例进行写操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#从切换为主"><span class="toc-text">从切换为主</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Redis升级" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Redis升级
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2015.11.23</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#nosql">
+        <span class="tag-name">nosql</span>
+    <span class="tag-size">( 8 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#redis">
+        <span class="tag-name">redis</span>
+    <span class="tag-size">( 12 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="创建一个新的实例"><a href="#创建一个新的实例" class="headerlink" title="创建一个新的实例"></a>创建一个新的实例</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">wget http://download.redis.io/redis-stable.tar.gz</div><div class="line"></div><div class="line">tar -xvf redis-stable.tar.gz</div><div class="line"><span class="built_in">cd</span> redis-stable</div><div class="line">make</div><div class="line">make PREFIX=/some/other/directory install</div></pre></td></tr></table></figure>
+<p>启动slave实例</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/some/other/directory/bin/redis-server /path/to/redis/redis.conf</div></pre></td></tr></table></figure>
+<h2 id="开启复制"><a href="#开启复制" class="headerlink" title="开启复制"></a>开启复制</h2><p>如果master要认证的话，要先认证下先,在slave的实例中的redis-cli启动后，输入以下命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">config <span class="built_in">set</span> masterauth &lt;password&gt;</div></pre></td></tr></table></figure>
+<p>然后开始复制:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">slaveof materIP masterPort</div></pre></td></tr></table></figure>
+<h2 id="检查是否复制完成"><a href="#检查是否复制完成" class="headerlink" title="检查是否复制完成"></a>检查是否复制完成</h2><p>检查从slave的日志文件，如果出现如下的提示，表明复制成功:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">15293:S 23 Nov 16:21:37.560 * MASTER &lt;-&gt; SLAVE sync: Flushing old data</div><div class="line">15293:S 23 Nov 16:21:37.560 * MASTER &lt;-&gt; SLAVE sync: Loading DB <span class="keyword">in</span> memory</div><div class="line">15293:S 23 Nov 16:21:50.799 * MASTER &lt;-&gt; SLAVE sync: Finished with success</div></pre></td></tr></table></figure>
+<h2 id="查看主从的INFO信息"><a href="#查看主从的INFO信息" class="headerlink" title="查看主从的INFO信息"></a>查看主从的INFO信息</h2><p>在主从实例中，都执行<code>INFO</code>命令，查看键数等是否一致.</p>
+<h2 id="允许从实例进行写操作"><a href="#允许从实例进行写操作" class="headerlink" title="允许从实例进行写操作"></a>允许从实例进行写操作</h2><p>默认情况下,redis的从slave实例是只读的，要开启写的话，可以在slave上执行:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">config <span class="built_in">set</span> slave-read-only no</div></pre></td></tr></table></figure>
+<p>配置你的应用（客户端使用新的slave的连接信息）</p>
+<h2 id="从切换为主"><a href="#从切换为主" class="headerlink" title="从切换为主"></a>从切换为主</h2><p>在slave上执行以下命令（要在没有命令执行的情况下进行切换，可以在slave上执行<code>MONITOR</code>命令查看情况)，如果没有的话，就可以切换了:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">SLAVEOF NO ONE</div></pre></td></tr></table></figure>
+<p>即可关闭复制，成为主实例.</p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

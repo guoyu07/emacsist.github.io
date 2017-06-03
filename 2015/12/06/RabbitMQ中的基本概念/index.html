@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>RabbitMQ中的基本概念 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="java,rabbitmq," />
+  
+
+  <meta name="description" content="RabbitMQ的工作流程12345----------------------- virtual host ------------------------------|                                -&amp;gt; queue                         ||publisher -&amp;gt; exchange -&amp;gt; [binding] -&amp;g">
+<meta name="keywords" content="java,rabbitmq">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RabbitMQ中的基本概念">
+<meta property="og:url" content="https://emacsist.github.io/2015/12/06/RabbitMQ中的基本概念/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="RabbitMQ的工作流程12345----------------------- virtual host ------------------------------|                                -&amp;gt; queue                         ||publisher -&amp;gt; exchange -&amp;gt; [binding] -&amp;g">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RabbitMQ中的基本概念">
+<meta name="twitter:description" content="RabbitMQ的工作流程12345----------------------- virtual host ------------------------------|                                -&amp;gt; queue                         ||publisher -&amp;gt; exchange -&amp;gt; [binding] -&amp;g">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#RabbitMQ的工作流程"><span class="toc-text">RabbitMQ的工作流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Virtual-Host"><span class="toc-text">Virtual Host</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建一个virtual-host"><span class="toc-text">创建一个virtual host</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除一个virtual-host"><span class="toc-text">删除一个virtual host</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#列出所有virtual-host"><span class="toc-text">列出所有virtual host</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#exchange-交换机"><span class="toc-text">exchange (交换机)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#default-exchange-默认交换机"><span class="toc-text">default exchange (默认交换机)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Direct-exchange（直连交换机）"><span class="toc-text">Direct exchange（直连交换机）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#funout-exchange-扇形交换机"><span class="toc-text">funout exchange (扇形交换机)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#topic-exchanges-主题交换机"><span class="toc-text">topic exchanges (主题交换机)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#headers-exchange-头交换机"><span class="toc-text">headers exchange (头交换机)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#交换机常用属性"><span class="toc-text">交换机常用属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常用命令"><span class="toc-text">常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#列出所有交换机"><span class="toc-text">列出所有交换机</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#声明一个交换机"><span class="toc-text">声明一个交换机</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#queue-队列"><span class="toc-text">queue (队列)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#常用属性"><span class="toc-text">常用属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常用命令-1"><span class="toc-text">常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#列出队列简要信息"><span class="toc-text">列出队列简要信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#列出队列尽可能详细信息"><span class="toc-text">列出队列尽可能详细信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#声明一个队列"><span class="toc-text">声明一个队列</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#发布一条消息"><span class="toc-text">发布一条消息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#取出一条消息"><span class="toc-text">取出一条消息</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Binding-绑定"><span class="toc-text">Binding (绑定)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#示例"><span class="toc-text">示例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#扇形交换机使用例子"><span class="toc-text">扇形交换机使用例子</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-text">参考资料</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#binding"><span class="toc-text">binding</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-RabbitMQ中的基本概念" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            RabbitMQ中的基本概念
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2015.12.06</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#rabbitmq">
+        <span class="tag-name">rabbitmq</span>
+    <span class="tag-size">( 18 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="RabbitMQ的工作流程"><a href="#RabbitMQ的工作流程" class="headerlink" title="RabbitMQ的工作流程"></a>RabbitMQ的工作流程</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">----------------------- virtual host ------------------------------</div><div class="line">|                                -&gt; queue                         |</div><div class="line">|publisher -&gt; exchange -&gt; [binding] -&gt; queue  -&gt; consumer            |</div><div class="line">|                                -&gt; queue                         |</div><div class="line">----------------------- virtual host ------------------------------</div></pre></td></tr></table></figure>
+<p>RabbitMQ是通过<code>virtual host</code>的概念来实行环境隔离的.</p>
+<p>以下,来理解下各个概念</p>
+<h2 id="Virtual-Host"><a href="#Virtual-Host" class="headerlink" title="Virtual Host"></a>Virtual Host</h2><blockquote>
+<p>为了在一个单独的代理上实现多个隔离的环境（用户、用户组、交换机、队列 等），AMQP提供了一个虚拟主机（virtual hosts - vhosts）的概念</p>
+</blockquote>
+<p>默认的<code>virtual host</code>为<code>/</code>.</p>
+<h3 id="创建一个virtual-host"><a href="#创建一个virtual-host" class="headerlink" title="创建一个virtual host"></a>创建一个virtual host</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">rabbitmqctl add_vhost <span class="built_in">test</span></div><div class="line"></div><div class="line">例如:</div><div class="line">➜  ~  rabbitmqctl add_vhost <span class="built_in">test</span></div><div class="line">Creating vhost <span class="string">"test"</span> ...</div><div class="line">➜  ~</div></pre></td></tr></table></figure>
+<h3 id="删除一个virtual-host"><a href="#删除一个virtual-host" class="headerlink" title="删除一个virtual host"></a>删除一个virtual host</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">rabbitmqctl delete_vhost <span class="built_in">test</span></div><div class="line"></div><div class="line">例如:</div><div class="line"></div><div class="line">➜  ~  rabbitmqctl delete_vhost <span class="built_in">test</span></div><div class="line">Deleting vhost <span class="string">"test"</span> ...</div><div class="line">➜  ~</div></pre></td></tr></table></figure>
+<h3 id="列出所有virtual-host"><a href="#列出所有virtual-host" class="headerlink" title="列出所有virtual host"></a>列出所有virtual host</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">rabbitmqctl list_vhosts name tracing</div><div class="line"></div><div class="line">例如:</div><div class="line"></div><div class="line">➜  ~  rabbitmqctl list_vhosts</div><div class="line">Listing vhosts ...</div><div class="line">/</div><div class="line"><span class="built_in">test</span></div><div class="line">➜  ~</div><div class="line"></div><div class="line"></div><div class="line">➜  ~  rabbitmqctl list_vhosts name tracing</div><div class="line">Listing vhosts ...</div><div class="line">/	<span class="literal">false</span></div><div class="line"><span class="built_in">test</span>	<span class="literal">false</span></div><div class="line">➜  ~</div></pre></td></tr></table></figure>
+<h2 id="exchange-交换机"><a href="#exchange-交换机" class="headerlink" title="exchange (交换机)"></a>exchange (交换机)</h2><blockquote>
+<p>交换机是用来发送消息的AMQP实体。交换机拿到一个消息之后将它路由给一个或零个队列。它使用哪种路由算法是由交换机类型和被称作绑定（bindings）的规则所决定的</p>
+</blockquote>
+<h3 id="default-exchange-默认交换机"><a href="#default-exchange-默认交换机" class="headerlink" title="default exchange (默认交换机)"></a>default exchange (默认交换机)</h3><blockquote>
+<p>默认交换机（default exchange）实际上是一个由消息代理预先声明好的没有名字（名字为空字符串）的<em>直连交换机（direct exchange）</em>。它有一个特殊的属性使得它对于简单应用特别有用处：那就是每个新建队列（queue）都会自动绑定到默认交换机上，绑定的路由键（routing key）名称与队列名称相同。</p>
+</blockquote>
+<h3 id="Direct-exchange（直连交换机）"><a href="#Direct-exchange（直连交换机）" class="headerlink" title="Direct exchange（直连交换机）"></a>Direct exchange（直连交换机）</h3><blockquote>
+<p>直连型交换机（direct exchange）是根据消息携带的路由键（routing key）将消息投递给对应队列的。直连交换机用来处理消息的单播路由（unicast routing）（尽管它也可以处理多播路由）</p>
+</blockquote>
+<p>注意,这个路由键必须完全匹配才能投递.</p>
+<h3 id="funout-exchange-扇形交换机"><a href="#funout-exchange-扇形交换机" class="headerlink" title="funout exchange (扇形交换机)"></a>funout exchange (扇形交换机)</h3><blockquote>
+<p>扇型交换机（funout exchange）将消息路由给绑定到它身上的所有队列，而不理会绑定的路由键。如果N个队列绑定到某个扇型交换机上，当有消息发送给此扇型交换机时，交换机会将消息的拷贝分别发送给这所有的N个队列。扇型用来交换机处理消息的广播路由（broadcast routing）。</p>
+</blockquote>
+<h3 id="topic-exchanges-主题交换机"><a href="#topic-exchanges-主题交换机" class="headerlink" title="topic exchanges (主题交换机)"></a>topic exchanges (主题交换机)</h3><blockquote>
+<p>主题交换机（topic exchanges）通过对消息的路由键和队列到交换机的绑定模式之间的匹配，将消息路由给一个或多个队列。主题交换机经常用来实现各种分发/订阅模式及其变种。主题交换机通常用来实现消息的多播路由（multicast routing）。</p>
+</blockquote>
+<h3 id="headers-exchange-头交换机"><a href="#headers-exchange-头交换机" class="headerlink" title="headers exchange (头交换机)"></a>headers exchange (头交换机)</h3><blockquote>
+<p>头交换机使用多个消息属性来代替路由键建立路由规则。通过判断消息头的值能否与指定的绑定相匹配来确立路由规则.</p>
+<p>头交换机可以视为直连交换机的另一种表现形式。头交换机能够像直连交换机一样工作，不同之处在于头交换机的路由规则是建立在头属性值之上，而不是路由键。路由键必须是一个字符串，而头属性值则没有这个约束，它们甚至可以是整数或者哈希值（字典）等</p>
+</blockquote>
+<h3 id="交换机常用属性"><a href="#交换机常用属性" class="headerlink" title="交换机常用属性"></a>交换机常用属性</h3><ol>
+<li>Name: 交换机名</li>
+<li>Durability: （消息代理重启后，交换机是否还存在）</li>
+<li>Auto-delete: （当所有与之绑定的消息队列都完成了对此交换机的使用后，删掉它）</li>
+<li>Arguments:（依赖代理本身)</li>
+</ol>
+<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><h4 id="列出所有交换机"><a href="#列出所有交换机" class="headerlink" title="列出所有交换机"></a>列出所有交换机</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">rabbitmqadmin -V <span class="built_in">test</span> list exchanges</div><div class="line"></div><div class="line">例如:</div><div class="line"></div><div class="line">➜  ~  rabbitmqadmin -V / list exchanges</div><div class="line">+--------------------+---------+</div><div class="line">|        name        |  <span class="built_in">type</span>   |</div><div class="line">+--------------------+---------+</div><div class="line">|                    | direct  |</div><div class="line">| amq.direct         | direct  |</div><div class="line">| amq.fanout         | fanout  |</div><div class="line">| amq.headers        | headers |</div><div class="line">| amq.match          | headers |</div><div class="line">| amq.rabbitmq.log   | topic   |</div><div class="line">| amq.rabbitmq.trace | topic   |</div><div class="line">| amq.topic          | topic   |</div><div class="line">+--------------------+---------+</div><div class="line">➜  ~</div></pre></td></tr></table></figure>
+<h4 id="声明一个交换机"><a href="#声明一个交换机" class="headerlink" title="声明一个交换机"></a>声明一个交换机</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">rabbitmqadmin <span class="built_in">declare</span> exchange name=my-new-exchange <span class="built_in">type</span>=fanout</div><div class="line"></div><div class="line"><span class="built_in">type</span>可以参考上面的类型.</div></pre></td></tr></table></figure>
+<h2 id="queue-队列"><a href="#queue-队列" class="headerlink" title="queue (队列)"></a>queue (队列)</h2><blockquote>
+<p>队列在声明（declare）后才能被使用。如果一个队列尚不存在，声明一个队列会创建它。如果声明的队列已经存在，并且属性完全相同，那么此次声明不会对原有队列产生任何影响。如果声明中的属性与已存在队列的属性有差异，那么一个错误代码为406的通道级异常就会被抛出</p>
+</blockquote>
+<h3 id="常用属性"><a href="#常用属性" class="headerlink" title="常用属性"></a>常用属性</h3><ol>
+<li>Name: 队列名</li>
+<li>Durable:（消息代理重启后，队列依旧存在）</li>
+<li>Exclusive:（只被一个连接（connection）使用，而且当连接关闭后队列即被删除）</li>
+<li>Auto-delete:（当最后一个消费者退订后即被删除）</li>
+<li>Arguments:（一些消息代理用他来完成类似与TTL的某些额外功能）</li>
+</ol>
+<h3 id="常用命令-1"><a href="#常用命令-1" class="headerlink" title="常用命令"></a>常用命令</h3><h4 id="列出队列简要信息"><a href="#列出队列简要信息" class="headerlink" title="列出队列简要信息"></a>列出队列简要信息</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">rabbitmqadmin list queues vhost name node messages message_stats.publish_details.rate</div><div class="line"></div><div class="line">例如:</div><div class="line"></div><div class="line">➜  ~  rabbitmqadmin list queues vhost name node messages message_stats.publish_details.rate</div><div class="line">+-------+-------------+------------------+----------+------------------------------------+</div><div class="line">| vhost |    name     |       node       | messages | message_stats.publish_details.rate |</div><div class="line">+-------+-------------+------------------+----------+------------------------------------+</div><div class="line">| /     | yangzhiyong | rabbit@localhost | 0        |                                    |</div><div class="line">+-------+-------------+------------------+----------+------------------------------------+</div><div class="line">➜  ~</div></pre></td></tr></table></figure>
+<h4 id="列出队列尽可能详细信息"><a href="#列出队列尽可能详细信息" class="headerlink" title="列出队列尽可能详细信息"></a>列出队列尽可能详细信息</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rabbitmqadmin <span class="_">-f</span> long <span class="_">-d</span> 3 list queues</div></pre></td></tr></table></figure>
+<h4 id="声明一个队列"><a href="#声明一个队列" class="headerlink" title="声明一个队列"></a>声明一个队列</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rabbitmqadmin <span class="built_in">declare</span> queue name=my-new-queue durable=<span class="literal">false</span></div></pre></td></tr></table></figure>
+<h4 id="发布一条消息"><a href="#发布一条消息" class="headerlink" title="发布一条消息"></a>发布一条消息</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rabbitmqadmin publish exchange=amq.default routing_key=<span class="built_in">test</span> payload=<span class="string">"hello, world"</span></div></pre></td></tr></table></figure>
+<h4 id="取出一条消息"><a href="#取出一条消息" class="headerlink" title="取出一条消息"></a>取出一条消息</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rabbitmqadmin get queue=<span class="built_in">test</span> requeue=<span class="literal">false</span></div></pre></td></tr></table></figure>
+<h2 id="Binding-绑定"><a href="#Binding-绑定" class="headerlink" title="Binding (绑定)"></a>Binding (绑定)</h2><blockquote>
+<p>绑定（Binding）是交换机（exchange）将消息（message）路由给队列（queue）所需遵循的规则.</p>
+</blockquote>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><h3 id="扇形交换机使用例子"><a href="#扇形交换机使用例子" class="headerlink" title="扇形交换机使用例子"></a>扇形交换机使用例子</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">声明一个扇形交换机:</div><div class="line">➜  ~  rabbitmqadmin <span class="built_in">declare</span> exchange name=myexchange <span class="built_in">type</span>=fanout</div><div class="line">exchange declared</div><div class="line"></div><div class="line"></div><div class="line">声明两个队列</div><div class="line">➜  ~  rabbitmqadmin <span class="built_in">declare</span> queue name=myqueue durable=<span class="literal">true</span></div><div class="line">queue declared</div><div class="line"></div><div class="line">➜  ~  rabbitmqadmin <span class="built_in">declare</span> queue name=myqueue2 durable=<span class="literal">true</span></div><div class="line">queue declared</div><div class="line">➜  ~</div><div class="line"></div><div class="line"></div><div class="line">绑定队列到交换机</div><div class="line">➜  ~  rabbitmqadmin <span class="built_in">declare</span> binding <span class="built_in">source</span>=myexchange destination_type=<span class="string">"queue"</span> destination=<span class="string">"myqueue"</span> routing_key=<span class="string">"ignore_routing_key"</span></div><div class="line">binding declared</div><div class="line">➜  ~</div><div class="line"></div><div class="line">➜  ~  rabbitmqadmin <span class="built_in">declare</span> binding <span class="built_in">source</span>=myexchange destination_type=<span class="string">"queue"</span> destination=<span class="string">"myqueue2"</span> routing_key=<span class="string">"ignore_routing_key"</span></div><div class="line">binding declared</div><div class="line">➜  ~</div><div class="line"></div><div class="line">发布一条消息到交换myexchange</div><div class="line">➜  ~  rabbitmqadmin publish exchange=myexchange routing_key=<span class="string">"ignore_routing_key"</span> payload=<span class="string">"hello, world, from publisher"</span></div><div class="line">Message published</div><div class="line">➜  ~</div><div class="line"></div><div class="line">从队列<span class="string">"myqueue"</span>出队一条消息</div><div class="line">➜  ~  rabbitmqadmin get queue=myqueue requeue=<span class="literal">true</span></div><div class="line">+--------------------+------------+---------------+------------------------------+---------------+------------------+------------+-------------+</div><div class="line">|    routing_key     |  exchange  | message_count |           payload            | payload_bytes | payload_encoding | properties | redelivered |</div><div class="line">+--------------------+------------+---------------+------------------------------+---------------+------------------+------------+-------------+</div><div class="line">| ignore_routing_key | myexchange | 0             | hello, world, from publisher | 28            | string           |            | False       |</div><div class="line">+--------------------+------------+---------------+------------------------------+---------------+------------------+------------+-------------+</div><div class="line">➜</div><div class="line"></div><div class="line"></div><div class="line">从队列<span class="string">"myqueue2"</span>出队一条消息</div><div class="line">➜  ~  rabbitmqadmin get queue=myqueue2 requeue=<span class="literal">true</span></div><div class="line">+--------------------+------------+---------------+------------------------------+---------------+------------------+------------+-------------+</div><div class="line">|    routing_key     |  exchange  | message_count |           payload            | payload_bytes | payload_encoding | properties | redelivered |</div><div class="line">+--------------------+------------+---------------+------------------------------+---------------+------------------+------------+-------------+</div><div class="line">| ignore_routing_key | myexchange | 0             | hello, world, from publisher | 28            | string           |            | False       |</div><div class="line">+--------------------+------------+---------------+------------------------------+---------------+------------------+------------+-------------+</div><div class="line">➜</div></pre></td></tr></table></figure>
+<p>注意,扇形交换机会忽略routing_key的,只要队列绑定到了扇形交换机,那么扇形交换机就会将这些消息,都会发给每一个队列.</p>
+<p>其他有兴趣的, 可以自行测试.</p>
+<p>还有, 这里没有指明<code>virtual host</code>,那么就是默认的<code>/</code>.如果指定了virtual host,那么上面的每条命令的<code>virtual host</code>都要相同.</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a href="https://www.rabbitmq.com/man/rabbitmqctl.1.man.html" target="_blank" rel="external">Rabbitmq rabbitmqctl文档</a></li>
+<li><a href="http://rabbitmq-into-chinese.readthedocs.org/zh_CN/latest/AMQP/AMQP_0-9-1_Model_Explained/" target="_blank" rel="external">Rabbitmq 中文文档</a></li>
+</ol>
+<h2 id="binding"><a href="#binding" class="headerlink" title="binding"></a>binding</h2>
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

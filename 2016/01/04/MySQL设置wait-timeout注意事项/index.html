@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>MySQL设置wait_timeout注意事项 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="database,mysql," />
+  
+
+  <meta name="description" content="wait_timeout 是服务器等待客户端多久没有活动时，就关闭连接的时间，单位是秒.  查看1234567891011121314151617181920212223242526272829303132333435363738394041424344-- global levelmysql&amp;gt; show global variables like &apos;%timeout%&apos;;+-------">
+<meta name="keywords" content="database,mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL设置wait_timeout注意事项">
+<meta property="og:url" content="https://emacsist.github.io/2016/01/04/MySQL设置wait-timeout注意事项/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="wait_timeout 是服务器等待客户端多久没有活动时，就关闭连接的时间，单位是秒.  查看1234567891011121314151617181920212223242526272829303132333435363738394041424344-- global levelmysql&amp;gt; show global variables like &apos;%timeout%&apos;;+-------">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL设置wait_timeout注意事项">
+<meta name="twitter:description" content="wait_timeout 是服务器等待客户端多久没有活动时，就关闭连接的时间，单位是秒.  查看1234567891011121314151617181920212223242526272829303132333435363738394041424344-- global levelmysql&amp;gt; show global variables like &apos;%timeout%&apos;;+-------">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#查看"><span class="toc-text">查看</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置全局wait-timeout"><span class="toc-text">设置全局wait_timeout</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原因"><span class="toc-text">原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置"><span class="toc-text">设置</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-MySQL设置wait-timeout注意事项" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            MySQL设置wait_timeout注意事项
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2016.01.04</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <blockquote>
+<p>wait_timeout 是服务器等待客户端多久没有活动时，就关闭连接的时间，单位是秒.</p>
+</blockquote>
+<h2 id="查看"><a href="#查看" class="headerlink" title="查看"></a>查看</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">-- global level</div><div class="line"></div><div class="line">mysql&gt; show global variables like <span class="string">'%timeout%'</span>;</div><div class="line">+-----------------------------+----------+</div><div class="line">| Variable_name               | Value    |</div><div class="line">+-----------------------------+----------+</div><div class="line">| connect_timeout             | 10       |</div><div class="line">| delayed_insert_timeout      | 300      |</div><div class="line">| innodb_flush_log_at_timeout | 1        |</div><div class="line">| innodb_lock_wait_timeout    | 30       |</div><div class="line">| innodb_rollback_on_timeout  | OFF      |</div><div class="line">| interactive_timeout         | 120      |</div><div class="line">| lock_wait_timeout           | 600      |</div><div class="line">| net_read_timeout            | 3        |</div><div class="line">| net_write_timeout           | 6        |</div><div class="line">| rpl_stop_slave_timeout      | 31536000 |</div><div class="line">| slave_net_timeout           | 30       |</div><div class="line">| wait_timeout                | 28800    |</div><div class="line">+-----------------------------+----------+</div><div class="line">12 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">-- session level</div><div class="line"></div><div class="line">mysql&gt; show variables like <span class="string">'%timeout%'</span>;</div><div class="line">+-----------------------------+----------+</div><div class="line">| Variable_name               | Value    |</div><div class="line">+-----------------------------+----------+</div><div class="line">| connect_timeout             | 10       |</div><div class="line">| delayed_insert_timeout      | 300      |</div><div class="line">| innodb_flush_log_at_timeout | 1        |</div><div class="line">| innodb_lock_wait_timeout    | 30       |</div><div class="line">| innodb_rollback_on_timeout  | OFF      |</div><div class="line">| interactive_timeout         | 120      |</div><div class="line">| lock_wait_timeout           | 600      |</div><div class="line">| net_read_timeout            | 3        |</div><div class="line">| net_write_timeout           | 6        |</div><div class="line">| rpl_stop_slave_timeout      | 31536000 |</div><div class="line">| slave_net_timeout           | 30       |</div><div class="line">| wait_timeout                | 120      |</div><div class="line">+-----------------------------+----------+</div><div class="line">12 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
+<p>有<code>global</code>时，是查看全局，没有global时，是查看session级别.</p>
+<h2 id="设置全局wait-timeout"><a href="#设置全局wait-timeout" class="headerlink" title="设置全局wait_timeout"></a>设置全局<code>wait_timeout</code></h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mysql&gt; <span class="built_in">set</span> global wait_timeout = 280000;</div><div class="line">Query OK, 0 rows affected (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
+<p>开启新会话，再查看:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">-- session level</div><div class="line"></div><div class="line">mysql&gt; show variables like <span class="string">'%timeout%'</span>;</div><div class="line">+-----------------------------+----------+</div><div class="line">| Variable_name               | Value    |</div><div class="line">+-----------------------------+----------+</div><div class="line">| connect_timeout             | 10       |</div><div class="line">| delayed_insert_timeout      | 300      |</div><div class="line">| innodb_flush_log_at_timeout | 1        |</div><div class="line">| innodb_lock_wait_timeout    | 30       |</div><div class="line">| innodb_rollback_on_timeout  | OFF      |</div><div class="line">| interactive_timeout         | 120      |</div><div class="line">| lock_wait_timeout           | 600      |</div><div class="line">| net_read_timeout            | 3        |</div><div class="line">| net_write_timeout           | 6        |</div><div class="line">| rpl_stop_slave_timeout      | 31536000 |</div><div class="line">| slave_net_timeout           | 30       |</div><div class="line">| wait_timeout                | 120      |</div><div class="line">+-----------------------------+----------+</div><div class="line">12 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.01 sec)</div><div class="line"></div><div class="line">-- global level</div><div class="line"></div><div class="line">mysql&gt; show global variables like <span class="string">'%timeout%'</span>;</div><div class="line">+-----------------------------+----------+</div><div class="line">| Variable_name               | Value    |</div><div class="line">+-----------------------------+----------+</div><div class="line">| connect_timeout             | 10       |</div><div class="line">| delayed_insert_timeout      | 300      |</div><div class="line">| innodb_flush_log_at_timeout | 1        |</div><div class="line">| innodb_lock_wait_timeout    | 30       |</div><div class="line">| innodb_rollback_on_timeout  | OFF      |</div><div class="line">| interactive_timeout         | 120      |</div><div class="line">| lock_wait_timeout           | 600      |</div><div class="line">| net_read_timeout            | 3        |</div><div class="line">| net_write_timeout           | 6        |</div><div class="line">| rpl_stop_slave_timeout      | 31536000 |</div><div class="line">| slave_net_timeout           | 30       |</div><div class="line">| wait_timeout                | 280000   |</div><div class="line">+-----------------------------+----------+</div><div class="line">12 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
+<p>这里奇怪的是，为什么新会话的<code>wait_timieout</code>会话级别的值，不是之前设置的全局变量的值。</p>
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>查看了一下官方文档，如下:</p>
+<blockquote>
+<p>On thread startup, the session wait_timeout value is initialized from the global wait_timeout value or from the global interactive_timeout value, depending on the type of client (as defined by the CLIENT_INTERACTIVE connect option to mysql_real_connect()). See also interactive_timeout.</p>
+</blockquote>
+<p>大意是说: <code>wait_timeout</code>的会话初始值，根据mysql客户端的类型不同，而选择使用<code>全局 wait_timeout</code>的值，或者使用<code>全局 interactive_timeout</code> 的值.</p>
+<p><code>global wait_timeout</code>： 是指那些非交互式的客户端，比如用JDBC连接的。<br><code>global interactive_timeout</code>： 是指那些交互式的客户端，比如使用了命令行的<code>mysql</code>.</p>
+<p>这就可以理解这里为什么我们的会话级别的<code>wait_timeout</code>的初始值，不是我们之前设置的<code>280000</code>，而是<code>120</code>了。因为全局的<code>interactive_timeout=120</code>，而我们又是使用交互式客户端。</p>
+<h2 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h2><p>如果想让MySQL无论从哪种客户端都能让<code>wait_timeout</code>一致，那就要同时设置<code>global wait_timeout</code>和<code>global interactive_timeout</code>了。例如:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">mysql&gt; <span class="built_in">set</span> global wait_timeout = 280000;</div><div class="line">Query OK, 0 rows affected (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; <span class="built_in">set</span> global interactive_timeout = 280000;</div><div class="line">Query OK, 0 rows affected (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
+<p>这样了，新打开的会话的<code>wait_timeout</code>就会是<code>280000</code>了.如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">-- session level</div><div class="line"></div><div class="line">mysql&gt; show variables like <span class="string">'%timeout%'</span>;</div><div class="line">+-----------------------------+----------+</div><div class="line">| Variable_name               | Value    |</div><div class="line">+-----------------------------+----------+</div><div class="line">| connect_timeout             | 10       |</div><div class="line">| delayed_insert_timeout      | 300      |</div><div class="line">| innodb_flush_log_at_timeout | 1        |</div><div class="line">| innodb_lock_wait_timeout    | 30       |</div><div class="line">| innodb_rollback_on_timeout  | OFF      |</div><div class="line">| interactive_timeout         | 280000   |</div><div class="line">| lock_wait_timeout           | 600      |</div><div class="line">| net_read_timeout            | 3        |</div><div class="line">| net_write_timeout           | 6        |</div><div class="line">| rpl_stop_slave_timeout      | 31536000 |</div><div class="line">| slave_net_timeout           | 30       |</div><div class="line">| wait_timeout                | 280000   |</div><div class="line">+-----------------------------+----------+</div><div class="line">12 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

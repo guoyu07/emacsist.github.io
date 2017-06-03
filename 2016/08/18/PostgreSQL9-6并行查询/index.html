@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title> PostgreSQL9.6并行查询 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="postgresql," />
+  
+
+  <meta name="description" content="并行查询这个是PostgreSQL 9.6才开始有的。 测试环境是4核心的i5CPU，其他配置为PostgreSQL默认. 测试数据123456789[local]:5432 sky@sky=# CREATE TABLE testcount(id int);CREATE TABLETime: 2.733 ms[local]:5432 sky@sky=# INSERT INTO testcount">
+<meta name="keywords" content="postgresql">
+<meta property="og:type" content="article">
+<meta property="og:title" content=" PostgreSQL9.6并行查询">
+<meta property="og:url" content="https://emacsist.github.io/2016/08/18/PostgreSQL9-6并行查询/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="并行查询这个是PostgreSQL 9.6才开始有的。 测试环境是4核心的i5CPU，其他配置为PostgreSQL默认. 测试数据123456789[local]:5432 sky@sky=# CREATE TABLE testcount(id int);CREATE TABLETime: 2.733 ms[local]:5432 sky@sky=# INSERT INTO testcount">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content=" PostgreSQL9.6并行查询">
+<meta name="twitter:description" content="并行查询这个是PostgreSQL 9.6才开始有的。 测试环境是4核心的i5CPU，其他配置为PostgreSQL默认. 测试数据123456789[local]:5432 sky@sky=# CREATE TABLE testcount(id int);CREATE TABLETime: 2.733 ms[local]:5432 sky@sky=# INSERT INTO testcount">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#并行查询"><span class="toc-text">并行查询</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#测试数据"><span class="toc-text">测试数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#非并行查询"><span class="toc-text">非并行查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开启并行查询"><span class="toc-text">开启并行查询</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#开启1个worker"><span class="toc-text">开启1个worker</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#开启2个worker"><span class="toc-text">开启2个worker</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#开启3个worker"><span class="toc-text">开启3个worker</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#开启4个worker"><span class="toc-text">开启4个worker</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#与并行相关的参数"><span class="toc-text">与并行相关的参数</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-PostgreSQL9-6并行查询" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+             PostgreSQL9.6并行查询
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2016.08.18</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="并行查询"><a href="#并行查询" class="headerlink" title="并行查询"></a>并行查询</h2><p>这个是PostgreSQL 9.6才开始有的。</p>
+<p>测试环境是4核心的i5CPU，其他配置为PostgreSQL默认.</p>
+<h3 id="测试数据"><a href="#测试数据" class="headerlink" title="测试数据"></a>测试数据</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># CREATE TABLE testcount(id int);</span></div><div class="line">CREATE TABLE</div><div class="line">Time: 2.733 ms</div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># INSERT INTO testcount VALUES (generate_series(1,15000000));</span></div><div class="line">INSERT 0 15000000</div><div class="line">Time: 11145.722 ms</div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># VACUUM FULL ;</span></div><div class="line">VACUUM</div><div class="line">Time: 8084.445 ms</div></pre></td></tr></table></figure>
+<h3 id="非并行查询"><a href="#非并行查询" class="headerlink" title="非并行查询"></a>非并行查询</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># set max_parallel_workers_per_gather = 0;</span></div><div class="line">SET</div><div class="line">Time: 0.164 ms</div><div class="line"></div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># EXPLAIN (analyze, verbose, buffers) select count(1) from testcount ;</span></div><div class="line">                                                             QUERY PLAN                                                              </div><div class="line">-------------------------------------------------------------------------------------------------------------------------------------</div><div class="line"> Aggregate  (cost=277932.75..277932.76 rows=1 width=8) (actual time=1982.173..1982.173 rows=1 loops=1)</div><div class="line">   Output: count(1)</div><div class="line">   Buffers: shared hit=896 <span class="built_in">read</span>=65476</div><div class="line">   -&gt;  Seq Scan on public.testcount  (cost=0.00..235620.60 rows=16924860 width=0) (actual time=0.022..884.887 rows=15000000 loops=1)</div><div class="line">         Output: id</div><div class="line">         Buffers: shared hit=896 <span class="built_in">read</span>=65476</div><div class="line"> Planning time: 0.029 ms</div><div class="line"> Execution time: 1982.196 ms</div><div class="line">(8 rows)</div><div class="line"></div><div class="line"></div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># SELECT count(1) from testcount ;</span></div><div class="line">  count   </div><div class="line">----------</div><div class="line"> 15000000</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 1005.757 ms</div></pre></td></tr></table></figure>
+<h3 id="开启并行查询"><a href="#开启并行查询" class="headerlink" title="开启并行查询"></a>开启并行查询</h3><h4 id="开启1个worker"><a href="#开启1个worker" class="headerlink" title="开启1个worker"></a>开启1个worker</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># set max_parallel_workers_per_gather = 1;</span></div><div class="line">SET</div><div class="line">Time: 0.131 ms</div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># EXPLAIN (analyze, verbose, buffers) select count(1) from testcount ;</span></div><div class="line">                                                                      QUERY PLAN                                                                       </div><div class="line">--------------------------------------------------------------------------------------------------------------------------------------------------------</div><div class="line"> Finalize Aggregate  (cost=191819.61..191819.62 rows=1 width=8) (actual time=1016.820..1016.820 rows=1 loops=1)</div><div class="line">   Output: count(1)</div><div class="line">   Buffers: shared hit=1326 <span class="built_in">read</span>=65124</div><div class="line">   -&gt;  Gather  (cost=191819.50..191819.61 rows=1 width=8) (actual time=1016.761..1016.817 rows=2 loops=1)</div><div class="line">         Output: (PARTIAL count(1))</div><div class="line">         Workers Planned: 1</div><div class="line">         Workers Launched: 1</div><div class="line">         Buffers: shared hit=1326 <span class="built_in">read</span>=65124</div><div class="line">         -&gt;  Partial Aggregate  (cost=190819.50..190819.51 rows=1 width=8) (actual time=1015.814..1015.814 rows=1 loops=2)</div><div class="line">               Output: PARTIAL count(1)</div><div class="line">               Buffers: shared hit=1248 <span class="built_in">read</span>=65124</div><div class="line">               Worker 0: actual time=1014.972..1014.972 rows=1 loops=1</div><div class="line">                 Buffers: shared hit=595 <span class="built_in">read</span>=32170</div><div class="line">               -&gt;  Parallel Seq Scan on public.testcount  (cost=0.00..165930.00 rows=9955800 width=0) (actual time=0.029..500.854 rows=7500000 loops=2)</div><div class="line">                     Buffers: shared hit=1248 <span class="built_in">read</span>=65124</div><div class="line">                     Worker 0: actual time=0.027..491.502 rows=7404818 loops=1</div><div class="line">                       Buffers: shared hit=595 <span class="built_in">read</span>=32170</div><div class="line"> Planning time: 0.033 ms</div><div class="line"> Execution time: 1017.595 ms</div><div class="line">(19 rows)</div><div class="line"></div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># SELECT count(1) from testcount ;</span></div><div class="line">  count   </div><div class="line">----------</div><div class="line"> 15000000</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 660.512 m</div></pre></td></tr></table></figure>
+<h4 id="开启2个worker"><a href="#开启2个worker" class="headerlink" title="开启2个worker"></a>开启2个worker</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># set max_parallel_workers_per_gather = 2;</span></div><div class="line">SET</div><div class="line">Time: 0.125 ms</div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># EXPLAIN (analyze, verbose, buffers) select count(1) from testcount ;</span></div><div class="line"></div><div class="line">                                                                       QUERY PLAN                                                                       </div><div class="line">--------------------------------------------------------------------------------------------------------------------------------------------------------</div><div class="line"> Finalize Aggregate  (cost=155522.53..155522.54 rows=1 width=8) (actual time=766.411..766.411 rows=1 loops=1)</div><div class="line">   Output: count(1)</div><div class="line">   Buffers: shared hit=1532 <span class="built_in">read</span>=64996</div><div class="line">   -&gt;  Gather  (cost=155522.31..155522.52 rows=2 width=8) (actual time=766.365..766.406 rows=3 loops=1)</div><div class="line">         Output: (PARTIAL count(1))</div><div class="line">         Workers Planned: 2</div><div class="line">         Workers Launched: 2</div><div class="line">         Buffers: shared hit=1532 <span class="built_in">read</span>=64996</div><div class="line">         -&gt;  Partial Aggregate  (cost=154522.31..154522.32 rows=1 width=8) (actual time=764.665..764.665 rows=1 loops=3)</div><div class="line">               Output: PARTIAL count(1)</div><div class="line">               Buffers: shared hit=1376 <span class="built_in">read</span>=64996</div><div class="line">               Worker 0: actual time=763.246..763.246 rows=1 loops=1</div><div class="line">                 Buffers: shared hit=488 <span class="built_in">read</span>=23400</div><div class="line">               Worker 1: actual time=764.496..764.496 rows=1 loops=1</div><div class="line">                 Buffers: shared hit=514 <span class="built_in">read</span>=23576</div><div class="line">               -&gt;  Parallel Seq Scan on public.testcount  (cost=0.00..136892.25 rows=7052025 width=0) (actual time=0.025..370.283 rows=5000000 loops=3)</div><div class="line">                     Buffers: shared hit=1376 <span class="built_in">read</span>=64996</div><div class="line">                     Worker 0: actual time=0.018..350.004 rows=5398688 loops=1</div><div class="line">                       Buffers: shared hit=488 <span class="built_in">read</span>=23400</div><div class="line">                     Worker 1: actual time=0.020..372.743 rows=5444268 loops=1</div><div class="line">                       Buffers: shared hit=514 <span class="built_in">read</span>=23576</div><div class="line"> Planning time: 0.044 ms</div><div class="line"> Execution time: 767.434 ms</div><div class="line">(23 rows)</div><div class="line"></div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># SELECT count(1) from testcount ;</span></div><div class="line">  count   </div><div class="line">----------</div><div class="line"> 15000000</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 502.905 ms</div></pre></td></tr></table></figure>
+<h4 id="开启3个worker"><a href="#开启3个worker" class="headerlink" title="开启3个worker"></a>开启3个worker</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># set max_parallel_workers_per_gather = 3;</span></div><div class="line">SET</div><div class="line">Time: 0.177 ms</div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># EXPLAIN (analyze, verbose, buffers) select count(1) from testcount ;</span></div><div class="line">                                                                       QUERY PLAN                                                                       </div><div class="line">--------------------------------------------------------------------------------------------------------------------------------------------------------</div><div class="line"> Finalize Aggregate  (cost=135617.72..135617.73 rows=1 width=8) (actual time=757.778..757.778 rows=1 loops=1)</div><div class="line">   Output: count(1)</div><div class="line">   Buffers: shared hit=1802 <span class="built_in">read</span>=64804</div><div class="line">   -&gt;  Gather  (cost=135617.40..135617.71 rows=3 width=8) (actual time=757.021..757.775 rows=4 loops=1)</div><div class="line">         Output: (PARTIAL count(1))</div><div class="line">         Workers Planned: 3</div><div class="line">         Workers Launched: 3</div><div class="line">         Buffers: shared hit=1802 <span class="built_in">read</span>=64804</div><div class="line">         -&gt;  Partial Aggregate  (cost=134617.40..134617.41 rows=1 width=8) (actual time=753.981..753.981 rows=1 loops=4)</div><div class="line">               Output: PARTIAL count(1)</div><div class="line">               Buffers: shared hit=1568 <span class="built_in">read</span>=64804</div><div class="line">               Worker 0: actual time=749.686..749.686 rows=1 loops=1</div><div class="line">                 Buffers: shared hit=511 <span class="built_in">read</span>=11359</div><div class="line">               Worker 1: actual time=753.743..753.743 rows=1 loops=1</div><div class="line">                 Buffers: shared hit=481 <span class="built_in">read</span>=16752</div><div class="line">               Worker 2: actual time=755.592..755.592 rows=1 loops=1</div><div class="line">                 Buffers: shared hit=334 <span class="built_in">read</span>=20173</div><div class="line">               -&gt;  Parallel Seq Scan on public.testcount  (cost=0.00..120968.32 rows=5459632 width=0) (actual time=0.019..357.230 rows=3750000 loops=4)</div><div class="line">                     Buffers: shared hit=1568 <span class="built_in">read</span>=64804</div><div class="line">                     Worker 0: actual time=0.015..315.006 rows=2682548 loops=1</div><div class="line">                       Buffers: shared hit=511 <span class="built_in">read</span>=11359</div><div class="line">                     Worker 1: actual time=0.015..346.246 rows=3894658 loops=1</div><div class="line">                       Buffers: shared hit=481 <span class="built_in">read</span>=16752</div><div class="line">                     Worker 2: actual time=0.015..408.609 rows=4634582 loops=1</div><div class="line">                       Buffers: shared hit=334 <span class="built_in">read</span>=20173</div><div class="line"> Planning time: 0.033 ms</div><div class="line"> Execution time: 757.836 ms</div><div class="line">(27 rows)</div><div class="line"></div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># SELECT count(1) from testcount ;</span></div><div class="line">  count   </div><div class="line">----------</div><div class="line"> 15000000</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 514.604 ms</div></pre></td></tr></table></figure>
+<h4 id="开启4个worker"><a href="#开启4个worker" class="headerlink" title="开启4个worker"></a>开启4个worker</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># set max_parallel_workers_per_gather = 4;</span></div><div class="line">SET</div><div class="line">Time: 0.149 ms</div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># EXPLAIN (analyze, verbose, buffers) select count(1) from testcount ;</span></div><div class="line"></div><div class="line"></div><div class="line">                                                                       QUERY PLAN                                                                       </div><div class="line">--------------------------------------------------------------------------------------------------------------------------------------------------------</div><div class="line"> Finalize Aggregate  (cost=120262.61..120262.62 rows=1 width=8) (actual time=799.792..799.792 rows=1 loops=1)</div><div class="line">   Output: count(1)</div><div class="line">   Buffers: shared hit=2264 <span class="built_in">read</span>=64420</div><div class="line">   -&gt;  Gather  (cost=120262.19..120262.60 rows=4 width=8) (actual time=799.782..799.789 rows=5 loops=1)</div><div class="line">         Output: (PARTIAL count(1))</div><div class="line">         Workers Planned: 4</div><div class="line">         Workers Launched: 4</div><div class="line">         Buffers: shared hit=2264 <span class="built_in">read</span>=64420</div><div class="line">         -&gt;  Partial Aggregate  (cost=119262.19..119262.20 rows=1 width=8) (actual time=791.188..791.188 rows=1 loops=5)</div><div class="line">               Output: PARTIAL count(1)</div><div class="line">               Buffers: shared hit=1952 <span class="built_in">read</span>=64420</div><div class="line">               Worker 0: actual time=793.609..793.609 rows=1 loops=1</div><div class="line">                 Buffers: shared hit=93 <span class="built_in">read</span>=11941</div><div class="line">               Worker 1: actual time=783.423..783.423 rows=1 loops=1</div><div class="line">                 Buffers: shared hit=352 <span class="built_in">read</span>=12496</div><div class="line">               Worker 2: actual time=787.593..787.593 rows=1 loops=1</div><div class="line">                 Buffers: shared hit=612 <span class="built_in">read</span>=14750</div><div class="line">               Worker 3: actual time=791.640..791.640 rows=1 loops=1</div><div class="line">                 Buffers: shared hit=528 <span class="built_in">read</span>=14056</div><div class="line">               -&gt;  Parallel Seq Scan on public.testcount  (cost=0.00..108684.15 rows=4231215 width=0) (actual time=0.017..368.500 rows=3000000 loops=5)</div><div class="line">                     Buffers: shared hit=1952 <span class="built_in">read</span>=64420</div><div class="line">                     Worker 0: actual time=0.017..389.196 rows=2719684 loops=1</div><div class="line">                       Buffers: shared hit=93 <span class="built_in">read</span>=11941</div><div class="line">                     Worker 1: actual time=0.016..379.447 rows=2903648 loops=1</div><div class="line">                       Buffers: shared hit=352 <span class="built_in">read</span>=12496</div><div class="line">                     Worker 2: actual time=0.015..371.381 rows=3471812 loops=1</div><div class="line">                       Buffers: shared hit=612 <span class="built_in">read</span>=14750</div><div class="line">                     Worker 3: actual time=0.014..315.571 rows=3295912 loops=1</div><div class="line">                       Buffers: shared hit=528 <span class="built_in">read</span>=14056</div><div class="line"> Planning time: 0.030 ms</div><div class="line"> Execution time: 802.207 ms</div><div class="line">(31 rows)</div><div class="line"></div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># SELECT count(1) from testcount ;</span></div><div class="line">  count   </div><div class="line">----------</div><div class="line"> 15000000</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 513.976 ms</div></pre></td></tr></table></figure>
+<h2 id="与并行相关的参数"><a href="#与并行相关的参数" class="headerlink" title="与并行相关的参数"></a>与并行相关的参数</h2><p><a href="https://yq.aliyun.com/articles/59180" target="_blank" rel="external">德哥 阿里云栖社区 PostgreSQL 9.6 并行计算 优化器算法浅析</a></p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

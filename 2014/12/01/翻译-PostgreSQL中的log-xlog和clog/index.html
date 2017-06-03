@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>[翻译]PostgreSQL中的log, xlog和clog | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="postgresql,翻译,database," />
+  
+
+  <meta name="description" content="[翻译]PostgreSQL中的log, xlog和clog原文 译记：该文章开头还有一段内容就不翻译了。主要翻译这些log的主要内容。 pg_log$PGDATA/pg_log是数据库运行活动日志的默认保存目录，它包括错误信息，查询日志以及启动/关闭数据库的信息。当PostgreSQL启动失败时，这里应该是你第一个应该查看的信息。一些Linux发行版以及其他的软件包管理系统会将这个日志目录移到某">
+<meta name="keywords" content="postgresql,翻译,database">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[翻译]PostgreSQL中的log, xlog和clog">
+<meta property="og:url" content="https://emacsist.github.io/2014/12/01/翻译-PostgreSQL中的log-xlog和clog/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="[翻译]PostgreSQL中的log, xlog和clog原文 译记：该文章开头还有一段内容就不翻译了。主要翻译这些log的主要内容。 pg_log$PGDATA/pg_log是数据库运行活动日志的默认保存目录，它包括错误信息，查询日志以及启动/关闭数据库的信息。当PostgreSQL启动失败时，这里应该是你第一个应该查看的信息。一些Linux发行版以及其他的软件包管理系统会将这个日志目录移到某">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[翻译]PostgreSQL中的log, xlog和clog">
+<meta name="twitter:description" content="[翻译]PostgreSQL中的log, xlog和clog原文 译记：该文章开头还有一段内容就不翻译了。主要翻译这些log的主要内容。 pg_log$PGDATA/pg_log是数据库运行活动日志的默认保存目录，它包括错误信息，查询日志以及启动/关闭数据库的信息。当PostgreSQL启动失败时，这里应该是你第一个应该查看的信息。一些Linux发行版以及其他的软件包管理系统会将这个日志目录移到某">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#翻译-PostgreSQL中的log-xlog和clog"><span class="toc-text">[翻译]PostgreSQL中的log, xlog和clog</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pg-log"><span class="toc-text">pg_log</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pg-xlog"><span class="toc-text">pg_xlog</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pg-clog"><span class="toc-text">pg_clog</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-翻译-PostgreSQL中的log-xlog和clog" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            [翻译]PostgreSQL中的log, xlog和clog
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2014.12.01</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#翻译">
+        <span class="tag-name">翻译</span>
+    <span class="tag-size">( 23 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="翻译-PostgreSQL中的log-xlog和clog"><a href="#翻译-PostgreSQL中的log-xlog和clog" class="headerlink" title="[翻译]PostgreSQL中的log, xlog和clog"></a>[翻译]PostgreSQL中的log, xlog和clog</h2><p><a href="http://it.toolbox.com/blogs/database-soup/pg_log-pg_xlog-and-pg_clog-45611" target="_blank" rel="external">原文</a></p>
+<p>译记：该文章开头还有一段内容就不翻译了。主要翻译这些log的主要内容。</p>
+<h2 id="pg-log"><a href="#pg-log" class="headerlink" title="pg_log"></a>pg_log</h2><p><code>$PGDATA/pg_log</code>是数据库运行活动日志的默认保存目录，它包括错误信息，查询日志以及启动/关闭数据库的信息。当PostgreSQL启动失败时，这里应该是你第一个应该查看的信息。一些Linux发行版以及其他的软件包管理系统会将这个日志目录移到某些地方，比如：<code>/var/log/postgresql</code></p>
+<p>你可以在<code>pg_log</code>目录里自由地删除、重命名、压缩或者移动文件而不会有什么不好的结果，只要Postgres用户仍然有权限写该目录。如果<code>pg_log</code>随着许多大文件而膨胀，你可能需要在<code>postgresql.conf</code>里减小你想记录日志的事件。</p>
+<h2 id="pg-xlog"><a href="#pg-xlog" class="headerlink" title="pg_xlog"></a>pg_xlog</h2><p><code>$PGDATA/pg_xlog</code>是PostgreSQL的事务日志。 这是一些二进制日志文件的集合，文件名类似<code>00000001000000000000008E</code>，它包含最近事务的一些描述数据。这些日志也被用于二进制复制。如果复制、归档或者<code>PITR</code>失败了，当归档正在恢复时，这个目录保存的数据库日志可能会膨胀数GB。这可能会导致你用完你的磁盘空间。不像<code>pg_log</code>，你不能自由地删除、移动或者压缩这个目录的文件。你甚至不能在没有符号链接到该目录的情况下移动这个目录。删除<code>pg_xlog</code>的文件可能会导致不可恢复的数据库损坏。</p>
+<p>如果你发现自己处在这样的情况：你发现有100G大小的文件在<code>pg_xlog</code>目录并且数据也启动不了，并且你已经禁止<code>归档/复制</code>并且尝试清理磁盘空间等任何其他的方式，请做以下两个步骤：</p>
+<ol>
+<li><p>从<code>pg_xlog</code>目录里移动文件到一个备份磁盘或者共享网络驱动器中，也不要删除它们，并且 </p>
+</li>
+<li><p>移动一些最老的文件，直到足够允许PostgreSQL启动起来。 </p>
+</li>
+</ol>
+<h2 id="pg-clog"><a href="#pg-clog" class="headerlink" title="pg_clog"></a>pg_clog</h2><p><code>$PGDATA/pg_clog</code>包含了事务的元数据。这种日志用于告诉PostgreSQL哪个事务已经完成、哪个还没有完成。clog是比较小的并且没有任何理由会膨胀，所以，你应该没有任何理由去碰触它。在任何时候你都不应该从<code>pg_clog</code>里删除文件，如果你这样子做，还不如完全地删除整个数据库目录。缺少clog是不可恢复的。请注意，这意味着，如果你在<code>$PGDATA</code>目录里备份文件，你应该确定同时包含<code>pg_clog</code>和<code>pg_xlog</code>，否则你可能会发现你的备份是不可用的。</p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

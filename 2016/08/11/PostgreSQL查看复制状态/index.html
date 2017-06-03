@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>PostgreSQL查看复制状态 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="postgresql,databasse," />
+  
+
+  <meta name="description" content="查看复制状态在master上执行 1234567891011121314151617181920sky=# select * from pg_stat_replication;-[ RECORD 1 ]----+------------------------------pid              | 13321usesysid         | 17019usename">
+<meta name="keywords" content="postgresql,databasse">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PostgreSQL查看复制状态">
+<meta property="og:url" content="https://emacsist.github.io/2016/08/11/PostgreSQL查看复制状态/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="查看复制状态在master上执行 1234567891011121314151617181920sky=# select * from pg_stat_replication;-[ RECORD 1 ]----+------------------------------pid              | 13321usesysid         | 17019usename">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PostgreSQL查看复制状态">
+<meta name="twitter:description" content="查看复制状态在master上执行 1234567891011121314151617181920sky=# select * from pg_stat_replication;-[ RECORD 1 ]----+------------------------------pid              | 13321usesysid         | 17019usename">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#查看复制状态"><span class="toc-text">查看复制状态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查看延迟多少"><span class="toc-text">查看延迟多少</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查看是否处于recovery模式"><span class="toc-text">查看是否处于recovery模式</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-PostgreSQL查看复制状态" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            PostgreSQL查看复制状态
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2016.08.11</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#databasse">
+        <span class="tag-name">databasse</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="查看复制状态"><a href="#查看复制状态" class="headerlink" title="查看复制状态"></a>查看复制状态</h2><p>在<code>master</code>上执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># select * from pg_stat_replication;</span></div><div class="line">-[ RECORD 1 ]----+------------------------------</div><div class="line">pid              | 13321</div><div class="line">usesysid         | 17019</div><div class="line">usename          | replication</div><div class="line">application_name | walreceiver</div><div class="line">client_addr      | 10.0.0.81</div><div class="line">client_hostname  | </div><div class="line">client_port      | 42809</div><div class="line">backend_start    | 2016-08-11 10:57:35.856289+08</div><div class="line">backend_xmin     | </div><div class="line">state            | streaming</div><div class="line">sent_location    | 1/E0CE9750</div><div class="line">write_location   | 1/E0CE9750</div><div class="line">flush_location   | 1/E0CE9750</div><div class="line">replay_location  | 1/E0CE9750</div><div class="line">sync_priority    | 0</div><div class="line">sync_state       | async</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<p><code>pid</code>：　master的<code>sender</code>进程：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">╭─sky@sky-linux /ihome/db/postgresql  </div><div class="line">╰─➤  ps aux | grep 13321</div><div class="line">sky      13321  0.1  0.0 172320  2992 ?        Ss   10:57   0:03 postgres: wal sender process replication 10.0.0.81(42809) streaming 1/E0CE9750</div></pre></td></tr></table></figure>
+<hr>
+<p><code>usesysid</code>: 复制的用户ID(17019)<br><code>usename</code> : 用户名</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># select * from pg_user;</span></div><div class="line">-[ RECORD 1 ]+------------</div><div class="line">usename      | sky</div><div class="line">usesysid     | 10</div><div class="line">usecreatedb  | t</div><div class="line">usesuper     | t</div><div class="line">userepl      | t</div><div class="line">usebypassrls | t</div><div class="line">passwd       | ********</div><div class="line">valuntil     | </div><div class="line">useconfig    | </div><div class="line">-[ RECORD 2 ]+------------</div><div class="line">usename      | replication</div><div class="line">usesysid     | 17019</div><div class="line">usecreatedb  | f</div><div class="line">usesuper     | f</div><div class="line">userepl      | t</div><div class="line">usebypassrls | f</div><div class="line">passwd       | ********</div><div class="line">valuntil     | </div><div class="line">useconfig    |</div></pre></td></tr></table></figure>
+<hr>
+<p><code>client_addr</code>: slave的IP地址</p>
+<hr>
+<p><code>client_port</code>: slave的 <code>wal receiver process</code>的PID使用的端口</p>
+<hr>
+<p><code>backend_start</code>: 开始复制的时间</p>
+<hr>
+<p><code>state</code>: 同步状态.</p>
+<ul>
+<li>streaming : 同步</li>
+<li>startup : 连接中</li>
+<li>catchup: 同步中</li>
+</ul>
+<hr>
+<p><code>sent_location</code>:Master传送的WAL位置<br><code>write_location</code>:Slave接收WAL位置<br><code>flush_location</code>:Slave同步到磁盘的WAL位置<br><code>replay_location</code>:Slave同步到数据库的WAL位置</p>
+<hr>
+<p><code>sync_priority</code>:同步优先级.</p>
+<hr>
+<p><code>sync_state</code>: 同步模式.</p>
+<ul>
+<li>async : 异步</li>
+<li>sync : 同步</li>
+<li>potential: 虽然现在是异步,但有可能提升到同步.</li>
+</ul>
+<hr>
+<h2 id="查看延迟多少"><a href="#查看延迟多少" class="headerlink" title="查看延迟多少"></a>查看延迟多少</h2><p>在<code>master</code>上执行以下SQL可以查看滞后程度,以字节为单位.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># select pg_xlog_location_diff(sent_location, replay_location) from pg_stat_replication; </span></div><div class="line"> pg_xlog_location_diff </div><div class="line">-----------------------</div><div class="line">                     0</div><div class="line">(1 row)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<p>或者</p>
+<p>在<code>slave</code>上执行以下SQL可以查看滞后时间.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># SELECT CASE WHEN pg_last_xlog_receive_location() = pg_last_xlog_replay_location()</span></div><div class="line">    THEN 0</div><div class="line">    ELSE EXTRACT (EPOCH FROM now() - pg_last_xact_replay_timestamp())</div><div class="line">    END AS log_delay;</div><div class="line"> log_delay </div><div class="line">-----------</div><div class="line">         0</div><div class="line">(1 row)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<p>如果没输出就表示完全同步了.</p>
+<h2 id="查看是否处于recovery模式"><a href="#查看是否处于recovery模式" class="headerlink" title="查看是否处于recovery模式"></a>查看是否处于<code>recovery</code>模式</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment">#  select pg_is_in_recovery();</span></div><div class="line"> pg_is_in_recovery </div><div class="line">-------------------</div><div class="line"> t</div><div class="line">(1 row)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<p>如果处于复制模式的话, <code>select pg_last_xact_replay_timestamp();</code>和<code>select pg_last_xlog_replay_location();</code>会一直增加.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">select pg_last_xact_replay_timestamp();</div><div class="line"></div><div class="line">select pg_last_xlog_replay_location();</div></pre></td></tr></table></figure>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

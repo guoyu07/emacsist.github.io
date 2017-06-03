@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Emacs配置文件之prelude | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="emacs," />
+  
+
+  <meta name="description" content="Prelude 它是一个高度可配置的开箱即用的Emacs配置文件集合.   Github Prelude  开启里面的modules 默认情况下, 安装好 prelude 是没有开启它的模块功能的,要开启自己想要的模块, 可以按以下做:  123cd ~/.eamcs.d/cp sample/prelude-modules.el .emacs prelude-modules.el 然后按里面的模块">
+<meta name="keywords" content="emacs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Emacs配置文件之prelude">
+<meta property="og:url" content="https://emacsist.github.io/2015/07/03/Emacs配置文件之prelude/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="Prelude 它是一个高度可配置的开箱即用的Emacs配置文件集合.   Github Prelude  开启里面的modules 默认情况下, 安装好 prelude 是没有开启它的模块功能的,要开启自己想要的模块, 可以按以下做:  123cd ~/.eamcs.d/cp sample/prelude-modules.el .emacs prelude-modules.el 然后按里面的模块">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Emacs配置文件之prelude">
+<meta name="twitter:description" content="Prelude 它是一个高度可配置的开箱即用的Emacs配置文件集合.   Github Prelude  开启里面的modules 默认情况下, 安装好 prelude 是没有开启它的模块功能的,要开启自己想要的模块, 可以按以下做:  123cd ~/.eamcs.d/cp sample/prelude-modules.el .emacs prelude-modules.el 然后按里面的模块">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Prelude"><span class="toc-text">Prelude</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开启里面的modules"><span class="toc-text">开启里面的modules</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自定义自己的额外配置"><span class="toc-text">自定义自己的额外配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注意"><span class="toc-text">注意</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Emacs配置文件之prelude" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Emacs配置文件之prelude
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2015.07.03</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#emacs">
+        <span class="tag-name">emacs</span>
+    <span class="tag-size">( 13 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="Prelude"><a href="#Prelude" class="headerlink" title="Prelude"></a>Prelude</h2><blockquote>
+<p>它是一个高度可配置的开箱即用的Emacs配置文件集合.</p>
+</blockquote>
+<ul>
+<li><a href="https://github.com/bbatsov/prelude" target="_blank" rel="external">Github Prelude</a></li>
+</ul>
+<h2 id="开启里面的modules"><a href="#开启里面的modules" class="headerlink" title="开启里面的modules"></a>开启里面的modules</h2><blockquote>
+<p>默认情况下, 安装好 <code>prelude</code> 是没有开启它的模块功能的,要开启自己想要的模块, 可以按以下做:</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ~/.eamcs.d/</div><div class="line">cp sample/prelude-modules.el .</div><div class="line">emacs prelude-modules.el</div></pre></td></tr></table></figure>
+<p>然后按里面的模块, 根据自己的需要, 去开启或者关闭.</p>
+<h2 id="自定义自己的额外配置"><a href="#自定义自己的额外配置" class="headerlink" title="自定义自己的额外配置"></a>自定义自己的额外配置</h2><blockquote>
+<p>将自己的配置文件放到 <code>~/.emacs.d/personal/preload/</code> 目录下即可.</p>
+</blockquote>
+<p>例如, 我有一个配置文件 <code>~/.emacs.d/personal/preload/yang.el</code> , 这样子 <code>prelude</code> 就会自动加载这个配置文件了.</p>
+<p>我刚开始做 <code>prelude</code> , 我只是暂时添加了自己喜欢的主题, <code>yang.el</code> 的内容就只有以下一行:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(setq prelude-theme <span class="string">'solarized-dark)</span></div></pre></td></tr></table></figure>
+<blockquote>
+<p>注意, 默认情况下, <code>prelude</code> 并没有安装这个主题, 所以先要安装下这个主题先:</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">M-x package-install RET solarized-theme</div></pre></td></tr></table></figure>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>为了升级方便, 其他地方的文件自己不要随便添加或者修改, 最好按 <code>prelude</code> 的约定来做:</p>
+<ul>
+<li><p><code>~/.emacs.d/prelude-modules.el</code> : 这里开启或关闭自己需要的模块.</p>
+</li>
+<li><p><code>~/.emacs.d/personal/preload/</code> : 这个目录,存放自定义的配置文件.</p>
+</li>
+</ul>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

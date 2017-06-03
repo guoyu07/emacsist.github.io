@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Cookie 的 HttpOnly 和 Secure 属性作用 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="HTTP,Cookie," />
+  
+
+  <meta name="description" content="今天和总监、同事又讨论起关于Session共享的解决方案问题，讨论到因为Tomcat自带的Session机制在集群时难以做到真正的集群。因为使用Tomcat自带的Session机制，难以做到在集群中节点共享，一般是通过Nginx反向代理使用Hash、固定IP等解决方案，并不能避免单节点崩溃时不能继续提供服务的问题。虽然这种可以解决压力的问题，但是当一直为某IP或通过Hash来分配服务的某台服务器挂">
+<meta name="keywords" content="HTTP,Cookie">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cookie 的 HttpOnly 和 Secure 属性作用">
+<meta property="og:url" content="https://emacsist.github.io/2014/12/22/Cookie-的-HttpOnly-和-Secure-属性作用/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="今天和总监、同事又讨论起关于Session共享的解决方案问题，讨论到因为Tomcat自带的Session机制在集群时难以做到真正的集群。因为使用Tomcat自带的Session机制，难以做到在集群中节点共享，一般是通过Nginx反向代理使用Hash、固定IP等解决方案，并不能避免单节点崩溃时不能继续提供服务的问题。虽然这种可以解决压力的问题，但是当一直为某IP或通过Hash来分配服务的某台服务器挂">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cookie 的 HttpOnly 和 Secure 属性作用">
+<meta name="twitter:description" content="今天和总监、同事又讨论起关于Session共享的解决方案问题，讨论到因为Tomcat自带的Session机制在集群时难以做到真正的集群。因为使用Tomcat自带的Session机制，难以做到在集群中节点共享，一般是通过Nginx反向代理使用Hash、固定IP等解决方案，并不能避免单节点崩溃时不能继续提供服务的问题。虽然这种可以解决压力的问题，但是当一直为某IP或通过Hash来分配服务的某台服务器挂">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Secure"><span class="toc-text">Secure</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HttpOnly"><span class="toc-text">HttpOnly</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Cookie-的-HttpOnly-和-Secure-属性作用" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Cookie 的 HttpOnly 和 Secure 属性作用
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2014.12.22</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#Cookie">
+        <span class="tag-name">Cookie</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#HTTP">
+        <span class="tag-name">HTTP</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p>今天和总监、同事又讨论起关于Session共享的解决方案问题，讨论到因为Tomcat自带的Session机制在集群时难以做到真正的集群。因为使用Tomcat自带的Session机制，难以做到在集群中节点共享，一般是通过Nginx反向代理使用Hash、固定IP等解决方案，并不能避免单节点崩溃时不能继续提供服务的问题。虽然这种可以解决压力的问题，但是当一直为某IP或通过Hash来分配服务的某台服务器挂了，则它负责服务的客户就都访问不了了（Session失效，只能重新调度分配到其他服务器，这时要重新生成会话）。讨论到的可用的解决方案是Cookie + Redis，然后又讨论了Cookie的安全性问题。然后同事问了下<code>HttpOnly</code>这个在浏览器里打勾的作用，然后自己按以前了解到的资料来回答了一下，大概是说：不能通过Javascript来修改带有HttpOnly属性的Cookie，只能通过服务器来修改。但是看到总监却可以通过JS来修改带有HttpOnly属性的Cookie，这让我产生了怀疑自己的正确性。</p>
+<p>不过还好，事后向总监确认了一下，原来他是通过删除旧的带有HttpOnly属性的Cookie，然后才用JS添加一个同名同值没有HttpOnly属性来测试。所以，我之前说的大概是对的，但是不够系统，所以再次查了下资料来系统整理一下，与君分享。</p>
+<p>下面两个属性都属于Cookie安全方面考虑的。这要视浏览器或服务端有没有支持。</p>
+<h2 id="Secure"><a href="#Secure" class="headerlink" title="Secure"></a>Secure</h2><p>Cookie的<code>Secure</code>属性，意味着保持Cookie通信只限于加密传输，指示浏览器仅仅在通过<code>安全/加密</code>连接才能使用该Cookie。如果一个Web服务器从一个非安全连接里设置了一个带有<code>secure</code>属性的Cookie，当Cookie被发送到客户端时，它仍然能通过<code>中间人攻击</code>来拦截。</p>
+<h2 id="HttpOnly"><a href="#HttpOnly" class="headerlink" title="HttpOnly"></a>HttpOnly</h2><p>Cookie的<code>HttpOnly</code>属性，指示浏览器不要在除HTTP（和 HTTPS)请求之外暴露Cookie。一个有<code>HttpOnly</code>属性的Cookie，不能通过非HTTP方式来访问，例如通过调用JavaScript(例如，引用 <code>document.cookie</code>），因此，不可能通过跨域脚本（一种非常普通的攻击技术）来偷走这种Cookie。尤其是Facebook 和 Google 正在广泛地使用<code>HttpOnly</code>属性。</p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

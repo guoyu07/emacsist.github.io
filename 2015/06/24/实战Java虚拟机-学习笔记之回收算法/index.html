@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>&lt;实战Java虚拟机&gt;学习笔记之回收算法 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="java,jvm," />
+  
+
+  <meta name="description" content="引用计数法 问题1: 无法处理循环引用的情况  问题2: 都要伴随着加减引用计数操作,对性能有一定的影响   名词解释可达对象 通过根对象进行引用搜索, 最终可以达到的对象  不可达对象 通过根对象进行引用搜索,最终没有被引用到的对象  新生代 存放年轻对象的堆空间.年轻对象指刚刚创建的, 或者经历垃圾回收次数不多的对象.  老年代 存放老年对象的堆空间.老年对象指经历多次垃圾回收依然存活的对象.">
+<meta name="keywords" content="java,jvm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="<实战Java虚拟机>学习笔记之回收算法">
+<meta property="og:url" content="https://emacsist.github.io/2015/06/24/实战Java虚拟机-学习笔记之回收算法/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="引用计数法 问题1: 无法处理循环引用的情况  问题2: 都要伴随着加减引用计数操作,对性能有一定的影响   名词解释可达对象 通过根对象进行引用搜索, 最终可以达到的对象  不可达对象 通过根对象进行引用搜索,最终没有被引用到的对象  新生代 存放年轻对象的堆空间.年轻对象指刚刚创建的, 或者经历垃圾回收次数不多的对象.  老年代 存放老年对象的堆空间.老年对象指经历多次垃圾回收依然存活的对象.">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="<实战Java虚拟机>学习笔记之回收算法">
+<meta name="twitter:description" content="引用计数法 问题1: 无法处理循环引用的情况  问题2: 都要伴随着加减引用计数操作,对性能有一定的影响   名词解释可达对象 通过根对象进行引用搜索, 最终可以达到的对象  不可达对象 通过根对象进行引用搜索,最终没有被引用到的对象  新生代 存放年轻对象的堆空间.年轻对象指刚刚创建的, 或者经历垃圾回收次数不多的对象.  老年代 存放老年对象的堆空间.老年对象指经历多次垃圾回收依然存活的对象.">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引用计数法"><span class="toc-text">引用计数法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#名词解释"><span class="toc-text">名词解释</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#可达对象"><span class="toc-text">可达对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#不可达对象"><span class="toc-text">不可达对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#新生代"><span class="toc-text">新生代</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#老年代"><span class="toc-text">老年代</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#标记清除-Mark-Sweep"><span class="toc-text">标记清除(Mark-Sweep)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#复制算法"><span class="toc-text">复制算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#标记压缩算法-Mark-Compact"><span class="toc-text">标记压缩算法(Mark-Compact)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分代算法"><span class="toc-text">分代算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分区算法"><span class="toc-text">分区算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#引用类型"><span class="toc-text">引用类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#强引用"><span class="toc-text">强引用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#软引用"><span class="toc-text">软引用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#弱引用"><span class="toc-text">弱引用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#虚引用"><span class="toc-text">虚引用</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-实战Java虚拟机-学习笔记之回收算法" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            &lt;实战Java虚拟机&gt;学习笔记之回收算法
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2015.06.24</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#jvm">
+        <span class="tag-name">jvm</span>
+    <span class="tag-size">( 11 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="引用计数法"><a href="#引用计数法" class="headerlink" title="引用计数法"></a>引用计数法</h2><ul>
+<li><p>问题1: 无法处理循环引用的情况</p>
+</li>
+<li><p>问题2: 都要伴随着加减引用计数操作,对性能有一定的影响</p>
+</li>
+</ul>
+<h2 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h2><h3 id="可达对象"><a href="#可达对象" class="headerlink" title="可达对象"></a>可达对象</h3><blockquote>
+<p>通过根对象进行引用搜索, 最终可以达到的对象</p>
+</blockquote>
+<h3 id="不可达对象"><a href="#不可达对象" class="headerlink" title="不可达对象"></a>不可达对象</h3><blockquote>
+<p>通过根对象进行引用搜索,最终没有被引用到的对象</p>
+</blockquote>
+<h3 id="新生代"><a href="#新生代" class="headerlink" title="新生代"></a>新生代</h3><blockquote>
+<p>存放年轻对象的堆空间.年轻对象指刚刚创建的, 或者经历垃圾回收次数不多的对象.</p>
+</blockquote>
+<h3 id="老年代"><a href="#老年代" class="headerlink" title="老年代"></a>老年代</h3><blockquote>
+<p>存放老年对象的堆空间.老年对象指经历多次垃圾回收依然存活的对象.</p>
+</blockquote>
+<h2 id="标记清除-Mark-Sweep"><a href="#标记清除-Mark-Sweep" class="headerlink" title="标记清除(Mark-Sweep)"></a>标记清除(Mark-Sweep)</h2><ul>
+<li><p>第一阶段: 首先通过根节点, 标记所有从根节点开始的可达对象.因此未被标记的对象就是未被引用的垃圾对象.</p>
+</li>
+<li><p>第二阶段: 清除所有未被标记的对象.</p>
+</li>
+</ul>
+<p>最大的问题: 空间碎片.</p>
+<h2 id="复制算法"><a href="#复制算法" class="headerlink" title="复制算法"></a>复制算法</h2><blockquote>
+<p>将原有的内存空间分成两块, 每次只使用其中一块, 在垃圾回收时, 将正在使用的内存中的存活对象复制到未使用的内存块中,之后清除正在使用的内存块中的所有对象, 交换两个内存的角色, 完成垃圾回收.</p>
+</blockquote>
+<p>最大问题: 可用内存减半.</p>
+<p>在Java新生代串行垃圾回收器中,使用了复制算法的思想.如其中的 <code>from</code> 和 <code>to</code> 空间.</p>
+<h2 id="标记压缩算法-Mark-Compact"><a href="#标记压缩算法-Mark-Compact" class="headerlink" title="标记压缩算法(Mark-Compact)"></a>标记压缩算法(Mark-Compact)</h2><p>老年代的一种垃圾回收算法.</p>
+<ul>
+<li><p>第一阶段: 标记</p>
+</li>
+<li><p>第二阶段: 压缩</p>
+</li>
+<li><p>第三阶段: 清理</p>
+</li>
+</ul>
+<blockquote>
+<p>最终效果等同于<code>标记清除算法</code>执行完成后, 再进行一次内存碎片整理.</p>
+</blockquote>
+<h2 id="分代算法"><a href="#分代算法" class="headerlink" title="分代算法"></a>分代算法</h2><ul>
+<li><p>新生代: 复制算法</p>
+</li>
+<li><p>老年代: 标记压缩算法 或 标记清除算法</p>
+</li>
+</ul>
+<h2 id="分区算法"><a href="#分区算法" class="headerlink" title="分区算法"></a>分区算法</h2><h2 id="引用类型"><a href="#引用类型" class="headerlink" title="引用类型"></a>引用类型</h2><h3 id="强引用"><a href="#强引用" class="headerlink" title="强引用"></a>强引用</h3><ul>
+<li><p>强引用可以直接访问目标对象</p>
+</li>
+<li><p>强引用所指向的对象在任何时候都不会被系统回收,虚拟机宁愿抛出OOM异常,也不会回收强引用所指向对象</p>
+</li>
+<li><p>强引用可能导致内存泄漏</p>
+</li>
+</ul>
+<blockquote>
+<p>例如: Object o = new Ojbect(), o 就是强引用.</p>
+</blockquote>
+<h3 id="软引用"><a href="#软引用" class="headerlink" title="软引用"></a>软引用</h3><ul>
+<li>一个对象只持有软引用, 那么当堆空间不足时, 就会被回收. 软引用使用<code>java.lang.ref.SoftReference</code>类实现.</li>
+</ul>
+<h3 id="弱引用"><a href="#弱引用" class="headerlink" title="弱引用"></a>弱引用</h3><ul>
+<li>GC时,只要发现弱引用,就会回收.使用<code>java.lang.ref.WeakFeference</code></li>
+</ul>
+<blockquote>
+<p>软引用 和 弱引用 都非常适合来保存那些可有可无的缓存数据.</p>
+</blockquote>
+<h3 id="虚引用"><a href="#虚引用" class="headerlink" title="虚引用"></a>虚引用</h3><ul>
+<li>和没有引用几乎一样.试图get()时,总是会失败. 并且必须要和队列一起使用, 它的作用在于跟踪垃圾回收过程.</li>
+</ul>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

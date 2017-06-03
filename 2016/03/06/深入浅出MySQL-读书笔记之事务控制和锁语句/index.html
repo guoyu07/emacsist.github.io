@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>&lt;深入浅出MySQL&gt;读书笔记之事务控制和锁语句 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="database,mysql," />
+  
+
+  <meta name="description" content="MySQL支持对MyISAM和MEMORY存储引擎的表进行表级锁定，对BDB存储引擎的表进行页级锁定，对InnoDB存储引擎的表进行行级锁定。  锁表LOCK TABLES: 可以锁定用于当前线的表。如果表被其他线程锁定，则当前线程会等待，直到可以获取所有锁定为止. UNLOCK TABLES: 可以释放当前线程获得的任何锁定。当前线程执行另一个 LOCK TABLES时，或当与服务器的连接被关">
+<meta name="keywords" content="database,mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="<深入浅出MySQL>读书笔记之事务控制和锁语句">
+<meta property="og:url" content="https://emacsist.github.io/2016/03/06/深入浅出MySQL-读书笔记之事务控制和锁语句/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="MySQL支持对MyISAM和MEMORY存储引擎的表进行表级锁定，对BDB存储引擎的表进行页级锁定，对InnoDB存储引擎的表进行行级锁定。  锁表LOCK TABLES: 可以锁定用于当前线的表。如果表被其他线程锁定，则当前线程会等待，直到可以获取所有锁定为止. UNLOCK TABLES: 可以释放当前线程获得的任何锁定。当前线程执行另一个 LOCK TABLES时，或当与服务器的连接被关">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="<深入浅出MySQL>读书笔记之事务控制和锁语句">
+<meta name="twitter:description" content="MySQL支持对MyISAM和MEMORY存储引擎的表进行表级锁定，对BDB存储引擎的表进行页级锁定，对InnoDB存储引擎的表进行行级锁定。  锁表LOCK TABLES: 可以锁定用于当前线的表。如果表被其他线程锁定，则当前线程会等待，直到可以获取所有锁定为止. UNLOCK TABLES: 可以释放当前线程获得的任何锁定。当前线程执行另一个 LOCK TABLES时，或当与服务器的连接被关">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#锁表"><span class="toc-text">锁表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#事务控制"><span class="toc-text">事务控制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分布式事务-XA"><span class="toc-text">分布式事务 XA</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-深入浅出MySQL-读书笔记之事务控制和锁语句" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            &lt;深入浅出MySQL&gt;读书笔记之事务控制和锁语句
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2016.03.06</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <blockquote>
+<p>MySQL支持对MyISAM和MEMORY存储引擎的表进行表级锁定，对BDB存储引擎的表进行页级锁定，对InnoDB存储引擎的表进行行级锁定。</p>
+</blockquote>
+<h2 id="锁表"><a href="#锁表" class="headerlink" title="锁表"></a>锁表</h2><p><code>LOCK TABLES</code>: 可以锁定用于当前线的表。如果表被其他线程锁定，则当前线程会等待，直到可以获取所有锁定为止.</p>
+<p><code>UNLOCK TABLES</code>: 可以释放当前线程获得的任何锁定。当前线程执行另一个 LOCK TABLES时，或当与服务器的连接被关闭时，所有由当前线程锁定的表被隐含地解锁.</p>
+<p><strong>语法</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">mysql&gt; ? lock</div><div class="line">Name: <span class="string">'LOCK'</span></div><div class="line">Description:</div><div class="line">Syntax:</div><div class="line">LOCK TABLES</div><div class="line">    tbl_name [[AS] <span class="built_in">alias</span>] lock_type</div><div class="line">    [, tbl_name [[AS] <span class="built_in">alias</span>] lock_type] ...</div><div class="line"></div><div class="line">lock_type:</div><div class="line">    READ [LOCAL]</div><div class="line">  | [LOW_PRIORITY] WRITE</div><div class="line"></div><div class="line">UNLOCK TABLES</div></pre></td></tr></table></figure>
+<h2 id="事务控制"><a href="#事务控制" class="headerlink" title="事务控制"></a>事务控制</h2><p>默认情况下, MySQL是自动提交事务的.</p>
+<p>更详细的帮助, 可以查看:</p>
+<p><code>mysql&gt; ? start transaction</code></p>
+<ul>
+<li><p>开启事务: <code>start transaction</code> 或 <code>begin</code></p>
+</li>
+<li><p>提交或回滚: <code>commit</code>, <code>rollback</code></p>
+</li>
+<li><p><code>commit and chain</code>: 立即启动一个新的事务, 并且和刚才的那个事务具有相同的隔离级别.</p>
+</li>
+<li><p><code>release</code>: 断开和客户端的连接.</p>
+</li>
+<li><p>如果定义了相同名字的 <code>SAVEPOINT</code>，则后面定义的SAVEPOINT 会覆盖之前的定义。</p>
+</li>
+</ul>
+<h2 id="分布式事务-XA"><a href="#分布式事务-XA" class="headerlink" title="分布式事务 XA"></a>分布式事务 XA</h2><p>查看具体的帮助:<code>mysql&gt; ? xa</code></p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Golang 归并排序MergeSort | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="golang,go," />
+  
+
+  <meta name="description" content="思路将一排数据，进行左右不断地进行划分（递[归]），然后再对比左右两边的数据后再(合[并])，这就是”归并排序“。  注意：[左右]对比，是指左的第一个元素，与右边的第一个元素进行对比，哪个小，就先放到结果的第一位，然后左或右取出了元素的那边的索引进行++，没有取出的元素的，则不用进行++。比较完后，还要分别将左，右的剩余的元素，追加到结果列的后面。  归并排序(MergeSort)1234567">
+<meta name="keywords" content="golang,go">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Golang 归并排序MergeSort">
+<meta property="og:url" content="https://emacsist.github.io/2016/11/22/Golang 归并排序MergeSort/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="思路将一排数据，进行左右不断地进行划分（递[归]），然后再对比左右两边的数据后再(合[并])，这就是”归并排序“。  注意：[左右]对比，是指左的第一个元素，与右边的第一个元素进行对比，哪个小，就先放到结果的第一位，然后左或右取出了元素的那边的索引进行++，没有取出的元素的，则不用进行++。比较完后，还要分别将左，右的剩余的元素，追加到结果列的后面。  归并排序(MergeSort)1234567">
+<meta property="og:updated_time" content="2016-11-22T14:06:06.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Golang 归并排序MergeSort">
+<meta name="twitter:description" content="思路将一排数据，进行左右不断地进行划分（递[归]），然后再对比左右两边的数据后再(合[并])，这就是”归并排序“。  注意：[左右]对比，是指左的第一个元素，与右边的第一个元素进行对比，哪个小，就先放到结果的第一位，然后左或右取出了元素的那边的索引进行++，没有取出的元素的，则不用进行++。比较完后，还要分别将左，右的剩余的元素，追加到结果列的后面。  归并排序(MergeSort)1234567">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#思路"><span class="toc-text">思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#归并排序-MergeSort"><span class="toc-text">归并排序(MergeSort)</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Golang 归并排序MergeSort" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Golang 归并排序MergeSort
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2016.11.22</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#go">
+        <span class="tag-name">go</span>
+    <span class="tag-size">( 15 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#golang">
+        <span class="tag-name">golang</span>
+    <span class="tag-size">( 17 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>将一排数据，进行左右不断地进行划分（递[归]），然后再对比左右两边的数据后再(合[并])，这就是”归并排序“。</p>
+<blockquote>
+<p>注意：[左右]对比，是指左的第一个元素，与右边的第一个元素进行对比，哪个小，就先放到结果的第一位，然后左或右取出了元素的那边的索引进行++，没有取出的元素的，则不用进行++。<br>比较完后，还要分别将左，右的剩余的元素，追加到结果列的后面。</p>
+</blockquote>
+<h2 id="归并排序-MergeSort"><a href="#归并排序-MergeSort" class="headerlink" title="归并排序(MergeSort)"></a>归并排序(MergeSort)</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line">package main</div><div class="line"></div><div class="line">import <span class="string">"fmt"</span></div><div class="line"></div><div class="line">import <span class="string">"time"</span></div><div class="line">import number <span class="string">"github.com/emacsist/go-common/helper/number"</span></div><div class="line"></div><div class="line">func <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">	data := number.GenerateInt(100000, 100000)</div><div class="line">	start := makeTimestamp()</div><div class="line">	// fmt.Printf(<span class="string">"%v\n"</span>, data)</div><div class="line">	data = mergeSort(data)</div><div class="line">	fmt.Printf(<span class="string">"cost %v ms \n"</span>, makeTimestamp()-start)</div><div class="line">	// fmt.Printf(<span class="string">"%v\n"</span>, data)</div><div class="line">&#125;</div><div class="line"></div><div class="line">//------------------------------------------------------------------------------</div><div class="line"></div><div class="line">func makeTimestamp() int64 &#123;</div><div class="line">	<span class="built_in">return</span> time.Now().UnixNano() / int64(time.Millisecond)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func mergeSort(data []int) []int &#123;</div><div class="line">	<span class="keyword">if</span> len(data) &lt;= 1 &#123;</div><div class="line">		<span class="built_in">return</span> data</div><div class="line">	&#125;</div><div class="line">	//递[归]</div><div class="line">	middle := len(data) / 2</div><div class="line">	//不断地进行左右对半划分</div><div class="line">	left := mergeSort(data[:middle])</div><div class="line">	right := mergeSort(data[middle:])</div><div class="line">	//合[并]</div><div class="line">	<span class="built_in">return</span> merge(left, right)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func merge(left, right []int) (result []int) &#123;</div><div class="line">	l, r := 0, 0</div><div class="line"></div><div class="line">    // 注意：[左右]对比，是指左的第一个元素，与右边的第一个元素进行对比，哪个小，就先放到结果的第一位，然后左或右取出了元素的那边的索引进行++</div><div class="line">	<span class="keyword">for</span> l &lt; len(left) &amp;&amp; r &lt; len(right) &#123;</div><div class="line">        //从小到大排序.</div><div class="line">		<span class="keyword">if</span> left[l] &gt; right[r] &#123;</div><div class="line">			result = append(result, right[r])</div><div class="line">            //因为处理了右边的第r个元素，所以r的指针要向前移动一个单位</div><div class="line">			r++</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			result = append(result, left[l])</div><div class="line">            //因为处理了左边的第r个元素，所以r的指针要向前移动一个单位</div><div class="line">			l++</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">    // 比较完后，还要分别将左，右的剩余的元素，追加到结果列的后面(不然就漏咯）。</div><div class="line">	result = append(result, left[l:]...)</div><div class="line">	result = append(result, right[r:]...)</div><div class="line">	<span class="built_in">return</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

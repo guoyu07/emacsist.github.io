@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>&lt;深入浅出MySQL&gt;读书笔记之字符集处理 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="mysql," />
+  
+
+  <meta name="description" content="字符集 查看支持的字符集: show character set;  查看校对规则: show collation;, show collation like &amp;#39;xxx&amp;#39;, select * from infomation_schema.collations\G    _ci: 大小写不敏感, _cs: 大小写敏感, _bin:二进制比较.   查看当前服务器的字符集: show">
+<meta name="keywords" content="mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="<深入浅出MySQL>读书笔记之字符集处理">
+<meta property="og:url" content="https://emacsist.github.io/2016/03/06/深入浅出MySQL-读书笔记之字符集处理/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="字符集 查看支持的字符集: show character set;  查看校对规则: show collation;, show collation like &amp;#39;xxx&amp;#39;, select * from infomation_schema.collations\G    _ci: 大小写不敏感, _cs: 大小写敏感, _bin:二进制比较.   查看当前服务器的字符集: show">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="<深入浅出MySQL>读书笔记之字符集处理">
+<meta name="twitter:description" content="字符集 查看支持的字符集: show character set;  查看校对规则: show collation;, show collation like &amp;#39;xxx&amp;#39;, select * from infomation_schema.collations\G    _ci: 大小写不敏感, _cs: 大小写敏感, _bin:二进制比较.   查看当前服务器的字符集: show">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#字符集"><span class="toc-text">字符集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#参数说明"><span class="toc-text">参数说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设置my-conf"><span class="toc-text">设置my.conf</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#修改字符集"><span class="toc-text">修改字符集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#修改数据库默认的字符集"><span class="toc-text">修改数据库默认的字符集</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-深入浅出MySQL-读书笔记之字符集处理" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            &lt;深入浅出MySQL&gt;读书笔记之字符集处理
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2016.03.06</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="字符集"><a href="#字符集" class="headerlink" title="字符集"></a>字符集</h2><ul>
+<li><p>查看支持的字符集: <code>show character set;</code></p>
+</li>
+<li><p>查看校对规则: <code>show collation;</code>, <code>show collation like &#39;xxx&#39;</code>, <code>select * from infomation_schema.collations\G</code></p>
+</li>
+</ul>
+<blockquote>
+<p><code>_ci</code>: 大小写不敏感, <code>_cs</code>: 大小写敏感, <code>_bin</code>:二进制比较.</p>
+</blockquote>
+<ul>
+<li><p>查看当前服务器的字符集: <code>show variables like &#39;%character%&#39;;</code></p>
+</li>
+<li><p>查看当前服务器的校对规则: <code>show variables like &#39;%collation%&#39;</code></p>
+</li>
+<li><p>查看某表的字符集和校对规则: <code>show create table tbname\G</code></p>
+</li>
+</ul>
+<h3 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明"></a>参数说明</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">+--------------------------+------------------------------------------------------+</div><div class="line">| Variable_name            | Value                                                |</div><div class="line">+--------------------------+------------------------------------------------------+</div><div class="line">| character_set_client     | utf8                                                 |</div><div class="line">| character_set_connection | utf8                                                 |</div><div class="line">| character_set_database   | utf8                                                 |</div><div class="line">| character_set_filesystem | binary                                               |</div><div class="line">| character_set_results    | utf8                                                 |</div><div class="line">| character_set_server     | utf8                                                 |</div><div class="line">| character_set_system     | utf8                                                 |</div><div class="line">| character_sets_dir       | /usr/<span class="built_in">local</span>/Cellar/mysql/5.7.10/share/mysql/charsets/ |</div><div class="line">+--------------------------+------------------------------------------------------+</div><div class="line">8 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.02 sec)</div></pre></td></tr></table></figure>
+<ul>
+<li><code>character_set_client</code>: 客户端字符集</li>
+<li><code>character_set_connection</code>: 连接字符集</li>
+<li><code>character_set_results</code>: 返回结果的字符集</li>
+</ul>
+<h3 id="设置my-conf"><a href="#设置my-conf" class="headerlink" title="设置my.conf"></a>设置<code>my.conf</code></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[mysql]</div><div class="line">default-character-set=utf8</div><div class="line"></div><div class="line">[mysqld]</div><div class="line">default-charatcer-set=utf8</div></pre></td></tr></table></figure>
+<h2 id="修改字符集"><a href="#修改字符集" class="headerlink" title="修改字符集"></a>修改字符集</h2><h3 id="修改数据库默认的字符集"><a href="#修改数据库默认的字符集" class="headerlink" title="修改数据库默认的字符集"></a>修改数据库默认的字符集</h3><p><code>alter database test CHARACTER set &#39;gbk&#39;;</code>: 这个不能对已有的数据进行修改, 而是对新的数据效.</p>
+<p><code>alter table tbname character set &#39;gbk&#39;</code>: 这个也不能修改已有数据的字符, 只是对新插入的数据生效.<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show create table t_p;</div><div class="line">+-------+------------------------------------------------------------------------------------------------------------------------+</div><div class="line">| Table | Create Table                                                                                                           |</div><div class="line">+-------+------------------------------------------------------------------------------------------------------------------------+</div><div class="line">| t_p   | CREATE TABLE `t_p` (</div><div class="line">  `id` int(11) NOT NULL AUTO_INCREMENT,</div><div class="line">  PRIMARY KEY (`id`)</div><div class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8 |</div><div class="line">+-------+------------------------------------------------------------------------------------------------------------------------+</div><div class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; alter table t_p character <span class="built_in">set</span> <span class="string">'gbk'</span>;</div><div class="line">Query OK, 0 rows affected (0.07 sec)</div><div class="line">Records: 0  Duplicates: 0  Warnings: 0</div><div class="line"></div><div class="line">mysql&gt; show create table t_p;</div><div class="line">+-------+-----------------------------------------------------------------------------------------------------------------------+</div><div class="line">| Table | Create Table                                                                                                          |</div><div class="line">+-------+-----------------------------------------------------------------------------------------------------------------------+</div><div class="line">| t_p   | CREATE TABLE `t_p` (</div><div class="line">  `id` int(11) NOT NULL AUTO_INCREMENT,</div><div class="line">  PRIMARY KEY (`id`)</div><div class="line">) ENGINE=InnoDB DEFAULT CHARSET=gbk |</div><div class="line">+-------+-----------------------------------------------------------------------------------------------------------------------+</div><div class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div></pre></td></tr></table></figure></p>
+<p>如果需要对已有数据进行调整, 需要先将数据导出, 然后按新的字符集再进行导入才行.</p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

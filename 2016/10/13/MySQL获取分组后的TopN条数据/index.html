@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>MySQL获取分组后的TopN条数据 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="database,mysql," />
+  
+
+  <meta name="description" content="表结构123456789101112131415161718192021222324252627282930313233mysql&amp;gt; desc dce_his_cs_m_jyhqsj;+---------+---------------+------+-----+---------+----------------+| Field   | Type          | Null | Key">
+<meta name="keywords" content="database,mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL获取分组后的TopN条数据">
+<meta property="og:url" content="https://emacsist.github.io/2016/10/13/MySQL获取分组后的TopN条数据/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="表结构123456789101112131415161718192021222324252627282930313233mysql&amp;gt; desc dce_his_cs_m_jyhqsj;+---------+---------------+------+-----+---------+----------------+| Field   | Type          | Null | Key">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL获取分组后的TopN条数据">
+<meta name="twitter:description" content="表结构123456789101112131415161718192021222324252627282930313233mysql&amp;gt; desc dce_his_cs_m_jyhqsj;+---------+---------------+------+-----+---------+----------------+| Field   | Type          | Null | Key">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#表结构"><span class="toc-text">表结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL"><span class="toc-text">SQL</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-MySQL获取分组后的TopN条数据" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            MySQL获取分组后的TopN条数据
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2016.10.13</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="表结构"><a href="#表结构" class="headerlink" title="表结构"></a>表结构</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">mysql&gt; desc dce_his_cs_m_jyhqsj;</div><div class="line">+---------+---------------+------+-----+---------+----------------+</div><div class="line">| Field   | Type          | Null | Key | Default | Extra          |</div><div class="line">+---------+---------------+------+-----+---------+----------------+</div><div class="line">| QSJDATE | varchar(20)   | YES  |     | NULL    |                |</div><div class="line">| QSJDDDD | varchar(8)    | NO   | PRI | NULL    |                |</div><div class="line">| QSJMMMM | varchar(4)    | NO   | PRI | NULL    |                |</div><div class="line">| QSJHYBH | varchar(10)   | NO   | PRI | NULL    |                |</div><div class="line">| QSJKHBH | varchar(10)   | NO   | PRI | NULL    |                |</div><div class="line">| QSJKPJG | decimal(10,2) | YES  |     | NULL    |                |</div><div class="line">| QSJKPTM | decimal(20,0) | YES  |     | NULL    |                |</div><div class="line">| QSJZGJG | decimal(10,2) | YES  |     | NULL    |                |</div><div class="line">| QSJZDJG | decimal(10,2) | YES  |     | NULL    |                |</div><div class="line">| QSJSPJG | decimal(10,2) | YES  |     | NULL    |                |</div><div class="line">| QSJSPTM | varchar(20)   | YES  |     | NULL    |                |</div><div class="line">| QSJCJSL | decimal(10,0) | YES  |     | NULL    |                |</div><div class="line">| QSJSKCL | decimal(10,0) | YES  |     | NULL    |                |</div><div class="line">| QSJSPCL | decimal(10,0) | YES  |     | NULL    |                |</div><div class="line">| QSJBKCL | decimal(10,0) | YES  |     | NULL    |                |</div><div class="line">| QSJBPCL | decimal(10,0) | YES  |     | NULL    |                |</div><div class="line">| QSJSCCL | decimal(10,0) | YES  |     | NULL    |                |</div><div class="line">| QSJBCCL | decimal(10,0) | YES  |     | NULL    |                |</div><div class="line">| QSJZCCL | decimal(10,0) | YES  |     | NULL    |                |</div><div class="line">| QSJSWTL | decimal(10,0) | YES  |     | NULL    |                |</div><div class="line">| QSJBWTL | decimal(10,0) | YES  |     | NULL    |                |</div><div class="line">| QSJZWTL | decimal(10,0) | YES  |     | NULL    |                |</div><div class="line">| QSJAMPL | decimal(10,2) | YES  |     | NULL    |                |</div><div class="line">| QSJZDFD | decimal(10,2) | YES  |     | NULL    |                |</div><div class="line">| id      | int(11)       | NO   | UNI | NULL    | auto_increment |</div><div class="line">+---------+---------------+------+-----+---------+----------------+</div><div class="line">25 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
+<h2 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">SET SESSION group_concat_max_len = 1000000;</div><div class="line"></div><div class="line">mysql&gt; select id, QSJDDDD, QSJMMMM, QSJCJSL  from dce_his_cs_m_jyhqsj <span class="built_in">where</span> FIND_IN_SET(id,  (SELECT group_concat(id) as id  from (select substring_index(group_concat(id order by id desc SEPARATOR <span class="string">','</span>),<span class="string">","</span>,5) as id from dce_his_cs_m_jyhqsj GROUP BY QSJDDDD, qsjmmmm) as b)) order by QSJDDDD, QSJMMMM, QSJCJSL;</div><div class="line"></div><div class="line"></div><div class="line">mysql&gt; select id, QSJDDDD, QSJMMMM, QSJCJSL  from dce_his_cs_m_jyhqsj <span class="built_in">where</span> FIND_IN_SET(id,  (SELECT group_concat(id) as id  from (select substring_index(group_concat(id order by id desc SEPARATOR <span class="string">','</span>),<span class="string">","</span>,5) as id from dce_his_cs_m_jyhqsj GROUP BY QSJDDDD, qsjmmmm) as b)) order by QSJDDDD, QSJMMMM, QSJCJSL;</div><div class="line">+-------+----------+---------+---------+</div><div class="line">| id    | QSJDDDD  | QSJMMMM | QSJCJSL |</div><div class="line">+-------+----------+---------+---------+</div><div class="line">|  2577 | 20160909 | 1401    |      14 |</div><div class="line">| 10862 | 20160909 | 1401    |      28 |</div><div class="line">| 10702 | 20160909 | 1402    |      21 |</div><div class="line">| 11142 | 20160909 | 1402    |      35 |</div><div class="line">| 11802 | 20160909 | 1402    |      57 |</div><div class="line">| 10070 | 20160909 | 1402    |      98 |</div><div class="line">|  9238 | 20160909 | 1402    |     120 |</div><div class="line">| 11394 | 20160909 | 1403    |       5 |</div><div class="line">| 10863 | 20160909 | 1403    |      11 |</div><div class="line">| 11803 | 20160909 | 1403    |      14 |</div><div class="line">| 11618 | 20160909 | 1403    |      56 |</div><div class="line">| 12651 | 20160909 | 1403    |      95 |</div><div class="line">| 11395 | 20160909 | 1404    |      53 |</div><div class="line">| 12210 | 20160909 | 1404    |      64 |</div><div class="line">| 12010 | 20160909 | 1404    |      67 |</div><div class="line">| 12652 | 20160909 | 1404    |      89 |</div><div class="line">| 12422 | 20160909 | 1404    |     114 |</div><div class="line">|  9672 | 20160909 | 1405    |       9 |</div><div class="line">| 12653 | 20160909 | 1405    |      22 |</div><div class="line">| 11619 | 20160909 | 1405    |      26 |</div><div class="line">| 10071 | 20160909 | 1405    |      64 |</div><div class="line">| 12423 | 20160909 | 1405    |     118 |</div></pre></td></tr></table></figure>
+<p>思路：</p>
+<p>使用<code>group_concat</code>，然后将<code>group_concat</code>的数据取出前N位（TopN），然后再通过<code>FIND_IN_SET</code> 来获取每个TopN的完整数据即可.</p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

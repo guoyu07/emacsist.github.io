@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>OSGi Bundle元数据描述说明 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="java,OSGi," />
+  
+
+  <meta name="description" content="Bundle 预定义标记描述元数据Bundle的元数据信息定义在/META-INF/MANIFEST.MF文件之中，OSGi规范中明确要求实现框架必须能够正确识别那些被预定义过的标记（在R5.0规范中预定义了28项标记），对于不可识别的标记以及不符合MANIFEST.MF标记格式的内容都要忽略且不能影响Bundle的正常解析。 预定义标记以下列出了MANIFEST.MF文件中常用的预定义标记，除非">
+<meta name="keywords" content="java,OSGi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OSGi Bundle元数据描述说明">
+<meta property="og:url" content="https://emacsist.github.io/2015/09/10/OSGi-Bundle元数据描述说明/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="Bundle 预定义标记描述元数据Bundle的元数据信息定义在/META-INF/MANIFEST.MF文件之中，OSGi规范中明确要求实现框架必须能够正确识别那些被预定义过的标记（在R5.0规范中预定义了28项标记），对于不可识别的标记以及不符合MANIFEST.MF标记格式的内容都要忽略且不能影响Bundle的正常解析。 预定义标记以下列出了MANIFEST.MF文件中常用的预定义标记，除非">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OSGi Bundle元数据描述说明">
+<meta name="twitter:description" content="Bundle 预定义标记描述元数据Bundle的元数据信息定义在/META-INF/MANIFEST.MF文件之中，OSGi规范中明确要求实现框架必须能够正确识别那些被预定义过的标记（在R5.0规范中预定义了28项标记），对于不可识别的标记以及不符合MANIFEST.MF标记格式的内容都要忽略且不能影响Bundle的正常解析。 预定义标记以下列出了MANIFEST.MF文件中常用的预定义标记，除非">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Bundle-预定义标记"><span class="toc-text">Bundle 预定义标记</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#描述元数据"><span class="toc-text">描述元数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#预定义标记"><span class="toc-text">预定义标记</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Bundle-ActivationPolicy"><span class="toc-text">Bundle-ActivationPolicy</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Bundle-Activator"><span class="toc-text">Bundle-Activator</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Bundle-Category"><span class="toc-text">Bundle-Category</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Bundle-Classpath"><span class="toc-text">Bundle-Classpath</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Bundle-ContactAddress"><span class="toc-text">Bundle-ContactAddress</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Bundle-Copyright"><span class="toc-text">Bundle-Copyright</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Bundle-Description"><span class="toc-text">Bundle-Description</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Bundle-DocURL"><span class="toc-text">Bundle-DocURL</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Bundle-Icon"><span class="toc-text">Bundle-Icon</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Bundle-License"><span class="toc-text">Bundle-License</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Bundle-Localization"><span class="toc-text">Bundle-Localization</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Bundle-ManifestVersion"><span class="toc-text">Bundle-ManifestVersion</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Bundle-Name"><span class="toc-text">Bundle-Name</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Bundle-NativeCode"><span class="toc-text">Bundle-NativeCode</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Bundle-RequiredExecutionEnvironment"><span class="toc-text">Bundle-RequiredExecutionEnvironment</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Bundle-SymbolicName"><span class="toc-text">Bundle-SymbolicName</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Bundle-UpdateLocation"><span class="toc-text">Bundle-UpdateLocation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Bundle-Vendor"><span class="toc-text">Bundle-Vendor</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Bundle-Version"><span class="toc-text">Bundle-Version</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DynamicImport-Package"><span class="toc-text">DynamicImport-Package</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Export-Package"><span class="toc-text">Export-Package</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Export-Service"><span class="toc-text">Export-Service</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Fragment-Host"><span class="toc-text">Fragment-Host</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Import-Package"><span class="toc-text">Import-Package</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Import-Service"><span class="toc-text">Import-Service</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Provided-Capability"><span class="toc-text">Provided-Capability</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Require-Capability"><span class="toc-text">Require-Capability</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Require-Bundle"><span class="toc-text">Require-Bundle</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-OSGi-Bundle元数据描述说明" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            OSGi Bundle元数据描述说明
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2015.09.10</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#OSGi">
+        <span class="tag-name">OSGi</span>
+    <span class="tag-size">( 8 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="Bundle-预定义标记"><a href="#Bundle-预定义标记" class="headerlink" title="Bundle 预定义标记"></a>Bundle 预定义标记</h2><h3 id="描述元数据"><a href="#描述元数据" class="headerlink" title="描述元数据"></a>描述元数据</h3><p>Bundle的元数据信息定义在/META-INF/MANIFEST.MF文件之中，OSGi规范中明确要求实现框架必须能够正确识别那些被预定义过的标记（在R5.0规范中预定义了28项标记），对于不可识别的标记以及不符合MANIFEST.MF标记格式的内容都要忽略且不能影响Bundle的正常解析。</p>
+<h3 id="预定义标记"><a href="#预定义标记" class="headerlink" title="预定义标记"></a>预定义标记</h3><p>以下列出了MANIFEST.MF文件中常用的预定义标记，除非特别说明，所列举的标记项都是可选的。对于其中某些较重要的标记（如Import-Package和Export-Package等），我们将在后续章节着重分析讲解。</p>
+<h4 id="Bundle-ActivationPolicy"><a href="#Bundle-ActivationPolicy" class="headerlink" title="Bundle-ActivationPolicy"></a>Bundle-ActivationPolicy</h4><p>标记Bundle-ActivationPolicy设置Bundle的加载策略，该参数目前只有一个值：lazy，设置该参数后，Bundle将延迟激活，延迟至有其他的Bundle请求加载该Bundle中的类或资源时它才会被激活，如果不设置这个参数，那么Bundle启动时就会被激活。</p>
+<p>示例：</p>
+<p>Bundle-ActivationPolicy: lazy</p>
+<h4 id="Bundle-Activator"><a href="#Bundle-Activator" class="headerlink" title="Bundle-Activator"></a>Bundle-Activator</h4><p>标记Bundle-Activator指明一个Activator 类，在Bundle启动和停止时会分别调用该类的start()和stop()方法，以便执行程序员所希望的动作，该类必须实现org.osgi.framework.BundleActivator接口。</p>
+<p>Activator类通常用于在Bundle启动时注册和初始化服务，在Bundle卸载时注销这些服务。它很常用，但并不是必须的。</p>
+<p>示例：</p>
+<p>Bundle-Activator: com.acme.fw.Activator</p>
+<h4 id="Bundle-Category"><a href="#Bundle-Category" class="headerlink" title="Bundle-Category"></a>Bundle-Category</h4><p>标记Bundle-Category指明该Bundle的功能类别，可使用逗号分隔多个类别名称。这个功能类别仅供人工分类和阅读，OSGi框架并不会使用它。</p>
+<p>示例：</p>
+<p>Bundle-Category: osgi, test, nursery</p>
+<h4 id="Bundle-Classpath"><a href="#Bundle-Classpath" class="headerlink" title="Bundle-Classpath"></a>Bundle-Classpath</h4><p>标记Bundle-Classpath指明该Bundle所引用的类路径，该路径应为Bundle包内部的一个合法路径，如果有多个Classpath，使用逗号分隔。在介绍Bundle类加载过程时我们会详细介绍这个标记。</p>
+<p>示例：</p>
+<p>Bundle-Classpath: /jar/http.jar,.</p>
+<h4 id="Bundle-ContactAddress"><a href="#Bundle-ContactAddress" class="headerlink" title="Bundle-ContactAddress"></a>Bundle-ContactAddress</h4><p>标记Bundle-ContactAddress描述Bundle发行者的联系信息，仅供人工阅读，OSGi框架并不会使用它。</p>
+<p>示例：</p>
+<p>Bundle-ContactAddress: 2400 Oswego Road, Austin, TX 74563</p>
+<h4 id="Bundle-Copyright"><a href="#Bundle-Copyright" class="headerlink" title="Bundle-Copyright"></a>Bundle-Copyright</h4><p>标记Bundle-Copyright描述Bundle的版权信息，仅供人工阅读，OSGi框架并不会使用它。<br>示例：</p>
+<p>Bundle-Copyright: OSGi (c) 2002</p>
+<h4 id="Bundle-Description"><a href="#Bundle-Description" class="headerlink" title="Bundle-Description"></a>Bundle-Description</h4><p>标记Bundle-Description给出关于该Bundle的简短描述信息，仅供人工阅读，OSGi框架并不会使用它。</p>
+<p>示例：</p>
+<p>Bundle-Description: Network Firewall</p>
+<h4 id="Bundle-DocURL"><a href="#Bundle-DocURL" class="headerlink" title="Bundle-DocURL"></a>Bundle-DocURL</h4><p>标记Bundle-DocURL给出该Bundle文档的链接地址，仅供人工阅读，OSGi框架并不会使用它。</p>
+<p>示例：</p>
+<p>Bundle-DocURL: http:/www.acme.com/Firewall/doc</p>
+<h4 id="Bundle-Icon"><a href="#Bundle-Icon" class="headerlink" title="Bundle-Icon"></a>Bundle-Icon</h4><p>标记Bundle-Icon给出该Bundle的显示图标，图标应为一张正方形的图片，并通过参数size指出图标的宽度。OSGi规范要求实现框架至少要支持PNG图片格式。</p>
+<p>示例：</p>
+<p>Bundle-Icon: /icons/acme-logo.png;size=64</p>
+<h4 id="Bundle-License"><a href="#Bundle-License" class="headerlink" title="Bundle-License"></a>Bundle-License</h4><p>标记Bundle-License给出该Bundle的授权协议信息。</p>
+<p>示例：</p>
+<p>Bundle-License: <a href="http://www.opensource.org/licenses/jabberpl.php" target="_blank" rel="external">http://www.opensource.org/licenses/jabberpl.php</a></p>
+<h4 id="Bundle-Localization"><a href="#Bundle-Localization" class="headerlink" title="Bundle-Localization"></a>Bundle-Localization</h4><p>标记Bundle-Localization给出该Bundle在不同语言系统下的本地化信息，如果不设置此标记，它的默认值为OSGI-INF/l10n/bundle。</p>
+<p>示例：</p>
+<p>Bundle-Localization: OSGI-INF/l10n/bundle</p>
+<h4 id="Bundle-ManifestVersion"><a href="#Bundle-ManifestVersion" class="headerlink" title="Bundle-ManifestVersion"></a>Bundle-ManifestVersion</h4><p>标记Bundle-ManifestVersion指出该Bundle应遵循哪个版本的OSGi规范，默认值为1。对于OSGi R3规范，该值为1；对于OSGi R4/R5规范，该值为2。也可能在以后的OSGi规范中使用更高的数字,但现在仅允许将它设置为1或2。</p>
+<p>示例：</p>
+<p>Bundle-ManifestVersion: 2</p>
+<h4 id="Bundle-Name"><a href="#Bundle-Name" class="headerlink" title="Bundle-Name"></a>Bundle-Name</h4><p>标记Bundle-Name定义该Bundle的名称。注意该名称只供人工阅读，在Bundle-SymbolicName标记中定义的名称才会作为程序使用的Bundle的唯一标识来使用。根据一般开发习惯，Bundle-Name中所定义的名称会在打包发布时与Bundle-Version一起构成该Bundle的文件名，所以这个名称一般不含空格或其他不能在文件名中出现的字符。</p>
+<p>示例：</p>
+<p>Bundle-Name: Firewall</p>
+<h4 id="Bundle-NativeCode"><a href="#Bundle-NativeCode" class="headerlink" title="Bundle-NativeCode"></a>Bundle-NativeCode</h4><p>如果Bundle中需要使用JNI加载其他语言实现的本地代码，那么必须使用Bundle-NativeCode标记进行说明。这个标记有如下附加参数：</p>
+<p>osname：操作系统名称，如Windows等。</p>
+<p>osversion：操作系统版本号，如3.1等。</p>
+<p>processor：处理器指令集架构，如x86等。</p>
+<p>language：遵循ISO编码的语言，如en，zh等。</p>
+<p>seleciton-filter：选择过滤器，该值为一个过滤器表达式，指定被选中或未被选中的本地代码。</p>
+<p>示例：</p>
+<p>Bundle-NativeCode: /lib/http.DLL; osname = QNX; osversion = 3.1</p>
+<h4 id="Bundle-RequiredExecutionEnvironment"><a href="#Bundle-RequiredExecutionEnvironment" class="headerlink" title="Bundle-RequiredExecutionEnvironment"></a>Bundle-RequiredExecutionEnvironment</h4><p>标记Bundle-RequiredExecutionEnvironment定义该Bundle所需的执行环境，支持多种执行环境的Bundle使用逗号分隔。OSGi在设计上就有非常广泛的应用范围，从嵌入式系统至大型服务器执行环境必然会有许多差异，因此在这个标记中需要指出该Bundle所适合的执行环境。在后续章节中我们还会继续介绍OSGi执行环境。</p>
+<p>示例：</p>
+<p>Bundle-RequiredExecutionEnvironment: CDC-1.0/Foundation-1.0</p>
+<h4 id="Bundle-SymbolicName"><a href="#Bundle-SymbolicName" class="headerlink" title="Bundle-SymbolicName"></a>Bundle-SymbolicName</h4><p>标记Bundle-SymbolicName给出该Bundle在OSGi容器中的全局唯一标识符。与其他可选标记不同，这个标记没有默认值，并且是Bundle元数据信息之中唯一一个必须设置的标记。程序将基于此标记和版本号在OSGi容器中定位到一个独一无二的Bundle。</p>
+<p>当且仅当两个Bundle的Bundle-SymbolicName和Bundle-Version属性都相同的时候，它们才是完全相同的，不允许同时安装两个完全相同的Bundle到同一个OSGi容器之中。</p>
+<p>Bundle-SymbolicName有以下两个附加参数。</p>
+<p>singleton：表示Bundle是单例的。如果OSGi系统中同时存在两个Bundle-SymbolicName相同的（当然，要求Bundle-Version不相同，否则是不可能同时存在的）单例Bundle，那么仅有其中一个会被解析。如果其中一个没有声明为单例Bundle，则不会受到另外一个单例Bundle的影响，默认值为false。</p>
+<p>fragment-attachment：定义Fragment Bundle是否能附加到该Bundle之上。允许值为always、never和resolve-time，含义为允许附加、禁止附加和只允许在解析过程中附加，默认值为always，即允许附加。</p>
+<p>示例：</p>
+<p>Bundle-SymbolicName: com.acme.daffy</p>
+<h4 id="Bundle-UpdateLocation"><a href="#Bundle-UpdateLocation" class="headerlink" title="Bundle-UpdateLocation"></a>Bundle-UpdateLocation</h4><p>标记Bundle-UpdateLocation给出Bundle的网络更新地址。如果Bundle需要更新版本，将使用这个地址。</p>
+<p>示例：</p>
+<p>Bundle-UpdateLocation: <a href="http://www.acme.com/Firewall/bundle.jar" target="_blank" rel="external">http://www.acme.com/Firewall/bundle.jar</a></p>
+<h4 id="Bundle-Vendor"><a href="#Bundle-Vendor" class="headerlink" title="Bundle-Vendor"></a>Bundle-Vendor</h4><p>标记Bundle-Vendor给出该Bundle的发行者信息。</p>
+<p>示例：</p>
+<p>Bundle-Vendor: OSGi Alliance</p>
+<h4 id="Bundle-Version"><a href="#Bundle-Version" class="headerlink" title="Bundle-Version"></a>Bundle-Version</h4><p>标记Bundle-Version给出该Bundle的版本信息，默认值为“0.0.0”。注意，这项信息并不是仅供人工阅读的，“版本”在OSGi中是一项受系统管理的信息。维护一个Bundle的不同版本也是运行OSGi框架的重要特征之一，当一个Bundle依赖另一个Bundle时，经常需要指明它依赖的是什么版本范围内的Bundle。</p>
+<p>版本号是有序的，在Symbolic-Name相同的前提下，两个Bundle的版本可比较大小。完整的版本号会由“主版本号（Major）”+“副版本号（Minor）”+“微版本号（Micro）”+“限定字符串（Qualifier）”构成。</p>
+<p>示例：</p>
+<p>Bundle-Version: 22.3.58.build-345678</p>
+<p>根据一般的开发习惯，上述4项版本号约定俗成地表示如下含义。</p>
+<p>主版本号：表示与之前版本不兼容的重大功能升级。</p>
+<p>副版本号：表示与之前版本兼容，但可能提供新的特性或接口。</p>
+<p>微版本号：表示API接口没有变化，只是内部实现改变，或者修正了错误。</p>
+<p>限定字符串：通常用于表示编译时间戳或者编译次数。</p>
+<p>在比较版本大小时，从前往后逐项（含限定字符串）进行比较，当且仅当4个比较项都对应相等，两个Bundle的版本才相等，否则以第一个出现差异的版本号的大小决定整个Bundle版本的大小。</p>
+<p>示例：</p>
+<p>1.2.3 &lt; 3.2.1 &lt; 4.0</p>
+<p>有一点必须注意，对于限定字符串的处理，OSGi和Maven是恰恰相反的，在Maven里，版本“1.2.3.2012”&lt;=“1.2.3”，但在OSGi里则是版本“1.2.3.2012”&gt;=“1.2.3”。</p>
+<h4 id="DynamicImport-Package"><a href="#DynamicImport-Package" class="headerlink" title="DynamicImport-Package"></a>DynamicImport-Package</h4><p>标记Dynamic Import-Package描述运行时动态导入的Package。Package的导入和导出构成了OSGi多模块之间的组织协作关系，这是一个相对复杂而又很重要的内容，我们将在后续章节中专门介绍。</p>
+<p>示例：</p>
+<p>DynamicImport-Package: com.acme.plugin.*</p>
+<h4 id="Export-Package"><a href="#Export-Package" class="headerlink" title="Export-Package"></a>Export-Package</h4><p>标记Export-Package描述被导出的Package。导入导出Package是模块层的核心功能，该内容将在后续章节中具体介绍。</p>
+<p>示例：</p>
+<p>Export-Package: org.osgi.util.tracker;version=1.3</p>
+<h4 id="Export-Service"><a href="#Export-Service" class="headerlink" title="Export-Service"></a>Export-Service</h4><p>标记Export-Service描述被导出的服务，这个标记在OSGi规范中已经被声明为Deprecated了，不推荐继续使用此标记。</p>
+<p>示例：</p>
+<p>Export-Service: org.osgi.service.log.LogService</p>
+<h4 id="Fragment-Host"><a href="#Fragment-Host" class="headerlink" title="Fragment-Host"></a>Fragment-Host</h4><p>当该Bundle是一个Fragment Bundle时，标记Fragment-Host指明它的宿主Bundle。</p>
+<p>示例：</p>
+<p>Fragment-Host: org.eclipse.swt; bundle-version=”[3.0.0,4.0.0)”</p>
+<h4 id="Import-Package"><a href="#Import-Package" class="headerlink" title="Import-Package"></a>Import-Package</h4><p>标记Import-Package描述该Bundle需要导入的Package。导入导出Package是模块层的核心功能，该内容将在后续章节中具体介绍。</p>
+<p>示例：</p>
+<p>Import-Package:org.osgi.service.io;version=1.4</p>
+<h4 id="Import-Service"><a href="#Import-Service" class="headerlink" title="Import-Service"></a>Import-Service</h4><p>标记Import-Service描述导入的服务。这个标记在OSGi规范中已经被声明为Deprecated了，不推荐继续使用此标记。</p>
+<p>示例：</p>
+<p>Import-Service: org.osgi.service.log.LogService</p>
+<h4 id="Provided-Capability"><a href="#Provided-Capability" class="headerlink" title="Provided-Capability"></a>Provided-Capability</h4><p>标记Provided-Capability描述该Bundle提供的服务特性（Capability）。服务特性是在OSGi R4.3规范中加入的新概念。在此之前，Bundle只能通过Bundle-RequiredExecution-Environment来声明所需的执行环境；但是在某些场景下一些执行环境特性是由其他Bundle提供的，这样依赖运行环境来描述所需特性就受到限制了。因此在R4.3规范中加入了Provided-Capability和Require-Capability来声明Bundle所需要和能够提供的特性。</p>
+<p>示例：</p>
+<p>Provided-Capability: com.acme.dict; from=nl; to=de; version:Version=1.2</p>
+<h4 id="Require-Capability"><a href="#Require-Capability" class="headerlink" title="Require-Capability"></a>Require-Capability</h4><p>标记Require-Capability描述该Bundle所需要的服务特性。</p>
+<p>示例：</p>
+<p>Require-Capability: osgi.ee; filter:=”(&amp;(osgi.ee=AcmeMin)(version=1.1))”</p>
+<h4 id="Require-Bundle"><a href="#Require-Bundle" class="headerlink" title="Require-Bundle"></a>Require-Bundle</h4><p>标记Require-Bundle描述该Bundle所依赖的其他Bundle，一旦声明了依赖某个Bundle，就意味着可以直接使用所有从这个Bundle中导出的Package。</p>
+<p>示例：</p>
+<p>Require-Bundle: com.acme.chess</p>
+<p><a href="http://book.2cto.com/201301/15399.html" target="_blank" rel="external">来源</a></p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

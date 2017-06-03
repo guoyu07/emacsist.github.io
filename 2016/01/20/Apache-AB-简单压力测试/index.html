@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Apache AB 简单压力测试 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="java,nginx,ab,apache," />
+  
+
+  <meta name="description" content="以下的测试使用环境为ubuntu  安装ab工具1sudo apt-get install apache2-utils 使用直接写入到 requestBody1ab -T &quot;Content-Type: application/json&quot; -p /tmp/ab.data.user -n 1000 -c 500 http://localhost:8080/hello/action.do GET1ab">
+<meta name="keywords" content="java,nginx,ab,apache">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Apache AB 简单压力测试">
+<meta property="og:url" content="https://emacsist.github.io/2016/01/20/Apache-AB-简单压力测试/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="以下的测试使用环境为ubuntu  安装ab工具1sudo apt-get install apache2-utils 使用直接写入到 requestBody1ab -T &quot;Content-Type: application/json&quot; -p /tmp/ab.data.user -n 1000 -c 500 http://localhost:8080/hello/action.do GET1ab">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Apache AB 简单压力测试">
+<meta name="twitter:description" content="以下的测试使用环境为ubuntu  安装ab工具1sudo apt-get install apache2-utils 使用直接写入到 requestBody1ab -T &quot;Content-Type: application/json&quot; -p /tmp/ab.data.user -n 1000 -c 500 http://localhost:8080/hello/action.do GET1ab">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装ab工具"><span class="toc-text">安装ab工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用"><span class="toc-text">使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#直接写入到-requestBody"><span class="toc-text">直接写入到 requestBody</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GET"><span class="toc-text">GET</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#POST"><span class="toc-text">POST</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Apache-AB-简单压力测试" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Apache AB 简单压力测试
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2016.01.20</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#ab">
+        <span class="tag-name">ab</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#apache">
+        <span class="tag-name">apache</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#nginx">
+        <span class="tag-name">nginx</span>
+    <span class="tag-size">( 8 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <blockquote>
+<p>以下的测试使用环境为ubuntu</p>
+</blockquote>
+<h2 id="安装ab工具"><a href="#安装ab工具" class="headerlink" title="安装ab工具"></a>安装ab工具</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install apache2-utils</div></pre></td></tr></table></figure>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="直接写入到-requestBody"><a href="#直接写入到-requestBody" class="headerlink" title="直接写入到 requestBody"></a>直接写入到 requestBody</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ab -T <span class="string">"Content-Type: application/json"</span> -p /tmp/ab.data.user -n 1000 -c 500 http://localhost:8080/hello/action.do</div></pre></td></tr></table></figure>
+<h3 id="GET"><a href="#GET" class="headerlink" title="GET"></a>GET</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ab -n 1000 -c 500 http://localhost:8080/hello/action.do</div></pre></td></tr></table></figure>
+<h3 id="POST"><a href="#POST" class="headerlink" title="POST"></a>POST</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ab -T <span class="string">"application/x-www-form-urlencoded"</span> -p /tmp/ab.data.user -n 1000 -c 500 http://localhost:8080/hello/action.do</div></pre></td></tr></table></figure>
+<p><code>ab.data.user</code>为<code>key=value&amp;key1=value1</code>的形式`</p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>PostgreSQL中的json与jsonb | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="postgresql,json,jsonb," />
+  
+
+  <meta name="description" content="hstore vs json vs jsonbstackoverflow  首先，hstore是一个扩展模块，它允许你保存key=&amp;gt;values键值对，且键值都只能是texts类型（但是，值也允许sql的NULL） json与jsonb 允许你保存一个有效的json值(定义). 例如，以下都是有效的json表示方式: null, true, [1, false, &amp;quot;string&amp;q">
+<meta name="keywords" content="postgresql,json,jsonb">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PostgreSQL中的json与jsonb">
+<meta property="og:url" content="https://emacsist.github.io/2016/10/09/PostgreSQL中的json与jsonb/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="hstore vs json vs jsonbstackoverflow  首先，hstore是一个扩展模块，它允许你保存key=&amp;gt;values键值对，且键值都只能是texts类型（但是，值也允许sql的NULL） json与jsonb 允许你保存一个有效的json值(定义). 例如，以下都是有效的json表示方式: null, true, [1, false, &amp;quot;string&amp;q">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PostgreSQL中的json与jsonb">
+<meta name="twitter:description" content="hstore vs json vs jsonbstackoverflow  首先，hstore是一个扩展模块，它允许你保存key=&amp;gt;values键值对，且键值都只能是texts类型（但是，值也允许sql的NULL） json与jsonb 允许你保存一个有效的json值(定义). 例如，以下都是有效的json表示方式: null, true, [1, false, &amp;quot;string&amp;q">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#hstore-vs-json-vs-jsonb"><span class="toc-text">hstore vs json vs jsonb</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#json（jsonb-的常用函数及操作符"><span class="toc-text">json（jsonb) 的常用函数及操作符</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#gt"><span class="toc-text">-></span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gt-gt"><span class="toc-text">->></span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gt-1"><span class="toc-text">#></span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gt-gt-1"><span class="toc-text">#>></span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#jsonb-操作符"><span class="toc-text">jsonb 操作符</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#gt-2"><span class="toc-text">@></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#lt"><span class="toc-text"><@</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#"><span class="toc-text">?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-1"><span class="toc-text">?|</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#？-amp"><span class="toc-text">？&</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-2"><span class="toc-text">||</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-3"><span class="toc-text">-</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-4"><span class="toc-text">#-</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常用json函数"><span class="toc-text">常用json函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#row-to-json"><span class="toc-text">row_to_json()</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#json-jsonb-中的CRUD"><span class="toc-text">json(jsonb)中的CRUD</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-PostgreSQL中的json与jsonb" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            PostgreSQL中的json与jsonb
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2016.10.09</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#json">
+        <span class="tag-name">json</span>
+    <span class="tag-size">( 3 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#jsonb">
+        <span class="tag-name">jsonb</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="hstore-vs-json-vs-jsonb"><a href="#hstore-vs-json-vs-jsonb" class="headerlink" title="hstore vs json vs jsonb"></a>hstore vs json vs jsonb</h2><p><a href="http://stackoverflow.com/questions/22654170/explanation-of-jsonb-introduced-by-postgresql" target="_blank" rel="external">stackoverflow</a></p>
+<blockquote>
+<p>首先，<code>hstore</code>是一个扩展模块，它允许你保存<code>key=&gt;values</code>键值对，且键值都只能是<code>text</code>s类型（但是，值也允许sql的NULL）</p>
+<p>json与jsonb 允许你保存一个有效的json值(<a href="http://json.org" target="_blank" rel="external">定义</a>).</p>
+<p>例如，以下都是有效的json表示方式: <code>null</code>, <code>true</code>, <code>[1, false, &quot;string&quot;, {&quot;foo&quot;:&quot;bar&quot;}]</code>, <code>{&quot;foo&quot;:&quot;bar&quot;, &quot;baz&quot;:[null]}</code>.</p>
+<p>相比json, hstore只是它的一个很小的子集(但是，如果你只需要这个子集，也OK的.)</p>
+<p>json与jsonb的区别主要是它们的存储方式：</p>
+</blockquote>
+<ul>
+<li><p><code>json</code>是保存为文本格式的</p>
+</li>
+<li><p><code>jsonb</code>是保存为二进制格式的</p>
+</li>
+</ul>
+<blockquote>
+<p>这主要有三方面的影响：</p>
+</blockquote>
+<ul>
+<li><p><code>jsonb</code>通常比<code>json</code>占用更多的磁盘空间（有些情况不是）</p>
+</li>
+<li><p><code>jsonb</code>比<code>json</code>的写入更耗时间</p>
+</li>
+<li><p><code>json</code>的操作比<code>jsonb</code>的操作明显更耗时间（在操作一个<code>json</code>类型值时需要每次都去解析）</p>
+</li>
+</ul>
+<blockquote>
+<p>当<code>jsonb</code>将在未来稳定版发行可用时，这有两个主要使用情况，你很容易在他们之间选择的：</p>
+</blockquote>
+<ol>
+<li><p>如果你的应用只用json表示，PostgreSQL只用于保存与获取时，你应该使用<code>json</code>.</p>
+</li>
+<li><p>如果你需要在PostgreSQL中做比较多的json值的操作，或者在一些json字段上使用索引时，你应该使用<code>jsonb</code></p>
+</li>
+</ol>
+<hr>
+<p>官方文档上说:</p>
+<blockquote>
+<p>有两个JSON数据类型：json和jsonb。它们接受几乎 相同的值组作为输入。它们实际的主要差别是效率。json 数据类型存储输入文本的精确拷贝，处理函数必须在每个执行上重新解析；而jsonb数据以分解的二进制格式存储，这使得它由于添加了转换机制而在输入上稍微慢些，但是在处理上明显更快，因为不需要重新解析。jsonb也支持索引，这也是一个明显的优势。</p>
+<p>因为json类型存储输入文本的精确拷贝，它将保存令牌间语义上无关紧要的空格，和JSON对象中键的顺序。另外，如果值中的一个JSON对象多次包含相同的键，那么保存所有的键/值对。（处理函数将最后一个值当做操作值。）相比之下， jsonb不保存空格，也不保存对象键的顺序，并且不保存重复对象键。如果在输入中指定了重复的键，那么只保存最后一个值。</p>
+</blockquote>
+<h2 id="json（jsonb-的常用函数及操作符"><a href="#json（jsonb-的常用函数及操作符" class="headerlink" title="json（jsonb) 的常用函数及操作符"></a>json（jsonb) 的常用函数及操作符</h2><p><a href="https://www.postgresql.org/docs/current/static/functions-json.html" target="_blank" rel="external">functions-json</a></p>
+<h3 id="gt"><a href="#gt" class="headerlink" title="-&gt;"></a><code>-&gt;</code></h3><p>右操作符为int： 获取JSON数组元素（索引从0开始）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">select <span class="string">'[&#123;"a":"foo"&#125;,&#123;"b":"bar"&#125;,&#123;"c":"baz"&#125;]'</span>::json-&gt;2;</div><div class="line">  ?column?   </div><div class="line">-------------</div><div class="line"> &#123;<span class="string">"c"</span>:<span class="string">"baz"</span>&#125;</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 1.240 ms</div></pre></td></tr></table></figure>
+<p>右操作符为text： 通过键获取json值.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">SELECT  <span class="string">'&#123;"a": &#123;"b":"foo"&#125;&#125;'</span>::json-&gt;<span class="string">'a'</span>;</div><div class="line">  ?column?   </div><div class="line">-------------</div><div class="line"> &#123;<span class="string">"b"</span>:<span class="string">"foo"</span>&#125;</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.685 ms</div></pre></td></tr></table></figure>
+<h3 id="gt-gt"><a href="#gt-gt" class="headerlink" title="-&gt;&gt;"></a><code>-&gt;&gt;</code></h3><p>右操作符为int： 获取JSON数组元素为text</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">SELECT  <span class="string">'[1,2,3]'</span>::json-&gt;&gt;2;</div><div class="line"> ?column? </div><div class="line">----------</div><div class="line"> 3</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.530 ms</div></pre></td></tr></table></figure>
+<p>右操作符为text： 通过键获取json值为text</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"> SELECT  <span class="string">'&#123;"a":1,"b":2&#125;'</span>::json-&gt;&gt;<span class="string">'b'</span>;</div><div class="line"> ?column? </div><div class="line">----------</div><div class="line"> 2</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.585 ms</div></pre></td></tr></table></figure>
+<h3 id="gt-1"><a href="#gt-1" class="headerlink" title="#&gt;"></a><code>#&gt;</code></h3><p>右操作符为: <code>text[]</code>, 在指定的路径获取JSON对象。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">SELECT  <span class="string">'&#123;"a": &#123;"b":&#123;"c": "foo"&#125;&#125;&#125;'</span>::json<span class="comment">#&gt;'&#123;a,b&#125;';</span></div><div class="line">   ?column?   </div><div class="line">--------------</div><div class="line"> &#123;<span class="string">"c"</span>: <span class="string">"foo"</span>&#125;</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.665 ms</div></pre></td></tr></table></figure>
+<p>即在获取<code>a.b</code>的值</p>
+<h3 id="gt-gt-1"><a href="#gt-gt-1" class="headerlink" title="#&gt;&gt;"></a><code>#&gt;&gt;</code></h3><p>右操作符为: <code>text[]</code>, 在指定的路径获取JSON对象为text</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">SELECT  <span class="string">'&#123;"a":[1,2,3],"b":[4,5,6]&#125;'</span>::json<span class="comment">#&gt;&gt;'&#123;a,2&#125;';</span></div><div class="line"> ?column? </div><div class="line">----------</div><div class="line"> 3</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.556 ms</div></pre></td></tr></table></figure>
+<p>即获取<code>a[2]</code>的值并转为text.</p>
+<h3 id="jsonb-操作符"><a href="#jsonb-操作符" class="headerlink" title="jsonb 操作符"></a>jsonb 操作符</h3><h4 id="gt-2"><a href="#gt-2" class="headerlink" title="@&gt;"></a><code>@&gt;</code></h4><p>右操作数的类型： <code>jsonb</code>, 左侧的JSONB的是否包含右侧的.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">SELECT  <span class="string">'&#123;"a":1, "b":2&#125;'</span>::jsonb @&gt; <span class="string">'&#123;"b":2&#125;'</span>::jsonb;</div><div class="line"> ?column? </div><div class="line">----------</div><div class="line"> t</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.599 ms</div></pre></td></tr></table></figure>
+<h4 id="lt"><a href="#lt" class="headerlink" title="&lt;@"></a><code>&lt;@</code></h4><p>右操作数的类型： <code>jsonb</code>, 右侧的JSONB的是否包含左侧的.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">SELECT  <span class="string">'&#123;"a":1, "b":2&#125;'</span>::jsonb &lt;@ <span class="string">'&#123;"b":2&#125;'</span>::jsonb;</div><div class="line"> ?column? </div><div class="line">----------</div><div class="line"> f</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.435 ms</div></pre></td></tr></table></figure>
+<h4 id=""><a href="#" class="headerlink" title="?"></a><code>?</code></h4><p>右操作符: <code>text</code>, 该字符串是否存在于json的顶级key中.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">SELECT <span class="string">'&#123;"a":1, "b":2&#125;'</span>::jsonb ? <span class="string">'b'</span>;</div><div class="line"> ?column? </div><div class="line">----------</div><div class="line"> t</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.551 ms</div></pre></td></tr></table></figure>
+<h4 id="-1"><a href="#-1" class="headerlink" title="?|"></a><code>?|</code></h4><p>右操作符：<code>text[]</code>，这些元素之一是否存在于json的顶级key中.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">SELECT  &apos;&#123;&quot;a&quot;:1, &quot;b&quot;:2, &quot;c&quot;:3&#125;&apos;::jsonb ?| array[&apos;b&apos;, &apos;ceeee&apos;, &apos;e&apos;];</div><div class="line"> ?column? </div><div class="line">----------</div><div class="line"> t</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.315 ms</div></pre></td></tr></table></figure>
+<h4 id="？-amp"><a href="#？-amp" class="headerlink" title="？&amp;"></a><code>？&amp;</code></h4><p>右操作符：<code>text[]</code>，所有这些元素是否存都在于json的顶级key中.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># SELECT  '["a", "b"]'::jsonb ?&amp; array['a', 'b'];</span></div><div class="line"> ?column? </div><div class="line">----------</div><div class="line"> t</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 36.143 ms</div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># SELECT  '["a", "b"]'::jsonb ?&amp; array['a', 'b', 'c'];</span></div><div class="line"> ?column? </div><div class="line">----------</div><div class="line"> f</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.370 ms</div></pre></td></tr></table></figure>
+<h4 id="-2"><a href="#-2" class="headerlink" title="||"></a><code>||</code></h4><p>右操作符: <code>jsonb</code>, 拼接两个<code>jsonb</code>生成一个新的<code>jsonb</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># SELECT  '["a", "b", &#123;"hello":"world"&#125;]'::jsonb || '["c", "d", &#123;"hello":"world"&#125;]'::jsonb;</span></div><div class="line">                           ?column?                           </div><div class="line">--------------------------------------------------------------</div><div class="line"> [<span class="string">"a"</span>, <span class="string">"b"</span>, &#123;<span class="string">"hello"</span>: <span class="string">"world"</span>&#125;, <span class="string">"c"</span>, <span class="string">"d"</span>, &#123;<span class="string">"hello"</span>: <span class="string">"world"</span>&#125;]</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.359 ms</div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<h4 id="-3"><a href="#-3" class="headerlink" title="-"></a><code>-</code></h4><p>右操作符：<code>text</code>，从左操作数中删除K/V或者字符串元素。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># SELECT  '&#123;"a": "b"&#125;'::jsonb - 'a';</span></div><div class="line"> ?column? </div><div class="line">----------</div><div class="line"> &#123;&#125;</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.357 ms</div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># SELECT  '["a", "b"]'::jsonb - 'a';</span></div><div class="line"> ?column? </div><div class="line">----------</div><div class="line"> [<span class="string">"b"</span>]</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.359 ms</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line"></div><div class="line">右操作符：`int`， 删除指定索引的元素（负数表示从结尾开始）</div><div class="line"></div><div class="line">```bash</div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># SELECT  '["a", "b"]'::jsonb - (-1);</span></div><div class="line"> ?column? </div><div class="line">----------</div><div class="line"> [<span class="string">"a"</span>]</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.319 ms</div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># SELECT  '["a", "b"]'::jsonb - 0;</span></div><div class="line"> ?column? </div><div class="line">----------</div><div class="line"> [<span class="string">"b"</span>]</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.319 ms</div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># SELECT  '["a", "b"]'::jsonb - 1;</span></div><div class="line"> ?column? </div><div class="line">----------</div><div class="line"> [<span class="string">"a"</span>]</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.305 ms</div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># SELECT  '["a", "b"]'::jsonb - 2;</span></div><div class="line">  ?column?  </div><div class="line">------------</div><div class="line"> [<span class="string">"a"</span>, <span class="string">"b"</span>]</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.312 ms</div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<h4 id="-4"><a href="#-4" class="headerlink" title="#-"></a><code>#-</code></h4><p>右操作符： <code>text[]</code>， 删除字段或指定路径的元素.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># SELECT  '["a", &#123;"b":1&#125;]'::jsonb #- '&#123;1,b&#125;';</span></div><div class="line"> ?column?  </div><div class="line">-----------</div><div class="line"> [<span class="string">"a"</span>, &#123;&#125;]</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.460 ms</div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># SELECT  '["a", &#123;"b":1&#125;]'::jsonb #- '&#123;0&#125;';</span></div><div class="line">  ?column?  </div><div class="line">------------</div><div class="line"> [&#123;<span class="string">"b"</span>: 1&#125;]</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.329 ms</div></pre></td></tr></table></figure>
+<h2 id="常用json函数"><a href="#常用json函数" class="headerlink" title="常用json函数"></a>常用json函数</h2><h3 id="row-to-json"><a href="#row-to-json" class="headerlink" title="row_to_json()"></a>row_to_json()</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">localhost:5433 sky@sky=<span class="comment"># SELECT * from test_json ;</span></div><div class="line"> id |  hello  </div><div class="line">----+---------</div><div class="line">  1 | hello</div><div class="line">  1 | hello2</div><div class="line">  2 | hello-2</div><div class="line">  2 | hello-3</div><div class="line">(4 rows)</div><div class="line"></div><div class="line">Time: 0.203 ms</div><div class="line">localhost:5433 sky@sky=<span class="comment"># SELECT row_to_json(test_json) from test_json ;</span></div><div class="line">        row_to_json         </div><div class="line">----------------------------</div><div class="line"> &#123;<span class="string">"id"</span>:1,<span class="string">"hello"</span>:<span class="string">"hello"</span>&#125;</div><div class="line"> &#123;<span class="string">"id"</span>:1,<span class="string">"hello"</span>:<span class="string">"hello2"</span>&#125;</div><div class="line"> &#123;<span class="string">"id"</span>:2,<span class="string">"hello"</span>:<span class="string">"hello-2"</span>&#125;</div><div class="line"> &#123;<span class="string">"id"</span>:2,<span class="string">"hello"</span>:<span class="string">"hello-3"</span>&#125;</div><div class="line">(4 rows)</div><div class="line"></div><div class="line">Time: 0.229 ms</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">localhost:5433 sky@sky=<span class="comment"># SELECT * from article ;</span></div><div class="line"> id |        content        </div><div class="line">----+-----------------------</div><div class="line">  1 | hello article content</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.199 ms</div><div class="line">localhost:5433 sky@sky=<span class="comment"># SELECT * from tags ;</span></div><div class="line"> aid | name </div><div class="line">-----+------</div><div class="line">   1 | tag1</div><div class="line">   1 | tag2</div><div class="line">(2 rows)</div><div class="line"></div><div class="line">Time: 0.210 ms</div><div class="line">localhost:5433 sky@sky=<span class="comment"># select row_to_json(t)</span></div><div class="line">from (</div><div class="line">  select id,</div><div class="line">    (</div><div class="line">      select array_to_json(array_agg(row_to_json(d)))</div><div class="line">      from (</div><div class="line">        select name</div><div class="line">        from tags</div><div class="line">        <span class="built_in">where</span> tags.aid = article.id</div><div class="line">      ) d</div><div class="line">    ) as tags</div><div class="line">  from article</div><div class="line">  <span class="built_in">where</span> id = 1</div><div class="line">) t;</div><div class="line">                    row_to_json                    </div><div class="line">---------------------------------------------------</div><div class="line"> &#123;<span class="string">"id"</span>:1,<span class="string">"tags"</span>:[&#123;<span class="string">"name"</span>:<span class="string">"tag1"</span>&#125;,&#123;<span class="string">"name"</span>:<span class="string">"tag2"</span>&#125;]&#125;</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.349 ms</div><div class="line">localhost:5433 sky@sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">localhost:5433 sky@sky=<span class="comment"># select row_to_json(t) from ( select *, ( SELECT array_to_json(array_agg(name))  as name  from tags where aid = article.id) as tags from article ) as t ;</span></div><div class="line">                            row_to_json                            </div><div class="line">-------------------------------------------------------------------</div><div class="line"> &#123;<span class="string">"id"</span>:1,<span class="string">"content"</span>:<span class="string">"hello article content"</span>,<span class="string">"tags"</span>:[<span class="string">"tag1"</span>,<span class="string">"tag2"</span>]&#125;</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.304 ms</div><div class="line">localhost:5433 sky@sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<h2 id="json-jsonb-中的CRUD"><a href="#json-jsonb-中的CRUD" class="headerlink" title="json(jsonb)中的CRUD"></a>json(jsonb)中的CRUD</h2><p>添加jsonb的字段</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">localhost:5433 sky@sky=<span class="comment"># create TABLE test_json(hello jsonb);</span></div><div class="line">CREATE TABLE</div><div class="line">Time: 5.642 ms</div><div class="line"></div><div class="line">localhost:5433 sky@sky=<span class="comment"># INSERT INTO test_json VALUES ('&#123;"hello":"hello-value", "wolrd":"world-value"&#125;');</span></div><div class="line">INSERT 0 1</div><div class="line">Time: 1.722 ms</div><div class="line">localhost:5433 sky@sky=<span class="comment"># SELECT * from test_json ;</span></div><div class="line">                      hello                       </div><div class="line">--------------------------------------------------</div><div class="line"> &#123;<span class="string">"hello"</span>: <span class="string">"hello-value"</span>, <span class="string">"wolrd"</span>: <span class="string">"world-value"</span>&#125;</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.179 ms</div><div class="line">localhost:5433 sky@sky=<span class="comment"># UPDATE test_json set hello = jsonb_set(hello, '&#123;hello&#125;', '"hello-new-value"'::text::jsonb, true);</span></div><div class="line">UPDATE 1</div><div class="line">Time: 0.994 ms</div><div class="line">localhost:5433 sky@sky=<span class="comment"># SELECT * from test_json ;</span></div><div class="line">                        hello                         </div><div class="line">------------------------------------------------------</div><div class="line"> &#123;<span class="string">"hello"</span>: <span class="string">"hello-new-value"</span>, <span class="string">"wolrd"</span>: <span class="string">"world-value"</span>&#125;</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.174 ms</div><div class="line">localhost:5433 sky@sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<p>删除jsonb的某字段</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">localhost:5433 sky@sky=<span class="comment"># UPDATE test_json set hello = (hello - 'hello');</span></div><div class="line">UPDATE 1</div><div class="line">Time: 0.883 ms</div><div class="line">localhost:5433 sky@sky=<span class="comment"># SELECT * from test_json ;</span></div><div class="line">          hello           </div><div class="line">--------------------------</div><div class="line"> &#123;<span class="string">"wolrd"</span>: <span class="string">"world-value"</span>&#125;</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.185 ms</div><div class="line">localhost:5433 sky@sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

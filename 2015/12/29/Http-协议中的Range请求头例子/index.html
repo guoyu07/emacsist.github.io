@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Http 协议中的Range请求头例子 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="http,tcp,header," />
+  
+
+  <meta name="description" content="HTTP 请求头 Range 请求资源的部分内容(不包括响应头的大小), 单位是byte,即字节,从0开始.  如果服务器能够正常响应的话，服务器会返回206 Partial Content的状态码及说明.如果不能处理这种Range的话，就会返回整个资源以及响应状态码为200 OK.（这个要注意，要分段下载时，要先判断这个） 比如：类似下面的 123456789101112131415161718">
+<meta name="keywords" content="http,tcp,header">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Http 协议中的Range请求头例子">
+<meta property="og:url" content="https://emacsist.github.io/2015/12/29/Http-协议中的Range请求头例子/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="HTTP 请求头 Range 请求资源的部分内容(不包括响应头的大小), 单位是byte,即字节,从0开始.  如果服务器能够正常响应的话，服务器会返回206 Partial Content的状态码及说明.如果不能处理这种Range的话，就会返回整个资源以及响应状态码为200 OK.（这个要注意，要分段下载时，要先判断这个） 比如：类似下面的 123456789101112131415161718">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Http 协议中的Range请求头例子">
+<meta name="twitter:description" content="HTTP 请求头 Range 请求资源的部分内容(不包括响应头的大小), 单位是byte,即字节,从0开始.  如果服务器能够正常响应的话，服务器会返回206 Partial Content的状态码及说明.如果不能处理这种Range的话，就会返回整个资源以及响应状态码为200 OK.（这个要注意，要分段下载时，要先判断这个） 比如：类似下面的 123456789101112131415161718">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-请求头-Range"><span class="toc-text">HTTP 请求头 Range</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Range-请求头格式"><span class="toc-text">Range 请求头格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#响应头"><span class="toc-text">响应头</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Content-Range"><span class="toc-text">Content-Range</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Content-Type"><span class="toc-text">Content-Type</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Content-Length"><span class="toc-text">Content-Length</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Last-Modified"><span class="toc-text">Last-Modified</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ETag"><span class="toc-text">ETag</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#强ETag"><span class="toc-text">强ETag</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#弱ETag"><span class="toc-text">弱ETag</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分段下载"><span class="toc-text">分段下载</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HEAD-请求"><span class="toc-text">HEAD 请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多线程下载"><span class="toc-text">多线程下载</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#线程1-下载"><span class="toc-text">线程1 下载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#线程2-下载"><span class="toc-text">线程2 下载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#合并"><span class="toc-text">合并</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-请求头注意"><span class="toc-text">HTTP 请求头注意</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Http-协议中的Range请求头例子" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Http 协议中的Range请求头例子
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2015.12.29</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#header">
+        <span class="tag-name">header</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#http">
+        <span class="tag-name">http</span>
+    <span class="tag-size">( 4 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#tcp">
+        <span class="tag-name">tcp</span>
+    <span class="tag-size">( 2 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="HTTP-请求头-Range"><a href="#HTTP-请求头-Range" class="headerlink" title="HTTP 请求头 Range"></a>HTTP 请求头 <code>Range</code></h2><blockquote>
+<p>请求资源的部分内容(不包括响应头的大小), 单位是byte,即字节,从0开始.</p>
+</blockquote>
+<p>如果服务器能够正常响应的话，服务器会返回<code>206 Partial Content</code>的状态码及说明.<br>如果不能处理这种Range的话，就会返回整个资源以及响应状态码为<code>200 OK</code>.（这个要注意，要分段下载时，要先判断这个）</p>
+<p>比如：类似下面的</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">➜  /tmp  curl -H <span class="string">"Range: bytes=0-10"</span> http://127.0.0.1:8180/<span class="built_in">bg</span>-upper.png -v</div><div class="line">* Hostname was NOT found <span class="keyword">in</span> DNS cache</div><div class="line">*   Trying 127.0.0.1...</div><div class="line">* Connected to 127.0.0.1 (127.0.0.1) port 8180 (<span class="comment">#0)</span></div><div class="line">&gt; GET /<span class="built_in">bg</span>-upper.png HTTP/1.1</div><div class="line">&gt; User-Agent: curl/7.35.0</div><div class="line">&gt; Host: 127.0.0.1:8180</div><div class="line">&gt; Accept: */*</div><div class="line">&gt; Range: bytes=0-10</div><div class="line">&gt;</div><div class="line">&lt; HTTP/1.1 206 Partial Content</div><div class="line">* Server Apache-Coyote/1.1 is not blacklisted</div><div class="line">&lt; Server: Apache-Coyote/1.1</div><div class="line">&lt; Accept-Ranges: bytes</div><div class="line">&lt; ETag: W/<span class="string">"3103-1435633968000"</span></div><div class="line">&lt; Last-Modified: Tue, 30 Jun 2015 03:12:48 GMT</div><div class="line">&lt; Content-Range: bytes 0-10/3103</div><div class="line">&lt; Content-Type: image/png</div><div class="line">&lt; Content-Length: 11</div><div class="line">&lt; Date: Tue, 29 Dec 2015 09:18:36 GMT</div><div class="line">&lt;</div><div class="line">PNG</div><div class="line"></div><div class="line">* Connection <span class="comment">#0 to host 127.0.0.1 left intact</span></div><div class="line">➜</div></pre></td></tr></table></figure>
+<p>响应头就是<code>HTTP/1.1 206 Partial Content</code></p>
+<h3 id="Range-请求头格式"><a href="#Range-请求头格式" class="headerlink" title="Range 请求头格式"></a>Range 请求头格式</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Range: bytes=start-end</div></pre></td></tr></table></figure>
+<p>例如：</p>
+<p><code>Range: bytes=10-</code>：第10个字节及最后个字节的数据<br><code>Range: bytes=40-100</code>：第40个字节到第100个字节之间的数据.</p>
+<p><em>注意，这个表示[start,end]，即是包含请求头的start及end字节的，所以，下一个请求，应该是上一个请求的[end+1, nextEnd]</em></p>
+<h3 id="响应头"><a href="#响应头" class="headerlink" title="响应头"></a>响应头</h3><h4 id="Content-Range"><a href="#Content-Range" class="headerlink" title="Content-Range"></a>Content-Range</h4><p><code>Content-Range: bytes 0-10/3103</code></p>
+<p>这个表示，服务器响应了前(0-10)个字节的数据，该资源一共有(3103)个字节大小。</p>
+<h4 id="Content-Type"><a href="#Content-Type" class="headerlink" title="Content-Type"></a>Content-Type</h4><p><code>Content-Type: image/png</code></p>
+<p>表示这个资源的类型</p>
+<h4 id="Content-Length"><a href="#Content-Length" class="headerlink" title="Content-Length"></a>Content-Length</h4><p><code>Content-Length: 11</code></p>
+<p>表示这次服务器响应了11个字节的数据（0-10）</p>
+<h4 id="Last-Modified"><a href="#Last-Modified" class="headerlink" title="Last-Modified"></a>Last-Modified</h4><p><code>Last-Modified: Tue, 30 Jun 2015 03:12:48 GMT</code></p>
+<p>表示资源最近修改的时间（分段下载时要注意这个东西，因为如果修改了，分段下载可能就要重新下载了）</p>
+<h4 id="ETag"><a href="#ETag" class="headerlink" title="ETag"></a>ETag</h4><p><code>ETag: W/&quot;3103-1435633968000&quot;</code></p>
+<p>这个响应头表示资源版本的标识符，通常是消息摘要(类似MD5一样）（分段下载时要注意这个东西，或者缓存控制也要注意这个东西）</p>
+<p><em>注意，每种服务器对生成ETag的算法不同，这个要特别注意</em> 如果使用分布式缓存，要特别要保证每台服务器生成的ETag算法是一致的.</p>
+<p>缓存的过期，要同时结合(ETag + Last-Modified)这两个响应头来判断.</p>
+<h5 id="强ETag"><a href="#强ETag" class="headerlink" title="强ETag"></a>强ETag</h5><p>只要实体发生任何改变，都会改变ETag值.如:</p>
+<p><code>ETag: &quot;1234234234&quot;</code></p>
+<h5 id="弱ETag"><a href="#弱ETag" class="headerlink" title="弱ETag"></a>弱ETag</h5><p>它在前面会有个<code>W/</code>，如：</p>
+<p><code>ETag: W/&quot;12342423&quot;</code></p>
+<h2 id="分段下载"><a href="#分段下载" class="headerlink" title="分段下载"></a>分段下载</h2><p>利用这个特点，我们可以使用分段下载（多线程下载，分布式下载）</p>
+<p>思想:先请求一个<code>HEAD</code>方法的请求，获取总文件大小：</p>
+<h3 id="HEAD-请求"><a href="#HEAD-请求" class="headerlink" title="HEAD 请求"></a>HEAD 请求</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">➜  /tmp  curl -X HEAD http://127.0.0.1:8180/<span class="built_in">bg</span>-upper.png -v</div><div class="line">* Hostname was NOT found <span class="keyword">in</span> DNS cache</div><div class="line">*   Trying 127.0.0.1...</div><div class="line">* Connected to 127.0.0.1 (127.0.0.1) port 8180 (<span class="comment">#0)</span></div><div class="line">&gt; HEAD /<span class="built_in">bg</span>-upper.png HTTP/1.1</div><div class="line">&gt; User-Agent: curl/7.35.0</div><div class="line">&gt; Host: 127.0.0.1:8180</div><div class="line">&gt; Accept: */*</div><div class="line">&gt;</div><div class="line">&lt; HTTP/1.1 200 OK</div><div class="line">* Server Apache-Coyote/1.1 is not blacklisted</div><div class="line">&lt; Server: Apache-Coyote/1.1</div><div class="line">&lt; Accept-Ranges: bytes</div><div class="line">&lt; ETag: W/<span class="string">"3103-1435633968000"</span></div><div class="line">&lt; Last-Modified: Tue, 30 Jun 2015 03:12:48 GMT</div><div class="line">&lt; Content-Type: image/png</div><div class="line">&lt; Content-Length: 3103</div><div class="line">&lt; Date: Tue, 29 Dec 2015 10:16:16 GMT</div><div class="line">&lt;</div><div class="line">* transfer closed with 3103 bytes remaining to <span class="built_in">read</span></div><div class="line">* Closing connection 0</div><div class="line">curl: (18) transfer closed with 3103 bytes remaining to <span class="built_in">read</span></div><div class="line">➜  /tmp</div></pre></td></tr></table></figure>
+<p>那个响应头的<code>Content-Length</code>就是总字节大小了（3103）字节.</p>
+<h3 id="多线程下载"><a href="#多线程下载" class="headerlink" title="多线程下载"></a>多线程下载</h3><p>假设分2条线程</p>
+<h4 id="线程1-下载"><a href="#线程1-下载" class="headerlink" title="线程1 下载"></a>线程1 下载</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">3103 / 2 = 1551</div><div class="line"></div><div class="line">➜  /tmp  curl -H <span class="string">"Range: bytes=0-1551"</span> http://127.0.0.1:8180/<span class="built_in">bg</span>-upper.png -v -o 0-1151.png</div><div class="line">* Hostname was NOT found <span class="keyword">in</span> DNS cache</div><div class="line">*   Trying 127.0.0.1...</div><div class="line">  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</div><div class="line">                                 Dload  Upload   Total   Spent    Left  Speed</div><div class="line">  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* Connected to 127.0.0.1 (127.0.0.1) port 8180 (<span class="comment">#0)</span></div><div class="line">&gt; GET /<span class="built_in">bg</span>-upper.png HTTP/1.1</div><div class="line">&gt; User-Agent: curl/7.35.0</div><div class="line">&gt; Host: 127.0.0.1:8180</div><div class="line">&gt; Accept: */*</div><div class="line">&gt; Range: bytes=0-1551</div><div class="line">&gt;</div><div class="line">&lt; HTTP/1.1 206 Partial Content</div><div class="line">* Server Apache-Coyote/1.1 is not blacklisted</div><div class="line">&lt; Server: Apache-Coyote/1.1</div><div class="line">&lt; Accept-Ranges: bytes</div><div class="line">&lt; ETag: W/<span class="string">"3103-1435633968000"</span></div><div class="line">&lt; Last-Modified: Tue, 30 Jun 2015 03:12:48 GMT</div><div class="line">&lt; Content-Range: bytes 0-1551/3103</div><div class="line">&lt; Content-Type: image/png</div><div class="line">&lt; Content-Length: 1552</div><div class="line">&lt; Date: Tue, 29 Dec 2015 10:19:43 GMT</div><div class="line">&lt;</div><div class="line">&#123; [data not shown]</div><div class="line">100  1552  100  1552    0     0  1376k      0 --:--:-- --:--:-- --:--:-- 1515k</div><div class="line">* Connection <span class="comment">#0 to host 127.0.0.1 left intact</span></div><div class="line">➜  /tmp</div></pre></td></tr></table></figure>
+<p>这样子，线程1就下载了（0-1551）字节的数据了.</p>
+<h4 id="线程2-下载"><a href="#线程2-下载" class="headerlink" title="线程2 下载"></a>线程2 下载</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">➜  /tmp  curl -H <span class="string">"Range: bytes=1552-3103"</span> http://127.0.0.1:8180/<span class="built_in">bg</span>-upper.png -v -o 1552-end.png</div><div class="line">* Hostname was NOT found <span class="keyword">in</span> DNS cache</div><div class="line">*   Trying 127.0.0.1...</div><div class="line">  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</div><div class="line">                                 Dload  Upload   Total   Spent    Left  Speed</div><div class="line">  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* Connected to 127.0.0.1 (127.0.0.1) port 8180 (<span class="comment">#0)</span></div><div class="line">&gt; GET /<span class="built_in">bg</span>-upper.png HTTP/1.1</div><div class="line">&gt; User-Agent: curl/7.35.0</div><div class="line">&gt; Host: 127.0.0.1:8180</div><div class="line">&gt; Accept: */*</div><div class="line">&gt; Range: bytes=1552</div><div class="line">&gt;</div><div class="line">&lt; HTTP/1.1 416 Requested Range Not Satisfiable</div><div class="line">* Server Apache-Coyote/1.1 is not blacklisted</div><div class="line">&lt; Server: Apache-Coyote/1.1</div><div class="line">&lt; Accept-Ranges: bytes</div><div class="line">&lt; Content-Range: bytes */3103</div><div class="line">&lt; Content-Type: text/html;charset=utf-8</div><div class="line">&lt; Content-Language: en</div><div class="line">&lt; Content-Length: 954</div><div class="line">&lt; Date: Tue, 29 Dec 2015 10:26:18 GMT</div><div class="line">&lt;</div><div class="line">&#123; [data not shown]</div><div class="line">100   954  100   954    0     0   457k      0 --:--:-- --:--:-- --:--:--  931k</div><div class="line">* Connection <span class="comment">#0 to host 127.0.0.1 left intact</span></div><div class="line">➜  /tmp</div></pre></td></tr></table></figure>
+<h4 id="合并"><a href="#合并" class="headerlink" title="合并"></a>合并</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat 0-1151.png 1552-end.png &gt; filename.png</div></pre></td></tr></table></figure>
+<p>这样子就OK了.</p>
+<h2 id="HTTP-请求头注意"><a href="#HTTP-请求头注意" class="headerlink" title="HTTP 请求头注意"></a>HTTP 请求头注意</h2><p>根据HTTP规范，HTTP的消息头部的字段名，是不区分大小写的.</p>
+<blockquote>
+<p>3.2.  Header Fields</p>
+<p>  Each header field consists of a case-insensitive field name followed<br>  by a colon (“:”), optional leading whitespace, the field value, and<br>  optional trailing whitespace.</p>
+</blockquote>
+<p><a href="https://tools.ietf.org/html/rfc7230#appendix-A.2" target="_blank" rel="external">RFC7230</a></p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

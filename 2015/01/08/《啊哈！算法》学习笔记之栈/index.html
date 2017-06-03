@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>《啊哈！算法》学习笔记之栈 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="算法,啊哈！算法," />
+  
+
+  <meta name="description" content="栈实现也很简单，只需要一个一维数组和一个指向栈顶的变量 top 就可以了。我们通过 top 来对栈进行插入和删除操作。 ##特点：后进先出 利用栈判断是否回文（java实现）1234567891011121314151617181920212223242526public static void main(String[] args) &amp;#123;    char[] character = &amp;#">
+<meta name="keywords" content="算法,啊哈！算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《啊哈！算法》学习笔记之栈">
+<meta property="og:url" content="https://emacsist.github.io/2015/01/08/《啊哈！算法》学习笔记之栈/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="栈实现也很简单，只需要一个一维数组和一个指向栈顶的变量 top 就可以了。我们通过 top 来对栈进行插入和删除操作。 ##特点：后进先出 利用栈判断是否回文（java实现）1234567891011121314151617181920212223242526public static void main(String[] args) &amp;#123;    char[] character = &amp;#">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《啊哈！算法》学习笔记之栈">
+<meta name="twitter:description" content="栈实现也很简单，只需要一个一维数组和一个指向栈顶的变量 top 就可以了。我们通过 top 来对栈进行插入和删除操作。 ##特点：后进先出 利用栈判断是否回文（java实现）1234567891011121314151617181920212223242526public static void main(String[] args) &amp;#123;    char[] character = &amp;#">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#栈"><span class="toc-text">栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#利用栈判断是否回文（java实现）"><span class="toc-text">利用栈判断是否回文（java实现）</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-《啊哈！算法》学习笔记之栈" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            《啊哈！算法》学习笔记之栈
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2015.01.08</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#啊哈！算法">
+        <span class="tag-name">啊哈！算法</span>
+    <span class="tag-size">( 5 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#算法">
+        <span class="tag-name">算法</span>
+    <span class="tag-size">( 5 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h2><p>实现也很简单，只需要一个一维数组和一个指向栈顶的变量 top 就可以了。我们通过 top 来对栈进行插入和删除操作。</p>
+<p>##特点：后进先出</p>
+<h2 id="利用栈判断是否回文（java实现）"><a href="#利用栈判断是否回文（java实现）" class="headerlink" title="利用栈判断是否回文（java实现）"></a>利用栈判断是否回文（java实现）</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">    <span class="keyword">char</span>[] character = &#123; <span class="string">'a'</span>, <span class="string">'a'</span>, <span class="string">'h'</span>, <span class="string">'a'</span>, <span class="string">'a'</span> &#125;;</div><div class="line">    <span class="keyword">char</span>[] <span class="built_in">stack</span> = <span class="keyword">new</span> <span class="keyword">char</span>[<span class="number">10</span>];</div><div class="line">    <span class="keyword">int</span> top = <span class="number">-1</span>;</div><div class="line">    <span class="keyword">int</span> mid = character.length % <span class="number">2</span> == <span class="number">0</span> ? character.length / <span class="number">2</span> - <span class="number">1</span> : character.length / <span class="number">2</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= mid; i++) &#123;</div><div class="line">        top++;</div><div class="line">        <span class="built_in">stack</span>[top] = character[i];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (character.length % <span class="number">2</span> == <span class="number">0</span>) &#123;</div><div class="line">        mid++;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = mid; i &lt; character.length; i++) &#123;</div><div class="line">        <span class="keyword">if</span> (top &gt;= <span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">if</span> (<span class="built_in">stack</span>[top] != character[i]) &#123;</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        top--;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (top == <span class="number">-1</span>) &#123;</div><div class="line">        System.out.println(<span class="string">"YES"</span>);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        System.out.println(<span class="string">"NO"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

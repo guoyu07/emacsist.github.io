@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>使用PostgreSQL无限递归 SELECT 评论系统 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="postgresql,database," />
+  
+
+  <meta name="description" content="假设有个评论系统，要求支持无限层级的回复，就像一棵树那样 12345       文章     /      \    /        \评论1     评论2.... 注意可以有任意个子树以及做任意个叶子 大意的表结构12345678create table comments (    comment_id serial primary key,    parent_id bigint,">
+<meta name="keywords" content="postgresql,database">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用PostgreSQL无限递归 SELECT 评论系统">
+<meta property="og:url" content="https://emacsist.github.io/2015/01/05/使用PostgreSQL无限递归-SELECT-评论系统/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="假设有个评论系统，要求支持无限层级的回复，就像一棵树那样 12345       文章     /      \    /        \评论1     评论2.... 注意可以有任意个子树以及做任意个叶子 大意的表结构12345678create table comments (    comment_id serial primary key,    parent_id bigint,">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用PostgreSQL无限递归 SELECT 评论系统">
+<meta name="twitter:description" content="假设有个评论系统，要求支持无限层级的回复，就像一棵树那样 12345       文章     /      \    /        \评论1     评论2.... 注意可以有任意个子树以及做任意个叶子 大意的表结构12345678create table comments (    comment_id serial primary key,    parent_id bigint,">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#大意的表结构"><span class="toc-text">大意的表结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL语句"><span class="toc-text">SQL语句</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-使用PostgreSQL无限递归-SELECT-评论系统" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            使用PostgreSQL无限递归 SELECT 评论系统
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2015.01.05</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p>假设有个评论系统，要求支持无限层级的回复，就像一棵树那样</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">       文章</div><div class="line">     /      \</div><div class="line">    /        \</div><div class="line">评论<span class="number">1</span>     评论<span class="number">2</span></div><div class="line">....</div></pre></td></tr></table></figure>
+<p>注意可以有任意个子树以及做任意个叶子</p>
+<h2 id="大意的表结构"><a href="#大意的表结构" class="headerlink" title="大意的表结构"></a>大意的表结构</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">create</span> <span class="keyword">table</span> comments (</div><div class="line">    comment_id <span class="built_in">serial</span> primary <span class="keyword">key</span>,</div><div class="line">    parent_id <span class="built_in">bigint</span>,</div><div class="line">    bug_id <span class="built_in">bigint</span> <span class="keyword">not</span> <span class="literal">null</span>,</div><div class="line">    author <span class="built_in">varchar</span>(<span class="number">20</span>) <span class="keyword">not</span> <span class="literal">null</span>,</div><div class="line">    <span class="keyword">comment</span> <span class="built_in">text</span> <span class="keyword">not</span> <span class="literal">null</span>,</div><div class="line">    foreign <span class="keyword">key</span> (parent_id) <span class="keyword">references</span> comments(comment_id)</div><div class="line">);</div></pre></td></tr></table></figure>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">test=<span class="comment"># select * from comments;</span></div><div class="line"> comment_id |<span class="string"> parent_id </span>|<span class="string"> bug_id </span>|<span class="string"> author </span>|<span class="string">       comment      </span></div><div class="line">------------+-----------+--------+--------+---------------------</div><div class="line">          1 |<span class="string">           </span>|<span class="string">      1 </span>|<span class="string"> Fran   </span>|<span class="string"> 这个bug的成因是什么</span></div><div class="line">          2 |<span class="string">         1 </span>|<span class="string">      1 </span>|<span class="string"> Ollie  </span>|<span class="string"> 我觉得是一个空指针</span></div><div class="line">          3 |<span class="string">         2 </span>|<span class="string">      1 </span>|<span class="string"> Fran   </span>|<span class="string"> 不，我查过了</span></div><div class="line">          4 |<span class="string">         1 </span>|<span class="string">      1 </span>|<span class="string"> Kukla  </span>|<span class="string"> 我们需要查无效输入</span></div><div class="line">          5 |<span class="string">         4 </span>|<span class="string">      1 </span>|<span class="string"> Ollie  </span>|<span class="string"> 是的，那是个问题</span></div><div class="line">          6 |<span class="string">         4 </span>|<span class="string">      1 </span>|<span class="string"> Fran   </span>|<span class="string"> 好，查一下吧</span></div><div class="line">          7 |<span class="string">         6 </span>|<span class="string">      1 </span>|<span class="string"> Kukla  </span>|<span class="string"> 解决了</span></div><div class="line">(7 rows)</div></pre></td></tr></table></figure>
+<h2 id="SQL语句"><a href="#SQL语句" class="headerlink" title="SQL语句"></a>SQL语句</h2><p>利用递归查询，可以查某篇文章评论组成的树结构。其中 depth是树的深度，显示的时候，按已经排序好的层次及相应的父结点显示出来就可以了。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">test=# with RECURSIVE  commenttree (comment_id, bug_id, parent_id, author, comment, depth) as (select comment_id, bug_id, parent_id, author, comment , 0 as depth from comments where parent_id is null union all select c.comment_id, c.bug_id, c.parent_id, c.author, c.comment, ct.depth+1 as depth from commenttree as ct join comments as c on (ct.comment_id = c.parent_id)) select * from commenttree where bug_id = 1;;</div><div class="line"> comment_id | bug_id | parent_id | author |       comment       | depth</div><div class="line">------------+--------+-----------+--------+---------------------+-------</div><div class="line">          1 |      1 |           | Fran   | 这个bug的成因是什么 |     0</div><div class="line">          2 |      1 |         1 | Ollie  | 我觉得是一个空指针  |     1</div><div class="line">          4 |      1 |         1 | Kukla  | 我们需要查无效输入  |     1</div><div class="line">          3 |      1 |         2 | Fran   | 不，我查过了        |     2</div><div class="line">          5 |      1 |         4 | Ollie  | 是的，那是个问题    |     2</div><div class="line">          6 |      1 |         4 | Fran   | 好，查一下吧        |     2</div><div class="line">          7 |      1 |         6 | Kukla  | 解决了              |     3</div><div class="line">(7 rows)</div><div class="line"> </div><div class="line">test=#</div></pre></td></tr></table></figure>
+<p>注意PostgreSQL里，必须加 RECURSIVE 才能支持递归。</p>
+<p>内容来源资料：<br>[1]《SQL反模式》</p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

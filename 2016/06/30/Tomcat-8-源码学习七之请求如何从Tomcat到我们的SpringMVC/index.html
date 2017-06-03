@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Tomcat 8 源码学习七之请求如何从Tomcat到我们的SpringMVC | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="java,tomcat,Tomcat源码," />
+  
+
+  <meta name="description" content="一次请求的调用栈 从上面的线程调用栈,可以看到一次请求的调用过程. 注意中间那些以Valve结尾的类,它是Tomcat的里的责任链的组件.每一个组件,在Tomcat里都有自己对请求时可以进行自定义的处理.比如AccessLogValve就是记录访问日志的Valve.Tomcat自带的Valve,可以在包org.apache.catalina.valves下可以看到所有的列表. 测试代码HelloS">
+<meta name="keywords" content="java,tomcat,Tomcat源码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tomcat 8 源码学习七之请求如何从Tomcat到我们的SpringMVC">
+<meta property="og:url" content="https://emacsist.github.io/2016/06/30/Tomcat-8-源码学习七之请求如何从Tomcat到我们的SpringMVC/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="一次请求的调用栈 从上面的线程调用栈,可以看到一次请求的调用过程. 注意中间那些以Valve结尾的类,它是Tomcat的里的责任链的组件.每一个组件,在Tomcat里都有自己对请求时可以进行自定义的处理.比如AccessLogValve就是记录访问日志的Valve.Tomcat自带的Valve,可以在包org.apache.catalina.valves下可以看到所有的列表. 测试代码HelloS">
+<meta property="og:image" content="https://emacsist.github.io/img/tomcat-source-debug-http.png">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tomcat 8 源码学习七之请求如何从Tomcat到我们的SpringMVC">
+<meta name="twitter:description" content="一次请求的调用栈 从上面的线程调用栈,可以看到一次请求的调用过程. 注意中间那些以Valve结尾的类,它是Tomcat的里的责任链的组件.每一个组件,在Tomcat里都有自己对请求时可以进行自定义的处理.比如AccessLogValve就是记录访问日志的Valve.Tomcat自带的Valve,可以在包org.apache.catalina.valves下可以看到所有的列表. 测试代码HelloS">
+<meta name="twitter:image" content="https://emacsist.github.io/img/tomcat-source-debug-http.png">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一次请求的调用栈"><span class="toc-text">一次请求的调用栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试代码"><span class="toc-text">测试代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HelloServlet"><span class="toc-text">HelloServlet</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#web-xml"><span class="toc-text">web.xml</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解析HTTP协议"><span class="toc-text">解析HTTP协议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#调用相应的责任链"><span class="toc-text">调用相应的责任链</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tomcat到SpringMVC"><span class="toc-text">Tomcat到SpringMVC</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Tomcat-8-源码学习七之请求如何从Tomcat到我们的SpringMVC" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Tomcat 8 源码学习七之请求如何从Tomcat到我们的SpringMVC
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2016.06.30</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#Tomcat源码">
+        <span class="tag-name">Tomcat源码</span>
+    <span class="tag-size">( 9 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#tomcat">
+        <span class="tag-name">tomcat</span>
+    <span class="tag-size">( 20 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="一次请求的调用栈"><a href="#一次请求的调用栈" class="headerlink" title="一次请求的调用栈"></a>一次请求的调用栈</h2><p><img src="/img/tomcat-source-debug-http.png" alt=""></p>
+<p>从上面的线程调用栈,可以看到一次请求的调用过程.</p>
+<p>注意中间那些以<code>Valve</code>结尾的类,它是Tomcat的里的责任链的组件.每一个组件,在Tomcat里都有自己对请求时可以进行自定义的处理.比如<code>AccessLogValve</code>就是记录访问日志的<code>Valve</code>.Tomcat自带的Valve,可以在包<code>org.apache.catalina.valves</code>下可以看到所有的列表.</p>
+<h2 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h2><h3 id="HelloServlet"><a href="#HelloServlet" class="headerlink" title="HelloServlet"></a>HelloServlet</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">package com.example;</div><div class="line"></div><div class="line">import javax.servlet.ServletException;</div><div class="line">import javax.servlet.http.HttpServlet;</div><div class="line">import javax.servlet.http.HttpServletRequest;</div><div class="line">import javax.servlet.http.HttpServletResponse;</div><div class="line">import java.io.IOException;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by sky on 16-6-30.</div><div class="line"> */</div><div class="line">public class HelloServlet extends HttpServlet &#123;</div><div class="line">    @Override</div><div class="line">    protected void <span class="keyword">do</span>Get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123;</div><div class="line">        resp.getWriter().write(<span class="string">"hello world"</span>);</div><div class="line">        resp.getWriter().flush();</div><div class="line">        resp.getWriter().close();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="web-xml"><a href="#web-xml" class="headerlink" title="web.xml"></a>web.xml</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"ISO-8859-1"</span>?&gt;</div><div class="line">&lt;!--</div><div class="line"> Licensed to the Apache Software Foundation (ASF) under one or more</div><div class="line">  contributor license agreements.  See the NOTICE file distributed with</div><div class="line">  this work <span class="keyword">for</span> additional information regarding copyright ownership.</div><div class="line">  The ASF licenses this file to You under the Apache License, Version 2.0</div><div class="line">  (the <span class="string">"License"</span>); you may not use this file except <span class="keyword">in</span> compliance with</div><div class="line">  the License.  You may obtain a copy of the License at</div><div class="line"></div><div class="line">      http://www.apache.org/licenses/LICENSE-2.0</div><div class="line"></div><div class="line">  Unless required by applicable law or agreed to <span class="keyword">in</span> writing, software</div><div class="line">  distributed under the License is distributed on an <span class="string">"AS IS"</span> BASIS,</div><div class="line">  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</div><div class="line">  See the License <span class="keyword">for</span> the specific language governing permissions and</div><div class="line">  limitations under the License.</div><div class="line">--&gt;</div><div class="line">&lt;web-app xmlns=<span class="string">"http://xmlns.jcp.org/xml/ns/javaee"</span></div><div class="line">  xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></div><div class="line">  xsi:schemaLocation=<span class="string">"http://xmlns.jcp.org/xml/ns/javaee</span></div><div class="line">                      http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"</div><div class="line">  version=<span class="string">"3.1"</span></div><div class="line">  metadata-complete=<span class="string">"true"</span>&gt;</div><div class="line"></div><div class="line">  &lt;display-name&gt;Welcome to Tomcat&lt;/display-name&gt;</div><div class="line">  &lt;description&gt;</div><div class="line">     Welcome to Tomcat</div><div class="line">  &lt;/description&gt;</div><div class="line"></div><div class="line">    &lt;servlet&gt;</div><div class="line">        &lt;servlet-name&gt;hello-servlet&lt;/servlet-name&gt;</div><div class="line">        &lt;servlet-class&gt;com.example.HelloServlet&lt;/servlet-class&gt;</div><div class="line">        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;</div><div class="line">    &lt;/servlet&gt;</div><div class="line">    &lt;servlet-mapping&gt;</div><div class="line">        &lt;servlet-name&gt;hello-servlet&lt;/servlet-name&gt;</div><div class="line">        &lt;url-pattern&gt;/hello&lt;/url-pattern&gt;</div><div class="line">    &lt;/servlet-mapping&gt;</div><div class="line"></div><div class="line">&lt;/web-app&gt;</div></pre></td></tr></table></figure>
+<h2 id="解析HTTP协议"><a href="#解析HTTP协议" class="headerlink" title="解析HTTP协议"></a>解析HTTP协议</h2><p>Tomcat8默认使用 NIO 来处理HTTP了.看调用栈,可以知道,它通过<code>org.apache.coyote.http11.AbstractInputBuffer.parseRequestLine()</code>来解析请求头的.</p>
+<p>请求头的内容,保存在以下这个字段里.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">* Pointer to the current <span class="built_in">read</span> buffer.</div><div class="line">*/</div><div class="line">protected byte[] buf;</div></pre></td></tr></table></figure>
+<p>解析完成后,就创建了一个<code>org.apache.catalina.connector.Request</code>对象.</p>
+<h2 id="调用相应的责任链"><a href="#调用相应的责任链" class="headerlink" title="调用相应的责任链"></a>调用相应的责任链</h2><p>通过Requset对象,再查找相应的Servlet(应该说是调用链,在Tomcat里,它用<code>StandardWrapper</code>对象表示, 在这里就是<code>hello-servlet</code>)(代码是 <code>StandardWrapper wrapper = (StandardWrapper) getContainer();</code> )<br>最后,Tomcat就会调用名为<code>hello-servlet</code>的Servlet来执行代码了.</p>
+<h2 id="Tomcat到SpringMVC"><a href="#Tomcat到SpringMVC" class="headerlink" title="Tomcat到SpringMVC"></a>Tomcat到SpringMVC</h2><p>上面就已经执行到了我们自定义的<code>hello-servlet</code>了,只要将这个Servlet,替换成Spring的<code>org.springframework.web.servlet.DispatcherServlet</code>即可.它是SpringMVC的总控制及转发器(路由器,因为SpringMVC并不是使用传统的Servlet来对应每一个请求,而是使用Bean的某个方法来处理).</p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

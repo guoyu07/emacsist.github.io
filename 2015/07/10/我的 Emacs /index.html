@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>我的Emacs | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="emacs,prelude," />
+  
+
+  <meta name="description" content="Emacs PreludeGithub 配置说明~/.emacs.d/personal 目录: 用于存放自己的个性化配置, 最好不要动其他的目录的文件. 比如自己通过 package-install 安装完成后,可以将该插件的一些配置自定义放在这里 ~/.emacs.d/personal/preload/ 目录: 用于最先预加载自己的配置文件, 在加载 Prelude 之前会加载这个目录下的所有配">
+<meta name="keywords" content="emacs,prelude">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我的Emacs">
+<meta property="og:url" content="https://emacsist.github.io/2015/07/10/我的 Emacs /index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="Emacs PreludeGithub 配置说明~/.emacs.d/personal 目录: 用于存放自己的个性化配置, 最好不要动其他的目录的文件. 比如自己通过 package-install 安装完成后,可以将该插件的一些配置自定义放在这里 ~/.emacs.d/personal/preload/ 目录: 用于最先预加载自己的配置文件, 在加载 Prelude 之前会加载这个目录下的所有配">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的Emacs">
+<meta name="twitter:description" content="Emacs PreludeGithub 配置说明~/.emacs.d/personal 目录: 用于存放自己的个性化配置, 最好不要动其他的目录的文件. 比如自己通过 package-install 安装完成后,可以将该插件的一些配置自定义放在这里 ~/.emacs.d/personal/preload/ 目录: 用于最先预加载自己的配置文件, 在加载 Prelude 之前会加载这个目录下的所有配">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Emacs-Prelude"><span class="toc-text">Emacs Prelude</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#配置说明"><span class="toc-text">配置说明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#我使用的插件"><span class="toc-text">我使用的插件</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-我的 Emacs " class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            我的Emacs
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2015.07.10</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#emacs">
+        <span class="tag-name">emacs</span>
+    <span class="tag-size">( 13 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#prelude">
+        <span class="tag-name">prelude</span>
+    <span class="tag-size">( 2 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="Emacs-Prelude"><a href="#Emacs-Prelude" class="headerlink" title="Emacs Prelude"></a>Emacs Prelude</h2><p><a href="https://github.com/bbatsov/prelude" target="_blank" rel="external">Github</a></p>
+<h3 id="配置说明"><a href="#配置说明" class="headerlink" title="配置说明"></a>配置说明</h3><p><code>~/.emacs.d/personal</code> 目录: 用于存放自己的个性化配置, 最好不要动其他的目录的文件.</p>
+<p>比如自己通过 package-install 安装完成后,可以将该插件的一些配置自定义放在这里</p>
+<p><code>~/.emacs.d/personal/preload/</code> 目录: 用于最先预加载自己的配置文件, 在加载 Prelude 之前会加载这个目录下的所有配置文件.</p>
+<p>比如主题配置, 可以放在这里</p>
+<blockquote>
+<p>Prelude 源码里有注释说明: <code>&quot;This directory is for your personal configuration, that you want loaded before Prelude.&quot;</code></p>
+</blockquote>
+<h2 id="我使用的插件"><a href="#我使用的插件" class="headerlink" title="我使用的插件"></a>我使用的插件</h2><ul>
+<li><p>ace-jump-mode</p>
+</li>
+<li><p>relative-line-number</p>
+</li>
+</ul>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Spring session 添加HttpSessionListener | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="java,spring,session," />
+  
+
+  <meta name="description" content="这时介绍的版本，是基于以下版本: 12345&amp;lt;dependency&amp;gt;          &amp;lt;groupId&amp;gt;org.springframework.session&amp;lt;/groupId&amp;gt;          &amp;lt;artifactId&amp;gt;spring-session&amp;lt;/artifactId&amp;gt;          &amp;lt;version&amp;gt;1.1.0.">
+<meta name="keywords" content="java,spring,session">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring session 添加HttpSessionListener">
+<meta property="og:url" content="https://emacsist.github.io/2015/11/23/Spring-session-添加HttpSessionListener/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="这时介绍的版本，是基于以下版本: 12345&amp;lt;dependency&amp;gt;          &amp;lt;groupId&amp;gt;org.springframework.session&amp;lt;/groupId&amp;gt;          &amp;lt;artifactId&amp;gt;spring-session&amp;lt;/artifactId&amp;gt;          &amp;lt;version&amp;gt;1.1.0.">
+<meta property="og:updated_time" content="2017-02-13T08:53:17.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring session 添加HttpSessionListener">
+<meta name="twitter:description" content="这时介绍的版本，是基于以下版本: 12345&amp;lt;dependency&amp;gt;          &amp;lt;groupId&amp;gt;org.springframework.session&amp;lt;/groupId&amp;gt;          &amp;lt;artifactId&amp;gt;spring-session&amp;lt;/artifactId&amp;gt;          &amp;lt;version&amp;gt;1.1.0.">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#先上示例demo"><span class="toc-text">先上示例demo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现原理"><span class="toc-text">实现原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#事件类型"><span class="toc-text">事件类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#事件的触发"><span class="toc-text">事件的触发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Spring自带的事件模型例子"><span class="toc-text">Spring自带的事件模型例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#同步事件模型"><span class="toc-text">同步事件模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异步事件模型"><span class="toc-text">异步事件模型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注意"><span class="toc-text">注意</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Spring-session-添加HttpSessionListener" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Spring session 添加HttpSessionListener
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2015.11.23</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#session">
+        <span class="tag-name">session</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#spring">
+        <span class="tag-name">spring</span>
+    <span class="tag-size">( 27 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p>这时介绍的版本，是基于以下版本:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">          &lt;groupId&gt;org.springframework.session&lt;/groupId&gt;</div><div class="line">          &lt;artifactId&gt;spring-session&lt;/artifactId&gt;</div><div class="line">          &lt;version&gt;1.1.0.M1&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
+<h2 id="先上示例demo"><a href="#先上示例demo" class="headerlink" title="先上示例demo"></a>先上示例demo</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</div><div class="line">&lt;beans xmlns=<span class="string">"http://www.springframework.org/schema/beans"</span></div><div class="line">       xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></div><div class="line">       xmlns:p=<span class="string">"http://www.springframework.org/schema/p"</span></div><div class="line">       xmlns:context=<span class="string">"http://www.springframework.org/schema/context"</span></div><div class="line"></div><div class="line">       xsi:schemaLocation=<span class="string">"http://www.springframework.org/schema/beans</span></div><div class="line">			http://www.springframework.org/schema/beans/spring-beans-3.2.xsd</div><div class="line">			  http://www.springframework.org/schema/context</div><div class="line">        http://www.springframework.org/schema/context/spring-context-3.2.xsd"&gt;</div><div class="line"></div><div class="line"></div><div class="line">    &lt;context:annotation-config /&gt;</div><div class="line"></div><div class="line">    &lt;bean id=<span class="string">"v2redisConnectionFactory"</span> class=<span class="string">"org.springframework.data.redis.connection.jedis.JedisConnectionFactory"</span></div><div class="line">          p:host-name=<span class="string">"<span class="variable">$&#123;config.redis.host&#125;</span>"</span> p:port=<span class="string">"<span class="variable">$&#123;redis.port&#125;</span>"</span> p:use-pool=<span class="string">"true"</span> p:database=<span class="string">"<span class="variable">$&#123;redis.database&#125;</span>"</span></div><div class="line">          p:password=<span class="string">"<span class="variable">$&#123;config.redis.password&#125;</span>"</span></div><div class="line">            /&gt;</div><div class="line"></div><div class="line">    &lt;bean id=<span class="string">"stringRedisSerializer"</span></div><div class="line">          class=<span class="string">"org.springframework.data.redis.serializer.StringRedisSerializer"</span>/&gt;</div><div class="line"></div><div class="line">    &lt;bean id=<span class="string">"genericToStringSerializer"</span> class=<span class="string">"org.springframework.data.redis.serializer.GenericToStringSerializer"</span>&gt;</div><div class="line">        &lt;constructor-arg <span class="built_in">type</span>=<span class="string">"java.lang.Class"</span> value=<span class="string">"java.lang.Object"</span>&gt;&lt;/constructor-arg&gt;</div><div class="line">    &lt;/bean&gt;</div><div class="line"></div><div class="line">    &lt;bean id=<span class="string">"object"</span> class=<span class="string">"java.lang.Object"</span>/&gt;</div><div class="line"></div><div class="line">    &lt;bean id=<span class="string">"v2redisTemplate"</span> class=<span class="string">"org.springframework.data.redis.core.RedisTemplate"</span></div><div class="line">          p:connection-factory-ref=<span class="string">"v2redisConnectionFactory"</span></div><div class="line">          p:keySerializer-ref=<span class="string">"stringRedisSerializer"</span></div><div class="line">          p:valueSerializer-ref=<span class="string">"genericToStringSerializer"</span></div><div class="line">          p:<span class="built_in">hash</span>KeySerializer-ref=<span class="string">"stringRedisSerializer"</span></div><div class="line">          p:<span class="built_in">hash</span>ValueSerializer-ref=<span class="string">"genericToStringSerializer"</span>/&gt;</div><div class="line"></div><div class="line">    &lt;bean class=<span class="string">"org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration"</span>/&gt;</div><div class="line">    </div><div class="line">    &lt;!-- 2017-2-13 更新： --&gt;</div><div class="line">    &lt;!-- YourHttpSessionListener 加上 @Component 注解即可，不需要下面的配置了，因为上面 RedisHttpSessionConfiguration 会自动将实现了</div><div class="line">    HttpSessionListener 的 bean 注册 ，下面再注册的话，就会执行多次了 --&gt;</div><div class="line">    &lt;!-- Http session Listener Start --&gt;</div><div class="line">    &lt;!--&lt;bean id=<span class="string">"l"</span> class=<span class="string">"org.springframework.session.web.http.SessionEventHttpSessionListenerAdapter"</span>&gt;--&gt;</div><div class="line">        &lt;!--&lt;constructor-arg&gt;--&gt;</div><div class="line">            &lt;!--&lt;list&gt;--&gt;</div><div class="line">                &lt;!--&lt;ref bean=<span class="string">"webHttpSessionListener"</span> /&gt;--&gt;</div><div class="line">            &lt;!--&lt;/list&gt;--&gt;</div><div class="line">        &lt;!--&lt;/constructor-arg&gt;--&gt;</div><div class="line">    &lt;!--&lt;/bean&gt;--&gt;</div><div class="line"></div><div class="line">    &lt;!--&lt;bean class=<span class="string">"org.springframework.security.web.session.HttpSessionEventPublisher"</span>/&gt;--&gt;</div><div class="line">    &lt;!-- END --&gt;</div><div class="line">&lt;/beans&gt;</div></pre></td></tr></table></figure>
+<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><h3 id="事件类型"><a href="#事件类型" class="headerlink" title="事件类型"></a>事件类型</h3><p>通过查看源码，可知在包<code>org.springframework.session.events</code>下，有4个session生命周期的类型，比默认的<code>javax.servlet.http.HttpSessionListener</code>还多了两个.<br>分别是以下四种事件类型：</p>
+<ol>
+<li>SessionCreatedEvent; Session创建</li>
+<li>SessionDeletedEvent; Session删除</li>
+<li>SessionDestroyedEvent; Session销毁</li>
+<li>SessionExpiredEvent; Session过期</li>
+</ol>
+<h3 id="事件的触发"><a href="#事件的触发" class="headerlink" title="事件的触发"></a>事件的触发</h3><p>查看源码<code>org.springframework.session.data.redis.RedisOperationsSessionRepository</code>可知:</p>
+<p>事件的触发，是由<code>org.springframework.context.ApplicationEventPublisher</code>来发布事件的，它利用了Spring自带的事件模型来进行session的生命周期的事件发布。</p>
+<h3 id="Spring自带的事件模型例子"><a href="#Spring自带的事件模型例子" class="headerlink" title="Spring自带的事件模型例子"></a>Spring自带的事件模型例子</h3><p>步骤:</p>
+<ol>
+<li><p>创建一个自定义的事件，它要继承于<code>org.springframework.context.ApplicationEvent</code>，然后在这里定义事件的属性和方法</p>
+</li>
+<li><p>创建一个自定义事件的发布器（广播器）,实现<code>org.springframework.context.ApplicationEventPublisherAware</code>接口，或者<code>@Autowire ApplicationEventPublisher applicationEventPublisher</code>，然后通过它来发布自定义事件.</p>
+</li>
+<li><p>创建一个自定义事件的监听器，它要实现<code>org.springframework.context.ApplicationListener</code>即可。</p>
+</li>
+</ol>
+<h3 id="同步事件模型"><a href="#同步事件模型" class="headerlink" title="同步事件模型"></a>同步事件模型</h3><p>默认情况下，就是同步的.</p>
+<p>创建一个登录的事件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public class TestLoginEvent extends ApplicationEvent &#123;</div><div class="line"></div><div class="line">    private int userId;</div><div class="line"></div><div class="line">    public TestLoginEvent(int userId) &#123;</div><div class="line">        super(userId);</div><div class="line">        this.userId = userId;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    public int <span class="function"><span class="title">getUserId</span></span>() &#123;</div><div class="line">        <span class="built_in">return</span> userId;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void <span class="built_in">set</span>UserId(int userId) &#123;</div><div class="line">        this.userId = userId;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>创建一个登录的事件的发布者:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">@Service</div><div class="line">public class TestLoginEventPubisher implements ApplicationEventPublisherAware &#123;</div><div class="line">    private ApplicationEventPublisher applicationEventPublisher;</div><div class="line"></div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void <span class="built_in">set</span>ApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) &#123;</div><div class="line">        this.applicationEventPublisher = applicationEventPublisher;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void login(int userId) &#123;</div><div class="line">        applicationEventPublisher.publishEvent(new TestLoginEvent(userId));</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>创建一个登录事件的监听器:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@Service</div><div class="line">public class TestLoginEventListener implements ApplicationListener&lt;TestLoginEvent&gt; &#123;</div><div class="line">    @Override</div><div class="line">    public void onApplicationEvent(TestLoginEvent event) &#123;</div><div class="line">        int userId = event.getUserId();</div><div class="line">        System.out.println(<span class="string">"user "</span> + userId + <span class="string">" login"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样子就OK了。不过，这样子的模型，是同步的事件处理模型。</p>
+<h3 id="异步事件模型"><a href="#异步事件模型" class="headerlink" title="异步事件模型"></a>异步事件模型</h3><p>默认的情况下，是同步的事件处理模型，想改为异步，则进行如下修改即可：</p>
+<ol>
+<li>在spring应用的配置文件里，添加以下配置：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;context:annotation-config /&gt;</div><div class="line">&lt;aop:aspectj-autoproxy /&gt;</div><div class="line">&lt;aop:aspectj-autoproxy proxy-target-class=<span class="string">"true"</span> /&gt;</div><div class="line"></div><div class="line">&lt;task:annotation-driven executor=<span class="string">"myExecutor"</span> scheduler=<span class="string">"myScheduler"</span>/&gt;</div><div class="line">&lt;task:executor id=<span class="string">"myExecutor"</span> pool-size=<span class="string">"10"</span> /&gt;</div><div class="line">&lt;task:scheduler id=<span class="string">"myScheduler"</span> pool-size=<span class="string">"10"</span> /&gt;</div></pre></td></tr></table></figure>
+<ol>
+<li>在发布者(publisher)或者监听器（listener)相应的方法上，添加注解 <code>@Async</code> 即可.</li>
+</ol>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>使用 Spring-session ，它会将 Session 的生命周期的事件，发布给所有集群中的 Tomcat 的，所以，如果你需要监听这些事件，而且事件的动作，只需要执行一次的话，那就要进行额外的处理了（比如，一个用户退出时，插入一条日志到数据库，如果不进行额外的处理的话，那你的集群里有多少个 Tomcat，就会插入多少条日志了，这可能并不是我们想要的）</p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

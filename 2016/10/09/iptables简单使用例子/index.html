@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>iptables简单使用例子 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="linux,iptables," />
+  
+
+  <meta name="description" content="保存1sudo iptables-save &amp;gt; iptables.rule 还原1sudo iptables-restore &amp;lt; iptables.rule 持久化1sudo apt-get install iptables-persistent 删除某条规则1234sudo iptables -L --line-numbers然后删除sudo iptables -D INPUT（即所">
+<meta name="keywords" content="linux,iptables">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iptables简单使用例子">
+<meta property="og:url" content="https://emacsist.github.io/2016/10/09/iptables简单使用例子/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="保存1sudo iptables-save &amp;gt; iptables.rule 还原1sudo iptables-restore &amp;lt; iptables.rule 持久化1sudo apt-get install iptables-persistent 删除某条规则1234sudo iptables -L --line-numbers然后删除sudo iptables -D INPUT（即所">
+<meta property="og:updated_time" content="2017-02-22T04:13:05.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iptables简单使用例子">
+<meta name="twitter:description" content="保存1sudo iptables-save &amp;gt; iptables.rule 还原1sudo iptables-restore &amp;lt; iptables.rule 持久化1sudo apt-get install iptables-persistent 删除某条规则1234sudo iptables -L --line-numbers然后删除sudo iptables -D INPUT（即所">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#保存"><span class="toc-text">保存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#还原"><span class="toc-text">还原</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#持久化"><span class="toc-text">持久化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除某条规则"><span class="toc-text">删除某条规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#禁用某端口，但只允许指定的ip访问"><span class="toc-text">禁用某端口，但只允许指定的ip访问</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-iptables简单使用例子" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            iptables简单使用例子
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2016.10.09</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#iptables">
+        <span class="tag-name">iptables</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#linux">
+        <span class="tag-name">linux</span>
+    <span class="tag-size">( 14 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="保存"><a href="#保存" class="headerlink" title="保存"></a>保存</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo iptables-save &gt; iptables.rule</div></pre></td></tr></table></figure>
+<h2 id="还原"><a href="#还原" class="headerlink" title="还原"></a>还原</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo iptables-restore &lt; iptables.rule</div></pre></td></tr></table></figure>
+<h2 id="持久化"><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install iptables-persistent</div></pre></td></tr></table></figure>
+<h2 id="删除某条规则"><a href="#删除某条规则" class="headerlink" title="删除某条规则"></a>删除某条规则</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sudo iptables -L --line-numbers</div><div class="line"></div><div class="line">然后删除</div><div class="line">sudo iptables -D INPUT（即所在类型） 行号</div></pre></td></tr></table></figure>
+<h2 id="禁用某端口，但只允许指定的ip访问"><a href="#禁用某端口，但只允许指定的ip访问" class="headerlink" title="禁用某端口，但只允许指定的ip访问"></a>禁用某端口，但只允许指定的ip访问</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">iptables -A INPUT -p tcp --dport 8000 <span class="_">-s</span> 1.2.3.4 -j ACCEPT</div><div class="line">iptables -A INPUT -p tcp --dport 8000 -j DROP</div></pre></td></tr></table></figure>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

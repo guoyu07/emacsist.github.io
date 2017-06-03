@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java 日志实践 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="java,log," />
+  
+
+  <meta name="description" content="每个类一个Logger1private static final Logger LOG = LoggerFactory.getLogger(Your.class); 日志级别trace最详细的日志级别信息 debug调试级别的日志级别信息 info一般的日志级别信息 warn警告级别信息 error错误级别信息 fatal导致终止程序的级别信息 在应用中按需开启不同的级别示例日志配置 123456">
+<meta name="keywords" content="java,log">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 日志实践">
+<meta property="og:url" content="https://emacsist.github.io/2015/07/23/Java-日志实践/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="每个类一个Logger1private static final Logger LOG = LoggerFactory.getLogger(Your.class); 日志级别trace最详细的日志级别信息 debug调试级别的日志级别信息 info一般的日志级别信息 warn警告级别信息 error错误级别信息 fatal导致终止程序的级别信息 在应用中按需开启不同的级别示例日志配置 123456">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java 日志实践">
+<meta name="twitter:description" content="每个类一个Logger1private static final Logger LOG = LoggerFactory.getLogger(Your.class); 日志级别trace最详细的日志级别信息 debug调试级别的日志级别信息 info一般的日志级别信息 warn警告级别信息 error错误级别信息 fatal导致终止程序的级别信息 在应用中按需开启不同的级别示例日志配置 123456">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#每个类一个Logger"><span class="toc-text">每个类一个Logger</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#日志级别"><span class="toc-text">日志级别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#trace"><span class="toc-text">trace</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#debug"><span class="toc-text">debug</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#info"><span class="toc-text">info</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#warn"><span class="toc-text">warn</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#error"><span class="toc-text">error</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fatal"><span class="toc-text">fatal</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在应用中按需开启不同的级别"><span class="toc-text">在应用中按需开启不同的级别</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Java-日志实践" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Java 日志实践
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2015.07.23</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#log">
+        <span class="tag-name">log</span>
+    <span class="tag-size">( 5 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="每个类一个Logger"><a href="#每个类一个Logger" class="headerlink" title="每个类一个Logger"></a>每个类一个Logger</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger LOG = LoggerFactory.getLogger(Your.class);</div></pre></td></tr></table></figure>
+<h2 id="日志级别"><a href="#日志级别" class="headerlink" title="日志级别"></a>日志级别</h2><h3 id="trace"><a href="#trace" class="headerlink" title="trace"></a>trace</h3><p>最详细的日志级别信息</p>
+<h3 id="debug"><a href="#debug" class="headerlink" title="debug"></a>debug</h3><p>调试级别的日志级别信息</p>
+<h3 id="info"><a href="#info" class="headerlink" title="info"></a>info</h3><p>一般的日志级别信息</p>
+<h3 id="warn"><a href="#warn" class="headerlink" title="warn"></a>warn</h3><p>警告级别信息</p>
+<h3 id="error"><a href="#error" class="headerlink" title="error"></a>error</h3><p>错误级别信息</p>
+<h3 id="fatal"><a href="#fatal" class="headerlink" title="fatal"></a>fatal</h3><p>导致终止程序的级别信息</p>
+<h2 id="在应用中按需开启不同的级别"><a href="#在应用中按需开启不同的级别" class="headerlink" title="在应用中按需开启不同的级别"></a>在应用中按需开启不同的级别</h2><p>示例日志配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</div><div class="line">&lt;configuration &gt;</div><div class="line">	&lt;appender name=<span class="string">"STDOUT"</span> class=<span class="string">"ch.qos.logback.core.ConsoleAppender"</span>&gt;</div><div class="line">		&lt;layout class=<span class="string">"ch.qos.logback.classic.PatternLayout"</span>&gt;</div><div class="line">			&lt;Pattern&gt;%-70(%c&#123;15&#125;.%M[%date&#123;yyyy-MM-dd HH:mm:ss&#125;]) : %m%ex%n&lt;/Pattern&gt;</div><div class="line">		&lt;/layout&gt;</div><div class="line">	&lt;/appender&gt;</div><div class="line">	&lt;root&gt;</div><div class="line">                &lt;!-- 假设是生产环境，可以默认将所有日志级别设置为error级别 --&gt;</div><div class="line">		&lt;level value=<span class="string">"error"</span> /&gt;</div><div class="line">		&lt;appender-ref ref=<span class="string">"STDOUT"</span> /&gt;</div><div class="line">	&lt;/root&gt;</div><div class="line">        &lt;!-- 这里可以将在你程序里，想要将不同的类设置为不同的级别打印消息 --&gt;</div><div class="line">        &lt;logger name=<span class="string">"com.your.packge[.YourClassName]"</span> level=<span class="string">"debug"</span>&gt;</div><div class="line">	   &lt;appender-ref ref=<span class="string">"STDOUT"</span> /&gt;</div><div class="line">	&lt;/logger&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

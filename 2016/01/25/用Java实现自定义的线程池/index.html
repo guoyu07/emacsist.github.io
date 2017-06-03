@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>“[翻译]用Java实现自定义的线程池” | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="java,thread pool," />
+  
+
+  <meta name="description" content="原文 让我们用Java来实现自定义的线程池. 让我们首先定义一个类，它拥有两个方法enqueue和dequeue. 这个类的dequeue方法将充当一个阻塞队列。即，当队列里有数据时，阻塞所有调用dequeue方法，否则就一直等待。 123456789package com.pract.threadpool;public interface CustomQueue&amp;lt;E&amp;gt;&amp;#123;">
+<meta name="keywords" content="java,thread pool">
+<meta property="og:type" content="article">
+<meta property="og:title" content="“[翻译]用Java实现自定义的线程池”">
+<meta property="og:url" content="https://emacsist.github.io/2016/01/25/用Java实现自定义的线程池/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="原文 让我们用Java来实现自定义的线程池. 让我们首先定义一个类，它拥有两个方法enqueue和dequeue. 这个类的dequeue方法将充当一个阻塞队列。即，当队列里有数据时，阻塞所有调用dequeue方法，否则就一直等待。 123456789package com.pract.threadpool;public interface CustomQueue&amp;lt;E&amp;gt;&amp;#123;">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="“[翻译]用Java实现自定义的线程池”">
+<meta name="twitter:description" content="原文 让我们用Java来实现自定义的线程池. 让我们首先定义一个类，它拥有两个方法enqueue和dequeue. 这个类的dequeue方法将充当一个阻塞队列。即，当队列里有数据时，阻塞所有调用dequeue方法，否则就一直等待。 123456789package com.pract.threadpool;public interface CustomQueue&amp;lt;E&amp;gt;&amp;#123;">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-用Java实现自定义的线程池" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            “[翻译]用Java实现自定义的线程池”
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2016.01.25</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#thread pool">
+        <span class="tag-name">thread pool</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p><a href="http://oppansource.com/implementing-own-thread-pool-in-java/" target="_blank" rel="external">原文</a></p>
+<p>让我们用Java来实现自定义的线程池.</p>
+<p>让我们首先定义一个类，它拥有两个方法<code>enqueue</code>和<code>dequeue</code>. 这个类的<code>dequeue</code>方法将充当一个阻塞队列。即，当队列里有数据时，阻塞所有调用<code>dequeue</code>方法，否则就一直等待。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.pract.threadpool;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CustomQueue</span>&lt;<span class="title">E</span>&gt;</span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">enqueue</span><span class="params">(E e)</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> E <span class="title">dequeue</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>以下是实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.pract.threadpool;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.util.LinkedList;</div><div class="line"><span class="keyword">import</span> java.util.Queue;</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyQueue</span>&lt;<span class="title">E</span>&gt; <span class="keyword">implements</span> <span class="title">CustomQueue</span>&lt;<span class="title">E</span>&gt;</span>&#123;</div><div class="line"></div><div class="line">    <span class="comment">// queue backed by a linkedlist</span></div><div class="line">    <span class="keyword">private</span> Queue&lt;E&gt; queue = <span class="keyword">new</span> LinkedList&lt;E&gt;();</div><div class="line"></div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Enqueue will add an object to this queue, and will notify any waiting</div><div class="line">     * threads that now there is an object available.</div><div class="line">     *</div><div class="line">     * In enqueue method we just adding the elements not caring of size,</div><div class="line">     * we can even introduce some check of size here also.</div><div class="line">     */</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">enqueue</span><span class="params">(E e)</span> </span>&#123;</div><div class="line">        queue.add(e);</div><div class="line">        <span class="comment">// Wake up anyone waiting on the queue to put some item.</span></div><div class="line">        notifyAll();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">    * Make a blocking call so that we will only return when the queue has</div><div class="line">    * something on it, otherwise wait until something is put on it.</div><div class="line">    */</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> E <span class="title">dequeue</span><span class="params">()</span></span>&#123;</div><div class="line">        E e = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">        <span class="keyword">while</span>(queue.isEmpty())&#123;</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                wait();</div><div class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e1) &#123;</div><div class="line">                <span class="keyword">return</span> e;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        e = queue.remove();</div><div class="line">        <span class="keyword">return</span> e;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>现在，让我们思考下线程池管理器，通过名称以及工作线程的大小参数，即线程池大小。并且，<code>worker</code>线程应该监听该任务被提交到的队列。</p>
+<p>以下是实现:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.pract.threadpool;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadPoolManager</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> THREADPOOL_CAPACITY;</div><div class="line">    <span class="keyword">private</span> MyQueue&lt;Runnable&gt; myQueue = <span class="keyword">new</span> MyQueue&lt;Runnable&gt;();</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolManager</span><span class="params">(<span class="keyword">int</span> capacity)</span></span>&#123;</div><div class="line">        <span class="keyword">this</span>.THREADPOOL_CAPACITY = capacity;</div><div class="line">        initAllConsumers();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initAllConsumers</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">for</span>(Integer i = <span class="number">0</span>; i &lt; THREADPOOL_CAPACITY; i++)&#123;</div><div class="line">            Thread thread = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Worker(myQueue, i.toString()));</div><div class="line">            thread.start();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">submitTask</span><span class="params">(Runnable r)</span></span>&#123;</div><div class="line">        myQueue.enqueue(r);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果你检查上面的实现，你就会发现我们已经初始化的队列为<code>MyQueue</code>:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">MyQueue&lt;Runnable&gt; myQueue = <span class="keyword">new</span> MyQueue&lt;Runnable&gt;();</div></pre></td></tr></table></figure>
+<p><code>MyQeueue</code>队列会一直保持所有任务会被我们的<code>worker</code>线程执行。<br>基于上面，我们也创建一个<code>Worker</code>类. <code>Worker</code>类是我们的工作者，它会一直监听队列然后处理提交的任务。</p>
+<p>以下是<code>Worker</code>的实现:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.pract.threadpool;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Worker</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> MyQueue&lt;Runnable&gt; myQueue;</div><div class="line">    <span class="keyword">private</span> String name;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Worker</span><span class="params">(MyQueue&lt;Runnable&gt; myQueue, String name)</span></span>&#123;</div><div class="line">        <span class="keyword">this</span>.myQueue = myQueue;</div><div class="line">        <span class="keyword">this</span>.name = name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</div><div class="line">            Runnable r = myQueue.dequeue();</div><div class="line">            <span class="comment">// print the dequeued item</span></div><div class="line">            System.out.println(<span class="string">" Taken Item by thread name:"</span> + <span class="keyword">this</span>.name );</div><div class="line">            <span class="comment">// run it</span></div><div class="line">            r.run();</div><div class="line">            System.out.println(<span class="string">" Task completed of thread:"</span> + <span class="keyword">this</span>.name);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>现在，让我们测试下我们以上的实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.pract.threadpool;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestThreadPoolManager</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        ThreadPoolManager poolManager = <span class="keyword">new</span> ThreadPoolManager(<span class="number">10</span>);</div><div class="line"></div><div class="line">        <span class="comment">//now lets submit task</span></div><div class="line">        poolManager.submitTask(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                System.out.println(<span class="string">"Starting Task A...."</span>);</div><div class="line">                <span class="keyword">try</span> &#123;</div><div class="line">                    Thread.sleep(<span class="number">5000</span>);</div><div class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">                    e.printStackTrace();</div><div class="line">                &#125;</div><div class="line">                System.out.println(<span class="string">"Task A Completed...."</span>);</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line"></div><div class="line">        poolManager.submitTask(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                System.out.println(<span class="string">"Starting Task B...."</span>);</div><div class="line">                <span class="keyword">try</span> &#123;</div><div class="line">                    Thread.sleep(<span class="number">1000</span>);</div><div class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">                    e.printStackTrace();</div><div class="line">                &#125;</div><div class="line">                System.out.println(<span class="string">"Task B Completed...."</span>);</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>以下是输出:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">Taken Item by thread name:9</div><div class="line">Taken Item by thread name:0</div><div class="line"></div><div class="line">Starting Task A....</div><div class="line">Starting Task B....</div><div class="line"></div><div class="line">Task B Completed....</div><div class="line">Task completed of thread:0</div><div class="line"></div><div class="line">Task A Completed....</div><div class="line">Task completed of thread:9</div></pre></td></tr></table></figure>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

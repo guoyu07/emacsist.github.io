@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Spring Redis 使用 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="java,spring,redis,nosql," />
+  
+
+  <meta name="description" content="Pipelining共享一条connection，以减少因为网络连接导致的性能问题: 12345678910List&amp;lt;Object&amp;gt; results = stringRedisTemplate.executePipelined(  new RedisCallback&amp;lt;Object&amp;gt;() &amp;#123;    public Object doInRedis(RedisConne">
+<meta name="keywords" content="java,spring,redis,nosql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Redis 使用">
+<meta property="og:url" content="https://emacsist.github.io/2015/11/23/Spring-Redis-使用/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="Pipelining共享一条connection，以减少因为网络连接导致的性能问题: 12345678910List&amp;lt;Object&amp;gt; results = stringRedisTemplate.executePipelined(  new RedisCallback&amp;lt;Object&amp;gt;() &amp;#123;    public Object doInRedis(RedisConne">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring Redis 使用">
+<meta name="twitter:description" content="Pipelining共享一条connection，以减少因为网络连接导致的性能问题: 12345678910List&amp;lt;Object&amp;gt; results = stringRedisTemplate.executePipelined(  new RedisCallback&amp;lt;Object&amp;gt;() &amp;#123;    public Object doInRedis(RedisConne">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Pipelining"><span class="toc-text">Pipelining</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#transaction"><span class="toc-text">transaction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#demo"><span class="toc-text">demo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用问题"><span class="toc-text">使用问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ERR-Protocol-error-invalid-multibulk-length"><span class="toc-text">ERR Protocol error: invalid multibulk length</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-text">参考资料</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Spring-Redis-使用" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Spring Redis 使用
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2015.11.23</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#nosql">
+        <span class="tag-name">nosql</span>
+    <span class="tag-size">( 8 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#redis">
+        <span class="tag-name">redis</span>
+    <span class="tag-size">( 12 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#spring">
+        <span class="tag-name">spring</span>
+    <span class="tag-size">( 27 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="Pipelining"><a href="#Pipelining" class="headerlink" title="Pipelining"></a>Pipelining</h2><p>共享一条connection，以减少因为网络连接导致的性能问题:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">List&lt;Object&gt; results = stringRedisTemplate.executePipelined(</div><div class="line">  new RedisCallback&lt;Object&gt;() &#123;</div><div class="line">    public Object <span class="keyword">do</span>InRedis(RedisConnection connection) throws DataAccessException &#123;</div><div class="line">      StringRedisConnection stringRedisConn = (StringRedisConnection)connection;</div><div class="line">      <span class="keyword">for</span>(int i=0; i&lt; batchSize; i++) &#123;</div><div class="line">        stringRedisConn.rPop(<span class="string">"myqueue"</span>);</div><div class="line">      &#125;</div><div class="line">    <span class="built_in">return</span> null;</div><div class="line">  &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="transaction"><a href="#transaction" class="headerlink" title="transaction"></a>transaction</h2><p>redis中的事务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">List&lt;Object&gt; txResults = redisTemplate.execute(new SessionCallback&lt;List&lt;Object&gt;&gt;() &#123;</div><div class="line">  public List&lt;Object&gt; execute(RedisOperations operations) throws DataAccessException &#123;</div><div class="line">    operations.multi();</div><div class="line">    operations.opsForSet().add(<span class="string">"key"</span>, <span class="string">"value1"</span>);</div><div class="line"></div><div class="line">    // This will contain the results of all ops <span class="keyword">in</span> the transaction</div><div class="line">    <span class="built_in">return</span> operations.exec();</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line">System.out.println(<span class="string">"Number of items added to set: "</span> + txResults.get(0));</div></pre></td></tr></table></figure>
+<h2 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">@Test</div><div class="line">public void <span class="function"><span class="title">genrete</span></span>() &#123;</div><div class="line">    ValueOperations&lt;String, String&gt; valueOperations = redisTemplate.opsForValue();</div><div class="line">    <span class="keyword">for</span> (int i = 0; i &lt; 2000; i++) &#123;</div><div class="line">        valueOperations.set(<span class="string">"hello"</span> + i, String.valueOf(i));</div><div class="line">    &#125;</div><div class="line">    System.out.println(<span class="string">"gen ok"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line">@Test</div><div class="line">public void <span class="function"><span class="title">forGet</span></span>() &#123;</div><div class="line">    ValueOperations&lt;String, String&gt; valueOperations = redisTemplate.opsForValue();</div><div class="line">    long start = System.currentTimeMillis();</div><div class="line">    <span class="keyword">for</span> (int i = 0; i &lt; 2000; i++) &#123;</div><div class="line">        String hello = valueOperations.get(<span class="string">"hello"</span> + i);</div><div class="line">        System.out.println(hello);</div><div class="line">    &#125;</div><div class="line">    System.out.println(<span class="string">"cost for get "</span> + (System.currentTimeMillis() - start));</div><div class="line">    // cost <span class="keyword">for</span> get 2458 ms</div><div class="line">&#125;</div><div class="line"></div><div class="line">@Test</div><div class="line">public void <span class="function"><span class="title">forPipline</span></span>() &#123;</div><div class="line">    ValueOperations&lt;String, String&gt; valueOperations = redisTemplate.opsForValue();</div><div class="line">    long start = System.currentTimeMillis();</div><div class="line"></div><div class="line">    List&lt;Object&gt; list = redisTemplate.executePipelined(new RedisCallback&lt;Object&gt;() &#123;</div><div class="line">        @Override</div><div class="line">        public Object <span class="keyword">do</span>InRedis(RedisConnection redisConnection) throws DataAccessException &#123;</div><div class="line">            redisConnection.openPipeline();</div><div class="line">            <span class="keyword">for</span> (int i = 0; i &lt; 2000; i++) &#123;</div><div class="line">                redisConnection.get((<span class="string">"hello"</span> + i).getBytes());</div><div class="line">            &#125;</div><div class="line">            <span class="built_in">return</span> null;//注意，这里一定要返回null</div><div class="line">        &#125;</div><div class="line">    &#125;, redisTemplate.getKeySerializer());</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (Object hello : list) &#123;</div><div class="line">        System.out.println(hello);</div><div class="line">    &#125;</div><div class="line">    System.out.println(<span class="string">"cost for piple "</span> + (System.currentTimeMillis() - start));</div><div class="line">    // cost <span class="keyword">for</span> piple 121 ms</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="使用问题"><a href="#使用问题" class="headerlink" title="使用问题"></a>使用问题</h2><h3 id="ERR-Protocol-error-invalid-multibulk-length"><a href="#ERR-Protocol-error-invalid-multibulk-length" class="headerlink" title="ERR Protocol error: invalid multibulk length"></a>ERR Protocol error: invalid multibulk length</h3><p>一下子执行的redis的命令大小太大，比如下面的：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">final String keysPattern = CcRedisKeyUtils.Session.getCleanSessionObjectKeys(userId);</div><div class="line">//Set&lt;String&gt; ks = <span class="built_in">hash</span>Ops.getOperations().keys(keysPattern);</div><div class="line">final Set&lt;String&gt; ks = RedisKeysPatternUtils.getKeys(<span class="built_in">hash</span>Ops.getOperations(), keysPattern);</div><div class="line"><span class="built_in">hash</span>Ops.getOperations().delete(ks);</div></pre></td></tr></table></figure>
+<p><a href="https://github.com/StackExchange/StackExchange.Redis/issues/201" target="_blank" rel="external">参考资料</a></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a href="https://github.com/spring-projects/spring-data-redis/tree/master/src/asciidoc/reference" target="_blank" rel="external">Spring-data-redis</a></li>
+</ol>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

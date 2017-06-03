@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>关于Tomcat关闭时注意的问题 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="java," />
+  
+
+  <meta name="description" content="测试环境: Spring Boot MVC + RabbitMQ + Task + Tomcat Controller层测试代码 12345678910@RequestMapping(&quot;/world&quot;)   @ResponseBody   public String hello() throws InterruptedException &amp;#123;       System.out.printl">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于Tomcat关闭时注意的问题">
+<meta property="og:url" content="https://emacsist.github.io/2016/06/17/关于Tomcat关闭时注意的问题/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="测试环境: Spring Boot MVC + RabbitMQ + Task + Tomcat Controller层测试代码 12345678910@RequestMapping(&quot;/world&quot;)   @ResponseBody   public String hello() throws InterruptedException &amp;#123;       System.out.printl">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于Tomcat关闭时注意的问题">
+<meta name="twitter:description" content="测试环境: Spring Boot MVC + RabbitMQ + Task + Tomcat Controller层测试代码 12345678910@RequestMapping(&quot;/world&quot;)   @ResponseBody   public String hello() throws InterruptedException &amp;#123;       System.out.printl">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Controller层"><span class="toc-text">Controller层</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#shutdown"><span class="toc-text">shutdown</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#kill"><span class="toc-text">kill</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Task"><span class="toc-text">Task</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#shutdown-1"><span class="toc-text">shutdown</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#kill-1"><span class="toc-text">kill</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#listener-层"><span class="toc-text">listener 层</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#shutdown-2"><span class="toc-text">shutdown</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#kill-2"><span class="toc-text">kill</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-text">结论</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-关于Tomcat关闭时注意的问题" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            关于Tomcat关闭时注意的问题
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2016.06.17</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p>测试环境: Spring Boot MVC + RabbitMQ + Task + Tomcat</p>
+<h2 id="Controller层"><a href="#Controller层" class="headerlink" title="Controller层"></a>Controller层</h2><p>测试代码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(<span class="string">"/world"</span>)</div><div class="line">   @ResponseBody</div><div class="line">   public String hello() throws InterruptedException &#123;</div><div class="line">       System.out.println(<span class="string">"in controller"</span>);</div><div class="line">       <span class="keyword">for</span>(int i=0; i&lt;100000000; i++)&#123;</div><div class="line">           System.out.println(<span class="string">"in "</span> + i + <span class="string">" hehe"</span>);</div><div class="line">       &#125;</div><div class="line">       System.out.println(<span class="string">"out controller"</span>);</div><div class="line">       <span class="built_in">return</span> <span class="string">"OK."</span>;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>关闭方式：</p>
+<h3 id="shutdown"><a href="#shutdown" class="headerlink" title="shutdown"></a>shutdown</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -X POST http://localhost:8080/shutdown</div></pre></td></tr></table></figure>
+<p>没有执行到<code>out controller</code>程序就退出了</p>
+<h3 id="kill"><a href="#kill" class="headerlink" title="kill"></a>kill</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jps -vm | grep Demo | awk <span class="string">'&#123;print $1&#125;'</span> | xargs <span class="built_in">kill</span></div></pre></td></tr></table></figure>
+<p>没有执行到<code>out controller</code>程序就退出了</p>
+<h2 id="Task"><a href="#Task" class="headerlink" title="Task"></a>Task</h2><p>测试代码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@Scheduled(fixedRate = 1000 * 10)</div><div class="line">public void run() throws InterruptedException &#123;</div><div class="line">    System.out.println(<span class="string">"in task before "</span> + Thread.currentThread().getName());</div><div class="line">    <span class="keyword">for</span> (int i = 0; i &lt; 10000000; i++) &#123;</div><div class="line">        System.out.println(<span class="string">"in "</span> + i + <span class="string">" task"</span>);</div><div class="line">    &#125;</div><div class="line">    System.out.println(<span class="string">"out task ok "</span> + Thread.currentThread().getName());</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>关闭方式：</p>
+<h3 id="shutdown-1"><a href="#shutdown-1" class="headerlink" title="shutdown"></a>shutdown</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -X POST http://localhost:8080/shutdown</div></pre></td></tr></table></figure>
+<p>它会等待线程执行完毕程序再退出，即执行到了”out task ok xxx”</p>
+<h3 id="kill-1"><a href="#kill-1" class="headerlink" title="kill"></a>kill</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jps -vm | grep Demo | awk <span class="string">'&#123;print $1&#125;'</span> | xargs <span class="built_in">kill</span></div></pre></td></tr></table></figure>
+<p>没有执行到<code>out task ok xxx</code>程序就退出了</p>
+<h2 id="listener-层"><a href="#listener-层" class="headerlink" title="listener 层"></a>listener 层</h2><p>测试代码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@RabbitListener(queues = <span class="string">"test.queue"</span>)</div><div class="line">public void <span class="function"><span class="title">run</span></span>() &#123;</div><div class="line">    System.out.println(<span class="string">"in listener"</span>);</div><div class="line">    <span class="keyword">for</span> (int i = 0; i &lt; 10000000; i++) &#123;</div><div class="line">        System.out.println(<span class="string">"in "</span> + i + <span class="string">" listener"</span>);</div><div class="line">    &#125;</div><div class="line">    System.out.println(<span class="string">"out listener"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>关闭方式：</p>
+<h3 id="shutdown-2"><a href="#shutdown-2" class="headerlink" title="shutdown"></a>shutdown</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -X POST http://localhost:8080/shutdown</div></pre></td></tr></table></figure>
+<p>程序会等等执行完毕再退出，即执行到了<code>out listener</code></p>
+<h3 id="kill-2"><a href="#kill-2" class="headerlink" title="kill"></a>kill</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jps -vm | grep Demo | awk <span class="string">'&#123;print $1&#125;'</span> | xargs <span class="built_in">kill</span></div></pre></td></tr></table></figure>
+<p>没有执行到<code>out listener</code>程序就退出了</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>最好停止Tomcat的方式是: 通过Nginx加负载均衡，在Nginx上停用某个Tomcat的连接（upstream)，然后过一段时间后，再调用Tomcat的<code>shutdown.sh</code>，以尽可能减少数据的丢失。<br>其他的方式来停止Tomcat，都会有风险。</p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

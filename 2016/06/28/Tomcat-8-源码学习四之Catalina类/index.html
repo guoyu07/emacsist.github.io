@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Tomcat 8 源码学习四之Catalina类 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="java,tomcat,Tomcat源码," />
+  
+
+  <meta name="description" content="StringManager每个包一个StringManager。这样子，对同一个包(以及同一个locale)来说，它只有一个实例的。实现原理: 1private static final Map&amp;lt;String, Map&amp;lt;Locale,StringManager&amp;gt;&amp;gt; managers = new Hashtable&amp;lt;&amp;gt;(); key：就是包名.value：就是它的">
+<meta name="keywords" content="java,tomcat,Tomcat源码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tomcat 8 源码学习四之Catalina类">
+<meta property="og:url" content="https://emacsist.github.io/2016/06/28/Tomcat-8-源码学习四之Catalina类/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="StringManager每个包一个StringManager。这样子，对同一个包(以及同一个locale)来说，它只有一个实例的。实现原理: 1private static final Map&amp;lt;String, Map&amp;lt;Locale,StringManager&amp;gt;&amp;gt; managers = new Hashtable&amp;lt;&amp;gt;(); key：就是包名.value：就是它的">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tomcat 8 源码学习四之Catalina类">
+<meta name="twitter:description" content="StringManager每个包一个StringManager。这样子，对同一个包(以及同一个locale)来说，它只有一个实例的。实现原理: 1private static final Map&amp;lt;String, Map&amp;lt;Locale,StringManager&amp;gt;&amp;gt; managers = new Hashtable&amp;lt;&amp;gt;(); key：就是包名.value：就是它的">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#StringManager"><span class="toc-text">StringManager</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ResourceBundle"><span class="toc-text">ResourceBundle</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Catalina"><span class="toc-text">Catalina</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SecurityConfig"><span class="toc-text">SecurityConfig</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#启动Tomcat"><span class="toc-text">启动Tomcat</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#start"><span class="toc-text">start()</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#server-xml-解析器-Digester"><span class="toc-text">server.xml 解析器 Digester</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#catalina-startServer"><span class="toc-text">catalina.startServer()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#catalina-stopServer"><span class="toc-text">catalina.stopServer()</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#StandardServer-类"><span class="toc-text">StandardServer 类</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#启动Server"><span class="toc-text">启动Server</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#stopServer"><span class="toc-text">stopServer</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Tomcat-8-源码学习四之Catalina类" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Tomcat 8 源码学习四之Catalina类
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2016.06.28</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#Tomcat源码">
+        <span class="tag-name">Tomcat源码</span>
+    <span class="tag-size">( 9 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#tomcat">
+        <span class="tag-name">tomcat</span>
+    <span class="tag-size">( 20 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="StringManager"><a href="#StringManager" class="headerlink" title="StringManager"></a>StringManager</h2><p>每个包一个StringManager。这样子，对同一个包(以及同一个locale)来说，它只有一个实例的。实现原理:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">private static final Map&lt;String, Map&lt;Locale,StringManager&gt;&gt; managers = new Hashtable&lt;&gt;();</div></pre></td></tr></table></figure>
+<p>key：就是包名.<br>value：就是它的由locale,StringManager组合的Map</p>
+<p>它的作用，就是实现日志打印的国际化.比如，在包<code>/org/apache/catalina/startup</code>下，可以看到有以下几个国际化的资源文件:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">╭─sky@sky-linux /ihome/java/tomcat/apache-tomcat-8.0.36-src/java/org/apache/catalina/startup  </div><div class="line">╰─➤  ls -al LocalStrings*</div><div class="line">-rw-r--r-- 1 sky sky  8590  6月  9 15:00 LocalStrings_es.properties</div><div class="line">-rw-r--r-- 1 sky sky  4536  6月  9 15:00 LocalStrings_fr.properties</div><div class="line">-rw-r--r-- 1 sky sky  6770  6月  9 15:00 LocalStrings_ja.properties</div><div class="line">-rw-r--r-- 1 sky sky 12332  6月  9 15:00 LocalStrings.properties</div></pre></td></tr></table></figure>
+<h3 id="ResourceBundle"><a href="#ResourceBundle" class="headerlink" title="ResourceBundle"></a>ResourceBundle</h3><p>StringManager是封装了ResourceBundle的，</p>
+<p>ResourceBundle简单用法:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">package com.example;</div><div class="line"></div><div class="line">import java.util.Locale;</div><div class="line">import java.util.ResourceBundle;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by sky on 16-6-28.</div><div class="line"> */</div><div class="line">public class TestBundle &#123;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        String bundleName = <span class="string">"res"</span>;</div><div class="line">        Locale localeZH = new Locale(<span class="string">"zh"</span>, <span class="string">"CN"</span>);</div><div class="line">        ResourceBundle resourceBundleZH = ResourceBundle.getBundle(bundleName, localeZH);</div><div class="line">        System.out.println(resourceBundleZH.getString(<span class="string">"hello"</span>));</div><div class="line"></div><div class="line">        Locale localeEN = new Locale(<span class="string">"en"</span>, <span class="string">"US"</span>);</div><div class="line">        ResourceBundle resourceBundleEN = ResourceBundle.getBundle(bundleName, localeEN);</div><div class="line">        System.out.println(resourceBundleEN.getString(<span class="string">"hello"</span>));</div><div class="line"></div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在classpath根目录下，创建两个文件:<code>res_en_US.properties</code>, <code>res_zh_CN.properties</code></p>
+<p><code>res_en_US.properties</code>文件内容:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hello=hello world from en US</div></pre></td></tr></table></figure>
+<p><code>res_zh_CN.properties</code>文件内容:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hello=hello world from zh CN</div></pre></td></tr></table></figure>
+<p>最后执行上面的代码，即可以看到它会输出下面的结果:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">hello world from zh CN</div><div class="line">hello world from en US</div><div class="line"></div><div class="line">Process finished with <span class="built_in">exit</span> code 0</div></pre></td></tr></table></figure>
+<h2 id="Catalina"><a href="#Catalina" class="headerlink" title="Catalina"></a>Catalina</h2><p>它的构造函数就一个，代码如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public <span class="function"><span class="title">Catalina</span></span>() &#123;</div><div class="line">      <span class="built_in">set</span>SecurityProtection();</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p><code>setSecurityProtection()</code>方法代码如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">protected void <span class="function"><span class="title">setSecurityProtection</span></span>()&#123;</div><div class="line">        SecurityConfig securityConfig = SecurityConfig.newInstance();</div><div class="line">        securityConfig.setPackageDefinition();</div><div class="line">        securityConfig.setPackageAccess();</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h3 id="SecurityConfig"><a href="#SecurityConfig" class="headerlink" title="SecurityConfig"></a>SecurityConfig</h3><p>它的作用是，再次保护Tomcat的包访问权限.</p>
+<p>默认情况下它是获取<code>catalina.properties</code>文件中的<code>package.definition</code>和<code>package.access</code>两个属性的值.如果这两个值为空，则设置为该类中默认的<code>PACKAGE_DEFINITION</code>和<code>PACKAGE_ACCESS</code>值.</p>
+<p>最后，将这两个值，设置到<code>java.security.Security</code>类中的属性时，<code>Security</code>类主要用于管理提供者.</p>
+<p><a href="http://docs.oracle.com/javase/7/docs/technotes/guides/security/smPortGuide.html" target="_blank" rel="external">Oracle JavaSE Security文档</a></p>
+<p><a href="http://www.tutorialspoint.com/java/lang/securitymanager_checkpackageaccess.htm" target="_blank" rel="external">tutorialspoint</a></p>
+<h3 id="启动Tomcat"><a href="#启动Tomcat" class="headerlink" title="启动Tomcat"></a>启动Tomcat</h3><p>Catalina表示一个Tomcat服务器实例.现在我们来看看它的各种逻辑处理.</p>
+<h4 id="start"><a href="#start" class="headerlink" title="start()"></a>start()</h4><p>启动前，会先判断有没有Server实例，即:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (getServer() == null) &#123;</div><div class="line">    load();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">if</span> (getServer() == null) &#123;</div><div class="line">    log.fatal(<span class="string">"Cannot start server. Server instance is not configured."</span>);</div><div class="line">    <span class="built_in">return</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到，如果第二次判断还是null，就直接打印日志并退出了.</p>
+<p>那我们再来看看 <code>load()</code> 方法加载server的逻辑是如何的.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">1. initDirs() : 初始化 java.io.tmpdir 目录</div><div class="line">2. initNaming() : 初始化Java命名服务</div><div class="line">3. 使用 Digester 读取`server.xml`配置文件作为server instance配置.</div><div class="line">4. 设置server的catalina, catalinaHome, catalinaBase</div><div class="line">5. initStreams()： 设置标准输出和错误输出为 SystemLogHandler 接管.</div><div class="line">6. 最后调用 server.init() 方法来初始化server的生命周期阶段.</div></pre></td></tr></table></figure>
+<p>关于Tomcat组件的生命周期，它们是通过实现 <code>Lifecyle</code> 接口来进行处理的.<br>经过上面的步骤处理后，server就算是启动完毕了.</p>
+<h5 id="server-xml-解析器-Digester"><a href="#server-xml-解析器-Digester" class="headerlink" title="server.xml 解析器 Digester"></a>server.xml 解析器 Digester</h5><p>在<code>org.apache.catalina.startup.Catalina.createStartDigester()</code>方法上，可以看到整个xml的节点结构.</p>
+<p>初始化的时候，就会调用这个方法然后初始化<code>Server</code>, <code>GlobalNamingResources</code>, <code>Listener</code>, <code>Service</code>, <code>Executor</code>, <code>Connector</code>, <code>Engine</code>等，然后它会调用相相关的<code>setXXX</code>方法来设置相应值。</p>
+<p>例如:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">digester.addSetNext(<span class="string">"Server/GlobalNamingResources"</span>,</div><div class="line">                            <span class="string">"setGlobalNamingResources"</span>,</div><div class="line">                            <span class="string">"org.apache.catalina.deploy.NamingResourcesImpl"</span>);</div></pre></td></tr></table></figure>
+<p><code>Server/GlobalNamingResources</code>表示设置 Server 类的 globalNamingResources 属性.<br><code>setGlobalNamingResources</code>表示方法名<br><code>org.apache.catalina.deploy.NamingResourcesImpl</code>：表示参数类型.</p>
+<p>其他类似.</p>
+<h4 id="catalina-startServer"><a href="#catalina-startServer" class="headerlink" title="catalina.startServer()"></a>catalina.startServer()</h4><ol>
+<li><p>获取或初化 StandardServer</p>
+</li>
+<li><p>注册关闭勾子（shutdownHook， JVM的一种勾子机制）。本质上是调用<code>Catalina.stop()</code>方法，然后<code>Catalina.stop()</code>方法的处理逻辑是：<br>移除这个勾子，然后调用 <code>Server.stop()，最后再调用 Server.destroy()</code>.</p>
+</li>
+</ol>
+<h4 id="catalina-stopServer"><a href="#catalina-stopServer" class="headerlink" title="catalina.stopServer()"></a>catalina.stopServer()</h4><p>通过源码可以看到，它本上是通过解析<code>server.xml</code>（通过 <code>Digester digester = createStopDigester();</code> 获取stop时需要的节点元素及数据）然后向注册了关闭勾子的线程(shutdownHook)发送一个在<code>server.xml</code>里配置的<code>shutdown</code>的字符串的值发送到勾子线程监听的socket里，然后触发<code>catalina.stop()</code>方法的。（即在上面说的原理）</p>
+<p>而这个<code>shutdown</code>字符串的值，是在<code>server.xml</code>里配置的.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;Server port=<span class="string">"8005"</span> shutdown=<span class="string">"SHUTDOWN"</span>&gt;</div></pre></td></tr></table></figure>
+<p>即，解析完<code>server.xml</code>后，获取这个<code>shutdown</code>属性的值（这里为<code>SHUTDOWN</code>)，然后发送到<code>shutdownHook</code>勾子里，让它触发<code>catalina.stop()</code>的方法.</p>
+<h3 id="StandardServer-类"><a href="#StandardServer-类" class="headerlink" title="StandardServer 类"></a>StandardServer 类</h3><h4 id="启动Server"><a href="#启动Server" class="headerlink" title="启动Server"></a>启动Server</h4><p>启动的顺序，通过源码可知:</p>
+<p><code>org.apache.catalina.core.StandardServer</code>中的下面方法.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">protected void startInternal() throws LifecycleException &#123;</div><div class="line"></div><div class="line">    fireLifecycleEvent(CONFIGURE_START_EVENT, null);</div><div class="line">    <span class="built_in">set</span>State(LifecycleState.STARTING);</div><div class="line"></div><div class="line">    globalNamingResources.start();</div><div class="line"></div><div class="line">    // Start our defined Services</div><div class="line">    synchronized (servicesLock) &#123;</div><div class="line">        <span class="keyword">for</span> (int i = 0; i &lt; services.length; i++) &#123;</div><div class="line">            services[i].start();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>即:</p>
+<p><code>Server -&gt; globalNamingResources.start(),  Service.start()</code><br><code>service -&gt; container.start()</code><br><code>service -&gt; executors.start()</code><br><code>service -&gt; listener.start()</code><br><code>service -&gt; connector.start()</code></p>
+<p>即每个组件初始化启动时，都会负责去启动自己内部组件的嵌套组件.比如上面的情况，通过debug源码，可以看到上面的层次关系.</p>
+<h4 id="stopServer"><a href="#stopServer" class="headerlink" title="stopServer"></a>stopServer</h4><p><code>destroyInternal()</code>，源码如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">protected void destroyInternal() throws LifecycleException &#123;</div><div class="line">    // Destroy our defined Services</div><div class="line">    <span class="keyword">for</span> (int i = 0; i &lt; services.length; i++) &#123;</div><div class="line">        services[i].destroy();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    globalNamingResources.destroy();</div><div class="line"></div><div class="line">    unregister(onameMBeanFactory);</div><div class="line"></div><div class="line">    unregister(onameStringCache);</div><div class="line"></div><div class="line">    super.destroyInternal();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>server -&gt; service.destroy()</code></p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

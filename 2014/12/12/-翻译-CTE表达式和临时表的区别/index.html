@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>[翻译]CTE表达式和临时表的区别 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="CTE表达式,临时表,postgresql,翻译," />
+  
+
+  <meta name="description" content="翻译于dba.stackexchange.com版权归原作者所有，本人只是业余爱好翻译。  这个问题是相当广泛的，但尽我所能给你一个普通的回答。 CTEs 不可以建索引（但可以使用引用到的对象的索引） 不能有约束 本质上是一个一次性视图 只在下一个执行查询时存在 可以递归 没有专门的统计状态数据（只依赖于底层对象）  临时表 是存在于临时数据库的真正物化的表 可以建索引 可以有约束 在当前连接的会">
+<meta name="keywords" content="CTE表达式,临时表,postgresql,翻译">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[翻译]CTE表达式和临时表的区别">
+<meta property="og:url" content="https://emacsist.github.io/2014/12/12/-翻译-CTE表达式和临时表的区别/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="翻译于dba.stackexchange.com版权归原作者所有，本人只是业余爱好翻译。  这个问题是相当广泛的，但尽我所能给你一个普通的回答。 CTEs 不可以建索引（但可以使用引用到的对象的索引） 不能有约束 本质上是一个一次性视图 只在下一个执行查询时存在 可以递归 没有专门的统计状态数据（只依赖于底层对象）  临时表 是存在于临时数据库的真正物化的表 可以建索引 可以有约束 在当前连接的会">
+<meta property="og:updated_time" content="2016-11-12T02:06:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[翻译]CTE表达式和临时表的区别">
+<meta name="twitter:description" content="翻译于dba.stackexchange.com版权归原作者所有，本人只是业余爱好翻译。  这个问题是相当广泛的，但尽我所能给你一个普通的回答。 CTEs 不可以建索引（但可以使用引用到的对象的索引） 不能有约束 本质上是一个一次性视图 只在下一个执行查询时存在 可以递归 没有专门的统计状态数据（只依赖于底层对象）  临时表 是存在于临时数据库的真正物化的表 可以建索引 可以有约束 在当前连接的会">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CTEs"><span class="toc-text">CTEs</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#临时表"><span class="toc-text">临时表</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post--翻译-CTE表达式和临时表的区别" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            [翻译]CTE表达式和临时表的区别
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2014.12.12</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#CTE表达式">
+        <span class="tag-name">CTE表达式</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#临时表">
+        <span class="tag-name">临时表</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#翻译">
+        <span class="tag-name">翻译</span>
+    <span class="tag-size">( 23 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p>翻译于<a href="http://dba.stackexchange.com/a/13117" target="_blank" rel="external">dba.stackexchange.com</a><br>版权归原作者所有，本人只是业余爱好翻译。</p>
+<hr>
+<p>这个问题是相当广泛的，但尽我所能给你一个普通的回答。</p>
+<h1 id="CTEs"><a href="#CTEs" class="headerlink" title="CTEs"></a>CTEs</h1><ul>
+<li>不可以建索引（但可以使用引用到的对象的索引）</li>
+<li>不能有约束</li>
+<li>本质上是一个一次性视图</li>
+<li>只在下一个执行查询时存在</li>
+<li>可以递归</li>
+<li>没有专门的统计状态数据（只依赖于底层对象）</li>
+</ul>
+<h1 id="临时表"><a href="#临时表" class="headerlink" title="临时表"></a>临时表</h1><ul>
+<li>是存在于临时数据库的真正物化的表</li>
+<li>可以建索引</li>
+<li>可以有约束</li>
+<li>在当前连接的会话中会一直存在</li>
+<li>可以被其他查询或子查询引用</li>
+<li>引擎可以有专门为它准备的统计数据</li>
+</ul>
+<p>至于何时使用哪个，他们有不同的应用场景。如果你会有一个非常大的结果集，或者需要不上一次地引用它，那请使用临时表。如果需要使用递归，一次性，或者做一些简单的逻辑计算，那就使用CTE。</p>
+<p>注意，CTE永远不应该用于性能。使用CTE并不会提高你的性能，因为，它仅仅是个一次性视图。你可以用它做一些其他的事，但是为了加快查询真的并不是它的用途。</p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java并发操作MySQL数据库的读写注意 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="java,mysql," />
+  
+
+  <meta name="description" content="情景模拟：  线程1是一个task,然后分批select数据，然后可能会对这些select的结果进行更新线程2是一个业务, 它也可能会对这些数据进行update. 问题：如果线程1首先拿到一个数据的快照（MySQL的MVCC），然后开始遍历每行数据来根据业务更新。这时，线程2修改了数据原来的状态。这时线程已经拿到的数据，就会是脏数据了。然后就会导致数据的不一致！ 解决办法方式1使用 select">
+<meta name="keywords" content="java,mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java并发操作MySQL数据库的读写注意">
+<meta property="og:url" content="https://emacsist.github.io/2016/06/01/Java并发操作MySQL数据库的读写注意/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="情景模拟：  线程1是一个task,然后分批select数据，然后可能会对这些select的结果进行更新线程2是一个业务, 它也可能会对这些数据进行update. 问题：如果线程1首先拿到一个数据的快照（MySQL的MVCC），然后开始遍历每行数据来根据业务更新。这时，线程2修改了数据原来的状态。这时线程已经拿到的数据，就会是脏数据了。然后就会导致数据的不一致！ 解决办法方式1使用 select">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java并发操作MySQL数据库的读写注意">
+<meta name="twitter:description" content="情景模拟：  线程1是一个task,然后分批select数据，然后可能会对这些select的结果进行更新线程2是一个业务, 它也可能会对这些数据进行update. 问题：如果线程1首先拿到一个数据的快照（MySQL的MVCC），然后开始遍历每行数据来根据业务更新。这时，线程2修改了数据原来的状态。这时线程已经拿到的数据，就会是脏数据了。然后就会导致数据的不一致！ 解决办法方式1使用 select">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#解决办法"><span class="toc-text">解决办法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#方式1"><span class="toc-text">方式1</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方式2"><span class="toc-text">方式2</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Java并发操作MySQL数据库的读写注意" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Java并发操作MySQL数据库的读写注意
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2016.06.01</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p>情景模拟： </p>
+<p>线程1是一个task,然后分批select数据，然后可能会对这些select的结果进行更新<br>线程2是一个业务, 它也可能会对这些数据进行update.</p>
+<p>问题：如果线程1首先拿到一个数据的快照（MySQL的MVCC），然后开始遍历每行数据来根据业务更新。这时，线程2修改了数据原来的状态。这时线程已经拿到的数据，就会是脏数据了。然后就会导致数据的不一致！</p>
+<h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h2><h3 id="方式1"><a href="#方式1" class="headerlink" title="方式1"></a>方式1</h3><p>使用 <code>select ... for udpate</code> 来保证数据强一致性（即所谓的悲观锁），还要注意，这种SQL必须要使用到索引，不然会造成表锁。</p>
+<p>不过，这容易造成死锁，以及降低性能。</p>
+<h2 id="方式2"><a href="#方式2" class="headerlink" title="方式2"></a>方式2</h2><p>这种方式，要根据业务具体情况。而不是通用。</p>
+<p>也可以在线程1 update的SQL语句中，加上严格的条件判断。<br>比如，线程1只会更新<code>status</code> &lt; 2的数据。如果线程2修改了status为2,那么这时这次更新就不会再次更新了。线程1的SQL类似：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">update xxxx <span class="built_in">set</span> ststus = (一个小于2的值) <span class="built_in">where</span> id = xx and status != 2;</div></pre></td></tr></table></figure>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

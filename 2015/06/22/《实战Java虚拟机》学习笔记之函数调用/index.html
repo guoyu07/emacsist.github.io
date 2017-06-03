@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>《实战Java虚拟机》学习笔记之函数调用 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="java,jvm," />
+  
+
+  <meta name="description" content="出入Java栈Java栈是一块线程私有的内存空间。它是一块先进后出的数据结构。Java栈中保存的主要内容为栈帧。每一次函数调用，都会有一个对应的栈帧被压入栈，每一个函数调用结束，都会有一个栈帧被弹出Java栈。当前正在执行的函数所对应的帧就是当前的帧（位于栈顶），它保存着当前函数的局部变量、中间运算结果等数据。 Java方法有两种返回函数的方式，一种是正常的函数返回，使用return指令；另一种是">
+<meta name="keywords" content="java,jvm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《实战Java虚拟机》学习笔记之函数调用">
+<meta property="og:url" content="https://emacsist.github.io/2015/06/22/《实战Java虚拟机》学习笔记之函数调用/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="出入Java栈Java栈是一块线程私有的内存空间。它是一块先进后出的数据结构。Java栈中保存的主要内容为栈帧。每一次函数调用，都会有一个对应的栈帧被压入栈，每一个函数调用结束，都会有一个栈帧被弹出Java栈。当前正在执行的函数所对应的帧就是当前的帧（位于栈顶），它保存着当前函数的局部变量、中间运算结果等数据。 Java方法有两种返回函数的方式，一种是正常的函数返回，使用return指令；另一种是">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《实战Java虚拟机》学习笔记之函数调用">
+<meta name="twitter:description" content="出入Java栈Java栈是一块线程私有的内存空间。它是一块先进后出的数据结构。Java栈中保存的主要内容为栈帧。每一次函数调用，都会有一个对应的栈帧被压入栈，每一个函数调用结束，都会有一个栈帧被弹出Java栈。当前正在执行的函数所对应的帧就是当前的帧（位于栈顶），它保存着当前函数的局部变量、中间运算结果等数据。 Java方法有两种返回函数的方式，一种是正常的函数返回，使用return指令；另一种是">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#出入Java栈"><span class="toc-text">出入Java栈</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#局部变量表"><span class="toc-text">局部变量表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#操作数栈"><span class="toc-text">操作数栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#帧数据区"><span class="toc-text">帧数据区</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-《实战Java虚拟机》学习笔记之函数调用" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            《实战Java虚拟机》学习笔记之函数调用
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2015.06.22</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#jvm">
+        <span class="tag-name">jvm</span>
+    <span class="tag-size">( 11 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="出入Java栈"><a href="#出入Java栈" class="headerlink" title="出入Java栈"></a>出入Java栈</h2><p>Java栈是一块线程私有的内存空间。它是一块先进后出的数据结构。Java栈中保存的主要内容为栈帧。每一次函数调用，都会有一个对应的栈帧被压入栈，每一个函数调用结束，都会有一个栈帧被弹出Java栈。当前正在执行的函数所对应的帧就是当前的帧（位于栈顶），它保存着当前函数的局部变量、中间运算结果等数据。</p>
+<p>Java方法有两种返回函数的方式，一种是正常的函数返回，使用return指令；另一种是抛出异常。不管使用哪种方式，都会导致栈帧被弹出。</p>
+<p>在一个栈帧中，至少要包含<code>局部变量表</code>，<code>操作数栈</code>，<code>帧数据区</code>几个部分。</p>
+<p>Java栈的大小，是通过虚拟机参数<code>-Xss</code>来控制大小的。</p>
+<p>函数嵌套调用的层次，在很大程度上由栈的大小决定。栈越大，函数可以支持的嵌套调用次数越多。</p>
+<h3 id="局部变量表"><a href="#局部变量表" class="headerlink" title="局部变量表"></a>局部变量表</h3><p>它用于保存函数的参数及局部变量。局部变量表中的变量只在当前函数调用中有效，当函数调用结束后，随着函数栈帧的销毁，局部变量表也会随之销毁。</p>
+<p>由于局部变量表在栈帧之中，因此，如果函数的参数和局部变量较多，会使得局部变量表膨胀，从而每一次函数调用就会占用更多的栈空间，最终导致函数的嵌套调用次数减少。</p>
+<blockquote>
+<p>查看局部变量表的工具： <a href="https://github.com/ingokegel/jclasslib" target="_blank" rel="external">jclasslib</a></p>
+</blockquote>
+<h3 id="操作数栈"><a href="#操作数栈" class="headerlink" title="操作数栈"></a>操作数栈</h3><p>操作数栈也是栈帧中重要内容之一，它主要用于保存计算过程的中间结果，同时作为计算过程中变量临时的存储空间。</p>
+<h3 id="帧数据区"><a href="#帧数据区" class="headerlink" title="帧数据区"></a>帧数据区</h3><p>它保存着访问常量池的指针，方便程序访问常量池。</p>
+<p>异常处理表，也是帧数据区中重要的一部分。</p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

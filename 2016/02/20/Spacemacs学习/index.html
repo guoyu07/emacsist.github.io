@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Spacemacs学习 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="emacs," />
+  
+
+  <meta name="description" content="说白了,spacemacs本质上也就是一个emacs的配置环境. 知道了本质, 也就容易理解了.  安装针对Mac 123$ brew tap railwaycat/homebrew-emacsmacport$ brew install emacs-mac --with-spacemacs-icon  # OR, brew cask install emacs-mac$ brew linkapp">
+<meta name="keywords" content="emacs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spacemacs学习">
+<meta property="og:url" content="https://emacsist.github.io/2016/02/20/Spacemacs学习/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="说白了,spacemacs本质上也就是一个emacs的配置环境. 知道了本质, 也就容易理解了.  安装针对Mac 123$ brew tap railwaycat/homebrew-emacsmacport$ brew install emacs-mac --with-spacemacs-icon  # OR, brew cask install emacs-mac$ brew linkapp">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spacemacs学习">
+<meta name="twitter:description" content="说白了,spacemacs本质上也就是一个emacs的配置环境. 知道了本质, 也就容易理解了.  安装针对Mac 123$ brew tap railwaycat/homebrew-emacsmacport$ brew install emacs-mac --with-spacemacs-icon  # OR, brew cask install emacs-mac$ brew linkapp">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装"><span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置"><span class="toc-text">配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#禁用https启动"><span class="toc-text">禁用https启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#set-mark-command-不生效"><span class="toc-text">set-mark-command 不生效</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mac-默认按键"><span class="toc-text">mac 默认按键</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查看所有按键绑定"><span class="toc-text">查看所有按键绑定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#撤消-或-重做"><span class="toc-text">撤消 或 重做</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装-Source-Code-Pro-字体"><span class="toc-text">安装 Source Code Pro 字体</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Spacemacs学习" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Spacemacs学习
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2016.02.20</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#emacs">
+        <span class="tag-name">emacs</span>
+    <span class="tag-size">( 13 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <blockquote>
+<p>说白了,spacemacs本质上也就是一个emacs的配置环境. 知道了本质, 也就容易理解了.</p>
+</blockquote>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p><strong>针对Mac</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ brew tap railwaycat/homebrew-emacsmacport</div><div class="line">$ brew install emacs-mac --with-spacemacs-icon  <span class="comment"># OR, brew cask install emacs-mac</span></div><div class="line">$ brew linkapps</div></pre></td></tr></table></figure>
+<p><strong>安装</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mv ~/.emacs.d ~/.emacs.d.bak</div><div class="line"></div><div class="line">git <span class="built_in">clone</span> https://github.com/syl20bnr/spacemacs ~/.emacs.d</div></pre></td></tr></table></figure>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div><div class="line">228</div><div class="line">229</div><div class="line">230</div><div class="line">231</div><div class="line">232</div><div class="line">233</div><div class="line">234</div><div class="line">235</div><div class="line">236</div><div class="line">237</div><div class="line">238</div><div class="line">239</div><div class="line">240</div><div class="line">241</div><div class="line">242</div><div class="line">243</div><div class="line">244</div><div class="line">245</div><div class="line">246</div><div class="line">247</div><div class="line">248</div><div class="line">249</div><div class="line">250</div><div class="line">251</div><div class="line">252</div><div class="line">253</div><div class="line">254</div><div class="line">255</div><div class="line">256</div><div class="line">257</div><div class="line">258</div></pre></td><td class="code"><pre><div class="line">;; -*- mode: emacs-lisp -*-</div><div class="line">;; This file is loaded by Spacemacs at startup.</div><div class="line">;; It must be stored <span class="keyword">in</span> your home directory.</div><div class="line"></div><div class="line">(defun dotspacemacs/layers ()</div><div class="line">  <span class="string">"Configuration Layers declaration.</span></div><div class="line">You should not put any user code in this function besides modifying the variable</div><div class="line">values."</div><div class="line">  (setq-default</div><div class="line">   ;; Base distribution to use. This is a layer contained <span class="keyword">in</span> the directory</div><div class="line">   ;; `+distribution<span class="string">'. For now available distributions are `spacemacs-base'</span></div><div class="line">   ;; or `spacemacs<span class="string">'. (default '</span>spacemacs)</div><div class="line">   dotspacemacs-distribution <span class="string">'spacemacs</span></div><div class="line">   ;; List of additional paths where to look for configuration layers.</div><div class="line">   ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')</div><div class="line">   dotspacemacs-configuration-layer-path <span class="string">'()</span></div><div class="line">   ;; List of configuration layers to load. If it is the symbol `all' instead</div><div class="line">   ;; of a list <span class="keyword">then</span> all discovered layers will be installed.</div><div class="line">   dotspacemacs-configuration-layers</div><div class="line">   <span class="string">'(</span></div><div class="line">     ;; ----------------------------------------------------------------</div><div class="line">     ;; Example of useful layers you may want to use right away.</div><div class="line">     ;; Uncomment some layer names and press &lt;SPC f e R&gt; (Vim style) or</div><div class="line">     ;; &lt;M-m f e R&gt; (Emacs style) to install them.</div><div class="line">     ;; ----------------------------------------------------------------</div><div class="line">     ;; auto-completion</div><div class="line">     ;; better-defaults</div><div class="line">     emacs-lisp</div><div class="line">     git</div><div class="line">     markdown</div><div class="line">     org</div><div class="line">     html</div><div class="line">     javascript</div><div class="line">     (shell :variables</div><div class="line">             shell-default-height 30</div><div class="line">             shell-default-position 'bottom)</div><div class="line">      ;; spell-checking</div><div class="line">      syntax-checking</div><div class="line">      version-control</div><div class="line">     )</div><div class="line">     </div><div class="line">   ;; List of additional packages that will be installed without being</div><div class="line">   ;; wrapped <span class="keyword">in</span> a layer. If you need some configuration <span class="keyword">for</span> these</div><div class="line">   ;; packages, <span class="keyword">then</span> consider creating a layer. You can also put the</div><div class="line">   ;; configuration <span class="keyword">in</span> `dotspacemacs/user-config<span class="string">'.</span></div><div class="line">   dotspacemacs-additional-packages '()</div><div class="line">   ;; A list of packages and/or extensions that will not be install and loaded.</div><div class="line">   dotspacemacs-excluded-packages <span class="string">'()</span></div><div class="line">   ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that</div><div class="line">   ;; are declared in a layer which is not a member of</div><div class="line">   ;; the list `dotspacemacs-configuration-layers'. (default t)</div><div class="line">   dotspacemacs-delete-orphan-packages t))</div><div class="line"></div><div class="line">(defun dotspacemacs/init ()</div><div class="line">  <span class="string">"Initialization function.</span></div><div class="line">This function is called at the very startup of Spacemacs initialization</div><div class="line">before layers configuration.</div><div class="line">You should not put any user code in there besides modifying the variable</div><div class="line">values."</div><div class="line">  ;; This setq-default sexp is an exhaustive list of all the supported</div><div class="line">  ;; spacemacs settings.</div><div class="line">  (setq-default</div><div class="line">   ;; If non nil ELPA repositories are contacted via HTTPS whenever it<span class="string">'s</span></div><div class="line">   ;; possible. Set it to nil if you have no way to use HTTPS in your</div><div class="line">   ;; environment, otherwise it is strongly recommended to let it set to t.</div><div class="line">   ;; This variable has no effect if Emacs is launched with the parameter</div><div class="line">   ;; `--insecure' <span class="built_in">which</span> forces the value of this variable to nil.</div><div class="line">   ;; (default t)</div><div class="line">   dotspacemacs-elpa-https t</div><div class="line">   ;; Maximum allowed time <span class="keyword">in</span> seconds to contact an ELPA repository.</div><div class="line">   dotspacemacs-elpa-timeout 5</div><div class="line">   ;; If non nil <span class="keyword">then</span> spacemacs will check <span class="keyword">for</span> updates at startup</div><div class="line">   ;; when the current branch is not `develop<span class="string">'. (default t)</span></div><div class="line">   dotspacemacs-check-for-update nil</div><div class="line">   ;; One of `vim', `emacs<span class="string">' or `hybrid'</span>. Evil is always enabled but <span class="keyword">if</span> the</div><div class="line">   ;; variable is `emacs<span class="string">' then the `holy-mode'</span> is enabled at startup. `hybrid<span class="string">'</span></div><div class="line">   ;; uses emacs key bindings for vim's insert mode, but otherwise leaves evil</div><div class="line">   ;; unchanged. (default <span class="string">'vim)</span></div><div class="line">   dotspacemacs-editing-style 'emacs</div><div class="line">   ;; If non nil output loading progress <span class="keyword">in</span> `*Messages*<span class="string">' buffer. (default nil)</span></div><div class="line">   dotspacemacs-verbose-loading nil</div><div class="line">   ;; Specify the startup banner. Default value is `official', it displays</div><div class="line">   ;; the official spacemacs logo. An <span class="built_in">integer</span> value is the index of text</div><div class="line">   ;; banner, `random<span class="string">' chooses a random text banner in `core/banners'</span></div><div class="line">   ;; directory. A string value must be a path to an image format supported</div><div class="line">   ;; by your Emacs build.</div><div class="line">   ;; If the value is nil <span class="keyword">then</span> no banner is displayed. (default <span class="string">'official)</span></div><div class="line">   dotspacemacs-startup-banner 'official</div><div class="line">   ;; List of items to show <span class="keyword">in</span> the startup buffer. If nil it is disabled.</div><div class="line">   ;; Possible values are: `recents<span class="string">' `bookmarks'</span> `projects<span class="string">'.</span></div><div class="line">   ;; (default '(recents projects))</div><div class="line">   dotspacemacs-startup-lists <span class="string">'(recents projects)</span></div><div class="line">   ;; Number of recent files to show in the startup buffer. Ignored if</div><div class="line">   ;; `dotspacemacs-startup-lists' doesn<span class="string">'t include `recents'</span>. (default 5)</div><div class="line">   dotspacemacs-startup-recent-list-size 5</div><div class="line">   ;; Default major mode of the scratch buffer (default `text-mode<span class="string">')</span></div><div class="line">   dotspacemacs-scratch-mode 'text-mode</div><div class="line">   ;; List of themes, the first of the list is loaded when spacemacs starts.</div><div class="line">   ;; Press &lt;SPC&gt; T n to cycle to the next theme <span class="keyword">in</span> the list (works great</div><div class="line">   ;; with 2 themes variants, one dark and one light)</div><div class="line">   dotspacemacs-themes <span class="string">'(spacemacs-dark</span></div><div class="line">                         spacemacs-light</div><div class="line">                         solarized-light</div><div class="line">                         solarized-dark</div><div class="line">                         leuven</div><div class="line">                         monokai</div><div class="line">                         zenburn)</div><div class="line">   ;; If non nil the cursor color matches the state color in GUI Emacs.</div><div class="line">   dotspacemacs-colorize-cursor-according-to-state t</div><div class="line">   ;; Default font. `powerline-scale' allows to quickly tweak the mode-line</div><div class="line">   ;; size to make separators look not too crappy.</div><div class="line">   dotspacemacs-default-font <span class="string">'("Source Code Pro"</span></div><div class="line">                               :size 13</div><div class="line">                               :weight normal</div><div class="line">                               :width normal</div><div class="line">                               :powerline-scale 1.1)</div><div class="line">   ;; The leader key</div><div class="line">   dotspacemacs-leader-key "SPC"</div><div class="line">   ;; The leader key accessible in `emacs state' and `insert state<span class="string">'</span></div><div class="line">   ;; (default "M-m")</div><div class="line">   dotspacemacs-emacs-leader-key "M-m"</div><div class="line">   ;; Major mode leader key is a shortcut key which is the equivalent of</div><div class="line">   ;; pressing `&lt;leader&gt; m`. Set it to `nil` to disable it. (default ",")</div><div class="line">   dotspacemacs-major-mode-leader-key ","</div><div class="line">   ;; Major mode leader key accessible in `emacs state' and `insert state<span class="string">'.</span></div><div class="line">   ;; (default "C-M-m)</div><div class="line">   dotspacemacs-major-mode-emacs-leader-key "C-M-m"</div><div class="line">   ;; These variables control whether separate commands are bound in the GUI to</div><div class="line">   ;; the key pairs C-i, TAB and C-m, RET.</div><div class="line">   ;; Setting it to a non-nil value, allows for separate commands under &lt;C-i&gt;</div><div class="line">   ;; and TAB or &lt;C-m&gt; and RET.</div><div class="line">   ;; In the terminal, these pairs are generally indistinguishable, so this only</div><div class="line">   ;; works in the GUI. (default nil)</div><div class="line">   dotspacemacs-distinguish-gui-tab nil</div><div class="line">   ;; (Not implemented) dotspacemacs-distinguish-gui-ret nil</div><div class="line">   ;; The command key used for Evil commands (ex-commands) and</div><div class="line">   ;; Emacs commands (M-x).</div><div class="line">   ;; By default the command key is `:' so ex-commands are executed like <span class="keyword">in</span> Vim</div><div class="line">   ;; with `:<span class="string">' and Emacs commands are executed with `&lt;leader&gt; :'</span>.</div><div class="line">   dotspacemacs-command-key <span class="string">":"</span></div><div class="line">   ;; If non nil `Y<span class="string">' is remapped to `y$'</span>. (default t)</div><div class="line">   dotspacemacs-remap-Y-to-y$ t</div><div class="line">   ;; Name of the default layout (default <span class="string">"Default"</span>)</div><div class="line">   dotspacemacs-default-layout-name <span class="string">"Default"</span></div><div class="line">   ;; If non nil the default layout name is displayed <span class="keyword">in</span> the mode-line.</div><div class="line">   ;; (default nil)</div><div class="line">   dotspacemacs-display-default-layout nil</div><div class="line">   ;; If non nil <span class="keyword">then</span> the last auto saved layouts are resume automatically upon</div><div class="line">   ;; start. (default nil)</div><div class="line">   dotspacemacs-auto-resume-layouts nil</div><div class="line">   ;; Location <span class="built_in">where</span> to auto-save files. Possible values are `original<span class="string">' to</span></div><div class="line">   ;; auto-save the file in-place, `cache' to auto-save the file to another</div><div class="line">   ;; file stored <span class="keyword">in</span> the cache directory and `nil<span class="string">' to disable auto-saving.</span></div><div class="line">   ;; (default 'cache)</div><div class="line">   dotspacemacs-auto-save-file-location <span class="string">'cache</span></div><div class="line">   ;; Maximum number of rollback slots to keep in the cache. (default 5)</div><div class="line">   dotspacemacs-max-rollback-slots 5</div><div class="line">   ;; If non nil then `ido' replaces `helm<span class="string">' for some commands. For now only</span></div><div class="line">   ;; `find-files' (SPC f f), `find-spacemacs-file<span class="string">' (SPC f e s), and</span></div><div class="line">   ;; `find-contrib-file' (SPC f e c) are replaced. (default nil)</div><div class="line">   dotspacemacs-use-ido nil</div><div class="line">   ;; If non nil, `helm<span class="string">' will try to minimize the space it uses. (default nil)</span></div><div class="line">   dotspacemacs-helm-resize nil</div><div class="line">   ;; if non nil, the helm header is hidden when there is only one source.</div><div class="line">   ;; (default nil)</div><div class="line">   dotspacemacs-helm-no-header nil</div><div class="line">   ;; define the position to display `helm', options are `bottom<span class="string">', `top'</span>,</div><div class="line">   ;; `left<span class="string">', or `right'</span>. (default <span class="string">'bottom)</span></div><div class="line">   dotspacemacs-helm-position 'bottom</div><div class="line">   ;; If non nil the paste micro-state is enabled. When enabled pressing `p`</div><div class="line">   ;; several <span class="built_in">times</span> cycle between the <span class="built_in">kill</span> ring content. (default nil)</div><div class="line">   dotspacemacs-enable-paste-micro-state nil</div><div class="line">   ;; Which-key delay <span class="keyword">in</span> seconds. The <span class="built_in">which</span>-key buffer is the popup listing</div><div class="line">   ;; the commands bound to the current keystroke sequence. (default 0.4)</div><div class="line">   dotspacemacs-which-key-delay 0.4</div><div class="line">   ;; Which-key frame position. Possible values are `right<span class="string">', `bottom'</span> and</div><div class="line">   ;; `right-then-bottom<span class="string">'. right-then-bottom tries to display the frame to the</span></div><div class="line">   ;; right; if there is insufficient space it displays it at the bottom.</div><div class="line">   ;; (default 'bottom)</div><div class="line">   dotspacemacs-which-key-position <span class="string">'bottom</span></div><div class="line">   ;; If non nil a progress bar is displayed when spacemacs is loading. This</div><div class="line">   ;; may increase the boot time on some systems and emacs builds, set it to</div><div class="line">   ;; nil to boost the loading time. (default t)</div><div class="line">   dotspacemacs-loading-progress-bar t</div><div class="line">   ;; If non nil the frame is fullscreen when Emacs starts up. (default nil)</div><div class="line">   ;; (Emacs 24.4+ only)</div><div class="line">   dotspacemacs-fullscreen-at-startup nil</div><div class="line">   ;; If non nil `spacemacs/toggle-fullscreen' will not use native fullscreen.</div><div class="line">   ;; Use to <span class="built_in">disable</span> fullscreen animations <span class="keyword">in</span> OSX. (default nil)</div><div class="line">   dotspacemacs-fullscreen-use-non-native nil</div><div class="line">   ;; If non nil the frame is maximized when Emacs starts up.</div><div class="line">   ;; Takes effect only <span class="keyword">if</span> `dotspacemacs-fullscreen-at-startup<span class="string">' is nil.</span></div><div class="line">   ;; (default nil) (Emacs 24.4+ only)</div><div class="line">   dotspacemacs-maximized-at-startup nil</div><div class="line">   ;; A value from the range (0..100), in increasing opacity, which describes</div><div class="line">   ;; the transparency level of a frame when it's active or selected.</div><div class="line">   ;; Transparency can be toggled through `toggle-transparency<span class="string">'. (default 90)</span></div><div class="line">   dotspacemacs-active-transparency 90</div><div class="line">   ;; A value from the range (0..100), in increasing opacity, which describes</div><div class="line">   ;; the transparency level of a frame when it's inactive or deselected.</div><div class="line">   ;; Transparency can be toggled through `toggle-transparency<span class="string">'. (default 90)</span></div><div class="line">   dotspacemacs-inactive-transparency 90</div><div class="line">   ;; If non nil unicode symbols are displayed in the mode line. (default t)</div><div class="line">   dotspacemacs-mode-line-unicode-symbols t</div><div class="line">   ;; If non nil smooth scrolling (native-scrolling) is enabled. Smooth</div><div class="line">   ;; scrolling overrides the default behavior of Emacs which recenters the</div><div class="line">   ;; point when it reaches the top or bottom of the screen. (default t)</div><div class="line">   dotspacemacs-smooth-scrolling t</div><div class="line">   ;; If non nil line numbers are turned on in all `prog-mode' and `text-mode<span class="string">'</span></div><div class="line">   ;; derivatives. If set to `relative', also turns on relative line numbers.</div><div class="line">   ;; (default nil)</div><div class="line">   dotspacemacs-line-numbers <span class="string">'relative</span></div><div class="line">   ;; If non-nil smartparens-strict-mode will be enabled in programming modes.</div><div class="line">   ;; (default nil)</div><div class="line">   dotspacemacs-smartparens-strict-mode nil</div><div class="line">   ;; Select a scope to highlight delimiters. Possible values are `any',</div><div class="line">   ;; `current<span class="string">', `all'</span> or `nil<span class="string">'. Default is `all'</span> (highlight any scope and</div><div class="line">   ;; emphasis the current one). (default <span class="string">'all)</span></div><div class="line">   dotspacemacs-highlight-delimiters 'all</div><div class="line">   ;; If non nil advises quit <span class="built_in">functions</span> to keep server open when quitting.</div><div class="line">   ;; (default nil)</div><div class="line">   dotspacemacs-persistent-server nil</div><div class="line">   ;; List of search tool executable names. Spacemacs uses the first installed</div><div class="line">   ;; tool of the list. Supported tools are `ag<span class="string">', `pt'</span>, `ack<span class="string">' and `grep'</span>.</div><div class="line">   ;; (default <span class="string">'("ag" "pt" "ack" "grep"))</span></div><div class="line">   dotspacemacs-search-tools '(<span class="string">"ag"</span> <span class="string">"pt"</span> <span class="string">"ack"</span> <span class="string">"grep"</span>)</div><div class="line">   ;; The default package repository used <span class="keyword">if</span> no explicit repository has been</div><div class="line">   ;; specified with an installed package.</div><div class="line">   ;; Not used <span class="keyword">for</span> now. (default nil)</div><div class="line">   dotspacemacs-default-package-repository nil</div><div class="line">   ;; Delete whitespace <span class="keyword">while</span> saving buffer. Possible values are `all<span class="string">'</span></div><div class="line">   ;; to aggressively delete empty line and long sequences of whitespace,</div><div class="line">   ;; `trailing' to delete only the whitespace at end of lines, `changed<span class="string">'to</span></div><div class="line">   ;; delete only whitespace for changed lines or `nil' to <span class="built_in">disable</span> cleanup.</div><div class="line">   ;; (default nil)</div><div class="line">   dotspacemacs-whitespace-cleanup nil</div><div class="line">   ))</div><div class="line"></div><div class="line">(defun dotspacemacs/user-init ()</div><div class="line">  <span class="string">"Initialization function for user code.</span></div><div class="line">It is called immediately after `dotspacemacs/init'.  You are free to put almost</div><div class="line">any user code here.  The exception is org related code, which should be placed</div><div class="line">in `dotspacemacs/user-config'."</div><div class="line">  )</div><div class="line"></div><div class="line">(defun dotspacemacs/user-config ()</div><div class="line">  <span class="string">"Configuration function for user code.</span></div><div class="line">This function is called at the very end of Spacemacs initialization after</div><div class="line">layers configuration. You are free to put any user code."</div><div class="line">  )</div><div class="line">;; 自定义快捷键</div><div class="line"></div><div class="line">(global-set-key (kbd <span class="string">"C-@"</span>) nil)</div><div class="line">(global-set-key (kbd <span class="string">"C-SPC"</span>) nil)</div><div class="line">(global-set-key (kbd <span class="string">"C-@"</span>) <span class="string">'set-mark-command)</span></div><div class="line"></div><div class="line">;; Do not write anything past this comment. This is where Emacs will</div><div class="line">;; auto-generate custom variable definitions.</div></pre></td></tr></table></figure>
+<h2 id="禁用https启动"><a href="#禁用https启动" class="headerlink" title="禁用https启动"></a>禁用https启动</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">emacs --insecure</div></pre></td></tr></table></figure>
+<p>如果出现问题, 可以先删除<code>rm -rf ~/.emacs.d/elpa/</code> 再用上面的命令来启动.</p>
+<h2 id="set-mark-command-不生效"><a href="#set-mark-command-不生效" class="headerlink" title="set-mark-command 不生效"></a>set-mark-command 不生效</h2><p><code>spacemacs</code> 默认的<code>set-mark-command</code>的快捷键为<code>C-SPC</code>. 这个在mac里的弹出使用<code>splotlight</code>,所以我重定义了这个命令的按键(如上.)</p>
+<p>如果发现这种情况, 请注意自己的 <strong>输入法状态</strong>.注意, 因为使用的是搜狗输入法, 这种情况下, 如果是搜狗输入法, 并且是英文输入状态(即按左Shift), 这时按<code>C-@</code>也是无效的! 必须是系统的英文状态才行!</p>
+<p>这个问题, 折腾了我好久才发现!!!!!重要的事, 要一堆叹号强调才行!!!!</p>
+<h2 id="mac-默认按键"><a href="#mac-默认按键" class="headerlink" title="mac 默认按键"></a>mac 默认按键</h2><p><code>Meta</code>键在<code>spacemacs</code>里, 改为了<code>Command</code>键, 而不是<code>Option/Alt</code>!</p>
+<p>其他的暂时没有发现其他. 待继续…</p>
+<h2 id="查看所有按键绑定"><a href="#查看所有按键绑定" class="headerlink" title="查看所有按键绑定"></a>查看所有按键绑定</h2><p><code>M-m ?</code>, 在Mac下即是<code>Command + m</code> + <code>?</code>.</p>
+<h2 id="撤消-或-重做"><a href="#撤消-或-重做" class="headerlink" title="撤消 或 重做"></a>撤消 或 重做</h2><ul>
+<li><p>undo: 不再是<code>C-/</code>, 而是<code>C-_</code>. </p>
+</li>
+<li><p>redo: <code>M-_</code></p>
+</li>
+</ul>
+<h2 id="安装-Source-Code-Pro-字体"><a href="#安装-Source-Code-Pro-字体" class="headerlink" title="安装 Source Code Pro 字体"></a>安装 <code>Source Code Pro</code> 字体</h2><p><a href="https://github.com/adobe-fonts/source-code-pro" target="_blank" rel="external">Go</a></p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

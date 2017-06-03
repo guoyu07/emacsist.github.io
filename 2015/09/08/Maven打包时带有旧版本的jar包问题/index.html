@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Maven打包时带有旧版本的jar包问题 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="java,maven," />
+  
+
+  <meta name="description" content="最近发现在修改pom.xl的jar包版本依赖时，每次进行package时，都会发现以前的版本的jar包遗留下来。 原因这是因为我们公司有部分同事，喜欢在Eclipse里配置Tomcat的部署目录直接为项目的目录，而且在pom.xml配置了如下的task 1234567891011121314151617181920212223242526&amp;lt;plugin&amp;gt;	&amp;lt;artifactId&amp;">
+<meta name="keywords" content="java,maven">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Maven打包时带有旧版本的jar包问题">
+<meta property="og:url" content="https://emacsist.github.io/2015/09/08/Maven打包时带有旧版本的jar包问题/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="最近发现在修改pom.xl的jar包版本依赖时，每次进行package时，都会发现以前的版本的jar包遗留下来。 原因这是因为我们公司有部分同事，喜欢在Eclipse里配置Tomcat的部署目录直接为项目的目录，而且在pom.xml配置了如下的task 1234567891011121314151617181920212223242526&amp;lt;plugin&amp;gt;	&amp;lt;artifactId&amp;">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Maven打包时带有旧版本的jar包问题">
+<meta name="twitter:description" content="最近发现在修改pom.xl的jar包版本依赖时，每次进行package时，都会发现以前的版本的jar包遗留下来。 原因这是因为我们公司有部分同事，喜欢在Eclipse里配置Tomcat的部署目录直接为项目的目录，而且在pom.xml配置了如下的task 1234567891011121314151617181920212223242526&amp;lt;plugin&amp;gt;	&amp;lt;artifactId&amp;">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#原因"><span class="toc-text">原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决"><span class="toc-text">解决</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Maven打包时带有旧版本的jar包问题" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Maven打包时带有旧版本的jar包问题
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2015.09.08</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#maven">
+        <span class="tag-name">maven</span>
+    <span class="tag-size">( 7 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p>最近发现在修改<code>pom.xl</code>的jar包版本依赖时，每次进行<code>package</code>时，都会发现以前的版本的jar包遗留下来。</p>
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>这是因为我们公司有部分同事，喜欢在Eclipse里配置Tomcat的部署目录直接为项目的目录，而且在<code>pom.xml</code>配置了如下的<code>task</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">&lt;plugin&gt;</div><div class="line">	&lt;artifactId&gt;maven-antrun-plugin&lt;/artifactId&gt;</div><div class="line">	&lt;executions&gt;</div><div class="line">		&lt;execution&gt;</div><div class="line">			&lt;id&gt;copy-lib-src-webapps&lt;/id&gt;</div><div class="line">			&lt;phase&gt;package&lt;/phase&gt;</div><div class="line">			&lt;configuration&gt;</div><div class="line">				&lt;tasks&gt;</div><div class="line">					&lt;copy todir=<span class="string">"webroot/WEB-INF/lib"</span>&gt;</div><div class="line">						&lt;fileset dir=<span class="string">"target/ROOT/WEB-INF/lib"</span>&gt;</div><div class="line">							&lt;include name=<span class="string">"*"</span> /&gt;</div><div class="line">						&lt;/fileset&gt;</div><div class="line">					&lt;/copy&gt;</div><div class="line">					&lt;copy todir=<span class="string">"webroot/WEB-INF/classes"</span>&gt;</div><div class="line">						&lt;fileset dir=<span class="string">"target/ROOT/WEB-INF/classes"</span>&gt;</div><div class="line">							&lt;include name=<span class="string">"*"</span> /&gt;</div><div class="line">						&lt;/fileset&gt;</div><div class="line">					&lt;/copy&gt;</div><div class="line">				&lt;/tasks&gt;</div><div class="line">			&lt;/configuration&gt;</div><div class="line">			&lt;goals&gt;</div><div class="line">				&lt;goal&gt;run&lt;/goal&gt;</div><div class="line">			&lt;/goals&gt;</div><div class="line">		&lt;/execution&gt;</div><div class="line">	&lt;/executions&gt;</div><div class="line">&lt;/plugin&gt;</div></pre></td></tr></table></figure>
+<p>关键就是上面的<code>tasks</code>部分，它是直接将<code>target/ROOT/WEB-INF/lib</code>目录，复制到项目工程的<code>webroot/WEB-INF/lib</code>目录下。而<code>target/ROOT/WEB-INF/lib</code>又是在部署时，将<code>webroot/WEB-INF/lib</code>目录复制到该目录的。这样子，就造成了旧版本的<code>JAR</code>包，一直会叠加了。还有<code>classes</code>目录也同理，虽然同名的会覆盖，但删除的java文件，还会保留下来，作为一名处女座，应该不能忍受这种事情。所以，进行了以下改造：</p>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>修改上面那段代码为以下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">&lt;plugin&gt;</div><div class="line">				&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</div><div class="line">				&lt;artifactId&gt;maven-antrun-plugin&lt;/artifactId&gt;</div><div class="line">				&lt;version&gt;1.8&lt;/version&gt;</div><div class="line">				&lt;executions&gt;</div><div class="line">					&lt;execution&gt;</div><div class="line">						&lt;id&gt;delete-lib&lt;/id&gt;</div><div class="line">						&lt;phase&gt;clean&lt;/phase&gt;</div><div class="line">						&lt;configuration&gt;</div><div class="line">							&lt;target&gt;</div><div class="line">								&lt;mkdir dir=<span class="string">"webroot/WEB-INF/lib/"</span>/&gt;</div><div class="line">								&lt;delete includeemptydirs=<span class="string">"true"</span>&gt;</div><div class="line">								    &lt;fileset dir=<span class="string">"webroot/WEB-INF/lib/"</span> includes=<span class="string">"**/*"</span>/&gt;</div><div class="line">								&lt;/delete&gt;</div><div class="line">								&lt;mkdir dir=<span class="string">"webroot/WEB-INF/classes"</span>/&gt;</div><div class="line">								&lt;delete includeemptydirs=<span class="string">"true"</span>&gt;</div><div class="line">								    &lt;fileset dir=<span class="string">"webroot/WEB-INF/classes/"</span> includes=<span class="string">"**/*"</span>/&gt;</div><div class="line">								&lt;/delete&gt;</div><div class="line">								&lt;mkdir dir=<span class="string">"webroot/WEB-INF/classes"</span>/&gt;</div><div class="line">							&lt;/target&gt;</div><div class="line">						&lt;/configuration&gt;</div><div class="line">						&lt;goals&gt;</div><div class="line">							&lt;goal&gt;run&lt;/goal&gt;</div><div class="line">						&lt;/goals&gt;</div><div class="line">					&lt;/execution&gt;</div><div class="line"></div><div class="line">					&lt;execution&gt;</div><div class="line">						&lt;id&gt;copy-lib-src-webapps&lt;/id&gt;</div><div class="line">						&lt;phase&gt;package&lt;/phase&gt;</div><div class="line">						&lt;configuration&gt;</div><div class="line">							&lt;target&gt;</div><div class="line">								&lt;copy todir=<span class="string">"webroot/WEB-INF/lib"</span>&gt;</div><div class="line">									&lt;fileset dir=<span class="string">"target/ROOT/WEB-INF/lib"</span>&gt;</div><div class="line">										&lt;include name=<span class="string">"*"</span> /&gt;</div><div class="line">									&lt;/fileset&gt;</div><div class="line">								&lt;/copy&gt;</div><div class="line">								&lt;copy todir=<span class="string">"webroot/WEB-INF/classes"</span>&gt;</div><div class="line">									&lt;fileset dir=<span class="string">"target/ROOT/WEB-INF/classes"</span>&gt;</div><div class="line">										&lt;include name=<span class="string">"*"</span> /&gt;</div><div class="line">									&lt;/fileset&gt;</div><div class="line">								&lt;/copy&gt;</div><div class="line">							&lt;/target&gt;</div><div class="line">						&lt;/configuration&gt;</div><div class="line">						&lt;goals&gt;</div><div class="line">							&lt;goal&gt;run&lt;/goal&gt;</div><div class="line">						&lt;/goals&gt;</div><div class="line">					&lt;/execution&gt;</div><div class="line"></div><div class="line">				&lt;/executions&gt;</div><div class="line">			&lt;/plugin&gt;</div></pre></td></tr></table></figure>
+<p>这样子就解决了。思路也非常简单：就是先删除，再copy。</p>
+<p>这样子，执行命令时，就不会有遗留旧的jar包版本了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mvn clean package -Dmaven.test.skip=<span class="literal">true</span></div></pre></td></tr></table></figure>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

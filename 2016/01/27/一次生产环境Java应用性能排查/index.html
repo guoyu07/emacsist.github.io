@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>一次生产环境Java应用性能排查 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="java,server,tomcat," />
+  
+
+  <meta name="description" content="问题 生产环境上，有客户反应某个页面，点击时非常慢  然后，有个测试同事，这个测试的账号给我登录，然后亲自重现排查下原因。发现，该页面，第一次加载入去时，点击[对话]的响应时间还可以接受。但是过了几十秒之后，再点击就变得非常之慢了（有时整个请求耗时差不多1分钟….，这种情况，只有再现大量数据时，才会呈现这种问题） 排查一开始，我以为是点击时请求[对话]某URL的原因，然后线上hot fix加入方法">
+<meta name="keywords" content="java,server,tomcat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一次生产环境Java应用性能排查">
+<meta property="og:url" content="https://emacsist.github.io/2016/01/27/一次生产环境Java应用性能排查/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="问题 生产环境上，有客户反应某个页面，点击时非常慢  然后，有个测试同事，这个测试的账号给我登录，然后亲自重现排查下原因。发现，该页面，第一次加载入去时，点击[对话]的响应时间还可以接受。但是过了几十秒之后，再点击就变得非常之慢了（有时整个请求耗时差不多1分钟….，这种情况，只有再现大量数据时，才会呈现这种问题） 排查一开始，我以为是点击时请求[对话]某URL的原因，然后线上hot fix加入方法">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一次生产环境Java应用性能排查">
+<meta name="twitter:description" content="问题 生产环境上，有客户反应某个页面，点击时非常慢  然后，有个测试同事，这个测试的账号给我登录，然后亲自重现排查下原因。发现，该页面，第一次加载入去时，点击[对话]的响应时间还可以接受。但是过了几十秒之后，再点击就变得非常之慢了（有时整个请求耗时差不多1分钟….，这种情况，只有再现大量数据时，才会呈现这种问题） 排查一开始，我以为是点击时请求[对话]某URL的原因，然后线上hot fix加入方法">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题"><span class="toc-text">问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#排查"><span class="toc-text">排查</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决"><span class="toc-text">解决</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结知识点"><span class="toc-text">总结知识点</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-一次生产环境Java应用性能排查" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            一次生产环境Java应用性能排查
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2016.01.27</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#server">
+        <span class="tag-name">server</span>
+    <span class="tag-size">( 6 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#tomcat">
+        <span class="tag-name">tomcat</span>
+    <span class="tag-size">( 20 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><blockquote>
+<p>生产环境上，有客户反应某个页面，点击时非常慢</p>
+</blockquote>
+<p>然后，有个测试同事，这个测试的账号给我登录，然后亲自重现排查下原因。发现，该页面，第一次加载入去时，点击[对话]的响应时间还可以接受。但是过了几十秒之后，再点击就变得非常之慢了（有时整个请求耗时差不多1分钟….，这种情况，只有再现大量数据时，才会呈现这种问题）</p>
+<h2 id="排查"><a href="#排查" class="headerlink" title="排查"></a>排查</h2><p>一开始，我以为是点击时请求[对话]某URL的原因，然后线上hot fix加入方法调用时间的统计，发现非常慢的时候，前端还一直在等待，但服务器却没有打印出我的加入时间统计的日志，等完成时，却发现一个非常奇怪的现象：</p>
+<p>前端显示该请求的 <code>responseTime</code> 为 <code>51s</code></p>
+<p>但后端统计调用该方法直到返回，整个处理耗时为<code>100ms</code></p>
+<p>为何会差别如此之大？</p>
+<p>实在不得已，然后请了前端的同事，过来帮忙看看原因。然后同事再次打开浏览器调试工具，发现非常慢的那段时间，有不少其他的请求一直是等待状态，服务器响应未完成。</p>
+<blockquote>
+<p>这…….</p>
+</blockquote>
+<p>经前端同事的指出，才知道Google Chrome浏览器，同一个<code>tab</code>对<code>同一域名</code>的最大同时连接数是有限制的.可以通过如下方式查看:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">在浏览器地址栏输入以下:</div><div class="line"></div><div class="line">chrome://net-internals/<span class="comment">#sockets</span></div></pre></td></tr></table></figure>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>经过这次排查，发现自己一开始时的排查方向都是错的。因为问题的根源，并不是点击[对话]的URL的后端处理导致的。而是由于其他的URL，导致服务器没有能及时响应，而这些又是前端轮询的。所以，当服务器出现不能及时响应时，就会造成不少同时连接到同一域名，从而达到浏览器的连接上限，其他的请求，就只有挂起了。所以，才看到整个处理时间，前端与后端差别这么大。</p>
+<p>找到根源的那个URL请求，然后优化了下该代码就好了。</p>
+<h2 id="总结知识点"><a href="#总结知识点" class="headerlink" title="总结知识点"></a>总结知识点</h2><ul>
+<li><p>浏览器对同一域名，最大同时连接数是有限制的</p>
+</li>
+<li><p>前端的http请求，没有添加 <code>timeout</code></p>
+</li>
+<li><p>这次慢的原因，是因为后端代码的redis遍历问题，而且还是（1）获取某个zset的memebers –&gt; （2）获取每个memebers的对象（当时是有2W多个Key），这在以后用redis要特别注意.</p>
+</li>
+</ul>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

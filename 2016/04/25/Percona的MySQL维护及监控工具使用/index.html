@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Percona的MySQL维护及监控工具使用 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="mysql,percona," />
+  
+
+  <meta name="description" content="安装Doc 使用pt-mysql-summarypt-mysql-summary --host=127.0.0.1 --port=6606 --password=xxx 说明： 显示MySQL服务器的概况. pt-align将输出的文本对齐. 例子: 123456789#echo -e &quot;hello owrld\n                            Hello world&quot; |">
+<meta name="keywords" content="mysql,percona">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Percona的MySQL维护及监控工具使用">
+<meta property="og:url" content="https://emacsist.github.io/2016/04/25/Percona的MySQL维护及监控工具使用/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="安装Doc 使用pt-mysql-summarypt-mysql-summary --host=127.0.0.1 --port=6606 --password=xxx 说明： 显示MySQL服务器的概况. pt-align将输出的文本对齐. 例子: 123456789#echo -e &quot;hello owrld\n                            Hello world&quot; |">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Percona的MySQL维护及监控工具使用">
+<meta name="twitter:description" content="安装Doc 使用pt-mysql-summarypt-mysql-summary --host=127.0.0.1 --port=6606 --password=xxx 说明： 显示MySQL服务器的概况. pt-align将输出的文本对齐. 例子: 123456789#echo -e &quot;hello owrld\n                            Hello world&quot; |">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装"><span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用"><span class="toc-text">使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#pt-mysql-summary"><span class="toc-text">pt-mysql-summary</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pt-align"><span class="toc-text">pt-align</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pt-archiver"><span class="toc-text">pt-archiver</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pt-config-diff"><span class="toc-text">pt-config-diff</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pt-deadlock-logger"><span class="toc-text">pt-deadlock-logger</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pt-diskstats"><span class="toc-text">pt-diskstats</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pt-duplicate-key-checker"><span class="toc-text">pt-duplicate-key-checker</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pt-fifo-split"><span class="toc-text">pt-fifo-split</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pt-find"><span class="toc-text">pt-find</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pt-fingerprint"><span class="toc-text">pt-fingerprint</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pt-fk-error-logger"><span class="toc-text">pt-fk-error-logger</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pt-heartbeat"><span class="toc-text">pt-heartbeat</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pt-index-usage"><span class="toc-text">pt-index-usage</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pt-online-schema-change"><span class="toc-text">pt-online-schema-change</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pt-query-digest"><span class="toc-text">pt-query-digest</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pt-show-grants"><span class="toc-text">pt-show-grants</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pt-sift"><span class="toc-text">pt-sift</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pt-stalk"><span class="toc-text">pt-stalk</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pt-table-checksum"><span class="toc-text">pt-table-checksum</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pt-table-sync"><span class="toc-text">pt-table-sync</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pt-variable-advisor"><span class="toc-text">pt-variable-advisor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pt-visual-explain"><span class="toc-text">pt-visual-explain</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Percona的MySQL维护及监控工具使用" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Percona的MySQL维护及监控工具使用
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2016.04.25</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#percona">
+        <span class="tag-name">percona</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p><a href="https://www.percona.com/doc/percona-toolkit/2.2/installation.html" target="_blank" rel="external">Doc</a></p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="pt-mysql-summary"><a href="#pt-mysql-summary" class="headerlink" title="pt-mysql-summary"></a>pt-mysql-summary</h3><p><code>pt-mysql-summary --host=127.0.0.1 --port=6606 --password=xxx</code></p>
+<p>说明： 显示MySQL服务器的概况.</p>
+<h3 id="pt-align"><a href="#pt-align" class="headerlink" title="pt-align"></a>pt-align</h3><p>将输出的文本对齐.</p>
+<p>例子:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#echo -e "hello owrld\n                            Hello world" | pt-align </span></div><div class="line">hello owrld</div><div class="line">Hello world</div><div class="line"></div><div class="line">如果没有pt-align，则输出如下：</div><div class="line"></div><div class="line"><span class="comment">#echo -e "hello owrld\n                            Hello world"</span></div><div class="line">hello owrld</div><div class="line">                            Hello world</div></pre></td></tr></table></figure>
+<h3 id="pt-archiver"><a href="#pt-archiver" class="headerlink" title="pt-archiver"></a>pt-archiver</h3><p>将mysql数据库中表的记录归档到另外一个表或者文件.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">pt-archiver --source h=127.0.0.1,D=dbName,t=tableName --user=root --password=123456 \</div><div class="line">--dest h=127.0.0.1,D=destDBName,t=destTableName --file <span class="string">'/var/log/logToFileName'</span> --where <span class="string">"id&lt;=100000"</span> --commit-each</div></pre></td></tr></table></figure>
+<p>默认会删除源表的数据.</p>
+<h3 id="pt-config-diff"><a href="#pt-config-diff" class="headerlink" title="pt-config-diff"></a>pt-config-diff</h3><p>配置文件比较工具</p>
+<p><code>pt-config-diff my.conf1 my.conf2 ...</code></p>
+<h3 id="pt-deadlock-logger"><a href="#pt-deadlock-logger" class="headerlink" title="pt-deadlock-logger"></a>pt-deadlock-logger</h3><p>死锁检测输出日志工具，这里将它输出到test数据库中的deadlocks表中.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pt-deadlock-logger --ask-pass --run-time=10 --interval=3 --create-dest-table --dest D=<span class="built_in">test</span>,t=deadlocks u=root,P=6606,h=127.0.0.1</div></pre></td></tr></table></figure>
+<h3 id="pt-diskstats"><a href="#pt-diskstats" class="headerlink" title="pt-diskstats"></a>pt-diskstats</h3><p>打印磁盘io统计信息</p>
+<h3 id="pt-duplicate-key-checker"><a href="#pt-duplicate-key-checker" class="headerlink" title="pt-duplicate-key-checker"></a>pt-duplicate-key-checker</h3><p>重复索引检测工具.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pt-duplicate-key-checker --host=127.0.0.1 --user=root --databases=db1,db2,db3 --port=6606 --password=xxxx</div></pre></td></tr></table></figure>
+<h3 id="pt-fifo-split"><a href="#pt-fifo-split" class="headerlink" title="pt-fifo-split"></a>pt-fifo-split</h3><p>可以模拟切割文件，并通过管道传递给先入先出队列而不用真正的切割文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">源文件 /tmp/hello.world 内容</div><div class="line"></div><div class="line">cat /tmp/hello.world </div><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line"></div><div class="line">先创建fifo文件</div><div class="line">pt-fifo-split /tmp/hello.world --fifo=/tmp/hello.world.fifo --lines=3 &amp;</div><div class="line"></div><div class="line">然后就可以不断向 /tmp/cmbcc.fifo 文件读取文件了.结果如下：</div><div class="line"></div><div class="line">cat /tmp/hello.world.fifo </div><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line"></div><div class="line">cat /tmp/hello.world.fifo </div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line"></div><div class="line">cat /tmp/hello.world.fifo </div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line"></div><div class="line">...</div></pre></td></tr></table></figure>
+<h3 id="pt-find"><a href="#pt-find" class="headerlink" title="pt-find"></a>pt-find</h3><p>对MySQL的数据库或表进行类似GNU find的操作并执行一些命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">打印MySQL中的所有数据库及表名</div><div class="line">pt-find --ask-pass --host=127.0.0.1 --user=root --port=6606</div><div class="line"></div><div class="line">打印指定数据库中的表</div><div class="line">pt-find --ask-pass --host=127.0.0.1 --user=root --port=6606 db1 db2 db3</div><div class="line"></div><div class="line">找出表大小超过100M的表</div><div class="line">pt-find --ask-pass --host=127.0.0.1 --user=root --port=6606 --tablesize +100M  db1 db2</div><div class="line"></div><div class="line">显示所有表的大小并排序</div><div class="line">pt-find --ask-pass --host=127.0.0.1 --user=root --port=6606 --printf <span class="string">"%T\t%D.%N\n"</span> | sort -rn</div><div class="line"> </div><div class="line">所有大小信息</div><div class="line">pt-find --ask-pass --host=127.0.0.1 --user=root --port=6606 --printf <span class="string">"DB=%D, TB=%N, Auto_increment=%a, Engine=%E,  ROWS=%S, Row_format=%R, Max_data_length=%M, Avg_row_length=%A, Collation=%L, Data_length=%d, Index_length=%I, Table_length=%T\n\n"</span> db1 db2 db3 | sort -rn</div></pre></td></tr></table></figure>
+<p><a href="https://www.percona.com/doc/percona-toolkit/2.1/pt-find.html" target="_blank" rel="external">官方文档</a></p>
+<h3 id="pt-fingerprint"><a href="#pt-fingerprint" class="headerlink" title="pt-fingerprint"></a>pt-fingerprint</h3><p>将查询转化为带参查询</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">pt-fingerprint --query <span class="string">"select a, b, c from users where id = 500"</span></div><div class="line"></div><div class="line">select a, b, c from users <span class="built_in">where</span> id = ?</div></pre></td></tr></table></figure>
+<h3 id="pt-fk-error-logger"><a href="#pt-fk-error-logger" class="headerlink" title="pt-fk-error-logger"></a>pt-fk-error-logger</h3><p>提取和记录mysql外键错误信息.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pt-fk-error-logger --ask-pass -h127.0.0.1 -P6606 --run-time=10 --interval=3 -uroot --dest D=<span class="built_in">test</span> t=foreign_key_errors h=127.0.0.1,u=root,P=6606</div></pre></td></tr></table></figure>
+<h3 id="pt-heartbeat"><a href="#pt-heartbeat" class="headerlink" title="pt-heartbeat"></a>pt-heartbeat</h3><p>监控MySQL复制延迟.</p>
+<p><a href="https://www.percona.com/doc/percona-toolkit/2.1/pt-heartbeat.html" target="_blank" rel="external">官方文档</a></p>
+<h3 id="pt-index-usage"><a href="#pt-index-usage" class="headerlink" title="pt-index-usage"></a>pt-index-usage</h3><p>从慢查询中分析索引使用情况</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pt-index-usage /path/to/slow.log -h127.0.0.1 -uroot -P6606 --password=xxx</div></pre></td></tr></table></figure>
+<h3 id="pt-online-schema-change"><a href="#pt-online-schema-change" class="headerlink" title="pt-online-schema-change"></a>pt-online-schema-change</h3><p>在线更改表结构，既不阻塞read，也不会阻塞写</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pt-online-schema-change --alter <span class="string">"ADD COLUMN c1 INT"</span> D=sakila,t=actor</div></pre></td></tr></table></figure>
+<p><a href="https://www.percona.com/doc/percona-toolkit/2.1/pt-online-schema-change.html" target="_blank" rel="external">官方文档</a></p>
+<h3 id="pt-query-digest"><a href="#pt-query-digest" class="headerlink" title="pt-query-digest"></a>pt-query-digest</h3><p>从日志，processlist, tcpdump分析MySQL的查询.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">pt-query-digest slow.log</div><div class="line"></div><div class="line">pt-query-digest --processlist h=host1</div><div class="line"></div><div class="line">pt-query-digest --review h=host2 --no-report slow.log</div></pre></td></tr></table></figure>
+<p><a href="https://www.percona.com/doc/percona-toolkit/2.2/pt-query-digest.html" target="_blank" rel="external">官方文档</a></p>
+<h3 id="pt-show-grants"><a href="#pt-show-grants" class="headerlink" title="pt-show-grants"></a>pt-show-grants</h3><p>显示服务器的用户及相应的权限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pt-show-grants --user=root --port=6606 --host=127.0.0.1 --ask-pass</div></pre></td></tr></table></figure>
+<h3 id="pt-sift"><a href="#pt-sift" class="headerlink" title="pt-sift"></a>pt-sift</h3><p>浏览由  pt-stalk 生成的文件</p>
+<h3 id="pt-stalk"><a href="#pt-stalk" class="headerlink" title="pt-stalk"></a>pt-stalk</h3><p>问题诊断工具.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">pt-stalk --collect-tcpdump --function status \</div><div class="line">--variable Threads_connected --threshold 2500 \</div><div class="line">--daemonize -- --user=root --password=YOURPASSWORD</div></pre></td></tr></table></figure>
+<p>当MySQL的参数 threads_connected 达到 2500 时， 就收集它的服务器状态信息.</p>
+<h3 id="pt-table-checksum"><a href="#pt-table-checksum" class="headerlink" title="pt-table-checksum"></a>pt-table-checksum</h3><p>用于检测MySQL主、从库的数据是否一致</p>
+<p><a href="http://seanlook.com/2015/12/29/mysql_replica_pt-table-checksum/" target="_blank" rel="external">博客资料</a></p>
+<h3 id="pt-table-sync"><a href="#pt-table-sync" class="headerlink" title="pt-table-sync"></a>pt-table-sync</h3><p>同于主从同步.</p>
+<p>pt-table-checksum 发现不一致时，就用它来进行同步.</p>
+<h3 id="pt-variable-advisor"><a href="#pt-variable-advisor" class="headerlink" title="pt-variable-advisor"></a>pt-variable-advisor</h3><p>查看变量及其提供建议.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pt-variable-advisor --user=root --host=127.0.0.1 --port=6606 -p password h=127.0.0.1</div></pre></td></tr></table></figure>
+<h3 id="pt-visual-explain"><a href="#pt-visual-explain" class="headerlink" title="pt-visual-explain"></a>pt-visual-explain</h3><p>可视化explain</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">mysql -h127.0.0.1 -uroot -p -P6606 -D yourDbName <span class="_">-e</span> <span class="string">"explain select * from users limit 1"</span> | pt-visual-explain </div><div class="line">Enter password: </div><div class="line"></div><div class="line">Table scan</div><div class="line">rows           422</div><div class="line">+- Table</div><div class="line">   table          users</div></pre></td></tr></table></figure>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

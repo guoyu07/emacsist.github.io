@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Emacs技巧之矩阵编辑 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="emacs," />
+  
+
+  <meta name="description" content="Emacs中的矩阵编辑 在开始进行矩阵编辑之前, 首先要标记所要编辑的矩阵.矩阵的选择, 是指两个对角的点所在的范围里.  在矩阵编辑中, 所有的指令, 都是以 C-x r 开头的. 矩阵的选择 标记对角的起点. [C-@] 标记对角的终点. [移动光标到对角的另一点的位置即可]  剪切矩阵的内容 C-x r k  或者  M-x kill-rectangle  以某字符串替代矩阵里的每一行的内容">
+<meta name="keywords" content="emacs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Emacs技巧之矩阵编辑">
+<meta property="og:url" content="https://emacsist.github.io/2015/06/29/Emacs技巧之矩阵编辑/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="Emacs中的矩阵编辑 在开始进行矩阵编辑之前, 首先要标记所要编辑的矩阵.矩阵的选择, 是指两个对角的点所在的范围里.  在矩阵编辑中, 所有的指令, 都是以 C-x r 开头的. 矩阵的选择 标记对角的起点. [C-@] 标记对角的终点. [移动光标到对角的另一点的位置即可]  剪切矩阵的内容 C-x r k  或者  M-x kill-rectangle  以某字符串替代矩阵里的每一行的内容">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Emacs技巧之矩阵编辑">
+<meta name="twitter:description" content="Emacs中的矩阵编辑 在开始进行矩阵编辑之前, 首先要标记所要编辑的矩阵.矩阵的选择, 是指两个对角的点所在的范围里.  在矩阵编辑中, 所有的指令, 都是以 C-x r 开头的. 矩阵的选择 标记对角的起点. [C-@] 标记对角的终点. [移动光标到对角的另一点的位置即可]  剪切矩阵的内容 C-x r k  或者  M-x kill-rectangle  以某字符串替代矩阵里的每一行的内容">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Emacs中的矩阵编辑"><span class="toc-text">Emacs中的矩阵编辑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#矩阵的选择"><span class="toc-text">矩阵的选择</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#剪切矩阵的内容"><span class="toc-text">剪切矩阵的内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#以某字符串替代矩阵里的每一行的内容"><span class="toc-text">以某字符串替代矩阵里的每一行的内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#粘贴已经复制好或剪切好的矩阵内容"><span class="toc-text">粘贴已经复制好或剪切好的矩阵内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为矩阵内的每一行-添加行数数字"><span class="toc-text">为矩阵内的每一行,添加行数数字.</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#更多内容-请参考"><span class="toc-text">更多内容, 请参考</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Emacs技巧之矩阵编辑" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Emacs技巧之矩阵编辑
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2015.06.29</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#emacs">
+        <span class="tag-name">emacs</span>
+    <span class="tag-size">( 13 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="Emacs中的矩阵编辑"><a href="#Emacs中的矩阵编辑" class="headerlink" title="Emacs中的矩阵编辑"></a>Emacs中的矩阵编辑</h2><blockquote>
+<p>在开始进行矩阵编辑之前, 首先要标记所要编辑的矩阵.矩阵的选择, 是指两个对角的点所在的范围里.</p>
+</blockquote>
+<p>在矩阵编辑中, 所有的指令, 都是以 <code>C-x r</code> 开头的.</p>
+<h3 id="矩阵的选择"><a href="#矩阵的选择" class="headerlink" title="矩阵的选择"></a>矩阵的选择</h3><ol>
+<li>标记对角的起点. [C-@]</li>
+<li>标记对角的终点. [移动光标到对角的另一点的位置即可]</li>
+</ol>
+<h3 id="剪切矩阵的内容"><a href="#剪切矩阵的内容" class="headerlink" title="剪切矩阵的内容"></a>剪切矩阵的内容</h3><ul>
+<li><code>C-x r k</code></li>
+</ul>
+<p>或者</p>
+<ul>
+<li><code>M-x kill-rectangle</code></li>
+</ul>
+<h3 id="以某字符串替代矩阵里的每一行的内容"><a href="#以某字符串替代矩阵里的每一行的内容" class="headerlink" title="以某字符串替代矩阵里的每一行的内容"></a>以某字符串替代矩阵里的每一行的内容</h3><blockquote>
+<p>注意,首先要选择好所要编辑的矩阵内容</p>
+</blockquote>
+<ul>
+<li><code>C-x r t string RET</code></li>
+</ul>
+<p>或者</p>
+<ul>
+<li><code>M-x string-rectangle</code></li>
+</ul>
+<h3 id="粘贴已经复制好或剪切好的矩阵内容"><a href="#粘贴已经复制好或剪切好的矩阵内容" class="headerlink" title="粘贴已经复制好或剪切好的矩阵内容"></a>粘贴已经复制好或剪切好的矩阵内容</h3><ul>
+<li><code>C-x r y</code></li>
+</ul>
+<p>或者</p>
+<ul>
+<li><code>M-x yank-rectangle</code></li>
+</ul>
+<h3 id="为矩阵内的每一行-添加行数数字"><a href="#为矩阵内的每一行-添加行数数字" class="headerlink" title="为矩阵内的每一行,添加行数数字."></a>为矩阵内的每一行,添加行数数字.</h3><blockquote>
+<p>行数, 是以所选择的内容为起始数字, 第一行为1.</p>
+</blockquote>
+<ul>
+<li><code>C-x r N</code></li>
+</ul>
+<p>或者</p>
+<ul>
+<li><code>M-x rectangle-number-lines</code></li>
+</ul>
+<h2 id="更多内容-请参考"><a href="#更多内容-请参考" class="headerlink" title="更多内容, 请参考"></a>更多内容, 请参考</h2><ul>
+<li><p><a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Rectangles.html" target="_blank" rel="external">Emacs Rectangles</a></p>
+</li>
+<li><p><a href="http://emacsrocks.com/e01.html" target="_blank" rel="external">Emacs Rocks!关于矩阵操作的视频</a></p>
+</li>
+</ul>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

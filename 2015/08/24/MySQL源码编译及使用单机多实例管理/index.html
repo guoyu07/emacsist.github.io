@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>MySQL源码编译及使用单机多实例管理 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="mysql," />
+  
+
+  <meta name="description" content="本文的测试环境为 Ubuntu 14.04.2 LTS 64 bit + MySQL 5.6 下载源码并安装及初始化数据库123456789101112131415161718192021222324252627282930313233343536cd ~/Downloadswget -c http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.26.">
+<meta name="keywords" content="mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL源码编译及使用单机多实例管理">
+<meta property="og:url" content="https://emacsist.github.io/2015/08/24/MySQL源码编译及使用单机多实例管理/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="本文的测试环境为 Ubuntu 14.04.2 LTS 64 bit + MySQL 5.6 下载源码并安装及初始化数据库123456789101112131415161718192021222324252627282930313233343536cd ~/Downloadswget -c http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.26.">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL源码编译及使用单机多实例管理">
+<meta name="twitter:description" content="本文的测试环境为 Ubuntu 14.04.2 LTS 64 bit + MySQL 5.6 下载源码并安装及初始化数据库123456789101112131415161718192021222324252627282930313233343536cd ~/Downloadswget -c http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.26.">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#下载源码并安装及初始化数据库"><span class="toc-text">下载源码并安装及初始化数据库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置my-conf"><span class="toc-text">配置my.conf</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#启动各个实例"><span class="toc-text">启动各个实例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#查看各个实例状态"><span class="toc-text">查看各个实例状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#启动某个实例"><span class="toc-text">启动某个实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一次性启动多个实例"><span class="toc-text">一次性启动多个实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#停止某个实例"><span class="toc-text">停止某个实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一次性停止多个实例"><span class="toc-text">一次性停止多个实例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#修改默认密码"><span class="toc-text">修改默认密码</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-MySQL源码编译及使用单机多实例管理" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            MySQL源码编译及使用单机多实例管理
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2015.08.24</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#mysql">
+        <span class="tag-name">mysql</span>
+    <span class="tag-size">( 37 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p>本文的测试环境为 Ubuntu 14.04.2 LTS 64 bit + MySQL 5.6</p>
+<h2 id="下载源码并安装及初始化数据库"><a href="#下载源码并安装及初始化数据库" class="headerlink" title="下载源码并安装及初始化数据库"></a>下载源码并安装及初始化数据库</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ~/Downloads</div><div class="line"></div><div class="line">wget -c http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.26.tar.gz</div><div class="line"></div><div class="line">tar -xvf mysql-5.6.26.tar.gz</div><div class="line"></div><div class="line"><span class="built_in">cd</span> mysql-5.6.26</div><div class="line"></div><div class="line">sudo groupadd mysql</div><div class="line"></div><div class="line">sudo useradd -r -g mysql mysql</div><div class="line"></div><div class="line">sudo apt-get install cmake</div><div class="line"></div><div class="line">cmake . -DCMAKE_INSTALL_PREFIX=/usr/<span class="built_in">local</span>/mysql-5.6 -DMYSQL_USER=mysql</div><div class="line"></div><div class="line">sudo mkdir /usr/<span class="built_in">local</span>/mysql-5.6</div><div class="line"></div><div class="line">sudo make install</div><div class="line"></div><div class="line">sudo chown mysql:mysql -R /usr/<span class="built_in">local</span>/mysql-5.6</div><div class="line"></div><div class="line">sudo mkdir /usr/<span class="built_in">local</span>/mysql-data/3306 -p</div><div class="line">sudo mkdir /usr/<span class="built_in">local</span>/mysql-data/3307 -p</div><div class="line"></div><div class="line">sudo chown mysql:mysql /usr/<span class="built_in">local</span>/mysql-data/3306 -R</div><div class="line">sudo chown mysql:mysql /usr/<span class="built_in">local</span>/mysql-data/3307 -R</div><div class="line"></div><div class="line">sudo su</div><div class="line"></div><div class="line">su mysql</div><div class="line"></div><div class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/mysql-5.6</div><div class="line"></div><div class="line">scripts/mysql_install_db --datadir=/usr/<span class="built_in">local</span>/mysql-data/3306 --basedir=/usr/<span class="built_in">local</span>/mysql-5.6 --user=mysql</div><div class="line">scripts/mysql_install_db --datadir=/usr/<span class="built_in">local</span>/mysql-data/3307 --basedir=/usr/<span class="built_in">local</span>/mysql-5.6 --user=mysql</div></pre></td></tr></table></figure>
+<h2 id="配置my-conf"><a href="#配置my-conf" class="headerlink" title="配置my.conf"></a>配置my.conf</h2><p>文件位置： <code>/usr/local/mysql-5.6/my.cnf</code></p>
+<p>内容</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># For advice on how to change settings please see</span></div><div class="line"><span class="comment"># http://dev.mysql.com/doc/refman/5.6/en/server-configuration-defaults.html</span></div><div class="line"></div><div class="line">[mysqld_multi]</div><div class="line">mysqld     = /usr/<span class="built_in">local</span>/mysql-5.6/bin/mysqld_safe</div><div class="line">mysqladmin = /usr/<span class="built_in">local</span>/mysql-5.6/bin/mysqladmin</div><div class="line"><span class="built_in">log</span>        = /usr/<span class="built_in">local</span>/mysql-5.6/log.err</div><div class="line">user       = root</div><div class="line">password   = yang</div><div class="line"></div><div class="line"><span class="comment"># The MySQL server</span></div><div class="line">[mysqld1]</div><div class="line">port       = 3306</div><div class="line">socket     = /usr/<span class="built_in">local</span>/mysql-data/3306/3306.socket</div><div class="line">datadir    = /usr/<span class="built_in">local</span>/mysql-data/3306</div><div class="line">pid-file   = /usr/<span class="built_in">local</span>/mysql-data/3306/3306.pid</div><div class="line"><span class="built_in">log</span>-error    = /usr/<span class="built_in">local</span>/mysql-data/3306/3306.err</div><div class="line">slow_query_log = 1</div><div class="line">long_query_time = 0.3</div><div class="line">slow_query_log_file = /usr/<span class="built_in">local</span>/mysql-data/3306/query-slow.log</div><div class="line">general_log = /usr/<span class="built_in">local</span>/mysql-data/3306/general-log.log</div><div class="line">sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES</div><div class="line"></div><div class="line">[mysqld2]</div><div class="line">port       = 3307</div><div class="line">socket     = /usr/<span class="built_in">local</span>/mysql-data/3307/3307.socket</div><div class="line">datadir    = /usr/<span class="built_in">local</span>/mysql-data/3307</div><div class="line">pid-file   = /usr/<span class="built_in">local</span>/mysql-data/3307/3307.pid</div><div class="line"><span class="built_in">log</span>-error    = /usr/<span class="built_in">local</span>/mysql-data/3307/3307.err</div><div class="line">slow_query_log = 1</div><div class="line">long_query_time = 0.3</div><div class="line">slow_query_log_file = /usr/<span class="built_in">local</span>/mysql-data/3307/query-slow.log</div><div class="line">general_log = /usr/<span class="built_in">local</span>/mysql-data/3307/general-log.log</div><div class="line">sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES</div></pre></td></tr></table></figure>
+<h2 id="启动各个实例"><a href="#启动各个实例" class="headerlink" title="启动各个实例"></a>启动各个实例</h2><p><code>export PATH=/usr/local/mysql-5.6/bin:$PATH</code></p>
+<h3 id="查看各个实例状态"><a href="#查看各个实例状态" class="headerlink" title="查看各个实例状态"></a>查看各个实例状态</h3><p><code>mysqld_multi --defaults-file=/usr/local/mysql-5.6/my.cnf report</code></p>
+<h3 id="启动某个实例"><a href="#启动某个实例" class="headerlink" title="启动某个实例"></a>启动某个实例</h3><p><code>mysqld_multi --defaults-file=/usr/local/mysql-5.6/my.cnf start 1</code></p>
+<p>这表示启动<code>my.conf</code>文件里<code>[mysqld1]</code>配置的实例</p>
+<h3 id="一次性启动多个实例"><a href="#一次性启动多个实例" class="headerlink" title="一次性启动多个实例"></a>一次性启动多个实例</h3><p><code>mysqld_multi --defaults-file=/usr/local/mysql-5.6/my.cnf start 1-2</code></p>
+<p>这表示启动<code>my.conf</code>文件里的<code>[mysqld1]</code>和<code>[mysqld2]</code></p>
+<h3 id="停止某个实例"><a href="#停止某个实例" class="headerlink" title="停止某个实例"></a>停止某个实例</h3><p><code>mysqld_multi --defaults-file=/usr/local/mysql-5.6/my.cnf stop 1</code></p>
+<h3 id="一次性停止多个实例"><a href="#一次性停止多个实例" class="headerlink" title="一次性停止多个实例"></a>一次性停止多个实例</h3><p><code>mysqld_multi --defaults-file=/usr/local/mysql-5.6/my.cnf stop 1-2</code></p>
+<h2 id="修改默认密码"><a href="#修改默认密码" class="headerlink" title="修改默认密码"></a>修改默认密码</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">/usr/<span class="built_in">local</span>/mysql-5.6/bin/mysqladmin -S /usr/<span class="built_in">local</span>/mysql-data/3306/3306.socket -u root password <span class="string">'yang'</span></div><div class="line">/usr/<span class="built_in">local</span>/mysql-5.6/bin/mysqladmin -S /usr/<span class="built_in">local</span>/mysql-data/3307/3307.socket -u root password <span class="string">'yang'</span></div></pre></td></tr></table></figure>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

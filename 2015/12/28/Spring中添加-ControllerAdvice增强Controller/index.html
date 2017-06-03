@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Spring中添加@ControllerAdvice增强Controller | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="java,spring," />
+  
+
+  <meta name="description" content="@ControllerAdvice 注解，会应用到所有的Controller中的@RequestMapping注解的方法中.  配置 要注意，经自己测试，这个注解的类，要被 org.springframework.web.servlet.DispatcherServlet的contextConfigLocation中扫描到，如果是放在application context里扫描，是没有效果的.">
+<meta name="keywords" content="java,spring">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring中添加@ControllerAdvice增强Controller">
+<meta property="og:url" content="https://emacsist.github.io/2015/12/28/Spring中添加-ControllerAdvice增强Controller/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="@ControllerAdvice 注解，会应用到所有的Controller中的@RequestMapping注解的方法中.  配置 要注意，经自己测试，这个注解的类，要被 org.springframework.web.servlet.DispatcherServlet的contextConfigLocation中扫描到，如果是放在application context里扫描，是没有效果的.">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring中添加@ControllerAdvice增强Controller">
+<meta name="twitter:description" content="@ControllerAdvice 注解，会应用到所有的Controller中的@RequestMapping注解的方法中.  配置 要注意，经自己测试，这个注解的类，要被 org.springframework.web.servlet.DispatcherServlet的contextConfigLocation中扫描到，如果是放在application context里扫描，是没有效果的.">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#配置"><span class="toc-text">配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#java-文件内容"><span class="toc-text">java 文件内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xml-配置"><span class="toc-text">xml  配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用"><span class="toc-text">使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#示例"><span class="toc-text">示例</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Spring中添加-ControllerAdvice增强Controller" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Spring中添加@ControllerAdvice增强Controller
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2015.12.28</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#spring">
+        <span class="tag-name">spring</span>
+    <span class="tag-size">( 27 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <blockquote>
+<p>@ControllerAdvice 注解，会应用到所有的Controller中的@RequestMapping注解的方法中.</p>
+</blockquote>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><blockquote>
+<p>要注意，经自己测试，这个注解的类，要被 <code>org.springframework.web.servlet.DispatcherServlet</code>的<code>contextConfigLocation</code>中扫描到，如果是放在<code>application context</code>里扫描，是没有效果的.</p>
+</blockquote>
+<h3 id="java-文件内容"><a href="#java-文件内容" class="headerlink" title="java 文件内容"></a>java 文件内容</h3><p><code>ControllerAdviceHandler.java</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">@ControllerAdvice</div><div class="line">public class ControllerAdviceHandler &#123;</div><div class="line"></div><div class="line">    private static final Logger <span class="built_in">log</span> = LoggerFactory.getLogger(ControllerAdviceHandler.class);</div><div class="line"></div><div class="line">    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)</div><div class="line">    @ExceptionHandler(value = Exception.class)</div><div class="line">    @ResponseBody</div><div class="line">    public Object exceptionHandler(HttpServletRequest request, HttpServletResponse response, Exception e) &#123;</div><div class="line">        Map&lt;String, Object&gt; hello = new HashMap&lt;&gt;(2);</div><div class="line">        hello.put(<span class="string">"hello"</span>, <span class="string">"helllo msg"</span>);</div><div class="line">        hello.put(<span class="string">"msg"</span>, e.getMessage());</div><div class="line">        log.error(<span class="string">"error in url:&#123;&#125;, reason: &#123;&#125;"</span>, request.getRequestURI().toString(), e);</div><div class="line">        <span class="built_in">return</span> hello;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="xml-配置"><a href="#xml-配置" class="headerlink" title="xml  配置"></a>xml  配置</h3><p>在<code>DispatcherServlet</code>的<code>contextconfigLocation</code>参数值的配置文件里，添加以下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&lt;mvc:annotation-driven /&gt;</div><div class="line">&lt;!-- Scans <span class="keyword">for</span> annotated @Controllers <span class="keyword">in</span> the classpath --&gt;</div><div class="line">&lt;context:component-scan base-package=<span class="string">"com.uniweibov2.web"</span> use-default-filters=<span class="string">"false"</span>&gt;</div><div class="line">  	    &lt;context:include-filter <span class="built_in">type</span>=<span class="string">"annotation"</span> expression=<span class="string">"org.springframework.stereotype.Controller"</span>/&gt;</div><div class="line">	&lt;context:include-filter <span class="built_in">type</span>=<span class="string">"annotation"</span> expression=<span class="string">"org.springframework.web.bind.annotation.ControllerAdvice"</span>/&gt;</div><div class="line">&lt;/context:component-scan&gt;</div><div class="line"></div><div class="line">   &lt;!-- 启动对@AspectJ注解的支持 --&gt;</div><div class="line">&lt;aop:aspectj-autoproxy /&gt;</div><div class="line">&lt;!--通知spring使用cglib而不是jdk的来生成代理方法 AOP可以拦截到Controller--&gt;</div><div class="line">&lt;aop:aspectj-autoproxy proxy-target-class=<span class="string">"true"</span> /&gt;</div></pre></td></tr></table></figure>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>在某个Controller的拥有<code>@RequestMapping</code>注解的方法拥有抛出的异常：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(<span class="string">"/index"</span>)</div><div class="line">@SystemControllerLog(module = FunctionBlockContants.SYSTEM, <span class="keyword">function</span> = FunctionBlockContants.INDEX_PAGE)</div><div class="line">public ModelAndView <span class="function"><span class="title">index</span></span>() &#123;</div><div class="line">    <span class="keyword">if</span> (index.equals(<span class="string">"login"</span>)) &#123;</div><div class="line">        throw new RuntimeException(<span class="string">"error in index"</span>);</div><div class="line">        //<span class="built_in">return</span> new ModelAndView(<span class="string">"redirect:/"</span> + index);</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">return</span> null;</div><div class="line">    //<span class="built_in">return</span> new ModelAndView(index);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样子，就会被<code>@ControllerAdvice</code>的类的<code>@ExceptionHandler</code>注解的方法处理异常了（比如，可以在这里记录log!）</p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~  curl http://localhost:8080/index</div><div class="line">&#123;<span class="string">"msg"</span>:<span class="string">"error in index"</span>,<span class="string">"hello"</span>:<span class="string">"helllo msg"</span>&#125;                                                                                                                                                      ➜  ~</div></pre></td></tr></table></figure>
+<p>控制台打印：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">error <span class="keyword">in</span> url:/index, reason: java.lang.RuntimeException: error <span class="keyword">in</span> index</div></pre></td></tr></table></figure>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

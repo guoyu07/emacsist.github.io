@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Emacs技巧之反转指定区域的内容 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="emacs," />
+  
+
+  <meta name="description" content="原内容12345678一二三四五六七八 操作之后的内容12345678八七六五四三二一 操作步骤 先标记所要反转的区域的内容(C-@ 为开始标记, 然后移动渔村到指定区域)  然后输入以下命令: M-x reverse-region RET 即可.   某两行之间进行反转 C-x C-t : 反转当前行和上一行,并且将光标移动这两行的下面.  或者  M-x transpose-lines  两个">
+<meta name="keywords" content="emacs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Emacs技巧之反转指定区域的内容">
+<meta property="og:url" content="https://emacsist.github.io/2015/07/01/Emacs技巧之反转指定区域的内容/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="原内容12345678一二三四五六七八 操作之后的内容12345678八七六五四三二一 操作步骤 先标记所要反转的区域的内容(C-@ 为开始标记, 然后移动渔村到指定区域)  然后输入以下命令: M-x reverse-region RET 即可.   某两行之间进行反转 C-x C-t : 反转当前行和上一行,并且将光标移动这两行的下面.  或者  M-x transpose-lines  两个">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Emacs技巧之反转指定区域的内容">
+<meta name="twitter:description" content="原内容12345678一二三四五六七八 操作之后的内容12345678八七六五四三二一 操作步骤 先标记所要反转的区域的内容(C-@ 为开始标记, 然后移动渔村到指定区域)  然后输入以下命令: M-x reverse-region RET 即可.   某两行之间进行反转 C-x C-t : 反转当前行和上一行,并且将光标移动这两行的下面.  或者  M-x transpose-lines  两个">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#原内容"><span class="toc-text">原内容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#操作之后的内容"><span class="toc-text">操作之后的内容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#操作步骤"><span class="toc-text">操作步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#某两行之间进行反转"><span class="toc-text">某两行之间进行反转</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#两个字符间的反转"><span class="toc-text">两个字符间的反转</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#两个单词之间的反转"><span class="toc-text">两个单词之间的反转</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#根据某规则来排序"><span class="toc-text">根据某规则来排序</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#原内容-1"><span class="toc-text">原内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#根据第二个Filed来排序之后的内容为"><span class="toc-text">根据第二个Filed来排序之后的内容为</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#命令"><span class="toc-text">命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#更多资料可以参考-GNU-Emacs-官网"><span class="toc-text">更多资料可以参考 GNU Emacs 官网</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Emacs技巧之反转指定区域的内容" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Emacs技巧之反转指定区域的内容
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2015.07.01</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#emacs">
+        <span class="tag-name">emacs</span>
+    <span class="tag-size">( 13 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="原内容"><a href="#原内容" class="headerlink" title="原内容"></a>原内容</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">一</div><div class="line">二</div><div class="line">三</div><div class="line">四</div><div class="line">五</div><div class="line">六</div><div class="line">七</div><div class="line">八</div></pre></td></tr></table></figure>
+<h2 id="操作之后的内容"><a href="#操作之后的内容" class="headerlink" title="操作之后的内容"></a>操作之后的内容</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">八</div><div class="line">七</div><div class="line">六</div><div class="line">五</div><div class="line">四</div><div class="line">三</div><div class="line">二</div><div class="line">一</div></pre></td></tr></table></figure>
+<h2 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h2><ol>
+<li><p>先标记所要反转的区域的内容(<code>C-@</code> 为开始标记, 然后移动渔村到指定区域)</p>
+</li>
+<li><p>然后输入以下命令: <code>M-x reverse-region RET</code> 即可.</p>
+</li>
+</ol>
+<h2 id="某两行之间进行反转"><a href="#某两行之间进行反转" class="headerlink" title="某两行之间进行反转"></a>某两行之间进行反转</h2><ul>
+<li><code>C-x C-t</code> : 反转当前行和上一行,并且将光标移动这两行的下面.</li>
+</ul>
+<p>或者</p>
+<ul>
+<li><code>M-x transpose-lines</code></li>
+</ul>
+<h2 id="两个字符间的反转"><a href="#两个字符间的反转" class="headerlink" title="两个字符间的反转"></a>两个字符间的反转</h2><ul>
+<li><code>C-t</code> : 反转当前光标所在的字符与后一个(左)字符.并且将光标向前移动一个字符.</li>
+</ul>
+<p>或者</p>
+<ul>
+<li><code>M-x transpose-chars</code></li>
+</ul>
+<h2 id="两个单词之间的反转"><a href="#两个单词之间的反转" class="headerlink" title="两个单词之间的反转"></a>两个单词之间的反转</h2><ul>
+<li><code>M-t</code>: 反转当前光标所在的单词与后一个(左)单词,并且将光标移动到反转后单词的结尾.(要注意光标的位置, 在一个单词开始处, 与结束处的行为是不同的)</li>
+</ul>
+<p>或者</p>
+<ul>
+<li><code>M-x transpose-words</code></li>
+</ul>
+<p>zhi yang yong</p>
+<h2 id="根据某规则来排序"><a href="#根据某规则来排序" class="headerlink" title="根据某规则来排序"></a>根据某规则来排序</h2><h3 id="原内容-1"><a href="#原内容-1" class="headerlink" title="原内容"></a>原内容</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">八 a 二且全</div><div class="line">七 c 了顶起</div><div class="line">六 e 是是在</div><div class="line">五 d 是是是</div><div class="line">四 b 我我我</div><div class="line">三 f 是是是是</div><div class="line">二 h 我是不是</div><div class="line">一 g 你妹</div></pre></td></tr></table></figure>
+<h3 id="根据第二个Filed来排序之后的内容为"><a href="#根据第二个Filed来排序之后的内容为" class="headerlink" title="根据第二个Filed来排序之后的内容为"></a>根据第二个Filed来排序之后的内容为</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">八 a 二且全</div><div class="line">四 b 我我我</div><div class="line">七 c 了顶起</div><div class="line">五 d 是是是</div><div class="line">六 e 是是在</div><div class="line">三 f 是是是是</div><div class="line">一 g 你妹</div><div class="line">二 h 我是不是</div></pre></td></tr></table></figure>
+<h3 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">C-u 2 M-x sort-fields</div></pre></td></tr></table></figure>
+<blockquote>
+<p>2 表示根据第2项来排序.</p>
+</blockquote>
+<h3 id="更多资料可以参考-GNU-Emacs-官网"><a href="#更多资料可以参考-GNU-Emacs-官网" class="headerlink" title="更多资料可以参考 GNU Emacs 官网"></a>更多资料可以参考 GNU Emacs 官网</h3><ul>
+<li><a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Sorting.html" target="_blank" rel="external">Sorting Text</a></li>
+</ul>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

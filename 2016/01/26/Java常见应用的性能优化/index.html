@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java常见应用的性能优化 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="java,performance," />
+  
+
+  <meta name="description" content="总诀式 减少网络连接次数  减小网络传输数据  添加缓存  分布式   Redis 式 在同一线程的操作里，尽可能合并redis的操作(pipeline)（减少网络连接次数）  对象尽可能用 hash 保存，然后按需获取 hashKey 的值（减小网络传输数据)  用合适的数据类型，保存相应的数据   Java 式 添加redis缓存（不过，要防止缓存穿透的问题）  在for循环里使用redis判">
+<meta name="keywords" content="java,performance">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java常见应用的性能优化">
+<meta property="og:url" content="https://emacsist.github.io/2016/01/26/Java常见应用的性能优化/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="总诀式 减少网络连接次数  减小网络传输数据  添加缓存  分布式   Redis 式 在同一线程的操作里，尽可能合并redis的操作(pipeline)（减少网络连接次数）  对象尽可能用 hash 保存，然后按需获取 hashKey 的值（减小网络传输数据)  用合适的数据类型，保存相应的数据   Java 式 添加redis缓存（不过，要防止缓存穿透的问题）  在for循环里使用redis判">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java常见应用的性能优化">
+<meta name="twitter:description" content="总诀式 减少网络连接次数  减小网络传输数据  添加缓存  分布式   Redis 式 在同一线程的操作里，尽可能合并redis的操作(pipeline)（减少网络连接次数）  对象尽可能用 hash 保存，然后按需获取 hashKey 的值（减小网络传输数据)  用合适的数据类型，保存相应的数据   Java 式 添加redis缓存（不过，要防止缓存穿透的问题）  在for循环里使用redis判">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#总诀式"><span class="toc-text">总诀式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Redis-式"><span class="toc-text">Redis 式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Java-式"><span class="toc-text">Java 式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DB-式"><span class="toc-text">DB 式</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Java常见应用的性能优化" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Java常见应用的性能优化
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2016.01.26</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#performance">
+        <span class="tag-name">performance</span>
+    <span class="tag-size">( 2 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="总诀式"><a href="#总诀式" class="headerlink" title="总诀式"></a>总诀式</h2><ul>
+<li><p>减少网络连接次数</p>
+</li>
+<li><p>减小网络传输数据</p>
+</li>
+<li><p>添加缓存</p>
+</li>
+<li><p>分布式</p>
+</li>
+</ul>
+<h3 id="Redis-式"><a href="#Redis-式" class="headerlink" title="Redis 式"></a>Redis 式</h3><ul>
+<li><p>在同一线程的操作里，尽可能合并redis的操作(<code>pipeline</code>)（减少网络连接次数）</p>
+</li>
+<li><p>对象尽可能用 <code>hash</code> 保存，然后按需获取 <code>hashKey</code> 的值（减小网络传输数据)</p>
+</li>
+<li><p>用合适的数据类型，保存相应的数据</p>
+</li>
+</ul>
+<h3 id="Java-式"><a href="#Java-式" class="headerlink" title="Java 式"></a>Java 式</h3><ul>
+<li><p>添加<code>redis</code>缓存（不过，要防止缓存穿透的问题）</p>
+</li>
+<li><p>在<code>for</code>循环里使用<code>redis</code>判断时，可以在Java里再次添加二级缓存（<code>Java Memory</code>），而不是每次直接再连接redis（减少网络连接次数）</p>
+</li>
+<li><p>连接要设置 (connectionTimeout，或其他相关的timeout的问题)</p>
+</li>
+<li><p>一下子加载的数据太多，可以先加载第一页的数据，其他页的数据，可以开启一个线程，去完成。（先满足用户第一页的数据请求先，后面的数据，再异步去处理）</p>
+</li>
+<li><p>线程池 + 异步处理</p>
+</li>
+</ul>
+<h3 id="DB-式"><a href="#DB-式" class="headerlink" title="DB 式"></a>DB 式</h3><ul>
+<li><p>优化SQL</p>
+</li>
+<li><p>只选择需要的列（减小网络传输数据）</p>
+</li>
+<li><p>大量数据，可以分批处理</p>
+</li>
+</ul>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>PostgreSQL服务器参数配置 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="postgresql,database," />
+  
+
+  <meta name="description" content="内存相关shared_buffers这个参数决定了有多少内存将用于PostgreSQL的数据缓存.当多个会话从同一张表中请求相同数据时，shared_buffers保证了不需要在内在保留数据集的多个副本。这种方法减少了物理I/O。它在启动时被分配。PostgreSQL9.3以上为默认为128MB, 旧版为32MB. 这个参数对性能有显著的影响，因为直接影响服务器上物理I/O的使用量. 推荐为RAM">
+<meta name="keywords" content="postgresql,database">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PostgreSQL服务器参数配置">
+<meta property="og:url" content="https://emacsist.github.io/2016/08/12/PostgreSQL服务器参数配置/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="内存相关shared_buffers这个参数决定了有多少内存将用于PostgreSQL的数据缓存.当多个会话从同一张表中请求相同数据时，shared_buffers保证了不需要在内在保留数据集的多个副本。这种方法减少了物理I/O。它在启动时被分配。PostgreSQL9.3以上为默认为128MB, 旧版为32MB. 这个参数对性能有显著的影响，因为直接影响服务器上物理I/O的使用量. 推荐为RAM">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PostgreSQL服务器参数配置">
+<meta name="twitter:description" content="内存相关shared_buffers这个参数决定了有多少内存将用于PostgreSQL的数据缓存.当多个会话从同一张表中请求相同数据时，shared_buffers保证了不需要在内在保留数据集的多个副本。这种方法减少了物理I/O。它在启动时被分配。PostgreSQL9.3以上为默认为128MB, 旧版为32MB. 这个参数对性能有显著的影响，因为直接影响服务器上物理I/O的使用量. 推荐为RAM">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#内存相关"><span class="toc-text">内存相关</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#shared-buffers"><span class="toc-text">shared_buffers</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#effective-cache-size"><span class="toc-text">effective_cache_size</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#work-mem"><span class="toc-text">work_mem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#maintenace-work-mem"><span class="toc-text">maintenace_work_mem</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查询规划相关"><span class="toc-text">查询规划相关</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#default-statistics-target"><span class="toc-text">default_statistics_target</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#seq-page-cost-与-random-page-cost"><span class="toc-text">seq_page_cost 与 random_page_cost</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#enable-xxx"><span class="toc-text">enable_xxx</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WAL-相关"><span class="toc-text">WAL 相关</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#checkpoint-segments（或叫wal-keep-segments，PG9-0及以后版本）"><span class="toc-text">checkpoint_segments（或叫wal_keep_segments，PG9.0及以后版本）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#checkpoint-timeout"><span class="toc-text">checkpoint_timeout</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#checkpoint-completion-target"><span class="toc-text">checkpoint_completion_target</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Windows下"><span class="toc-text">Windows下</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#杂项"><span class="toc-text">杂项</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#autovacuum-analyze-threshold"><span class="toc-text">autovacuum_analyze_threshold</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看所有表的状态信息"><span class="toc-text">查看所有表的状态信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看所有用户定义的表的状态信息"><span class="toc-text">查看所有用户定义的表的状态信息</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#执行一次analyze前后："><span class="toc-text">执行一次analyze前后：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#delete一条数据"><span class="toc-text">delete一条数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#autoanalyze-与-autovacuum-的threshold"><span class="toc-text">autoanalyze 与 autovacuum 的threshold</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#表膨胀的问题"><span class="toc-text">表膨胀的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-text">参考资料</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-PostgreSQL服务器参数配置" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            PostgreSQL服务器参数配置
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2016.08.12</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#database">
+        <span class="tag-name">database</span>
+    <span class="tag-size">( 73 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#postgresql">
+        <span class="tag-name">postgresql</span>
+    <span class="tag-size">( 57 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="内存相关"><a href="#内存相关" class="headerlink" title="内存相关"></a>内存相关</h2><h3 id="shared-buffers"><a href="#shared-buffers" class="headerlink" title="shared_buffers"></a>shared_buffers</h3><p>这个参数决定了有多少内存将用于PostgreSQL的数据缓存.当多个会话从同一张表中请求相同数据时，<code>shared_buffers</code>保证了不需要在内在保留数据集的多个副本。这种方法减少了物理I/O。它在启动时被分配。PostgreSQL9.3以上为默认为<code>128MB</code>, 旧版为<code>32MB</code>. 这个参数对性能有显著的影响，因为直接影响服务器上物理I/O的使用量.</p>
+<p>推荐为<code>RAM的40%</code></p>
+<h3 id="effective-cache-size"><a href="#effective-cache-size" class="headerlink" title="effective_cache_size"></a>effective_cache_size</h3><p>这个值告诉PostgreSQL大约有多少内存可用于缓存机制（<code>shared_buffers</code> + 文件系统缓存）。</p>
+<p>这个不是分配的。而是用于查询规划器进行查询预估的。并发的查询，将共享可用的空间。</p>
+<p>主要作用：</p>
+<p>当增加<code>effective_cache_size</code>时，规划器认为内存中可以获取更多的页面。这使得使用索引比顺序扫描更好。</p>
+<p>如果设置太低，PostgreSQL则可能会认为顺序扫描更高效。</p>
+<p>即一个较高的值， 会增加使用索引的可能性；而较低的值，则增加了顺序扫描的可能性。</p>
+<h3 id="work-mem"><a href="#work-mem" class="headerlink" title="work_mem"></a>work_mem</h3><p>推荐为</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">work_mem = (available_ram * 0.25) / max_connections</div></pre></td></tr></table></figure>
+<p>这样子，可以确保所有连接的工作内存占总内存的1/4 RAM左右.</p>
+<p>它可以在会话级别设置，如果你的SQL有明显的需要，可以为单个连接分配更多的内存。比如，在批量处理的情况下，对一张大表进行排序.</p>
+<p>注意，这个内存是独立的，不与<code>shared_buffers</code>共享的。</p>
+<h3 id="maintenace-work-mem"><a href="#maintenace-work-mem" class="headerlink" title="maintenace_work_mem"></a>maintenace_work_mem</h3><p>这个参数可用于<code>自动清空进程</code>， <code>索引</code>和<code>更改表语句</code>中执行的。这个可以在会话级别设置。</p>
+<p>可以将这个参数值，设置得比<code>work_mem</code>更高，因为服务器上一般不会有太多的维护操作同时发生。</p>
+<h2 id="查询规划相关"><a href="#查询规划相关" class="headerlink" title="查询规划相关"></a>查询规划相关</h2><h3 id="default-statistics-target"><a href="#default-statistics-target" class="headerlink" title="default_statistics_target"></a>default_statistics_target</h3><p>默认为<code>100</code>.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># show default_statistics_target ;</span></div><div class="line"> default_statistics_target </div><div class="line">---------------------------</div><div class="line"> 100</div><div class="line">(1 row)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<p>PG会考虑（300*当前值）个页面来完成随机抽样。从这些样本中，填充<code>pg_statistics</code>。这些值将用于规划器。</p>
+<p>如果<code>explain analyze</code>显示出实际成本与预估成本之间有明显差异，那可以适当增加这个值。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># select attstattarget, attname from pg_attribute where attrelid = 'wb_status'::regclass;</span></div><div class="line"> attstattarget |        attname         </div><div class="line">---------------+------------------------</div><div class="line">            -1 | user_id</div><div class="line">             0 | ctid</div><div class="line">             0 | xmin</div><div class="line">            -1 | id</div><div class="line">            -1 | sid</div><div class="line">            -1 | idstr</div><div class="line">            -1 | mid</div><div class="line">            -1 | user_screen_name</div><div class="line">            -1 | user_profile_image_url</div><div class="line">            -1 | text</div><div class="line">            -1 | <span class="built_in">source</span></div><div class="line">            -1 | thumbnail_pic</div><div class="line">            -1 | bmiddle_pic</div><div class="line">            -1 | original_pic</div><div class="line">            -1 | retweeted_status_id</div><div class="line">            -1 | geo</div><div class="line">             0 | cmin</div><div class="line">             0 | xmax</div><div class="line">             0 | cmax</div><div class="line">             0 | tableoid</div><div class="line">            -1 | reposts_count</div><div class="line">            -1 | comments_count</div><div class="line">            -1 | attitudes_count</div><div class="line">            -1 | visible</div><div class="line">            -1 | pic_urls</div><div class="line">            -1 | create_at</div><div class="line">            -1 | update_at</div><div class="line">            -1 | ad</div><div class="line">            -1 | is_deleted</div><div class="line">(29 rows)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<p>为表的某些列，设置指定的<code>statistics</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># alter table wb_status alter COLUMN sid set statistics 200;</span></div><div class="line">ALTER TABLE</div><div class="line">sky=<span class="comment"># select attstattarget, attname from pg_attribute where attrelid = 'wb_status'::regclass;</span></div><div class="line"> attstattarget |        attname         </div><div class="line">---------------+------------------------</div><div class="line">            -1 | user_id</div><div class="line">             0 | ctid</div><div class="line">             0 | xmin</div><div class="line">            -1 | id</div><div class="line">           200 | sid</div><div class="line">            -1 | idstr</div><div class="line">            -1 | mid</div><div class="line">            -1 | user_screen_name</div><div class="line">            -1 | user_profile_image_url</div><div class="line">            -1 | text</div><div class="line">            -1 | <span class="built_in">source</span></div><div class="line">            -1 | thumbnail_pic</div><div class="line">            -1 | bmiddle_pic</div><div class="line">            -1 | original_pic</div><div class="line">            -1 | retweeted_status_id</div><div class="line">            -1 | geo</div><div class="line">             0 | cmin</div><div class="line">             0 | xmax</div><div class="line">             0 | cmax</div><div class="line">             0 | tableoid</div><div class="line">            -1 | reposts_count</div><div class="line">            -1 | comments_count</div><div class="line">            -1 | attitudes_count</div><div class="line">            -1 | visible</div><div class="line">            -1 | pic_urls</div><div class="line">            -1 | create_at</div><div class="line">            -1 | update_at</div><div class="line">            -1 | ad</div><div class="line">            -1 | is_deleted</div><div class="line">(29 rows)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<p><code>-1</code>：表示默认值，增加这个值会导致更多的抽样，也就是更多的资源消耗。最好是在会话中设置这个值，可以看到分析表使用了多长时间，查询性能增加了多少，然后决定是否保留这个值。</p>
+<h3 id="seq-page-cost-与-random-page-cost"><a href="#seq-page-cost-与-random-page-cost" class="headerlink" title="seq_page_cost 与 random_page_cost"></a>seq_page_cost 与 random_page_cost</h3><p><code>random_page_cost</code>：默认为4,<br><code>seq_page_cost</code>：默认为1</p>
+<p>即默认为<code>4:1</code>，如果调低到<code>2:1</code>，则可增加规划器使用索引的机会。（建议如果是SSD的话，可以调低为这个）</p>
+<p>千万不要将<code>random_page_cost</code>设置得比<code>seq_page_cost</code>低。</p>
+<p>查看所有影响规划器的cost如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">╭─sky@sky-linux /ihome/db/postgresql/postgresql-9.5.0/data  </div><div class="line">╰─➤  cat postgresql.conf | grep <span class="string">"cost = "</span></div><div class="line"><span class="comment">#seq_page_cost = 1.0			# measured on an arbitrary scale</span></div><div class="line"><span class="comment">#random_page_cost = 4.0			# same scale as above</span></div><div class="line"><span class="comment">#cpu_tuple_cost = 0.01			# same scale as above</span></div><div class="line"><span class="comment">#cpu_index_tuple_cost = 0.005		# same scale as above</span></div><div class="line"><span class="comment">#cpu_operator_cost = 0.0025		# same scale as above</span></div><div class="line">╭─sky@sky-linux /ihome/db/postgresql/postgresql-9.5.0/data  </div><div class="line">╰─➤</div></pre></td></tr></table></figure>
+<h3 id="enable-xxx"><a href="#enable-xxx" class="headerlink" title="enable_xxx"></a>enable_xxx</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">╭─sky@sky-linux /ihome/db/postgresql/postgresql-9.5.0/data  </div><div class="line">╰─➤  cat postgresql.conf | grep <span class="string">"enable_"</span></div><div class="line"><span class="comment">#enable_bitmapscan = on</span></div><div class="line"><span class="comment">#enable_hashagg = on</span></div><div class="line"><span class="comment">#enable_hashjoin = on</span></div><div class="line"><span class="comment">#enable_indexscan = on</span></div><div class="line"><span class="comment">#enable_indexonlyscan = on</span></div><div class="line"><span class="comment">#enable_material = on</span></div><div class="line"><span class="comment">#enable_mergejoin = on</span></div><div class="line"><span class="comment">#enable_nestloop = on</span></div><div class="line"><span class="comment">#enable_seqscan = on</span></div><div class="line"><span class="comment">#enable_sort = on</span></div><div class="line"><span class="comment">#enable_tidscan = on</span></div></pre></td></tr></table></figure>
+<p>上面的是各种查询方式。可以设置为<code>off</code>。注意，就算是设置为<code>off</code>，也不是表示PG绝对不用这种方式。只是尽最大的可能不去使用这种方式（它本质上，只是将这种扫描方式的cost设置得非常大而已）</p>
+<h2 id="WAL-相关"><a href="#WAL-相关" class="headerlink" title="WAL 相关"></a>WAL 相关</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">╭─sky@sky-linux /ihome/db/postgresql/postgresql-9.5.0/data  </div><div class="line">╰─➤  cat postgresql.conf | grep -E <span class="string">"checkpoint|segments"</span></div><div class="line"><span class="comment">#checkpoint_timeout = 5min		# range 30s-1h</span></div><div class="line"><span class="comment">#checkpoint_completion_target = 0.5	# checkpoint target duration, 0.0 - 1.0</span></div><div class="line"><span class="comment">#checkpoint_warning = 30s		# 0 disables</span></div><div class="line">wal_keep_segments = 32		<span class="comment"># in logfile segments, 16MB each; 0 disables</span></div><div class="line"><span class="comment">#log_checkpoints = off</span></div></pre></td></tr></table></figure>
+<h3 id="checkpoint-segments（或叫wal-keep-segments，PG9-0及以后版本）"><a href="#checkpoint-segments（或叫wal-keep-segments，PG9-0及以后版本）" class="headerlink" title="checkpoint_segments（或叫wal_keep_segments，PG9.0及以后版本）"></a>checkpoint_segments（或叫wal_keep_segments，PG9.0及以后版本）</h3><p>查看默认值:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># show wal_keep_segments ;</span></div><div class="line"> wal_keep_segments </div><div class="line">-------------------</div><div class="line"> 32</div><div class="line">(1 row)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<p>即一旦<code>wal_keep_segments</code>个WAL区段填充后，则出现一个<code>checkpoint</code>。</p>
+<h3 id="checkpoint-timeout"><a href="#checkpoint-timeout" class="headerlink" title="checkpoint_timeout"></a>checkpoint_timeout</h3><p>超时值.（可以根据不同的单位来设置不同，参考上面的配置文件及说明）</p>
+<p>如果超时了，也会出现一个<code>checkpoint</code></p>
+<h3 id="checkpoint-completion-target"><a href="#checkpoint-completion-target" class="headerlink" title="checkpoint_completion_target"></a>checkpoint_completion_target</h3><p>这个参数告诉PostgreSQL在每一次迭代过程中，以多快的速度来设法完成<code>checkpoint</code>的操作。默认为<code>0.5</code>。即PostgreSQL可以在下一个<code>checkpoint</code>开始之前，花费大约一半的时间来完成每个检查点。<br>可以直观地理解为，以多激烈的硬盘写速度来完成<code>checkpoint</code>操作。越小，表示以最大的速度来完成<code>checkpoint</code>操作，越大，表示以最慢的速度来完成<code>checkpoint</code>操作。<br>也即值越小，系统负载的峰值会瞬间非常高，值越大，系统负载就越倾向于平稳。</p>
+<h3 id="Windows下"><a href="#Windows下" class="headerlink" title="Windows下"></a>Windows下</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">update_process_title</div></pre></td></tr></table></figure>
+<p>将这个参数，设置为<code>off</code>，可以大幅提高Windows下的PostgreSQL性能？</p>
+<p>参考资料<a href="http://www.openscg.com/2016/09/improve-postgresql-windows-performance-by-100/?utm_source=postgresweekly&amp;utm_medium=email" target="_blank" rel="external">improve-postgresql-windows-performance-by-100</a></p>
+<h2 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h2><h3 id="autovacuum-analyze-threshold"><a href="#autovacuum-analyze-threshold" class="headerlink" title="autovacuum_analyze_threshold"></a>autovacuum_analyze_threshold</h3><p>作用：</p>
+<blockquote>
+<p>指定至少N个插入，更新或删除的无组时才需要触发 ANALYZE 去分析表.</p>
+</blockquote>
+<p>查看系统默认值:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">localhost:5433 sky@sky=<span class="comment"># show autovacuum_analyze_threshold ;</span></div><div class="line"> autovacuum_analyze_threshold </div><div class="line">------------------------------</div><div class="line"> 50</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.146 ms</div><div class="line">localhost:5433 sky@sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<p>默认为<code>50</code>.（可在配置文件或命令行里设置，也可以独立修改某张表的阀值）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ALTER TABLE ... SET (autovacuum_analyze_threshold  = ...);</div></pre></td></tr></table></figure>
+<p>如:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">localhost:5433 sky@sky=<span class="comment"># ALTER TABLE wb_status SET (autovacuum_analyze_threshold  = 100);</span></div><div class="line">ALTER TABLE</div><div class="line">Time: 1.194 ms</div><div class="line">localhost:5433 sky@sky=<span class="comment"># \d+ wb_status;</span></div><div class="line">                                                               Table <span class="string">"public.wb_status"</span></div><div class="line">         Column         |            Type             |                       Modifiers                        | Storage  | Stats target | Description </div><div class="line">------------------------+-----------------------------+--------------------------------------------------------+----------+--------------+-------------</div><div class="line"> id                     | <span class="built_in">integer</span>                     | not null default nextval(<span class="string">'wb_status_id_seq'</span>::regclass) | plain    |              | </div><div class="line"> sid                    | bigint                      | not null default <span class="string">'0'</span>::bigint                           | plain    |              | </div><div class="line"> idstr                  | character varying(64)       | not null default <span class="string">''</span>::character varying                 | extended |              | </div><div class="line"> mid                    | bigint                      | default <span class="string">'0'</span>::bigint                                    | plain    | 10000        | </div><div class="line"> user_id                | bigint                      |                                                        | plain    |              | </div><div class="line"> user_screen_name       | character varying(32)       | not null default <span class="string">''</span>::character varying                 | extended |              | </div><div class="line"> user_profile_image_url | character varying(128)      | not null default <span class="string">''</span>::character varying                 | extended |              | </div><div class="line"> text                   | character varying(512)      | not null default <span class="string">''</span>::character varying                 | extended |              | </div><div class="line"> <span class="built_in">source</span>                 | character varying(256)      | not null default <span class="string">''</span>::character varying                 | extended |              | </div><div class="line"> thumbnail_pic          | character varying(256)      | not null default <span class="string">''</span>::character varying                 | extended |              | </div><div class="line"> bmiddle_pic            | character varying(256)      | not null default <span class="string">''</span>::character varying                 | extended |              | </div><div class="line"> original_pic           | character varying(256)      | not null default <span class="string">''</span>::character varying                 | extended |              | </div><div class="line"> retweeted_status_id    | character varying(32)       | not null default <span class="string">''</span>::character varying                 | extended |              | </div><div class="line"> geo                    | character varying(256)      | default <span class="string">''</span>::character varying                          | extended |              | </div><div class="line"> reposts_count          | <span class="built_in">integer</span>                     | default 0                                              | plain    |              | </div><div class="line"> comments_count         | <span class="built_in">integer</span>                     | default 0                                              | plain    |              | </div><div class="line"> attitudes_count        | <span class="built_in">integer</span>                     | default 0                                              | plain    |              | </div><div class="line"> visible                | character varying(64)       | not null default <span class="string">''</span>::character varying                 | extended |              | </div><div class="line"> pic_urls               | character varying(1024)     | not null default <span class="string">''</span>::character varying                 | extended |              | </div><div class="line"> create_at              | timestamp without time zone | not null default now()                                 | plain    |              | </div><div class="line"> update_at              | timestamp without time zone | not null default now()                                 | plain    |              | </div><div class="line"> ad                     | character varying(256)      | not null default <span class="string">''</span>::character varying                 | extended |              | </div><div class="line"> is_deleted             | smallint                    | not null default <span class="string">'0'</span>::smallint                         | plain    |              | </div><div class="line">Indexes:</div><div class="line">    <span class="string">"wb_status_pkey"</span> PRIMARY KEY, btree (id)</div><div class="line">    <span class="string">"sid_wb_staus"</span> UNIQUE, btree (sid)</div><div class="line">    <span class="string">"user_id_wb_staus"</span> btree (user_id)</div><div class="line">Options: autovacuum_analyze_threshold=100</div><div class="line"></div><div class="line">localhost:5433 sky@sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<h3 id="查看所有表的状态信息"><a href="#查看所有表的状态信息" class="headerlink" title="查看所有表的状态信息"></a>查看所有表的状态信息</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">SELECT *  FROM pg_stat_all_tables [<span class="built_in">where</span> schemaname = <span class="string">'public'</span>];</div></pre></td></tr></table></figure>
+<h3 id="查看所有用户定义的表的状态信息"><a href="#查看所有用户定义的表的状态信息" class="headerlink" title="查看所有用户定义的表的状态信息"></a>查看所有用户定义的表的状态信息</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">SELECT * FROM pg_stat_user_tables;</div></pre></td></tr></table></figure>
+<h4 id="执行一次analyze前后："><a href="#执行一次analyze前后：" class="headerlink" title="执行一次analyze前后："></a>执行一次analyze前后：</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line">localhost:5433 sky@sky=<span class="comment"># SELECT *  FROM pg_stat_all_tables where schemaname = 'public';</span></div><div class="line">-[ RECORD 1 ]-------+------------------------------</div><div class="line">relid               | 17864</div><div class="line">schemaname          | public</div><div class="line">relname             | wb_status</div><div class="line">seq_scan            | 80</div><div class="line">seq_tup_read        | 103252172</div><div class="line">idx_scan            | 47</div><div class="line">idx_tup_fetch       | 29580516</div><div class="line">n_tup_ins           | 1370996</div><div class="line">n_tup_upd           | 0</div><div class="line">n_tup_del           | 0</div><div class="line">n_tup_hot_upd       | 0</div><div class="line">n_live_tup          | 1370996</div><div class="line">n_dead_tup          | 0</div><div class="line">n_mod_since_analyze | 0</div><div class="line">last_vacuum         | [null]</div><div class="line">last_autovacuum     | [null]</div><div class="line">last_analyze        | [null]</div><div class="line">last_autoanalyze    | 2016-08-18 15:03:00.763547+08</div><div class="line">vacuum_count        | 0</div><div class="line">autovacuum_count    | 0</div><div class="line">analyze_count       | 0</div><div class="line">autoanalyze_count   | 1</div><div class="line"></div><div class="line">Time: 10.908 ms</div><div class="line">localhost:5433 sky@sky=<span class="comment"># ANALYZE wb_status ;</span></div><div class="line">ANALYZE</div><div class="line">Time: 110883.966 ms</div><div class="line">localhost:5433 sky@sky=<span class="comment"># SELECT *  FROM pg_stat_all_tables where schemaname = 'public';</span></div><div class="line">-[ RECORD 1 ]-------+------------------------------</div><div class="line">relid               | 17864</div><div class="line">schemaname          | public</div><div class="line">relname             | wb_status</div><div class="line">seq_scan            | 80</div><div class="line">seq_tup_read        | 103252172</div><div class="line">idx_scan            | 47</div><div class="line">idx_tup_fetch       | 29580516</div><div class="line">n_tup_ins           | 1370996</div><div class="line">n_tup_upd           | 0</div><div class="line">n_tup_del           | 0</div><div class="line">n_tup_hot_upd       | 0</div><div class="line">n_live_tup          | 1370996</div><div class="line">n_dead_tup          | 0</div><div class="line">n_mod_since_analyze | 0</div><div class="line">last_vacuum         | [null]</div><div class="line">last_autovacuum     | [null]</div><div class="line">last_analyze        | 2016-09-26 18:02:29.72493+08</div><div class="line">last_autoanalyze    | 2016-08-18 15:03:00.763547+08</div><div class="line">vacuum_count        | 0</div><div class="line">autovacuum_count    | 0</div><div class="line">analyze_count       | 1</div><div class="line">autoanalyze_count   | 1</div><div class="line"></div><div class="line">Time: 10.861 ms</div><div class="line">localhost:5433 sky@sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<p>可以看到<code>analyze_count+1</code>了</p>
+<h4 id="delete一条数据"><a href="#delete一条数据" class="headerlink" title="delete一条数据"></a>delete一条数据</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">localhost:5433 sky@sky=<span class="comment"># delete from wb_status where id = 185794019;</span></div><div class="line">DELETE 1</div><div class="line">Time: 0.975 ms</div><div class="line">localhost:5433 sky@sky=<span class="comment"># SELECT *  FROM pg_stat_all_tables where schemaname = 'public';</span></div><div class="line">-[ RECORD 1 ]-------+------------------------------</div><div class="line">relid               | 17864</div><div class="line">schemaname          | public</div><div class="line">relname             | wb_status</div><div class="line">seq_scan            | 80</div><div class="line">seq_tup_read        | 103252172</div><div class="line">idx_scan            | 49</div><div class="line">idx_tup_fetch       | 29580518</div><div class="line">n_tup_ins           | 1370996</div><div class="line">n_tup_upd           | 0</div><div class="line">n_tup_del           | 1</div><div class="line">n_tup_hot_upd       | 0</div><div class="line">n_live_tup          | 1370995</div><div class="line">n_dead_tup          | 1</div><div class="line">n_mod_since_analyze | 1</div><div class="line">last_vacuum         | [null]</div><div class="line">last_autovacuum     | [null]</div><div class="line">last_analyze        | 2016-09-26 18:02:29.72493+08</div><div class="line">last_autoanalyze    | 2016-08-18 15:03:00.763547+08</div><div class="line">vacuum_count        | 0</div><div class="line">autovacuum_count    | 0</div><div class="line">analyze_count       | 1</div><div class="line">autoanalyze_count   | 1</div><div class="line"></div><div class="line">Time: 10.814 ms</div><div class="line">localhost:5433 sky@sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<p>也可以看到<code>n_dead_tup+1</code>了.</p>
+<h4 id="autoanalyze-与-autovacuum-的threshold"><a href="#autoanalyze-与-autovacuum-的threshold" class="headerlink" title="autoanalyze 与 autovacuum 的threshold"></a>autoanalyze 与 autovacuum 的threshold</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">vacuum threshold = vacuum base threshold + vacuum scale factor * number of tuples</div><div class="line"></div><div class="line">analyze threshold = analyze base threshold + analyze scale factor * number of tuples</div></pre></td></tr></table></figure>
+<h2 id="表膨胀的问题"><a href="#表膨胀的问题" class="headerlink" title="表膨胀的问题"></a>表膨胀的问题</h2><p><a href="http://mysql.taobao.org/monthly/2015/12/07/" target="_blank" rel="external">taobao</a></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://www.depesz.com/2010/11/03/checkpoint_completion_target/" target="_blank" rel="external">depesz</a></p>
+<p><a href="https://www.postgresql.org/docs/9.5/static/runtime-config-autovacuum.html" target="_blank" rel="external">runtime-config-autovacuum</a></p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

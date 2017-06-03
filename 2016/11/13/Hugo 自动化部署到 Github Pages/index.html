@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Hugo 自动化部署到 Github Pages | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="blog,hugo," />
+  
+
+  <meta name="description" content="脚本由于将博客从 Hexo 迁移到了 Hugo ， 没有发现好的自动化部署方法，查资料用的什么 Hook 等机制这些又觉得太麻烦。所以，自己动手写了个自动化部署的脚本，从博客内容自动化部署到 Github Pages 和 Coding Pages 上： 前提：创建一个静态博客的目录，这里假设为/Users/emacsist/public-blog, 用 Hugo 生成的站点目录，这里假设为:/Us">
+<meta name="keywords" content="blog,hugo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hugo 自动化部署到 Github Pages">
+<meta property="og:url" content="https://emacsist.github.io/2016/11/13/Hugo 自动化部署到 Github Pages/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="脚本由于将博客从 Hexo 迁移到了 Hugo ， 没有发现好的自动化部署方法，查资料用的什么 Hook 等机制这些又觉得太麻烦。所以，自己动手写了个自动化部署的脚本，从博客内容自动化部署到 Github Pages 和 Coding Pages 上： 前提：创建一个静态博客的目录，这里假设为/Users/emacsist/public-blog, 用 Hugo 生成的站点目录，这里假设为:/Us">
+<meta property="og:updated_time" content="2016-11-13T13:25:35.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hugo 自动化部署到 Github Pages">
+<meta name="twitter:description" content="脚本由于将博客从 Hexo 迁移到了 Hugo ， 没有发现好的自动化部署方法，查资料用的什么 Hook 等机制这些又觉得太麻烦。所以，自己动手写了个自动化部署的脚本，从博客内容自动化部署到 Github Pages 和 Coding Pages 上： 前提：创建一个静态博客的目录，这里假设为/Users/emacsist/public-blog, 用 Hugo 生成的站点目录，这里假设为:/Us">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#脚本"><span class="toc-text">脚本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#效果"><span class="toc-text">效果</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Hugo 自动化部署到 Github Pages" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Hugo 自动化部署到 Github Pages
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2016.11.13</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#blog">
+        <span class="tag-name">blog</span>
+    <span class="tag-size">( 2 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#hugo">
+        <span class="tag-name">hugo</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h2><p>由于将博客从 Hexo 迁移到了 Hugo ， 没有发现好的自动化部署方法，查资料用的什么 Hook 等机制这些又觉得太麻烦。所以，自己动手写了个自动化部署的脚本，从博客内容自动化部署到 Github Pages 和 Coding Pages 上：</p>
+<p>前提：创建一个静态博客的目录，这里假设为<code>/Users/emacsist/public-blog</code>, 用 Hugo 生成的站点目录，这里假设为:<code>/Users/emacsist/git/hugo-blog</code></p>
+<p>然后在你的<code>public-blog</code>上，添加两个远程分支：（自行修改为自己对应的分支路径）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#Github</span></div><div class="line">git remote add origin http://github.com/emacsist/emacsist.github.io</div><div class="line"></div><div class="line"><span class="comment">#Coding</span></div><div class="line">git remote add coding http://xxxxx</div></pre></td></tr></table></figure>
+<p>脚本内容：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"></div><div class="line">SITE_SOURCE=<span class="string">"/Users/emacsist/git/hugo-blog"</span></div><div class="line">PUBLIC_DIR=<span class="string">"/Users/emacsist/public-blog"</span></div><div class="line"></div><div class="line"><span class="built_in">cd</span> <span class="string">"<span class="variable">$&#123;SITE_SOURCE&#125;</span>"</span></div><div class="line"></div><div class="line">rm -rf <span class="string">"<span class="variable">$&#123;SITE_SOURCE&#125;</span>/"</span>public/*</div><div class="line"></div><div class="line"><span class="comment"># 将 vec 修改为你的主题名</span></div><div class="line"></div><div class="line">hugo -t vec  || <span class="built_in">exit</span> 1</div><div class="line"></div><div class="line">rm -rf <span class="string">"<span class="variable">$&#123;PUBLIC_DIR&#125;</span>/"</span>* &amp;&amp; cp -R <span class="string">"<span class="variable">$&#123;SITE_SOURCE&#125;</span>/public/"</span>* <span class="string">"<span class="variable">$&#123;PUBLIC_DIR&#125;</span>/"</span></div><div class="line"></div><div class="line"><span class="built_in">cd</span> <span class="string">"<span class="variable">$&#123;PUBLIC_DIR&#125;</span>"</span></div><div class="line">git add .</div><div class="line">git commit -m <span class="string">'update blog files'</span></div><div class="line">git push origin master --force</div><div class="line">git push coding master --force</div></pre></td></tr></table></figure>
+<h2 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">[18:24:23] emacsist:hugo-blog git:(master) $ ./deploy.sh </div><div class="line">Started building sites ...</div><div class="line">Built site <span class="keyword">for</span> language en:</div><div class="line">0 draft content</div><div class="line">0 future content</div><div class="line">0 expired content</div><div class="line">271 pages created</div><div class="line">0 non-page files copied</div><div class="line">220 paginator pages created</div><div class="line">132 tags created</div><div class="line">49 categories created</div><div class="line">total <span class="keyword">in</span> 562 ms</div><div class="line">[master 72b4092] update blog files</div><div class="line"> 32 files changed, 923 insertions(+), 580 deletions(-)</div><div class="line"> create mode 100644 2016/11/13/Github-上发起-Pull-request/index.html</div><div class="line"> create mode 100644 img/first-git-pull-request.png</div><div class="line"> create mode 100644 tags/pull-request/index.html</div><div class="line"> create mode 100644 tags/pull-request/index.xml</div><div class="line"> create mode 100644 tags/pull-request/page/1/index.html</div><div class="line">Username <span class="keyword">for</span> <span class="string">'https://github.com'</span>: xxx</div><div class="line">Password <span class="keyword">for</span> <span class="string">'xxx'</span>: </div><div class="line">Counting objects: 65, done.</div><div class="line">Delta compression using up to 4 threads.</div><div class="line">Compressing objects: 100% (47/47), done.</div><div class="line">Writing objects: 100% (65/65), 277.14 KiB | 0 bytes/s, done.</div><div class="line">Total 65 (delta 34), reused 0 (delta 0)</div><div class="line">remote: Resolving deltas: 100% (34/34), completed with 28 <span class="built_in">local</span> objects.</div><div class="line">To xxxx</div><div class="line">   a298898..72b4092  master -&gt; master</div><div class="line">Counting objects: 65, done.</div><div class="line">Delta compression using up to 4 threads.</div><div class="line">Compressing objects: 100% (47/47), done.</div><div class="line">Writing objects: 100% (65/65), 277.14 KiB | 0 bytes/s, done.</div><div class="line">Total 65 (delta 34), reused 0 (delta 0)</div><div class="line">To xxxx</div><div class="line">   a298898..72b4092  master -&gt; master</div></pre></td></tr></table></figure>
+<p>之前用 Hexo，每次部署一下，都要成分钟。现在 1 秒钟都不用了，飞一般的感觉。Enjoy it ！</p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

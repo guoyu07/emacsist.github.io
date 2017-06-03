@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Emacs技巧收集 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="emacs," />
+  
+
+  <meta name="description" content="Emacs中的按键说明 C-: 意思是按住 Ctrol 键 `M-‘: 意指 Meta 键 (在大多数键盘上指 Alt 键) `DEL’:  意指退格键 (不是 删除(Delete) key) `RET’:  意指回车键 `SPC’:  意指空格键 `ESC’:  意指Escape键 `TAB’:  意指Tab键  获取帮助按下 C-h 后, 接着按以下  k : 查看某键位的说明  f : 查看">
+<meta name="keywords" content="emacs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Emacs技巧收集">
+<meta property="og:url" content="https://emacsist.github.io/2015/06/30/Emacs技巧收集/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="Emacs中的按键说明 C-: 意思是按住 Ctrol 键 `M-‘: 意指 Meta 键 (在大多数键盘上指 Alt 键) `DEL’:  意指退格键 (不是 删除(Delete) key) `RET’:  意指回车键 `SPC’:  意指空格键 `ESC’:  意指Escape键 `TAB’:  意指Tab键  获取帮助按下 C-h 后, 接着按以下  k : 查看某键位的说明  f : 查看">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Emacs技巧收集">
+<meta name="twitter:description" content="Emacs中的按键说明 C-: 意思是按住 Ctrol 键 `M-‘: 意指 Meta 键 (在大多数键盘上指 Alt 键) `DEL’:  意指退格键 (不是 删除(Delete) key) `RET’:  意指回车键 `SPC’:  意指空格键 `ESC’:  意指Escape键 `TAB’:  意指Tab键  获取帮助按下 C-h 后, 接着按以下  k : 查看某键位的说明  f : 查看">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Emacs中的按键说明"><span class="toc-text">Emacs中的按键说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取帮助"><span class="toc-text">获取帮助</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Undo-和-Redo"><span class="toc-text">Undo 和 Redo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在光标处插入指定命令的输出结果"><span class="toc-text">在光标处插入指定命令的输出结果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#打开-emacs-指南"><span class="toc-text">打开 emacs 指南</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#替换"><span class="toc-text">替换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#替换所有"><span class="toc-text">替换所有</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#完全匹配-非包含-大小写敏感"><span class="toc-text">完全匹配(非包含), 大小写敏感</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#包含匹配-大小写不敏感"><span class="toc-text">包含匹配, 大小写不敏感</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查询并替换"><span class="toc-text">查询并替换</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#完全匹配-大小写敏感"><span class="toc-text">完全匹配, 大小写敏感</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#包含匹配-大小写不敏感-1"><span class="toc-text">包含匹配, 大小写不敏感</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#搜索"><span class="toc-text">搜索</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#向后搜索"><span class="toc-text">向后搜索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#向前搜索"><span class="toc-text">向前搜索</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#统计行数"><span class="toc-text">统计行数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#插入一个-tab"><span class="toc-text">插入一个 tab</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#从当前光标开始删除到下一个指定的字符为止-包括这个字符"><span class="toc-text">从当前光标开始删除到下一个指定的字符为止(包括这个字符)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除两个单词之间的空格"><span class="toc-text">删除两个单词之间的空格</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除空白行-只保留一行空白行"><span class="toc-text">删除空白行, 只保留一行空白行:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Emacs中的undo-tree"><span class="toc-text">Emacs中的undo-tree</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除行尾的空格"><span class="toc-text">删除行尾的空格</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Emacs技巧收集" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Emacs技巧收集
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2015.06.30</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#emacs">
+        <span class="tag-name">emacs</span>
+    <span class="tag-size">( 13 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="Emacs中的按键说明"><a href="#Emacs中的按键说明" class="headerlink" title="Emacs中的按键说明"></a>Emacs中的按键说明</h2><ul>
+<li><code>C-</code>: 意思是按住 Ctrol 键</li>
+<li>`M-‘: 意指 Meta 键 (在大多数键盘上指 Alt 键)</li>
+<li>`DEL’:  意指退格键 (不是 删除(Delete) key)</li>
+<li>`RET’:  意指回车键</li>
+<li>`SPC’:  意指空格键</li>
+<li>`ESC’:  意指Escape键</li>
+<li>`TAB’:  意指Tab键</li>
+</ul>
+<h2 id="获取帮助"><a href="#获取帮助" class="headerlink" title="获取帮助"></a>获取帮助</h2><p>按下 <code>C-h</code> 后, 接着按以下</p>
+<ul>
+<li><p><code>k</code> : 查看某键位的说明</p>
+</li>
+<li><p><code>f</code> : 查看某函数的功能</p>
+</li>
+<li><p><code>m</code> : 查看当前模式的键盘设置.</p>
+</li>
+<li><p><code>w</code> : 查看某个函数设定到哪个键上</p>
+</li>
+<li><p><code>a</code> : 查看包含某个字符串的所有函数</p>
+</li>
+</ul>
+<h2 id="Undo-和-Redo"><a href="#Undo-和-Redo" class="headerlink" title="Undo 和 Redo"></a>Undo 和 Redo</h2><ul>
+<li>undo</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">`C-/` 或者 `C-_` 或者 `C-x u`</div></pre></td></tr></table></figure>
+<ul>
+<li>redo</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">`C-g C-/` 或者 `C-g C-_` 或者 `C-g C-x u`</div></pre></td></tr></table></figure>
+<blockquote>
+<p>redo 的思维就是 “undo undo”.</p>
+</blockquote>
+<h2 id="在光标处插入指定命令的输出结果"><a href="#在光标处插入指定命令的输出结果" class="headerlink" title="在光标处插入指定命令的输出结果"></a>在光标处插入指定命令的输出结果</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">`C-u M-! 命令 RET`</div></pre></td></tr></table></figure>
+<h2 id="打开-emacs-指南"><a href="#打开-emacs-指南" class="headerlink" title="打开 emacs 指南"></a>打开 emacs 指南</h2><ul>
+<li><code>C-h t</code> 或者 <code>F1 t</code> 或者 <code>M-x help-with-tutorial</code></li>
+</ul>
+<p>如果你想看非英文的指南, 可以使用:</p>
+<ul>
+<li><code>M-x help-with-tutorial-spec-language RET</code> 然后选择你想看要看语种的指南.(有中文的哦)</li>
+</ul>
+<h2 id="替换"><a href="#替换" class="headerlink" title="替换"></a>替换</h2><h3 id="替换所有"><a href="#替换所有" class="headerlink" title="替换所有"></a>替换所有</h3><h4 id="完全匹配-非包含-大小写敏感"><a href="#完全匹配-非包含-大小写敏感" class="headerlink" title="完全匹配(非包含), 大小写敏感"></a>完全匹配(非包含), 大小写敏感</h4><ul>
+<li><code>M-x replace-string RET 要替换的字符串 RET 新的字符串 RET</code></li>
+</ul>
+<h4 id="包含匹配-大小写不敏感"><a href="#包含匹配-大小写不敏感" class="headerlink" title="包含匹配, 大小写不敏感"></a>包含匹配, 大小写不敏感</h4><ul>
+<li><code>M-x replace-regexp RET 要替换的字符串 RET 新的字符串 RET</code></li>
+</ul>
+<h3 id="查询并替换"><a href="#查询并替换" class="headerlink" title="查询并替换"></a>查询并替换</h3><h4 id="完全匹配-大小写敏感"><a href="#完全匹配-大小写敏感" class="headerlink" title="完全匹配, 大小写敏感"></a>完全匹配, 大小写敏感</h4><ul>
+<li><code>M-x query-replace RET 要替换的字符串 RET 新的字符串 RET</code>, 然后按 <code>y</code> 或者 <code>n</code>, 决定是否替换. <code>q 或者 RET</code> 为退出.</li>
+</ul>
+<h4 id="包含匹配-大小写不敏感-1"><a href="#包含匹配-大小写不敏感-1" class="headerlink" title="包含匹配, 大小写不敏感"></a>包含匹配, 大小写不敏感</h4><ul>
+<li><code>M-x query-replace-regexp RET 要替换的字符串 RET 新的字符串 RET</code>, 然后按 <code>y</code> 或者 <code>n</code>, 决定是否替换. <code>q 或者 RET</code> 为退出.</li>
+</ul>
+<h2 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h2><h3 id="向后搜索"><a href="#向后搜索" class="headerlink" title="向后搜索"></a>向后搜索</h3><ul>
+<li><code>C-r</code> 或者 <code>M-x isearch-backward 搜索的字符串 RET</code></li>
+</ul>
+<h3 id="向前搜索"><a href="#向前搜索" class="headerlink" title="向前搜索"></a>向前搜索</h3><ul>
+<li><code>C-s</code> 或者 <code>M-x isearch-forward RET 搜索的字符串 RET</code></li>
+</ul>
+<h2 id="统计行数"><a href="#统计行数" class="headerlink" title="统计行数"></a>统计行数</h2><ul>
+<li><code>C-x l</code></li>
+</ul>
+<h2 id="插入一个-tab"><a href="#插入一个-tab" class="headerlink" title="插入一个 tab"></a>插入一个 tab</h2><blockquote>
+<p>有时候, 想输入一个tab字符, 但是tab已经有它自己的作用, 特别是在org-mode, 或者是markdown-mode下, tab表示缩略标题及它的内容.这时如果想插入一个原始的tab字符,一般情况下就不适用了.这时可以按以下的做</p>
+</blockquote>
+<ul>
+<li><code>C-q TAB</code></li>
+</ul>
+<p><code>C-q</code> 表示下一个要输入的是原始(RAW)字符.</p>
+<h2 id="从当前光标开始删除到下一个指定的字符为止-包括这个字符"><a href="#从当前光标开始删除到下一个指定的字符为止-包括这个字符" class="headerlink" title="从当前光标开始删除到下一个指定的字符为止(包括这个字符)"></a>从当前光标开始删除到下一个指定的字符为止(包括这个字符)</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">zap-to-char(M-z)</div></pre></td></tr></table></figure>
+<p>也是vim里的<code>ct</code>命令.</p>
+<h2 id="删除两个单词之间的空格"><a href="#删除两个单词之间的空格" class="headerlink" title="删除两个单词之间的空格"></a>删除两个单词之间的空格</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">M-x cycle-spacing</div><div class="line">或者 Alt+Space</div></pre></td></tr></table></figure>
+<p>Ubuntu下要禁用<code>Alt+Space</code>快捷捷才行.</p>
+<h2 id="删除空白行-只保留一行空白行"><a href="#删除空白行-只保留一行空白行" class="headerlink" title="删除空白行, 只保留一行空白行:"></a>删除空白行, 只保留一行空白行:</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">C-x C-o</div></pre></td></tr></table></figure>
+<h2 id="Emacs中的undo-tree"><a href="#Emacs中的undo-tree" class="headerlink" title="Emacs中的undo-tree"></a>Emacs中的undo-tree</h2><p>spacemacs:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">M-m a u</div></pre></td></tr></table></figure></p>
+<p>命令叫<code>undo-tree-visualize</code></p>
+<p>使用:</p>
+<p><code>b</code>:左分支<br><code>f</code>:右分支<br><code>p</code>:上一节点<br><code>n</code>:下一节点<br><code>q</code>:退出</p>
+<h2 id="删除行尾的空格"><a href="#删除行尾的空格" class="headerlink" title="删除行尾的空格"></a>删除行尾的空格</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">M-x delete-trailing-whitespace</div></pre></td></tr></table></figure>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

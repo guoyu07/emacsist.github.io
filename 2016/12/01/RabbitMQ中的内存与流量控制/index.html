@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>RabbitMQ中的内存与流量控制 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="rabbitmq," />
+  
+
+  <meta name="description" content="相关内存参数vm_memory_high_watermark这个是与流量控制相关的内存参数.  RabbitMQ会在启动和执行命令rabbitmqctl set_vm_memory_high_watermark 百分比的时候检测系统所安装的内存总量。默认情况沔，当RabbitMQ服务器使用超过40%的内存时，它会引起一个内存报警并且阻塞所有连接。一旦内存报警清除后（例如，由于RabbitMQ服务器">
+<meta name="keywords" content="rabbitmq">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RabbitMQ中的内存与流量控制">
+<meta property="og:url" content="https://emacsist.github.io/2016/12/01/RabbitMQ中的内存与流量控制/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="相关内存参数vm_memory_high_watermark这个是与流量控制相关的内存参数.  RabbitMQ会在启动和执行命令rabbitmqctl set_vm_memory_high_watermark 百分比的时候检测系统所安装的内存总量。默认情况沔，当RabbitMQ服务器使用超过40%的内存时，它会引起一个内存报警并且阻塞所有连接。一旦内存报警清除后（例如，由于RabbitMQ服务器">
+<meta property="og:updated_time" content="2016-12-01T15:25:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RabbitMQ中的内存与流量控制">
+<meta name="twitter:description" content="相关内存参数vm_memory_high_watermark这个是与流量控制相关的内存参数.  RabbitMQ会在启动和执行命令rabbitmqctl set_vm_memory_high_watermark 百分比的时候检测系统所安装的内存总量。默认情况沔，当RabbitMQ服务器使用超过40%的内存时，它会引起一个内存报警并且阻塞所有连接。一旦内存报警清除后（例如，由于RabbitMQ服务器">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#相关内存参数"><span class="toc-text">相关内存参数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#vm-memory-high-watermark"><span class="toc-text">vm_memory_high_watermark</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vm-memory-limit"><span class="toc-text">vm_memory_limit</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#流量控制"><span class="toc-text">流量控制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#注意"><span class="toc-text">注意</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例子"><span class="toc-text">例子</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#默认情况下的内存"><span class="toc-text">默认情况下的内存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改-vm-memory-high-watermark"><span class="toc-text">修改 vm_memory_high_watermark</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改-vm-memory-high-watermark-为绝对值"><span class="toc-text">修改 vm_memory_high_watermark 为绝对值</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-RabbitMQ中的内存与流量控制" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            RabbitMQ中的内存与流量控制
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2016.12.01</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#rabbitmq">
+        <span class="tag-name">rabbitmq</span>
+    <span class="tag-size">( 18 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="相关内存参数"><a href="#相关内存参数" class="headerlink" title="相关内存参数"></a>相关内存参数</h2><h3 id="vm-memory-high-watermark"><a href="#vm-memory-high-watermark" class="headerlink" title="vm_memory_high_watermark"></a>vm_memory_high_watermark</h3><p>这个是与流量控制相关的内存参数.</p>
+<blockquote>
+<p>RabbitMQ会在启动和执行命令<code>rabbitmqctl set_vm_memory_high_watermark 百分比</code>的时候检测系统所安装的内存总量。默认情况沔，当RabbitMQ服务器使用超过<code>40%</code>的内存时，它会引起一个内存报警并且<code>阻塞所有连接</code>。一旦内存报警清除后（例如，由于RabbitMQ服务器将消息页交换到磁盘或者分发到客户端时）就会恢复正常服务了。</p>
+</blockquote>
+<p>所以，将这个值设置为<code>0</code>,然后它就会立即触发内存报警！如果你希望允许RabbitMQ使用更加多的内存，它可以增大该值.</p>
+<p>另一个重要的事项：</p>
+<blockquote>
+<p>默认的内存阀值是 40% 的系统安装的内存。请注意，该值并不是防止RabbitMQ服务器使用超过40%的内存，它仅仅只是指明生产者(publishers)会进行节流（流量控制）</p>
+</blockquote>
+<p>所以，如果你在引起内存报警的时候尝试发送消息，在进行发送期间就会被阻塞了。</p>
+<p>如果你想阻塞所有的发送者，你可以将该参数 <code>vm_memory_high_watermark</code> 设置为0.</p>
+<p>如果你想<code>禁止</code>基于内存的流量控制，你可以将该参数<code>vm_memory_high_watermark</code> 设置为100。</p>
+<p><a href="http://www.rabbitmq.com/memory.html" target="_blank" rel="external">rabbitmq memory</a></p>
+<h3 id="vm-memory-limit"><a href="#vm-memory-limit" class="headerlink" title="vm_memory_limit"></a>vm_memory_limit</h3><p>这个值，默认就是 <code>vm_memory_high_watermark * installed memory</code>（如果设置的是百分比参数的话）</p>
+<p>可使用内存上限。注意，如果 <code>vm_memory_high_watermark</code> 生效的话，那MQ是有可能超过这个值的（上下波动）</p>
+<p>如果 <code>vm_memory_high_watermark</code> 设置的是绝对值的话，那<code>vm_memory_limit = vm_memory_high_watermark</code>。</p>
+<h2 id="流量控制"><a href="#流量控制" class="headerlink" title="流量控制"></a>流量控制</h2><p>当达到内存阀值的时候（无论设置的是百分比，还是绝对值），RabbitMQ就会触发流量控制。即<code>publishers</code>会全部阻塞，直到解除报警才会恢复正常的<code>publishers</code>服务。</p>
+<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><p>因为RabbitMQ提供两种协议<code>HTTP</code>和<code>AMQP</code>。这个流量控制，只是对<code>AMQP</code>生效的。对<code>HTPP</code>协议发送的消息并不会进行流量控制。所以，<code>rabbitmq</code>使用的总内存会超过<code>vm_memory_limit</code>也就不奇怪了。</p>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p>测试环境:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">┌─[sky@sky-linux] - [/ihome/rabbitmq/rabbitmq_server-3.6.1] - [2016-12-01 03:21:31]</div><div class="line">└─[0] &lt;&gt; free -m                </div><div class="line">             total       used       free     shared    buffers     cached</div><div class="line">Mem:         15920      13144       2775       1038        608       5794</div><div class="line">-/+ buffers/cache:       6741       9178</div><div class="line">Swap:            0          0          0</div><div class="line">┌─[sky@sky-linux] - [/ihome/rabbitmq/rabbitmq_server-3.6.1] - [2016-12-01 03:22:16]</div><div class="line">└─[0] &lt;&gt; uname <span class="_">-a</span></div><div class="line">Linux sky-linux 3.19.0-32-generic <span class="comment">#37~14.04.1-Ubuntu SMP Thu Oct 22 09:41:40 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux</span></div><div class="line">┌─[sky@sky-linux] - [/ihome/rabbitmq/rabbitmq_server-3.6.1] - [2016-12-01 03:22:34]</div><div class="line">└─[0] &lt;&gt;</div></pre></td></tr></table></figure>
+<h3 id="默认情况下的内存"><a href="#默认情况下的内存" class="headerlink" title="默认情况下的内存"></a>默认情况下的内存</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">./sbin/rabbitmqctl status</div><div class="line"></div><div class="line"> &#123;vm_memory_high_watermark,0.4&#125;,</div><div class="line"> &#123;vm_memory_limit,6677449932&#125;,</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">15920 * 0.4 = 6368.0 MB</div><div class="line">6677449932 / 1024 / 1024 = 6368 MB</div></pre></td></tr></table></figure>
+<h3 id="修改-vm-memory-high-watermark"><a href="#修改-vm-memory-high-watermark" class="headerlink" title="修改 vm_memory_high_watermark"></a>修改 vm_memory_high_watermark</h3><p>修改为 <code>0.8</code> 看看效果:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">─[sky@sky-linux] - [/ihome/rabbitmq/rabbitmq_server-3.6.1] - [2016-12-01 03:22:34]</div><div class="line">└─[0] &lt;&gt; ./sbin/rabbitmqctl set_vm_memory_high_watermark 0.8</div><div class="line">Setting memory threshold on <span class="string">'rabbit@sky-linux'</span> to 0.8 ...</div><div class="line">┌─[sky@sky-linux] - [/ihome/rabbitmq/rabbitmq_server-3.6.1] - [2016-12-01 03:25:30]</div><div class="line">└─[0] &lt;&gt; ./sbin/rabbitmqctl status  </div><div class="line">...                        </div><div class="line">&#123;vm_memory_high_watermark,0.8&#125;,</div><div class="line"> &#123;vm_memory_limit,13354899865&#125;,</div><div class="line">...</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">15920 * 0.8 = 12736 MB</div><div class="line">13354899865 / 1024 / 1024 = 12736 MB</div></pre></td></tr></table></figure>
+<p>可知，<code>vm_memory_high_watermark</code> 修改后，<code>vm_memory_limit</code> 也会随之改变.</p>
+<h3 id="修改-vm-memory-high-watermark-为绝对值"><a href="#修改-vm-memory-high-watermark-为绝对值" class="headerlink" title="修改 vm_memory_high_watermark 为绝对值"></a>修改 vm_memory_high_watermark 为绝对值</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">┌─[sky@sky-linux] - [/ihome/rabbitmq/rabbitmq_server-3.6.1] - [2016-12-01 03:38:10]</div><div class="line">└─[64] &lt;&gt; ./sbin/rabbitmqctl set_vm_memory_high_watermark absolute 10MB</div><div class="line">Setting memory threshold on <span class="string">'rabbit@sky-linux'</span> to 10000000 bytes ...</div><div class="line">┌─[sky@sky-linux] - [/ihome/rabbitmq/rabbitmq_server-3.6.1] - [2016-12-01 03:38:38]</div><div class="line">└─[0] &lt;&gt; ./sbin/rabbitmqctl status                                    </div><div class="line">...</div><div class="line">&#123;vm_memory_high_watermark,&#123;absolute,10000000&#125;&#125;,</div><div class="line"> &#123;vm_memory_limit,10000000&#125;,</div><div class="line"></div><div class="line">...</div></pre></td></tr></table></figure>
+<p>可以看到，它们的值是相等的.</p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

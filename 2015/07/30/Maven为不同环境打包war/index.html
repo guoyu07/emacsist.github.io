@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Maven为不同环境打包war | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="java,maven," />
+  
+
+  <meta name="description" content="Maven为生产环境，测试环境（或者更多）的不同而使用不同的配置文件首先，为项目准备好不同的环境存放的配置文件的目录比如 存放测试环境的配置文件src/main/env/dev 存放生产环境的配置文件src/main/env/product 详细情况如下: 123456789101112131415project/`-- src    |-- main    |   |-- java    |">
+<meta name="keywords" content="java,maven">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Maven为不同环境打包war">
+<meta property="og:url" content="https://emacsist.github.io/2015/07/30/Maven为不同环境打包war/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="Maven为生产环境，测试环境（或者更多）的不同而使用不同的配置文件首先，为项目准备好不同的环境存放的配置文件的目录比如 存放测试环境的配置文件src/main/env/dev 存放生产环境的配置文件src/main/env/product 详细情况如下: 123456789101112131415project/`-- src    |-- main    |   |-- java    |">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Maven为不同环境打包war">
+<meta name="twitter:description" content="Maven为生产环境，测试环境（或者更多）的不同而使用不同的配置文件首先，为项目准备好不同的环境存放的配置文件的目录比如 存放测试环境的配置文件src/main/env/dev 存放生产环境的配置文件src/main/env/product 详细情况如下: 123456789101112131415project/`-- src    |-- main    |   |-- java    |">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Maven为生产环境，测试环境（或者更多）的不同而使用不同的配置文件"><span class="toc-text">Maven为生产环境，测试环境（或者更多）的不同而使用不同的配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置pom-xml"><span class="toc-text">配置pom.xml</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#打包"><span class="toc-text">打包</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#开发环境"><span class="toc-text">开发环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#生产环境"><span class="toc-text">生产环境</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Maven为不同环境打包war" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Maven为不同环境打包war
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2015.07.30</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 110 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#maven">
+        <span class="tag-name">maven</span>
+    <span class="tag-size">( 7 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="Maven为生产环境，测试环境（或者更多）的不同而使用不同的配置文件"><a href="#Maven为生产环境，测试环境（或者更多）的不同而使用不同的配置文件" class="headerlink" title="Maven为生产环境，测试环境（或者更多）的不同而使用不同的配置文件"></a>Maven为生产环境，测试环境（或者更多）的不同而使用不同的配置文件</h2><p>首先，为项目准备好不同的环境存放的配置文件的目录比如</p>
+<p>存放测试环境的配置文件<br><code>src/main/env/dev</code></p>
+<p>存放生产环境的配置文件<br><code>src/main/env/product</code></p>
+<p>详细情况如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">project/</div><div class="line">`-- src</div><div class="line">    |-- main</div><div class="line">    |   |-- java</div><div class="line">    |   |-- env</div><div class="line">    |   |   |-- dev</div><div class="line">    |   |   |   |-- core.properties</div><div class="line">    |   |   |   |-- jdbc.properties</div><div class="line">    |   |   |   `-- spring.xml</div><div class="line">    |   |   |-- product</div><div class="line">    |   |   |   |-- core.properties</div><div class="line">    |   |   |   |-- jdbc.properties</div><div class="line">    |   |   |   `-- spring.xml</div><div class="line">    |   `-- webroot</div><div class="line">    `-- <span class="built_in">test</span></div></pre></td></tr></table></figure>
+<h2 id="配置pom-xml"><a href="#配置pom-xml" class="headerlink" title="配置pom.xml"></a>配置pom.xml</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div></pre></td><td class="code"><pre><div class="line">&lt;project xmlns=<span class="string">"http://maven.apache.org/POM/4.0.0"</span> xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></div><div class="line">	xsi:schemaLocation=<span class="string">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span>&gt;</div><div class="line">	&lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</div><div class="line">	&lt;groupId&gt;com.test.maven.package&lt;/groupId&gt;</div><div class="line">	&lt;artifactId&gt;package&lt;/artifactId&gt;</div><div class="line">	&lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;</div><div class="line">	&lt;packaging&gt;war&lt;/packaging&gt;</div><div class="line"></div><div class="line">	&lt;properties&gt;</div><div class="line">		&lt;spring.version&gt;3.2.6.RELEASE&lt;/spring.version&gt;</div><div class="line">		&lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;</div><div class="line">	&lt;/properties&gt;</div><div class="line"></div><div class="line">	&lt;profiles&gt;</div><div class="line">		&lt;profile&gt;</div><div class="line">			&lt;id&gt;default&lt;/id&gt;</div><div class="line">			&lt;activation&gt;</div><div class="line">				&lt;activeByDefault&gt;<span class="literal">true</span>&lt;/activeByDefault&gt;</div><div class="line">			&lt;/activation&gt;</div><div class="line">			&lt;properties&gt;</div><div class="line">				&lt;!-- dev env --&gt;</div><div class="line">				&lt;runtime.env&gt;src/main/env/dev&lt;/runtime.env&gt;</div><div class="line">                                &lt;!-- 这里添加放根据开发环境需要配置的其他的 property 数据 --&gt;</div><div class="line">			&lt;/properties&gt;</div><div class="line">		&lt;/profile&gt;</div><div class="line"></div><div class="line">		&lt;profile&gt;</div><div class="line">			&lt;id&gt;product&lt;/id&gt;</div><div class="line">			&lt;activation&gt;</div><div class="line">				&lt;activeByDefault&gt;<span class="literal">false</span>&lt;/activeByDefault&gt;</div><div class="line">			&lt;/activation&gt;</div><div class="line">			&lt;properties&gt;</div><div class="line">				&lt;!-- product env --&gt;</div><div class="line">				&lt;runtime.env&gt;src/main/env/product&lt;/runtime.env&gt;</div><div class="line">                                &lt;!-- 这里添加放根据生产环境需要配置的其他的 property 数据 --&gt;</div><div class="line">			&lt;/properties&gt;</div><div class="line">		&lt;/profile&gt;</div><div class="line">	&lt;/profiles&gt;</div><div class="line"></div><div class="line"></div><div class="line">	&lt;dependencies&gt;</div><div class="line">		&lt;!-- 这里放项目依赖的jar包 --&gt;</div><div class="line">	&lt;/dependencies&gt;</div><div class="line"></div><div class="line">	&lt;build&gt;</div><div class="line">		&lt;finalName&gt;ROOT&lt;/finalName&gt;</div><div class="line">		&lt;<span class="built_in">source</span>Directory&gt;src/main/java&lt;/<span class="built_in">source</span>Directory&gt;</div><div class="line">		&lt;scriptSourceDirectory&gt;<span class="variable">$&#123;runtime.env&#125;</span>&lt;/scriptSourceDirectory&gt;</div><div class="line">		&lt;resources&gt;</div><div class="line">			&lt;resource&gt;</div><div class="line">				&lt;directory&gt;src/main/java&lt;/directory&gt;</div><div class="line">				&lt;includes&gt;</div><div class="line">                   &lt;!-- 如果上面的directory有除了java文件以外的文件，也要在这里配置，需要copy到编译后的classes目录里 --&gt;</div><div class="line">					&lt;include&gt;**/*.xml&lt;/include&gt;</div><div class="line">				&lt;/includes&gt;</div><div class="line">				&lt;filtering&gt;<span class="literal">false</span>&lt;/filtering&gt;</div><div class="line">			&lt;/resource&gt;</div><div class="line">			&lt;resource&gt;</div><div class="line">				&lt;directory&gt;<span class="variable">$&#123;runtime.env&#125;</span>&lt;/directory&gt;</div><div class="line">				&lt;includes&gt;</div><div class="line">                    &lt;!-- 这里是按需copy所要的文件 --&gt;</div><div class="line">					&lt;include&gt;**/*.xml&lt;/include&gt;</div><div class="line">					&lt;include&gt;**/*.json&lt;/include&gt;</div><div class="line">					&lt;include&gt;**/*.properties&lt;/include&gt;</div><div class="line">     			&lt;/includes&gt;</div><div class="line">                &lt;!-- 这里是否开启过虑，即上面的文件是否有占位符 <span class="variable">$&#123;变量&#125;</span> 之类的，如果有就要设置为<span class="literal">true</span>，否则就是<span class="literal">false</span> --&gt;</div><div class="line">				&lt;filtering&gt;<span class="literal">true</span>&lt;/filtering&gt;</div><div class="line">			&lt;/resource&gt;</div><div class="line">		&lt;/resources&gt;</div><div class="line">		&lt;outputDirectory&gt;webroot/WEB-INF/classes&lt;/outputDirectory&gt;</div><div class="line">		&lt;plugins&gt;</div><div class="line">			&lt;plugin&gt;</div><div class="line">				&lt;artifactId&gt;maven-war-plugin&lt;/artifactId&gt;</div><div class="line">				&lt;version&gt;2.3&lt;/version&gt;</div><div class="line">				&lt;configuration&gt;</div><div class="line">					&lt;webXml&gt;webroot/WEB-INF/web.xml&lt;/webXml&gt;</div><div class="line">					&lt;warSourceDirectory&gt;webroot&lt;/warSourceDirectory&gt;</div><div class="line">					&lt;failOnMissingWebXml&gt;<span class="literal">false</span>&lt;/failOnMissingWebXml&gt;</div><div class="line">					&lt;webResources&gt;</div><div class="line">						&lt;resource&gt;</div><div class="line">							&lt;directory&gt;<span class="variable">$&#123;runtime.env&#125;</span>&lt;/directory&gt;</div><div class="line">							&lt;targetPath&gt;WEB-INF/classes&lt;/targetPath&gt;</div><div class="line">							&lt;filtering&gt;<span class="literal">true</span>&lt;/filtering&gt;</div><div class="line">						&lt;/resource&gt;</div><div class="line">					&lt;/webResources&gt;</div><div class="line">				&lt;/configuration&gt;</div><div class="line">			&lt;/plugin&gt;</div><div class="line">			&lt;plugin&gt;</div><div class="line">				&lt;artifactId&gt;maven-antrun-plugin&lt;/artifactId&gt;</div><div class="line">				&lt;executions&gt;</div><div class="line">					&lt;execution&gt;</div><div class="line">						&lt;id&gt;copy-lib-src-webapps&lt;/id&gt;</div><div class="line">						&lt;phase&gt;package&lt;/phase&gt;</div><div class="line">						&lt;configuration&gt;</div><div class="line">							&lt;tasks&gt;</div><div class="line">                               &lt;!-- 这里的作用是将target下编译好的数据，复制回到webroot下的，对应的目录，因为有些人喜欢直接将tomcat的部署目录指向项目路径，而不是tomcat默认的部署目录里 --&gt;</div><div class="line">								&lt;copy todir=<span class="string">"webroot/WEB-INF/lib"</span>&gt;</div><div class="line">									&lt;fileset dir=<span class="string">"target/ROOT/WEB-INF/lib"</span>&gt;</div><div class="line">										&lt;include name=<span class="string">"*"</span> /&gt;</div><div class="line">									&lt;/fileset&gt;</div><div class="line">								&lt;/copy&gt;</div><div class="line">								&lt;copy todir=<span class="string">"webroot/WEB-INF/classes"</span>&gt;</div><div class="line">									&lt;fileset dir=<span class="string">"target/ROOT/WEB-INF/classes"</span>&gt;</div><div class="line">										&lt;include name=<span class="string">"*"</span> /&gt;</div><div class="line">									&lt;/fileset&gt;</div><div class="line">								&lt;/copy&gt;</div><div class="line">							&lt;/tasks&gt;</div><div class="line">						&lt;/configuration&gt;</div><div class="line">						&lt;goals&gt;</div><div class="line">							&lt;goal&gt;run&lt;/goal&gt;</div><div class="line">						&lt;/goals&gt;</div><div class="line">					&lt;/execution&gt;</div><div class="line">				&lt;/executions&gt;</div><div class="line">			&lt;/plugin&gt;</div><div class="line">		&lt;/plugins&gt;</div><div class="line">	&lt;/build&gt;</div><div class="line"></div><div class="line">&lt;/project&gt;</div></pre></td></tr></table></figure>
+<h2 id="打包"><a href="#打包" class="headerlink" title="打包"></a>打包</h2><h3 id="开发环境"><a href="#开发环境" class="headerlink" title="开发环境"></a>开发环境</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#如果打包时需要调用测试代码，就去掉最后的参数，这里为了加快编译，直接去掉了测试代码。</span></div><div class="line"><span class="comment">#因为默认情况下就是开发环境，所以不需要特别添加参数</span></div><div class="line">mvn clean package  -Dmaven.test.skip=<span class="literal">true</span></div></pre></td></tr></table></figure>
+<h3 id="生产环境"><a href="#生产环境" class="headerlink" title="生产环境"></a>生产环境</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#如果打包时需要调用测试代码，就去掉最后的参数，这里为了加快编译，直接去掉了测试代码。</span></div><div class="line"><span class="comment">#用 `-P` 指定环境参数</span></div><div class="line">mvn clean package -Pproduct -Dmaven.test.skip=<span class="literal">true</span></div></pre></td></tr></table></figure>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

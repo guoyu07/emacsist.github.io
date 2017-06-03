@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Linux 进程监控 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="linux,监控," />
+  
+
+  <meta name="description" content="进程监控pidstat [option] interval [count] 监控进程的内存使用情况12345678910$ pidstat -r  -p 26092 1 5Linux 2.6.32-33-server (pro-srv4) 	Wednesday, November 25, 2015 	_x86_64_	(8 CPU)11:16:38 HKT       PID  minflt/s">
+<meta name="keywords" content="linux,监控">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 进程监控">
+<meta property="og:url" content="https://emacsist.github.io/2015/11/25/Linux-进程监控/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="进程监控pidstat [option] interval [count] 监控进程的内存使用情况12345678910$ pidstat -r  -p 26092 1 5Linux 2.6.32-33-server (pro-srv4) 	Wednesday, November 25, 2015 	_x86_64_	(8 CPU)11:16:38 HKT       PID  minflt/s">
+<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux 进程监控">
+<meta name="twitter:description" content="进程监控pidstat [option] interval [count] 监控进程的内存使用情况12345678910$ pidstat -r  -p 26092 1 5Linux 2.6.32-33-server (pro-srv4) 	Wednesday, November 25, 2015 	_x86_64_	(8 CPU)11:16:38 HKT       PID  minflt/s">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#进程监控"><span class="toc-text">进程监控</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#监控进程的内存使用情况"><span class="toc-text">监控进程的内存使用情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#监控进程的IO使用情况"><span class="toc-text">监控进程的IO使用情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#监控进程的CPU使用情况"><span class="toc-text">监控进程的CPU使用情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多处理器情况"><span class="toc-text">多处理器情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进程堆栈的情况"><span class="toc-text">进程堆栈的情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进程上下文切换情况"><span class="toc-text">进程上下文切换情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#线程的级别"><span class="toc-text">线程的级别</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Linux-进程监控" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Linux 进程监控
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2015.11.25</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#linux">
+        <span class="tag-name">linux</span>
+    <span class="tag-size">( 14 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#监控">
+        <span class="tag-name">监控</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h2 id="进程监控"><a href="#进程监控" class="headerlink" title="进程监控"></a>进程监控</h2><p><code>pidstat [option] interval [count]</code></p>
+<h3 id="监控进程的内存使用情况"><a href="#监控进程的内存使用情况" class="headerlink" title="监控进程的内存使用情况"></a>监控进程的内存使用情况</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">$ pidstat -r  -p 26092 1 5</div><div class="line">Linux 2.6.32-33-server (pro-srv4) 	Wednesday, November 25, 2015 	_x86_64_	(8 CPU)</div><div class="line"></div><div class="line">11:16:38 HKT       PID  minflt/s  majflt/s     VSZ    RSS   %MEM  Command</div><div class="line">11:16:39 HKT     26092      0.00      0.00 2983032 607484   3.69  java</div><div class="line">11:16:40 HKT     26092      0.00      0.00 2983032 607484   3.69  java</div><div class="line">11:16:41 HKT     26092      0.00      0.00 2983032 607484   3.69  java</div><div class="line">11:16:42 HKT     26092      0.00      0.00 2983032 607484   3.69  java</div><div class="line">11:16:43 HKT     26092      0.00      0.00 2983032 607484   3.69  java</div><div class="line">Average:        26092      0.00      0.00 2983032 607484   3.69  java</div></pre></td></tr></table></figure>
+<p>列说明:</p>
+<p><code>minflt/s</code>: 每秒次缺页错误次数(minor page faults)，次缺页错误次数意即虚拟内存地址映射成物理内存地址产生的page fault次数<br><code>majflt/s</code>: 每秒主缺页错误次数(major page faults)，当虚拟内存地址映射成物理内存地址时，相应的page在swap中，这样的page fault为major page fault，一般在内存使用紧张时产生<br><code>VSZ</code>:      虚拟内存：整个进程使用的虚拟内存（KB）<br><code>RSS</code>:      常驻内存大小，占用的非交换分区的物理内存（KB）<br><code>%MEM</code>:     进程当前占用可用内存的百分比<br><code>Command</code>:  进程对应的命令</p>
+<h3 id="监控进程的IO使用情况"><a href="#监控进程的IO使用情况" class="headerlink" title="监控进程的IO使用情况"></a>监控进程的IO使用情况</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">➜  ~  pidstat <span class="_">-d</span> -p 2942 1 5</div><div class="line">Linux 3.16.0-50-generic (yang) 	2015年11月25日 	_x86_64_	(4 CPU)</div><div class="line"></div><div class="line">11时53分57秒   UID       PID   kB_rd/s   kB_wr/s kB_ccwr/s  Command</div><div class="line">11时53分58秒  1000      2942      0.00      0.00      0.00  java</div><div class="line">11时53分59秒  1000      2942      0.00      0.00      0.00  java</div><div class="line">11时54分00秒  1000      2942      0.00      0.00      0.00  java</div><div class="line">11时54分01秒  1000      2942      0.00      0.00      0.00  java</div><div class="line">11时54分02秒  1000      2942      0.00      0.00      0.00  java</div><div class="line">Average:     1000      2942      0.00      0.00      0.00  java</div><div class="line">➜  ~</div></pre></td></tr></table></figure>
+<p>列说明:</p>
+<p><code>kb_rd/s</code>：每秒读多少KB<br><code>kb_rw/s</code>：每秒写多少KB<br><code>kb_ccwr/s</code>：每秒多少KB正准备写到磁盘时被进程取消</p>
+<h3 id="监控进程的CPU使用情况"><a href="#监控进程的CPU使用情况" class="headerlink" title="监控进程的CPU使用情况"></a>监控进程的CPU使用情况</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">➜  ~  pidstat -u -p 2942 1 5</div><div class="line">Linux 3.16.0-50-generic (yang) 	2015年11月25日 	_x86_64_	(4 CPU)</div><div class="line"></div><div class="line">11时59分19秒   UID       PID    %usr %system  %guest    %CPU   CPU  Command</div><div class="line">11时59分20秒  1000      2942    1.00    1.00    0.00    2.00     3  java</div><div class="line">11时59分21秒  1000      2942    1.00    0.00    0.00    1.00     3  java</div><div class="line">11时59分22秒  1000      2942    1.00    1.00    0.00    2.00     3  java</div><div class="line">11时59分23秒  1000      2942    1.00    0.00    0.00    1.00     3  java</div><div class="line">11时59分24秒  1000      2942    2.00    0.00    0.00    2.00     3  java</div><div class="line">Average:     1000      2942    1.20    0.40    0.00    1.60     -  java</div></pre></td></tr></table></figure>
+<p>列说明：</p>
+<p><code>%usr</code>：用户态CPU占用总CPU使用百分比<br><code>%system</code>：内核态CPU占总CPU使用百分比<br><code>%guest</code>： 进程运行在虚拟CPU上占用的百分比<br><code>cpu</code>: 进程运行在哪个CPU核上.</p>
+<h3 id="多处理器情况"><a href="#多处理器情况" class="headerlink" title="多处理器情况"></a>多处理器情况</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pidstat -I 后面接的参数和上面的一样.</div></pre></td></tr></table></figure>
+<p>说明：这时，CPU的占用率是/CPU核心数后的数据的，没有 <code>-I</code> 的话，是看成单个CPU后的总占用率.</p>
+<h3 id="进程堆栈的情况"><a href="#进程堆栈的情况" class="headerlink" title="进程堆栈的情况"></a>进程堆栈的情况</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">➜  ~  pidstat <span class="_">-s</span> -p 2942 1 5</div><div class="line">Linux 3.16.0-50-generic (yang) 	2015年11月25日 	_x86_64_	(4 CPU)</div><div class="line"></div><div class="line">14时36分01秒   UID       PID StkSize  StkRef  Command</div><div class="line">14时36分02秒  1000      2942     140      44  java</div><div class="line">14时36分03秒  1000      2942     140      44  java</div><div class="line">14时36分04秒  1000      2942     140      44  java</div><div class="line">14时36分05秒  1000      2942     140      44  java</div><div class="line">14时36分06秒  1000      2942     140      44  java</div><div class="line">Average:     1000      2942     140      44  java</div><div class="line">➜  ~</div></pre></td></tr></table></figure>
+<p>列说明：</p>
+<p><code>StkSize</code>：为进程预留的栈大小（KB）<br><code>StkRef</code>：进程使用的栈大小（KB）</p>
+<h3 id="进程上下文切换情况"><a href="#进程上下文切换情况" class="headerlink" title="进程上下文切换情况"></a>进程上下文切换情况</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">➜  ~  pidstat -w -p 2942 1 5</div><div class="line">Linux 3.16.0-50-generic (yang) 	2015年11月25日 	_x86_64_	(4 CPU)</div><div class="line"></div><div class="line">14时38分55秒   UID       PID   cswch/s nvcswch/s  Command</div><div class="line">14时38分56秒  1000      2942      0.00      0.00  java</div><div class="line">14时38分57秒  1000      2942      0.00      0.00  java</div><div class="line">14时38分58秒  1000      2942      0.00      0.00  java</div><div class="line">14时38分59秒  1000      2942      0.00      0.00  java</div><div class="line">14时39分00秒  1000      2942      0.00      0.00  java</div><div class="line">Average:     1000      2942      0.00      0.00  java</div><div class="line">➜  ~</div></pre></td></tr></table></figure>
+<p>列说明:</p>
+<p><code>cswch/s</code>：进程每秒自愿上下文切换次数，这当一个进程因为一个资源不可用而导致阻塞时就会出现这种自愿上下文切换.</p>
+<p><code>nvcswch/s</code>: 进程非自愿上下文切换次数。当一个进程在CPU时间片内执行期间被强迫放弃CPU时就会出现这种非自愿上下文切换.</p>
+<h3 id="线程的级别"><a href="#线程的级别" class="headerlink" title="线程的级别"></a>线程的级别</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pidstat -t 其他参数和以上相同.</div></pre></td></tr></table></figure>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
