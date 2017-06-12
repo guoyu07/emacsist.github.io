@@ -146,7 +146,7 @@
 
 
   <div id="toc" class="toc-article">
-    <strong class="toc-title">文章目录</strong>
+    <strong class="toc-title">Posts List</strong>
     <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#启动-intercept"><span class="toc-text">启动 intercept</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#启动-tcpcopy"><span class="toc-text">启动 tcpcopy</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#注意"><span class="toc-text">注意</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#丢包"><span class="toc-text">丢包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#负载"><span class="toc-text">负载</span></a></li></ol></li></ol>
   </div>
 
@@ -201,10 +201,10 @@
 <p>安装就不多介绍了，这里只是描述使用</p>
 <p>假设你的测试环境的应用监听的是 <em>9001</em> ，而且是在 <em>10.0.0.40</em> </p>
 <h1 id="启动-intercept"><a href="#启动-intercept" class="headerlink" title="启动 intercept"></a>启动 intercept</h1><p>假设 intercept 的IP为 <em>10.0.0.40</em> （ intercept 要与你的测试的应用程序所在的服务器在同一个），而且下面的 9001 也就是测试的应用程序的端口。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./intercept -i eth0 -F <span class="string">'tcp and src port 9001'</span> <span class="_">-d</span></div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./intercept -i eth0 -F <span class="string">'tcp and src port 9001'</span> -d</div></pre></td></tr></table></figure>
 <p>注意，这里的 <em>9001</em> 就是要处理的当前服务器地址的源端口</p>
 <h1 id="启动-tcpcopy"><a href="#启动-tcpcopy" class="headerlink" title="启动 tcpcopy"></a>启动 tcpcopy</h1><p>假设 tcpcopy 的地址为 10.0.0.40</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./tcpcopy -x 80-10.0.0.40:9001 <span class="_">-s</span> 10.0.0.40 -c 10.0.0.40</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./tcpcopy -x 80-10.0.0.40:9001 -s 10.0.0.40 -c 10.0.0.40</div></pre></td></tr></table></figure>
 <p><em>-x</em> ：表示将本机的 <em>80</em> 端口的流量，copy一份到 <em>10.0.0.40</em> 的 <em>9001</em> 端口。<br><em>-s</em> ：这个就是 intercept 的地址。<br><em>-c</em> ：tcpcopy 修改tcp的源IP地址，以免响应给最初的 client。</p>
 <h1 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h1><p>下面是要注意的事项</p>
 <h2 id="丢包"><a href="#丢包" class="headerlink" title="丢包"></a>丢包</h2><p>在测试过程中，发现它会丢包，测试的情况如下:</p>
@@ -257,7 +257,7 @@
   <span id="cover" class="cover hide"></span>
   <div id="modal-dialog" class="modal-dialog hide-dialog">
     <div class="modal-header">
-      <span id="close" class="btn-close">关闭</span>
+      <span id="close" class="btn-close">Close</span>
     </div>
     <hr>
     <div class="modal-body">

@@ -146,7 +146,7 @@
 
 
   <div id="toc" class="toc-article">
-    <strong class="toc-title">文章目录</strong>
+    <strong class="toc-title">Posts List</strong>
     <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#jetty-home-和-jetty-base"><span class="toc-text">jetty.home 和 jetty.base</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Jetty常用命令"><span class="toc-text">Jetty常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#查看帮助"><span class="toc-text">查看帮助</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#指定jetty-home和jetty-base"><span class="toc-text">指定jetty.home和jetty.base</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#列出配置"><span class="toc-text">列出配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建一个实例"><span class="toc-text">创建一个实例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Jetty配置说明"><span class="toc-text">Jetty配置说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-text">参考资料</span></a></li></ol>
   </div>
 
@@ -207,7 +207,7 @@
     <div class="article-content">
         
                             <h2 id="jetty-home-和-jetty-base"><a href="#jetty-home-和-jetty-base" class="headerlink" title="jetty.home 和 jetty.base"></a>jetty.home 和 jetty.base</h2><p>可以看作：<br><code>${jetty.home}</code> 是jetty的安装目录<br><code>${jetty.base}</code> 是实例目录</p>
-<h2 id="Jetty常用命令"><a href="#Jetty常用命令" class="headerlink" title="Jetty常用命令"></a>Jetty常用命令</h2><h3 id="查看帮助"><a href="#查看帮助" class="headerlink" title="查看帮助"></a>查看帮助</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">java -jar <span class="variable">$&#123;jetty.home&#125;</span>/start.jar --help</div></pre></td></tr></table></figure>
+<h2 id="Jetty常用命令"><a href="#Jetty常用命令" class="headerlink" title="Jetty常用命令"></a>Jetty常用命令</h2><h3 id="查看帮助"><a href="#查看帮助" class="headerlink" title="查看帮助"></a>查看帮助</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">java -jar <span class="variable">$&#123;jetty.home&#125;</span>/start.jar --<span class="built_in">help</span></div></pre></td></tr></table></figure>
 <h3 id="指定jetty-home和jetty-base"><a href="#指定jetty-home和jetty-base" class="headerlink" title="指定jetty.home和jetty.base"></a>指定jetty.home和jetty.base</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">java -jar /home/yang/Java/jetty-distribution-9.2.13.v20150730/start.jar \</div><div class="line">jetty.home=/home/yang/Java/jetty-distribution-9.2.13.v20150730 \</div><div class="line">jetty.base=/home/yang/Java/jetty-distribution-9.2.13.v20150730/demo-base</div></pre></td></tr></table></figure>
 <h3 id="列出配置"><a href="#列出配置" class="headerlink" title="列出配置"></a>列出配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> $</div><div class="line">java -jar <span class="variable">$&#123;jetty.home&#125;</span>/start.jar --list-config</div></pre></td></tr></table></figure>
 <h3 id="创建一个实例"><a href="#创建一个实例" class="headerlink" title="创建一个实例"></a>创建一个实例</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /path/to/jetty/base/empty/dir</div><div class="line"></div><div class="line">java -jar <span class="variable">$&#123;jetty.home&#125;</span>/start.jar --add-to-startd=http,deploy</div><div class="line"></div><div class="line">添加https支持</div><div class="line">--add-to-startd=https</div></pre></td></tr></table></figure>
@@ -258,7 +258,7 @@
   <span id="cover" class="cover hide"></span>
   <div id="modal-dialog" class="modal-dialog hide-dialog">
     <div class="modal-header">
-      <span id="close" class="btn-close">关闭</span>
+      <span id="close" class="btn-close">Close</span>
     </div>
     <hr>
     <div class="modal-body">

@@ -146,7 +146,7 @@
 
 
   <div id="toc" class="toc-article">
-    <strong class="toc-title">文章目录</strong>
+    <strong class="toc-title">Posts List</strong>
     <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#查看Go源码输出的汇编代码"><span class="toc-text">查看Go源码输出的汇编代码</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#小例子"><span class="toc-text">小例子</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#只有一个返回值"><span class="toc-text">只有一个返回值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多个返回值"><span class="toc-text">多个返回值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数调用图"><span class="toc-text">函数调用图</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#栈的改变"><span class="toc-text">栈的改变</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考资料"><span class="toc-text">参考资料</span></a></li></ol>
   </div>
 
@@ -178,7 +178,7 @@
     
       <a class="tag-item" href="/tags/#golang">
         <span class="tag-name">golang</span>
-    <span class="tag-size">( 17 )</span>
+    <span class="tag-size">( 18 )</span>
     </a>
     
       <a class="tag-item" href="/tags/#汇编">
@@ -201,7 +201,7 @@
 
     <div class="article-content">
         
-                            <h1 id="查看Go源码输出的汇编代码"><a href="#查看Go源码输出的汇编代码" class="headerlink" title="查看Go源码输出的汇编代码"></a>查看Go源码输出的汇编代码</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">go tool compile -S hello.go</div><div class="line"></div><div class="line">或</div><div class="line">go tool objdump <span class="_">-s</span> <span class="string">"main\.main"</span> hello</div><div class="line"></div><div class="line">或</div><div class="line">go tool compile -N -S hello.go</div><div class="line">最好用这个，这种是禁止优化的</div></pre></td></tr></table></figure>
+                            <h1 id="查看Go源码输出的汇编代码"><a href="#查看Go源码输出的汇编代码" class="headerlink" title="查看Go源码输出的汇编代码"></a>查看Go源码输出的汇编代码</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">go tool compile -S hello.go</div><div class="line"></div><div class="line">或</div><div class="line">go tool objdump -s <span class="string">"main\.main"</span> hello</div><div class="line"></div><div class="line">或</div><div class="line">go tool compile -N -S hello.go</div><div class="line">最好用这个，这种是禁止优化的</div></pre></td></tr></table></figure>
 <h1 id="小例子"><a href="#小例子" class="headerlink" title="小例子"></a>小例子</h1><h2 id="只有一个返回值"><a href="#只有一个返回值" class="headerlink" title="只有一个返回值"></a>只有一个返回值</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[22:58:38] emacsist:Desktop $ cat hello.go</div><div class="line">package main</div><div class="line"></div><div class="line">func <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">	a, b := 3, 4</div><div class="line">	println(add(a, b))</div><div class="line">&#125;</div><div class="line"></div><div class="line">func add(a, b int) int &#123;</div><div class="line">	<span class="built_in">return</span> a + b</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>输出的汇编代码:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="string">""</span>.add t=1 size=19 args=0x18 locals=0x0</div><div class="line">	0x0000 00000 (hello.go:8)	TEXT	<span class="string">""</span>.add(SB), <span class="variable">$0</span>-24</div><div class="line">	0x0000 00000 (hello.go:8)	FUNCDATA	<span class="variable">$0</span>, gclocals·54241e171da8af6ae173d69da0236748(SB)</div><div class="line">	0x0000 00000 (hello.go:8)	FUNCDATA	<span class="variable">$1</span>, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)</div><div class="line">	0x0000 00000 (hello.go:9)	MOVQ	<span class="string">""</span>.b+16(FP), AX</div><div class="line">	0x0005 00005 (hello.go:9)	MOVQ	<span class="string">""</span>.a+8(FP), CX</div><div class="line">	0x000a 00010 (hello.go:9)	ADDQ	CX, AX</div><div class="line">	0x000d 00013 (hello.go:9)	MOVQ	AX, <span class="string">""</span>.~r2+24(FP)</div><div class="line">	0x0012 00018 (hello.go:9)	RET</div><div class="line">	0x0000 48 8b 44 24 10 48 8b 4c 24 08 48 01 c8 48 89 44  H.D$.H.L$.H..H.D</div><div class="line">	0x0010 24 18 c3                                         $..</div></pre></td></tr></table></figure>
@@ -288,7 +288,7 @@
   <span id="cover" class="cover hide"></span>
   <div id="modal-dialog" class="modal-dialog hide-dialog">
     <div class="modal-header">
-      <span id="close" class="btn-close">关闭</span>
+      <span id="close" class="btn-close">Close</span>
     </div>
     <hr>
     <div class="modal-body">

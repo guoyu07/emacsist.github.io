@@ -146,7 +146,7 @@
 
 
   <div id="toc" class="toc-article">
-    <strong class="toc-title">文章目录</strong>
+    <strong class="toc-title">Posts List</strong>
     <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#用-pg-dump-升级"><span class="toc-text">用 pg_dump 升级</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用-pg-upgrade-升级"><span class="toc-text">使用 pg_upgrade 升级</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应该选择哪个？"><span class="toc-text">应该选择哪个？</span></a></li></ol>
   </div>
 
@@ -210,7 +210,7 @@
 <p>从不同的重大版本升级PostgreSQL（例如，从9.1升级到9.3），基本上有三种方法：</p>
 <h2 id="用-pg-dump-升级"><a href="#用-pg-dump-升级" class="headerlink" title="用 pg_dump 升级"></a>用 pg_dump 升级</h2><p>如果可以的话，首先推荐的方法是使用新版本（9.3）进行二进制备份一个老（9.1）版本数据，然后在新版本创建的集群中恢复数据。</p>
 <p>这种途径，通常，是比较慢的，但是也是最实用的。使它进行得更加快的方法之一是，使用并发。为了并行备份任务，你可以这样子做：</p>
-<figure class="highlight brainfuck"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment">$</span> <span class="comment">pg_dump</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">format=directory</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">jobs=4</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">no</span><span class="literal">-</span><span class="comment">synchronized</span><span class="literal">-</span><span class="comment">snapshots</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">file=/path/to/mydump</span> <span class="comment">mydatabase</span></div></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ pg_dump <span class="attribute">--format</span>=directory <span class="attribute">--jobs</span>=4 --no-synchronized-snapshots <span class="attribute">--file</span>=/path/to/mydump mydatabase</div></pre></td></tr></table></figure>
 <p>你可以为每个数据库进行这样子的备份，并调整 <code>--jobs=4</code> 参数值到任何值（测试从2到CPU核心数，并看看哪个更快）。当然，在备份期间，没人应该连接到数据库，任何的修改将会导致备份中断（因为非安全选项 <code>--no-synchronized-snapshots</code>）</p>
 <p>之后，你可以使用<code>pg_restore</code>来恢复到新的实例中：</p>
 <figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ createdb &lt;options&gt; -T template0 mydatabase</div><div class="line">$ pg_restore --<span class="keyword">exit</span>-on-error --jobs=<span class="number">4</span> --dbname=mydatabase <span class="regexp">/path/</span>to<span class="regexp">/mydump</span></div></pre></td></tr></table></figure>
@@ -273,7 +273,7 @@
   <span id="cover" class="cover hide"></span>
   <div id="modal-dialog" class="modal-dialog hide-dialog">
     <div class="modal-header">
-      <span id="close" class="btn-close">关闭</span>
+      <span id="close" class="btn-close">Close</span>
     </div>
     <hr>
     <div class="modal-body">

@@ -146,7 +146,7 @@
 
 
   <div id="toc" class="toc-article">
-    <strong class="toc-title">文章目录</strong>
+    <strong class="toc-title">Posts List</strong>
     <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis-引发系统OOM-Killer"><span class="toc-text">Redis 引发系统OOM Killer</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原因"><span class="toc-text">原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#overcommit-memory-对fork的影响"><span class="toc-text">overcommit_memory 对fork的影响</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#overcommit-memory-0"><span class="toc-text">overcommit_memory = 0</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#overcommit-memory-1"><span class="toc-text">overcommit_memory = 1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#overcommit-memory-2"><span class="toc-text">overcommit_memory = 2</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决"><span class="toc-text">解决</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查找出系统中首先会被Kill的进程"><span class="toc-text">查找出系统中首先会被Kill的进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查看历史命令的执行时间"><span class="toc-text">查看历史命令的执行时间</span></a></li></ol>
   </div>
 
@@ -183,7 +183,7 @@
     
       <a class="tag-item" href="/tags/#redis">
         <span class="tag-name">redis</span>
-    <span class="tag-size">( 12 )</span>
+    <span class="tag-size">( 13 )</span>
     </a>
     
 
@@ -218,7 +218,7 @@
 <p>参考资料:</p>
 <p><a href="http://redis.io/topics/faq" target="_blank" rel="external">Redis FAQ</a><br><a href="http://ifeve.com/redis-faq/" target="_blank" rel="external">ifeve redis faq中文翻译</a></p>
 <h2 id="overcommit-memory-对fork的影响"><a href="#overcommit-memory-对fork的影响" class="headerlink" title="overcommit_memory 对fork的影响"></a>overcommit_memory 对fork的影响</h2><p>我们可以来做一个实验，来一步一步理解这个参数到fork的影响.<br>测试的环境是:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">┌─[sky@sky-linux] - [~] - [2016-09-06 02:43:37]</div><div class="line">└─[0] &lt;&gt; uname <span class="_">-a</span></div><div class="line">Linux sky-linux 3.19.0-32-generic <span class="comment">#37~14.04.1-Ubuntu SMP Thu Oct 22 09:41:40 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux</span></div><div class="line">┌─[sky@sky-linux] - [~] - [2016-09-06 02:46:14]</div><div class="line">└─[0] &lt;&gt; free -h </div><div class="line">             total       used       free     shared    buffers     cached</div><div class="line">Mem:           15G        10G       4.6G       750M       209M       3.8G</div><div class="line">-/+ buffers/cache:       7.0G       8.6G</div><div class="line">Swap:           0B         0B         0B</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">┌─[sky@sky-linux] - [~] - [2016-09-06 02:43:37]</div><div class="line">└─[0] &lt;&gt; uname -a</div><div class="line">Linux sky-linux 3.19.0-32-generic <span class="comment">#37~14.04.1-Ubuntu SMP Thu Oct 22 09:41:40 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux</span></div><div class="line">┌─[sky@sky-linux] - [~] - [2016-09-06 02:46:14]</div><div class="line">└─[0] &lt;&gt; free -h </div><div class="line">             total       used       free     shared    buffers     cached</div><div class="line">Mem:           15G        10G       4.6G       750M       209M       3.8G</div><div class="line">-/+ buffers/cache:       7.0G       8.6G</div><div class="line">Swap:           0B         0B         0B</div></pre></td></tr></table></figure>
 <p>可以看到，还有<code>8.6GB</code>空闲内存。默认的情况下，<code>overcommit_memory</code>的值是：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">┌─[sky@sky-linux] - [~] - [2016-09-06 02:47:16]</div><div class="line">└─[0] &lt;&gt; cat /proc/sys/vm/overcommit_memory </div><div class="line">0</div></pre></td></tr></table></figure>
 <p>即它是以试探式分配内存，如果不够的话，就直接拒绝该次的内存分配.</p>
@@ -259,7 +259,7 @@
 <p>执行完上面的命令后，查看</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dmesg -T</div></pre></td></tr></table></figure>
 <h2 id="查找出系统中首先会被Kill的进程"><a href="#查找出系统中首先会被Kill的进程" class="headerlink" title="查找出系统中首先会被Kill的进程"></a>查找出系统中首先会被Kill的进程</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dstat --top-oom</div></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> /proc/*/oom_score; <span class="keyword">do</span> pid=$(<span class="built_in">echo</span> <span class="string">"<span class="variable">$&#123;i&#125;</span>"</span> | cut <span class="_">-d</span>/ <span class="_">-f</span>3); <span class="built_in">echo</span> <span class="string">"oom_score=<span class="variable">$(cat "$&#123;i&#125;")</span>, PID=<span class="variable">$&#123;pid&#125;</span>, exe=<span class="variable">$(readlink -e /proc/$&#123;pid&#125;/exe)</span>"</span>; <span class="keyword">done</span> 2&gt; /dev/null | sort -rn -t, -k 1.11 | head -n 50</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> /proc/*/oom_score; <span class="keyword">do</span> pid=$(<span class="built_in">echo</span> <span class="string">"<span class="variable">$&#123;i&#125;</span>"</span> | cut -d/ -f3); <span class="built_in">echo</span> <span class="string">"oom_score=<span class="variable">$(cat "$&#123;i&#125;")</span>, PID=<span class="variable">$&#123;pid&#125;</span>, exe=<span class="variable">$(readlink -e /proc/$&#123;pid&#125;/exe)</span>"</span>; <span class="keyword">done</span> 2&gt; /dev/null | sort -rn -t, -k 1.11 | head -n 50</div></pre></td></tr></table></figure>
 <p><a href="http://laoxu.blog.51cto.com/4120547/1267097" target="_blank" rel="external">参考资料</a></p>
 <h2 id="查看历史命令的执行时间"><a href="#查看历史命令的执行时间" class="headerlink" title="查看历史命令的执行时间"></a>查看历史命令的执行时间</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">export</span> HISTTIMEFORMAT=<span class="string">"%d/%m/%y %T "</span></div></pre></td></tr></table></figure>
 <p>这有个问题，就是之前的历史命令，会统一为执行这个export的命令，然后之后的命令才会记录下时间.</p>
@@ -308,7 +308,7 @@
   <span id="cover" class="cover hide"></span>
   <div id="modal-dialog" class="modal-dialog hide-dialog">
     <div class="modal-header">
-      <span id="close" class="btn-close">关闭</span>
+      <span id="close" class="btn-close">Close</span>
     </div>
     <hr>
     <div class="modal-body">
