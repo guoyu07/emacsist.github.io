@@ -22,7 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2015/07/06/Redis与Java使用经验/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="Redis 中的数据类型 String——字符串 Hash——字典 List——列表 Set——集合 Sorted Set——有序集合  String (简单的 K-V 类型) 适合场景: 简单的 K-V 键值对.  Hash 结构 适合存储Java对象.Key就是对象有唯一标识, HashKey就是对象的属性标识, value就是属性的值.Object -&amp;gt; HashMap -&amp;gt; R">
-<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta property="og:updated_time" content="2017-06-29T11:19:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis与Java使用经验">
 <meta name="twitter:description" content="Redis 中的数据类型 String——字符串 Hash——字典 List——列表 Set——集合 Sorted Set——有序集合  String (简单的 K-V 类型) 适合场景: 简单的 K-V 键值对.  Hash 结构 适合存储Java对象.Key就是对象有唯一标识, HashKey就是对象的属性标识, value就是属性的值.Object -&amp;gt; HashMap -&amp;gt; R">
@@ -147,7 +147,7 @@
 
   <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis-中的数据类型"><span class="toc-text">Redis 中的数据类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#String-简单的-K-V-类型"><span class="toc-text">String (简单的 K-V 类型)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hash-结构"><span class="toc-text">Hash 结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#List-结构"><span class="toc-text">List 结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Set-集合"><span class="toc-text">Set 集合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Sorted-Set-排序集合"><span class="toc-text">Sorted Set 排序集合</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis-中的数据类型"><span class="toc-text">Redis 中的数据类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#String-简单的-K-V-类型"><span class="toc-text">String (简单的 K-V 类型)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hash-结构"><span class="toc-text">Hash 结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#List-结构"><span class="toc-text">List 结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Set-集合"><span class="toc-text">Set 集合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Sorted-Set-排序集合"><span class="toc-text">Sorted Set 排序集合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编码注意"><span class="toc-text">编码注意</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#多用-pipline"><span class="toc-text">多用 pipline</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#减小操作的粒度"><span class="toc-text">减小操作的粒度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除大-key"><span class="toc-text">删除大 key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#scan-注意"><span class="toc-text">scan 注意</span></a></li></ol></li></ol>
   </div>
 
 
@@ -178,7 +178,7 @@
     
       <a class="tag-item" href="/tags/#java">
         <span class="tag-name">java</span>
-    <span class="tag-size">( 111 )</span>
+    <span class="tag-size">( 114 )</span>
     </a>
     
       <a class="tag-item" href="/tags/#nosql">
@@ -235,6 +235,10 @@
 <p>特别提一下, 它是根据 <code>score</code> 来排序. 如果需要根据多个字段来进行排序的话, 可以在<code>score</code>里,逻辑上分配个多字段值.</p>
 <p>在这里, 以我在公司里的两个字段排序来举个例子.上面说到,一个排序是根据消息最新时间来排序, 还有一个是置顶. 置顶永远是最前面的.然后才是最新消息的排序.</p>
 <p>这里, 我使用了 <code>x.y</code> 的 <code>score</code> 方式来排序. 置顶时 <code>x=1</code>, 否则就是 <code>x=0</code>, 然后 <code>y</code> 就是最新消息的时间戳.这样子就可以实现两人个字段来排序的逻辑了.</p>
+<h2 id="编码注意"><a href="#编码注意" class="headerlink" title="编码注意"></a>编码注意</h2><h3 id="多用-pipline"><a href="#多用-pipline" class="headerlink" title="多用 pipline"></a>多用 pipline</h3><p>业务允许的话，尽可能将命令合并到一个 pipline</p>
+<h3 id="减小操作的粒度"><a href="#减小操作的粒度" class="headerlink" title="减小操作的粒度"></a>减小操作的粒度</h3><p>比如大 zset ，可以分批，小量小量地删除（删除操作，可以凌晨或业务空闲的时候处理）</p>
+<h3 id="删除大-key"><a href="#删除大-key" class="headerlink" title="删除大 key"></a>删除大 key</h3><p>在业务繁忙时，不要删除一个大 key ，可以临时 rename 这个 key，然后定时在凌晨相对空闲时才正式删除。</p>
+<h3 id="scan-注意"><a href="#scan-注意" class="headerlink" title="scan 注意"></a>scan 注意</h3><p>scan 的耗时与 count 的大小有非常重要的关系, count 的参数越大，耗时越多。</p>
 
                                 
     </div>
