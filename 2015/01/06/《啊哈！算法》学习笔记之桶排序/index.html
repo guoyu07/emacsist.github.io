@@ -146,7 +146,7 @@
 
 
   <div id="toc" class="toc-article">
-    <strong class="toc-title">Posts List</strong>
+    <strong class="toc-title">文章目录</strong>
     <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#时间复杂度：O-M-N"><span class="toc-text">时间复杂度：O(M+N)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java实现"><span class="toc-text">Java实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#个人总结"><span class="toc-text">个人总结</span></a></li></ol>
   </div>
 
@@ -202,7 +202,7 @@
     <div class="article-content">
         
                             <h2 id="时间复杂度：O-M-N"><a href="#时间复杂度：O-M-N" class="headerlink" title="时间复杂度：O(M+N)"></a>时间复杂度：O(M+N)</h2><p>M:桶的个数（也是该数值的最大数）<br>N:待排序个数</p>
-<h2 id="Java实现"><a href="#Java实现" class="headerlink" title="Java实现"></a>Java实现</h2><p>随便输入N个不大于M的数字，然后从小到大输出：（从大到小，作一下小修改即可）<br><figure class="highlight vbscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> static void main(<span class="built_in">String</span>[] args) &#123;</div><div class="line">    <span class="built_in">int</span> M= <span class="number">100</span>;</div><div class="line">    <span class="built_in">int</span> N = <span class="number">5</span>;</div><div class="line">    <span class="built_in">int</span>[] <span class="built_in">array</span> = <span class="keyword">new</span> <span class="built_in">int</span>[M+ <span class="number">1</span>];</div><div class="line">    Scanner scan = <span class="keyword">new</span> Scanner(System.<span class="keyword">in</span>);</div><div class="line">    <span class="built_in">int</span> <span class="keyword">in</span> = <span class="number">0</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; N; i++) &#123;</div><div class="line">        <span class="keyword">in</span> = scan.nextInt();</div><div class="line">        <span class="built_in">array</span>[<span class="keyword">in</span>] = <span class="built_in">array</span>[<span class="keyword">in</span>] + <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; <span class="built_in">array</span>.length; i++) &#123;</div><div class="line">        <span class="keyword">for</span> (<span class="built_in">int</span> j = <span class="number">0</span>; j &lt; <span class="built_in">array</span>[i]; j++) &#123;</div><div class="line">            System.out.println(i);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="Java实现"><a href="#Java实现" class="headerlink" title="Java实现"></a>Java实现</h2><p>随便输入N个不大于M的数字，然后从小到大输出：（从大到小，作一下小修改即可）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">public static void main(String[] args) &#123;</div><div class="line">    int M= 100;</div><div class="line">    int N = 5;</div><div class="line">    int[] array = new int[M+ 1];</div><div class="line">    Scanner scan = new Scanner(System.in);</div><div class="line">    int in = 0;</div><div class="line">    for (int i = 0; i &lt; N; i++) &#123;</div><div class="line">        in = scan.nextInt();</div><div class="line">        array[in] = array[in] + 1;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    for (int i = 0; i &lt; array.length; i++) &#123;</div><div class="line">        for (int j = 0; j &lt; array[i]; j++) &#123;</div><div class="line">            System.out.println(i);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <h2 id="个人总结"><a href="#个人总结" class="headerlink" title="个人总结"></a>个人总结</h2><p>这种算法适合于范围比较小的排序，并且是需要知道输入的最大值。不然就不适用了。</p>
 
                                 
@@ -249,7 +249,7 @@
   <span id="cover" class="cover hide"></span>
   <div id="modal-dialog" class="modal-dialog hide-dialog">
     <div class="modal-header">
-      <span id="close" class="btn-close">Close</span>
+      <span id="close" class="btn-close">关闭</span>
     </div>
     <hr>
     <div class="modal-body">

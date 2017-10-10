@@ -146,7 +146,7 @@
 
 
   <div id="toc" class="toc-article">
-    <strong class="toc-title">Posts List</strong>
+    <strong class="toc-title">文章目录</strong>
     <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是窗口函数"><span class="toc-text">什么是窗口函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#窗口函数的语法"><span class="toc-text">窗口函数的语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#典型的窗口函数用法"><span class="toc-text">典型的窗口函数用法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内置的窗口函数"><span class="toc-text">内置的窗口函数</span></a></li></ol>
   </div>
 
@@ -206,12 +206,12 @@
 <p>窗口函数提供跨行相关的当前查询行集执行计算的能力。仅当调用跟着OVER子句的聚集函数，作为窗口函数；否则它们作为常规的聚合函数。</p>
 <p>我个人的理解：窗口也是一种分组，但和 group by 的分组不同。窗口，可以提供分组之外，还可以执行对每个窗口进行计算。可以相像成是group by 后，然后对每个分组进行计算，而不像Group by ，只是单纯地分组。</p>
 </blockquote>
-<h2 id="窗口函数的语法"><a href="#窗口函数的语法" class="headerlink" title="窗口函数的语法"></a>窗口函数的语法</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">function_name ([expression [, expression ... ]]) OVER window_name</div><div class="line">function_name ([expression [, expression ... ]]) OVER ( <span class="name">window_definition</span> )</div><div class="line">function_name ( <span class="name">*</span> ) OVER window_name</div><div class="line">function_name ( <span class="name">*</span> ) OVER ( <span class="name">window_definition</span> )</div></pre></td></tr></table></figure>
+<h2 id="窗口函数的语法"><a href="#窗口函数的语法" class="headerlink" title="窗口函数的语法"></a>窗口函数的语法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">function_name ([expression [, expression ... ]]) OVER window_name</div><div class="line">function_name ([expression [, expression ... ]]) OVER ( window_definition )</div><div class="line">function_name ( * ) OVER window_name</div><div class="line">function_name ( * ) OVER ( window_definition )</div></pre></td></tr></table></figure>
 <blockquote>
 <p>窗口函数的调用总是包含一个OVER子句，即窗口函数的名称和参数。 该语法区别于普通函数或聚合功能。OVER子句决定究竟将 查询的行如何通过窗口函数拆分处理。OVER子句内的PARTITION BY分区指定 行划分成组，或分区，共享相同的PARTITION BY值。 对于每一行，窗口函数通过同一个分区作为当前行的行进行计算</p>
 <p>如果OVER不使用PARTITION BY时即代表整个表。</p>
 </blockquote>
-<h2 id="典型的窗口函数用法"><a href="#典型的窗口函数用法" class="headerlink" title="典型的窗口函数用法"></a>典型的窗口函数用法</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">select</span> <span class="keyword">path</span>, <span class="keyword">cost</span>, <span class="keyword">sum</span>(<span class="keyword">cost</span>) <span class="keyword">over</span> (<span class="keyword">partition</span> <span class="keyword">by</span> <span class="keyword">path</span> ) <span class="keyword">as</span> sum_cost <span class="keyword">from</span> tcost;</div></pre></td></tr></table></figure>
+<h2 id="典型的窗口函数用法"><a href="#典型的窗口函数用法" class="headerlink" title="典型的窗口函数用法"></a>典型的窗口函数用法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select path, cost, sum(cost) over (partition by path ) as sum_cost from tcost;</div></pre></td></tr></table></figure>
 <h2 id="内置的窗口函数"><a href="#内置的窗口函数" class="headerlink" title="内置的窗口函数"></a>内置的窗口函数</h2><table>
 <thead>
 <tr>
@@ -323,7 +323,7 @@
   <span id="cover" class="cover hide"></span>
   <div id="modal-dialog" class="modal-dialog hide-dialog">
     <div class="modal-header">
-      <span id="close" class="btn-close">Close</span>
+      <span id="close" class="btn-close">关闭</span>
     </div>
     <hr>
     <div class="modal-body">

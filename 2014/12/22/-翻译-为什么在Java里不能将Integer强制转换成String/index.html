@@ -146,7 +146,7 @@
 
 
   <div id="toc" class="toc-article">
-    <strong class="toc-title">Posts List</strong>
+    <strong class="toc-title">文章目录</strong>
     <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#为何Integer不能转换为String"><span class="toc-text">为何Integer不能转换为String</span></a></li></ol>
   </div>
 
@@ -178,7 +178,7 @@
     
       <a class="tag-item" href="/tags/#java">
         <span class="tag-name">java</span>
-    <span class="tag-size">( 114 )</span>
+    <span class="tag-size">( 116 )</span>
     </a>
     
       <a class="tag-item" href="/tags/#java 基础学习">
@@ -203,9 +203,9 @@
         
                             <h2 id="为何Integer不能转换为String"><a href="#为何Integer不能转换为String" class="headerlink" title="为何Integer不能转换为String"></a>为何Integer不能转换为String</h2><p><a href="http://stackoverflow.com/a/8973685/3815425" target="_blank" rel="external">原文</a></p>
 <p>因为 <code>String</code> 和 <code>Integer</code> 不是在同一个对象阶层。</p>
-<figure class="highlight vbnet"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">      <span class="built_in">Object</span></div><div class="line">     /      \</div><div class="line">    /        \</div><div class="line"><span class="built_in">String</span>     <span class="built_in">Integer</span></div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">      Object</div><div class="line">     /      \</div><div class="line">    /        \</div><div class="line">String     Integer</div></pre></td></tr></table></figure>
 <p>当你尝试强制转换时，仅仅会在同一个对象阶层转换。比如：</p>
-<figure class="highlight crystal"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">     Object</div><div class="line">     /</div><div class="line">    <span class="regexp">/</span></div><div class="line">   A</div><div class="line">  /</div><div class="line">/</div><div class="line">B</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">     Object</div><div class="line">     /</div><div class="line">    /</div><div class="line">   A</div><div class="line">  /</div><div class="line">/</div><div class="line">B</div></pre></td></tr></table></figure>
 <p>在这种情况，<code>(A)objB</code> 或者 <code>(Object)objB</code> 或者 <code>(Object)objA</code> 可以进行转换。</p>
 <p>正如其他人已经提到，将<code>integer</code>转换成<code>String</code>可以使用以下方法：</p>
 <p>基本类型的整型时使用：<code>String.valueOf(integer)</code>或者<code>Integer.toString(integer)</code> 来转换成<code>String</code>。<br><code>Integer</code>对象型时使用：<code>Integer.toString()</code>转换成<code>String</code></p>
@@ -256,7 +256,7 @@
   <span id="cover" class="cover hide"></span>
   <div id="modal-dialog" class="modal-dialog hide-dialog">
     <div class="modal-header">
-      <span id="close" class="btn-close">Close</span>
+      <span id="close" class="btn-close">关闭</span>
     </div>
     <hr>
     <div class="modal-body">
