@@ -15,17 +15,17 @@
     <meta name="keywords" content="rabbitmq,cluster," />
   
 
-  <meta name="description" content="创建集群 先把所有的插件都禁用先，避免因插件的端口问题导致集群启动不了.  集群节点启动集群节点 1RABBITMQ_NODE_PORT=5672 RABBITMQ_NODENAME=master /ihome/rabbitmq/rabbitmq_server-3.6.1/sbin/rabbitmq-server -detached 加入一个磁盘集群节点1234567891011-- 这样子，默认">
+  <meta name="description" content="创建集群 先把所有的插件都禁用先，避免因插件的端口问题导致集群启动不了.  默认插件监听端口:rabbit_stomp_listenersup:::61613rabbit_mqtt_listenersup:::1883rabbitmq_management:::15672 1234rabbitmq-plugins -n node1@localhost listrabbitmq-plugins -n">
 <meta name="keywords" content="rabbitmq,cluster">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RabbitMQ 3.6 集群使用">
 <meta property="og:url" content="https://emacsist.github.io/2016/04/20/RabbitMQ-3-6-集群使用/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="创建集群 先把所有的插件都禁用先，避免因插件的端口问题导致集群启动不了.  集群节点启动集群节点 1RABBITMQ_NODE_PORT=5672 RABBITMQ_NODENAME=master /ihome/rabbitmq/rabbitmq_server-3.6.1/sbin/rabbitmq-server -detached 加入一个磁盘集群节点1234567891011-- 这样子，默认">
-<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta property="og:description" content="创建集群 先把所有的插件都禁用先，避免因插件的端口问题导致集群启动不了.  默认插件监听端口:rabbit_stomp_listenersup:::61613rabbit_mqtt_listenersup:::1883rabbitmq_management:::15672 1234rabbitmq-plugins -n node1@localhost listrabbitmq-plugins -n">
+<meta property="og:updated_time" content="2017-10-25T07:38:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RabbitMQ 3.6 集群使用">
-<meta name="twitter:description" content="创建集群 先把所有的插件都禁用先，避免因插件的端口问题导致集群启动不了.  集群节点启动集群节点 1RABBITMQ_NODE_PORT=5672 RABBITMQ_NODENAME=master /ihome/rabbitmq/rabbitmq_server-3.6.1/sbin/rabbitmq-server -detached 加入一个磁盘集群节点1234567891011-- 这样子，默认">
+<meta name="twitter:description" content="创建集群 先把所有的插件都禁用先，避免因插件的端口问题导致集群启动不了.  默认插件监听端口:rabbit_stomp_listenersup:::61613rabbit_mqtt_listenersup:::1883rabbitmq_management:::15672 1234rabbitmq-plugins -n node1@localhost listrabbitmq-plugins -n">
 
   
 
@@ -183,7 +183,7 @@
     
       <a class="tag-item" href="/tags/#rabbitmq">
         <span class="tag-name">rabbitmq</span>
-    <span class="tag-size">( 19 )</span>
+    <span class="tag-size">( 20 )</span>
     </a>
     
 
@@ -204,6 +204,8 @@
                             <h2 id="创建集群"><a href="#创建集群" class="headerlink" title="创建集群"></a>创建集群</h2><blockquote>
 <p>先把所有的插件都禁用先，避免因插件的端口问题导致集群启动不了.</p>
 </blockquote>
+<p>默认插件监听端口:<br>rabbit_stomp_listener<em>sup</em>:::61613<br>rabbit_mqtt_listener<em>sup</em>:::1883<br>rabbitmq_management:::15672</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">rabbitmq-plugins -n node1@localhost list</div><div class="line">rabbitmq-plugins -n node1@localhost <span class="built_in">disable</span> rabbitmq_management</div><div class="line">rabbitmq-plugins -n node1@localhost <span class="built_in">disable</span> rabbitmq_mqtt</div><div class="line">rabbitmq-plugins -n node1@localhost <span class="built_in">disable</span> rabbitmq_stomp</div></pre></td></tr></table></figure>
 <h3 id="集群节点"><a href="#集群节点" class="headerlink" title="集群节点"></a>集群节点</h3><p>启动集群节点</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">RABBITMQ_NODE_PORT=5672 RABBITMQ_NODENAME=master /ihome/rabbitmq/rabbitmq_server-3.6.1/sbin/rabbitmq-server -detached</div></pre></td></tr></table></figure>
 <h4 id="加入一个磁盘集群节点"><a href="#加入一个磁盘集群节点" class="headerlink" title="加入一个磁盘集群节点"></a>加入一个磁盘集群节点</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">-- 这样子，默认的节点名就是 node1@你的机器名 </div><div class="line">RABBITMQ_NODE_PORT=5673 RABBITMQ_NODENAME=node1 /ihome/rabbitmq/rabbitmq_server-3.6.1/sbin/rabbitmq-server -detached</div><div class="line"></div><div class="line">/ihome/rabbitmq/rabbitmq_server-3.6.1/sbin/rabbitmqctl -n node1 stop_app</div><div class="line">/ihome/rabbitmq/rabbitmq_server-3.6.1/sbin/rabbitmqctl -n node1 reset</div><div class="line"></div><div class="line">-- 第二个参数 master@sky-linux 是要填写完整的节点名</div><div class="line">/ihome/rabbitmq/rabbitmq_server-3.6.1/sbin/rabbitmqctl -n node1 join_cluster master@sky-linux</div><div class="line"></div><div class="line">-- 启动node1节点</div><div class="line">/ihome/rabbitmq/rabbitmq_server-3.6.1/sbin/rabbitmqctl -n node1 start_app</div></pre></td></tr></table></figure>
