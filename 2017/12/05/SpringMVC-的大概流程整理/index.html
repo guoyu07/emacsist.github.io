@@ -22,18 +22,18 @@
 <meta property="og:url" content="https://emacsist.github.io/2017/12/05/SpringMVC-的大概流程整理/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="入口: 从 Tomcat 到 SpringMVC 的 DispatcherServletorg.apache.catalina.core.StandardWrapperValve: 第一步: 获取 wrapper 容器 StandardWrapper wrapper = (StandardWrapper) getContainer(); 第二步: 根据容器 wrapper 获取相应的 servle">
-<meta property="og:image" content="https://emacsist.github.io/img/B884E8BDA5960496520F01C3FA9CBEFB.jpg%20=1073x512">
+<meta property="og:image" content="https://emacsist.github.io/img/B884E8BDA5960496520F01C3FA9CBEFB.jpg">
 <meta property="og:image" content="https://emacsist.github.io/img/1A90C5643C19D3356F7D44FA5AAC4DA2.jpg%20=1286x637">
-<meta property="og:image" content="https://emacsist.github.io/img/49A7CE21EE7083DB5879CC103E1CC447.jpg%20=1367x226">
-<meta property="og:image" content="https://emacsist.github.io/img/F639DD8F3C3F6A3BFED52277EE8AF0E4.jpg%20=1487x295">
-<meta property="og:image" content="https://emacsist.github.io/img/161109E05B54D187B02EC23C29C15B52.jpg%20=1579x101">
-<meta property="og:image" content="https://emacsist.github.io/img/07F1BDCD995F72D3E83D39DC2DF2C19F.jpg%20=553x82">
-<meta property="og:image" content="https://emacsist.github.io/img/DEEDD44A78BB8A15B20E91C57E6BF409.jpg%20=935x351">
-<meta property="og:updated_time" content="2017-12-05T08:45:51.633Z">
+<meta property="og:image" content="https://emacsist.github.io/img/49A7CE21EE7083DB5879CC103E1CC447.jpg">
+<meta property="og:image" content="https://emacsist.github.io/img/F639DD8F3C3F6A3BFED52277EE8AF0E4.jpg">
+<meta property="og:image" content="https://emacsist.github.io/img/161109E05B54D187B02EC23C29C15B52.jpg">
+<meta property="og:image" content="https://emacsist.github.io/img/07F1BDCD995F72D3E83D39DC2DF2C19F.jpg">
+<meta property="og:image" content="https://emacsist.github.io/img/DEEDD44A78BB8A15B20E91C57E6BF409.jpg">
+<meta property="og:updated_time" content="2017-12-05T08:58:35.050Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringMVC 的大概流程整理">
 <meta name="twitter:description" content="入口: 从 Tomcat 到 SpringMVC 的 DispatcherServletorg.apache.catalina.core.StandardWrapperValve: 第一步: 获取 wrapper 容器 StandardWrapper wrapper = (StandardWrapper) getContainer(); 第二步: 根据容器 wrapper 获取相应的 servle">
-<meta name="twitter:image" content="https://emacsist.github.io/img/B884E8BDA5960496520F01C3FA9CBEFB.jpg%20=1073x512">
+<meta name="twitter:image" content="https://emacsist.github.io/img/B884E8BDA5960496520F01C3FA9CBEFB.jpg">
 
   
 
@@ -154,7 +154,7 @@
 
 
   <div id="toc" class="toc-article">
-    <strong class="toc-title">文章目录</strong>
+    <strong class="toc-title">Posts List</strong>
     <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#入口"><span class="toc-text">入口:</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#从-Tomcat-到-SpringMVC-的-DispatcherServlet"><span class="toc-text">从 Tomcat 到 SpringMVC 的 DispatcherServlet</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#从-DispatcherServlet-到-Controller"><span class="toc-text">从 DispatcherServlet 到 Controller</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#第一步-判断是不是-checkMultipart-即上传文件类型的-Request"><span class="toc-text">第一步: 判断是不是 checkMultipart (即上传文件类型的 Request)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第二步-根据Request对象查找相应的-Handler"><span class="toc-text">第二步: 根据Request对象查找相应的 Handler</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#查找-HandlerMethod"><span class="toc-text">查找 HandlerMethod</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第三步-根据-MethodHanlder-获取-HandlerExecutionChain-即-handler-的调用链"><span class="toc-text">第三步: 根据 MethodHanlder 获取 HandlerExecutionChain , 即 handler 的调用链</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#第四步-获取-HandlerAdapter"><span class="toc-text">第四步: 获取 HandlerAdapter</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#第五步-应用-interceptors"><span class="toc-text">第五步: 应用 interceptors</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#第六步-实际开始调用-Handler"><span class="toc-text">第六步: 实际开始调用 Handler</span></a></li></ol>
   </div>
 
@@ -209,7 +209,7 @@
 
     <div class="article-content">
         
-                            <h1 id="入口"><a href="#入口" class="headerlink" title="入口:"></a>入口:</h1><p><img src="/img/B884E8BDA5960496520F01C3FA9CBEFB.jpg =1073x512" alt="IMAGE"></p>
+                            <h1 id="入口"><a href="#入口" class="headerlink" title="入口:"></a>入口:</h1><p><img src="/img/B884E8BDA5960496520F01C3FA9CBEFB.jpg" alt="IMAGE"></p>
 <h1 id="从-Tomcat-到-SpringMVC-的-DispatcherServlet"><a href="#从-Tomcat-到-SpringMVC-的-DispatcherServlet" class="headerlink" title="从 Tomcat 到 SpringMVC 的 DispatcherServlet"></a>从 Tomcat 到 SpringMVC 的 DispatcherServlet</h1><p><code>org.apache.catalina.core.StandardWrapperValve</code>:</p>
 <p>第一步: 获取 <code>wrapper</code> 容器</p>
 <p><code>StandardWrapper wrapper = (StandardWrapper) getContainer();</code></p>
@@ -244,14 +244,14 @@
 <h2 id="第三步-根据-MethodHanlder-获取-HandlerExecutionChain-即-handler-的调用链"><a href="#第三步-根据-MethodHanlder-获取-HandlerExecutionChain-即-handler-的调用链" class="headerlink" title="第三步: 根据 MethodHanlder 获取 HandlerExecutionChain , 即 handler 的调用链"></a>第三步: 根据 MethodHanlder 获取 HandlerExecutionChain , 即 handler 的调用链</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">protected</span> HandlerExecutionChain <span class="title">getHandlerExecutionChain</span><span class="params">(Object handler, HttpServletRequest request)</span> </span>&#123;</div><div class="line">    HandlerExecutionChain chain = (handler <span class="keyword">instanceof</span> HandlerExecutionChain ?</div><div class="line">            (HandlerExecutionChain) handler : <span class="keyword">new</span> HandlerExecutionChain(handler));</div><div class="line"></div><div class="line">    String lookupPath = <span class="keyword">this</span>.urlPathHelper.getLookupPathForRequest(request);</div><div class="line">    <span class="keyword">for</span> (HandlerInterceptor interceptor : <span class="keyword">this</span>.adaptedInterceptors) &#123;</div><div class="line">        <span class="keyword">if</span> (interceptor <span class="keyword">instanceof</span> MappedInterceptor) &#123;</div><div class="line">            MappedInterceptor mappedInterceptor = (MappedInterceptor) interceptor;</div><div class="line">            <span class="keyword">if</span> (mappedInterceptor.matches(lookupPath, <span class="keyword">this</span>.pathMatcher)) &#123;</div><div class="line">                chain.addInterceptor(mappedInterceptor.getInterceptor());</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span> &#123;</div><div class="line">            chain.addInterceptor(interceptor);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> chain;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>可以看到, 是根据相应的请求 URL 来获取相应的 <code>Interceptor</code> 拦截器, 并设置到调用链对象中.</p>
 <p>例子这里只有2个 interceptor</p>
-<p><img src="/img/49A7CE21EE7083DB5879CC103E1CC447.jpg =1367x226" alt="IMAGE"></p>
+<p><img src="/img/49A7CE21EE7083DB5879CC103E1CC447.jpg" alt="IMAGE"></p>
 <p>注意, Inteceptor 还分区很多类型的. 例如有:</p>
-<p><img src="/img/F639DD8F3C3F6A3BFED52277EE8AF0E4.jpg =1487x295" alt="IMAGE"></p>
+<p><img src="/img/F639DD8F3C3F6A3BFED52277EE8AF0E4.jpg" alt="IMAGE"></p>
 <p>可以看到上面的源码, 如果是 <code>MappedInterceptor</code> 类型的, 它还要匹配该请求的 URL 是否满足该 Interceptor 的条件, 只有满足条件的, 才会将它加到该 Handler 的调用链中.</p>
 <p>完成后, 可以看到调用链的对象已经设置好了</p>
-<p><img src="/img/161109E05B54D187B02EC23C29C15B52.jpg =1579x101" alt="IMAGE"></p>
+<p><img src="/img/161109E05B54D187B02EC23C29C15B52.jpg" alt="IMAGE"></p>
 <h1 id="第四步-获取-HandlerAdapter"><a href="#第四步-获取-HandlerAdapter" class="headerlink" title="第四步: 获取 HandlerAdapter"></a>第四步: 获取 HandlerAdapter</h1><p>默认情况下, 有三种<br><code>private List&lt;HandlerAdapter&gt; handlerAdapters;</code></p>
-<p><img src="/img/07F1BDCD995F72D3E83D39DC2DF2C19F.jpg =553x82" alt="IMAGE"></p>
+<p><img src="/img/07F1BDCD995F72D3E83D39DC2DF2C19F.jpg" alt="IMAGE"></p>
 <h1 id="第五步-应用-interceptors"><a href="#第五步-应用-interceptors" class="headerlink" title="第五步: 应用 interceptors"></a>第五步: 应用 interceptors</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">applyPreHandle</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">    HandlerInterceptor[] interceptors = getInterceptors();</div><div class="line">    <span class="keyword">if</span> (!ObjectUtils.isEmpty(interceptors)) &#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; interceptors.length; i++) &#123;</div><div class="line">            HandlerInterceptor interceptor = interceptors[i];</div><div class="line">            <span class="keyword">if</span> (!interceptor.preHandle(request, response, <span class="keyword">this</span>.handler)) &#123;</div><div class="line">                triggerAfterCompletion(request, response, <span class="keyword">null</span>);</div><div class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">this</span>.interceptorIndex = i;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>如果有返回 false 的, 表示中断了. 返回 true 表示继续向下执行.</p>
 <h1 id="第六步-实际开始调用-Handler"><a href="#第六步-实际开始调用-Handler" class="headerlink" title="第六步: 实际开始调用 Handler"></a>第六步: 实际开始调用 Handler</h1><p><code>protected ModelAndView handleInternal(HttpServletRequest request, HttpServletResponse response, HandlerMethod handlerMethod)</code></p>
@@ -274,7 +274,7 @@
 <p>根据所注册的 <code>argumentResolvers</code> 来判断当前位置的参数, 是否被相应的 <code>argumentResolvers</code> 所支持解析. 如果匹配的话, 则会调用它来进行参数解析.</p>
 <p>最终会调用 <code>ServletRequestMethodArgumentResolver.resolveArgument()</code> 方法来解析参数.</p>
 <p>所有的参数如果都正确的解析完后, 就会真正调用我们自己的 Controller 的相应的方法了.</p>
-<p><img src="/img/DEEDD44A78BB8A15B20E91C57E6BF409.jpg =935x351" alt="IMAGE"></p>
+<p><img src="/img/DEEDD44A78BB8A15B20E91C57E6BF409.jpg" alt="IMAGE"></p>
 
                                 
     </div>
@@ -320,7 +320,7 @@
   <span id="cover" class="cover hide"></span>
   <div id="modal-dialog" class="modal-dialog hide-dialog">
     <div class="modal-header">
-      <span id="close" class="btn-close">关闭</span>
+      <span id="close" class="btn-close">Close</span>
     </div>
     <hr>
     <div class="modal-body">
