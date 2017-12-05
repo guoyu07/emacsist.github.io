@@ -22,7 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2015/06/23/《实战Java虚拟机》学习笔记之常用Java虚拟机参数/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="跟踪垃圾回收-XX:+PrintGC例子日志样本： 1[GC 4793K-&amp;gt;377K(15872K), 0.0006926 secs] 表示当前使用了4793K,GC后，使用量变为377K，最大可用为15872K -XX:+PrintGCDetails 格式： [名称:当前某区大小-&amp;gt;GC后某区大小（一共可用某区大小）  GC时间跟踪 -XX:+PrintGCTimeStamps  例">
-<meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
+<meta property="og:updated_time" content="2017-11-17T06:41:23.425Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《实战Java虚拟机》学习笔记之常用Java虚拟机参数">
 <meta name="twitter:description" content="跟踪垃圾回收-XX:+PrintGC例子日志样本： 1[GC 4793K-&amp;gt;377K(15872K), 0.0006926 secs] 表示当前使用了4793K,GC后，使用量变为377K，最大可用为15872K -XX:+PrintGCDetails 格式： [名称:当前某区大小-&amp;gt;GC后某区大小（一共可用某区大小）  GC时间跟踪 -XX:+PrintGCTimeStamps  例">
@@ -147,7 +147,7 @@
 
   <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#跟踪垃圾回收"><span class="toc-text">跟踪垃圾回收</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#XX-PrintGC"><span class="toc-text">-XX:+PrintGC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XX-PrintGCDetails"><span class="toc-text">-XX:+PrintGCDetails</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GC时间跟踪"><span class="toc-text">GC时间跟踪</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#指定GC日志到某路径"><span class="toc-text">指定GC日志到某路径</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看GC时详细堆信息"><span class="toc-text">查看GC时详细堆信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看应用程序执行时间和停顿时间"><span class="toc-text">查看应用程序执行时间和停顿时间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看虚拟机引用信息"><span class="toc-text">查看虚拟机引用信息</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类的加载和卸载跟踪"><span class="toc-text">类的加载和卸载跟踪</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查看虚拟机参数"><span class="toc-text">查看虚拟机参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#堆的配置"><span class="toc-text">堆的配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#最大堆和初始堆设置"><span class="toc-text">最大堆和初始堆设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#新生代大小"><span class="toc-text">新生代大小</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#堆溢出处理"><span class="toc-text">堆溢出处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#非堆区"><span class="toc-text">非堆区</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#方法区（永久代）-JDK-1-8前"><span class="toc-text">方法区（永久代）[JDK 1.8前]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#元数据区-JDK-1-8-及之后"><span class="toc-text">元数据区[JDK 1.8 及之后]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#直接堆内存配置"><span class="toc-text">直接堆内存配置</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#跟踪垃圾回收"><span class="toc-text">跟踪垃圾回收</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#XX-PrintGC"><span class="toc-text">-XX:+PrintGC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XX-PrintGCDetails"><span class="toc-text">-XX:+PrintGCDetails</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GC时间跟踪"><span class="toc-text">GC时间跟踪</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#指定GC日志到某路径"><span class="toc-text">指定GC日志到某路径</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看GC时详细堆信息"><span class="toc-text">查看GC时详细堆信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看应用程序执行时间和停顿时间"><span class="toc-text">查看应用程序执行时间和停顿时间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看虚拟机引用信息"><span class="toc-text">查看虚拟机引用信息</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类的加载和卸载跟踪"><span class="toc-text">类的加载和卸载跟踪</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查看虚拟机参数"><span class="toc-text">查看虚拟机参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#堆的配置"><span class="toc-text">堆的配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#最大堆和初始堆设置"><span class="toc-text">最大堆和初始堆设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#新生代大小"><span class="toc-text">新生代大小</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#堆溢出处理"><span class="toc-text">堆溢出处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#非堆区"><span class="toc-text">非堆区</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#codeCache-区"><span class="toc-text">codeCache 区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法区（永久代）-JDK-1-8前"><span class="toc-text">方法区（永久代）[JDK 1.8前]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#元数据区-JDK-1-8-及之后"><span class="toc-text">元数据区[JDK 1.8 及之后]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#直接堆内存配置"><span class="toc-text">直接堆内存配置</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#更新"><span class="toc-text">更新</span></a>
   </div>
 
 
@@ -338,7 +338,10 @@
 <p>“-XX:OnOutOfMemoryError=/path/to/commnd.sh %p”</p>
 </blockquote>
 <p>注意：写法是双引号包括整个参数。%p 表示进程号</p>
-<h2 id="非堆区"><a href="#非堆区" class="headerlink" title="非堆区"></a>非堆区</h2><h3 id="方法区（永久代）-JDK-1-8前"><a href="#方法区（永久代）-JDK-1-8前" class="headerlink" title="方法区（永久代）[JDK 1.8前]"></a>方法区（永久代）[JDK 1.8前]</h3><ul>
+<h2 id="非堆区"><a href="#非堆区" class="headerlink" title="非堆区"></a>非堆区</h2><h3 id="codeCache-区"><a href="#codeCache-区" class="headerlink" title="codeCache 区"></a>codeCache 区</h3><p><a href="http://m.blog.csdn.net/yandaonan/article/details/50844806?from=groupmessage" target="_blank" rel="external">参考 blog</a></p>
+<p>设置 codeCache 区的内存大小</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-XX:ReservedCodeCacheSize=256M</div></pre></td></tr></table></figure>
+<h3 id="方法区（永久代）-JDK-1-8前"><a href="#方法区（永久代）-JDK-1-8前" class="headerlink" title="方法区（永久代）[JDK 1.8前]"></a>方法区（永久代）[JDK 1.8前]</h3><ul>
 <li><code>-XX:PermSize</code>：初始永久区大小</li>
 </ul>
 <blockquote>
@@ -366,6 +369,8 @@
 <h3 id="直接堆内存配置"><a href="#直接堆内存配置" class="headerlink" title="直接堆内存配置"></a>直接堆内存配置</h3><ul>
 <li><code>-XX:MaxDirectMemorySize</code>: 最大可用直接内存。如果不设置，默认值为最大堆空间，即<code>-Xmx</code>的值。</li>
 </ul>
+<h1 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h1><p>在网上看到一个图非常好, 这里引用一下:</p>
+<p><a href="http://javahonk.com/how-many-types-memory-areas-allocated-by-jvm/" target="_blank" rel="external">原文 http://javahonk.com/how-many-types-memory-areas-allocated-by-jvm/</a><br><a href="/img/JVM_Structure.png">img</a></p>
 
                                 
     </div>
