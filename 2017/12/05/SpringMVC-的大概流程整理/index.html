@@ -23,13 +23,13 @@
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="入口: 从 Tomcat 到 SpringMVC 的 DispatcherServletorg.apache.catalina.core.StandardWrapperValve: 第一步: 获取 wrapper 容器 StandardWrapper wrapper = (StandardWrapper) getContainer(); 第二步: 根据容器 wrapper 获取相应的 servle">
 <meta property="og:image" content="https://emacsist.github.io/img/B884E8BDA5960496520F01C3FA9CBEFB.jpg">
-<meta property="og:image" content="https://emacsist.github.io/img/1A90C5643C19D3356F7D44FA5AAC4DA2.jpg%20=1286x637">
+<meta property="og:image" content="https://emacsist.github.io/img/1A90C5643C19D3356F7D44FA5AAC4DA2.jpg">
 <meta property="og:image" content="https://emacsist.github.io/img/49A7CE21EE7083DB5879CC103E1CC447.jpg">
 <meta property="og:image" content="https://emacsist.github.io/img/F639DD8F3C3F6A3BFED52277EE8AF0E4.jpg">
 <meta property="og:image" content="https://emacsist.github.io/img/161109E05B54D187B02EC23C29C15B52.jpg">
 <meta property="og:image" content="https://emacsist.github.io/img/07F1BDCD995F72D3E83D39DC2DF2C19F.jpg">
 <meta property="og:image" content="https://emacsist.github.io/img/DEEDD44A78BB8A15B20E91C57E6BF409.jpg">
-<meta property="og:updated_time" content="2017-12-05T08:58:35.050Z">
+<meta property="og:updated_time" content="2017-12-11T02:58:38.113Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringMVC 的大概流程整理">
 <meta name="twitter:description" content="入口: 从 Tomcat 到 SpringMVC 的 DispatcherServletorg.apache.catalina.core.StandardWrapperValve: 第一步: 获取 wrapper 容器 StandardWrapper wrapper = (StandardWrapper) getContainer(); 第二步: 根据容器 wrapper 获取相应的 servle">
@@ -154,7 +154,7 @@
 
 
   <div id="toc" class="toc-article">
-    <strong class="toc-title">Posts List</strong>
+    <strong class="toc-title">文章目录</strong>
     <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#入口"><span class="toc-text">入口:</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#从-Tomcat-到-SpringMVC-的-DispatcherServlet"><span class="toc-text">从 Tomcat 到 SpringMVC 的 DispatcherServlet</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#从-DispatcherServlet-到-Controller"><span class="toc-text">从 DispatcherServlet 到 Controller</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#第一步-判断是不是-checkMultipart-即上传文件类型的-Request"><span class="toc-text">第一步: 判断是不是 checkMultipart (即上传文件类型的 Request)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第二步-根据Request对象查找相应的-Handler"><span class="toc-text">第二步: 根据Request对象查找相应的 Handler</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#查找-HandlerMethod"><span class="toc-text">查找 HandlerMethod</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第三步-根据-MethodHanlder-获取-HandlerExecutionChain-即-handler-的调用链"><span class="toc-text">第三步: 根据 MethodHanlder 获取 HandlerExecutionChain , 即 handler 的调用链</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#第四步-获取-HandlerAdapter"><span class="toc-text">第四步: 获取 HandlerAdapter</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#第五步-应用-interceptors"><span class="toc-text">第五步: 应用 interceptors</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#第六步-实际开始调用-Handler"><span class="toc-text">第六步: 实际开始调用 Handler</span></a></li></ol>
   </div>
 
@@ -222,7 +222,7 @@
 <p><code>filterChain.doFilter(request.getRequest(), response.getResponse());</code></p>
 <p>第五步: 根据调用链来执行当前的 filter</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">internalDoFilter</span><span class="params">(ServletRequest request, ServletResponse response)</span></span>&#123;</div><div class="line">    ...</div><div class="line">    filter.doFilter(request, response, <span class="keyword">this</span>);</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p><img src="/img/1A90C5643C19D3356F7D44FA5AAC4DA2.jpg =1286x637" alt="IMAGE"></p>
+<p><img src="/img/1A90C5643C19D3356F7D44FA5AAC4DA2.jpg" alt="IMAGE"></p>
 <p>可以看到, 当前有2个 filter ,然后它会按顺序, 从上到下依次执行相应的 filter </p>
 <p>第六步: filter 执行完后, 就开始执行相应的 servlet 了.</p>
 <p><code>servlet.service(request, response);</code></p>
@@ -320,7 +320,7 @@
   <span id="cover" class="cover hide"></span>
   <div id="modal-dialog" class="modal-dialog hide-dialog">
     <div class="modal-header">
-      <span id="close" class="btn-close">Close</span>
+      <span id="close" class="btn-close">关闭</span>
     </div>
     <hr>
     <div class="modal-body">
