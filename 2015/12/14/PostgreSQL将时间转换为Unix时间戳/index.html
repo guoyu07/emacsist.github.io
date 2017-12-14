@@ -212,8 +212,32 @@
 </blockquote>
 <p>这个在PostgreSQL里，有个时间函数，只不过可能没有MySQL的<code>unix_timestamp()</code>这么方便，但功能是一样的。PostgreSQL的函数，灵活性比较大（灵活的言外之意，就是复杂~~~哈哈）</p>
 <p>废话就不多说了，直接上码示例</p>
-<h2 id="创建一张示例表"><a href="#创建一张示例表" class="headerlink" title="创建一张示例表"></a>创建一张示例表</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">postgres=<span class="comment"># create table ttt (dt timestamptz);</span></div><div class="line">CREATE TABLE</div><div class="line"></div><div class="line">postgres=<span class="comment"># insert into ttt values ('2015-11-17 15:31:36.966+08');</span></div><div class="line">INSERT 0 1</div></pre></td></tr></table></figure>
-<h2 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">postgres=<span class="comment"># select * from ttt;</span></div><div class="line">             dt</div><div class="line">----------------------------</div><div class="line"> 2015-11-17 15:31:36.966+08</div><div class="line">(1 row)</div><div class="line"></div><div class="line">postgres=<span class="comment"># select (date_part('epoch', dt)) from ttt;</span></div><div class="line">   date_part</div><div class="line">----------------</div><div class="line"> 1447745496.966</div><div class="line">(1 row)</div><div class="line"></div><div class="line">postgres=<span class="comment"># select (date_part('epoch', dt))::bigint from ttt;</span></div><div class="line"> date_part</div><div class="line">------------</div><div class="line"> 1447745497</div><div class="line">(1 row)</div><div class="line"></div><div class="line">postgres=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<h2 id="创建一张示例表"><a href="#创建一张示例表" class="headerlink" title="创建一张示例表"></a>创建一张示例表</h2><pre><code class="bash">postgres=# create table ttt (dt timestamptz);
+CREATE TABLE
+
+postgres=# insert into ttt values (&#39;2015-11-17 15:31:36.966+08&#39;);
+INSERT 0 1
+</code></pre>
+<h2 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h2><pre><code class="bash">postgres=# select * from ttt;
+             dt
+----------------------------
+ 2015-11-17 15:31:36.966+08
+(1 row)
+
+postgres=# select (date_part(&#39;epoch&#39;, dt)) from ttt;
+   date_part
+----------------
+ 1447745496.966
+(1 row)
+
+postgres=# select (date_part(&#39;epoch&#39;, dt))::bigint from ttt;
+ date_part
+------------
+ 1447745497
+(1 row)
+
+postgres=#
+</code></pre>
 <p>即使用函数: <code>date_part(&#39;epoch&#39;, 时间字段(date,timestamp等))</code></p>
 <h2 id="PostgreSQL-日期-时间-函数手册"><a href="#PostgreSQL-日期-时间-函数手册" class="headerlink" title="PostgreSQL 日期/时间 函数手册"></a>PostgreSQL 日期/时间 函数手册</h2><p><a href="http://www.postgresql.org/docs/current/static/functions-datetime.html" target="_blank" rel="external">Manual</a></p>
 

@@ -15,17 +15,17 @@
     <meta name="keywords" content="postgresql,mysql,fdw," />
   
 
-  <meta name="description" content="安装mysql_fdw 123456789SELECT * from pg_available_extensions where name like &apos;%fdw%&apos;;     name     | default_version | installed_version |                      comment                       ------------">
+  <meta name="description" content="安装mysql_fdw SELECT * from pg_available_extensions where name like &amp;#39;%fdw%&amp;#39;;      name     | default_version | installed_version |                      comment                        -----------">
 <meta name="keywords" content="postgresql,mysql,fdw">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PostgreSQL9.6中使用mysql_fdw">
 <meta property="og:url" content="https://emacsist.github.io/2016/10/09/PostgreSQL9-6中使用mysql-fdw/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="安装mysql_fdw 123456789SELECT * from pg_available_extensions where name like &apos;%fdw%&apos;;     name     | default_version | installed_version |                      comment                       ------------">
+<meta property="og:description" content="安装mysql_fdw SELECT * from pg_available_extensions where name like &amp;#39;%fdw%&amp;#39;;      name     | default_version | installed_version |                      comment                        -----------">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PostgreSQL9.6中使用mysql_fdw">
-<meta name="twitter:description" content="安装mysql_fdw 123456789SELECT * from pg_available_extensions where name like &apos;%fdw%&apos;;     name     | default_version | installed_version |                      comment                       ------------">
+<meta name="twitter:description" content="安装mysql_fdw SELECT * from pg_available_extensions where name like &amp;#39;%fdw%&amp;#39;;      name     | default_version | installed_version |                      comment                        -----------">
 
   
 
@@ -207,16 +207,65 @@
     <div class="article-content">
         
                             <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p><a href="https://github.com/EnterpriseDB/mysql_fdw" target="_blank" rel="external">mysql_fdw</a></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">SELECT * from pg_available_extensions <span class="built_in">where</span> name like <span class="string">'%fdw%'</span>;</div><div class="line">     name     | default_version | installed_version |                      comment                       </div><div class="line">--------------+-----------------+-------------------+----------------------------------------------------</div><div class="line"> file_fdw     | 1.0             | [null]            | foreign-data wrapper <span class="keyword">for</span> flat file access</div><div class="line"> mysql_fdw    | 1.0             | [null]            | Foreign data wrapper <span class="keyword">for</span> querying a MySQL server</div><div class="line"> postgres_fdw | 1.0             | [null]            | foreign-data wrapper <span class="keyword">for</span> remote PostgreSQL servers</div><div class="line">(3 rows)</div><div class="line"></div><div class="line">Time: 1.742 ms</div></pre></td></tr></table></figure>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CREATE EXTENSION mysql_fdw;</div></pre></td></tr></table></figure>
+<pre><code class="bash">SELECT * from pg_available_extensions where name like &#39;%fdw%&#39;;
+     name     | default_version | installed_version |                      comment                       
+--------------+-----------------+-------------------+----------------------------------------------------
+ file_fdw     | 1.0             | [null]            | foreign-data wrapper for flat file access
+ mysql_fdw    | 1.0             | [null]            | Foreign data wrapper for querying a MySQL server
+ postgres_fdw | 1.0             | [null]            | foreign-data wrapper for remote PostgreSQL servers
+(3 rows)
+
+Time: 1.742 ms
+</code></pre>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><pre><code class="bash">CREATE EXTENSION mysql_fdw;
+</code></pre>
 <p>如果是源码编译安装的MySQL，如果没有设置<code>LD_LIBRARY_PATH</code>，会报如下的错误:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">CREATE EXTENSION mysql_fdw;</div><div class="line">ERROR:  HV00L: failed to load the mysql query: </div><div class="line">libmysqlclient.so: cannot open shared object file: No such file or directory</div><div class="line">HINT:  <span class="built_in">export</span> LD_LIBRARY_PATH to locate the library</div><div class="line">LOCATION:  _PG_init, mysql_fdw.c:267</div><div class="line">Time: 74.768 ms</div></pre></td></tr></table></figure>
+<pre><code class="bash">CREATE EXTENSION mysql_fdw;
+ERROR:  HV00L: failed to load the mysql query: 
+libmysqlclient.so: cannot open shared object file: No such file or directory
+HINT:  export LD_LIBRARY_PATH to locate the library
+LOCATION:  _PG_init, mysql_fdw.c:267
+Time: 74.768 ms
+</code></pre>
 <p>这时，需要停止PG服务器，然后在启动PG服务器之前，要配置好<code>LD_LIBRARY_PATH</code>环境变量，将它指向<code>MySQL_HOME/lib</code>目录下.即：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">export</span> LD_LIBRARY_PATH=MySQL_HOME/lib:<span class="variable">$LD_LIBRARY_PATH</span></div><div class="line">pg_ctl -D pg_data_dir start</div></pre></td></tr></table></figure>
+<pre><code class="bash">export LD_LIBRARY_PATH=MySQL_HOME/lib:$LD_LIBRARY_PATH
+pg_ctl -D pg_data_dir start
+</code></pre>
 <p>然后再创建<code>mysql_fdw</code>即可。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">CREATE EXTENSION mysql_fdw ;</div><div class="line">CREATE EXTENSION</div><div class="line">Time: 155.894 ms</div></pre></td></tr></table></figure>
+<pre><code class="bash">CREATE EXTENSION mysql_fdw ;
+CREATE EXTENSION
+Time: 155.894 ms
+</code></pre>
 <p>连接外部表</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">CREATE SERVER mysql_server_beta FOREIGN DATA WRAPPER mysql_fdw OPTIONS (host <span class="string">'your_ip_address'</span>, port <span class="string">'your_mysql_port'</span>);</div><div class="line">CREATE USER MAPPING FOR 你的pg的用户名 SERVER mysql_server_beta OPTIONS (username <span class="string">'your_mysql_user_name'</span>, password <span class="string">'your_mysql_passwd'</span>);</div><div class="line"></div><div class="line">CREATE FOREIGN TABLE wb_status_ft (</div><div class="line">    id int,</div><div class="line">    sid bigint,</div><div class="line">	idstr varchar(64),</div><div class="line">	mid bigint,</div><div class="line">	user_id bigint,</div><div class="line">	user_screen_name varchar(40),</div><div class="line">	user_profile_image_url varchar(128),</div><div class="line">	text varchar(1024),</div><div class="line">	<span class="built_in">source</span> varchar(256),</div><div class="line">	thumbnail_pic varchar(256),</div><div class="line">	bmiddle_pic varchar(256),</div><div class="line">	original_pic varchar(256),</div><div class="line">	retweeted_status_id varchar(64),</div><div class="line">	geo varchar(256),</div><div class="line">	reposts_count int,</div><div class="line">	comments_count int,</div><div class="line">	attitudes_count int,</div><div class="line">	visible varchar(64),</div><div class="line">	pic_urls varchar(1024),</div><div class="line">	create_at timestamp,</div><div class="line">	update_at timestamp,</div><div class="line">	ad varchar(256),</div><div class="line">	is_deleted smallint</div><div class="line">) SERVER mysql_server_beta OPTIONS (dbname <span class="string">'原mysql的数据库名'</span>, table_name <span class="string">'原mysql的表名'</span>);</div></pre></td></tr></table></figure>
+<pre><code class="bash">CREATE SERVER mysql_server_beta FOREIGN DATA WRAPPER mysql_fdw OPTIONS (host &#39;your_ip_address&#39;, port &#39;your_mysql_port&#39;);
+CREATE USER MAPPING FOR 你的pg的用户名 SERVER mysql_server_beta OPTIONS (username &#39;your_mysql_user_name&#39;, password &#39;your_mysql_passwd&#39;);
+
+CREATE FOREIGN TABLE wb_status_ft (
+    id int,
+    sid bigint,
+    idstr varchar(64),
+    mid bigint,
+    user_id bigint,
+    user_screen_name varchar(40),
+    user_profile_image_url varchar(128),
+    text varchar(1024),
+    source varchar(256),
+    thumbnail_pic varchar(256),
+    bmiddle_pic varchar(256),
+    original_pic varchar(256),
+    retweeted_status_id varchar(64),
+    geo varchar(256),
+    reposts_count int,
+    comments_count int,
+    attitudes_count int,
+    visible varchar(64),
+    pic_urls varchar(1024),
+    create_at timestamp,
+    update_at timestamp,
+    ad varchar(256),
+    is_deleted smallint
+) SERVER mysql_server_beta OPTIONS (dbname &#39;原mysql的数据库名&#39;, table_name &#39;原mysql的表名&#39;);
+</code></pre>
 <p>done.</p>
 
                                 

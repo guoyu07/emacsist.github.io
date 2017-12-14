@@ -213,15 +213,59 @@
 <li><p>查看某表的字符集和校对规则: <code>show create table tbname\G</code></p>
 </li>
 </ul>
-<h3 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明"></a>参数说明</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">+--------------------------+------------------------------------------------------+</div><div class="line">| Variable_name            | Value                                                |</div><div class="line">+--------------------------+------------------------------------------------------+</div><div class="line">| character_set_client     | utf8                                                 |</div><div class="line">| character_set_connection | utf8                                                 |</div><div class="line">| character_set_database   | utf8                                                 |</div><div class="line">| character_set_filesystem | binary                                               |</div><div class="line">| character_set_results    | utf8                                                 |</div><div class="line">| character_set_server     | utf8                                                 |</div><div class="line">| character_set_system     | utf8                                                 |</div><div class="line">| character_sets_dir       | /usr/<span class="built_in">local</span>/Cellar/mysql/5.7.10/share/mysql/charsets/ |</div><div class="line">+--------------------------+------------------------------------------------------+</div><div class="line">8 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.02 sec)</div></pre></td></tr></table></figure>
+<h3 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明"></a>参数说明</h3><pre><code class="bash">+--------------------------+------------------------------------------------------+
+| Variable_name            | Value                                                |
++--------------------------+------------------------------------------------------+
+| character_set_client     | utf8                                                 |
+| character_set_connection | utf8                                                 |
+| character_set_database   | utf8                                                 |
+| character_set_filesystem | binary                                               |
+| character_set_results    | utf8                                                 |
+| character_set_server     | utf8                                                 |
+| character_set_system     | utf8                                                 |
+| character_sets_dir       | /usr/local/Cellar/mysql/5.7.10/share/mysql/charsets/ |
++--------------------------+------------------------------------------------------+
+8 rows in set (0.02 sec)
+</code></pre>
 <ul>
 <li><code>character_set_client</code>: 客户端字符集</li>
 <li><code>character_set_connection</code>: 连接字符集</li>
 <li><code>character_set_results</code>: 返回结果的字符集</li>
 </ul>
-<h3 id="设置my-conf"><a href="#设置my-conf" class="headerlink" title="设置my.conf"></a>设置<code>my.conf</code></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[mysql]</div><div class="line">default-character-set=utf8</div><div class="line"></div><div class="line">[mysqld]</div><div class="line">default-charatcer-set=utf8</div></pre></td></tr></table></figure>
+<h3 id="设置my-conf"><a href="#设置my-conf" class="headerlink" title="设置my.conf"></a>设置<code>my.conf</code></h3><pre><code class="bash">[mysql]
+default-character-set=utf8
+
+[mysqld]
+default-charatcer-set=utf8
+</code></pre>
 <h2 id="修改字符集"><a href="#修改字符集" class="headerlink" title="修改字符集"></a>修改字符集</h2><h3 id="修改数据库默认的字符集"><a href="#修改数据库默认的字符集" class="headerlink" title="修改数据库默认的字符集"></a>修改数据库默认的字符集</h3><p><code>alter database test CHARACTER set &#39;gbk&#39;;</code>: 这个不能对已有的数据进行修改, 而是对新的数据效.</p>
-<p><code>alter table tbname character set &#39;gbk&#39;</code>: 这个也不能修改已有数据的字符, 只是对新插入的数据生效.<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show create table t_p;</div><div class="line">+-------+------------------------------------------------------------------------------------------------------------------------+</div><div class="line">| Table | Create Table                                                                                                           |</div><div class="line">+-------+------------------------------------------------------------------------------------------------------------------------+</div><div class="line">| t_p   | CREATE TABLE `t_p` (</div><div class="line">  `id` int(11) NOT NULL AUTO_INCREMENT,</div><div class="line">  PRIMARY KEY (`id`)</div><div class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8 |</div><div class="line">+-------+------------------------------------------------------------------------------------------------------------------------+</div><div class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; alter table t_p character <span class="built_in">set</span> <span class="string">'gbk'</span>;</div><div class="line">Query OK, 0 rows affected (0.07 sec)</div><div class="line">Records: 0  Duplicates: 0  Warnings: 0</div><div class="line"></div><div class="line">mysql&gt; show create table t_p;</div><div class="line">+-------+-----------------------------------------------------------------------------------------------------------------------+</div><div class="line">| Table | Create Table                                                                                                          |</div><div class="line">+-------+-----------------------------------------------------------------------------------------------------------------------+</div><div class="line">| t_p   | CREATE TABLE `t_p` (</div><div class="line">  `id` int(11) NOT NULL AUTO_INCREMENT,</div><div class="line">  PRIMARY KEY (`id`)</div><div class="line">) ENGINE=InnoDB DEFAULT CHARSET=gbk |</div><div class="line">+-------+-----------------------------------------------------------------------------------------------------------------------+</div><div class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div></pre></td></tr></table></figure></p>
+<p><code>alter table tbname character set &#39;gbk&#39;</code>: 这个也不能修改已有数据的字符, 只是对新插入的数据生效.</p>
+<pre><code class="bash">mysql&gt; show create table t_p;
++-------+------------------------------------------------------------------------------------------------------------------------+
+| Table | Create Table                                                                                                           |
++-------+------------------------------------------------------------------------------------------------------------------------+
+| t_p   | CREATE TABLE `t_p` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 |
++-------+------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql&gt; alter table t_p character set &#39;gbk&#39;;
+Query OK, 0 rows affected (0.07 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql&gt; show create table t_p;
++-------+-----------------------------------------------------------------------------------------------------------------------+
+| Table | Create Table                                                                                                          |
++-------+-----------------------------------------------------------------------------------------------------------------------+
+| t_p   | CREATE TABLE `t_p` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk |
++-------+-----------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+</code></pre>
 <p>如果需要对已有数据进行调整, 需要先将数据导出, 然后按新的字符集再进行导入才行.</p>
 
                                 

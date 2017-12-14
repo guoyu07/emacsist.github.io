@@ -214,14 +214,22 @@
 <p>第一步: 获取 <code>wrapper</code> 容器</p>
 <p><code>StandardWrapper wrapper = (StandardWrapper) getContainer();</code></p>
 <p>第二步: 根据容器 <code>wrapper</code> 获取相应的 <code>servlet</code></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (!unavailable) &#123;</div><div class="line">    servlet = wrapper.allocate();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="java">if (!unavailable) {
+    servlet = wrapper.allocate();
+}
+</code></pre>
 <p>第三步: 获取 filter 调用链</p>
 <p><code>ApplicationFilterFactory</code> 可以获取当前 Web 应用的所有 Filter 配置信息. 并以此来匹配相应的请求的 filter</p>
 <p><code>ApplicationFilterChain filterChain = ApplicationFilterFactory.createFilterChain(request, wrapper, servlet)</code></p>
 <p>第四步: 调用 filter</p>
 <p><code>filterChain.doFilter(request.getRequest(), response.getResponse());</code></p>
 <p>第五步: 根据调用链来执行当前的 filter</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">internalDoFilter</span><span class="params">(ServletRequest request, ServletResponse response)</span></span>&#123;</div><div class="line">    ...</div><div class="line">    filter.doFilter(request, response, <span class="keyword">this</span>);</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="java">private void internalDoFilter(ServletRequest request, ServletResponse response){
+    ...
+    filter.doFilter(request, response, this);
+    ...
+}
+</code></pre>
 <p><img src="/img/1A90C5643C19D3356F7D44FA5AAC4DA2.jpg" alt="IMAGE"></p>
 <p>可以看到, 当前有2个 filter ,然后它会按顺序, 从上到下依次执行相应的 filter </p>
 <p>第六步: filter 执行完后, 就开始执行相应的 servlet 了.</p>
@@ -236,12 +244,34 @@
 <p>该方法是从 <code>private List&lt;HandlerMapping&gt; handlerMappings;</code> 对象中匹配.</p>
 <h3 id="查找-HandlerMethod"><a href="#查找-HandlerMethod" class="headerlink" title="查找 HandlerMethod"></a>查找 HandlerMethod</h3><p><code>HandlerMapping.getHandler(request)</code> -&gt; </p>
 <p><code>org.springframework.web.servlet.handler.AbstractHandlerMapping.getHandler(HttpServletRequest request)</code> -&gt; </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Object handler = getHandlerInternal(request);</div><div class="line"><span class="function"><span class="keyword">protected</span> HandlerMethod <span class="title">getHandlerInternal</span><span class="params">(HttpServletRequest request)</span></span>;</div></pre></td></tr></table></figure>
+<pre><code class="java">Object handler = getHandlerInternal(request);
+protected HandlerMethod getHandlerInternal(HttpServletRequest request);
+</code></pre>
 <p>HandlerMethod 就是根据 url 匹配成功后返回的相应的方法对象.</p>
 <p>-&gt; </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">String lookupPath = getUrlPathHelper().getLookupPathForRequest(request);</div><div class="line">HandlerMethod handlerMethod = lookupHandlerMethod(lookupPath, request);</div></pre></td></tr></table></figure>
+<pre><code class="java">String lookupPath = getUrlPathHelper().getLookupPathForRequest(request);
+HandlerMethod handlerMethod = lookupHandlerMethod(lookupPath, request);
+</code></pre>
 <p>成功后就返回该 handlerMehtod 对象了.</p>
-<h2 id="第三步-根据-MethodHanlder-获取-HandlerExecutionChain-即-handler-的调用链"><a href="#第三步-根据-MethodHanlder-获取-HandlerExecutionChain-即-handler-的调用链" class="headerlink" title="第三步: 根据 MethodHanlder 获取 HandlerExecutionChain , 即 handler 的调用链"></a>第三步: 根据 MethodHanlder 获取 HandlerExecutionChain , 即 handler 的调用链</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">protected</span> HandlerExecutionChain <span class="title">getHandlerExecutionChain</span><span class="params">(Object handler, HttpServletRequest request)</span> </span>&#123;</div><div class="line">    HandlerExecutionChain chain = (handler <span class="keyword">instanceof</span> HandlerExecutionChain ?</div><div class="line">            (HandlerExecutionChain) handler : <span class="keyword">new</span> HandlerExecutionChain(handler));</div><div class="line"></div><div class="line">    String lookupPath = <span class="keyword">this</span>.urlPathHelper.getLookupPathForRequest(request);</div><div class="line">    <span class="keyword">for</span> (HandlerInterceptor interceptor : <span class="keyword">this</span>.adaptedInterceptors) &#123;</div><div class="line">        <span class="keyword">if</span> (interceptor <span class="keyword">instanceof</span> MappedInterceptor) &#123;</div><div class="line">            MappedInterceptor mappedInterceptor = (MappedInterceptor) interceptor;</div><div class="line">            <span class="keyword">if</span> (mappedInterceptor.matches(lookupPath, <span class="keyword">this</span>.pathMatcher)) &#123;</div><div class="line">                chain.addInterceptor(mappedInterceptor.getInterceptor());</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span> &#123;</div><div class="line">            chain.addInterceptor(interceptor);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> chain;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="第三步-根据-MethodHanlder-获取-HandlerExecutionChain-即-handler-的调用链"><a href="#第三步-根据-MethodHanlder-获取-HandlerExecutionChain-即-handler-的调用链" class="headerlink" title="第三步: 根据 MethodHanlder 获取 HandlerExecutionChain , 即 handler 的调用链"></a>第三步: 根据 MethodHanlder 获取 HandlerExecutionChain , 即 handler 的调用链</h2><pre><code class="java">    protected HandlerExecutionChain getHandlerExecutionChain(Object handler, HttpServletRequest request) {
+        HandlerExecutionChain chain = (handler instanceof HandlerExecutionChain ?
+                (HandlerExecutionChain) handler : new HandlerExecutionChain(handler));
+
+        String lookupPath = this.urlPathHelper.getLookupPathForRequest(request);
+        for (HandlerInterceptor interceptor : this.adaptedInterceptors) {
+            if (interceptor instanceof MappedInterceptor) {
+                MappedInterceptor mappedInterceptor = (MappedInterceptor) interceptor;
+                if (mappedInterceptor.matches(lookupPath, this.pathMatcher)) {
+                    chain.addInterceptor(mappedInterceptor.getInterceptor());
+                }
+            }
+            else {
+                chain.addInterceptor(interceptor);
+            }
+        }
+        return chain;
+    }
+</code></pre>
 <p>可以看到, 是根据相应的请求 URL 来获取相应的 <code>Interceptor</code> 拦截器, 并设置到调用链对象中.</p>
 <p>例子这里只有2个 interceptor</p>
 <p><img src="/img/49A7CE21EE7083DB5879CC103E1CC447.jpg" alt="IMAGE"></p>
@@ -252,11 +282,74 @@
 <p><img src="/img/161109E05B54D187B02EC23C29C15B52.jpg" alt="IMAGE"></p>
 <h1 id="第四步-获取-HandlerAdapter"><a href="#第四步-获取-HandlerAdapter" class="headerlink" title="第四步: 获取 HandlerAdapter"></a>第四步: 获取 HandlerAdapter</h1><p>默认情况下, 有三种<br><code>private List&lt;HandlerAdapter&gt; handlerAdapters;</code></p>
 <p><img src="/img/07F1BDCD995F72D3E83D39DC2DF2C19F.jpg" alt="IMAGE"></p>
-<h1 id="第五步-应用-interceptors"><a href="#第五步-应用-interceptors" class="headerlink" title="第五步: 应用 interceptors"></a>第五步: 应用 interceptors</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">applyPreHandle</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">    HandlerInterceptor[] interceptors = getInterceptors();</div><div class="line">    <span class="keyword">if</span> (!ObjectUtils.isEmpty(interceptors)) &#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; interceptors.length; i++) &#123;</div><div class="line">            HandlerInterceptor interceptor = interceptors[i];</div><div class="line">            <span class="keyword">if</span> (!interceptor.preHandle(request, response, <span class="keyword">this</span>.handler)) &#123;</div><div class="line">                triggerAfterCompletion(request, response, <span class="keyword">null</span>);</div><div class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">this</span>.interceptorIndex = i;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="第五步-应用-interceptors"><a href="#第五步-应用-interceptors" class="headerlink" title="第五步: 应用 interceptors"></a>第五步: 应用 interceptors</h1><pre><code class="java">    boolean applyPreHandle(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        HandlerInterceptor[] interceptors = getInterceptors();
+        if (!ObjectUtils.isEmpty(interceptors)) {
+            for (int i = 0; i &lt; interceptors.length; i++) {
+                HandlerInterceptor interceptor = interceptors[i];
+                if (!interceptor.preHandle(request, response, this.handler)) {
+                    triggerAfterCompletion(request, response, null);
+                    return false;
+                }
+                this.interceptorIndex = i;
+            }
+        }
+        return true;
+    }
+</code></pre>
 <p>如果有返回 false 的, 表示中断了. 返回 true 表示继续向下执行.</p>
 <h1 id="第六步-实际开始调用-Handler"><a href="#第六步-实际开始调用-Handler" class="headerlink" title="第六步: 实际开始调用 Handler"></a>第六步: 实际开始调用 Handler</h1><p><code>protected ModelAndView handleInternal(HttpServletRequest request, HttpServletResponse response, HandlerMethod handlerMethod)</code></p>
 <p><code>org.springframework.web.servlet.mvc.method.annotation.invokeHandlerMethod(...)</code></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">protected</span> ModelAndView <span class="title">invokeHandlerMethod</span><span class="params">(HttpServletRequest request,</span></span></div><div class="line">        HttpServletResponse response, HandlerMethod handlerMethod) <span class="keyword">throws</span> Exception &#123;</div><div class="line"></div><div class="line">    ServletWebRequest webRequest = <span class="keyword">new</span> ServletWebRequest(request, response);</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        WebDataBinderFactory binderFactory = getDataBinderFactory(handlerMethod);</div><div class="line">        ModelFactory modelFactory = getModelFactory(handlerMethod, binderFactory);</div><div class="line"></div><div class="line">        ServletInvocableHandlerMethod invocableMethod = createInvocableHandlerMethod(handlerMethod);</div><div class="line">        invocableMethod.setHandlerMethodArgumentResolvers(<span class="keyword">this</span>.argumentResolvers);</div><div class="line">        invocableMethod.setHandlerMethodReturnValueHandlers(<span class="keyword">this</span>.returnValueHandlers);</div><div class="line">        invocableMethod.setDataBinderFactory(binderFactory);</div><div class="line">        invocableMethod.setParameterNameDiscoverer(<span class="keyword">this</span>.parameterNameDiscoverer);</div><div class="line"></div><div class="line">        ModelAndViewContainer mavContainer = <span class="keyword">new</span> ModelAndViewContainer();</div><div class="line">        mavContainer.addAllAttributes(RequestContextUtils.getInputFlashMap(request));</div><div class="line">        modelFactory.initModel(webRequest, mavContainer, invocableMethod);</div><div class="line">        mavContainer.setIgnoreDefaultModelOnRedirect(<span class="keyword">this</span>.ignoreDefaultModelOnRedirect);</div><div class="line"></div><div class="line">        AsyncWebRequest asyncWebRequest = WebAsyncUtils.createAsyncWebRequest(request, response);</div><div class="line">        asyncWebRequest.setTimeout(<span class="keyword">this</span>.asyncRequestTimeout);</div><div class="line"></div><div class="line">        WebAsyncManager asyncManager = WebAsyncUtils.getAsyncManager(request);</div><div class="line">        asyncManager.setTaskExecutor(<span class="keyword">this</span>.taskExecutor);</div><div class="line">        asyncManager.setAsyncWebRequest(asyncWebRequest);</div><div class="line">        asyncManager.registerCallableInterceptors(<span class="keyword">this</span>.callableInterceptors);</div><div class="line">        asyncManager.registerDeferredResultInterceptors(<span class="keyword">this</span>.deferredResultInterceptors);</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (asyncManager.hasConcurrentResult()) &#123;</div><div class="line">            Object result = asyncManager.getConcurrentResult();</div><div class="line">            mavContainer = (ModelAndViewContainer) asyncManager.getConcurrentResultContext()[<span class="number">0</span>];</div><div class="line">            asyncManager.clearConcurrentResult();</div><div class="line">            <span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</div><div class="line">                logger.debug(<span class="string">"Found concurrent result value ["</span> + result + <span class="string">"]"</span>);</div><div class="line">            &#125;</div><div class="line">            invocableMethod = invocableMethod.wrapConcurrentResult(result);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        invocableMethod.invokeAndHandle(webRequest, mavContainer);</div><div class="line">        <span class="keyword">if</span> (asyncManager.isConcurrentHandlingStarted()) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> getModelAndView(mavContainer, modelFactory, webRequest);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">finally</span> &#123;</div><div class="line">        webRequest.requestCompleted();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="java">    protected ModelAndView invokeHandlerMethod(HttpServletRequest request,
+            HttpServletResponse response, HandlerMethod handlerMethod) throws Exception {
+
+        ServletWebRequest webRequest = new ServletWebRequest(request, response);
+        try {
+            WebDataBinderFactory binderFactory = getDataBinderFactory(handlerMethod);
+            ModelFactory modelFactory = getModelFactory(handlerMethod, binderFactory);
+
+            ServletInvocableHandlerMethod invocableMethod = createInvocableHandlerMethod(handlerMethod);
+            invocableMethod.setHandlerMethodArgumentResolvers(this.argumentResolvers);
+            invocableMethod.setHandlerMethodReturnValueHandlers(this.returnValueHandlers);
+            invocableMethod.setDataBinderFactory(binderFactory);
+            invocableMethod.setParameterNameDiscoverer(this.parameterNameDiscoverer);
+
+            ModelAndViewContainer mavContainer = new ModelAndViewContainer();
+            mavContainer.addAllAttributes(RequestContextUtils.getInputFlashMap(request));
+            modelFactory.initModel(webRequest, mavContainer, invocableMethod);
+            mavContainer.setIgnoreDefaultModelOnRedirect(this.ignoreDefaultModelOnRedirect);
+
+            AsyncWebRequest asyncWebRequest = WebAsyncUtils.createAsyncWebRequest(request, response);
+            asyncWebRequest.setTimeout(this.asyncRequestTimeout);
+
+            WebAsyncManager asyncManager = WebAsyncUtils.getAsyncManager(request);
+            asyncManager.setTaskExecutor(this.taskExecutor);
+            asyncManager.setAsyncWebRequest(asyncWebRequest);
+            asyncManager.registerCallableInterceptors(this.callableInterceptors);
+            asyncManager.registerDeferredResultInterceptors(this.deferredResultInterceptors);
+
+            if (asyncManager.hasConcurrentResult()) {
+                Object result = asyncManager.getConcurrentResult();
+                mavContainer = (ModelAndViewContainer) asyncManager.getConcurrentResultContext()[0];
+                asyncManager.clearConcurrentResult();
+                if (logger.isDebugEnabled()) {
+                    logger.debug(&quot;Found concurrent result value [&quot; + result + &quot;]&quot;);
+                }
+                invocableMethod = invocableMethod.wrapConcurrentResult(result);
+            }
+
+            invocableMethod.invokeAndHandle(webRequest, mavContainer);
+            if (asyncManager.isConcurrentHandlingStarted()) {
+                return null;
+            }
+
+            return getModelAndView(mavContainer, modelFactory, webRequest);
+        }
+        finally {
+            webRequest.requestCompleted();
+        }
+    }
+</code></pre>
 <ol>
 <li>首先根据 hanlderMethod 获取 <code>WebDataBinderFactory</code></li>
 <li>再获取 <code>ModelFactory</code> </li>
@@ -265,10 +358,54 @@
 </ol>
 <p>最后开始调用</p>
 <p><code>invocableMethod.invokeAndHandle(webRequest, mavContainer);</code></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">invokeAndHandle</span><span class="params">(ServletWebRequest webRequest, ModelAndViewContainer mavContainer,</span></span></div><div class="line">        Object... providedArgs) <span class="keyword">throws</span> Exception &#123;</div><div class="line"></div><div class="line">    Object returnValue = invokeForRequest(webRequest, mavContainer, providedArgs);</div><div class="line">    setResponseStatus(webRequest);</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (returnValue == <span class="keyword">null</span>) &#123;</div><div class="line">        <span class="keyword">if</span> (isRequestNotModified(webRequest) || getResponseStatus() != <span class="keyword">null</span> || mavContainer.isRequestHandled()) &#123;</div><div class="line">            mavContainer.setRequestHandled(<span class="keyword">true</span>);</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (StringUtils.hasText(getResponseStatusReason())) &#123;</div><div class="line">        mavContainer.setRequestHandled(<span class="keyword">true</span>);</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    mavContainer.setRequestHandled(<span class="keyword">false</span>);</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="keyword">this</span>.returnValueHandlers.handleReturnValue(</div><div class="line">                returnValue, getReturnValueType(returnValue), mavContainer, webRequest);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">catch</span> (Exception ex) &#123;</div><div class="line">        <span class="keyword">if</span> (logger.isTraceEnabled()) &#123;</div><div class="line">            logger.trace(getReturnValueHandlingErrorMessage(<span class="string">"Error handling return value"</span>, returnValue), ex);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">throw</span> ex;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="java">    public void invokeAndHandle(ServletWebRequest webRequest, ModelAndViewContainer mavContainer,
+            Object... providedArgs) throws Exception {
+
+        Object returnValue = invokeForRequest(webRequest, mavContainer, providedArgs);
+        setResponseStatus(webRequest);
+
+        if (returnValue == null) {
+            if (isRequestNotModified(webRequest) || getResponseStatus() != null || mavContainer.isRequestHandled()) {
+                mavContainer.setRequestHandled(true);
+                return;
+            }
+        }
+        else if (StringUtils.hasText(getResponseStatusReason())) {
+            mavContainer.setRequestHandled(true);
+            return;
+        }
+
+        mavContainer.setRequestHandled(false);
+        try {
+            this.returnValueHandlers.handleReturnValue(
+                    returnValue, getReturnValueType(returnValue), mavContainer, webRequest);
+        }
+        catch (Exception ex) {
+            if (logger.isTraceEnabled()) {
+                logger.trace(getReturnValueHandlingErrorMessage(&quot;Error handling return value&quot;, returnValue), ex);
+            }
+            throw ex;
+        }
+    }
+</code></pre>
 <p>可以看到该方法的第一行 <code>Object returnValue = invokeForRequest(webRequest, mavContainer, providedArgs);</code></p>
 <p>这就是真正调用 HandlerMethod 来处理请求了.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">invokeForRequest</span><span class="params">(NativeWebRequest request, ModelAndViewContainer mavContainer,</span></span></div><div class="line">        Object... providedArgs) <span class="keyword">throws</span> Exception &#123;</div><div class="line"></div><div class="line">    Object[] args = getMethodArgumentValues(request, mavContainer, providedArgs);</div><div class="line">    <span class="keyword">if</span> (logger.isTraceEnabled()) &#123;</div><div class="line">        logger.trace(<span class="string">"Invoking '"</span> + ClassUtils.getQualifiedMethodName(getMethod(), getBeanType()) +</div><div class="line">                <span class="string">"' with arguments "</span> + Arrays.toString(args));</div><div class="line">    &#125;</div><div class="line">    Object returnValue = doInvoke(args);</div><div class="line">    <span class="keyword">if</span> (logger.isTraceEnabled()) &#123;</div><div class="line">        logger.trace(<span class="string">"Method ["</span> + ClassUtils.getQualifiedMethodName(getMethod(), getBeanType()) +</div><div class="line">                <span class="string">"] returned ["</span> + returnValue + <span class="string">"]"</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> returnValue;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="java">    public Object invokeForRequest(NativeWebRequest request, ModelAndViewContainer mavContainer,
+            Object... providedArgs) throws Exception {
+
+        Object[] args = getMethodArgumentValues(request, mavContainer, providedArgs);
+        if (logger.isTraceEnabled()) {
+            logger.trace(&quot;Invoking &#39;&quot; + ClassUtils.getQualifiedMethodName(getMethod(), getBeanType()) +
+                    &quot;&#39; with arguments &quot; + Arrays.toString(args));
+        }
+        Object returnValue = doInvoke(args);
+        if (logger.isTraceEnabled()) {
+            logger.trace(&quot;Method [&quot; + ClassUtils.getQualifiedMethodName(getMethod(), getBeanType()) +
+                    &quot;] returned [&quot; + returnValue + &quot;]&quot;);
+        }
+        return returnValue;
+    }
+</code></pre>
 <p><code>invokeForRequest</code> 的第一行 <code>getMethodArgumentValues</code>, 这里就是构建的们的 Controller 对应的方法的参数了. 所有参数的自动处理, 就是在这里进行的.处理完后, 就会根据这些参数来正式调用该 Controller 的方法了.</p>
 <p><code>getMethodArgumentValues</code> 处理:</p>
 <p>根据所注册的 <code>argumentResolvers</code> 来判断当前位置的参数, 是否被相应的 <code>argumentResolvers</code> 所支持解析. 如果匹配的话, 则会调用它来进行参数解析.</p>

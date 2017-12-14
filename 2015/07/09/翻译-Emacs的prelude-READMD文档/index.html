@@ -205,40 +205,83 @@
 <h2 id="Emacs-Prelude"><a href="#Emacs-Prelude" class="headerlink" title="Emacs Prelude"></a>Emacs Prelude</h2><p><code>Prelude</code> 是一个Emacs发行版, 旨在加强默认Emacs的体验.<code>Prelude</code>更改了许多默认的配置, 组合捆绑了大量的额外的插件,并添加了它自己的核心库.最终的产品提供了一个对于新手易于使用, 对于高级用户提供了许多额外的能力的Emacs配置.</p>
 <p><code>Prelude</code> 只对 <code>GNU Emacs 24.x</code> 版本兼容.一般地, 我们总是建议你以最新版本的Emacs来运行<code>Prelude</code> - 当前最新版本为 <code>24.4</code>.</p>
 <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><h3 id="快速使用"><a href="#快速使用" class="headerlink" title="快速使用"></a>快速使用</h3><p>我们假设你正运行 <code>Unix-like</code> 系统(*BSD, GNU/Linux, OS X, Solaris, 等等), 并且你已经安装了<code>Emacs 24</code>, 也安装好了<code>git</code>以及<code>curl</code>,你可以忽略整个手册, 只需要在你喜欢的shell里输入以下命令:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -L https://git.io/epre | sh</div></pre></td></tr></table></figure>
+<pre><code class="bash">curl -L https://git.io/epre | sh
+</code></pre>
 <p>你可以启动你的Emacs,坐下来并享受<code>prelude</code>了,忘记这份手册的剩余部分.</p>
 <p>这时有两人个环境变量你可以用于控制源码仓库以及安装目录.为了改变安装目录, 你可以:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">export</span> PRELUDE_INSTALL_DIR=<span class="string">"<span class="variable">$HOME</span>/.emacs.d"</span> &amp;&amp; curl -L https://github.com/bbatsov/prelude/raw/master/utils/installer.sh | sh</div></pre></td></tr></table></figure>
+<pre><code class="bash">export PRELUDE_INSTALL_DIR=&quot;$HOME/.emacs.d&quot; &amp;&amp; curl -L https://github.com/bbatsov/prelude/raw/master/utils/installer.sh | sh
+</code></pre>
 <p>为了改变源码仓库为, 你可以:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">export</span> PRELUDE_URL=<span class="string">"https://github.com/yourname/prelude.git"</span> &amp;&amp; curl -L https://github.com/bbatsov/prelude/raw/master/utils/installer.sh | sh</div></pre></td></tr></table></figure>
+<pre><code class="bash">export PRELUDE_URL=&quot;https://github.com/yourname/prelude.git&quot; &amp;&amp; curl -L https://github.com/bbatsov/prelude/raw/master/utils/installer.sh | sh
+</code></pre>
 <p>注意,安装包会备份任何在 <code>.emacs</code> 文件或 <code>.emacs.d</code> 目录,然后它会解压<code>Prelude</code>的代码到<code>.emacs.d</code> 目录里.如果你打算手动安装, 请确保你没有<code>.emacs</code>文件或者手动备份你已经存在的<code>.emacs.d</code> 目录.</p>
 <p>一旦你安装完成后,不要忘记去调整你的<code>prelude-modules.el</code>文件.默认情况下, 许多<code>prelude</code>自带的模块并没有加载.</p>
 <h3 id="安装-Emacs-24"><a href="#安装-Emacs-24" class="headerlink" title="安装 Emacs 24"></a>安装 Emacs 24</h3><p>好明显, 你使用 <code>Emacs Prelude</code> 之前, 你首先得安装 <code>Emacs 24</code> . 请看 <a href="http://wikemacs.org/index.php/Installing_Emacs" target="_blank" rel="external">WikEmacs articles on installing Emacs</a></p>
 <h3 id="安装-Prelude"><a href="#安装-Prelude" class="headerlink" title="安装(Prelude)"></a>安装(Prelude)</h3><h4 id="自动化安装"><a href="#自动化安装" class="headerlink" title="自动化安装"></a>自动化安装</h4><p>你可以通过命令行使用<code>curl</code> 或者<code>wget</code>来安装<code>Emacs Prelude</code>.自然地,<code>git</code>也是要安装好的.</p>
 <h4 id="通过-curl-安装"><a href="#通过-curl-安装" class="headerlink" title="通过 curl 安装"></a>通过 curl 安装</h4><p>如果你打算用<code>curl</code>, 请在shell里输入以下命令:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -L https://github.com/bbatsov/prelude/raw/master/utils/installer.sh | sh</div></pre></td></tr></table></figure>
+<pre><code class="bash">curl -L https://github.com/bbatsov/prelude/raw/master/utils/installer.sh | sh
+</code></pre>
 <h4 id="通过-Wget-安装"><a href="#通过-Wget-安装" class="headerlink" title="通过 Wget 安装"></a>通过 Wget 安装</h4><p>如果你打算使用 <code>wget</code>, 请在shell里输入以下命令:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget --no-check-certificate https://github.com/bbatsov/prelude/raw/master/utils/installer.sh -O - | sh</div></pre></td></tr></table></figure>
-<h4 id="手动安装"><a href="#手动安装" class="headerlink" title="手动安装"></a>手动安装</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git <span class="built_in">clone</span> git://github.com/bbatsov/prelude.git path/to/<span class="built_in">local</span>/repo</div><div class="line">ln -s path/to/<span class="built_in">local</span>/repo ~/.emacs.d</div><div class="line"><span class="built_in">cd</span> ~/.emacs.d</div></pre></td></tr></table></figure>
+<pre><code class="bash">wget --no-check-certificate https://github.com/bbatsov/prelude/raw/master/utils/installer.sh -O - | sh
+</code></pre>
+<h4 id="手动安装"><a href="#手动安装" class="headerlink" title="手动安装"></a>手动安装</h4><pre><code class="bash">git clone git://github.com/bbatsov/prelude.git path/to/local/repo
+ln -s path/to/local/repo ~/.emacs.d
+cd ~/.emacs.d
+</code></pre>
 <h3 id="更新-Prelude"><a href="#更新-Prelude" class="headerlink" title="更新 Prelude"></a>更新 Prelude</h3><h4 id="手动更新"><a href="#手动更新" class="headerlink" title="手动更新"></a>手动更新</h4><p>更新过程非常简单直接,由3个步骤组成:</p>
 <h5 id="更新所有插件包"><a href="#更新所有插件包" class="headerlink" title="更新所有插件包"></a>更新所有插件包</h5><p>只需要运行 <code>M-x package-list-packages RET U x</code></p>
-<h5 id="更新Prelude的代码"><a href="#更新Prelude的代码" class="headerlink" title="更新Prelude的代码"></a>更新<code>Prelude</code>的代码</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> path/to/prelude/installation</div><div class="line">git pull</div></pre></td></tr></table></figure>
+<h5 id="更新Prelude的代码"><a href="#更新Prelude的代码" class="headerlink" title="更新Prelude的代码"></a>更新<code>Prelude</code>的代码</h5><pre><code class="bash">cd path/to/prelude/installation
+git pull
+</code></pre>
 <p>路径<code>path/to/prelude/installation</code>通常是 <code>~/.emacs.d</code> (在最新的Unix系统下)</p>
 <h5 id="重启-Prelude"><a href="#重启-Prelude" class="headerlink" title="重启 Prelude"></a>重启 Prelude</h5><p>在你更新完之后,重启一下Emacs通常是一个好的主意.在下次<code>Prelude</code>启动时, 它会安装好新的依赖(如果需要的话).</p>
 <h4 id="自动更新"><a href="#自动更新" class="headerlink" title="自动更新"></a>自动更新</h4><p>简单地执行<code>M-x prelude</code>,然后重启下Emacs就可以了.</p>
 <h3 id="开启额外的模块"><a href="#开启额外的模块" class="headerlink" title="开启额外的模块."></a>开启额外的模块.</h3><p>默认情况下,大多数<code>Prelude</code>自带的模块并没有加载.更多关于这些模块提供的功能, 请查这个文档 <a href="https://github.com/bbatsov/prelude/blob/master/modules/doc/README.md" target="_blank" rel="external">docs</a></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">;;; Uncomment the modules you<span class="string">'d like to use and restart Prelude afterwards</span></div><div class="line"></div><div class="line">(require 'prelude-c)</div><div class="line">;; (require <span class="string">'prelude-clojure)</span></div><div class="line">;; (require 'prelude-coffee)</div><div class="line">;; (require <span class="string">'prelude-common-lisp)</span></div><div class="line">;; (require 'prelude-css)</div><div class="line">(require <span class="string">'prelude-emacs-lisp)</span></div><div class="line">(require 'prelude-erc)</div><div class="line">;; (require <span class="string">'prelude-erlang)</span></div><div class="line">;; (require 'prelude-elixir)</div><div class="line">;; (require <span class="string">'prelude-haskell)</span></div><div class="line">(require 'prelude-js)</div><div class="line">;; (require <span class="string">'prelude-latex)</span></div><div class="line">(require 'prelude-lisp)</div><div class="line">;; (require <span class="string">'prelude-mediawiki)</span></div><div class="line">(require 'prelude-org)</div><div class="line">(require <span class="string">'prelude-perl)</span></div><div class="line">;; (require 'prelude-python)</div><div class="line">;; (require <span class="string">'prelude-ruby)</span></div><div class="line">;; (require 'prelude-scala)</div><div class="line">(require <span class="string">'prelude-scheme)</span></div><div class="line">;; (require 'prelude-scss)</div><div class="line">;; (require <span class="string">'prelude-web)</span></div><div class="line">(require 'prelude-xml)</div></pre></td></tr></table></figure>
+<pre><code class="bash">;;; Uncomment the modules you&#39;d like to use and restart Prelude afterwards
+
+(require &#39;prelude-c)
+;; (require &#39;prelude-clojure)
+;; (require &#39;prelude-coffee)
+;; (require &#39;prelude-common-lisp)
+;; (require &#39;prelude-css)
+(require &#39;prelude-emacs-lisp)
+(require &#39;prelude-erc)
+;; (require &#39;prelude-erlang)
+;; (require &#39;prelude-elixir)
+;; (require &#39;prelude-haskell)
+(require &#39;prelude-js)
+;; (require &#39;prelude-latex)
+(require &#39;prelude-lisp)
+;; (require &#39;prelude-mediawiki)
+(require &#39;prelude-org)
+(require &#39;prelude-perl)
+;; (require &#39;prelude-python)
+;; (require &#39;prelude-ruby)
+;; (require &#39;prelude-scala)
+(require &#39;prelude-scheme)
+;; (require &#39;prelude-scss)
+;; (require &#39;prelude-web)
+(require &#39;prelude-xml)
+</code></pre>
 <p>一旦你安装完成后,你可修改你的<code>prelude-modules.el</code>文件.如果你打算手动安装,这时你需要复制 <code>prelude-modules.el</code> 文件(译注: 放到<code>~/.emacs.d/</code>目录下),这个文件在根目录 <code>path/to/prelude/installation</code> 下的 <code>sample</code> 目录里.</p>
 <p>你在注释掉一些模块后, 你也应该重启Emacs或者通过<code>C-x C-e</code>来<code>evaluate</code>模块<code>require</code>表达式.(这个不好翻译…)</p>
 <h3 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h3><p>这没有什么特别的. 像平常一样启动Emacs就可以了.我个人将Emacs运行在一个守护模式:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">emacs --daemon</div></pre></td></tr></table></figure>
+<pre><code class="bash">emacs --daemon
+</code></pre>
 <p>然后,我通过终端或者一个图形客户端连接到服务, 就像这样:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">emacsclient -t</div><div class="line">emacsclient -c</div></pre></td></tr></table></figure>
+<pre><code class="bash">emacsclient -t
+emacsclient -c
+</code></pre>
 <p>你可能在你的<code>.zshrc</code>或者<code>.bashrc</code>也设置一些别名:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">alias</span> e=<span class="string">'emacsclient -t'</span></div><div class="line"><span class="built_in">alias</span> ec=<span class="string">'emacsclient -c'</span></div><div class="line"><span class="built_in">alias</span> vim=<span class="string">'emacsclient -t'</span></div><div class="line"><span class="built_in">alias</span> vi=<span class="string">'emacsclient -t'</span></div></pre></td></tr></table></figure>
+<pre><code class="bash">alias e=&#39;emacsclient -t&#39;
+alias ec=&#39;emacsclient -c&#39;
+alias vim=&#39;emacsclient -t&#39;
+alias vi=&#39;emacsclient -t&#39;
+</code></pre>
 <p>如果你通常在命令行使用<code>vi(m)</code>编辑文件, 最后两个别名将非常有用.</p>
 <p>你也可以打开一个文件并跳到指定行:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">emacsclient somefile:1234</div></pre></td></tr></table></figure>
+<pre><code class="bash">emacsclient somefile:1234
+</code></pre>
 <p>这会打开一个<code>somefile</code>文件,并且将光标定位到第1234行.</p>
 <h3 id="开始了解-Prelude"><a href="#开始了解-Prelude" class="headerlink" title="开始了解 Prelude"></a>开始了解 Prelude</h3><p>当然,了解<code>Prelude</code>是如何加强默认的Emacs检验的最好的方式就是去精读<code>Prelude</code>的源码.(好明显,是用Emacs Lisp来写的).理解代码不是必修课.<code>Prelude</code>包含了一个<code>prelude-mode</code>次模式, 它是<code>prelude</code>提供的额外的功能的集合.它也提供了些额外的键位映射绑定扩展.</p>
 <h4 id="键位映射情况"><a href="#键位映射情况" class="headerlink" title="键位映射情况"></a>键位映射情况</h4><h5 id="全局范围的"><a href="#全局范围的" class="headerlink" title="全局范围的"></a>全局范围的</h5><table>
@@ -524,7 +567,9 @@
 <p>注意: 对于各种算术运算符, 前缀操作符 <code>C-c .</code> , 仅需要同时按一次. 剩下部分的操作符, 适当按下就可以了.</p>
 <h4 id="OS-X-修改键位"><a href="#OS-X-修改键位" class="headerlink" title="OS X 修改键位"></a>OS X 修改键位</h4><p><code>Prelude</code> 默认情况下不弄乱标准的键位映射 <code>Command</code> (就是 <code>Super</code>), <code>Option</code> 就是<code>Meta</code>.</p>
 <p>如果你想互换它们, 请添加以下配置到你的个人配置文件里:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">(setq mac-command-modifier <span class="string">'meta)</span></div><div class="line">(setq mac-option-modifier 'super)</div></pre></td></tr></table></figure>
+<pre><code class="bash">(setq mac-command-modifier &#39;meta)
+(setq mac-option-modifier &#39;super)
+</code></pre>
 <h4 id="Projectile"><a href="#Projectile" class="headerlink" title="Projectile"></a>Projectile</h4><p>这些是 <a href="https://github.com/bbatsov/projectile" target="_blank" rel="external">Projectile</a> 提供的功能</p>
 <table>
 <thead>
@@ -720,55 +765,74 @@
 </tbody>
 </table>
 <h5 id="禁用-Key-chords"><a href="#禁用-Key-chords" class="headerlink" title="禁用 Key-chords"></a>禁用 Key-chords</h5><p>在一些情况下, 你可能不想要prelude已经定义好的 <code>key-chord</code> 的按键, 这时, 你可以在<code>personal.el</code>文件里通过设置它的命令为<code>nil</code>来禁用这些按键. 例如, 为了禁用<code>jj</code> key-chord, 可以添加以下行到配置文件里:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(key-chord-define-global <span class="string">"jj"</span> nil)</div></pre></td></tr></table></figure>
+<pre><code class="bash">(key-chord-define-global &quot;jj&quot; nil)
+</code></pre>
 <p>如果你是一个 <code>evil-mode</code> 用户, 你可能也想同时禁用 <code>key-chord-mode</code>:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(key-chord-mode -1)</div></pre></td></tr></table></figure>
+<pre><code class="bash">(key-chord-mode -1)
+</code></pre>
 <h5 id="vim-模拟器"><a href="#vim-模拟器" class="headerlink" title="vim 模拟器"></a>vim 模拟器</h5><p>如果你想在emacs里使用vim, 可以启用<code>prelude-evil</code>模块, 它提供了对<code>evil-mode</code>的支持.</p>
 <h3 id="自动化包安装"><a href="#自动化包安装" class="headerlink" title="自动化包安装"></a>自动化包安装</h3><p>默认情况下, <code>Prelude</code> 安装好后只带最小限度的功能.它也可以在后台自动安装各种编程语言及框架的附加插件.例如: 你试图打开一个<code>.clj</code>文件 <code>clojure-mode</code>, <code>cider</code>以及<code>Prelude</code>的加强版Lisp配置将会自动为你安装.</p>
 <p>当然, 你也可以手动安装任何东西.</p>
 <h4 id="颜色主题"><a href="#颜色主题" class="headerlink" title="颜色主题"></a>颜色主题</h4><p>Emacs 24 自带了一个新的主题服务, 这显式有效地渲染一些老的颜色主题包. Emacs 24 提供了一打内建的主题, 你可以开箱即用, 通过调用 <code>M-x load-theme</code> 命令.</p>
 <p><a href="https://github.com/bbatsov/zenburn-emacs" target="_blank" rel="external">Zenburn</a>是Prelude的默认颜色主题, 但你可以自行修改. 为什么用<code>Zenburn</code>?我(并且世界上许多黑客)发现它相当简洁.个人发现默认的主题容易对眼睛产生厌倦, 这是为什么我决定把有争议的地方替换它. 当然, 你也可以返回默认(或者选择其他颜色主题).</p>
 <p>为了禁用 <code>Zenburn</code> 主题, 你可以将以下行放到你个人的配置文件里:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(<span class="built_in">disable</span>-theme <span class="string">'zenburn)</span></div></pre></td></tr></table></figure>
+<pre><code class="bash">(disable-theme &#39;zenburn)
+</code></pre>
 <p>或者你可以使用其他主题颜色, 通过添加以下内容到 <code>personal/preload</code>, 像这样:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(setq prelude-theme <span class="string">'solarized-dark)</span></div></pre></td></tr></table></figure>
+<pre><code class="bash">(setq prelude-theme &#39;solarized-dark)
+</code></pre>
 <p>注意: Solarized 默认情况下是不可用的. 你可以从<code>MELPA</code>安装它(`M-x package-install RET solarized-theme).</p>
 <p>最后, 如果你不想用任何主题, 你可以添加以下内容到你的 <code>personal/preload</code>:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(setq prelude-theme nil)</div></pre></td></tr></table></figure>
+<pre><code class="bash">(setq prelude-theme nil)
+</code></pre>
 <h4 id="个性化"><a href="#个性化" class="headerlink" title="个性化"></a>个性化</h4><p>fork官方的 Prelude 仓库并添加一些你自己的东西. 你应该避免去修改你个人文件夹之外的东西, 以免在日后升级时带来的冲突问题.</p>
 <p>如果你想添加一些自动安装的包到你的个人配置文件, 可以使用以下代码:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(prelude-require-packages <span class="string">'(some-package some-other-package))</span></div></pre></td></tr></table></figure>
+<pre><code class="bash">(prelude-require-packages &#39;(some-package some-other-package))
+</code></pre>
 <p>如果你只需要单一的包, 你也可以这样子:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(prelude-require-packages <span class="string">'some-package)</span></div></pre></td></tr></table></figure>
+<pre><code class="bash">(prelude-require-packages &#39;some-package)
+</code></pre>
 <h4 id="预加载你自己的配置文件"><a href="#预加载你自己的配置文件" class="headerlink" title="预加载你自己的配置文件"></a>预加载你自己的配置文件</h4><p>有时, 你想要在 Perlude 加载之前, 加载你自己的配置文件. Prelude 会自动预加载所有在 <code>personal/preload</code> 文件夹下的 Emacs Lisp 文件. 注意, 这意味着你不能使用任何与Prelude相关的东西, 除了几个变量之外, 比如<code>prelude-dir</code>等等.</p>
 <h4 id="禁用-whitespace-mode"><a href="#禁用-whitespace-mode" class="headerlink" title="禁用 whitespace-mode"></a>禁用 whitespace-mode</h4><p>尽管 <code>whitespace-mode</code> 模式人令人眼前一亮, 但有些人觉得它太过有入侵性.你可以在你的个人配置文件里通过以下代码禁用它:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(setq prelude-whitespace nil)</div></pre></td></tr></table></figure>
+<pre><code class="bash">(setq prelude-whitespace nil)
+</code></pre>
 <p>如果你喜欢 <code>whitespace-mode</code> 但更愿意它不要在你保存文件时自动清除空格, 你可以在你的配置文件里通过设置 <code>prelude-clean-whitespace-on-save</code> 为nil 来禁用这些行为.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(setq prelude-clean-whitespace-on-save nil)</div></pre></td></tr></table></figure>
+<pre><code class="bash">(setq prelude-clean-whitespace-on-save nil)
+</code></pre>
 <h4 id="禁用-flyspell-mode"><a href="#禁用-flyspell-mode" class="headerlink" title="禁用 flyspell-mode"></a>禁用 <code>flyspell-mode</code></h4><p>如果你不喜欢, 可以这样子禁用它</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(setq prelude-flyspell nil)</div></pre></td></tr></table></figure>
+<pre><code class="bash">(setq prelude-flyspell nil)
+</code></pre>
 <h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><h4 id="更新捆绑的包"><a href="#更新捆绑的包" class="headerlink" title="更新捆绑的包"></a>更新捆绑的包</h4><p>在执行更新 Prelude 之前, 最好更新一下你已经安装好的包, 因为最新的Prelude通常依赖于捆绑好的包的更新版本.</p>
 <p>如果你打算手动更新Prelude, 你总是应该首先执行包更新操作.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">M-x package-list-packages RET U x</div></pre></td></tr></table></figure>
+<pre><code class="bash">M-x package-list-packages RET U x
+</code></pre>
 <p>如果你打算使用 <code>M-x prelude-update</code>, 上步的步骤就不是必须的, 因为它会自动先执行更新包操作.</p>
 <h4 id="flyspell-mode-的问题"><a href="#flyspell-mode-的问题" class="headerlink" title="flyspell-mode 的问题"></a>flyspell-mode 的问题</h4><p>Prelude 会大量使用 <code>flyspell-mode</code> 来对各种设置进行拼写检查. 这些操作会依赖于你的操作系统中的 <code>aspell</code> 程序以及一个英文字典. 在Mac OS X下, 你可以通过 <code>homebrew</code> 来安装 <code>aspell</code>, 像这样:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">brew install aspell --with-lang=en</div></pre></td></tr></table></figure>
+<pre><code class="bash">brew install aspell --with-lang=en
+</code></pre>
 <p>在Linux发行版, 只需使用你的包管理器来安装即可.</p>
 <h4 id="Emacs-的终端版颜色太丑的问题"><a href="#Emacs-的终端版颜色太丑的问题" class="headerlink" title="Emacs 的终端版颜色太丑的问题"></a>Emacs 的终端版颜色太丑的问题</h4><p>如果你的Emacs在终端上看上去太丑陋(相对于图形界面版), 可以试下添加以下配置到你的 <code>~/.bashrc</code> 或者 <code>~/.zshrc</code>.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">export</span> TERM=xterm-256color</div></pre></td></tr></table></figure>
+<pre><code class="bash">export TERM=xterm-256color
+</code></pre>
 <p>然后重新加载下 <code>~/.bashrc</code> 或 <code>~/.zshrc</code> 文件, 然后再次启动emacs.</p>
 <h4 id="在初始化启动时报-MELPA-错误"><a href="#在初始化启动时报-MELPA-错误" class="headerlink" title="在初始化启动时报 MELPA 错误"></a>在初始化启动时报 MELPA 错误</h4><p>如果你发现有一些 HTTP 连接到MELPA错误相关的信息, 只要手动执行 <code>M-x package-refresh-contents</code> , 然后直接重启Emacs即可.</p>
 <h4 id="在编辑器缓冲区发现箭头导航的警告"><a href="#在编辑器缓冲区发现箭头导航的警告" class="headerlink" title="在编辑器缓冲区发现箭头导航的警告"></a>在编辑器缓冲区发现箭头导航的警告</h4><p>这不是个bug, 而是一个特色. 我坚信唯一使用Emacs的方法是按它的方式来使用(至少相对于导航而言是这样子)</p>
 <p>如果你相信这会使你更进一步, 你可以完全禁用箭头导航, 可以在你的配置文件里添加:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(setq guru-warn-only nil)</div></pre></td></tr></table></figure>
+<pre><code class="bash">(setq guru-warn-only nil)
+</code></pre>
 <p>完全禁用, 可以在你的配置文件里添加以下片段:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(setq prelude-guru nil)</div></pre></td></tr></table></figure>
+<pre><code class="bash">(setq prelude-guru nil)
+</code></pre>
 <h3 id="自定义-C-a-的行为"><a href="#自定义-C-a-的行为" class="headerlink" title="自定义 C-a 的行为"></a>自定义 <code>C-a</code> 的行为</h3><p>Prelude 覆盖了 <code>C-a</code> 的行为, 描述在<a href="http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/" target="_blank" rel="external">这里</a>. 如果你不喜欢, 你可以简单地添加以下代码到你的配置文件里:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">(global-set-key [remap move-beginning-of-line]</div><div class="line">                <span class="string">'move-beginning-of-line)</span></div></pre></td></tr></table></figure>
+<pre><code class="bash">(global-set-key [remap move-beginning-of-line]
+                &#39;move-beginning-of-line)
+</code></pre>
 <h3 id="ido-在大的数据处理里遇到性能问题"><a href="#ido-在大的数据处理里遇到性能问题" class="headerlink" title="ido 在大的数据处理里遇到性能问题"></a>ido 在大的数据处理里遇到性能问题</h3><p>Prelude 将<code>ido-fix</code> 与默认的 <code>ido</code> 互换了. <code>flx</code>的排序算法更复杂, 但有着更好的结果. 在一些比较慢的机器下, 它可能需要降低 <code>flx-ido-threshold</code> 的值来确保有比较好的体验.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(setq flx-ido-threshold 1000)</div></pre></td></tr></table></figure>
+<pre><code class="bash">(setq flx-ido-threshold 1000)
+</code></pre>
 <p>你也可以完全禁止这些排序算法, 像这样:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(flx-ido-mode -1)</div></pre></td></tr></table></figure>
+<pre><code class="bash">(flx-ido-mode -1)
+</code></pre>
 <h3 id="Windows-兼容性"><a href="#Windows-兼容性" class="headerlink" title="Windows 兼容性"></a>Windows 兼容性</h3><p>理论上 Prelude 应该在 Windows 也可以很好地工作, 我只在 Linux 与 OS X上测试过, 所以Windows时而会有相关的问题. 这种情况可能随着时间的推移而解决 .</p>
 <h3 id="已知的问题"><a href="#已知的问题" class="headerlink" title="已知的问题"></a>已知的问题</h3><p>checkout 项目的未解决的问题列表. 顺便说下, 随意修复好它,然后发给我一个 pull  请求就好. :-)</p>
 <h3 id="技术支持"><a href="#技术支持" class="headerlink" title="技术支持"></a>技术支持</h3><p>通过 Prelude的 Google Group 可以得到些技术支持 <a href="emacs-prelude@googlegroups.com">emacs-prelude@googlegroups.com.</a>.</p>

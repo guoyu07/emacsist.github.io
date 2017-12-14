@@ -15,17 +15,17 @@
     <meta name="keywords" content="java,mybatis," />
   
 
-  <meta name="description" content="批处理1234567891011121314151617&amp;lt;select id=&quot;getAdsByGroupIds&quot; resultMap=&quot;adInfoWithGroupId&quot;&amp;gt; SELECTai.*, gam.group_id FROMgroup_ad_mapping AS gam LEFT JOINad_info AS ai ONgam.creative_id = ai.creati">
+  <meta name="description" content="批处理  &amp;lt;select id=&amp;quot;getAdsByGroupIds&amp;quot; resultMap=&amp;quot;adInfoWithGroupId&amp;quot;&amp;gt;       SELECT         ai.*, gam.group_id       FROM         group_ad_mapping AS gam       LEFT JOIN         a">
 <meta name="keywords" content="java,mybatis">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Mybatis代码片段">
 <meta property="og:url" content="https://emacsist.github.io/2016/07/21/Mybatis代码片段/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="批处理1234567891011121314151617&amp;lt;select id=&quot;getAdsByGroupIds&quot; resultMap=&quot;adInfoWithGroupId&quot;&amp;gt; SELECTai.*, gam.group_id FROMgroup_ad_mapping AS gam LEFT JOINad_info AS ai ONgam.creative_id = ai.creati">
+<meta property="og:description" content="批处理  &amp;lt;select id=&amp;quot;getAdsByGroupIds&amp;quot; resultMap=&amp;quot;adInfoWithGroupId&amp;quot;&amp;gt;       SELECT         ai.*, gam.group_id       FROM         group_ad_mapping AS gam       LEFT JOIN         a">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mybatis代码片段">
-<meta name="twitter:description" content="批处理1234567891011121314151617&amp;lt;select id=&quot;getAdsByGroupIds&quot; resultMap=&quot;adInfoWithGroupId&quot;&amp;gt; SELECTai.*, gam.group_id FROMgroup_ad_mapping AS gam LEFT JOINad_info AS ai ONgam.creative_id = ai.creati">
+<meta name="twitter:description" content="批处理  &amp;lt;select id=&amp;quot;getAdsByGroupIds&amp;quot; resultMap=&amp;quot;adInfoWithGroupId&amp;quot;&amp;gt;       SELECT         ai.*, gam.group_id       FROM         group_ad_mapping AS gam       LEFT JOIN         a">
 
   
 
@@ -201,13 +201,154 @@
 
     <div class="article-content">
         
-                            <h2 id="批处理"><a href="#批处理" class="headerlink" title="批处理"></a>批处理</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">&lt;select id=<span class="string">"getAdsByGroupIds"</span> resultMap=<span class="string">"adInfoWithGroupId"</span>&gt;</div><div class="line"> SELECT</div><div class="line">ai.*, gam.group_id</div><div class="line"> FROM</div><div class="line">group_ad_mapping AS gam</div><div class="line"> LEFT JOIN</div><div class="line">ad_info AS ai</div><div class="line"> ON</div><div class="line">gam.creative_id = ai.creative_id</div><div class="line"> WHERE</div><div class="line">gam.group_id <span class="keyword">in</span></div><div class="line"> &lt;foreach collection=<span class="string">"list"</span> item=<span class="string">"item"</span> index=<span class="string">"index"</span> separator=<span class="string">","</span> open=<span class="string">"("</span> close=<span class="string">")"</span>&gt;</div><div class="line">  <span class="comment">#&#123;item&#125;</span></div><div class="line"> &lt;/foreach&gt;</div><div class="line"> ORDER BY</div><div class="line">ai.create_at DESC</div><div class="line">&lt;/select&gt;</div></pre></td></tr></table></figure>
+                            <h2 id="批处理"><a href="#批处理" class="headerlink" title="批处理"></a>批处理</h2><pre><code class="bash">  &lt;select id=&quot;getAdsByGroupIds&quot; resultMap=&quot;adInfoWithGroupId&quot;&gt;
+      SELECT
+        ai.*, gam.group_id
+      FROM
+        group_ad_mapping AS gam
+      LEFT JOIN
+        ad_info AS ai
+      ON
+        gam.creative_id = ai.creative_id
+      WHERE
+        gam.group_id in
+      &lt;foreach collection=&quot;list&quot; item=&quot;item&quot; index=&quot;index&quot; separator=&quot;,&quot; open=&quot;(&quot; close=&quot;)&quot;&gt;
+          #{item}
+      &lt;/foreach&gt;
+      ORDER BY
+        ai.create_at DESC
+  &lt;/select&gt;
+</code></pre>
 <h2 id="一对多"><a href="#一对多" class="headerlink" title="一对多"></a>一对多</h2><p>java类</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">public class SalesLead &#123;</div><div class="line">    private Long id;</div><div class="line">    private Long clientId;</div><div class="line">    private Integer userId;</div><div class="line">    private Integer salesUserId;</div><div class="line">    private Integer agentUserId;</div><div class="line">    private Integer saleStatus = 0;</div><div class="line">    private Integer isDeal = 0;</div><div class="line">    private Integer isRead = 0;</div><div class="line">    private BigDecimal totalMoney = new BigDecimal(<span class="string">"0"</span>);</div><div class="line">    private BigDecimal prepaid = new BigDecimal(<span class="string">"0"</span>);</div><div class="line">    private String memo = <span class="string">""</span>;</div><div class="line">    private String fromOpenid = <span class="string">""</span>;</div><div class="line">    private String toOpenid = <span class="string">""</span>;</div><div class="line">    private String des = <span class="string">""</span>;</div><div class="line">    private String title = <span class="string">""</span>;</div><div class="line">    private Timestamp createTime = new Timestamp(System.currentTimeMillis());</div><div class="line">    private Timestamp updateTime = new Timestamp(System.currentTimeMillis());</div><div class="line">    private Timestamp closeTime;</div><div class="line"></div><div class="line">    private List&lt;SalesLeadFollow&gt; follows;</div><div class="line">    //getter and settter</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">&lt;resultMap id=<span class="string">"salesLeadMap"</span> <span class="built_in">type</span>=<span class="string">"com.company.sales.pojo.SalesLead"</span>&gt;</div><div class="line">    &lt;id property=<span class="string">"id"</span> column=<span class="string">"id"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"clientId"</span> column=<span class="string">"client_id"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"userId"</span> column=<span class="string">"user_id"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"salesUserId"</span> column=<span class="string">"sales_user_id"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"agentUserId"</span> column=<span class="string">"agent_user_id"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"saleStatus"</span> column=<span class="string">"sale_status"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"isDeal"</span> column=<span class="string">"is_deal"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"isRead"</span> column=<span class="string">"is_read"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"totalMoney"</span> column=<span class="string">"total_money"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"prepaid"</span> column=<span class="string">"prepaid"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"memo"</span> column=<span class="string">"memo"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"fromOpenid"</span> column=<span class="string">"from_openid"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"toOpenid"</span> column=<span class="string">"to_openid"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"des"</span> column=<span class="string">"des"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"title"</span> column=<span class="string">"title"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"createTime"</span> column=<span class="string">"create_time"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"updateTime"</span> column=<span class="string">"update_time"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"closeTime"</span> column=<span class="string">"close_time"</span>/&gt;</div><div class="line">    </div><div class="line">    &lt;collection property=<span class="string">"follows"</span> ofType=<span class="string">"com.company.sales.pojo.SalesLeadFollow"</span> column=<span class="string">"id"</span> select=<span class="string">"selectFollow"</span> /&gt;</div><div class="line">&lt;/resultMap&gt;</div><div class="line"></div><div class="line">&lt;resultMap id=<span class="string">"salesLeadFollowMap"</span> <span class="built_in">type</span>=<span class="string">"com.company.sales.pojo.SalesLeadFollow"</span>&gt;</div><div class="line">    &lt;id property=<span class="string">"id"</span> column=<span class="string">"id"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"userId"</span> column=<span class="string">"user_id"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"followUserId"</span> column=<span class="string">"follow_user_id"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"followType"</span> column=<span class="string">"follow_type"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"salesLeadId"</span> column=<span class="string">"sales_lead_id"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"timeline"</span> column=<span class="string">"timeline"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"createTime"</span> column=<span class="string">"create_time"</span>/&gt;</div><div class="line">&lt;/resultMap&gt;</div><div class="line"></div><div class="line">&lt;select id=<span class="string">"selectFollow"</span> resultMap=<span class="string">"salesLeadFollowMap"</span>&gt;</div><div class="line">    SELECT * from sales_lead_follow WHERE sales_lead_id = <span class="comment">#&#123;id&#125; ORDER BY id DESC</span></div><div class="line">&lt;/select&gt;</div></pre></td></tr></table></figure>
-<h2 id="一对一"><a href="#一对一" class="headerlink" title="一对一"></a>一对一</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">public class WbStatus extends BasePojo implements Serializable &#123;</div><div class="line">    private static final Logger <span class="built_in">log</span> = LoggerFactory.getLogger(WbStatus.class);</div><div class="line">    private static final long serialVersionUID = 1L;</div><div class="line">    private Integer id;</div><div class="line">    private Long sid = 0L;</div><div class="line">    private String idstr = <span class="string">""</span>;</div><div class="line">    private Long mid = 0L;</div><div class="line">    private Long userId = 0L;</div><div class="line">    private String userScreenName = <span class="string">""</span>;</div><div class="line">    private String userProfileImageUrl = <span class="string">""</span>;</div><div class="line">    private String text = <span class="string">""</span>;</div><div class="line">    private String <span class="built_in">source</span> = <span class="string">""</span>;</div><div class="line">    private String thumbnailPic = <span class="string">""</span>;</div><div class="line">    private String bmiddlePic = <span class="string">""</span>;</div><div class="line">    private String originalPic = <span class="string">""</span>;</div><div class="line">    private String retweetedStatusId = <span class="string">""</span>;</div><div class="line">    private String geo = <span class="string">""</span>;</div><div class="line">    private Integer repostsCount = 0;</div><div class="line">    private Integer commentsCount = 0;</div><div class="line">    private Integer attitudesCount = 0;</div><div class="line">    private String visible = <span class="string">""</span>;</div><div class="line">    private String picUrls = <span class="string">""</span>;</div><div class="line">    private Timestamp createAt;</div><div class="line">    private Timestamp updateAt;</div><div class="line">    private String ad = <span class="string">""</span>;</div><div class="line">    private Integer isDeleted = 0;</div><div class="line"></div><div class="line">    //逻辑字段，不是DB字段.</div><div class="line">    private WbUser wbUser;</div><div class="line"></div><div class="line"></div><div class="line">    public <span class="function"><span class="title">WbStatus</span></span>() &#123;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<pre><code class="bash">public class SalesLead {
+    private Long id;
+    private Long clientId;
+    private Integer userId;
+    private Integer salesUserId;
+    private Integer agentUserId;
+    private Integer saleStatus = 0;
+    private Integer isDeal = 0;
+    private Integer isRead = 0;
+    private BigDecimal totalMoney = new BigDecimal(&quot;0&quot;);
+    private BigDecimal prepaid = new BigDecimal(&quot;0&quot;);
+    private String memo = &quot;&quot;;
+    private String fromOpenid = &quot;&quot;;
+    private String toOpenid = &quot;&quot;;
+    private String des = &quot;&quot;;
+    private String title = &quot;&quot;;
+    private Timestamp createTime = new Timestamp(System.currentTimeMillis());
+    private Timestamp updateTime = new Timestamp(System.currentTimeMillis());
+    private Timestamp closeTime;
+
+    private List&lt;SalesLeadFollow&gt; follows;
+    //getter and settter
+}
+</code></pre>
+<pre><code class="bash">    &lt;resultMap id=&quot;salesLeadMap&quot; type=&quot;com.company.sales.pojo.SalesLead&quot;&gt;
+        &lt;id property=&quot;id&quot; column=&quot;id&quot;/&gt;
+        &lt;result property=&quot;clientId&quot; column=&quot;client_id&quot;/&gt;
+        &lt;result property=&quot;userId&quot; column=&quot;user_id&quot;/&gt;
+        &lt;result property=&quot;salesUserId&quot; column=&quot;sales_user_id&quot;/&gt;
+        &lt;result property=&quot;agentUserId&quot; column=&quot;agent_user_id&quot;/&gt;
+        &lt;result property=&quot;saleStatus&quot; column=&quot;sale_status&quot;/&gt;
+        &lt;result property=&quot;isDeal&quot; column=&quot;is_deal&quot;/&gt;
+        &lt;result property=&quot;isRead&quot; column=&quot;is_read&quot;/&gt;
+        &lt;result property=&quot;totalMoney&quot; column=&quot;total_money&quot;/&gt;
+        &lt;result property=&quot;prepaid&quot; column=&quot;prepaid&quot;/&gt;
+        &lt;result property=&quot;memo&quot; column=&quot;memo&quot;/&gt;
+        &lt;result property=&quot;fromOpenid&quot; column=&quot;from_openid&quot;/&gt;
+        &lt;result property=&quot;toOpenid&quot; column=&quot;to_openid&quot;/&gt;
+        &lt;result property=&quot;des&quot; column=&quot;des&quot;/&gt;
+        &lt;result property=&quot;title&quot; column=&quot;title&quot;/&gt;
+        &lt;result property=&quot;createTime&quot; column=&quot;create_time&quot;/&gt;
+        &lt;result property=&quot;updateTime&quot; column=&quot;update_time&quot;/&gt;
+        &lt;result property=&quot;closeTime&quot; column=&quot;close_time&quot;/&gt;
+
+        &lt;collection property=&quot;follows&quot; ofType=&quot;com.company.sales.pojo.SalesLeadFollow&quot; column=&quot;id&quot; select=&quot;selectFollow&quot; /&gt;
+    &lt;/resultMap&gt;
+
+    &lt;resultMap id=&quot;salesLeadFollowMap&quot; type=&quot;com.company.sales.pojo.SalesLeadFollow&quot;&gt;
+        &lt;id property=&quot;id&quot; column=&quot;id&quot;/&gt;
+        &lt;result property=&quot;userId&quot; column=&quot;user_id&quot;/&gt;
+        &lt;result property=&quot;followUserId&quot; column=&quot;follow_user_id&quot;/&gt;
+        &lt;result property=&quot;followType&quot; column=&quot;follow_type&quot;/&gt;
+        &lt;result property=&quot;salesLeadId&quot; column=&quot;sales_lead_id&quot;/&gt;
+        &lt;result property=&quot;timeline&quot; column=&quot;timeline&quot;/&gt;
+        &lt;result property=&quot;createTime&quot; column=&quot;create_time&quot;/&gt;
+    &lt;/resultMap&gt;
+
+    &lt;select id=&quot;selectFollow&quot; resultMap=&quot;salesLeadFollowMap&quot;&gt;
+        SELECT * from sales_lead_follow WHERE sales_lead_id = #{id} ORDER BY id DESC
+    &lt;/select&gt;
+</code></pre>
+<h2 id="一对一"><a href="#一对一" class="headerlink" title="一对一"></a>一对一</h2><pre><code class="bash">
+public class WbStatus extends BasePojo implements Serializable {
+    private static final Logger log = LoggerFactory.getLogger(WbStatus.class);
+    private static final long serialVersionUID = 1L;
+    private Integer id;
+    private Long sid = 0L;
+    private String idstr = &quot;&quot;;
+    private Long mid = 0L;
+    private Long userId = 0L;
+    private String userScreenName = &quot;&quot;;
+    private String userProfileImageUrl = &quot;&quot;;
+    private String text = &quot;&quot;;
+    private String source = &quot;&quot;;
+    private String thumbnailPic = &quot;&quot;;
+    private String bmiddlePic = &quot;&quot;;
+    private String originalPic = &quot;&quot;;
+    private String retweetedStatusId = &quot;&quot;;
+    private String geo = &quot;&quot;;
+    private Integer repostsCount = 0;
+    private Integer commentsCount = 0;
+    private Integer attitudesCount = 0;
+    private String visible = &quot;&quot;;
+    private String picUrls = &quot;&quot;;
+    private Timestamp createAt;
+    private Timestamp updateAt;
+    private String ad = &quot;&quot;;
+    private Integer isDeleted = 0;
+
+    //逻辑字段，不是DB字段.
+    private WbUser wbUser;
+
+
+    public WbStatus() {
+    }
+</code></pre>
 <p>Mybatis的代码片段:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">&lt;resultMap id=<span class="string">"wbStatusResultMap"</span> <span class="built_in">type</span>=<span class="string">"com.weibosdk.pojo.WbStatus"</span>&gt;</div><div class="line">    &lt;id property=<span class="string">"id"</span> column=<span class="string">"id"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"sid"</span> column=<span class="string">"sid"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"idstr"</span> column=<span class="string">"idstr"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"mid"</span> column=<span class="string">"mid"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"userId"</span> column=<span class="string">"user_id"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"userScreenName"</span> column=<span class="string">"user_screen_name"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"userProfileImageUrl"</span> column=<span class="string">"user_profile_image_url"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"text"</span> column=<span class="string">"text"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"source"</span> column=<span class="string">"source"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"thumbnailPic"</span> column=<span class="string">"thumbnail_pic"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"bmiddlePic"</span> column=<span class="string">"bmiddle_pic"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"originalPic"</span> column=<span class="string">"original_pic"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"retweetedStatusId"</span> column=<span class="string">"retweeted_status_id"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"geo"</span> column=<span class="string">"geo"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"repostsCount"</span> column=<span class="string">"reposts_count"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"commentsCount"</span> column=<span class="string">"comments_count"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"attitudesCount"</span> column=<span class="string">"attitudes_count"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"visible"</span> column=<span class="string">"visible"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"picUrls"</span> column=<span class="string">"pic_urls"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"createAt"</span> column=<span class="string">"create_at"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"updateAt"</span> column=<span class="string">"update_at"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"ad"</span> column=<span class="string">"ad"</span>/&gt;</div><div class="line">    &lt;result property=<span class="string">"isDeleted"</span> column=<span class="string">"is_deleted"</span>/&gt;</div><div class="line">    &lt;association property=<span class="string">"wbUser"</span> javaType=<span class="string">"com.weibosdk.pojo.WbUser"</span> select=<span class="string">"selectWbUser"</span> column=<span class="string">"user_id"</span>&gt;</div><div class="line">    &lt;/association&gt;</div><div class="line">&lt;/resultMap&gt;</div><div class="line"></div><div class="line">&lt;select id=<span class="string">"selectWbUser"</span> resultMap=<span class="string">"com.weibosdk.dao.mapper.WbUserMapper.wbUserResultMap"</span>&gt;</div><div class="line">  SELECT * from wb_user WHERE u_id = <span class="comment">#&#123;userId&#125; limit 1</span></div><div class="line">&lt;/select&gt;</div></pre></td></tr></table></figure>
+<pre><code class="bash">    &lt;resultMap id=&quot;wbStatusResultMap&quot; type=&quot;com.weibosdk.pojo.WbStatus&quot;&gt;
+        &lt;id property=&quot;id&quot; column=&quot;id&quot;/&gt;
+        &lt;result property=&quot;sid&quot; column=&quot;sid&quot;/&gt;
+        &lt;result property=&quot;idstr&quot; column=&quot;idstr&quot;/&gt;
+        &lt;result property=&quot;mid&quot; column=&quot;mid&quot;/&gt;
+        &lt;result property=&quot;userId&quot; column=&quot;user_id&quot;/&gt;
+        &lt;result property=&quot;userScreenName&quot; column=&quot;user_screen_name&quot;/&gt;
+        &lt;result property=&quot;userProfileImageUrl&quot; column=&quot;user_profile_image_url&quot;/&gt;
+        &lt;result property=&quot;text&quot; column=&quot;text&quot;/&gt;
+        &lt;result property=&quot;source&quot; column=&quot;source&quot;/&gt;
+        &lt;result property=&quot;thumbnailPic&quot; column=&quot;thumbnail_pic&quot;/&gt;
+        &lt;result property=&quot;bmiddlePic&quot; column=&quot;bmiddle_pic&quot;/&gt;
+        &lt;result property=&quot;originalPic&quot; column=&quot;original_pic&quot;/&gt;
+        &lt;result property=&quot;retweetedStatusId&quot; column=&quot;retweeted_status_id&quot;/&gt;
+        &lt;result property=&quot;geo&quot; column=&quot;geo&quot;/&gt;
+        &lt;result property=&quot;repostsCount&quot; column=&quot;reposts_count&quot;/&gt;
+        &lt;result property=&quot;commentsCount&quot; column=&quot;comments_count&quot;/&gt;
+        &lt;result property=&quot;attitudesCount&quot; column=&quot;attitudes_count&quot;/&gt;
+        &lt;result property=&quot;visible&quot; column=&quot;visible&quot;/&gt;
+        &lt;result property=&quot;picUrls&quot; column=&quot;pic_urls&quot;/&gt;
+        &lt;result property=&quot;createAt&quot; column=&quot;create_at&quot;/&gt;
+        &lt;result property=&quot;updateAt&quot; column=&quot;update_at&quot;/&gt;
+        &lt;result property=&quot;ad&quot; column=&quot;ad&quot;/&gt;
+        &lt;result property=&quot;isDeleted&quot; column=&quot;is_deleted&quot;/&gt;
+        &lt;association property=&quot;wbUser&quot; javaType=&quot;com.weibosdk.pojo.WbUser&quot; select=&quot;selectWbUser&quot; column=&quot;user_id&quot;&gt;
+        &lt;/association&gt;
+    &lt;/resultMap&gt;
+
+    &lt;select id=&quot;selectWbUser&quot; resultMap=&quot;com.weibosdk.dao.mapper.WbUserMapper.wbUserResultMap&quot;&gt;
+      SELECT * from wb_user WHERE u_id = #{userId} limit 1
+    &lt;/select&gt;
+</code></pre>
 
                                 
     </div>

@@ -15,17 +15,17 @@
     <meta name="keywords" content="java,class,javassist," />
   
 
-  <meta name="description" content="修改方法12345678910111213141516package org.test;/** * Created by sky on 15-12-31. */public class Bool &amp;#123;    public static void main(String[] args) throws InterruptedException &amp;#123;        new Bool().">
+  <meta name="description" content="修改方法package org.test;  /**  * Created by sky on 15-12-31.  */ public class Bool {      public static void main(String[] args) throws InterruptedException {         new Bool().run();     }      public">
 <meta name="keywords" content="java,class,javassist">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java使用Javassist修改class文件">
 <meta property="og:url" content="https://emacsist.github.io/2015/12/31/Java使用Javassist修改class文件/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="修改方法12345678910111213141516package org.test;/** * Created by sky on 15-12-31. */public class Bool &amp;#123;    public static void main(String[] args) throws InterruptedException &amp;#123;        new Bool().">
+<meta property="og:description" content="修改方法package org.test;  /**  * Created by sky on 15-12-31.  */ public class Bool {      public static void main(String[] args) throws InterruptedException {         new Bool().run();     }      public">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java使用Javassist修改class文件">
-<meta name="twitter:description" content="修改方法12345678910111213141516package org.test;/** * Created by sky on 15-12-31. */public class Bool &amp;#123;    public static void main(String[] args) throws InterruptedException &amp;#123;        new Bool().">
+<meta name="twitter:description" content="修改方法package org.test;  /**  * Created by sky on 15-12-31.  */ public class Bool {      public static void main(String[] args) throws InterruptedException {         new Bool().run();     }      public">
 
   
 
@@ -206,12 +206,81 @@
 
     <div class="article-content">
         
-                            <h2 id="修改方法"><a href="#修改方法" class="headerlink" title="修改方法"></a>修改方法</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">package org.test;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by sky on 15-12-31.</div><div class="line"> */</div><div class="line">public class Bool &#123;</div><div class="line"></div><div class="line">    public static void main(String[] args) throws InterruptedException &#123;</div><div class="line">        new Bool().run();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void run() throws InterruptedException &#123;</div><div class="line">        Thread.sleep(1000 * 5);</div><div class="line">        System.out.println(<span class="string">"default"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="为方法前后添加性能统计时间"><a href="#为方法前后添加性能统计时间" class="headerlink" title="为方法前后添加性能统计时间"></a>为方法前后添加性能统计时间</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">package org.javassist.demo;</div><div class="line"></div><div class="line">import javassist.*;</div><div class="line"></div><div class="line">import java.io.IOException;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by sky on 15-12-31.</div><div class="line"> */</div><div class="line">public class ReadByteCode &#123;</div><div class="line">    public static void main(String[] args) throws NotFoundException, CannotCompileException, IOException &#123;</div><div class="line">        ClassPool classPool = ClassPool.getDefault();</div><div class="line">        classPool.importPackage(<span class="string">"org.test"</span>);</div><div class="line">        CtClass ctClass = null;</div><div class="line">        try &#123;</div><div class="line">            ctClass = classPool.get(<span class="string">"org.test.Bool"</span>);</div><div class="line">        &#125; catch (NotFoundException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">        CtMethod[] methods = ctClass.getDeclaredMethods();</div><div class="line">        <span class="keyword">for</span> (int i = 0; i &lt; methods.length; i++) &#123;</div><div class="line">            CtMethod method = methods[i];</div><div class="line">            String methodName = method.getName();</div><div class="line">            String oldMethodName = methodName + <span class="string">"$<span class="variable">$old</span>"</span>;</div><div class="line">            <span class="keyword">if</span> (!<span class="string">"main"</span>.equalsIgnoreCase(methodName)) &#123;</div><div class="line">                CtMethod newMehtod = CtNewMethod.copy(method, ctClass, null);</div><div class="line">                method.setName(oldMethodName);</div><div class="line">                StringBuilder sb = new StringBuilder(100);</div><div class="line">                sb.append(<span class="string">"&#123;\nlong s = System.currentTimeMillis();\n"</span>);</div><div class="line">                sb.append(oldMethodName + <span class="string">"($$);\n"</span>);</div><div class="line">                sb.append(<span class="string">"System.out.println(\"Call to method "</span> + methodName</div><div class="line">                        + <span class="string">" took \" +\n (System.currentTimeMillis()-s) + "</span></div><div class="line">                        + <span class="string">"\" ms.\");\n"</span>);</div><div class="line"></div><div class="line">                sb.append(<span class="string">"&#125;"</span>);</div><div class="line">                newMehtod.setBody(sb.toString());</div><div class="line">                newMehtod.setName(methodName);</div><div class="line">                ctClass.addMethod(newMehtod);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        ctClass.writeFile(<span class="string">"/tmp/hello"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+                            <h2 id="修改方法"><a href="#修改方法" class="headerlink" title="修改方法"></a>修改方法</h2><pre><code class="bash">package org.test;
+
+/**
+ * Created by sky on 15-12-31.
+ */
+public class Bool {
+
+    public static void main(String[] args) throws InterruptedException {
+        new Bool().run();
+    }
+
+    public void run() throws InterruptedException {
+        Thread.sleep(1000 * 5);
+        System.out.println(&quot;default&quot;);
+    }
+}
+</code></pre>
+<h2 id="为方法前后添加性能统计时间"><a href="#为方法前后添加性能统计时间" class="headerlink" title="为方法前后添加性能统计时间"></a>为方法前后添加性能统计时间</h2><pre><code class="bash">package org.javassist.demo;
+
+import javassist.*;
+
+import java.io.IOException;
+
+/**
+ * Created by sky on 15-12-31.
+ */
+public class ReadByteCode {
+    public static void main(String[] args) throws NotFoundException, CannotCompileException, IOException {
+        ClassPool classPool = ClassPool.getDefault();
+        classPool.importPackage(&quot;org.test&quot;);
+        CtClass ctClass = null;
+        try {
+            ctClass = classPool.get(&quot;org.test.Bool&quot;);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
+        CtMethod[] methods = ctClass.getDeclaredMethods();
+        for (int i = 0; i &lt; methods.length; i++) {
+            CtMethod method = methods[i];
+            String methodName = method.getName();
+            String oldMethodName = methodName + &quot;$$old&quot;;
+            if (!&quot;main&quot;.equalsIgnoreCase(methodName)) {
+                CtMethod newMehtod = CtNewMethod.copy(method, ctClass, null);
+                method.setName(oldMethodName);
+                StringBuilder sb = new StringBuilder(100);
+                sb.append(&quot;{\nlong s = System.currentTimeMillis();\n&quot;);
+                sb.append(oldMethodName + &quot;($$);\n&quot;);
+                sb.append(&quot;System.out.println(\&quot;Call to method &quot; + methodName
+                        + &quot; took \&quot; +\n (System.currentTimeMillis()-s) + &quot;
+                        + &quot;\&quot; ms.\&quot;);\n&quot;);
+
+                sb.append(&quot;}&quot;);
+                newMehtod.setBody(sb.toString());
+                newMehtod.setName(methodName);
+                ctClass.addMethod(newMehtod);
+            }
+        }
+        ctClass.writeFile(&quot;/tmp/hello&quot;);
+    }
+}
+</code></pre>
 <p>运行完后，就可以看到<code>/tmp/hello</code>目录下有个class文件了，如下:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">└─[0] &lt;&gt; tree /tmp/hello</div><div class="line">/tmp/hello</div><div class="line">└── org</div><div class="line">    └── <span class="built_in">test</span></div><div class="line">        └── Bool.class</div><div class="line"></div><div class="line">2 directories, 1 file</div></pre></td></tr></table></figure>
+<pre><code class="bash">└─[0] &lt;&gt; tree /tmp/hello
+/tmp/hello
+└── org
+    └── test
+        └── Bool.class
+
+2 directories, 1 file
+</code></pre>
 <p>运行结果如下:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">└─[0] &lt;&gt; java org.test.Bool</div><div class="line">default</div><div class="line">Call to method run took 5001 ms.</div></pre></td></tr></table></figure>
+<pre><code class="bash">└─[0] &lt;&gt; java org.test.Bool
+default
+Call to method run took 5001 ms.
+</code></pre>
 
                                 
     </div>

@@ -208,15 +208,55 @@
 <p>要注意，经自己测试，这个注解的类，要被 <code>org.springframework.web.servlet.DispatcherServlet</code>的<code>contextConfigLocation</code>中扫描到，如果是放在<code>application context</code>里扫描，是没有效果的.</p>
 </blockquote>
 <h3 id="java-文件内容"><a href="#java-文件内容" class="headerlink" title="java 文件内容"></a>java 文件内容</h3><p><code>ControllerAdviceHandler.java</code></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">@ControllerAdvice</div><div class="line">public class ControllerAdviceHandler &#123;</div><div class="line"></div><div class="line">    private static final Logger <span class="built_in">log</span> = LoggerFactory.getLogger(ControllerAdviceHandler.class);</div><div class="line"></div><div class="line">    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)</div><div class="line">    @ExceptionHandler(value = Exception.class)</div><div class="line">    @ResponseBody</div><div class="line">    public Object exceptionHandler(HttpServletRequest request, HttpServletResponse response, Exception e) &#123;</div><div class="line">        Map&lt;String, Object&gt; hello = new HashMap&lt;&gt;(2);</div><div class="line">        hello.put(<span class="string">"hello"</span>, <span class="string">"helllo msg"</span>);</div><div class="line">        hello.put(<span class="string">"msg"</span>, e.getMessage());</div><div class="line">        log.error(<span class="string">"error in url:&#123;&#125;, reason: &#123;&#125;"</span>, request.getRequestURI().toString(), e);</div><div class="line">        <span class="built_in">return</span> hello;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="bash">@ControllerAdvice
+public class ControllerAdviceHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(ControllerAdviceHandler.class);
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(value = Exception.class)
+    @ResponseBody
+    public Object exceptionHandler(HttpServletRequest request, HttpServletResponse response, Exception e) {
+        Map&lt;String, Object&gt; hello = new HashMap&lt;&gt;(2);
+        hello.put(&quot;hello&quot;, &quot;helllo msg&quot;);
+        hello.put(&quot;msg&quot;, e.getMessage());
+        log.error(&quot;error in url:{}, reason: {}&quot;, request.getRequestURI().toString(), e);
+        return hello;
+    }
+}
+</code></pre>
 <h3 id="xml-配置"><a href="#xml-配置" class="headerlink" title="xml  配置"></a>xml  配置</h3><p>在<code>DispatcherServlet</code>的<code>contextconfigLocation</code>参数值的配置文件里，添加以下:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&lt;mvc:annotation-driven /&gt;</div><div class="line">&lt;!-- Scans <span class="keyword">for</span> annotated @Controllers <span class="keyword">in</span> the classpath --&gt;</div><div class="line">&lt;context:component-scan base-package=<span class="string">"com.uniweibov2.web"</span> use-default-filters=<span class="string">"false"</span>&gt;</div><div class="line">  	    &lt;context:include-filter <span class="built_in">type</span>=<span class="string">"annotation"</span> expression=<span class="string">"org.springframework.stereotype.Controller"</span>/&gt;</div><div class="line">	&lt;context:include-filter <span class="built_in">type</span>=<span class="string">"annotation"</span> expression=<span class="string">"org.springframework.web.bind.annotation.ControllerAdvice"</span>/&gt;</div><div class="line">&lt;/context:component-scan&gt;</div><div class="line"></div><div class="line">   &lt;!-- 启动对@AspectJ注解的支持 --&gt;</div><div class="line">&lt;aop:aspectj-autoproxy /&gt;</div><div class="line">&lt;!--通知spring使用cglib而不是jdk的来生成代理方法 AOP可以拦截到Controller--&gt;</div><div class="line">&lt;aop:aspectj-autoproxy proxy-target-class=<span class="string">"true"</span> /&gt;</div></pre></td></tr></table></figure>
+<pre><code class="bash">    &lt;mvc:annotation-driven /&gt;
+    &lt;!-- Scans for annotated @Controllers in the classpath --&gt;
+    &lt;context:component-scan base-package=&quot;com.uniweibov2.web&quot; use-default-filters=&quot;false&quot;&gt;
+           &lt;context:include-filter type=&quot;annotation&quot; expression=&quot;org.springframework.stereotype.Controller&quot;/&gt;
+        &lt;context:include-filter type=&quot;annotation&quot; expression=&quot;org.springframework.web.bind.annotation.ControllerAdvice&quot;/&gt;
+    &lt;/context:component-scan&gt;
+
+    &lt;!-- 启动对@AspectJ注解的支持 --&gt;
+    &lt;aop:aspectj-autoproxy /&gt;
+    &lt;!--通知spring使用cglib而不是jdk的来生成代理方法 AOP可以拦截到Controller--&gt;
+    &lt;aop:aspectj-autoproxy proxy-target-class=&quot;true&quot; /&gt;
+</code></pre>
 <h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>在某个Controller的拥有<code>@RequestMapping</code>注解的方法拥有抛出的异常：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(<span class="string">"/index"</span>)</div><div class="line">@SystemControllerLog(module = FunctionBlockContants.SYSTEM, <span class="keyword">function</span> = FunctionBlockContants.INDEX_PAGE)</div><div class="line">public ModelAndView <span class="function"><span class="title">index</span></span>() &#123;</div><div class="line">    <span class="keyword">if</span> (index.equals(<span class="string">"login"</span>)) &#123;</div><div class="line">        throw new RuntimeException(<span class="string">"error in index"</span>);</div><div class="line">        //<span class="built_in">return</span> new ModelAndView(<span class="string">"redirect:/"</span> + index);</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">return</span> null;</div><div class="line">    //<span class="built_in">return</span> new ModelAndView(index);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="bash">    @RequestMapping(&quot;/index&quot;)
+    @SystemControllerLog(module = FunctionBlockContants.SYSTEM, function = FunctionBlockContants.INDEX_PAGE)
+    public ModelAndView index() {
+        if (index.equals(&quot;login&quot;)) {
+            throw new RuntimeException(&quot;error in index&quot;);
+            //return new ModelAndView(&quot;redirect:/&quot; + index);
+        }
+        return null;
+        //return new ModelAndView(index);
+    }
+</code></pre>
 <p>这样子，就会被<code>@ControllerAdvice</code>的类的<code>@ExceptionHandler</code>注解的方法处理异常了（比如，可以在这里记录log!）</p>
-<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~  curl http://localhost:8080/index</div><div class="line">&#123;<span class="string">"msg"</span>:<span class="string">"error in index"</span>,<span class="string">"hello"</span>:<span class="string">"helllo msg"</span>&#125;                                                                                                                                                      ➜  ~</div></pre></td></tr></table></figure>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><pre><code class="bash">➜  ~  curl http://localhost:8080/index
+{&quot;msg&quot;:&quot;error in index&quot;,&quot;hello&quot;:&quot;helllo msg&quot;}                                                                                                                                                      ➜  ~
+</code></pre>
 <p>控制台打印：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">error <span class="keyword">in</span> url:/index, reason: java.lang.RuntimeException: error <span class="keyword">in</span> index</div></pre></td></tr></table></figure>
+<pre><code class="bash">error in url:/index, reason: java.lang.RuntimeException: error in index
+</code></pre>
 
                                 
     </div>

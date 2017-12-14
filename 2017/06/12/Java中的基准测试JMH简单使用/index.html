@@ -15,17 +15,17 @@
     <meta name="keywords" content="Java,benchmarks," />
   
 
-  <meta name="description" content="使用命令行请参考官方网站: openjdk jmh Mavenpom.xml 1234567891011&amp;lt;dependency&amp;gt;	&amp;lt;groupId&amp;gt;org.openjdk.jmh&amp;lt;/groupId&amp;gt;	&amp;lt;artifactId&amp;gt;jmh-core&amp;lt;/artifactId&amp;gt;	&amp;lt;version&amp;gt;1.15&amp;lt;/version&amp;gt;&amp;">
+  <meta name="description" content="使用命令行请参考官方网站: openjdk jmh Mavenpom.xml          &amp;lt;dependency&amp;gt;             &amp;lt;groupId&amp;gt;org.openjdk.jmh&amp;lt;/groupId&amp;gt;             &amp;lt;artifactId&amp;gt;jmh-core&amp;lt;/artifactId&amp;gt;             &amp;lt;">
 <meta name="keywords" content="Java,benchmarks">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java中的基准测试JMH简单使用">
 <meta property="og:url" content="https://emacsist.github.io/2017/06/12/Java中的基准测试JMH简单使用/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="使用命令行请参考官方网站: openjdk jmh Mavenpom.xml 1234567891011&amp;lt;dependency&amp;gt;	&amp;lt;groupId&amp;gt;org.openjdk.jmh&amp;lt;/groupId&amp;gt;	&amp;lt;artifactId&amp;gt;jmh-core&amp;lt;/artifactId&amp;gt;	&amp;lt;version&amp;gt;1.15&amp;lt;/version&amp;gt;&amp;">
+<meta property="og:description" content="使用命令行请参考官方网站: openjdk jmh Mavenpom.xml          &amp;lt;dependency&amp;gt;             &amp;lt;groupId&amp;gt;org.openjdk.jmh&amp;lt;/groupId&amp;gt;             &amp;lt;artifactId&amp;gt;jmh-core&amp;lt;/artifactId&amp;gt;             &amp;lt;">
 <meta property="og:updated_time" content="2017-06-12T08:49:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java中的基准测试JMH简单使用">
-<meta name="twitter:description" content="使用命令行请参考官方网站: openjdk jmh Mavenpom.xml 1234567891011&amp;lt;dependency&amp;gt;	&amp;lt;groupId&amp;gt;org.openjdk.jmh&amp;lt;/groupId&amp;gt;	&amp;lt;artifactId&amp;gt;jmh-core&amp;lt;/artifactId&amp;gt;	&amp;lt;version&amp;gt;1.15&amp;lt;/version&amp;gt;&amp;">
+<meta name="twitter:description" content="使用命令行请参考官方网站: openjdk jmh Mavenpom.xml          &amp;lt;dependency&amp;gt;             &amp;lt;groupId&amp;gt;org.openjdk.jmh&amp;lt;/groupId&amp;gt;             &amp;lt;artifactId&amp;gt;jmh-core&amp;lt;/artifactId&amp;gt;             &amp;lt;">
 
   
 
@@ -204,13 +204,84 @@
                             <h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="命令行"><a href="#命令行" class="headerlink" title="命令行"></a>命令行</h2><p>请参考官方网站:</p>
 <p><a href="http://openjdk.java.net/projects/code-tools/jmh/" target="_blank" rel="external">openjdk jmh</a></p>
 <h2 id="Maven"><a href="#Maven" class="headerlink" title="Maven"></a>Maven</h2><p>pom.xml</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&lt;dependency&gt;</div><div class="line">	&lt;groupId&gt;org.openjdk.jmh&lt;/groupId&gt;</div><div class="line">	&lt;artifactId&gt;jmh-core&lt;/artifactId&gt;</div><div class="line">	&lt;version&gt;1.15&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">	&lt;groupId&gt;org.openjdk.jmh&lt;/groupId&gt;</div><div class="line">	&lt;artifactId&gt;jmh-generator-annprocess&lt;/artifactId&gt;</div><div class="line">	&lt;version&gt;1.15&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
+<pre><code class="bash">
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.openjdk.jmh&lt;/groupId&gt;
+            &lt;artifactId&gt;jmh-core&lt;/artifactId&gt;
+            &lt;version&gt;1.15&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.openjdk.jmh&lt;/groupId&gt;
+            &lt;artifactId&gt;jmh-generator-annprocess&lt;/artifactId&gt;
+            &lt;version&gt;1.15&lt;/version&gt;
+        &lt;/dependency&gt;
+</code></pre>
 <p>使用示例:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">import org.openjdk.jmh.annotations.*;</div><div class="line">import org.openjdk.jmh.runner.Runner;</div><div class="line">import org.openjdk.jmh.runner.RunnerException;</div><div class="line">import org.openjdk.jmh.runner.options.Options;</div><div class="line">import org.openjdk.jmh.runner.options.OptionsBuilder;</div><div class="line"></div><div class="line">import java.util.concurrent.TimeUnit;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by emacsist on 2017/6/12.</div><div class="line"> */</div><div class="line">@BenchmarkMode(Mode.Throughput)</div><div class="line">@OutputTimeUnit(TimeUnit.MICROSECONDS)</div><div class="line">@State(Scope.Thread)</div><div class="line">public class BenchmarkTest &#123;</div><div class="line">    @Benchmark</div><div class="line">    public void <span class="function"><span class="title">testJSON</span></span>()&#123;</div><div class="line">        add(1, 3);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static int add(int a, int b)&#123;</div><div class="line">        <span class="built_in">return</span> a + b;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static void main(String[] args) throws RunnerException &#123;</div><div class="line">        Options opt = new OptionsBuilder()</div><div class="line">                .include(BenchmarkTest.class.getSimpleName())</div><div class="line">                .forks(1)</div><div class="line">                .warmupIterations(5)</div><div class="line">                .measurementIterations(5)</div><div class="line">                .threads(10)</div><div class="line">                .build();</div><div class="line"></div><div class="line">        new Runner(opt).run();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="bash">import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.runner.Runner;
+import org.openjdk.jmh.runner.RunnerException;
+import org.openjdk.jmh.runner.options.Options;
+import org.openjdk.jmh.runner.options.OptionsBuilder;
+
+import java.util.concurrent.TimeUnit;
+
+/**
+ * Created by emacsist on 2017/6/12.
+ */
+@BenchmarkMode(Mode.Throughput)
+@OutputTimeUnit(TimeUnit.MICROSECONDS)
+@State(Scope.Thread)
+public class BenchmarkTest {
+    @Benchmark
+    public void testJSON(){
+        add(1, 3);
+    }
+
+    public static int add(int a, int b){
+        return a + b;
+    }
+
+    public static void main(String[] args) throws RunnerException {
+        Options opt = new OptionsBuilder()
+                .include(BenchmarkTest.class.getSimpleName())
+                .forks(1)
+                .warmupIterations(5)
+                .measurementIterations(5)
+                .threads(10)
+                .build();
+
+        new Runner(opt).run();
+    }
+}
+</code></pre>
 <h1 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h1><p>Mode：表示测试类型，它有 Throughput（吞吐量）， AverageTime（平均时间）， SampleTime（取样时间）， SingleShotTime（测量单次操作），All（前面所有类型）<br>OutputTimeUnit：输出的时间单位</p>
 <p>warmupIterations：表示预热，消除JIT的影响<br>measurementIterations：表示测量的次数</p>
 <h1 id="输出例子"><a href="#输出例子" class="headerlink" title="输出例子"></a>输出例子</h1><p>比如上面的代码的输出为</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Warmup Iteration   1: 2304.433 ops/us</span></div><div class="line"><span class="comment"># Warmup Iteration   2: 2817.992 ops/us</span></div><div class="line"><span class="comment"># Warmup Iteration   3: 3895.650 ops/us</span></div><div class="line"><span class="comment"># Warmup Iteration   4: 3912.852 ops/us</span></div><div class="line"><span class="comment"># Warmup Iteration   5: 4092.241 ops/us</span></div><div class="line">Iteration   1: 4133.110 ops/us</div><div class="line">Iteration   2: 4465.652 ops/us</div><div class="line">Iteration   3: 4754.479 ops/us</div><div class="line">Iteration   4: 5023.710 ops/us</div><div class="line">Iteration   5: 4653.248 ops/us</div><div class="line"></div><div class="line"></div><div class="line">Result <span class="string">"testJSON"</span>:</div><div class="line">  4606.040 ±(99.9%) 1280.132 ops/us [Average]</div><div class="line">  (min, avg, max) = (4133.110, 4606.040, 5023.710), stdev = 332.446</div><div class="line">  CI (99.9%): [3325.908, 5886.172] (assumes normal distribution)</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># Run complete. Total time: 00:00:12</span></div><div class="line"></div><div class="line">Benchmark                Mode  Cnt     Score      Error   Units</div><div class="line">BenchmarkTest.testJSON  thrpt    5  4606.040 ± 1280.132  ops/us</div><div class="line"></div><div class="line">Process finished with <span class="built_in">exit</span> code 0</div></pre></td></tr></table></figure>
+<pre><code class="bash"># Warmup Iteration   1: 2304.433 ops/us
+# Warmup Iteration   2: 2817.992 ops/us
+# Warmup Iteration   3: 3895.650 ops/us
+# Warmup Iteration   4: 3912.852 ops/us
+# Warmup Iteration   5: 4092.241 ops/us
+Iteration   1: 4133.110 ops/us
+Iteration   2: 4465.652 ops/us
+Iteration   3: 4754.479 ops/us
+Iteration   4: 5023.710 ops/us
+Iteration   5: 4653.248 ops/us
+
+
+Result &quot;testJSON&quot;:
+  4606.040 ±(99.9%) 1280.132 ops/us [Average]
+  (min, avg, max) = (4133.110, 4606.040, 5023.710), stdev = 332.446
+  CI (99.9%): [3325.908, 5886.172] (assumes normal distribution)
+
+
+# Run complete. Total time: 00:00:12
+
+Benchmark                Mode  Cnt     Score      Error   Units
+BenchmarkTest.testJSON  thrpt    5  4606.040 ± 1280.132  ops/us
+
+Process finished with exit code 0
+</code></pre>
 
                                 
     </div>

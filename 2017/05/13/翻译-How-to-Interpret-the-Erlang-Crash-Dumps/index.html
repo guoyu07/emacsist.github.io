@@ -225,7 +225,8 @@
 <li>导致 crash dump 的运行时系统线程</li>
 </ul>
 <h2 id="Crash-Dump-的原因-Slogan"><a href="#Crash-Dump-的原因-Slogan" class="headerlink" title="Crash Dump 的原因(Slogan)"></a>Crash Dump 的原因(Slogan)</h2><p>Dump 的原因显示在文件的开头:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Slogan: &lt;reason&gt;</div></pre></td></tr></table></figure>
+<pre><code class="bash">Slogan: &lt;reason&gt;
+</code></pre>
 <p>如果系统是由 <em>BIF</em>  <em>erlang:halt/1</em> 停止的话，则 Slogan 是传递给 BIF 的 <em>string</em> 参数，否则它是模拟器或(Erlang)内核生成的描述。通常，该消息足以知道问题所在，但有时只是一些描述一些消息。请注意，认为的 crash 的原因，<em>仅仅只是认为</em> 。具体的错误原因会因本地应用以及所在的操作系统而异。</p>
 <h2 id="Cannot-allocate-bytes-of-memory-of-type-““"><a href="#Cannot-allocate-bytes-of-memory-of-type-““" class="headerlink" title=": Cannot allocate  bytes of memory (of type ““)"></a><a>: Cannot allocate <n> bytes of memory (of type “<t>“)</t></n></a></h2><p>系统内存不足。 <em><a></a></em> 是失败分配内存的分配器。<em><n></n></em> 是 <em><a></a></em> 试图分配的 <em>字节数</em> 。<em><t></t></em> 是内存需要分配的内存块类型。最常见的情况是进程存储大量的数据。在这种情况下，最常见的导致crash的 <em><t></t></em> 是 <em>heap</em> ， <em>old heap</em> , <em>heap_fraq</em> 或 <em>binary</em> 。更多关于分配器的信息，请看 <a href="http://erlang.org/doc/man/erts_alloc.html" target="_blank" rel="external">erts_alloc(3)</a></p>
 <h2 id="Cannot-reallocate-bytes-of-memory-of-type-““"><a href="#Cannot-reallocate-bytes-of-memory-of-type-““" class="headerlink" title=": Cannot reallocate  bytes of memory (of type ““)"></a><a>: Cannot reallocate <n> bytes of memory (of type “<t>“)</t></n></a></h2><p>与上述相同，除了内存是重新分配，而不是在系统内存不足时被分配外。</p>
@@ -343,7 +344,14 @@
 <p>对于每一个进程，如果进程的消息队列不为空的话，还会有一个 <em>=proc_messages</em> 标签，如果进程的 dictionary （即 <em>put/2</em> 和 <em>get/1</em> 所做的事）不为空的话，还有一个 <em>proc_dictionary</em> 标签。</p>
 <p>原始内存信息可以在使用 Crashdump Viewer 工具时被解码。然后你可以看到栈的dump，消息队列（如果有话），以及 dictionary （如果有话）</p>
 <p>栈 dump 是Erlang进程的dump 。大多存活的数据（即，当前使用的变量）会放到栈上；因此可能比较感兴趣。人们可以猜测它是什么，但作为信息来说是符号来的，完整阅读这些信息可能是有用的。例如，我们可以在下面的例子的第5，和第6行中找出 Erlang 基本加载器的变量状态：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">(1)  3cac44   Return addr 0x13BF58 (&lt;terminate process normally&gt;)</div><div class="line">(2)  y(0)     [<span class="string">"/view/siri_r10_dev/clearcase/otp/erts/lib/kernel/ebin"</span>,</div><div class="line">(3)            <span class="string">"/view/siri_r10_dev/clearcase/otp/erts/lib/stdlib/ebin"</span>]</div><div class="line">(4)  y(1)     &lt;0.1.0&gt;</div><div class="line">(5)  y(2)     &#123;state,[],none,<span class="comment">#Fun&lt;erl_prim_loader.6.7085890&gt;,undefined,#Fun&lt;erl_prim_loader.7.9000327&gt;,</span></div><div class="line">(6)            <span class="comment">#Fun&lt;erl_prim_loader.8.116480692&gt;,#Port&lt;0.2&gt;,infinity,#Fun&lt;erl_prim_loader.9.10708760&gt;&#125;</span></div><div class="line">(7)  y(3)     infinity</div></pre></td></tr></table></figure>
+<pre><code class="bash">(1)  3cac44   Return addr 0x13BF58 (&lt;terminate process normally&gt;)
+(2)  y(0)     [&quot;/view/siri_r10_dev/clearcase/otp/erts/lib/kernel/ebin&quot;,
+(3)            &quot;/view/siri_r10_dev/clearcase/otp/erts/lib/stdlib/ebin&quot;]
+(4)  y(1)     &lt;0.1.0&gt;
+(5)  y(2)     {state,[],none,#Fun&lt;erl_prim_loader.6.7085890&gt;,undefined,#Fun&lt;erl_prim_loader.7.9000327&gt;,
+(6)            #Fun&lt;erl_prim_loader.8.116480692&gt;,#Port&lt;0.2&gt;,infinity,#Fun&lt;erl_prim_loader.9.10708760&gt;}
+(7)  y(3)     infinity
+</code></pre>
 <p>当为进程解释这些数据时，有助于知道匿名函数对象（funs) 是给出以下：</p>
 <ul>
 <li>创建它们的函数的名字的名称构造</li>

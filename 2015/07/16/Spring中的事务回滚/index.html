@@ -15,17 +15,17 @@
     <meta name="keywords" content="java,spring," />
   
 
-  <meta name="description" content="开启声明式事务spring.xml里配置 12345678910111213141516171819202122232425262728293031323334&amp;lt;bean id=&quot;dataSource&quot; class=&quot;org.apache.commons.dbcp.BasicDataSource&quot;&amp;gt;		&amp;lt;property name=&quot;driverClassName&quot; value=">
+  <meta name="description" content="开启声明式事务spring.xml里配置 &amp;lt;bean id=&amp;quot;dataSource&amp;quot; class=&amp;quot;org.apache.commons.dbcp.BasicDataSource&amp;quot;&amp;gt;         &amp;lt;property name=&amp;quot;driverClassName&amp;quot; value=&amp;quot;${jdbc.driverCla">
 <meta name="keywords" content="java,spring">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spring中的事务回滚">
 <meta property="og:url" content="https://emacsist.github.io/2015/07/16/Spring中的事务回滚/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="开启声明式事务spring.xml里配置 12345678910111213141516171819202122232425262728293031323334&amp;lt;bean id=&quot;dataSource&quot; class=&quot;org.apache.commons.dbcp.BasicDataSource&quot;&amp;gt;		&amp;lt;property name=&quot;driverClassName&quot; value=">
+<meta property="og:description" content="开启声明式事务spring.xml里配置 &amp;lt;bean id=&amp;quot;dataSource&amp;quot; class=&amp;quot;org.apache.commons.dbcp.BasicDataSource&amp;quot;&amp;gt;         &amp;lt;property name=&amp;quot;driverClassName&amp;quot; value=&amp;quot;${jdbc.driverCla">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring中的事务回滚">
-<meta name="twitter:description" content="开启声明式事务spring.xml里配置 12345678910111213141516171819202122232425262728293031323334&amp;lt;bean id=&quot;dataSource&quot; class=&quot;org.apache.commons.dbcp.BasicDataSource&quot;&amp;gt;		&amp;lt;property name=&quot;driverClassName&quot; value=">
+<meta name="twitter:description" content="开启声明式事务spring.xml里配置 &amp;lt;bean id=&amp;quot;dataSource&amp;quot; class=&amp;quot;org.apache.commons.dbcp.BasicDataSource&amp;quot;&amp;gt;         &amp;lt;property name=&amp;quot;driverClassName&amp;quot; value=&amp;quot;${jdbc.driverCla">
 
   
 
@@ -202,7 +202,41 @@
     <div class="article-content">
         
                             <h2 id="开启声明式事务"><a href="#开启声明式事务" class="headerlink" title="开启声明式事务"></a>开启声明式事务</h2><p><code>spring.xml</code>里配置</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=<span class="string">"dataSource"</span> class=<span class="string">"org.apache.commons.dbcp.BasicDataSource"</span>&gt;</div><div class="line">		&lt;property name=<span class="string">"driverClassName"</span> value=<span class="string">"<span class="variable">$&#123;jdbc.driverClassName&#125;</span>"</span> /&gt;</div><div class="line">		&lt;property name=<span class="string">"url"</span> value=<span class="string">"<span class="variable">$&#123;jdbc.url&#125;</span>"</span> /&gt;</div><div class="line">		&lt;property name=<span class="string">"username"</span> value=<span class="string">"<span class="variable">$&#123;jdbc.username&#125;</span>"</span> /&gt;</div><div class="line">		&lt;property name=<span class="string">"password"</span> value=<span class="string">"<span class="variable">$&#123;jdbc.password&#125;</span>"</span> /&gt;</div><div class="line">		&lt;property name=<span class="string">"maxActive"</span>&gt;</div><div class="line">			&lt;value&gt;64&lt;/value&gt;</div><div class="line">		&lt;/property&gt;</div><div class="line">		&lt;property name=<span class="string">"maxIdle"</span>&gt;</div><div class="line">			&lt;value&gt;64&lt;/value&gt;</div><div class="line">		&lt;/property&gt;</div><div class="line">		&lt;property name=<span class="string">"maxWait"</span>&gt;</div><div class="line">			&lt;value&gt;0&lt;/value&gt;</div><div class="line">		&lt;/property&gt;</div><div class="line">		&lt;property name=<span class="string">"validationQuery"</span>&gt;</div><div class="line">			&lt;value&gt;select 1&lt;/value&gt;</div><div class="line">		&lt;/property&gt;</div><div class="line">		&lt;property name=<span class="string">"testWhileIdle"</span>&gt;</div><div class="line">			&lt;value&gt;<span class="literal">true</span>&lt;/value&gt;</div><div class="line">		&lt;/property&gt;</div><div class="line">		&lt;property name=<span class="string">"minEvictableIdleTimeMillis"</span>&gt;</div><div class="line">			&lt;value&gt;20000000&lt;/value&gt;</div><div class="line">		&lt;/property&gt;</div><div class="line">		&lt;property name=<span class="string">"timeBetweenEvictionRunsMillis"</span>&gt;</div><div class="line">			&lt;value&gt;3600000&lt;/value&gt;</div><div class="line">		&lt;/property&gt;</div><div class="line">	&lt;/bean&gt;</div><div class="line"></div><div class="line">	&lt;bean id=<span class="string">"TxManager"</span></div><div class="line">		class=<span class="string">"org.springframework.jdbc.datasource.DataSourceTransactionManager"</span>&gt;</div><div class="line">		&lt;property name=<span class="string">"dataSource"</span> ref=<span class="string">"dataSource"</span> /&gt;</div><div class="line">	&lt;/bean&gt;</div><div class="line">    &lt;tx:annotation-driven transaction-manager=<span class="string">"TxManager"</span></div><div class="line">		proxy-target-class=<span class="string">"true"</span> /&gt;</div></pre></td></tr></table></figure>
+<pre><code class="bash">&lt;bean id=&quot;dataSource&quot; class=&quot;org.apache.commons.dbcp.BasicDataSource&quot;&gt;
+        &lt;property name=&quot;driverClassName&quot; value=&quot;${jdbc.driverClassName}&quot; /&gt;
+        &lt;property name=&quot;url&quot; value=&quot;${jdbc.url}&quot; /&gt;
+        &lt;property name=&quot;username&quot; value=&quot;${jdbc.username}&quot; /&gt;
+        &lt;property name=&quot;password&quot; value=&quot;${jdbc.password}&quot; /&gt;
+        &lt;property name=&quot;maxActive&quot;&gt;
+            &lt;value&gt;64&lt;/value&gt;
+        &lt;/property&gt;
+        &lt;property name=&quot;maxIdle&quot;&gt;
+            &lt;value&gt;64&lt;/value&gt;
+        &lt;/property&gt;
+        &lt;property name=&quot;maxWait&quot;&gt;
+            &lt;value&gt;0&lt;/value&gt;
+        &lt;/property&gt;
+        &lt;property name=&quot;validationQuery&quot;&gt;
+            &lt;value&gt;select 1&lt;/value&gt;
+        &lt;/property&gt;
+        &lt;property name=&quot;testWhileIdle&quot;&gt;
+            &lt;value&gt;true&lt;/value&gt;
+        &lt;/property&gt;
+        &lt;property name=&quot;minEvictableIdleTimeMillis&quot;&gt;
+            &lt;value&gt;20000000&lt;/value&gt;
+        &lt;/property&gt;
+        &lt;property name=&quot;timeBetweenEvictionRunsMillis&quot;&gt;
+            &lt;value&gt;3600000&lt;/value&gt;
+        &lt;/property&gt;
+    &lt;/bean&gt;
+
+    &lt;bean id=&quot;TxManager&quot;
+        class=&quot;org.springframework.jdbc.datasource.DataSourceTransactionManager&quot;&gt;
+        &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot; /&gt;
+    &lt;/bean&gt;
+    &lt;tx:annotation-driven transaction-manager=&quot;TxManager&quot;
+        proxy-target-class=&quot;true&quot; /&gt;
+</code></pre>
 <h2 id="默认情况下Spring对事务回滚策略的处理"><a href="#默认情况下Spring对事务回滚策略的处理" class="headerlink" title="默认情况下Spring对事务回滚策略的处理"></a>默认情况下Spring对事务回滚策略的处理</h2><blockquote>
 <p>在 Spring 的文档里, 可以看到这一句话: <code>Any RuntimeException triggers rollback, and any checked Exception does not.</code></p>
 </blockquote>
@@ -211,7 +245,8 @@
 <h2 id="让事务进行按自己的策略进行回滚"><a href="#让事务进行按自己的策略进行回滚" class="headerlink" title="让事务进行按自己的策略进行回滚"></a>让事务进行按自己的策略进行回滚</h2><h3 id="检查型异常"><a href="#检查型异常" class="headerlink" title="检查型异常"></a>检查型异常</h3><p>如果有检查型异常, 而又要进行事务回滚, 这时可以在检查型异常里的 <code>catch</code> 块里, 再次抛出 <code>RuntimeException</code> 即可.</p>
 <h3 id="RuntimeException"><a href="#RuntimeException" class="headerlink" title="RuntimeException"></a>RuntimeException</h3><p>如果有运行时异常, Spring会自动进行事务回滚.</p>
 <h3 id="按自己想要的异常类型来进行选择性回滚"><a href="#按自己想要的异常类型来进行选择性回滚" class="headerlink" title="按自己想要的异常类型来进行选择性回滚"></a>按自己想要的异常类型来进行选择性回滚</h3><p>在要进行事务的方法里, 添加以下方法级别的注解:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">@Transactional(rollbackFor=Exception.class)</div></pre></td></tr></table></figure>
+<pre><code class="bash">@Transactional(rollbackFor=Exception.class)
+</code></pre>
 <p>这时, Spring就会按指定的异常及其子类异常类型来进行事务回滚了. 如果配置了<code>Exception.class</code>, 那么任何<code>Exception</code>及其子类抛出的异常, 都会进行事务回滚.</p>
 <p>注意, 是要抛出异常. 如果你捕获了异常的而且又没有抛出新的异常的话, 就不会进行事务回滚了.</p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>

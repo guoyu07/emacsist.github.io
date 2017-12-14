@@ -201,14 +201,19 @@
 <p>安装就不多介绍了，这里只是描述使用</p>
 <p>假设你的测试环境的应用监听的是 <em>9001</em> ，而且是在 <em>10.0.0.40</em> </p>
 <h1 id="启动-intercept"><a href="#启动-intercept" class="headerlink" title="启动 intercept"></a>启动 intercept</h1><p>假设 intercept 的IP为 <em>10.0.0.40</em> （ intercept 要与你的测试的应用程序所在的服务器在同一个），而且下面的 9001 也就是测试的应用程序的端口。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./intercept -i eth0 -F <span class="string">'tcp and src port 9001'</span> -d</div></pre></td></tr></table></figure>
+<pre><code class="bash">./intercept -i eth0 -F &#39;tcp and src port 9001&#39; -d
+</code></pre>
 <p>注意，这里的 <em>9001</em> 就是要处理的当前服务器地址的源端口</p>
 <h1 id="启动-tcpcopy"><a href="#启动-tcpcopy" class="headerlink" title="启动 tcpcopy"></a>启动 tcpcopy</h1><p>假设 tcpcopy 的地址为 10.0.0.40</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./tcpcopy -x 80-10.0.0.40:9001 -s 10.0.0.40 -c 10.0.0.40</div></pre></td></tr></table></figure>
+<pre><code class="bash">./tcpcopy -x 80-10.0.0.40:9001 -s 10.0.0.40 -c 10.0.0.40
+</code></pre>
 <p><em>-x</em> ：表示将本机的 <em>80</em> 端口的流量，copy一份到 <em>10.0.0.40</em> 的 <em>9001</em> 端口。<br><em>-s</em> ：这个就是 intercept 的地址。<br><em>-c</em> ：tcpcopy 修改tcp的源IP地址，以免响应给最初的 client。</p>
 <h1 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h1><p>下面是要注意的事项</p>
 <h2 id="丢包"><a href="#丢包" class="headerlink" title="丢包"></a>丢包</h2><p>在测试过程中，发现它会丢包，测试的情况如下:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">9477 - 10000</div><div class="line">18959 - 20000</div><div class="line">28351 - 30000</div></pre></td></tr></table></figure>
+<pre><code class="bash">9477 - 10000
+18959 - 20000
+28351 - 30000
+</code></pre>
 <p>上面是 <em>成功数/总请求数</em></p>
 <h2 id="负载"><a href="#负载" class="headerlink" title="负载"></a>负载</h2><p>10GB内存，8核的 ab 10W个请求：</p>
 <p>tcpcopy: 0.4% 的内存，53% 的CPU<br>intercept: 0.4% 的内存， 23% 的CPU</p>

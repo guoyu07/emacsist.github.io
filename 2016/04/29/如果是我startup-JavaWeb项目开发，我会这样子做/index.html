@@ -15,17 +15,17 @@
     <meta name="keywords" content="java," />
   
 
-  <meta name="description" content="Maven 模块化开发按功能模块？    如果按功能分模块的话，比较复杂，难免会有代码循环依赖的问题。按分层模块？    这个相对比较简单点。 然后还要区分不同的环境下的包（web与非web环境，为以后的task等非web代码部署时，不需要再依赖tomcat等容器） 日志的统一slf4j，不过不能配置将标准输出，重定向到Tomcat的catalina.out里。即不能这样子配置： 123456&amp;l">
+  <meta name="description" content="Maven 模块化开发按功能模块？    如果按功能分模块的话，比较复杂，难免会有代码循环依赖的问题。按分层模块？    这个相对比较简单点。 然后还要区分不同的环境下的包（web与非web环境，为以后的task等非web代码部署时，不需要再依赖tomcat等容器） 日志的统一slf4j，不过不能配置将标准输出，重定向到Tomcat的catalina.out里。即不能这样子配置： &amp;lt;!--">
 <meta name="keywords" content="java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="如果是我startup JavaWeb项目开发，我会这样子做">
 <meta property="og:url" content="https://emacsist.github.io/2016/04/29/如果是我startup-JavaWeb项目开发，我会这样子做/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="Maven 模块化开发按功能模块？    如果按功能分模块的话，比较复杂，难免会有代码循环依赖的问题。按分层模块？    这个相对比较简单点。 然后还要区分不同的环境下的包（web与非web环境，为以后的task等非web代码部署时，不需要再依赖tomcat等容器） 日志的统一slf4j，不过不能配置将标准输出，重定向到Tomcat的catalina.out里。即不能这样子配置： 123456&amp;l">
+<meta property="og:description" content="Maven 模块化开发按功能模块？    如果按功能分模块的话，比较复杂，难免会有代码循环依赖的问题。按分层模块？    这个相对比较简单点。 然后还要区分不同的环境下的包（web与非web环境，为以后的task等非web代码部署时，不需要再依赖tomcat等容器） 日志的统一slf4j，不过不能配置将标准输出，重定向到Tomcat的catalina.out里。即不能这样子配置： &amp;lt;!--">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如果是我startup JavaWeb项目开发，我会这样子做">
-<meta name="twitter:description" content="Maven 模块化开发按功能模块？    如果按功能分模块的话，比较复杂，难免会有代码循环依赖的问题。按分层模块？    这个相对比较简单点。 然后还要区分不同的环境下的包（web与非web环境，为以后的task等非web代码部署时，不需要再依赖tomcat等容器） 日志的统一slf4j，不过不能配置将标准输出，重定向到Tomcat的catalina.out里。即不能这样子配置： 123456&amp;l">
+<meta name="twitter:description" content="Maven 模块化开发按功能模块？    如果按功能分模块的话，比较复杂，难免会有代码循环依赖的问题。按分层模块？    这个相对比较简单点。 然后还要区分不同的环境下的包（web与非web环境，为以后的task等非web代码部署时，不需要再依赖tomcat等容器） 日志的统一slf4j，不过不能配置将标准输出，重定向到Tomcat的catalina.out里。即不能这样子配置： &amp;lt;!--">
 
   
 
@@ -199,9 +199,30 @@
                             <h2 id="Maven-模块化开发"><a href="#Maven-模块化开发" class="headerlink" title="Maven 模块化开发"></a>Maven 模块化开发</h2><p>按功能模块？<br>    如果按功能分模块的话，比较复杂，难免会有代码循环依赖的问题。<br>按分层模块？<br>    这个相对比较简单点。</p>
 <p>然后还要区分不同的环境下的包（web与非web环境，为以后的task等非web代码部署时，不需要再依赖tomcat等容器）</p>
 <h2 id="日志的统一"><a href="#日志的统一" class="headerlink" title="日志的统一"></a>日志的统一</h2><p>slf4j，不过不能配置将标准输出，重定向到Tomcat的<code>catalina.out</code>里。<br>即不能这样子配置：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;!-- 控制台输出 --&gt;</div><div class="line">	&lt;appender name=<span class="string">"STDOUT"</span> class=<span class="string">"ch.qos.logback.core.ConsoleAppender"</span>&gt;</div><div class="line">		&lt;layout class=<span class="string">"ch.qos.logback.classic.PatternLayout"</span>&gt;</div><div class="line">			&lt;Pattern&gt;%C&#123;50&#125;.%M %L [%date&#123;yyyy-MM-dd HH:mm:ss.SSS&#125;] [%-5level] : %m%ex%n&lt;/Pattern&gt;</div><div class="line">		&lt;/layout&gt;</div><div class="line">	&lt;/appender&gt;</div></pre></td></tr></table></figure>
+<pre><code class="bash">&lt;!-- 控制台输出 --&gt;
+    &lt;appender name=&quot;STDOUT&quot; class=&quot;ch.qos.logback.core.ConsoleAppender&quot;&gt;
+        &lt;layout class=&quot;ch.qos.logback.classic.PatternLayout&quot;&gt;
+            &lt;Pattern&gt;%C{50}.%M %L [%date{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] : %m%ex%n&lt;/Pattern&gt;
+        &lt;/layout&gt;
+    &lt;/appender&gt;
+</code></pre>
 <p>而应该将应用的所有输出，重定向到一个文件（然后根据该文件增长的快慢，来设置按天，小时，或分或切割文件），例如按天：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&lt;appender name=<span class="string">"STDOUT"</span> class=<span class="string">"ch.qos.logback.core.rolling.RollingFileAppender"</span>&gt;</div><div class="line">		&lt;file&gt;<span class="variable">$&#123;LOG_HOME&#125;</span>/console/console.log&lt;/file&gt;</div><div class="line">		&lt;rollingPolicy class=<span class="string">"ch.qos.logback.core.rolling.TimeBasedRollingPolicy"</span>&gt;</div><div class="line">			&lt;!-- daily rollover. Make sure the path matches the one <span class="keyword">in</span> the file element or <span class="keyword">else</span></div><div class="line">             the rollover logs are placed <span class="keyword">in</span> the working directory. --&gt;</div><div class="line">			&lt;fileNamePattern&gt;<span class="variable">$&#123;LOG_HOME&#125;</span>/console/console_%d&#123;yyyy-MM-dd&#125;.%i.log&lt;/fileNamePattern&gt;</div><div class="line"></div><div class="line">			&lt;timeBasedFileNamingAndTriggeringPolicy class=<span class="string">"ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP"</span>&gt;</div><div class="line">				&lt;maxFileSize&gt;100MB&lt;/maxFileSize&gt;</div><div class="line">			&lt;/timeBasedFileNamingAndTriggeringPolicy&gt;</div><div class="line">		&lt;/rollingPolicy&gt;</div><div class="line">		&lt;layout class=<span class="string">"ch.qos.logback.classic.PatternLayout"</span>&gt;</div><div class="line">			&lt;Pattern&gt;%-10(%C&#123;40&#125;.%M %L) [%date&#123;yyyy-MM-dd HH:mm:ss&#125;] [%level]: %m%ex%n&lt;/Pattern&gt;</div><div class="line">		&lt;/layout&gt;</div><div class="line">	&lt;/appender&gt;</div></pre></td></tr></table></figure>
+<pre><code class="bash">&lt;appender name=&quot;STDOUT&quot; class=&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;&gt;
+        &lt;file&gt;${LOG_HOME}/console/console.log&lt;/file&gt;
+        &lt;rollingPolicy class=&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&gt;
+            &lt;!-- daily rollover. Make sure the path matches the one in the file element or else
+             the rollover logs are placed in the working directory. --&gt;
+            &lt;fileNamePattern&gt;${LOG_HOME}/console/console_%d{yyyy-MM-dd}.%i.log&lt;/fileNamePattern&gt;
+
+            &lt;timeBasedFileNamingAndTriggeringPolicy class=&quot;ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP&quot;&gt;
+                &lt;maxFileSize&gt;100MB&lt;/maxFileSize&gt;
+            &lt;/timeBasedFileNamingAndTriggeringPolicy&gt;
+        &lt;/rollingPolicy&gt;
+        &lt;layout class=&quot;ch.qos.logback.classic.PatternLayout&quot;&gt;
+            &lt;Pattern&gt;%-10(%C{40}.%M %L) [%date{yyyy-MM-dd HH:mm:ss}] [%level]: %m%ex%n&lt;/Pattern&gt;
+        &lt;/layout&gt;
+    &lt;/appender&gt;
+</code></pre>
 <p>然后每种业务，添加一个统一的logger，再分别存在到不同的日志文件里，方便排查问题.</p>
 <h2 id="框架的选择"><a href="#框架的选择" class="headerlink" title="框架的选择"></a>框架的选择</h2><p>SpringBoot + Redis + RabbitMQ + MySQL</p>
 <p>然后部署时，配置多种<code>profile</code>，并且要简化<code>xml</code>冗余的问题。（通过import来避免重复的配置文件问题）</p>
@@ -217,7 +238,13 @@
 <li><p>千万不写如下类似代码！！！（即删除时，尽可能使用 Iterator来做）</p>
 </li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">List xxxx</div><div class="line"></div><div class="line"><span class="keyword">for</span>(int i=0 ;i&lt;10; i++)&#123;</div><div class="line">    xxxx</div><div class="line">    list.remove(i);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="bash">List xxxx
+
+for(int i=0 ;i&lt;10; i++){
+    xxxx
+    list.remove(i);
+}
+</code></pre>
 <ol>
 <li><p>HTTP请求时的超时设置（一般的类库，默认是无限）</p>
 </li>
@@ -232,12 +259,189 @@
 <h2 id="关于代码质量监控"><a href="#关于代码质量监控" class="headerlink" title="关于代码质量监控"></a>关于代码质量监控</h2><p>Sonar + Findbugs 结合，每周一次自我检测代码质量.不断完善.</p>
 <h2 id="关于Tomcat"><a href="#关于Tomcat" class="headerlink" title="关于Tomcat"></a>关于Tomcat</h2><p>如果要进行远程调试，完成后，千万不要关闭远程调试再重启Tomcat！！<br>不然，JVM极有可能会因为这个原因，而莫名停掉！</p>
 <h2 id="Tomcat启动前添加参数"><a href="#Tomcat启动前添加参数" class="headerlink" title="Tomcat启动前添加参数"></a>Tomcat启动前添加参数</h2><p>tomcat目录下添加<code>bin/setenv.sh</code>，内容如下:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line"></div><div class="line">JAVA_HOME=/home/you/jdk/jdk1.7.0_79</div><div class="line">JRE_HOME=/home/you/jdk/jdk1.7.0_79/jre</div><div class="line"></div><div class="line"><span class="comment">#CATALINA_OPTS="-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -XX:+PrintGCDetails -Xloggc:weibosdk-gc.log -XX:+DisableExplicitGC -Xdebug -Xrunjdwp:transport=dt_socket,address=9999,server=y,suspend=n"</span></div><div class="line">NOW=<span class="string">"<span class="variable">$(date +'%Y_%m_%d_%H_%M_%S')</span>"</span></div><div class="line"></div><div class="line">JVM_TYPE=<span class="string">" -server"</span></div><div class="line"></div><div class="line">JVM_GC=<span class="string">" -XX:+PrintGCDateStamps -verbose:gc -XX:+PrintGCDetails -Xloggc:weibosdk-gc.log -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=10M"</span></div><div class="line">JVM_DUMP=<span class="string">" -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/home/you/tomcat/product_wbsdk_jvm-dump.hprof"</span></div><div class="line"></div><div class="line"><span class="comment">#JVM_GC_TYPE=" -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:+UseCMSInitiatingOccupancyOnly -XX:CMSInitiatingOccupancyFraction=90  -XX:+ScavengeBeforeFullGC -XX:+CMSScavengeBeforeRemark"</span></div><div class="line"></div><div class="line">JVM_GC_TYPE=<span class="string">" "</span></div><div class="line"></div><div class="line"><span class="comment"># 单位：秒</span></div><div class="line">JVM_DNS_CACHE=<span class="string">" -Dsun.net.inetaddr.ttl=60"</span></div><div class="line"></div><div class="line"><span class="comment"># hostname如果为远程，则是外网的IP</span></div><div class="line">JVM_RMI=<span class="string">" "</span></div><div class="line"></div><div class="line"><span class="comment"># survivorratio = eden / from 的比值</span></div><div class="line"></div><div class="line"><span class="comment">#JVM_MEM=" -Xms2048m -Xmx2048m  -XX:PermSize=512m -XX:MaxPermSize=512m -XX:SurvivorRatio=8"</span></div><div class="line">JVM_MEM=<span class="string">" "</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#JVM_DEBUG=" -Xdebug -Xrunjdwp:transport=dt_socket,address=9999,server=y,suspend=n"</span></div><div class="line"></div><div class="line">JVM_DEBUG=<span class="string">" "</span></div><div class="line"></div><div class="line">JMX=<span class="string">"-XX:+UnlockCommercialFeatures -XX:+FlightRecorder -Dcom.sun.management.jmxremote.port=7002 -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=IP"</span></div><div class="line"></div><div class="line">CATALINA_OPTS=<span class="string">" -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager <span class="variable">$&#123;JVM_TYPE&#125;</span> <span class="variable">$&#123;JVM_GC_TYPE&#125;</span> <span class="variable">$&#123;JVM_GC&#125;</span> <span class="variable">$&#123;JVM_DUMP&#125;</span> <span class="variable">$&#123;JVM_DNS_CACHE&#125;</span> <span class="variable">$&#123;JVM_RMI&#125;</span> <span class="variable">$&#123;JVM_MEM&#125;</span> <span class="variable">$&#123;JVM_DEBUG&#125;</span> <span class="variable">$&#123;JMX&#125;</span>"</span></div><div class="line"></div><div class="line"><span class="built_in">echo</span> <span class="string">"java opts = "</span>  <span class="variable">$&#123;CATALINA_OPTS&#125;</span></div></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">ulimit</span> -c unlimited</div><div class="line">tomcat_dir/bin/startup.sh</div></pre></td></tr></table></figure>
-<h1 id="Tomcat控制脚本"><a href="#Tomcat控制脚本" class="headerlink" title="Tomcat控制脚本"></a>Tomcat控制脚本</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"></div><div class="line"><span class="comment">###############################################################</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">#author: Zhiyong Yang</span></div><div class="line"><span class="comment">#date: 2015-12-4</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">###############################################################</span></div><div class="line"></div><div class="line"><span class="comment">#set -x </span></div><div class="line"></div><div class="line"><span class="comment">#作用 启动，停止，重启某tomcat，注意 ，tomcat使用绝对路径，并以/结束.</span></div><div class="line"><span class="comment">#./tomcat_ct.sh /path/to/tomcat/ start|stop|restart</span></div><div class="line"></div><div class="line">TOMCAT_HOME_DIR=<span class="string">""</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> [ ! -z <span class="variable">$1</span> ]; <span class="keyword">then</span></div><div class="line">	TOMCAT_HOME_DIR=<span class="variable">$1</span></div><div class="line"><span class="keyword">fi</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> [ -z <span class="variable">$&#123;TOMCAT_HOME_DIR&#125;</span> ]; <span class="keyword">then</span></div><div class="line">	<span class="built_in">echo</span> <span class="string">"no tomcat special..., so exit"</span> &amp;&amp; <span class="built_in">exit</span> 1</div><div class="line"><span class="keyword">fi</span></div><div class="line"></div><div class="line">TOMCAT_HOME_DIR_GREP=<span class="string">"<span class="variable">$&#123;TOMCAT_HOME_DIR/apache/[a]pache&#125;</span>"</span></div><div class="line"></div><div class="line"><span class="built_in">echo</span> <span class="string">"--&gt;<span class="variable">$TOMCAT_HOME_DIR_GREP</span>"</span></div><div class="line"></div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">stop</span></span>()&#123;</div><div class="line">	<span class="keyword">if</span> checkIsExist ; <span class="keyword">then</span></div><div class="line">		<span class="string">"<span class="variable">$&#123;TOMCAT_HOME_DIR&#125;</span>"</span>bin/shutdown.sh</div><div class="line">		sleep 1</div><div class="line">		<span class="keyword">while</span> checkIsExist ; <span class="keyword">do</span></div><div class="line">			sleep 2</div><div class="line">			<span class="built_in">kill</span> $(getPID)</div><div class="line">		<span class="keyword">done</span></div><div class="line">	<span class="keyword">fi</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">getPID</span></span>()&#123;</div><div class="line">	<span class="comment"># replace the grep content with your tomcat path, start with []</span></div><div class="line">	<span class="comment">#$PID=`ps aux | grep $&#123;TOMCAT_HOME_DIR_GREP&#125;`</span></div><div class="line">	<span class="built_in">local</span> PID=`ps aux | grep <span class="variable">$&#123;TOMCAT_HOME_DIR_GREP&#125;</span> | grep <span class="string">"[o]rg.apache.catalina.startup.Bootstrap"</span> | awk <span class="string">'&#123;print $2&#125;'</span>`</div><div class="line">	<span class="built_in">echo</span> <span class="variable">$PID</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">start</span></span>()&#123;</div><div class="line">	<span class="keyword">if</span> ! checkIsExist ; <span class="keyword">then</span></div><div class="line">		<span class="string">"<span class="variable">$&#123;TOMCAT_HOME_DIR&#125;</span>"</span>bin/startup.sh</div><div class="line">		tail -f -n 100 <span class="string">"<span class="variable">$&#123;TOMCAT_HOME_DIR&#125;</span>"</span>logs/catalina.out</div><div class="line">	<span class="keyword">fi</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">checkIsExist</span></span>()&#123;</div><div class="line">	<span class="built_in">local</span> P_ID=$(getPID)</div><div class="line">	<span class="keyword">if</span> [ -z <span class="variable">$&#123;P_ID&#125;</span> ]; <span class="keyword">then</span></div><div class="line">		<span class="built_in">echo</span> <span class="string">"not found running tomcat : <span class="variable">$&#123;TOMCAT_HOME_DIR&#125;</span>"</span></div><div class="line">		<span class="built_in">return</span> 1</div><div class="line">	<span class="keyword">else</span></div><div class="line">		<span class="built_in">echo</span> <span class="string">"found running tomcat pid = <span class="variable">$&#123;P_ID&#125;</span>"</span></div><div class="line">		<span class="built_in">return</span> 0</div><div class="line">	<span class="keyword">fi</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">usage</span></span>()&#123;</div><div class="line">	<span class="built_in">echo</span> <span class="string">"Usage:"</span></div><div class="line">	<span class="built_in">echo</span> <span class="string">"<span class="variable">$0</span> <span class="variable">$1</span> start : for start tomcat, no repeat"</span></div><div class="line">	<span class="built_in">echo</span> <span class="string">"<span class="variable">$0</span> <span class="variable">$1</span> stop : for stop tomcat"</span></div><div class="line">	<span class="built_in">echo</span> <span class="string">"<span class="variable">$0</span> <span class="variable">$1</span> restart : for restart"</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">if</span> [ -z <span class="variable">$2</span> ];<span class="keyword">then</span></div><div class="line">	usage <span class="variable">$1</span></div><div class="line">	<span class="built_in">exit</span> 0</div><div class="line"><span class="keyword">fi</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> [ <span class="variable">$2</span> = <span class="string">"stop"</span> ]; <span class="keyword">then</span></div><div class="line">	stop</div><div class="line"><span class="keyword">elif</span> [ <span class="variable">$2</span> = <span class="string">"start"</span> ]; <span class="keyword">then</span></div><div class="line">	start</div><div class="line"><span class="keyword">elif</span> [ <span class="variable">$2</span> = <span class="string">"restart"</span> ]; <span class="keyword">then</span></div><div class="line">	stop</div><div class="line">	start</div><div class="line"><span class="keyword">else</span></div><div class="line">	usage <span class="variable">$1</span></div><div class="line"><span class="keyword">fi</span></div></pre></td></tr></table></figure>
+<pre><code class="bash">#!/bin/sh
+
+JAVA_HOME=/home/you/jdk/jdk1.7.0_79
+JRE_HOME=/home/you/jdk/jdk1.7.0_79/jre
+
+#CATALINA_OPTS=&quot;-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -XX:+PrintGCDetails -Xloggc:weibosdk-gc.log -XX:+DisableExplicitGC -Xdebug -Xrunjdwp:transport=dt_socket,address=9999,server=y,suspend=n&quot;
+NOW=&quot;$(date +&#39;%Y_%m_%d_%H_%M_%S&#39;)&quot;
+
+JVM_TYPE=&quot; -server&quot;
+
+JVM_GC=&quot; -XX:+PrintGCDateStamps -verbose:gc -XX:+PrintGCDetails -Xloggc:weibosdk-gc.log -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=10M&quot;
+JVM_DUMP=&quot; -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/home/you/tomcat/product_wbsdk_jvm-dump.hprof&quot;
+
+#JVM_GC_TYPE=&quot; -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:+UseCMSInitiatingOccupancyOnly -XX:CMSInitiatingOccupancyFraction=90  -XX:+ScavengeBeforeFullGC -XX:+CMSScavengeBeforeRemark&quot;
+
+JVM_GC_TYPE=&quot; &quot;
+
+# 单位：秒
+JVM_DNS_CACHE=&quot; -Dsun.net.inetaddr.ttl=60&quot;
+
+# hostname如果为远程，则是外网的IP
+JVM_RMI=&quot; &quot;
+
+# survivorratio = eden / from 的比值
+
+#JVM_MEM=&quot; -Xms2048m -Xmx2048m  -XX:PermSize=512m -XX:MaxPermSize=512m -XX:SurvivorRatio=8&quot;
+JVM_MEM=&quot; &quot;
+
+
+#JVM_DEBUG=&quot; -Xdebug -Xrunjdwp:transport=dt_socket,address=9999,server=y,suspend=n&quot;
+
+JVM_DEBUG=&quot; &quot;
+
+JMX=&quot;-XX:+UnlockCommercialFeatures -XX:+FlightRecorder -Dcom.sun.management.jmxremote.port=7002 -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=IP&quot;
+
+CATALINA_OPTS=&quot; -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager ${JVM_TYPE} ${JVM_GC_TYPE} ${JVM_GC} ${JVM_DUMP} ${JVM_DNS_CACHE} ${JVM_RMI} ${JVM_MEM} ${JVM_DEBUG} ${JMX}&quot;
+
+echo &quot;java opts = &quot;  ${CATALINA_OPTS}
+</code></pre>
+<pre><code class="bash">ulimit -c unlimited
+tomcat_dir/bin/startup.sh
+</code></pre>
+<h1 id="Tomcat控制脚本"><a href="#Tomcat控制脚本" class="headerlink" title="Tomcat控制脚本"></a>Tomcat控制脚本</h1><pre><code class="bash">#!/bin/bash
+
+###############################################################
+#
+#author: Zhiyong Yang
+#date: 2015-12-4
+#
+###############################################################
+
+#set -x 
+
+#作用 启动，停止，重启某tomcat，注意 ，tomcat使用绝对路径，并以/结束.
+#./tomcat_ct.sh /path/to/tomcat/ start|stop|restart
+
+TOMCAT_HOME_DIR=&quot;&quot;
+
+if [ ! -z $1 ]; then
+    TOMCAT_HOME_DIR=$1
+fi
+
+if [ -z ${TOMCAT_HOME_DIR} ]; then
+    echo &quot;no tomcat special..., so exit&quot; &amp;&amp; exit 1
+fi
+
+TOMCAT_HOME_DIR_GREP=&quot;${TOMCAT_HOME_DIR/apache/[a]pache}&quot;
+
+echo &quot;--&gt;$TOMCAT_HOME_DIR_GREP&quot;
+
+function stop(){
+    if checkIsExist ; then
+        &quot;${TOMCAT_HOME_DIR}&quot;bin/shutdown.sh
+        sleep 1
+        while checkIsExist ; do
+            sleep 2
+            kill $(getPID)
+        done
+    fi
+}
+
+function getPID(){
+    # replace the grep content with your tomcat path, start with []
+    #$PID=`ps aux | grep ${TOMCAT_HOME_DIR_GREP}`
+    local PID=`ps aux | grep ${TOMCAT_HOME_DIR_GREP} | grep &quot;[o]rg.apache.catalina.startup.Bootstrap&quot; | awk &#39;{print $2}&#39;`
+    echo $PID
+}
+
+function start(){
+    if ! checkIsExist ; then
+        &quot;${TOMCAT_HOME_DIR}&quot;bin/startup.sh
+        tail -f -n 100 &quot;${TOMCAT_HOME_DIR}&quot;logs/catalina.out
+    fi
+}
+
+
+function checkIsExist(){
+    local P_ID=$(getPID)
+    if [ -z ${P_ID} ]; then
+        echo &quot;not found running tomcat : ${TOMCAT_HOME_DIR}&quot;
+        return 1
+    else
+        echo &quot;found running tomcat pid = ${P_ID}&quot;
+        return 0
+    fi
+}
+
+function usage(){
+    echo &quot;Usage:&quot;
+    echo &quot;$0 $1 start : for start tomcat, no repeat&quot;
+    echo &quot;$0 $1 stop : for stop tomcat&quot;
+    echo &quot;$0 $1 restart : for restart&quot;
+}
+
+if [ -z $2 ];then
+    usage $1
+    exit 0
+fi
+
+if [ $2 = &quot;stop&quot; ]; then
+    stop
+elif [ $2 = &quot;start&quot; ]; then
+    start
+elif [ $2 = &quot;restart&quot; ]; then
+    stop
+    start
+else
+    usage $1
+fi
+</code></pre>
 <h2 id="错误时发送警报-这些方面要尽可能完善-及时发现问题-然后修复问题"><a href="#错误时发送警报-这些方面要尽可能完善-及时发现问题-然后修复问题" class="headerlink" title="错误时发送警报(这些方面要尽可能完善, 及时发现问题, 然后修复问题.)"></a>错误时发送警报(这些方面要尽可能完善, 及时发现问题, 然后修复问题.)</h2><p>在所有出现异常的地方, 都添加上通知 <code>RabbitMQ + Email</code> 的方式来发送警报.</p>
 <p>SpringMVC加上如下:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">import org.springframework.beans.factory.annotation.Autowired;</div><div class="line">import org.springframework.web.bind.annotation.ControllerAdvice;</div><div class="line">import org.springframework.web.bind.annotation.ExceptionHandler;</div><div class="line">import org.springframework.web.bind.annotation.ResponseBody;</div><div class="line"></div><div class="line">import javax.servlet.http.HttpServletRequest;</div><div class="line">import java.util.HashMap;</div><div class="line">import java.util.Map;</div><div class="line"></div><div class="line">@ControllerAdvice</div><div class="line">public class ControllerExceptionAdvice &#123;</div><div class="line"></div><div class="line">    @Autowired</div><div class="line">    private RabbitMQService rabbitMQService;</div><div class="line"></div><div class="line">    @ExceptionHandler(value = &#123;Exception.class, RuntimeException.class&#125;)</div><div class="line">    @ResponseBody</div><div class="line">    public Map&lt;String, Object&gt; defaultErrorHandler(HttpServletRequest request, Exception e) &#123;</div><div class="line"></div><div class="line">        String requestUrl = request.getRequestURI();</div><div class="line">        Map&lt;String, String[]&gt; params = request.getParameterMap();</div><div class="line">        String stackMsg = getStack(e);</div><div class="line"></div><div class="line">        rabbitMQService.sendEmail(<span class="string">"yourmail"</span>, <span class="string">"subject"</span>, getFormatText(requestUrl, params, stackMsg));</div><div class="line"></div><div class="line">        Map&lt;String, Object&gt; json = new HashMap&lt;&gt;();</div><div class="line">        json.put(Constants.ERROR_CODE, 500);</div><div class="line">        json.put(Constants.ERROR_MSG, <span class="string">"server interval error."</span>);</div><div class="line">        <span class="built_in">return</span> json;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private String getFormatText(String requestUrl, Map&lt;String, String[]&gt; params, String stackMsg) &#123;</div><div class="line">        <span class="built_in">return</span> String.format(<span class="string">"请求的URL为 %s\n请求的参数为%s\n异常信息为:%s\n"</span>, requestUrl, params, stackMsg);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private String getStack(Exception e) &#123;</div><div class="line">        StackTraceElement[] stackTraceElements = e.getStackTrace();</div><div class="line">        StringBuilder sb = new StringBuilder(e.getMessage());</div><div class="line">        sb.append(<span class="string">"\n"</span>);</div><div class="line">        <span class="keyword">for</span> (StackTraceElement stackTraceElement : stackTraceElements) &#123;</div><div class="line">            String className = stackTraceElement.getClassName();</div><div class="line">            String methodName = stackTraceElement.getMethodName();</div><div class="line">            int lineNum = stackTraceElement.getLineNumber();</div><div class="line">            String fileName = stackTraceElement.getFileName();</div><div class="line">            sb.append(className).append(<span class="string">"."</span>).append(methodName).append(<span class="string">" --&gt; "</span>).append(fileName).append(<span class="string">":"</span>).append(lineNum);</div><div class="line">            sb.append(<span class="string">"\n"</span>);</div><div class="line">        &#125;</div><div class="line">        <span class="built_in">return</span> sb.toString();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="bash">import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
+
+@ControllerAdvice
+public class ControllerExceptionAdvice {
+
+    @Autowired
+    private RabbitMQService rabbitMQService;
+
+    @ExceptionHandler(value = {Exception.class, RuntimeException.class})
+    @ResponseBody
+    public Map&lt;String, Object&gt; defaultErrorHandler(HttpServletRequest request, Exception e) {
+
+        String requestUrl = request.getRequestURI();
+        Map&lt;String, String[]&gt; params = request.getParameterMap();
+        String stackMsg = getStack(e);
+
+        rabbitMQService.sendEmail(&quot;yourmail&quot;, &quot;subject&quot;, getFormatText(requestUrl, params, stackMsg));
+
+        Map&lt;String, Object&gt; json = new HashMap&lt;&gt;();
+        json.put(Constants.ERROR_CODE, 500);
+        json.put(Constants.ERROR_MSG, &quot;server interval error.&quot;);
+        return json;
+    }
+
+    private String getFormatText(String requestUrl, Map&lt;String, String[]&gt; params, String stackMsg) {
+        return String.format(&quot;请求的URL为 %s\n请求的参数为%s\n异常信息为:%s\n&quot;, requestUrl, params, stackMsg);
+    }
+
+    private String getStack(Exception e) {
+        StackTraceElement[] stackTraceElements = e.getStackTrace();
+        StringBuilder sb = new StringBuilder(e.getMessage());
+        sb.append(&quot;\n&quot;);
+        for (StackTraceElement stackTraceElement : stackTraceElements) {
+            String className = stackTraceElement.getClassName();
+            String methodName = stackTraceElement.getMethodName();
+            int lineNum = stackTraceElement.getLineNumber();
+            String fileName = stackTraceElement.getFileName();
+            sb.append(className).append(&quot;.&quot;).append(methodName).append(&quot; --&gt; &quot;).append(fileName).append(&quot;:&quot;).append(lineNum);
+            sb.append(&quot;\n&quot;);
+        }
+        return sb.toString();
+    }
+}
+</code></pre>
 
                                 
     </div>

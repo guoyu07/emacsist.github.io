@@ -15,16 +15,16 @@
     <meta name="keywords" content="Golang, Java, PostgreSQL, Postgres, MySQL, emacsist, RabbitMQ, Go, emacs, orgmode" />
   
 
-  <meta name="description" content="单模块使用pom.xml中添加 12345678910111213 &amp;lt;reporting&amp;gt;        &amp;lt;plugins&amp;gt;            &amp;lt;plugin&amp;gt;                &amp;lt;groupId&amp;gt;org.sonarsource.scanner.maven&amp;lt;/groupId&amp;gt;                &amp;lt;arti">
+  <meta name="description" content="单模块使用pom.xml中添加  &amp;lt;reporting&amp;gt;         &amp;lt;plugins&amp;gt;             &amp;lt;plugin&amp;gt;                 &amp;lt;groupId&amp;gt;org.sonarsource.scanner.maven&amp;lt;/groupId&amp;gt;                 &amp;lt;artifactId&amp;gt;son">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Maven多模块中使用Sonar">
 <meta property="og:url" content="https://emacsist.github.io/2016/06/21/Maven多模块中使用Sonar/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="单模块使用pom.xml中添加 12345678910111213 &amp;lt;reporting&amp;gt;        &amp;lt;plugins&amp;gt;            &amp;lt;plugin&amp;gt;                &amp;lt;groupId&amp;gt;org.sonarsource.scanner.maven&amp;lt;/groupId&amp;gt;                &amp;lt;arti">
+<meta property="og:description" content="单模块使用pom.xml中添加  &amp;lt;reporting&amp;gt;         &amp;lt;plugins&amp;gt;             &amp;lt;plugin&amp;gt;                 &amp;lt;groupId&amp;gt;org.sonarsource.scanner.maven&amp;lt;/groupId&amp;gt;                 &amp;lt;artifactId&amp;gt;son">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Maven多模块中使用Sonar">
-<meta name="twitter:description" content="单模块使用pom.xml中添加 12345678910111213 &amp;lt;reporting&amp;gt;        &amp;lt;plugins&amp;gt;            &amp;lt;plugin&amp;gt;                &amp;lt;groupId&amp;gt;org.sonarsource.scanner.maven&amp;lt;/groupId&amp;gt;                &amp;lt;arti">
+<meta name="twitter:description" content="单模块使用pom.xml中添加  &amp;lt;reporting&amp;gt;         &amp;lt;plugins&amp;gt;             &amp;lt;plugin&amp;gt;                 &amp;lt;groupId&amp;gt;org.sonarsource.scanner.maven&amp;lt;/groupId&amp;gt;                 &amp;lt;artifactId&amp;gt;son">
 
   
 
@@ -185,13 +185,41 @@
     <div class="article-content">
         
                             <h2 id="单模块使用"><a href="#单模块使用" class="headerlink" title="单模块使用"></a>单模块使用</h2><p><code>pom.xml</code>中添加</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"> &lt;reporting&gt;</div><div class="line">        &lt;plugins&gt;</div><div class="line">            &lt;plugin&gt;</div><div class="line">                &lt;groupId&gt;org.sonarsource.scanner.maven&lt;/groupId&gt;</div><div class="line">                &lt;artifactId&gt;sonar-maven-plugin&lt;/artifactId&gt;</div><div class="line">                &lt;version&gt;3.0.1&lt;/version&gt;</div><div class="line">            &lt;/plugin&gt;</div><div class="line">        &lt;/plugins&gt;</div><div class="line">    &lt;/reporting&gt;</div><div class="line"></div><div class="line">&lt;properties&gt;</div><div class="line">    &lt;sonar.java.source&gt;1.7&lt;/sonar.java.source&gt;</div><div class="line">&lt;/properties&gt;</div></pre></td></tr></table></figure>
+<pre><code class="bash"> &lt;reporting&gt;
+        &lt;plugins&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.sonarsource.scanner.maven&lt;/groupId&gt;
+                &lt;artifactId&gt;sonar-maven-plugin&lt;/artifactId&gt;
+                &lt;version&gt;3.0.1&lt;/version&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+    &lt;/reporting&gt;
+
+&lt;properties&gt;
+    &lt;sonar.java.source&gt;1.7&lt;/sonar.java.source&gt;
+&lt;/properties&gt;
+</code></pre>
 <p>生成报告:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mvn sonar:sonar -Dsonar.host.url=http://10.0.0.10:9000</div></pre></td></tr></table></figure>
+<pre><code class="bash">mvn sonar:sonar -Dsonar.host.url=http://10.0.0.10:9000
+</code></pre>
 <h2 id="一个项目多模块使用"><a href="#一个项目多模块使用" class="headerlink" title="一个项目多模块使用"></a>一个项目多模块使用</h2><p>在父<code>pom.xml</code>里添加</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"> &lt;reporting&gt;</div><div class="line">        &lt;plugins&gt;</div><div class="line">            &lt;plugin&gt;</div><div class="line">                &lt;groupId&gt;org.sonarsource.scanner.maven&lt;/groupId&gt;</div><div class="line">                &lt;artifactId&gt;sonar-maven-plugin&lt;/artifactId&gt;</div><div class="line">                &lt;version&gt;3.0.1&lt;/version&gt;</div><div class="line">            &lt;/plugin&gt;</div><div class="line">        &lt;/plugins&gt;</div><div class="line">    &lt;/reporting&gt;</div><div class="line"></div><div class="line">&lt;properties&gt;</div><div class="line">    &lt;sonar.java.source&gt;1.7&lt;/sonar.java.source&gt;</div><div class="line">&lt;/properties&gt;</div></pre></td></tr></table></figure>
+<pre><code class="bash"> &lt;reporting&gt;
+        &lt;plugins&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.sonarsource.scanner.maven&lt;/groupId&gt;
+                &lt;artifactId&gt;sonar-maven-plugin&lt;/artifactId&gt;
+                &lt;version&gt;3.0.1&lt;/version&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+    &lt;/reporting&gt;
+
+&lt;properties&gt;
+    &lt;sonar.java.source&gt;1.7&lt;/sonar.java.source&gt;
+&lt;/properties&gt;
+</code></pre>
 <p>生成报告</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mvn package sonar:sonar -Dsonar.host.url=http://10.0.0.10:9000</div></pre></td></tr></table></figure>
+<pre><code class="bash">mvn package sonar:sonar -Dsonar.host.url=http://10.0.0.10:9000
+</code></pre>
 <p>即模块前要添加<code>package</code>即可。</p>
 
                                 

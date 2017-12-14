@@ -215,14 +215,52 @@
 <h2 id="流量控制"><a href="#流量控制" class="headerlink" title="流量控制"></a>流量控制</h2><p>当达到内存阀值的时候（无论设置的是百分比，还是绝对值），RabbitMQ就会触发流量控制。即<code>publishers</code>会全部阻塞，直到解除报警才会恢复正常的<code>publishers</code>服务。</p>
 <h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><p>因为RabbitMQ提供两种协议<code>HTTP</code>和<code>AMQP</code>。这个流量控制，只是对<code>AMQP</code>生效的。对<code>HTPP</code>协议发送的消息并不会进行流量控制。所以，<code>rabbitmq</code>使用的总内存会超过<code>vm_memory_limit</code>也就不奇怪了。</p>
 <h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p>测试环境:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">┌─[sky@sky-linux] - [/ihome/rabbitmq/rabbitmq_server-3.6.1] - [2016-12-01 03:21:31]</div><div class="line">└─[0] &lt;&gt; free -m                </div><div class="line">             total       used       free     shared    buffers     cached</div><div class="line">Mem:         15920      13144       2775       1038        608       5794</div><div class="line">-/+ buffers/cache:       6741       9178</div><div class="line">Swap:            0          0          0</div><div class="line">┌─[sky@sky-linux] - [/ihome/rabbitmq/rabbitmq_server-3.6.1] - [2016-12-01 03:22:16]</div><div class="line">└─[0] &lt;&gt; uname -a</div><div class="line">Linux sky-linux 3.19.0-32-generic <span class="comment">#37~14.04.1-Ubuntu SMP Thu Oct 22 09:41:40 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux</span></div><div class="line">┌─[sky@sky-linux] - [/ihome/rabbitmq/rabbitmq_server-3.6.1] - [2016-12-01 03:22:34]</div><div class="line">└─[0] &lt;&gt;</div></pre></td></tr></table></figure>
-<h3 id="默认情况下的内存"><a href="#默认情况下的内存" class="headerlink" title="默认情况下的内存"></a>默认情况下的内存</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">./sbin/rabbitmqctl status</div><div class="line"></div><div class="line"> &#123;vm_memory_high_watermark,0.4&#125;,</div><div class="line"> &#123;vm_memory_limit,6677449932&#125;,</div></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">15920 * 0.4 = 6368.0 MB</div><div class="line">6677449932 / 1024 / 1024 = 6368 MB</div></pre></td></tr></table></figure>
+<pre><code class="bash">┌─[sky@sky-linux] - [/ihome/rabbitmq/rabbitmq_server-3.6.1] - [2016-12-01 03:21:31]
+└─[0] &lt;&gt; free -m                
+             total       used       free     shared    buffers     cached
+Mem:         15920      13144       2775       1038        608       5794
+-/+ buffers/cache:       6741       9178
+Swap:            0          0          0
+┌─[sky@sky-linux] - [/ihome/rabbitmq/rabbitmq_server-3.6.1] - [2016-12-01 03:22:16]
+└─[0] &lt;&gt; uname -a
+Linux sky-linux 3.19.0-32-generic #37~14.04.1-Ubuntu SMP Thu Oct 22 09:41:40 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux
+┌─[sky@sky-linux] - [/ihome/rabbitmq/rabbitmq_server-3.6.1] - [2016-12-01 03:22:34]
+└─[0] &lt;&gt;
+</code></pre>
+<h3 id="默认情况下的内存"><a href="#默认情况下的内存" class="headerlink" title="默认情况下的内存"></a>默认情况下的内存</h3><pre><code class="bash">./sbin/rabbitmqctl status
+
+ {vm_memory_high_watermark,0.4},
+ {vm_memory_limit,6677449932},
+</code></pre>
+<pre><code class="bash">15920 * 0.4 = 6368.0 MB
+6677449932 / 1024 / 1024 = 6368 MB
+</code></pre>
 <h3 id="修改-vm-memory-high-watermark"><a href="#修改-vm-memory-high-watermark" class="headerlink" title="修改 vm_memory_high_watermark"></a>修改 vm_memory_high_watermark</h3><p>修改为 <code>0.8</code> 看看效果:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">─[sky@sky-linux] - [/ihome/rabbitmq/rabbitmq_server-3.6.1] - [2016-12-01 03:22:34]</div><div class="line">└─[0] &lt;&gt; ./sbin/rabbitmqctl set_vm_memory_high_watermark 0.8</div><div class="line">Setting memory threshold on <span class="string">'rabbit@sky-linux'</span> to 0.8 ...</div><div class="line">┌─[sky@sky-linux] - [/ihome/rabbitmq/rabbitmq_server-3.6.1] - [2016-12-01 03:25:30]</div><div class="line">└─[0] &lt;&gt; ./sbin/rabbitmqctl status  </div><div class="line">...                        </div><div class="line">&#123;vm_memory_high_watermark,0.8&#125;,</div><div class="line"> &#123;vm_memory_limit,13354899865&#125;,</div><div class="line">...</div></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">15920 * 0.8 = 12736 MB</div><div class="line">13354899865 / 1024 / 1024 = 12736 MB</div></pre></td></tr></table></figure>
+<pre><code class="bash">─[sky@sky-linux] - [/ihome/rabbitmq/rabbitmq_server-3.6.1] - [2016-12-01 03:22:34]
+└─[0] &lt;&gt; ./sbin/rabbitmqctl set_vm_memory_high_watermark 0.8
+Setting memory threshold on &#39;rabbit@sky-linux&#39; to 0.8 ...
+┌─[sky@sky-linux] - [/ihome/rabbitmq/rabbitmq_server-3.6.1] - [2016-12-01 03:25:30]
+└─[0] &lt;&gt; ./sbin/rabbitmqctl status  
+...                        
+{vm_memory_high_watermark,0.8},
+ {vm_memory_limit,13354899865},
+...
+</code></pre>
+<pre><code class="bash">15920 * 0.8 = 12736 MB
+13354899865 / 1024 / 1024 = 12736 MB
+</code></pre>
 <p>可知，<code>vm_memory_high_watermark</code> 修改后，<code>vm_memory_limit</code> 也会随之改变.</p>
-<h3 id="修改-vm-memory-high-watermark-为绝对值"><a href="#修改-vm-memory-high-watermark-为绝对值" class="headerlink" title="修改 vm_memory_high_watermark 为绝对值"></a>修改 vm_memory_high_watermark 为绝对值</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">┌─[sky@sky-linux] - [/ihome/rabbitmq/rabbitmq_server-3.6.1] - [2016-12-01 03:38:10]</div><div class="line">└─[64] &lt;&gt; ./sbin/rabbitmqctl set_vm_memory_high_watermark absolute 10MB</div><div class="line">Setting memory threshold on <span class="string">'rabbit@sky-linux'</span> to 10000000 bytes ...</div><div class="line">┌─[sky@sky-linux] - [/ihome/rabbitmq/rabbitmq_server-3.6.1] - [2016-12-01 03:38:38]</div><div class="line">└─[0] &lt;&gt; ./sbin/rabbitmqctl status                                    </div><div class="line">...</div><div class="line">&#123;vm_memory_high_watermark,&#123;absolute,10000000&#125;&#125;,</div><div class="line"> &#123;vm_memory_limit,10000000&#125;,</div><div class="line"></div><div class="line">...</div></pre></td></tr></table></figure>
+<h3 id="修改-vm-memory-high-watermark-为绝对值"><a href="#修改-vm-memory-high-watermark-为绝对值" class="headerlink" title="修改 vm_memory_high_watermark 为绝对值"></a>修改 vm_memory_high_watermark 为绝对值</h3><pre><code class="bash">┌─[sky@sky-linux] - [/ihome/rabbitmq/rabbitmq_server-3.6.1] - [2016-12-01 03:38:10]
+└─[64] &lt;&gt; ./sbin/rabbitmqctl set_vm_memory_high_watermark absolute 10MB
+Setting memory threshold on &#39;rabbit@sky-linux&#39; to 10000000 bytes ...
+┌─[sky@sky-linux] - [/ihome/rabbitmq/rabbitmq_server-3.6.1] - [2016-12-01 03:38:38]
+└─[0] &lt;&gt; ./sbin/rabbitmqctl status                                    
+...
+{vm_memory_high_watermark,{absolute,10000000}},
+ {vm_memory_limit,10000000},
+
+...
+</code></pre>
 <p>可以看到，它们的值是相等的.</p>
 
                                 

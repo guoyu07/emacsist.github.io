@@ -15,17 +15,17 @@
     <meta name="keywords" content="golang,go," />
   
 
-  <meta name="description" content="这是在Google Golang的Nuts上看到的golang-nuts  当作为interface类型调用时，指针值没有更新？12345678910func f(resp interface&amp;#123;&amp;#125;) &amp;#123;	resp = &quot;abcd&quot;&amp;#125;func main() &amp;#123;	var s string	f(&amp;amp;s)	fmt.Println(s) //prin">
+  <meta name="description" content="这是在Google Golang的Nuts上看到的golang-nuts  当作为interface类型调用时，指针值没有更新？ func f(resp interface{}) {     resp = &amp;quot;abcd&amp;quot; }  func main() {     var s string     f(&amp;amp;s)     fmt.Println(s) //prints bla">
 <meta name="keywords" content="golang,go">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Golang 中的接口类型与指针">
 <meta property="og:url" content="https://emacsist.github.io/2016/11/24/Golang 中的接口类型与指针/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="这是在Google Golang的Nuts上看到的golang-nuts  当作为interface类型调用时，指针值没有更新？12345678910func f(resp interface&amp;#123;&amp;#125;) &amp;#123;	resp = &quot;abcd&quot;&amp;#125;func main() &amp;#123;	var s string	f(&amp;amp;s)	fmt.Println(s) //prin">
+<meta property="og:description" content="这是在Google Golang的Nuts上看到的golang-nuts  当作为interface类型调用时，指针值没有更新？ func f(resp interface{}) {     resp = &amp;quot;abcd&amp;quot; }  func main() {     var s string     f(&amp;amp;s)     fmt.Println(s) //prints bla">
 <meta property="og:updated_time" content="2016-11-24T13:47:10.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Golang 中的接口类型与指针">
-<meta name="twitter:description" content="这是在Google Golang的Nuts上看到的golang-nuts  当作为interface类型调用时，指针值没有更新？12345678910func f(resp interface&amp;#123;&amp;#125;) &amp;#123;	resp = &quot;abcd&quot;&amp;#125;func main() &amp;#123;	var s string	f(&amp;amp;s)	fmt.Println(s) //prin">
+<meta name="twitter:description" content="这是在Google Golang的Nuts上看到的golang-nuts  当作为interface类型调用时，指针值没有更新？ func f(resp interface{}) {     resp = &amp;quot;abcd&amp;quot; }  func main() {     var s string     f(&amp;amp;s)     fmt.Println(s) //prints bla">
 
   
 
@@ -204,9 +204,34 @@
                             <blockquote>
 <p>这是在Google Golang的Nuts上看到的<br><a href="https://groups.google.com/forum/#!topic/golang-nuts/nUqqdJw9K4I" target="_blank" rel="external">golang-nuts</a></p>
 </blockquote>
-<h2 id="当作为interface类型调用时，指针值没有更新？"><a href="#当作为interface类型调用时，指针值没有更新？" class="headerlink" title="当作为interface类型调用时，指针值没有更新？"></a>当作为interface类型调用时，指针值没有更新？</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">func f(resp interface&#123;&#125;) &#123;</div><div class="line">	resp = <span class="string">"abcd"</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">func <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">	var s string</div><div class="line">	f(&amp;s)</div><div class="line">	fmt.Println(s) //prints blank?</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="当作为interface类型调用时，指针值没有更新？"><a href="#当作为interface类型调用时，指针值没有更新？" class="headerlink" title="当作为interface类型调用时，指针值没有更新？"></a>当作为interface类型调用时，指针值没有更新？</h2><pre><code class="bash">
+func f(resp interface{}) {
+    resp = &quot;abcd&quot;
+}
+
+func main() {
+    var s string
+    f(&amp;s)
+    fmt.Println(s) //prints blank?
+}
+</code></pre>
 <p><code>interface</code>只是一个值，想要间接成指针，可以如下处理:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">package main</div><div class="line"></div><div class="line">import (</div><div class="line">	<span class="string">"fmt"</span></div><div class="line">)</div><div class="line"></div><div class="line">func f(resp interface&#123;&#125;) &#123;</div><div class="line">	*resp.(*string) = <span class="string">"abcd"</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">func <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">	var s string</div><div class="line">	f(&amp;s)</div><div class="line">	fmt.Println(s)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="bash">package main
+
+import (
+    &quot;fmt&quot;
+)
+
+func f(resp interface{}) {
+    *resp.(*string) = &quot;abcd&quot;
+}
+
+func main() {
+    var s string
+    f(&amp;s)
+    fmt.Println(s)
+}
+</code></pre>
 <p><code>resp.(*string)</code>：转换为<code>string</code>指针<br><code>*resp.(*string)</code>：这个表示指针的内容<br><code>*resp.(*string) = &quot;abcd&quot;</code>：将<code>abcd</code>的值赋给指针的内容.</p>
 
                                 

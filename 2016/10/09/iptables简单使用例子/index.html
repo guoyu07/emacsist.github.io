@@ -15,17 +15,17 @@
     <meta name="keywords" content="linux,iptables," />
   
 
-  <meta name="description" content="保存1sudo iptables-save &amp;gt; iptables.rule 还原1sudo iptables-restore &amp;lt; iptables.rule 持久化1sudo apt-get install iptables-persistent 删除某条规则1234sudo iptables -L --line-numbers然后删除sudo iptables -D INPUT（即所">
+  <meta name="description" content="保存sudo iptables-save &amp;gt; iptables.rule  还原sudo iptables-restore &amp;lt; iptables.rule  持久化sudo apt-get install iptables-persistent  删除某条规则sudo iptables -L --line-numbers  然后删除 sudo iptables -D INPUT（即所在">
 <meta name="keywords" content="linux,iptables">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iptables简单使用例子">
 <meta property="og:url" content="https://emacsist.github.io/2016/10/09/iptables简单使用例子/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="保存1sudo iptables-save &amp;gt; iptables.rule 还原1sudo iptables-restore &amp;lt; iptables.rule 持久化1sudo apt-get install iptables-persistent 删除某条规则1234sudo iptables -L --line-numbers然后删除sudo iptables -D INPUT（即所">
+<meta property="og:description" content="保存sudo iptables-save &amp;gt; iptables.rule  还原sudo iptables-restore &amp;lt; iptables.rule  持久化sudo apt-get install iptables-persistent  删除某条规则sudo iptables -L --line-numbers  然后删除 sudo iptables -D INPUT（即所在">
 <meta property="og:updated_time" content="2017-02-22T04:13:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iptables简单使用例子">
-<meta name="twitter:description" content="保存1sudo iptables-save &amp;gt; iptables.rule 还原1sudo iptables-restore &amp;lt; iptables.rule 持久化1sudo apt-get install iptables-persistent 删除某条规则1234sudo iptables -L --line-numbers然后删除sudo iptables -D INPUT（即所">
+<meta name="twitter:description" content="保存sudo iptables-save &amp;gt; iptables.rule  还原sudo iptables-restore &amp;lt; iptables.rule  持久化sudo apt-get install iptables-persistent  删除某条规则sudo iptables -L --line-numbers  然后删除 sudo iptables -D INPUT（即所在">
 
   
 
@@ -201,11 +201,21 @@
 
     <div class="article-content">
         
-                            <h2 id="保存"><a href="#保存" class="headerlink" title="保存"></a>保存</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo iptables-save &gt; iptables.rule</div></pre></td></tr></table></figure>
-<h2 id="还原"><a href="#还原" class="headerlink" title="还原"></a>还原</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo iptables-restore &lt; iptables.rule</div></pre></td></tr></table></figure>
-<h2 id="持久化"><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install iptables-persistent</div></pre></td></tr></table></figure>
-<h2 id="删除某条规则"><a href="#删除某条规则" class="headerlink" title="删除某条规则"></a>删除某条规则</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sudo iptables -L --line-numbers</div><div class="line"></div><div class="line">然后删除</div><div class="line">sudo iptables -D INPUT（即所在类型） 行号</div></pre></td></tr></table></figure>
-<h2 id="禁用某端口，但只允许指定的ip访问"><a href="#禁用某端口，但只允许指定的ip访问" class="headerlink" title="禁用某端口，但只允许指定的ip访问"></a>禁用某端口，但只允许指定的ip访问</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">iptables -A INPUT -p tcp --dport 8000 -s 1.2.3.4 -j ACCEPT</div><div class="line">iptables -A INPUT -p tcp --dport 8000 -j DROP</div></pre></td></tr></table></figure>
+                            <h2 id="保存"><a href="#保存" class="headerlink" title="保存"></a>保存</h2><pre><code class="bash">sudo iptables-save &gt; iptables.rule
+</code></pre>
+<h2 id="还原"><a href="#还原" class="headerlink" title="还原"></a>还原</h2><pre><code class="bash">sudo iptables-restore &lt; iptables.rule
+</code></pre>
+<h2 id="持久化"><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h2><pre><code class="bash">sudo apt-get install iptables-persistent
+</code></pre>
+<h2 id="删除某条规则"><a href="#删除某条规则" class="headerlink" title="删除某条规则"></a>删除某条规则</h2><pre><code class="bash">sudo iptables -L --line-numbers
+
+然后删除
+sudo iptables -D INPUT（即所在类型） 行号
+</code></pre>
+<h2 id="禁用某端口，但只允许指定的ip访问"><a href="#禁用某端口，但只允许指定的ip访问" class="headerlink" title="禁用某端口，但只允许指定的ip访问"></a>禁用某端口，但只允许指定的ip访问</h2><pre><code class="bash">
+iptables -A INPUT -p tcp --dport 8000 -s 1.2.3.4 -j ACCEPT
+iptables -A INPUT -p tcp --dport 8000 -j DROP
+</code></pre>
 
                                 
     </div>

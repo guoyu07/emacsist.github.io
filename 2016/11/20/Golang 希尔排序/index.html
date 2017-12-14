@@ -15,18 +15,18 @@
     <meta name="keywords" content="golang,go," />
   
 
-  <meta name="description" content="希尔排序1234567891011121314151617181920212223242526272829303132333435363738394041424344454647package mainimport (	&quot;fmt&quot;	&quot;helper/number&quot;	&quot;helper/time&quot;)func main() &amp;#123;	data := number.GenerateInt(100000,">
+  <meta name="description" content="希尔排序package main  import (     &amp;quot;fmt&amp;quot;     &amp;quot;helper/number&amp;quot;     &amp;quot;helper/time&amp;quot; )  func main() {     data := number.GenerateInt(100000, 100)     start := time.CurrentMillis()">
 <meta name="keywords" content="golang,go">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Golang 希尔排序">
 <meta property="og:url" content="https://emacsist.github.io/2016/11/20/Golang 希尔排序/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="希尔排序1234567891011121314151617181920212223242526272829303132333435363738394041424344454647package mainimport (	&quot;fmt&quot;	&quot;helper/number&quot;	&quot;helper/time&quot;)func main() &amp;#123;	data := number.GenerateInt(100000,">
+<meta property="og:description" content="希尔排序package main  import (     &amp;quot;fmt&amp;quot;     &amp;quot;helper/number&amp;quot;     &amp;quot;helper/time&amp;quot; )  func main() {     data := number.GenerateInt(100000, 100)     start := time.CurrentMillis()">
 <meta property="og:image" content="https://emacsist.github.io/img/shell-sort.png">
 <meta property="og:updated_time" content="2016-11-20T14:46:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Golang 希尔排序">
-<meta name="twitter:description" content="希尔排序1234567891011121314151617181920212223242526272829303132333435363738394041424344454647package mainimport (	&quot;fmt&quot;	&quot;helper/number&quot;	&quot;helper/time&quot;)func main() &amp;#123;	data := number.GenerateInt(100000,">
+<meta name="twitter:description" content="希尔排序package main  import (     &amp;quot;fmt&amp;quot;     &amp;quot;helper/number&amp;quot;     &amp;quot;helper/time&amp;quot; )  func main() {     data := number.GenerateInt(100000, 100)     start := time.CurrentMillis()">
 <meta name="twitter:image" content="https://emacsist.github.io/img/shell-sort.png">
 
   
@@ -203,9 +203,64 @@
 
     <div class="article-content">
         
-                            <h2 id="希尔排序"><a href="#希尔排序" class="headerlink" title="希尔排序"></a>希尔排序</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">package main</div><div class="line"></div><div class="line">import (</div><div class="line">	<span class="string">"fmt"</span></div><div class="line">	<span class="string">"helper/number"</span></div><div class="line">	<span class="string">"helper/time"</span></div><div class="line">)</div><div class="line"></div><div class="line">func <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">	data := number.GenerateInt(100000, 100)</div><div class="line">	start := time.CurrentMillis()</div><div class="line">	shellSort(data)</div><div class="line">	fmt.Printf(<span class="string">"cost %v ms\n"</span>, time.CurrentMillis()-start)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func shellSort(data []int) &#123;</div><div class="line">	//一共有多少列: 4 -&gt; 2 -&gt; 1</div><div class="line">	<span class="keyword">for</span> col := len(data) / 2; col &gt;= 1; col = col / 2 &#123;</div><div class="line"></div><div class="line">		//对每一列处理 0 -&gt; col（即每一次循环，就是处理该列的排序）</div><div class="line">		<span class="keyword">for</span> i := 0; i &lt; col; i++ &#123;</div><div class="line"></div><div class="line">			//从每一列的第二个数开始进行插入排序（因为只有 &gt;= 2 个元素时，才有可比性）</div><div class="line">			n := 1</div><div class="line">			//i + col * n 表示该列的下一个元素的位置 , 它要 &lt; len(data)</div><div class="line">			<span class="keyword">for</span> i+col*n &lt; len(data) &#123;</div><div class="line"></div><div class="line">				//保存当前元素的位置（因为它要不断地与位置比它小的进行交换（即插入排序）</div><div class="line">				k := i + col*n</div><div class="line">				<span class="keyword">for</span> k &gt;= 0 &amp;&amp; (k-col) &gt;= 0 &#123;</div><div class="line"></div><div class="line">					//不断地与前一个元素进行比较（直到 前一个元素 &gt;= 即可停止）这里是开始排序</div><div class="line">					<span class="keyword">if</span> data[k] &lt; data[k-col] &#123;</div><div class="line">						data[k], data[k-col] = data[k-col], data[k]</div><div class="line">						k = k - col</div><div class="line">					&#125; <span class="keyword">else</span> &#123;</div><div class="line">						<span class="built_in">break</span></div><div class="line">					&#125;</div><div class="line"></div><div class="line">				&#125;</div><div class="line"></div><div class="line">				//该列的下一个元素</div><div class="line">				n++</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+                            <h2 id="希尔排序"><a href="#希尔排序" class="headerlink" title="希尔排序"></a>希尔排序</h2><pre><code class="bash">package main
+
+import (
+    &quot;fmt&quot;
+    &quot;helper/number&quot;
+    &quot;helper/time&quot;
+)
+
+func main() {
+    data := number.GenerateInt(100000, 100)
+    start := time.CurrentMillis()
+    shellSort(data)
+    fmt.Printf(&quot;cost %v ms\n&quot;, time.CurrentMillis()-start)
+}
+
+func shellSort(data []int) {
+    //一共有多少列: 4 -&gt; 2 -&gt; 1
+    for col := len(data) / 2; col &gt;= 1; col = col / 2 {
+
+        //对每一列处理 0 -&gt; col（即每一次循环，就是处理该列的排序）
+        for i := 0; i &lt; col; i++ {
+
+            //从每一列的第二个数开始进行插入排序（因为只有 &gt;= 2 个元素时，才有可比性）
+            n := 1
+            //i + col * n 表示该列的下一个元素的位置 , 它要 &lt; len(data)
+            for i+col*n &lt; len(data) {
+
+                //保存当前元素的位置（因为它要不断地与位置比它小的进行交换（即插入排序）
+                k := i + col*n
+                for k &gt;= 0 &amp;&amp; (k-col) &gt;= 0 {
+
+                    //不断地与前一个元素进行比较（直到 前一个元素 &gt;= 即可停止）这里是开始排序
+                    if data[k] &lt; data[k-col] {
+                        data[k], data[k-col] = data[k-col], data[k]
+                        k = k - col
+                    } else {
+                        break
+                    }
+
+                }
+
+                //该列的下一个元素
+                n++
+            }
+        }
+    }
+}
+</code></pre>
 <p><img src="/img/shell-sort.png" alt="img"></p>
-<h2 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[22:34:42] emacsist:test3 $ go build main.go &amp;&amp; time ./main</div><div class="line">cost 11 ms</div><div class="line">./main  0.02s user 0.01s system 83% cpu 0.029 total</div><div class="line">[22:39:18] emacsist:test3 $ go build main.go &amp;&amp; time ./main</div><div class="line">cost 12 ms</div><div class="line">./main  0.02s user 0.01s system 95% cpu 0.024 total</div><div class="line">[22:39:56] emacsist:test3 $</div></pre></td></tr></table></figure>
+<h2 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h2><pre><code class="bash">[22:34:42] emacsist:test3 $ go build main.go &amp;&amp; time ./main
+cost 11 ms
+./main  0.02s user 0.01s system 83% cpu 0.029 total
+[22:39:18] emacsist:test3 $ go build main.go &amp;&amp; time ./main
+cost 12 ms
+./main  0.02s user 0.01s system 95% cpu 0.024 total
+[22:39:56] emacsist:test3 $
+</code></pre>
+
                                 
     </div>
 </article>

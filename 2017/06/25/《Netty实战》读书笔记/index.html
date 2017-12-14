@@ -15,17 +15,17 @@
     <meta name="keywords" content="java,netty," />
   
 
-  <meta name="description" content="Netty 核心组件 Channel : 传入或传出数据的载体 回调 : 一个被提供给另一个方法的方法引用 Future : 提供了另一种在完成时通知应用程序的方式 事件 和  ChannelHandler : Netty 使用不同的事件来通知我们状态的改变或者是操作的状态。 EeventLoop : Netty 在内部会为每个 Channel 分配一个 EventLoop，用以处理所有事件  1">
+  <meta name="description" content="Netty 核心组件 Channel : 传入或传出数据的载体 回调 : 一个被提供给另一个方法的方法引用 Future : 提供了另一种在完成时通知应用程序的方式 事件 和  ChannelHandler : Netty 使用不同的事件来通知我们状态的改变或者是操作的状态。 EeventLoop : Netty 在内部会为每个 Channel 分配一个 EventLoop，用以处理所有事件  入">
 <meta name="keywords" content="java,netty">
 <meta property="og:type" content="article">
 <meta property="og:title" content="《Netty实战》读书笔记">
 <meta property="og:url" content="https://emacsist.github.io/2017/06/25/《Netty实战》读书笔记/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="Netty 核心组件 Channel : 传入或传出数据的载体 回调 : 一个被提供给另一个方法的方法引用 Future : 提供了另一种在完成时通知应用程序的方式 事件 和  ChannelHandler : Netty 使用不同的事件来通知我们状态的改变或者是操作的状态。 EeventLoop : Netty 在内部会为每个 Channel 分配一个 EventLoop，用以处理所有事件  1">
+<meta property="og:description" content="Netty 核心组件 Channel : 传入或传出数据的载体 回调 : 一个被提供给另一个方法的方法引用 Future : 提供了另一种在完成时通知应用程序的方式 事件 和  ChannelHandler : Netty 使用不同的事件来通知我们状态的改变或者是操作的状态。 EeventLoop : Netty 在内部会为每个 Channel 分配一个 EventLoop，用以处理所有事件  入">
 <meta property="og:updated_time" content="2017-06-25T15:20:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《Netty实战》读书笔记">
-<meta name="twitter:description" content="Netty 核心组件 Channel : 传入或传出数据的载体 回调 : 一个被提供给另一个方法的方法引用 Future : 提供了另一种在完成时通知应用程序的方式 事件 和  ChannelHandler : Netty 使用不同的事件来通知我们状态的改变或者是操作的状态。 EeventLoop : Netty 在内部会为每个 Channel 分配一个 EventLoop，用以处理所有事件  1">
+<meta name="twitter:description" content="Netty 核心组件 Channel : 传入或传出数据的载体 回调 : 一个被提供给另一个方法的方法引用 Future : 提供了另一种在完成时通知应用程序的方式 事件 和  ChannelHandler : Netty 使用不同的事件来通知我们状态的改变或者是操作的状态。 EeventLoop : Netty 在内部会为每个 Channel 分配一个 EventLoop，用以处理所有事件  入">
 
   
 
@@ -208,15 +208,218 @@
 <li>事件 和  ChannelHandler : Netty 使用不同的事件来通知我们状态的改变或者是操作的状态。</li>
 <li>EeventLoop : Netty 在内部会为每个 Channel 分配一个 EventLoop，用以处理所有事件</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">入站事件 -&gt; 入站处理器 -&gt; 入站事件 -&gt; 入站处理器 -&gt; ...</div><div class="line"></div><div class="line">... &lt;- 出站处理器 &lt;- 出站事件 &lt;- 出站处理器 &lt;- 出站事件</div></pre></td></tr></table></figure>
+<pre><code class="bash">入站事件 -&gt; 入站处理器 -&gt; 入站事件 -&gt; 入站处理器 -&gt; ...
+
+... &lt;- 出站处理器 &lt;- 出站事件 &lt;- 出站处理器 &lt;- 出站事件
+</code></pre>
 <h1 id="echo-服务器"><a href="#echo-服务器" class="headerlink" title="echo 服务器"></a>echo 服务器</h1><p><a href="">github emacsist nett-echo</a></p>
 <p>纯手工输入~自己输入一次，加深下印象</p>
-<h2 id="server-端代码"><a href="#server-端代码" class="headerlink" title="server 端代码"></a>server 端代码</h2><h3 id="Handler"><a href="#Handler" class="headerlink" title="Handler"></a>Handler</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">package com.github.emacsist.echo.server;</div><div class="line"></div><div class="line">import io.netty.buffer.ByteBuf;</div><div class="line">import io.netty.buffer.Unpooled;</div><div class="line">import io.netty.channel.ChannelFutureListener;</div><div class="line">import io.netty.channel.ChannelHandler;</div><div class="line">import io.netty.channel.ChannelHandlerContext;</div><div class="line">import io.netty.channel.ChannelInboundHandlerAdapter;</div><div class="line">import io.netty.util.CharsetUtil;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by emacsist on 2017/6/25.</div><div class="line"> */</div><div class="line">@ChannelHandler.Sharable</div><div class="line">public class EchoServerHandler extends ChannelInboundHandlerAdapter &#123;</div><div class="line">    @Override</div><div class="line">    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception &#123;</div><div class="line">        ByteBuf <span class="keyword">in</span> = (ByteBuf)msg;</div><div class="line">        System.out.println(<span class="string">"Server received: "</span> + in.toString(CharsetUtil.UTF_8));</div><div class="line">        ctx.write(<span class="keyword">in</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception &#123;</div><div class="line">        ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception &#123;</div><div class="line">        cause.printStackTrace();</div><div class="line">        ctx.close();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="Bootstrap-代码"><a href="#Bootstrap-代码" class="headerlink" title="Bootstrap 代码"></a>Bootstrap 代码</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">package com.github.emacsist.echo.server;</div><div class="line"></div><div class="line">import io.netty.bootstrap.ServerBootstrap;</div><div class="line">import io.netty.channel.ChannelFuture;</div><div class="line">import io.netty.channel.ChannelInitializer;</div><div class="line">import io.netty.channel.EventLoopGroup;</div><div class="line">import io.netty.channel.nio.NioEventLoopGroup;</div><div class="line">import io.netty.channel.socket.SocketChannel;</div><div class="line">import io.netty.channel.socket.nio.NioServerSocketChannel;</div><div class="line"></div><div class="line">import java.net.InetSocketAddress;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by emacsist on 2017/6/25.</div><div class="line"> */</div><div class="line">public class EchoServer &#123;</div><div class="line">    private final int port;</div><div class="line"></div><div class="line">    public EchoServer(int port) &#123;</div><div class="line">        this.port = port;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void start() throws InterruptedException &#123;</div><div class="line">        final EchoServerHandler serverHandler = new EchoServerHandler();</div><div class="line">        EventLoopGroup eventLoopGroup = new NioEventLoopGroup();</div><div class="line">        try &#123;</div><div class="line">            ServerBootstrap b = new ServerBootstrap();</div><div class="line">            b.group(eventLoopGroup).channel(NioServerSocketChannel.class).localAddress(new InetSocketAddress(port))</div><div class="line">                    .childHandler(new ChannelInitializer&lt;SocketChannel&gt;() &#123;</div><div class="line"></div><div class="line">                        protected void initChannel(SocketChannel socketChannel) throws Exception &#123;</div><div class="line">                            socketChannel.pipeline().addLast(serverHandler);</div><div class="line">                        &#125;</div><div class="line">                    &#125;);</div><div class="line">            ChannelFuture f = b.bind().sync();</div><div class="line">            f.channel().closeFuture().sync();</div><div class="line">        &#125; finally &#123;</div><div class="line">            eventLoopGroup.shutdownGracefully().sync();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static void main(String[] args) throws InterruptedException &#123;</div><div class="line">        <span class="keyword">if</span> (args.length != 1 )&#123;</div><div class="line">            System.err.println(<span class="string">"Usage: "</span> + EchoServer.class.getSimpleName() + <span class="string">" &lt;port&gt;"</span>);</div><div class="line">            <span class="built_in">return</span>;</div><div class="line">        &#125;</div><div class="line">        int port = Integer.parseInt(args[0]);</div><div class="line">        new EchoServer(port).start();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="client-端代码"><a href="#client-端代码" class="headerlink" title="client 端代码"></a>client 端代码</h2><h3 id="Handler-代码"><a href="#Handler-代码" class="headerlink" title="Handler 代码"></a>Handler 代码</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">package com.github.emacsist.echo.client;</div><div class="line"></div><div class="line">import io.netty.buffer.ByteBuf;</div><div class="line">import io.netty.buffer.Unpooled;</div><div class="line">import io.netty.channel.ChannelHandler;</div><div class="line">import io.netty.channel.ChannelHandlerContext;</div><div class="line">import io.netty.channel.SimpleChannelInboundHandler;</div><div class="line">import io.netty.util.CharsetUtil;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by emacsist on 2017/6/25.</div><div class="line"> */</div><div class="line">@ChannelHandler.Sharable</div><div class="line">public class EchoClientHandler extends SimpleChannelInboundHandler&lt;ByteBuf&gt; &#123;</div><div class="line">    @Override</div><div class="line">    public void channelActive(ChannelHandlerContext ctx) throws Exception &#123;</div><div class="line">        ctx.writeAndFlush(Unpooled.copiedBuffer(<span class="string">"Netty rocks!"</span>, CharsetUtil.UTF_8));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    protected void channelRead0(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf) throws Exception &#123;</div><div class="line">        System.out.println(<span class="string">"Client received: "</span> + byteBuf.toString(CharsetUtil.UTF_8));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception &#123;</div><div class="line">        cause.printStackTrace();</div><div class="line">        ctx.close();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="Bootstrap-代码-1"><a href="#Bootstrap-代码-1" class="headerlink" title="Bootstrap 代码"></a>Bootstrap 代码</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line">package com.github.emacsist.echo.client;</div><div class="line"></div><div class="line">import io.netty.bootstrap.Bootstrap;</div><div class="line">import io.netty.channel.ChannelFuture;</div><div class="line">import io.netty.channel.ChannelInitializer;</div><div class="line">import io.netty.channel.EventLoopGroup;</div><div class="line">import io.netty.channel.nio.NioEventLoopGroup;</div><div class="line">import io.netty.channel.socket.SocketChannel;</div><div class="line">import io.netty.channel.socket.nio.NioSocketChannel;</div><div class="line"></div><div class="line">import java.net.InetSocketAddress;</div><div class="line"></div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by emacsist on 2017/6/25.</div><div class="line"> */</div><div class="line">public class EchoClient &#123;</div><div class="line">    private final String host;</div><div class="line">    private final int port;</div><div class="line">    public EchoClient(String host, int port)&#123;</div><div class="line">        this.host = host;</div><div class="line">        this.port = port;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void start() throws InterruptedException &#123;</div><div class="line">        EventLoopGroup group = new NioEventLoopGroup();</div><div class="line">        try&#123;</div><div class="line">            Bootstrap b = new Bootstrap();</div><div class="line">            b.group(group).channel(NioSocketChannel.class).remoteAddress(new InetSocketAddress(host, port))</div><div class="line">                    .handler(new ChannelInitializer&lt;SocketChannel&gt;() &#123;</div><div class="line"></div><div class="line">                        protected void initChannel(SocketChannel socketChannel) throws Exception &#123;</div><div class="line">                            socketChannel.pipeline().addLast(new EchoClientHandler());</div><div class="line">                        &#125;</div><div class="line">                    &#125;);</div><div class="line">            ChannelFuture f = b.connect().sync();</div><div class="line">            f.channel().closeFuture().sync();</div><div class="line">        &#125; finally &#123;</div><div class="line">            group.shutdownGracefully().sync();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static void main(String[] args) throws InterruptedException &#123;</div><div class="line">        <span class="keyword">if</span> (args.length != 2 )&#123;</div><div class="line">            System.err.println(<span class="string">"Usage: "</span> + EchoClient.class.getSimpleName() + <span class="string">" &lt;host&gt; &lt;port&gt;"</span>);</div><div class="line">            <span class="built_in">return</span>;</div><div class="line">        &#125;</div><div class="line">        String host = args[0];</div><div class="line">        int port = Integer.parseInt(args[1]);</div><div class="line">        new EchoClient(host, port).start();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="运行及结果"><a href="#运行及结果" class="headerlink" title="运行及结果"></a>运行及结果</h2><h3 id="server"><a href="#server" class="headerlink" title="server"></a>server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">[13:35:16] emacsist:<span class="built_in">echo</span>-server $ mvn <span class="built_in">exec</span>:java</div><div class="line">[INFO] Scanning <span class="keyword">for</span> projects...</div><div class="line">[INFO]</div><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line">[INFO] Building <span class="built_in">echo</span>-server 1.0-SNAPSHOT</div><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line">[INFO]</div><div class="line">[INFO] &gt;&gt;&gt; <span class="built_in">exec</span>-maven-plugin:1.2.1:java (default-cli) &gt; validate @ <span class="built_in">echo</span>-server &gt;&gt;&gt;</div><div class="line">[INFO]</div><div class="line">[INFO] &lt;&lt;&lt; <span class="built_in">exec</span>-maven-plugin:1.2.1:java (default-cli) &lt; validate @ <span class="built_in">echo</span>-server &lt;&lt;&lt;</div><div class="line">[INFO]</div><div class="line">[INFO]</div><div class="line">[INFO] --- <span class="built_in">exec</span>-maven-plugin:1.2.1:java (default-cli) @ <span class="built_in">echo</span>-server ---</div><div class="line">Server received: Netty rocks!</div></pre></td></tr></table></figure>
-<h3 id="client"><a href="#client" class="headerlink" title="client"></a>client</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">[13:35:05] emacsist:<span class="built_in">echo</span>-client $ mvn <span class="built_in">exec</span>:java</div><div class="line">[INFO] Scanning <span class="keyword">for</span> projects...</div><div class="line">[INFO]</div><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line">[INFO] Building <span class="built_in">echo</span>-client 1.0-SNAPSHOT</div><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line">[INFO]</div><div class="line">[INFO] &gt;&gt;&gt; <span class="built_in">exec</span>-maven-plugin:1.2.1:java (default-cli) &gt; validate @ <span class="built_in">echo</span>-client &gt;&gt;&gt;</div><div class="line">[INFO]</div><div class="line">[INFO] &lt;&lt;&lt; <span class="built_in">exec</span>-maven-plugin:1.2.1:java (default-cli) &lt; validate @ <span class="built_in">echo</span>-client &lt;&lt;&lt;</div><div class="line">[INFO]</div><div class="line">[INFO]</div><div class="line">[INFO] --- <span class="built_in">exec</span>-maven-plugin:1.2.1:java (default-cli) @ <span class="built_in">echo</span>-client ---</div><div class="line">Client received: Netty rocks!</div><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line">[INFO] BUILD SUCCESS</div><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line">[INFO] Total time: 4.327 s</div><div class="line">[INFO] Finished at: 2017-06-25T13:35:28+08:00</div><div class="line">[INFO] Final Memory: 9M/155M</div><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line">[13:35:28] emacsist:<span class="built_in">echo</span>-client $</div></pre></td></tr></table></figure>
+<h2 id="server-端代码"><a href="#server-端代码" class="headerlink" title="server 端代码"></a>server 端代码</h2><h3 id="Handler"><a href="#Handler" class="headerlink" title="Handler"></a>Handler</h3><pre><code class="bash">package com.github.emacsist.echo.server;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.util.CharsetUtil;
+
+/**
+ * Created by emacsist on 2017/6/25.
+ */
+@ChannelHandler.Sharable
+public class EchoServerHandler extends ChannelInboundHandlerAdapter {
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        ByteBuf in = (ByteBuf)msg;
+        System.out.println(&quot;Server received: &quot; + in.toString(CharsetUtil.UTF_8));
+        ctx.write(in);
+    }
+
+    @Override
+    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+        ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        cause.printStackTrace();
+        ctx.close();
+    }
+}
+</code></pre>
+<h3 id="Bootstrap-代码"><a href="#Bootstrap-代码" class="headerlink" title="Bootstrap 代码"></a>Bootstrap 代码</h3><pre><code class="bash">package com.github.emacsist.echo.server;
+
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+
+import java.net.InetSocketAddress;
+
+/**
+ * Created by emacsist on 2017/6/25.
+ */
+public class EchoServer {
+    private final int port;
+
+    public EchoServer(int port) {
+        this.port = port;
+    }
+
+    public void start() throws InterruptedException {
+        final EchoServerHandler serverHandler = new EchoServerHandler();
+        EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
+        try {
+            ServerBootstrap b = new ServerBootstrap();
+            b.group(eventLoopGroup).channel(NioServerSocketChannel.class).localAddress(new InetSocketAddress(port))
+                    .childHandler(new ChannelInitializer&lt;SocketChannel&gt;() {
+
+                        protected void initChannel(SocketChannel socketChannel) throws Exception {
+                            socketChannel.pipeline().addLast(serverHandler);
+                        }
+                    });
+            ChannelFuture f = b.bind().sync();
+            f.channel().closeFuture().sync();
+        } finally {
+            eventLoopGroup.shutdownGracefully().sync();
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        if (args.length != 1 ){
+            System.err.println(&quot;Usage: &quot; + EchoServer.class.getSimpleName() + &quot; &lt;port&gt;&quot;);
+            return;
+        }
+        int port = Integer.parseInt(args[0]);
+        new EchoServer(port).start();
+    }
+}
+</code></pre>
+<h2 id="client-端代码"><a href="#client-端代码" class="headerlink" title="client 端代码"></a>client 端代码</h2><h3 id="Handler-代码"><a href="#Handler-代码" class="headerlink" title="Handler 代码"></a>Handler 代码</h3><pre><code class="bash">package com.github.emacsist.echo.client;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.util.CharsetUtil;
+
+/**
+ * Created by emacsist on 2017/6/25.
+ */
+@ChannelHandler.Sharable
+public class EchoClientHandler extends SimpleChannelInboundHandler&lt;ByteBuf&gt; {
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        ctx.writeAndFlush(Unpooled.copiedBuffer(&quot;Netty rocks!&quot;, CharsetUtil.UTF_8));
+    }
+
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf) throws Exception {
+        System.out.println(&quot;Client received: &quot; + byteBuf.toString(CharsetUtil.UTF_8));
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        cause.printStackTrace();
+        ctx.close();
+    }
+}
+</code></pre>
+<h3 id="Bootstrap-代码-1"><a href="#Bootstrap-代码-1" class="headerlink" title="Bootstrap 代码"></a>Bootstrap 代码</h3><pre><code class="bash">package com.github.emacsist.echo.client;
+
+import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
+
+import java.net.InetSocketAddress;
+
+
+/**
+ * Created by emacsist on 2017/6/25.
+ */
+public class EchoClient {
+    private final String host;
+    private final int port;
+    public EchoClient(String host, int port){
+        this.host = host;
+        this.port = port;
+    }
+
+    public void start() throws InterruptedException {
+        EventLoopGroup group = new NioEventLoopGroup();
+        try{
+            Bootstrap b = new Bootstrap();
+            b.group(group).channel(NioSocketChannel.class).remoteAddress(new InetSocketAddress(host, port))
+                    .handler(new ChannelInitializer&lt;SocketChannel&gt;() {
+
+                        protected void initChannel(SocketChannel socketChannel) throws Exception {
+                            socketChannel.pipeline().addLast(new EchoClientHandler());
+                        }
+                    });
+            ChannelFuture f = b.connect().sync();
+            f.channel().closeFuture().sync();
+        } finally {
+            group.shutdownGracefully().sync();
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        if (args.length != 2 ){
+            System.err.println(&quot;Usage: &quot; + EchoClient.class.getSimpleName() + &quot; &lt;host&gt; &lt;port&gt;&quot;);
+            return;
+        }
+        String host = args[0];
+        int port = Integer.parseInt(args[1]);
+        new EchoClient(host, port).start();
+    }
+}
+</code></pre>
+<h2 id="运行及结果"><a href="#运行及结果" class="headerlink" title="运行及结果"></a>运行及结果</h2><h3 id="server"><a href="#server" class="headerlink" title="server"></a>server</h3><pre><code class="bash">[13:35:16] emacsist:echo-server $ mvn exec:java
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] Building echo-server 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO]
+[INFO] &gt;&gt;&gt; exec-maven-plugin:1.2.1:java (default-cli) &gt; validate @ echo-server &gt;&gt;&gt;
+[INFO]
+[INFO] &lt;&lt;&lt; exec-maven-plugin:1.2.1:java (default-cli) &lt; validate @ echo-server &lt;&lt;&lt;
+[INFO]
+[INFO]
+[INFO] --- exec-maven-plugin:1.2.1:java (default-cli) @ echo-server ---
+Server received: Netty rocks!
+</code></pre>
+<h3 id="client"><a href="#client" class="headerlink" title="client"></a>client</h3><pre><code class="bash">[13:35:05] emacsist:echo-client $ mvn exec:java
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] Building echo-client 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO]
+[INFO] &gt;&gt;&gt; exec-maven-plugin:1.2.1:java (default-cli) &gt; validate @ echo-client &gt;&gt;&gt;
+[INFO]
+[INFO] &lt;&lt;&lt; exec-maven-plugin:1.2.1:java (default-cli) &lt; validate @ echo-client &lt;&lt;&lt;
+[INFO]
+[INFO]
+[INFO] --- exec-maven-plugin:1.2.1:java (default-cli) @ echo-client ---
+Client received: Netty rocks!
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 4.327 s
+[INFO] Finished at: 2017-06-25T13:35:28+08:00
+[INFO] Final Memory: 9M/155M
+[INFO] ------------------------------------------------------------------------
+[13:35:28] emacsist:echo-client $
+</code></pre>
 <h1 id="Netty-网络抽象"><a href="#Netty-网络抽象" class="headerlink" title="Netty 网络抽象"></a>Netty 网络抽象</h1><ul>
 <li><p>Channel – Socket</p>
 <ul>
@@ -284,8 +487,12 @@
 <li>copy() : 返回这个 ByteBufHolder 的一个深拷贝</li>
 <li>duplicate() : 返回这个 ByteBufHolder 的一个浅拷贝</li>
 </ul>
-<h1 id="Channel-的生命周期"><a href="#Channel-的生命周期" class="headerlink" title="Channel 的生命周期"></a>Channel 的生命周期</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ChannelRegistered -&gt; ChannelActive -&gt; ChannelInactive -&gt; ChannelUnregistered</div></pre></td></tr></table></figure>
-<h1 id="ChannelHandler-的生命周期"><a href="#ChannelHandler-的生命周期" class="headerlink" title="ChannelHandler 的生命周期"></a>ChannelHandler 的生命周期</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">handlerAdded : 添加到 ChannelPipeline 中时被调用</div><div class="line">handlerRemoved : 从 ChannelPipeline 中移除时被调用</div><div class="line">handlerCaught : 当处理过程中在 ChannelPipeline 中有错误产生时调用</div></pre></td></tr></table></figure>
+<h1 id="Channel-的生命周期"><a href="#Channel-的生命周期" class="headerlink" title="Channel 的生命周期"></a>Channel 的生命周期</h1><pre><code class="bash">ChannelRegistered -&gt; ChannelActive -&gt; ChannelInactive -&gt; ChannelUnregistered
+</code></pre>
+<h1 id="ChannelHandler-的生命周期"><a href="#ChannelHandler-的生命周期" class="headerlink" title="ChannelHandler 的生命周期"></a>ChannelHandler 的生命周期</h1><pre><code class="bash">handlerAdded : 添加到 ChannelPipeline 中时被调用
+handlerRemoved : 从 ChannelPipeline 中移除时被调用
+handlerCaught : 当处理过程中在 ChannelPipeline 中有错误产生时调用
+</code></pre>
 <h1 id="资源管理"><a href="#资源管理" class="headerlink" title="资源管理"></a>资源管理</h1><p>调用 <em>ChannelInboundHandler.channelRead()</em> 或者  <em>ChannelOutboundHandler.write()</em> 处理数据时，必须要保证没有任何的资源泄漏。（因为Netty是使用引用计数来处理池化的 ByteBuf 的）</p>
 <p>为了检测资源泄漏的问题，Netty 提供了 class ResourceLeakDetector 来检测。</p>
 <p>检测级别有:</p>
@@ -296,7 +503,8 @@
 <li>PARANOID : 类似 ADVANCED ，但是会对每一次（对消息的）访问都采样。（这应该只是在调试阶段使用）</li>
 </ul>
 <p>使用：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">java -Dio.netty.leakDetectionLevel=ADVANCED</div></pre></td></tr></table></figure>
+<pre><code class="bash">java -Dio.netty.leakDetectionLevel=ADVANCED
+</code></pre>
 <h1 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h1><ul>
 <li>ChannelHandler.execeptionCaught() 默认实现是简单地将当前异常转发给 ChannelPipeline 中的下一个 ChannelHandler</li>
 <li>如果异常到达了 ChannelPipeline 的尾端，它将会被记录为未被处理</li>
@@ -308,7 +516,13 @@
 <li>当任务完成时，将该Thread返回给该列表，使其可被重用</li>
 </ol>
 <p>这虽然减少了每个任务线程的创建和销毁，但它并不能消除由 上下文切换 所带来的开销，随着线程数量的增加很快变得明显，并且在高负载下，愈演愈烈。</p>
-<h1 id="EventLoop-接口"><a href="#EventLoop-接口" class="headerlink" title="EventLoop 接口"></a>EventLoop 接口</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span>(!terminated) &#123;</div><div class="line">         List&lt;Runnable&gt; readyEvents = blockUntilEventsReady()</div><div class="line">         <span class="keyword">for</span> (Runnable ev : readyEvents) &#123;</div><div class="line">                 ev.run()</div><div class="line">         &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="EventLoop-接口"><a href="#EventLoop-接口" class="headerlink" title="EventLoop 接口"></a>EventLoop 接口</h1><pre><code class="bash">while(!terminated) {
+         List&lt;Runnable&gt; readyEvents = blockUntilEventsReady()
+         for (Runnable ev : readyEvents) {
+                 ev.run()
+         }
+}
+</code></pre>
 <p>在这个线程模型中，一个 EventLoop 由一个永不变的 Thread 驱动。可根据可用核心不同，可能会创建多个 EventLoop 实例用以优化资源的使用，并且单个 EventLoop 可能会被指派用于服务多个 Channel</p>
 <h1 id="Netty-4-中的-I-O-和事件处理"><a href="#Netty-4-中的-I-O-和事件处理" class="headerlink" title="Netty 4 中的 I/O 和事件处理"></a>Netty 4 中的 I/O 和事件处理</h1><p>在 Netty 4 中，所有的 I/O 操作和事件都已经被分配给了 EventLoop 的那个 Thread 来处理（注意，是处理，而不是触发哦）</p>
 <h1 id="Netty-3-中的-I-O-操作"><a href="#Netty-3-中的-I-O-操作" class="headerlink" title="Netty 3 中的 I/O 操作"></a>Netty 3 中的 I/O 操作</h1><p>这个模型只保证了入站（上游）事件会在所谓的 I/O 线程（对应 Netty 4 中的 EventLoop ）执行。<br>所有的出站（下游）事件都由调用线程处理，其可能是 I/O 线程也可能是别的线程。</p>
@@ -318,13 +532,49 @@
 <p>！！！！永远不要将一个长时间运行的任务放入到执行队列中，因为它将阻塞需要在同一线程上执行的任何的其他任务。</p>
 <h1 id="EventLoop-的线程分配"><a href="#EventLoop-的线程分配" class="headerlink" title="EventLoop 的线程分配"></a>EventLoop 的线程分配</h1><h2 id="NIO-中"><a href="#NIO-中" class="headerlink" title="NIO 中"></a>NIO 中</h2><p>这种模型中，它们可能会被多个 Channel 所共享，这样可以通过尽可能少的 Thread 来支撑大量的 Channel ，而不是每个 Channel 分配一个 Thread 。EventLoopGroup 负责为每个新创建的 Channel 分配一个 EventLoop。在当前实现中，使用顺序循环（round-robin) 的方式进行分配以获取一个均衡的分布，并且相同的 EventLoop 可能会被分配给多个 Channel 。</p>
 <h2 id="OIO-中"><a href="#OIO-中" class="headerlink" title="OIO 中"></a>OIO 中</h2><p>这里每个 Channel 都将被分配一个 EventLoop（以及它的Thread）</p>
-<h1 id="导引"><a href="#导引" class="headerlink" title="导引"></a>导引</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">                               &lt;-- Bootstrap（客户端）</div><div class="line">Cloneable &lt;- AbstractBootstrap &lt;--</div><div class="line">                               &lt;-- ServerBootstrap（服务器端）</div></pre></td></tr></table></figure>
+<h1 id="导引"><a href="#导引" class="headerlink" title="导引"></a>导引</h1><pre><code class="bash">                               &lt;-- Bootstrap（客户端）
+Cloneable &lt;- AbstractBootstrap &lt;--
+                               &lt;-- ServerBootstrap（服务器端）
+</code></pre>
 <p>为什么引导类是 Cloneable 的？</p>
 <blockquote>
 <p>你有时可能会需要创建多个具有类似配置或者完全相同配置的 Channel 。为了支持这种模式而又不需要为每个 Channel 都创建并配置一个新的引导类实例，AbstractBootstrap 被标记为了 Cloneable 。在一个已经配置完成的引导类实例上调用 clone() 方法将返回一个可以立即使用的引导类实例。</p>
 <p>注意，这种方式只会创建引导类实例的 EventLoopGroup 的一个浅拷贝，所以，后者将在所有克隆的 Channel 实例之间共享。</p>
 </blockquote>
-<h2 id="Bootstrap"><a href="#Bootstrap" class="headerlink" title="Bootstrap"></a>Bootstrap</h2><h1 id="内置编-解码器"><a href="#内置编-解码器" class="headerlink" title="内置编/解码器"></a>内置编/解码器</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/base64</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/bytes</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/compression</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/dns</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/haproxy</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/http</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/http/cookie</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/http/cors</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/http/multipart</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/http/websocketx</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/http/websocketx/extensions</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/http/websocketx/extensions/compression</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/http2</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/json</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/marshalling</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/memcache</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/memcache/binary</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/mqtt</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/protobuf</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/redis</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/rtsp</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/sctp</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/serialization</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/smtp</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/socks</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/socksx</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/socksx/v4</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/socksx/v5</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/spdy</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/stomp</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/string</div><div class="line">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/xml</div></pre></td></tr></table></figure>
+<h2 id="Bootstrap"><a href="#Bootstrap" class="headerlink" title="Bootstrap"></a>Bootstrap</h2><h1 id="内置编-解码器"><a href="#内置编-解码器" class="headerlink" title="内置编/解码器"></a>内置编/解码器</h1><pre><code class="bash">/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/base64
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/bytes
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/compression
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/dns
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/haproxy
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/http
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/http/cookie
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/http/cors
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/http/multipart
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/http/websocketx
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/http/websocketx/extensions
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/http/websocketx/extensions/compression
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/http2
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/json
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/marshalling
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/memcache
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/memcache/binary
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/mqtt
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/protobuf
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/redis
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/rtsp
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/sctp
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/serialization
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/smtp
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/socks
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/socksx
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/socksx/v4
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/socksx/v5
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/spdy
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/stomp
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/string
+/Users/emacsist/.m2/repository/io/netty/netty-all/4.1.12.Final/netty-all-4.1.12.Final.jar!/io/netty/handler/codec/xml
+</code></pre>
 
                                 
     </div>

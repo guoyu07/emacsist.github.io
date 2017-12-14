@@ -227,10 +227,26 @@
 <h3 id="Tomcat的properties管理类-CatalinaProperties"><a href="#Tomcat的properties管理类-CatalinaProperties" class="headerlink" title="Tomcat的properties管理类 CatalinaProperties"></a>Tomcat的properties管理类 CatalinaProperties</h3><p>在进入classloader初始化之前，我们来看看Tomcat加载properties的管理类，就是<code>org.apache.catalina.startup.CatalinaProperties</code>类.</p>
 <p>Tomcat加载不同的classLoader，是通过<code>String value = CatalinaProperties.getProperty(name + &quot;.loader&quot;);</code>这个配置来加载类的.</p>
 <p>而<code>CatalinaProperties</code>类，通过源码可知，它是加载<code>tomcat</code>目录下的<code>conf/catalina.properties</code>文件的.</p>
-<h3 id="initClassLoaders-方法"><a href="#initClassLoaders-方法" class="headerlink" title="initClassLoaders() 方法"></a>initClassLoaders() 方法</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">private void <span class="function"><span class="title">initClassLoaders</span></span>() &#123;</div><div class="line">    try &#123;</div><div class="line">        commonLoader = createClassLoader(<span class="string">"common"</span>, null);</div><div class="line">        <span class="keyword">if</span>( commonLoader == null ) &#123;</div><div class="line">            // no config file, default to this loader - we might be <span class="keyword">in</span> a <span class="string">'single'</span> env.</div><div class="line">            commonLoader=this.getClass().getClassLoader();</div><div class="line">        &#125;</div><div class="line">        catalinaLoader = createClassLoader(<span class="string">"server"</span>, commonLoader);</div><div class="line">        sharedLoader = createClassLoader(<span class="string">"shared"</span>, commonLoader);</div><div class="line">    &#125; catch (Throwable t) &#123;</div><div class="line">        handleThrowable(t);</div><div class="line">        log.error(<span class="string">"Class loader creation threw exception"</span>, t);</div><div class="line">        System.exit(1);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="initClassLoaders-方法"><a href="#initClassLoaders-方法" class="headerlink" title="initClassLoaders() 方法"></a>initClassLoaders() 方法</h3><pre><code class="bash">    private void initClassLoaders() {
+        try {
+            commonLoader = createClassLoader(&quot;common&quot;, null);
+            if( commonLoader == null ) {
+                // no config file, default to this loader - we might be in a &#39;single&#39; env.
+                commonLoader=this.getClass().getClassLoader();
+            }
+            catalinaLoader = createClassLoader(&quot;server&quot;, commonLoader);
+            sharedLoader = createClassLoader(&quot;shared&quot;, commonLoader);
+        } catch (Throwable t) {
+            handleThrowable(t);
+            log.error(&quot;Class loader creation threw exception&quot;, t);
+            System.exit(1);
+        }
+    }
+</code></pre>
 <p>可以看到该方法初始化了三个classloder，分别是<code>commonLoader</code>, <code>catalinaLoader</code>, <code>sharedLoader</code>.而且<code>commonLoader</code>是<code>catalinaLoader</code>和<code>sharedLoader</code>的父classloader.</p>
 <h4 id="commonLoader"><a href="#commonLoader" class="headerlink" title="commonLoader"></a>commonLoader</h4><p>所以，我们看看这个配置文件中<code>common.loader</code>的value可知是如下:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">common.loader=<span class="string">"<span class="variable">$&#123;catalina.base&#125;</span>/lib"</span>,<span class="string">"<span class="variable">$&#123;catalina.base&#125;</span>/lib/*.jar"</span>,<span class="string">"<span class="variable">$&#123;catalina.home&#125;</span>/lib"</span>,<span class="string">"<span class="variable">$&#123;catalina.home&#125;</span>/lib/*.jar"</span></div></pre></td></tr></table></figure>
+<pre><code class="bash">common.loader=&quot;${catalina.base}/lib&quot;,&quot;${catalina.base}/lib/*.jar&quot;,&quot;${catalina.home}/lib&quot;,&quot;${catalina.home}/lib/*.jar&quot;
+</code></pre>
 <p>在这里，可以看到，Tomcat是单目录，多实例结构的。<code>catalina.base</code>是实例的目录位置,<code>catalina.home</code>是tomcat安装目录的位置.但一般情况下，我们的<code>catalina.base</code>与<code>catalina.home</code>是相同的.</p>
 <p>所以，可以知道<code>commonLoader</code>负载加载上面指定的<code>&quot;${catalina.base}/lib&quot;,&quot;${catalina.base}/lib/*.jar&quot;,&quot;${catalina.home}/lib&quot;,&quot;${catalina.home}/lib/*.jar&quot;</code>这些类的.</p>
 <p>根据这样子的情况，我们可以知道，如果想让一个依赖包，让所有的应用都加载的话，可以将这些依赖包，放到以上指定的目录中即可.（不过，一般情况下也不建议这样子做，一个Tomcat中多个应用要加载不同版本的jar包，这样子就会出问题了)</p>

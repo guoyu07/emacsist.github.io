@@ -15,17 +15,17 @@
     <meta name="keywords" content="database,mysql," />
   
 
-  <meta name="description" content="表结构123456789101112131415161718192021222324252627282930313233mysql&amp;gt; desc dce_his_cs_m_jyhqsj;+---------+---------------+------+-----+---------+----------------+| Field   | Type          | Null | Key">
+  <meta name="description" content="表结构mysql&amp;gt; desc dce_his_cs_m_jyhqsj; +---------+---------------+------+-----+---------+----------------+ | Field   | Type          | Null | Key | Default | Extra          | +---------+--------------">
 <meta name="keywords" content="database,mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL获取分组后的TopN条数据">
 <meta property="og:url" content="https://emacsist.github.io/2016/10/13/MySQL获取分组后的TopN条数据/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="表结构123456789101112131415161718192021222324252627282930313233mysql&amp;gt; desc dce_his_cs_m_jyhqsj;+---------+---------------+------+-----+---------+----------------+| Field   | Type          | Null | Key">
+<meta property="og:description" content="表结构mysql&amp;gt; desc dce_his_cs_m_jyhqsj; +---------+---------------+------+-----+---------+----------------+ | Field   | Type          | Null | Key | Default | Extra          | +---------+--------------">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL获取分组后的TopN条数据">
-<meta name="twitter:description" content="表结构123456789101112131415161718192021222324252627282930313233mysql&amp;gt; desc dce_his_cs_m_jyhqsj;+---------+---------------+------+-----+---------+----------------+| Field   | Type          | Null | Key">
+<meta name="twitter:description" content="表结构mysql&amp;gt; desc dce_his_cs_m_jyhqsj; +---------+---------------+------+-----+---------+----------------+ | Field   | Type          | Null | Key | Default | Extra          | +---------+--------------">
 
   
 
@@ -201,8 +201,72 @@
 
     <div class="article-content">
         
-                            <h2 id="表结构"><a href="#表结构" class="headerlink" title="表结构"></a>表结构</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">mysql&gt; desc dce_his_cs_m_jyhqsj;</div><div class="line">+---------+---------------+------+-----+---------+----------------+</div><div class="line">| Field   | Type          | Null | Key | Default | Extra          |</div><div class="line">+---------+---------------+------+-----+---------+----------------+</div><div class="line">| QSJDATE | varchar(20)   | YES  |     | NULL    |                |</div><div class="line">| QSJDDDD | varchar(8)    | NO   | PRI | NULL    |                |</div><div class="line">| QSJMMMM | varchar(4)    | NO   | PRI | NULL    |                |</div><div class="line">| QSJHYBH | varchar(10)   | NO   | PRI | NULL    |                |</div><div class="line">| QSJKHBH | varchar(10)   | NO   | PRI | NULL    |                |</div><div class="line">| QSJKPJG | decimal(10,2) | YES  |     | NULL    |                |</div><div class="line">| QSJKPTM | decimal(20,0) | YES  |     | NULL    |                |</div><div class="line">| QSJZGJG | decimal(10,2) | YES  |     | NULL    |                |</div><div class="line">| QSJZDJG | decimal(10,2) | YES  |     | NULL    |                |</div><div class="line">| QSJSPJG | decimal(10,2) | YES  |     | NULL    |                |</div><div class="line">| QSJSPTM | varchar(20)   | YES  |     | NULL    |                |</div><div class="line">| QSJCJSL | decimal(10,0) | YES  |     | NULL    |                |</div><div class="line">| QSJSKCL | decimal(10,0) | YES  |     | NULL    |                |</div><div class="line">| QSJSPCL | decimal(10,0) | YES  |     | NULL    |                |</div><div class="line">| QSJBKCL | decimal(10,0) | YES  |     | NULL    |                |</div><div class="line">| QSJBPCL | decimal(10,0) | YES  |     | NULL    |                |</div><div class="line">| QSJSCCL | decimal(10,0) | YES  |     | NULL    |                |</div><div class="line">| QSJBCCL | decimal(10,0) | YES  |     | NULL    |                |</div><div class="line">| QSJZCCL | decimal(10,0) | YES  |     | NULL    |                |</div><div class="line">| QSJSWTL | decimal(10,0) | YES  |     | NULL    |                |</div><div class="line">| QSJBWTL | decimal(10,0) | YES  |     | NULL    |                |</div><div class="line">| QSJZWTL | decimal(10,0) | YES  |     | NULL    |                |</div><div class="line">| QSJAMPL | decimal(10,2) | YES  |     | NULL    |                |</div><div class="line">| QSJZDFD | decimal(10,2) | YES  |     | NULL    |                |</div><div class="line">| id      | int(11)       | NO   | UNI | NULL    | auto_increment |</div><div class="line">+---------+---------------+------+-----+---------+----------------+</div><div class="line">25 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
-<h2 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">SET SESSION group_concat_max_len = 1000000;</div><div class="line"></div><div class="line">mysql&gt; select id, QSJDDDD, QSJMMMM, QSJCJSL  from dce_his_cs_m_jyhqsj <span class="built_in">where</span> FIND_IN_SET(id,  (SELECT group_concat(id) as id  from (select substring_index(group_concat(id order by id desc SEPARATOR <span class="string">','</span>),<span class="string">","</span>,5) as id from dce_his_cs_m_jyhqsj GROUP BY QSJDDDD, qsjmmmm) as b)) order by QSJDDDD, QSJMMMM, QSJCJSL;</div><div class="line"></div><div class="line"></div><div class="line">mysql&gt; select id, QSJDDDD, QSJMMMM, QSJCJSL  from dce_his_cs_m_jyhqsj <span class="built_in">where</span> FIND_IN_SET(id,  (SELECT group_concat(id) as id  from (select substring_index(group_concat(id order by id desc SEPARATOR <span class="string">','</span>),<span class="string">","</span>,5) as id from dce_his_cs_m_jyhqsj GROUP BY QSJDDDD, qsjmmmm) as b)) order by QSJDDDD, QSJMMMM, QSJCJSL;</div><div class="line">+-------+----------+---------+---------+</div><div class="line">| id    | QSJDDDD  | QSJMMMM | QSJCJSL |</div><div class="line">+-------+----------+---------+---------+</div><div class="line">|  2577 | 20160909 | 1401    |      14 |</div><div class="line">| 10862 | 20160909 | 1401    |      28 |</div><div class="line">| 10702 | 20160909 | 1402    |      21 |</div><div class="line">| 11142 | 20160909 | 1402    |      35 |</div><div class="line">| 11802 | 20160909 | 1402    |      57 |</div><div class="line">| 10070 | 20160909 | 1402    |      98 |</div><div class="line">|  9238 | 20160909 | 1402    |     120 |</div><div class="line">| 11394 | 20160909 | 1403    |       5 |</div><div class="line">| 10863 | 20160909 | 1403    |      11 |</div><div class="line">| 11803 | 20160909 | 1403    |      14 |</div><div class="line">| 11618 | 20160909 | 1403    |      56 |</div><div class="line">| 12651 | 20160909 | 1403    |      95 |</div><div class="line">| 11395 | 20160909 | 1404    |      53 |</div><div class="line">| 12210 | 20160909 | 1404    |      64 |</div><div class="line">| 12010 | 20160909 | 1404    |      67 |</div><div class="line">| 12652 | 20160909 | 1404    |      89 |</div><div class="line">| 12422 | 20160909 | 1404    |     114 |</div><div class="line">|  9672 | 20160909 | 1405    |       9 |</div><div class="line">| 12653 | 20160909 | 1405    |      22 |</div><div class="line">| 11619 | 20160909 | 1405    |      26 |</div><div class="line">| 10071 | 20160909 | 1405    |      64 |</div><div class="line">| 12423 | 20160909 | 1405    |     118 |</div></pre></td></tr></table></figure>
+                            <h2 id="表结构"><a href="#表结构" class="headerlink" title="表结构"></a>表结构</h2><pre><code class="bash">mysql&gt; desc dce_his_cs_m_jyhqsj;
++---------+---------------+------+-----+---------+----------------+
+| Field   | Type          | Null | Key | Default | Extra          |
++---------+---------------+------+-----+---------+----------------+
+| QSJDATE | varchar(20)   | YES  |     | NULL    |                |
+| QSJDDDD | varchar(8)    | NO   | PRI | NULL    |                |
+| QSJMMMM | varchar(4)    | NO   | PRI | NULL    |                |
+| QSJHYBH | varchar(10)   | NO   | PRI | NULL    |                |
+| QSJKHBH | varchar(10)   | NO   | PRI | NULL    |                |
+| QSJKPJG | decimal(10,2) | YES  |     | NULL    |                |
+| QSJKPTM | decimal(20,0) | YES  |     | NULL    |                |
+| QSJZGJG | decimal(10,2) | YES  |     | NULL    |                |
+| QSJZDJG | decimal(10,2) | YES  |     | NULL    |                |
+| QSJSPJG | decimal(10,2) | YES  |     | NULL    |                |
+| QSJSPTM | varchar(20)   | YES  |     | NULL    |                |
+| QSJCJSL | decimal(10,0) | YES  |     | NULL    |                |
+| QSJSKCL | decimal(10,0) | YES  |     | NULL    |                |
+| QSJSPCL | decimal(10,0) | YES  |     | NULL    |                |
+| QSJBKCL | decimal(10,0) | YES  |     | NULL    |                |
+| QSJBPCL | decimal(10,0) | YES  |     | NULL    |                |
+| QSJSCCL | decimal(10,0) | YES  |     | NULL    |                |
+| QSJBCCL | decimal(10,0) | YES  |     | NULL    |                |
+| QSJZCCL | decimal(10,0) | YES  |     | NULL    |                |
+| QSJSWTL | decimal(10,0) | YES  |     | NULL    |                |
+| QSJBWTL | decimal(10,0) | YES  |     | NULL    |                |
+| QSJZWTL | decimal(10,0) | YES  |     | NULL    |                |
+| QSJAMPL | decimal(10,2) | YES  |     | NULL    |                |
+| QSJZDFD | decimal(10,2) | YES  |     | NULL    |                |
+| id      | int(11)       | NO   | UNI | NULL    | auto_increment |
++---------+---------------+------+-----+---------+----------------+
+25 rows in set (0.00 sec)
+
+mysql&gt;
+</code></pre>
+<h2 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h2><pre><code class="bash">SET SESSION group_concat_max_len = 1000000;
+
+mysql&gt; select id, QSJDDDD, QSJMMMM, QSJCJSL  from dce_his_cs_m_jyhqsj where FIND_IN_SET(id,  (SELECT group_concat(id) as id  from (select substring_index(group_concat(id order by id desc SEPARATOR &#39;,&#39;),&quot;,&quot;,5) as id from dce_his_cs_m_jyhqsj GROUP BY QSJDDDD, qsjmmmm) as b)) order by QSJDDDD, QSJMMMM, QSJCJSL;
+
+
+mysql&gt; select id, QSJDDDD, QSJMMMM, QSJCJSL  from dce_his_cs_m_jyhqsj where FIND_IN_SET(id,  (SELECT group_concat(id) as id  from (select substring_index(group_concat(id order by id desc SEPARATOR &#39;,&#39;),&quot;,&quot;,5) as id from dce_his_cs_m_jyhqsj GROUP BY QSJDDDD, qsjmmmm) as b)) order by QSJDDDD, QSJMMMM, QSJCJSL;
++-------+----------+---------+---------+
+| id    | QSJDDDD  | QSJMMMM | QSJCJSL |
++-------+----------+---------+---------+
+|  2577 | 20160909 | 1401    |      14 |
+| 10862 | 20160909 | 1401    |      28 |
+| 10702 | 20160909 | 1402    |      21 |
+| 11142 | 20160909 | 1402    |      35 |
+| 11802 | 20160909 | 1402    |      57 |
+| 10070 | 20160909 | 1402    |      98 |
+|  9238 | 20160909 | 1402    |     120 |
+| 11394 | 20160909 | 1403    |       5 |
+| 10863 | 20160909 | 1403    |      11 |
+| 11803 | 20160909 | 1403    |      14 |
+| 11618 | 20160909 | 1403    |      56 |
+| 12651 | 20160909 | 1403    |      95 |
+| 11395 | 20160909 | 1404    |      53 |
+| 12210 | 20160909 | 1404    |      64 |
+| 12010 | 20160909 | 1404    |      67 |
+| 12652 | 20160909 | 1404    |      89 |
+| 12422 | 20160909 | 1404    |     114 |
+|  9672 | 20160909 | 1405    |       9 |
+| 12653 | 20160909 | 1405    |      22 |
+| 11619 | 20160909 | 1405    |      26 |
+| 10071 | 20160909 | 1405    |      64 |
+| 12423 | 20160909 | 1405    |     118 |
+</code></pre>
 <p>思路：</p>
 <p>使用<code>group_concat</code>，然后将<code>group_concat</code>的数据取出前N位（TopN），然后再通过<code>FIND_IN_SET</code> 来获取每个TopN的完整数据即可.</p>
 

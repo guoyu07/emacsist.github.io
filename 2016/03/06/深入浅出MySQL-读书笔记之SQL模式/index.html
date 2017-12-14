@@ -15,17 +15,17 @@
     <meta name="keywords" content="database,mysql," />
   
 
-  <meta name="description" content="查看默认的SQL Mode1234567mysql&amp;gt; select @@sql_mode;+-------------------------------------------------------------------------------------------------------------------------------------------+| @@sql_mod">
+  <meta name="description" content="查看默认的SQL Modemysql&amp;gt; select @@sql_mode; +-------------------------------------------------------------------------------------------------------------------------------------------+ | @@sql_mode">
 <meta name="keywords" content="database,mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="&lt;深入浅出MySQL&gt;读书笔记之SQL模式">
 <meta property="og:url" content="https://emacsist.github.io/2016/03/06/深入浅出MySQL-读书笔记之SQL模式/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="查看默认的SQL Mode1234567mysql&amp;gt; select @@sql_mode;+-------------------------------------------------------------------------------------------------------------------------------------------+| @@sql_mod">
+<meta property="og:description" content="查看默认的SQL Modemysql&amp;gt; select @@sql_mode; +-------------------------------------------------------------------------------------------------------------------------------------------+ | @@sql_mode">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt;深入浅出MySQL&gt;读书笔记之SQL模式">
-<meta name="twitter:description" content="查看默认的SQL Mode1234567mysql&amp;gt; select @@sql_mode;+-------------------------------------------------------------------------------------------------------------------------------------------+| @@sql_mod">
+<meta name="twitter:description" content="查看默认的SQL Modemysql&amp;gt; select @@sql_mode; +-------------------------------------------------------------------------------------------------------------------------------------------+ | @@sql_mode">
 
   
 
@@ -201,12 +201,43 @@
 
     <div class="article-content">
         
-                            <h2 id="查看默认的SQL-Mode"><a href="#查看默认的SQL-Mode" class="headerlink" title="查看默认的SQL Mode"></a>查看默认的SQL Mode</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">mysql&gt; select @@sql_mode;</div><div class="line">+-------------------------------------------------------------------------------------------------------------------------------------------+</div><div class="line">| @@sql_mode                                                                                                                                |</div><div class="line">+-------------------------------------------------------------------------------------------------------------------------------------------+</div><div class="line">| ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION |</div><div class="line">+-------------------------------------------------------------------------------------------------------------------------------------------+</div><div class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.01 sec)</div></pre></td></tr></table></figure>
+                            <h2 id="查看默认的SQL-Mode"><a href="#查看默认的SQL-Mode" class="headerlink" title="查看默认的SQL Mode"></a>查看默认的SQL Mode</h2><pre><code class="bash">mysql&gt; select @@sql_mode;
++-------------------------------------------------------------------------------------------------------------------------------------------+
+| @@sql_mode                                                                                                                                |
++-------------------------------------------------------------------------------------------------------------------------------------------+
+| ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION |
++-------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.01 sec)
+</code></pre>
 <h2 id="设置模式"><a href="#设置模式" class="headerlink" title="设置模式"></a>设置模式</h2><p>SET [SESSION|GLOBAL] sql_mode=’modes’，其中SESSION选项表示只在本次连接中生效；而GLOBAL选项表示在本次连接中并不生效，而对于新的连接则生效，这种方法在MySQL 4.1开始有效。另外，也可以通过使用“–sql-mode=”modes””选项，在MySQL启动时设置sql_mode</p>
 <h2 id="SQL-模式功能"><a href="#SQL-模式功能" class="headerlink" title="SQL 模式功能"></a>SQL 模式功能</h2><ul>
 <li>验证日期的合法性.例如:</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">mysql&gt; create table t_mode(t datetime);</div><div class="line">Query OK, 0 rows affected (0.02 sec)</div><div class="line"></div><div class="line">mysql&gt; <span class="built_in">set</span> session sql_mode=<span class="string">'ansi'</span></div><div class="line">    -&gt; ;</div><div class="line">Query OK, 0 rows affected, 1 warning (0.01 sec)</div><div class="line"></div><div class="line">mysql&gt; insert into t_mode values(<span class="string">'2007-04-32'</span>);</div><div class="line">Query OK, 1 row affected, 1 warning (0.01 sec)</div><div class="line"></div><div class="line">mysql&gt; select * from t_mode;</div><div class="line">+---------------------+</div><div class="line">| t                   |</div><div class="line">+---------------------+</div><div class="line">| 0000-00-00 00:00:00 |</div><div class="line">+---------------------+</div><div class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; <span class="built_in">set</span> session sql_mode=<span class="string">'traditional'</span>;</div><div class="line">Query OK, 0 rows affected, 1 warning (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; insert into t_mode values(<span class="string">'2007-04-32'</span>);</div><div class="line">ERROR 1292 (22007): Incorrect datetime value: <span class="string">'2007-04-32'</span> <span class="keyword">for</span> column <span class="string">'t'</span> at row 1</div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
+<pre><code class="bash">mysql&gt; create table t_mode(t datetime);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql&gt; set session sql_mode=&#39;ansi&#39;
+    -&gt; ;
+Query OK, 0 rows affected, 1 warning (0.01 sec)
+
+mysql&gt; insert into t_mode values(&#39;2007-04-32&#39;);
+Query OK, 1 row affected, 1 warning (0.01 sec)
+
+mysql&gt; select * from t_mode;
++---------------------+
+| t                   |
++---------------------+
+| 0000-00-00 00:00:00 |
++---------------------+
+1 row in set (0.00 sec)
+
+mysql&gt; set session sql_mode=&#39;traditional&#39;;
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+mysql&gt; insert into t_mode values(&#39;2007-04-32&#39;);
+ERROR 1292 (22007): Incorrect datetime value: &#39;2007-04-32&#39; for column &#39;t&#39; at row 1
+mysql&gt;
+</code></pre>
 <ul>
 <li>在insert或update过程中, 如果sql mode处于<code>traditional</code>模式, <code>mod(x,0)</code>就会产生错误. 这是因为<code>traditional</code>也属于严格模式.在非严格模式下<code>mod(x,0)</code>返回的结果是<code>NULL</code>. </li>
 </ul>

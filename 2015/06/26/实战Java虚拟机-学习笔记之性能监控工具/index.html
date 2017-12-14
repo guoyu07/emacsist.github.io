@@ -216,7 +216,8 @@
 <h4 id="内存监控"><a href="#内存监控" class="headerlink" title="内存监控"></a>内存监控</h4><ul>
 <li><code>pidstat -r -p pid 1 5</code>:查看某pid进程的内存.</li>
 </ul>
-<h2 id="jps-查看Java进程"><a href="#jps-查看Java进程" class="headerlink" title="jps 查看Java进程"></a>jps 查看Java进程</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jps -mlv</div></pre></td></tr></table></figure>
+<h2 id="jps-查看Java进程"><a href="#jps-查看Java进程" class="headerlink" title="jps 查看Java进程"></a>jps 查看Java进程</h2><pre><code class="java">jps -mlv
+</code></pre>
 <h2 id="jstat-查看堆运行时信息"><a href="#jstat-查看堆运行时信息" class="headerlink" title="jstat 查看堆运行时信息"></a>jstat 查看堆运行时信息</h2><blockquote>
 <p>格式:<br><code>jstat -&lt;option&gt; [-t] [-h&lt;lines&gt;] &lt;vmid JVM进程ID&gt; [&lt;interval 每次统计间隔时间&gt; [&lt;count 统计次数&gt;] ]</code></p>
 </blockquote>
@@ -250,22 +251,57 @@
 <li><p><code>-flag &lt;name&gt;=&lt;value&gt;</code>:设置指定虚拟机参数的值</p>
 </li>
 </ul>
-<h2 id="jmap-导出堆到文件"><a href="#jmap-导出堆到文件" class="headerlink" title="jmap 导出堆到文件"></a>jmap 导出堆到文件</h2><h3 id="统计对象信息"><a href="#统计对象信息" class="headerlink" title="统计对象信息"></a>统计对象信息</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jmap -histo pid &gt; /tmp/heap.txt</div></pre></td></tr></table></figure>
-<h3 id="导出当前堆快照"><a href="#导出当前堆快照" class="headerlink" title="导出当前堆快照"></a>导出当前堆快照</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jmap -dump:format=b,file=/tmp/heap.hprof pid</div></pre></td></tr></table></figure>
-<h3 id="查看-ClassLoader-信息"><a href="#查看-ClassLoader-信息" class="headerlink" title="查看 ClassLoader 信息"></a>查看 ClassLoader 信息</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jmap -permstat pid</div></pre></td></tr></table></figure>
-<h3 id="查看-finalizer-队列中的对象"><a href="#查看-finalizer-队列中的对象" class="headerlink" title="查看 finalizer 队列中的对象"></a>查看 finalizer 队列中的对象</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jmap -finalizerinfo pid</div></pre></td></tr></table></figure>
-<h3 id="查看内存各区的大小信息"><a href="#查看内存各区的大小信息" class="headerlink" title="查看内存各区的大小信息"></a>查看内存各区的大小信息</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jmap -heap pid</div></pre></td></tr></table></figure>
-<h2 id="jhat-自带的堆分析工具"><a href="#jhat-自带的堆分析工具" class="headerlink" title="jhat 自带的堆分析工具"></a>jhat 自带的堆分析工具</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jhat /tmp/heap.hprof</div></pre></td></tr></table></figure>
+<h2 id="jmap-导出堆到文件"><a href="#jmap-导出堆到文件" class="headerlink" title="jmap 导出堆到文件"></a>jmap 导出堆到文件</h2><h3 id="统计对象信息"><a href="#统计对象信息" class="headerlink" title="统计对象信息"></a>统计对象信息</h3><pre><code class="bash">jmap -histo pid &gt; /tmp/heap.txt
+</code></pre>
+<h3 id="导出当前堆快照"><a href="#导出当前堆快照" class="headerlink" title="导出当前堆快照"></a>导出当前堆快照</h3><pre><code class="bash">jmap -dump:format=b,file=/tmp/heap.hprof pid
+</code></pre>
+<h3 id="查看-ClassLoader-信息"><a href="#查看-ClassLoader-信息" class="headerlink" title="查看 ClassLoader 信息"></a>查看 ClassLoader 信息</h3><pre><code class="bash">jmap -permstat pid
+</code></pre>
+<h3 id="查看-finalizer-队列中的对象"><a href="#查看-finalizer-队列中的对象" class="headerlink" title="查看 finalizer 队列中的对象"></a>查看 finalizer 队列中的对象</h3><pre><code class="bash">jmap -finalizerinfo pid
+</code></pre>
+<h3 id="查看内存各区的大小信息"><a href="#查看内存各区的大小信息" class="headerlink" title="查看内存各区的大小信息"></a>查看内存各区的大小信息</h3><pre><code class="bash">jmap -heap pid
+</code></pre>
+<h2 id="jhat-自带的堆分析工具"><a href="#jhat-自带的堆分析工具" class="headerlink" title="jhat 自带的堆分析工具"></a>jhat 自带的堆分析工具</h2><pre><code class="bash">jhat /tmp/heap.hprof
+</code></pre>
 <p>然后打开浏览器访问 <a href="http://127.0.0.1:7000" target="_blank" rel="external">localhost:7000</a></p>
-<h2 id="jstack-查看线程堆栈"><a href="#jstack-查看线程堆栈" class="headerlink" title="jstack 查看线程堆栈"></a>jstack 查看线程堆栈</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jstack [-l] &lt;pid&gt; &gt; /tmp.stack.txt</div></pre></td></tr></table></figure>
-<h2 id="jcmd-多功能命令行-JDK-7自带"><a href="#jcmd-多功能命令行-JDK-7自带" class="headerlink" title="jcmd 多功能命令行[JDK 7自带]"></a>jcmd 多功能命令行[JDK 7自带]</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#相当于 jps</span></div><div class="line">jcmd -l</div><div class="line"></div><div class="line"><span class="comment">#查看启动时间</span></div><div class="line">jcm pid VM.uptime</div><div class="line"></div><div class="line">...</div><div class="line">更多请使用 jcmd &lt;pid&gt; <span class="built_in">help</span> 看所支持的命令.</div></pre></td></tr></table></figure>
-<h2 id="hprof-性能统计工具"><a href="#hprof-性能统计工具" class="headerlink" title="hprof 性能统计工具"></a>hprof 性能统计工具</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">查看帮助:</div><div class="line"></div><div class="line">java -agentlib:hprof=<span class="built_in">help</span></div></pre></td></tr></table></figure>
+<h2 id="jstack-查看线程堆栈"><a href="#jstack-查看线程堆栈" class="headerlink" title="jstack 查看线程堆栈"></a>jstack 查看线程堆栈</h2><pre><code class="bash">jstack [-l] &lt;pid&gt; &gt; /tmp.stack.txt
+</code></pre>
+<h2 id="jcmd-多功能命令行-JDK-7自带"><a href="#jcmd-多功能命令行-JDK-7自带" class="headerlink" title="jcmd 多功能命令行[JDK 7自带]"></a>jcmd 多功能命令行[JDK 7自带]</h2><pre><code class="bash">#相当于 jps
+jcmd -l
+
+#查看启动时间
+jcm pid VM.uptime
+
+...
+更多请使用 jcmd &lt;pid&gt; help 看所支持的命令.
+</code></pre>
+<h2 id="hprof-性能统计工具"><a href="#hprof-性能统计工具" class="headerlink" title="hprof 性能统计工具"></a>hprof 性能统计工具</h2><pre><code class="bash">查看帮助:
+
+java -agentlib:hprof=help
+</code></pre>
 <ul>
 <li>查看函数执行时间</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">执行Java程序时,添加上以下参数</div><div class="line"></div><div class="line">-agentlib:hprof=cpu=<span class="built_in">times</span>,interval=10</div></pre></td></tr></table></figure>
-<h2 id="图形化监控工具-jConsole"><a href="#图形化监控工具-jConsole" class="headerlink" title="图形化监控工具 jConsole"></a>图形化监控工具 jConsole</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">远程配置:</div><div class="line"></div><div class="line">-Djava.rmi.server.hostname=127.0.0.1</div><div class="line">-Dcom.sun.management.jmxremote</div><div class="line">-Dcom.sun.management.jmxremote.port=8888</div><div class="line">-Dcom.sun.management.jmxremote.authenticate=<span class="literal">false</span></div><div class="line">-Dcom.sun.management.jmxremote.ssl=<span class="literal">false</span></div></pre></td></tr></table></figure>
-<h2 id="多合一工具-Visual-VM"><a href="#多合一工具-Visual-VM" class="headerlink" title="多合一工具 Visual VM"></a>多合一工具 Visual VM</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">远程配置:</div><div class="line"></div><div class="line">-Djava.rmi.server.hostname=127.0.0.1</div><div class="line">-Dcom.sun.management.jmxremote</div><div class="line">-Dcom.sun.management.jmxremote.port=8888</div><div class="line">-Dcom.sun.management.jmxremote.authenticate=<span class="literal">false</span></div><div class="line">-Dcom.sun.management.jmxremote.ssl=<span class="literal">false</span></div></pre></td></tr></table></figure>
+<pre><code class="bash">执行Java程序时,添加上以下参数
+
+-agentlib:hprof=cpu=times,interval=10
+</code></pre>
+<h2 id="图形化监控工具-jConsole"><a href="#图形化监控工具-jConsole" class="headerlink" title="图形化监控工具 jConsole"></a>图形化监控工具 jConsole</h2><pre><code class="bash">远程配置:
+
+-Djava.rmi.server.hostname=127.0.0.1
+-Dcom.sun.management.jmxremote
+-Dcom.sun.management.jmxremote.port=8888
+-Dcom.sun.management.jmxremote.authenticate=false
+-Dcom.sun.management.jmxremote.ssl=false
+</code></pre>
+<h2 id="多合一工具-Visual-VM"><a href="#多合一工具-Visual-VM" class="headerlink" title="多合一工具 Visual VM"></a>多合一工具 Visual VM</h2><pre><code class="bash">远程配置:
+
+-Djava.rmi.server.hostname=127.0.0.1
+-Dcom.sun.management.jmxremote
+-Dcom.sun.management.jmxremote.port=8888
+-Dcom.sun.management.jmxremote.authenticate=false
+-Dcom.sun.management.jmxremote.ssl=false
+</code></pre>
 <h2 id="Mission-Control"><a href="#Mission-Control" class="headerlink" title="Mission Control"></a>Mission Control</h2><blockquote>
 <p>该工具在 JDK Update 40 之后. 在bin目录下的 <code>jmc.exe</code>.</p>
 </blockquote>

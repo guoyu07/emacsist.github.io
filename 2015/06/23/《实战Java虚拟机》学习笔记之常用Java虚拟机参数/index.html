@@ -15,17 +15,17 @@
     <meta name="keywords" content="java,jvm," />
   
 
-  <meta name="description" content="跟踪垃圾回收-XX:+PrintGC例子日志样本： 1[GC 4793K-&amp;gt;377K(15872K), 0.0006926 secs] 表示当前使用了4793K,GC后，使用量变为377K，最大可用为15872K -XX:+PrintGCDetails 格式： [名称:当前某区大小-&amp;gt;GC后某区大小（一共可用某区大小）  GC时间跟踪 -XX:+PrintGCTimeStamps  例">
+  <meta name="description" content="跟踪垃圾回收-XX:+PrintGC例子日志样本： [GC 4793K-&amp;gt;377K(15872K), 0.0006926 secs]  表示当前使用了4793K,GC后，使用量变为377K，最大可用为15872K -XX:+PrintGCDetails 格式： [名称:当前某区大小-&amp;gt;GC后某区大小（一共可用某区大小）  GC时间跟踪 -XX:+PrintGCTimeStamps  例">
 <meta name="keywords" content="java,jvm">
 <meta property="og:type" content="article">
 <meta property="og:title" content="《实战Java虚拟机》学习笔记之常用Java虚拟机参数">
 <meta property="og:url" content="https://emacsist.github.io/2015/06/23/《实战Java虚拟机》学习笔记之常用Java虚拟机参数/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="跟踪垃圾回收-XX:+PrintGC例子日志样本： 1[GC 4793K-&amp;gt;377K(15872K), 0.0006926 secs] 表示当前使用了4793K,GC后，使用量变为377K，最大可用为15872K -XX:+PrintGCDetails 格式： [名称:当前某区大小-&amp;gt;GC后某区大小（一共可用某区大小）  GC时间跟踪 -XX:+PrintGCTimeStamps  例">
+<meta property="og:description" content="跟踪垃圾回收-XX:+PrintGC例子日志样本： [GC 4793K-&amp;gt;377K(15872K), 0.0006926 secs]  表示当前使用了4793K,GC后，使用量变为377K，最大可用为15872K -XX:+PrintGCDetails 格式： [名称:当前某区大小-&amp;gt;GC后某区大小（一共可用某区大小）  GC时间跟踪 -XX:+PrintGCTimeStamps  例">
 <meta property="og:updated_time" content="2017-11-17T06:41:23.425Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《实战Java虚拟机》学习笔记之常用Java虚拟机参数">
-<meta name="twitter:description" content="跟踪垃圾回收-XX:+PrintGC例子日志样本： 1[GC 4793K-&amp;gt;377K(15872K), 0.0006926 secs] 表示当前使用了4793K,GC后，使用量变为377K，最大可用为15872K -XX:+PrintGCDetails 格式： [名称:当前某区大小-&amp;gt;GC后某区大小（一共可用某区大小）  GC时间跟踪 -XX:+PrintGCTimeStamps  例">
+<meta name="twitter:description" content="跟踪垃圾回收-XX:+PrintGC例子日志样本： [GC 4793K-&amp;gt;377K(15872K), 0.0006926 secs]  表示当前使用了4793K,GC后，使用量变为377K，最大可用为15872K -XX:+PrintGCDetails 格式： [名称:当前某区大小-&amp;gt;GC后某区大小（一共可用某区大小）  GC时间跟踪 -XX:+PrintGCTimeStamps  例">
 
   
 
@@ -202,7 +202,8 @@
     <div class="article-content">
         
                             <h2 id="跟踪垃圾回收"><a href="#跟踪垃圾回收" class="headerlink" title="跟踪垃圾回收"></a>跟踪垃圾回收</h2><h3 id="XX-PrintGC"><a href="#XX-PrintGC" class="headerlink" title="-XX:+PrintGC"></a><code>-XX:+PrintGC</code></h3><p>例子日志样本：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[GC 4793K-&gt;377K(15872K), 0.0006926 secs]</div></pre></td></tr></table></figure>
+<pre><code class="bash">[GC 4793K-&gt;377K(15872K), 0.0006926 secs]
+</code></pre>
 <p>表示当前使用了<code>4793K</code>,GC后，使用量变为<code>377K</code>，最大可用为<code>15872K</code></p>
 <h3 id="XX-PrintGCDetails"><a href="#XX-PrintGCDetails" class="headerlink" title="-XX:+PrintGCDetails"></a><code>-XX:+PrintGCDetails</code></h3><blockquote>
 <p>格式： [名称:当前某区大小-&gt;GC后某区大小（一共可用某区大小）</p>
@@ -340,7 +341,8 @@
 <p>注意：写法是双引号包括整个参数。%p 表示进程号</p>
 <h2 id="非堆区"><a href="#非堆区" class="headerlink" title="非堆区"></a>非堆区</h2><h3 id="codeCache-区"><a href="#codeCache-区" class="headerlink" title="codeCache 区"></a>codeCache 区</h3><p><a href="http://m.blog.csdn.net/yandaonan/article/details/50844806?from=groupmessage" target="_blank" rel="external">参考 blog</a></p>
 <p>设置 codeCache 区的内存大小</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-XX:ReservedCodeCacheSize=256M</div></pre></td></tr></table></figure>
+<pre><code class="bash">-XX:ReservedCodeCacheSize=256M
+</code></pre>
 <h3 id="方法区（永久代）-JDK-1-8前"><a href="#方法区（永久代）-JDK-1-8前" class="headerlink" title="方法区（永久代）[JDK 1.8前]"></a>方法区（永久代）[JDK 1.8前]</h3><ul>
 <li><code>-XX:PermSize</code>：初始永久区大小</li>
 </ul>

@@ -220,12 +220,56 @@
 <p>找到对应的线程PID后，然后</p>
 <p><code>jstatck -l Java主进程PID &gt; /tmp/Java主进程pid.log</code></p>
 <p>导出线程栈情况，然后根据上面的<code>pidstat</code>工具查找对应占用资源情况的线程PID，与导出的Java线程情况的文件里<code>/tmp/Java主进程pid.log</code>查找与之对应的线程的详细情况.<br>注意：<code>pidstat</code>得出的线程PID是十进制的，而<code>jstatck</code>导出的线程PID是十六进制的，这要转换成十六进制后，再在导出的文件<code>/tmp/Java主进程pid.log</code>里查找.</p>
-<p><em>可以使用以下shell命令来进行转换</em><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">转换的方法:</div><div class="line"></div><div class="line">➜  Desktop  cat hello.txt </div><div class="line">03:25:21 HKT         -      8765   2902.00     26.00  |__java</div><div class="line">03:25:21 HKT         -      8767   3049.00     20.00  |__java</div><div class="line">03:25:21 HKT         -      8852   2896.00     41.00  |__java</div><div class="line">03:25:21 HKT         -      8853   3056.00     36.00  |__java</div><div class="line">03:25:21 HKT         -      8854   2841.00     27.00  |__java</div><div class="line">03:25:21 HKT         -      8855   2738.00     29.00  |__java</div><div class="line">03:25:21 HKT         -      8871   2823.00    124.00  |__java</div><div class="line">03:25:21 HKT         -      8872   2865.00      9.00  |__java</div><div class="line">03:25:21 HKT         -      8875   2905.00     24.00  |__java</div><div class="line">03:25:21 HKT         -      8876   3090.00     27.00  |__java</div><div class="line"></div><div class="line">➜  Desktop  cat hello.txt | awk <span class="string">'&#123;print $4&#125;'</span> | xargs -I &#123;&#125; <span class="built_in">printf</span> <span class="string">"&#123;&#125;=%x\n"</span> &#123;&#125; </div><div class="line">8765=223d</div><div class="line">8767=223f</div><div class="line">8852=2294</div><div class="line">8853=2295</div><div class="line">8854=2296</div><div class="line">8855=2297</div><div class="line">8871=22a7</div><div class="line">8872=22a8</div><div class="line">8875=22ab</div><div class="line">8876=22ac</div><div class="line">➜  Desktop</div></pre></td></tr></table></figure></p>
+<p><em>可以使用以下shell命令来进行转换</em></p>
+<pre><code class="bash">转换的方法:
+
+➜  Desktop  cat hello.txt 
+03:25:21 HKT         -      8765   2902.00     26.00  |__java
+03:25:21 HKT         -      8767   3049.00     20.00  |__java
+03:25:21 HKT         -      8852   2896.00     41.00  |__java
+03:25:21 HKT         -      8853   3056.00     36.00  |__java
+03:25:21 HKT         -      8854   2841.00     27.00  |__java
+03:25:21 HKT         -      8855   2738.00     29.00  |__java
+03:25:21 HKT         -      8871   2823.00    124.00  |__java
+03:25:21 HKT         -      8872   2865.00      9.00  |__java
+03:25:21 HKT         -      8875   2905.00     24.00  |__java
+03:25:21 HKT         -      8876   3090.00     27.00  |__java
+
+➜  Desktop  cat hello.txt | awk &#39;{print $4}&#39; | xargs -I {} printf &quot;{}=%x\n&quot; {} 
+8765=223d
+8767=223f
+8852=2294
+8853=2295
+8854=2296
+8855=2297
+8871=22a7
+8872=22a8
+8875=22ab
+8876=22ac
+➜  Desktop
+</code></pre>
 <p>这时，我发现，是由10多条以<code>SimpleAsynctaskExecutor</code>开头的线程占用了超高的CPU。</p>
 <p>找出对应的线程后，再根据文件里<code>/tmp/Java主进程pid.log</code>对应线程的调用栈，类似如下内容:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="string">"SimpleAsyncTaskExecutor-1"</span> prio=10 tid=0x00007fe354e56000 nid=0x5440 runnable [0x00007fe359acd000]</div><div class="line">   java.lang.Thread.State: TIMED_WAITING (parking)</div><div class="line">	at sun.misc.Unsafe.park(Native Method)</div><div class="line">	- parking to <span class="built_in">wait</span> <span class="keyword">for</span>  &lt;0x00000007a1d79ed0&gt; (a java.util.concurrent.locks.AbstractQueuedSynchronizer<span class="variable">$ConditionObject</span>)</div><div class="line">	at java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:226)</div><div class="line">	at java.util.concurrent.locks.AbstractQueuedSynchronizer<span class="variable">$ConditionObject</span>.awaitNanos(AbstractQueuedSynchronizer.java:2082)</div><div class="line">	at java.util.concurrent.LinkedBlockingQueue.poll(LinkedBlockingQueue.java:467)</div><div class="line">	at org.springframework.amqp.rabbit.listener.BlockingQueueConsumer.nextMessage(BlockingQueueConsumer.java:188)</div><div class="line">	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer.doReceiveAndExecute(SimpleMessageListenerContainer.java:466)</div><div class="line">	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer.receiveAndExecute(SimpleMessageListenerContainer.java:455)</div><div class="line">	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer.access<span class="variable">$300</span>(SimpleMessageListenerContainer.java:58)</div><div class="line">	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer<span class="variable">$AsyncMessageProcessingConsumer</span>.run(SimpleMessageListenerContainer.java:548)</div><div class="line">	at java.lang.Thread.run(Thread.java:722)</div><div class="line"></div><div class="line">   Locked ownable synchronizers:</div><div class="line">	- None</div></pre></td></tr></table></figure>
+<pre><code class="bash">&quot;SimpleAsyncTaskExecutor-1&quot; prio=10 tid=0x00007fe354e56000 nid=0x5440 runnable [0x00007fe359acd000]
+   java.lang.Thread.State: TIMED_WAITING (parking)
+    at sun.misc.Unsafe.park(Native Method)
+    - parking to wait for  &lt;0x00000007a1d79ed0&gt; (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
+    at java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:226)
+    at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2082)
+    at java.util.concurrent.LinkedBlockingQueue.poll(LinkedBlockingQueue.java:467)
+    at org.springframework.amqp.rabbit.listener.BlockingQueueConsumer.nextMessage(BlockingQueueConsumer.java:188)
+    at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer.doReceiveAndExecute(SimpleMessageListenerContainer.java:466)
+    at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer.receiveAndExecute(SimpleMessageListenerContainer.java:455)
+    at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer.access$300(SimpleMessageListenerContainer.java:58)
+    at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.run(SimpleMessageListenerContainer.java:548)
+    at java.lang.Thread.run(Thread.java:722)
+
+   Locked ownable synchronizers:
+    - None
+</code></pre>
 <p>这时，我们查看类源码<code>org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer</code>，发现到一个问题：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">private volatile Executor taskExecutor = new SimpleAsyncTaskExecutor();</div></pre></td></tr></table></figure>
+<pre><code class="bash">private volatile Executor taskExecutor = new SimpleAsyncTaskExecutor();
+</code></pre>
 <p>这一行代码，暴露出了它使用了<code>SimpleAsyncTaskExecutor</code>来执行我们的任务.</p>
 <h3 id="SimpleAsyncTaskExecutor-说明"><a href="#SimpleAsyncTaskExecutor-说明" class="headerlink" title="SimpleAsyncTaskExecutor 说明"></a>SimpleAsyncTaskExecutor 说明</h3><p>通过Spring官方文档<a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/core/task/SimpleAsyncTaskExecutor.html" target="_blank" rel="external">SimpleAsynctaskExecutor</a>可知：</p>
 <ol>
@@ -234,10 +278,17 @@
 <li>这个实现，并不会重用任何线程的!</li>
 </ol>
 <h3 id="项目自身的原因"><a href="#项目自身的原因" class="headerlink" title="项目自身的原因"></a>项目自身的原因</h3><p>由于我们使用了<code>Spring Rabbit</code>，配置如下:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;rabbit:listener-container connection-factory=<span class="string">"rabbitConnectionFactory"</span> error-handler=<span class="string">"MessageErrorHandler"</span>&gt;</div><div class="line">&lt;/rabbit:listener-container&gt;</div></pre></td></tr></table></figure>
+<pre><code class="bash">&lt;rabbit:listener-container connection-factory=&quot;rabbitConnectionFactory&quot; error-handler=&quot;MessageErrorHandler&quot;&gt;
+&lt;/rabbit:listener-container&gt;
+</code></pre>
 <p>这样子，默认的情况下，就是使用了<code>private volatile Executor taskExecutor = new SimpleAsyncTaskExecutor();</code></p>
 <p>我们改为</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">   &lt;task:annotation-driven executor=<span class="string">"myExecutor"</span> scheduler=<span class="string">"myScheduler"</span>/&gt;</div><div class="line">&lt;task:executor id=<span class="string">"myExecutor"</span> pool-size=<span class="string">"10-20"</span> /&gt;</div><div class="line">&lt;task:scheduler id=<span class="string">"myScheduler"</span> pool-size=<span class="string">"5"</span> /&gt;</div><div class="line">   &lt;rabbit:listener-container connection-factory=<span class="string">"rabbitConnectionFactory"</span> error-handler=<span class="string">"MessageErrorHandler"</span> concurrency=<span class="string">"10"</span> task-executor=<span class="string">"myExecutor"</span>&gt;</div><div class="line">   &lt;/rabbit:listener-container&gt;</div></pre></td></tr></table></figure>
+<pre><code class="bash">    &lt;task:annotation-driven executor=&quot;myExecutor&quot; scheduler=&quot;myScheduler&quot;/&gt;
+    &lt;task:executor id=&quot;myExecutor&quot; pool-size=&quot;10-20&quot; /&gt;
+    &lt;task:scheduler id=&quot;myScheduler&quot; pool-size=&quot;5&quot; /&gt;
+    &lt;rabbit:listener-container connection-factory=&quot;rabbitConnectionFactory&quot; error-handler=&quot;MessageErrorHandler&quot; concurrency=&quot;10&quot; task-executor=&quot;myExecutor&quot;&gt;
+    &lt;/rabbit:listener-container&gt;
+</code></pre>
 <p>这样子定义<code>&lt;task:executor&gt;</code>后，就会Spring就会创建一个<code>ThreadPoolTaskExecutor</code>，包含有线程池了.</p>
 <h3 id="Spring-Task"><a href="#Spring-Task" class="headerlink" title="Spring Task"></a>Spring Task</h3><p><em>注意，使用Spring Task也要留意这个问题，都要记得指定executor</em>，不然Spring又创建了<code>SimpleAsyncTaskExecutor</code>这种线程执行器。不过，<code>SimpleAsyncTaskExecutor</code>比较适合于那种临时性，执行时间非常短的任务。不过，还是线程池使用的比较安全点.</p>
 <h3 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h3><p>如果担心创建的线程池太多占用资源，可以使用<code>pool-size=&quot;10-20&quot;</code>这种范围式声明线程池的大小，有个动态范围.</p>

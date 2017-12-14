@@ -302,27 +302,96 @@
 </table>
 <h2 id="成本因子"><a href="#成本因子" class="headerlink" title="成本因子"></a>成本因子</h2><p>因为PostgreSQL是基于代价模型来选择最优的执行计划的，而成本因子则是计算代价模型的最重要参数。（代价=CPU代价+IO代价+数据传输[如网络]代价）</p>
 <p>在PG9.4默认情况下的成本因子如下：（这些值可以在 postgresql.conf 文件里修改的）</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment"># - Planner Cost Constants -</span></div><div class="line"><span class="comment">#seq_page_cost = 1.0                    # measured on an arbitrary scale。扫描一个数据块（一页）的成本（IO成本）</span></div><div class="line"><span class="comment">#random_page_cost = 4.0                 # same scale as above。随机获取一个数据块（一页）的成本（IO成本）</span></div><div class="line"><span class="comment">#cpu_tuple_cost = 0.01                  # same scale as above。获取一行数据的CPU成本</span></div><div class="line"><span class="comment">#cpu_index_tuple_cost = 0.005           # same scale as above。获取一个索引项的CPU成本</span></div><div class="line"><span class="comment">#cpu_operator_cost = 0.0025             # same scale as above。每个操作符的CPU成本</span></div><div class="line"><span class="comment">#effective_cache_size = 4GB             #评估操作系统缓存可能使用的内存大小。用于评估索引扫描的开销，大的值倾向使用索引，小的值倾向使用全表扫描。一般设置为“物理内存 - shared buffers - 内核和其他软件占用的内存”。</span></div></pre></td></tr></table></figure>
+<pre><code class="bash">
+# - Planner Cost Constants -
+#seq_page_cost = 1.0                    # measured on an arbitrary scale。扫描一个数据块（一页）的成本（IO成本）
+#random_page_cost = 4.0                 # same scale as above。随机获取一个数据块（一页）的成本（IO成本）
+#cpu_tuple_cost = 0.01                  # same scale as above。获取一行数据的CPU成本
+#cpu_index_tuple_cost = 0.005           # same scale as above。获取一个索引项的CPU成本
+#cpu_operator_cost = 0.0025             # same scale as above。每个操作符的CPU成本
+#effective_cache_size = 4GB             #评估操作系统缓存可能使用的内存大小。用于评估索引扫描的开销，大的值倾向使用索引，小的值倾向使用全表扫描。一般设置为“物理内存 - shared buffers - 内核和其他软件占用的内存”。
+</code></pre>
 <p>注意：SSD的随机读和顺序读差别不是太大，这时可以缩小 <code>seq_page_cost</code> 和 <code>random_page_cost</code> 之间的大小。使<code>random_page_cost</code>趋向于<code>seq_page_cost</code>。</p>
 <h4 id="关于-effective-cache-size-特别说明一下"><a href="#关于-effective-cache-size-特别说明一下" class="headerlink" title="关于 effective_cache_size 特别说明一下"></a>关于 effective_cache_size 特别说明一下</h4><p><a href="http://blogs.enterprisedb.com/2012/05/04/the-effectiveness-of-effective_cache_size/" target="_blank" rel="external">资料来源</a></p>
 <p><code>effective_cache_size</code>用于在Linux操作系统上报告内核缓存的大小，我想强调一下它在<code>postgresql.conf</code>配置里的重要性。<br><a href="http://www.postgresql.org/docs/9.1/static/runtime-config-query.html#RUNTIME-CONFIG-QUERY-CONSTANTS" target="_blank" rel="external">effective_cache_size</a></p>
 <p>不像其他内存那样是设置已经分配好的控制内存，<code>effective_cache_size</code>用于告诉优化器在内核里有多少cache（读缓存）。这对于决定代价高的索引扫描方式是非常重要的。优化器知道 <code>shared_buffers</code> 大小，但是不知道内核缓存大小，从而影响到代价非常高的磁盘访问。</p>
 <p>内核缓存大小改变比较频繁，所以，正常地运行一段时间的系统负载，然后使用该内存值去设置 <code>effective_cache_size</code>。这个值不必是非常完美的，仅仅只是粗略地估计还有多少内核内存，相当于是<code>shared buffers</code>的二级缓存。</p>
 <h2 id="explain-输出及详解"><a href="#explain-输出及详解" class="headerlink" title="explain 输出及详解"></a>explain 输出及详解</h2><p>explain 语法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">test=# \h explain;</div><div class="line">Command:     EXPLAIN</div><div class="line">Description: show the execution plan of a statement</div><div class="line">Syntax:</div><div class="line">EXPLAIN [ ( option [, ...] ) ] statement</div><div class="line">EXPLAIN [ ANALYZE ] [ VERBOSE ] statement</div><div class="line"> </div><div class="line">where option can be one of:</div><div class="line"> </div><div class="line">    ANALYZE [ boolean ] 是否真正执行</div><div class="line">    VERBOSE [ boolean ] 显示详细信息</div><div class="line">    COSTS [ boolean ] 显示代价信息</div><div class="line">    BUFFERS [ boolean ] 显示缓存信息</div><div class="line">    TIMING [ boolean ] 显示时间信息</div><div class="line">    FORMAT &#123; TEXT | XML | JSON | YAML &#125; 输出格式，默认为 text</div></pre></td></tr></table></figure>
-<p>图解：<br><img src="/img/postgresql-explain-des.jpg" alt=""></p>
+<pre><code>test=# \h explain;
+Command:     EXPLAIN
+Description: show the execution plan of a statement
+Syntax:
+EXPLAIN [ ( option [, ...] ) ] statement
+EXPLAIN [ ANALYZE ] [ VERBOSE ] statement
+
+where option can be one of:
+
+    ANALYZE [ boolean ] 是否真正执行
+    VERBOSE [ boolean ] 显示详细信息
+    COSTS [ boolean ] 显示代价信息
+    BUFFERS [ boolean ] 显示缓存信息
+    TIMING [ boolean ] 显示时间信息
+    FORMAT { TEXT | XML | JSON | YAML } 输出格式，默认为 text
+</code></pre><p>图解：<br><img src="/img/postgresql-explain-des.jpg" alt=""></p>
 <h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><p>看执行计划，是从最底层开始往后看的。即先从 节点1，再到节点2，最后到节点3。<br>而且，上一级节点的成本，是包含了下一级的成本的。比如：节点2的启动成本和结束成本是已经包含了节点1的启动成本和结束成本的，由此可以得出一个结论：就是上一级节点的启动成本和结束成本永远不会比下一级的小。</p>
 <p>再次强调一下，每个节点的估算的总启动或结束成本只是平均每次loops的平均成本，所以最后的总成本还要乘以loops次数。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">test=# explain(analyze, timing, verbose, buffers,costs) select max(sum) from ( select count(*) as sum from tgroup group by point) as t;</div><div class="line">                                                               QUERY PLAN                                                                </div><div class="line">-----------------------------------------------------------------------------------------------------------------------------------------</div><div class="line"> Aggregate  (cost=235363.15..235363.16 rows=1 width=8) (actual time=4898.900..4898.900 rows=1 loops=1)</div><div class="line">   Output: max((count(*)))</div><div class="line">   Buffers: shared hit=12770 read=49578</div><div class="line">   -&gt;  HashAggregate  (cost=235363.04..235363.09 rows=5 width=4) (actual time=4898.890..4898.891 rows=5 loops=1)</div><div class="line">         Output: count(*), tgroup.point</div><div class="line">         Group Key: tgroup.point</div><div class="line">         Buffers: shared hit=12770 read=49578</div><div class="line">         -&gt;  Seq Scan on public.tgroup  (cost=0.00..177691.36 rows=11534336 width=4) (actual time=0.045..1643.984 rows=11534336 loops=1)</div><div class="line">               Output: tgroup.id, tgroup.age, tgroup.point</div><div class="line">               Buffers: shared hit=12770 read=49578</div><div class="line"> Planning time: 0.170 ms</div><div class="line"> Execution time: 4898.982 ms</div><div class="line">(12 rows)</div><div class="line"></div><div class="line">Time: 4899.758 ms</div><div class="line">test=#</div></pre></td></tr></table></figure>
-<h2 id="估算成本的计算公式"><a href="#估算成本的计算公式" class="headerlink" title="估算成本的计算公式"></a>估算成本的计算公式</h2><h4 id="全表扫描时计算："><a href="#全表扫描时计算：" class="headerlink" title="全表扫描时计算："></a>全表扫描时计算：</h4><p>公式：<code>total cost = relpages * seq_page_cost + reltuples * cpu_tuple_cost。</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">test=# select relpages, reltuples from pg_class where relname = &apos;tgroup&apos;;</div><div class="line">-[ RECORD 1 ]----------</div><div class="line">relpages  | 62348</div><div class="line">reltuples | 1.15343e+07</div><div class="line"></div><div class="line">Time: 0.751 ms</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">test=# show seq_page_cost ;</div><div class="line">-[ RECORD 1 ]-+--</div><div class="line">seq_page_cost | 1</div><div class="line"></div><div class="line">Time: 28.848 ms</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">test=# show cpu_tuple_cost;</div><div class="line">-[ RECORD 1 ]--+-----</div><div class="line">cpu_tuple_cost | 0.01</div><div class="line"></div><div class="line">Time: 0.460 ms</div></pre></td></tr></table></figure>
-<p>如上节点1执行计划，是全表扫描：<br><code>177691.36 = 62348 * 1 + 1.15343e+07 * 0.01</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">test=# select 62348 * 1 + 1.15343e+07 * 0.01;</div><div class="line">-[ RECORD 1 ]-------</div><div class="line">?column? | 177691.00</div><div class="line"></div><div class="line">Time: 39.815 ms</div><div class="line">test=#</div></pre></td></tr></table></figure></p>
-<p>这个与结果相符。</p>
+<pre><code>test=# explain(analyze, timing, verbose, buffers,costs) select max(sum) from ( select count(*) as sum from tgroup group by point) as t;
+                                                               QUERY PLAN                                                                
+-----------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=235363.15..235363.16 rows=1 width=8) (actual time=4898.900..4898.900 rows=1 loops=1)
+   Output: max((count(*)))
+   Buffers: shared hit=12770 read=49578
+   -&gt;  HashAggregate  (cost=235363.04..235363.09 rows=5 width=4) (actual time=4898.890..4898.891 rows=5 loops=1)
+         Output: count(*), tgroup.point
+         Group Key: tgroup.point
+         Buffers: shared hit=12770 read=49578
+         -&gt;  Seq Scan on public.tgroup  (cost=0.00..177691.36 rows=11534336 width=4) (actual time=0.045..1643.984 rows=11534336 loops=1)
+               Output: tgroup.id, tgroup.age, tgroup.point
+               Buffers: shared hit=12770 read=49578
+ Planning time: 0.170 ms
+ Execution time: 4898.982 ms
+(12 rows)
+
+Time: 4899.758 ms
+test=#
+</code></pre><h2 id="估算成本的计算公式"><a href="#估算成本的计算公式" class="headerlink" title="估算成本的计算公式"></a>估算成本的计算公式</h2><h4 id="全表扫描时计算："><a href="#全表扫描时计算：" class="headerlink" title="全表扫描时计算："></a>全表扫描时计算：</h4><p>公式：<code>total cost = relpages * seq_page_cost + reltuples * cpu_tuple_cost。</code></p>
+<pre><code>test=# select relpages, reltuples from pg_class where relname = &#39;tgroup&#39;;
+-[ RECORD 1 ]----------
+relpages  | 62348
+reltuples | 1.15343e+07
+
+Time: 0.751 ms
+</code></pre><pre><code>test=# show seq_page_cost ;
+-[ RECORD 1 ]-+--
+seq_page_cost | 1
+
+Time: 28.848 ms
+</code></pre><pre><code>test=# show cpu_tuple_cost;
+-[ RECORD 1 ]--+-----
+cpu_tuple_cost | 0.01
+
+Time: 0.460 ms
+</code></pre><p>如上节点1执行计划，是全表扫描：<br><code>177691.36 = 62348 * 1 + 1.15343e+07 * 0.01</code></p>
+<pre><code>test=# select 62348 * 1 + 1.15343e+07 * 0.01;
+-[ RECORD 1 ]-------
+?column? | 177691.00
+
+Time: 39.815 ms
+test=#
+</code></pre><p>这个与结果相符。</p>
 <h2 id="全表顺序扫描并过滤，代价公式为"><a href="#全表顺序扫描并过滤，代价公式为" class="headerlink" title="全表顺序扫描并过滤，代价公式为:"></a>全表顺序扫描并过滤，代价公式为:</h2><p><code>Cost = seq_scan_cost*relpages + cpu_tuple_cost*reltuples + cpu_operator_cost*reltuples</code></p>
-<h2 id="扫描的方式"><a href="#扫描的方式" class="headerlink" title="扫描的方式"></a>扫描的方式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">enable_bitmapscan = on</div><div class="line">enable_hashagg = on</div><div class="line">enable_hashjoin = on</div><div class="line">enable_indexscan = on #索引扫描</div><div class="line">enable_indexonlyscan = on #只读索引扫描</div><div class="line">enable_material = on #物化视图</div><div class="line">enable_mergejoin = on</div><div class="line">enable_nestloop = on</div><div class="line">enable_seqscan = on</div><div class="line">enable_sort = on</div><div class="line">enable_tidscan = on</div></pre></td></tr></table></figure>
-<p>虽然我们不能强制指定PostgreSQL按我们写的SQL来执行（无视优化器），但是可以通过改变某些的查询方式代价从而影响PostgreSQL的查询优化器的选择。<br>这时，我们可以从上面的扫描方式中将其修改为 <code>off</code>（其实不是强制不能以某种方式扫描，将其设置为 off时，只是将该项的扫描代价提高到非常大的值，从而让PostgreSQL尽可能避免使用该方式来进行扫描，但不是绝对的，如果其他的方式比off的代价更大，那PostgreSQL还是会选择代价最小的来执行的），这就为我们提供了非常好的控制我们SQL的扫描方式。</p>
+<h2 id="扫描的方式"><a href="#扫描的方式" class="headerlink" title="扫描的方式"></a>扫描的方式</h2><pre><code>enable_bitmapscan = on
+enable_hashagg = on
+enable_hashjoin = on
+enable_indexscan = on #索引扫描
+enable_indexonlyscan = on #只读索引扫描
+enable_material = on #物化视图
+enable_mergejoin = on
+enable_nestloop = on
+enable_seqscan = on
+enable_sort = on
+enable_tidscan = on
+</code></pre><p>虽然我们不能强制指定PostgreSQL按我们写的SQL来执行（无视优化器），但是可以通过改变某些的查询方式代价从而影响PostgreSQL的查询优化器的选择。<br>这时，我们可以从上面的扫描方式中将其修改为 <code>off</code>（其实不是强制不能以某种方式扫描，将其设置为 off时，只是将该项的扫描代价提高到非常大的值，从而让PostgreSQL尽可能避免使用该方式来进行扫描，但不是绝对的，如果其他的方式比off的代价更大，那PostgreSQL还是会选择代价最小的来执行的），这就为我们提供了非常好的控制我们SQL的扫描方式。</p>
 <h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><p>如果explain，执行计划在同一层级，则是由上到下执行的的.</p>
 <p>参考资料:</p>
 <p><a href="http://www.dalibo.org/_media/understanding_explain.pdf" target="_blank" rel="external">understanding_explain.pdf</a></p>

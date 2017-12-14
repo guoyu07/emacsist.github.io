@@ -204,24 +204,113 @@
                             <h2 id="安装必要的编译环境"><a href="#安装必要的编译环境" class="headerlink" title="安装必要的编译环境"></a>安装必要的编译环境</h2><p><code>sudo apt-get update &amp;&amp; sudo apt-get install libcurl4-gnutls-dev libexpat1-dev gettext libz-dev libssl-dev build-essential</code></p>
 <h2 id="安装从这里打开终端"><a href="#安装从这里打开终端" class="headerlink" title="安装从这里打开终端"></a>安装从这里打开终端</h2><p><code>sudo apt-get install nautilus-open-terminal</code></p>
 <h2 id="安装Chrome"><a href="#安装Chrome" class="headerlink" title="安装Chrome"></a>安装Chrome</h2><p><code>wget -c https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb</code></p>
-<h2 id="源码安装Emacs"><a href="#源码安装Emacs" class="headerlink" title="源码安装Emacs"></a>源码安装Emacs</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">sudo apt-get build-dep emacs24</div><div class="line">wget -c http://mirror.rise.ph/gnu/emacs/emacs-24.5.tar.gz</div><div class="line">tar -xvf emacs-24.5.tar.gz</div><div class="line">mkdir /usr/<span class="built_in">local</span>/emacs-24.5/</div><div class="line">sudo chown -R yang:yang /usr/<span class="built_in">local</span>/emacs-24.5</div><div class="line">./configure --prefix=/usr/<span class="built_in">local</span>/emacs-24.5/</div><div class="line">make -j 8</div><div class="line">make install</div><div class="line">sudo chown -R yang:yang /usr/<span class="built_in">local</span>/emacs-24.5</div><div class="line">sudo ln -s /usr/<span class="built_in">local</span>/emacs-24.5/ /usr/<span class="built_in">local</span>/emacs</div><div class="line">sudo chown -R yang:yang /usr/<span class="built_in">local</span>/emacs</div></pre></td></tr></table></figure>
+<h2 id="源码安装Emacs"><a href="#源码安装Emacs" class="headerlink" title="源码安装Emacs"></a>源码安装Emacs</h2><pre><code class="bash">sudo apt-get build-dep emacs24
+wget -c http://mirror.rise.ph/gnu/emacs/emacs-24.5.tar.gz
+tar -xvf emacs-24.5.tar.gz
+mkdir /usr/local/emacs-24.5/
+sudo chown -R yang:yang /usr/local/emacs-24.5
+./configure --prefix=/usr/local/emacs-24.5/
+make -j 8
+make install
+sudo chown -R yang:yang /usr/local/emacs-24.5
+sudo ln -s /usr/local/emacs-24.5/ /usr/local/emacs
+sudo chown -R yang:yang /usr/local/emacs
+</code></pre>
 <p>添加到环境变量</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">export</span> PATH=/usr/<span class="built_in">local</span>/emacs/bin:<span class="variable">$PATH</span></div><div class="line"></div><div class="line"><span class="comment"># for emacs</span></div><div class="line"><span class="built_in">alias</span> e=<span class="string">'emacsclient -t'</span></div><div class="line"><span class="built_in">alias</span> ec=<span class="string">'nohup emacsclient -c &lt;/dev/null &amp;&gt;/dev/null &amp;'</span></div><div class="line"><span class="built_in">alias</span> vim=<span class="string">'emacsclient -t'</span></div><div class="line"><span class="built_in">alias</span> vi=<span class="string">'emacsclient -t'</span></div></pre></td></tr></table></figure>
+<pre><code class="bash">export PATH=/usr/local/emacs/bin:$PATH
+
+# for emacs
+alias e=&#39;emacsclient -t&#39;
+alias ec=&#39;nohup emacsclient -c &lt;/dev/null &amp;&gt;/dev/null &amp;&#39;
+alias vim=&#39;emacsclient -t&#39;
+alias vi=&#39;emacsclient -t&#39;
+</code></pre>
 <p>开机自动启动守护进程</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">ec /etc/init.d/rc.local</div><div class="line"></div><div class="line">在最后添加</div><div class="line"></div><div class="line">emacs --deamon</div><div class="line"></div><div class="line">即可</div></pre></td></tr></table></figure>
-<h2 id="配置系统的locale"><a href="#配置系统的locale" class="headerlink" title="配置系统的locale"></a>配置系统的locale</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">LANG=en_US.UTF-8</div><div class="line">LANGUAGE=en_US.UTF-8</div><div class="line">LC_CTYPE=zh_CN.UTF-8</div><div class="line">LC_NUMERIC=zh_CN.UTF-8</div><div class="line">LC_TIME=zh_CN.UTF-8</div><div class="line">LC_COLLATE=zh_CN.UTF-8</div><div class="line">LC_MONETARY=zh_CN.UTF-8</div><div class="line">LC_MESSAGES=zh_CN.UTF-8</div><div class="line">LC_PAPER=zh_CN.UTF-8</div><div class="line">LC_NAME=zh_CN.UTF-8</div><div class="line">LC_ADDRESS=zh_CN.UTF-8</div><div class="line">LC_TELEPHONE=zh_CN.UTF-8</div><div class="line">LC_MEASUREMENT=zh_CN.UTF-8</div><div class="line">LC_IDENTIFICATION=zh_CN.UTF-8</div><div class="line">LC_ALL=</div></pre></td></tr></table></figure>
-<h2 id="源码安装git"><a href="#源码安装git" class="headerlink" title="源码安装git"></a>源码安装git</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install libcurl4-gnutls-dev libexpat1-dev gettext libz-dev libssl-dev</div><div class="line">sudo apt-get install asciidoc xmlto docbook2x</div><div class="line"></div><div class="line">wget -c https://codeload.github.com/git/git/zip/v2.5.0</div><div class="line"></div><div class="line">unzip v2.5.0</div><div class="line"></div><div class="line"><span class="built_in">cd</span> git-2.5.0</div><div class="line"></div><div class="line">make configure</div><div class="line"></div><div class="line">mkdir /usr/<span class="built_in">local</span>/git-2.5</div><div class="line">sudo chown yang:yang /usr/<span class="built_in">local</span>/git-2.5</div><div class="line"></div><div class="line">./configure --prefix=/usr/<span class="built_in">local</span>/git-2.5</div><div class="line"></div><div class="line">make all doc info</div><div class="line"></div><div class="line">sudo make install install-doc install-html install-info</div><div class="line"></div><div class="line">sudo chown -R yang:yang /usr/<span class="built_in">local</span>/git-2.5</div><div class="line"></div><div class="line">sudo ln -s /usr/<span class="built_in">local</span>/git-2.5 /usr/<span class="built_in">local</span>/git</div><div class="line"></div><div class="line">sudo chown -R yang:yang /usr/<span class="built_in">local</span>/git</div></pre></td></tr></table></figure>
+<pre><code class="bash">ec /etc/init.d/rc.local
+
+在最后添加
+
+emacs --deamon
+
+即可
+</code></pre>
+<h2 id="配置系统的locale"><a href="#配置系统的locale" class="headerlink" title="配置系统的locale"></a>配置系统的locale</h2><pre><code class="bash">LANG=en_US.UTF-8
+LANGUAGE=en_US.UTF-8
+LC_CTYPE=zh_CN.UTF-8
+LC_NUMERIC=zh_CN.UTF-8
+LC_TIME=zh_CN.UTF-8
+LC_COLLATE=zh_CN.UTF-8
+LC_MONETARY=zh_CN.UTF-8
+LC_MESSAGES=zh_CN.UTF-8
+LC_PAPER=zh_CN.UTF-8
+LC_NAME=zh_CN.UTF-8
+LC_ADDRESS=zh_CN.UTF-8
+LC_TELEPHONE=zh_CN.UTF-8
+LC_MEASUREMENT=zh_CN.UTF-8
+LC_IDENTIFICATION=zh_CN.UTF-8
+LC_ALL=
+</code></pre>
+<h2 id="源码安装git"><a href="#源码安装git" class="headerlink" title="源码安装git"></a>源码安装git</h2><pre><code class="bash">sudo apt-get install libcurl4-gnutls-dev libexpat1-dev gettext libz-dev libssl-dev
+sudo apt-get install asciidoc xmlto docbook2x
+
+wget -c https://codeload.github.com/git/git/zip/v2.5.0
+
+unzip v2.5.0
+
+cd git-2.5.0
+
+make configure
+
+mkdir /usr/local/git-2.5
+sudo chown yang:yang /usr/local/git-2.5
+
+./configure --prefix=/usr/local/git-2.5
+
+make all doc info
+
+sudo make install install-doc install-html install-info
+
+sudo chown -R yang:yang /usr/local/git-2.5
+
+sudo ln -s /usr/local/git-2.5 /usr/local/git
+
+sudo chown -R yang:yang /usr/local/git
+</code></pre>
 <p>添加到环境变量</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># for git</span></div><div class="line"><span class="built_in">export</span> PATH=/usr/<span class="built_in">local</span>/git/bin:<span class="variable">$PATH</span></div></pre></td></tr></table></figure>
+<pre><code class="bash"># for git
+export PATH=/usr/local/git/bin:$PATH
+</code></pre>
 <p>配置</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">git config --global user.name <span class="string">"Zhiyong Yang"</span></div><div class="line">git config --global user.email dreamers.yzy@gmail.com</div><div class="line"></div><div class="line"></div><div class="line"><span class="built_in">echo</span> <span class="string">"export LESSCHARSET=utf-8"</span> &gt; <span class="variable">$HOME</span>/.profile</div><div class="line">git config --global gui.encoding utf-8</div><div class="line">git config --global i18n.commitencoding utf-8</div><div class="line">git config --global i18n.logoutputencoding utf-8</div><div class="line"></div><div class="line"><span class="comment"># 全局编辑器，提交时将COMMIT_EDITMSG编码转换成UTF-8可避免乱码</span></div><div class="line">git config --global core.editor e</div></pre></td></tr></table></figure>
-<h2 id="apt安装最新git"><a href="#apt安装最新git" class="headerlink" title="apt安装最新git"></a>apt安装最新git</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo add-apt-repository ppa:git-core/ppa</div><div class="line">sudo apt-get update</div><div class="line">sudo apt-get install git</div></pre></td></tr></table></figure>
+<pre><code class="bash">git config --global user.name &quot;Zhiyong Yang&quot;
+git config --global user.email dreamers.yzy@gmail.com
+
+
+echo &quot;export LESSCHARSET=utf-8&quot; &gt; $HOME/.profile
+git config --global gui.encoding utf-8
+git config --global i18n.commitencoding utf-8
+git config --global i18n.logoutputencoding utf-8
+
+# 全局编辑器，提交时将COMMIT_EDITMSG编码转换成UTF-8可避免乱码
+git config --global core.editor e
+</code></pre>
+<h2 id="apt安装最新git"><a href="#apt安装最新git" class="headerlink" title="apt安装最新git"></a>apt安装最新git</h2><pre><code class="shell">sudo add-apt-repository ppa:git-core/ppa
+sudo apt-get update
+sudo apt-get install git
+</code></pre>
 <h2 id="安装Java及Eclipse及Maven"><a href="#安装Java及Eclipse及Maven" class="headerlink" title="安装Java及Eclipse及Maven"></a>安装Java及Eclipse及Maven</h2><p><a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_blank" rel="external">JDK</a><br><a href="https://www.eclipse.org/downloads/" target="_blank" rel="external">Eclipse</a><br><a href="https://maven.apache.org/download.cgi" target="_blank" rel="external">Maven</a></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#这里也使用了软链接，将current指向某个具体版本的JDK目录即可</span></div><div class="line"><span class="built_in">export</span> JAVA_HOME=/home/yang/Java/current</div><div class="line"><span class="built_in">export</span> PATH=<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$PATH</span></div><div class="line"><span class="built_in">export</span> PATH=/home/yang/Java/apache-maven-3.3.3/bin:<span class="variable">$PAT</span></div></pre></td></tr></table></figure>
-<h2 id="安装五笔输入法"><a href="#安装五笔输入法" class="headerlink" title="安装五笔输入法"></a>安装五笔输入法</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install fcitx-table-wubi</div></pre></td></tr></table></figure>
+<pre><code class="bash">#这里也使用了软链接，将current指向某个具体版本的JDK目录即可
+export JAVA_HOME=/home/yang/Java/current
+export PATH=$JAVA_HOME/bin:$PATH
+export PATH=/home/yang/Java/apache-maven-3.3.3/bin:$PAT
+</code></pre>
+<h2 id="安装五笔输入法"><a href="#安装五笔输入法" class="headerlink" title="安装五笔输入法"></a>安装五笔输入法</h2><pre><code class="bash">sudo apt-get install fcitx-table-wubi
+</code></pre>
 <p>安装完成后，进入<code>System Settings</code> –&gt; <code>Language Support</code> –&gt; <code>Keyboard input method system</code> 中选择 <code>fcitx</code></p>
 <p>还有，在桌面的右上角，离网络图标左边的那个图标（即配置输入法），点击选择<code>Configure Current Input Method</code> –&gt; 点击左下角的<code>+</code>号，添加<code>Wubi</code> –&gt; 点击<code>OK</code> 即可。</p>
-<h2 id="安装zsh-oh-my-zsh"><a href="#安装zsh-oh-my-zsh" class="headerlink" title="安装zsh + oh my zsh"></a>安装zsh + oh my zsh</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install zsh</div><div class="line">wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh</div><div class="line">chsh -s `<span class="built_in">which</span> zsh`</div></pre></td></tr></table></figure>
+<h2 id="安装zsh-oh-my-zsh"><a href="#安装zsh-oh-my-zsh" class="headerlink" title="安装zsh + oh my zsh"></a>安装zsh + oh my zsh</h2><pre><code class="bash">sudo apt-get install zsh
+wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh
+chsh -s `which zsh`
+</code></pre>
 <h2 id="去掉Alt键触发快捷命令"><a href="#去掉Alt键触发快捷命令" class="headerlink" title="去掉Alt键触发快捷命令"></a>去掉Alt键触发快捷命令</h2><p>在右上角选择–&gt; <code>System Settings &gt; Keyboard &gt; Shortcuts &gt; Launchers</code></p>
 <p>找到选项<code>Key to show the HUD</code>，然后按下<code>Backspace</code>键清空即可.</p>
 <h2 id="去掉alt-f触发菜单"><a href="#去掉alt-f触发菜单" class="headerlink" title="去掉alt+f触发菜单"></a>去掉alt+f触发菜单</h2><p>打开<code>terminal</code> -&gt; <code>edit</code> -&gt; <code>Keyboard Shortcuts</code> and <code>check Disable all menu access keys (such as Alt+f to open File Menu)</code></p>

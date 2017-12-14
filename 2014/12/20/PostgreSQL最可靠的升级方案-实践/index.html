@@ -15,17 +15,17 @@
     <meta name="keywords" content="postgresql,database," />
   
 
-  <meta name="description" content="注意事项121. 如果原先的数据库安装了第三方的扩展，请在升级的新版本服务器上也先安装好这些第三方扩展(contrib)2. 相应的表空间配置也要与原先的一致 升级步骤123451. 以PG管理员的身份运行以下命令来备份所有数据库信息（包括用户，角色，等）    pg_dumpall &amp;gt; outfile2. 恢复DB（记得将最新版本的DB服务器运行起来先），运行以下命令    psql -f">
+  <meta name="description" content="注意事项1. 如果原先的数据库安装了第三方的扩展，请在升级的新版本服务器上也先安装好这些第三方扩展(contrib) 2. 相应的表空间配置也要与原先的一致  升级步骤1. 以PG管理员的身份运行以下命令来备份所有数据库信息（包括用户，角色，等）     pg_dumpall &amp;gt; outfile  2. 恢复DB（记得将最新版本的DB服务器运行起来先），运行以下命令     psql -f">
 <meta name="keywords" content="postgresql,database">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PostgreSQL最可靠的升级方案[实践]">
 <meta property="og:url" content="https://emacsist.github.io/2014/12/20/PostgreSQL最可靠的升级方案-实践/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="注意事项121. 如果原先的数据库安装了第三方的扩展，请在升级的新版本服务器上也先安装好这些第三方扩展(contrib)2. 相应的表空间配置也要与原先的一致 升级步骤123451. 以PG管理员的身份运行以下命令来备份所有数据库信息（包括用户，角色，等）    pg_dumpall &amp;gt; outfile2. 恢复DB（记得将最新版本的DB服务器运行起来先），运行以下命令    psql -f">
+<meta property="og:description" content="注意事项1. 如果原先的数据库安装了第三方的扩展，请在升级的新版本服务器上也先安装好这些第三方扩展(contrib) 2. 相应的表空间配置也要与原先的一致  升级步骤1. 以PG管理员的身份运行以下命令来备份所有数据库信息（包括用户，角色，等）     pg_dumpall &amp;gt; outfile  2. 恢复DB（记得将最新版本的DB服务器运行起来先），运行以下命令     psql -f">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PostgreSQL最可靠的升级方案[实践]">
-<meta name="twitter:description" content="注意事项121. 如果原先的数据库安装了第三方的扩展，请在升级的新版本服务器上也先安装好这些第三方扩展(contrib)2. 相应的表空间配置也要与原先的一致 升级步骤123451. 以PG管理员的身份运行以下命令来备份所有数据库信息（包括用户，角色，等）    pg_dumpall &amp;gt; outfile2. 恢复DB（记得将最新版本的DB服务器运行起来先），运行以下命令    psql -f">
+<meta name="twitter:description" content="注意事项1. 如果原先的数据库安装了第三方的扩展，请在升级的新版本服务器上也先安装好这些第三方扩展(contrib) 2. 相应的表空间配置也要与原先的一致  升级步骤1. 以PG管理员的身份运行以下命令来备份所有数据库信息（包括用户，角色，等）     pg_dumpall &amp;gt; outfile  2. 恢复DB（记得将最新版本的DB服务器运行起来先），运行以下命令     psql -f">
 
   
 
@@ -201,9 +201,15 @@
 
     <div class="article-content">
         
-                            <h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">1. 如果原先的数据库安装了第三方的扩展，请在升级的新版本服务器上也先安装好这些第三方扩展(contrib)</div><div class="line">2. 相应的表空间配置也要与原先的一致</div></pre></td></tr></table></figure>
-<h2 id="升级步骤"><a href="#升级步骤" class="headerlink" title="升级步骤"></a>升级步骤</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">1. 以PG管理员的身份运行以下命令来备份所有数据库信息（包括用户，角色，等）</div><div class="line">    pg_dumpall &gt; outfile</div><div class="line"></div><div class="line">2. 恢复DB（记得将最新版本的DB服务器运行起来先），运行以下命令</div><div class="line">    psql -f outfile postgres</div></pre></td></tr></table></figure>
-<p>打完收工。</p>
+                            <h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><pre><code class="bash">1. 如果原先的数据库安装了第三方的扩展，请在升级的新版本服务器上也先安装好这些第三方扩展(contrib)
+2. 相应的表空间配置也要与原先的一致
+</code></pre>
+<h2 id="升级步骤"><a href="#升级步骤" class="headerlink" title="升级步骤"></a>升级步骤</h2><pre><code>1. 以PG管理员的身份运行以下命令来备份所有数据库信息（包括用户，角色，等）
+    pg_dumpall &gt; outfile
+
+2. 恢复DB（记得将最新版本的DB服务器运行起来先），运行以下命令
+    psql -f outfile postgres
+</code></pre><p>打完收工。</p>
 
                                 
     </div>

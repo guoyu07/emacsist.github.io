@@ -15,17 +15,17 @@
     <meta name="keywords" content="java,spring,concurrency,task-executor," />
   
 
-  <meta name="description" content="上一篇只是说了同步彻底了解Spring 中 RabbitMQ配置的concurrency 和 task-executor. 现在来了解异步的情况.（感谢同事聪哥的指引) 如果listener的方法，添加了@Async，就表示是异步执行了.具体如下: rabbitmq的配置12345&amp;lt;task:executor id=&quot;myExecutor&quot; pool-size=&quot;12-15&quot; queue-c">
+  <meta name="description" content="上一篇只是说了同步彻底了解Spring 中 RabbitMQ配置的concurrency 和 task-executor. 现在来了解异步的情况.（感谢同事聪哥的指引) 如果listener的方法，添加了@Async，就表示是异步执行了.具体如下: rabbitmq的配置&amp;lt;task:executor id=&amp;quot;myExecutor&amp;quot; pool-size=&amp;quot;12-1">
 <meta name="keywords" content="java,spring,concurrency,task-executor">
 <meta property="og:type" content="article">
 <meta property="og:title" content="彻底了解Spring-中-RabbitMQ配置的concurrency-和-task-executor（异步)">
 <meta property="og:url" content="https://emacsist.github.io/2015/12/18/彻底了解Spring-中-RabbitMQ配置的concurrency-和-task-executor（异步/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="上一篇只是说了同步彻底了解Spring 中 RabbitMQ配置的concurrency 和 task-executor. 现在来了解异步的情况.（感谢同事聪哥的指引) 如果listener的方法，添加了@Async，就表示是异步执行了.具体如下: rabbitmq的配置12345&amp;lt;task:executor id=&quot;myExecutor&quot; pool-size=&quot;12-15&quot; queue-c">
+<meta property="og:description" content="上一篇只是说了同步彻底了解Spring 中 RabbitMQ配置的concurrency 和 task-executor. 现在来了解异步的情况.（感谢同事聪哥的指引) 如果listener的方法，添加了@Async，就表示是异步执行了.具体如下: rabbitmq的配置&amp;lt;task:executor id=&amp;quot;myExecutor&amp;quot; pool-size=&amp;quot;12-1">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="彻底了解Spring-中-RabbitMQ配置的concurrency-和-task-executor（异步)">
-<meta name="twitter:description" content="上一篇只是说了同步彻底了解Spring 中 RabbitMQ配置的concurrency 和 task-executor. 现在来了解异步的情况.（感谢同事聪哥的指引) 如果listener的方法，添加了@Async，就表示是异步执行了.具体如下: rabbitmq的配置12345&amp;lt;task:executor id=&quot;myExecutor&quot; pool-size=&quot;12-15&quot; queue-c">
+<meta name="twitter:description" content="上一篇只是说了同步彻底了解Spring 中 RabbitMQ配置的concurrency 和 task-executor. 现在来了解异步的情况.（感谢同事聪哥的指引) 如果listener的方法，添加了@Async，就表示是异步执行了.具体如下: rabbitmq的配置&amp;lt;task:executor id=&amp;quot;myExecutor&amp;quot; pool-size=&amp;quot;12-1">
 
   
 
@@ -214,7 +214,12 @@
                             <p>上一篇只是说了同步<a href="/2015/12/17/%E5%BD%BB%E5%BA%95%E4%BA%86%E8%A7%A3Spring-%E4%B8%AD-RabbitMQ%E9%85%8D%E7%BD%AE%E7%9A%84concurrency-%E5%92%8C-task-executor/">彻底了解Spring 中 RabbitMQ配置的concurrency 和 task-executor</a>.</p>
 <p>现在来了解异步的情况.（感谢同事聪哥的指引)</p>
 <p>如果<code>listener</code>的方法，添加了<code>@Async</code>，就表示是异步执行了.具体如下:</p>
-<h2 id="rabbitmq的配置"><a href="#rabbitmq的配置" class="headerlink" title="rabbitmq的配置"></a>rabbitmq的配置</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;task:executor id=<span class="string">"myExecutor"</span> pool-size=<span class="string">"12-15"</span> queue-capacity=<span class="string">"100"</span> rejection-policy=<span class="string">"CALLER_RUNS"</span>/&gt;</div><div class="line"></div><div class="line">&lt;rabbit:listener-container connection-factory=<span class="string">"rabbitConnectionFactory"</span> error-handler=<span class="string">"MessageErrorHandler"</span> concurrency=<span class="string">"2"</span> task-executor=<span class="string">"myExecutor"</span> &gt;</div><div class="line">        &lt;rabbit:listener ref=<span class="string">"initCcDataListener"</span> method=<span class="string">"init"</span> queue-names=<span class="string">"hello.world.test.queue"</span> /&gt;</div><div class="line">&lt;/rabbit:listener-container&gt;</div></pre></td></tr></table></figure>
+<h2 id="rabbitmq的配置"><a href="#rabbitmq的配置" class="headerlink" title="rabbitmq的配置"></a>rabbitmq的配置</h2><pre><code class="bash">&lt;task:executor id=&quot;myExecutor&quot; pool-size=&quot;12-15&quot; queue-capacity=&quot;100&quot; rejection-policy=&quot;CALLER_RUNS&quot;/&gt;
+
+&lt;rabbit:listener-container connection-factory=&quot;rabbitConnectionFactory&quot; error-handler=&quot;MessageErrorHandler&quot; concurrency=&quot;2&quot; task-executor=&quot;myExecutor&quot; &gt;
+        &lt;rabbit:listener ref=&quot;initCcDataListener&quot; method=&quot;init&quot; queue-names=&quot;hello.world.test.queue&quot; /&gt;
+&lt;/rabbit:listener-container&gt;
+</code></pre>
 <p>注意，要在<code>initCcDataListener</code>这个对象的<code>init</code>方法上，添加<code>@Async</code>注解，才会开启异步执行（即，一般情况下，listener监听队列，然后将执行消息的方法传递给线程池的其他线程来执行，listener现在负责转发）</p>
 <p>这时的逻辑，才会真正体现出线程池的并发优势：</p>
 <p>首先，<code>concurrency</code>为2,这时它会<code>一直占用</code>线程池2条线程（假设为myExecutor-1, myExecutor-2），但还没有达到<code>corePoolSize</code>(这里是12)。这时开始监听数据，假设有300条数据。这时，<code>myExecutor-1, myExecutor-2</code>就会先将前两条数据取出来，然后提交到线程池里其他的线程来执行（这时，myExecutor就会new出myExecutor-3, myExecutor-4来执行），如此循环取出2条（假设myExecutor-3, myExecutor-4还没有执行完），又会new两条线程(myExecutor-5, myExecutor-6)，线程数一直达到(corePoolSize 12)。</p>
@@ -226,16 +231,75 @@
 <p>这时，就会触发<code>rejection</code>了（即拒绝策略），默认是<code>ABORT</code>（即放弃不执行）</p>
 <p>其实这本质上，就是JDK里的<code>ThreadPoolTaskExecutor</code>的行为了.</p>
 <h2 id="executor-拒绝策略对rabbitmq的影响"><a href="#executor-拒绝策略对rabbitmq的影响" class="headerlink" title="executor 拒绝策略对rabbitmq的影响"></a>executor 拒绝策略对rabbitmq的影响</h2><h3 id="ThreadPoolExecutor-AbortPolicy"><a href="#ThreadPoolExecutor-AbortPolicy" class="headerlink" title="ThreadPoolExecutor.AbortPolicy"></a>ThreadPoolExecutor.AbortPolicy</h3><p>这个拒绝策略，会导致消息会重新进队（如果队列要求有ack确认的话）（即可以保证数据被正确消费掉）。因为它的拒绝策略的实现代码为:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * Always throws RejectedExecutionException.</div><div class="line"> *</div><div class="line"> * @param r the runnable task requested to be executed</div><div class="line"> * @param e the executor attempting to execute this task</div><div class="line"> * @throws RejectedExecutionException always</div><div class="line"> */</div><div class="line">public void rejectedExecution(Runnable r, ThreadPoolExecutor e) &#123;</div><div class="line">    throw new RejectedExecutionException(<span class="string">"Task "</span> + r.toString() +</div><div class="line">                                         <span class="string">" rejected from "</span> +</div><div class="line">                                         e.toString());</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="bash">        /**
+         * Always throws RejectedExecutionException.
+         *
+         * @param r the runnable task requested to be executed
+         * @param e the executor attempting to execute this task
+         * @throws RejectedExecutionException always
+         */
+        public void rejectedExecution(Runnable r, ThreadPoolExecutor e) {
+            throw new RejectedExecutionException(&quot;Task &quot; + r.toString() +
+                                                 &quot; rejected from &quot; +
+                                                 e.toString());
+        }
+</code></pre>
 <p>即抛出异常，这样子RabbitMQ会认为你没有成功处理该条数据，所以在有ACK的情况下，它就会重新进队</p>
 <h3 id="ThreadPoolExecutor-CallerRunsPolicy"><a href="#ThreadPoolExecutor-CallerRunsPolicy" class="headerlink" title="ThreadPoolExecutor.CallerRunsPolicy"></a>ThreadPoolExecutor.CallerRunsPolicy</h3><p>由调用者来执行.（即listener监听的那条线程来执行）。可以保证所有数据都会被正确消费.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * Executes task r <span class="keyword">in</span> the <span class="built_in">caller</span><span class="string">'s thread, unless the executor</span></div><div class="line"> * has been shut down, in which case the task is discarded.</div><div class="line"> *</div><div class="line"> * @param r the runnable task requested to be executed</div><div class="line"> * @param e the executor attempting to execute this task</div><div class="line"> */</div><div class="line">public void rejectedExecution(Runnable r, ThreadPoolExecutor e) &#123;</div><div class="line">    if (!e.isShutdown()) &#123;</div><div class="line">        r.run();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="bash">        /**
+         * Executes task r in the caller&#39;s thread, unless the executor
+         * has been shut down, in which case the task is discarded.
+         *
+         * @param r the runnable task requested to be executed
+         * @param e the executor attempting to execute this task
+         */
+        public void rejectedExecution(Runnable r, ThreadPoolExecutor e) {
+            if (!e.isShutdown()) {
+                r.run();
+            }
+        }
+</code></pre>
 <h3 id="ThreadPoolExecutor-DiscardOldestPolicy"><a href="#ThreadPoolExecutor-DiscardOldestPolicy" class="headerlink" title="ThreadPoolExecutor.DiscardOldestPolicy"></a>ThreadPoolExecutor.DiscardOldestPolicy</h3><p>即丢弃最旧的任务空出线程来执行现在的任务.（这个比较危险，因为会直接丢弃数据，如果要求所有数据都要正确处理，并且不能有丢弃，就不要用这个策略).即不保证所有数据都会被正确消费.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * Obtains and ignores the next task that the executor</div><div class="line"> * would otherwise execute, <span class="keyword">if</span> one is immediately available,</div><div class="line"> * and <span class="keyword">then</span> retries execution of task r, unless the executor</div><div class="line"> * is shut down, <span class="keyword">in</span> <span class="built_in">which</span> <span class="keyword">case</span> task r is instead discarded.</div><div class="line"> *</div><div class="line"> * @param r the runnable task requested to be executed</div><div class="line"> * @param e the executor attempting to execute this task</div><div class="line"> */</div><div class="line">public void rejectedExecution(Runnable r, ThreadPoolExecutor e) &#123;</div><div class="line">    <span class="keyword">if</span> (!e.isShutdown()) &#123;</div><div class="line">        e.getQueue().poll();</div><div class="line">        e.execute(r);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="bash">        /**
+         * Obtains and ignores the next task that the executor
+         * would otherwise execute, if one is immediately available,
+         * and then retries execution of task r, unless the executor
+         * is shut down, in which case task r is instead discarded.
+         *
+         * @param r the runnable task requested to be executed
+         * @param e the executor attempting to execute this task
+         */
+        public void rejectedExecution(Runnable r, ThreadPoolExecutor e) {
+            if (!e.isShutdown()) {
+                e.getQueue().poll();
+                e.execute(r);
+            }
+        }
+</code></pre>
 <h3 id="ThreadPoolExecutor-DiscardPolicy"><a href="#ThreadPoolExecutor-DiscardPolicy" class="headerlink" title="ThreadPoolExecutor.DiscardPolicy"></a>ThreadPoolExecutor.DiscardPolicy</h3><p>即直接丢弃（即不保证所有数据都会被正确消费掉）</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * Does nothing, <span class="built_in">which</span> has the effect of discarding task r.</div><div class="line"> *</div><div class="line"> * @param r the runnable task requested to be executed</div><div class="line"> * @param e the executor attempting to execute this task</div><div class="line"> */</div><div class="line">public void rejectedExecution(Runnable r, ThreadPoolExecutor e) &#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="bash">        /**
+         * Does nothing, which has the effect of discarding task r.
+         *
+         * @param r the runnable task requested to be executed
+         * @param e the executor attempting to execute this task
+         */
+        public void rejectedExecution(Runnable r, ThreadPoolExecutor e) {
+        }
+</code></pre>
 <h2 id="ThreadPoolTaskExecutor"><a href="#ThreadPoolTaskExecutor" class="headerlink" title="ThreadPoolTaskExecutor"></a>ThreadPoolTaskExecutor</h2><p>这里摘自JDK1.6中文文档说明，当自己做个提醒了.</p>
-<h3 id="java-util-concurrent-类-ThreadPoolExecutor"><a href="#java-util-concurrent-类-ThreadPoolExecutor" class="headerlink" title="java.util.concurrent 类 ThreadPoolExecutor"></a>java.util.concurrent 类 ThreadPoolExecutor</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">java.lang.Object</div><div class="line">  继承者 java.util.concurrent.AbstractExecutorService</div><div class="line">      继承者 java.util.concurrent.ThreadPoolExecutor</div><div class="line">所有已实现的接口：</div><div class="line">Executor, ExecutorService</div><div class="line">直接已知子类：</div><div class="line">ScheduledThreadPoolExecutor</div><div class="line">public class ThreadPoolExecutor</div><div class="line"></div><div class="line"></div><div class="line">      extends</div><div class="line">      AbstractExecutorService</div></pre></td></tr></table></figure>
+<h3 id="java-util-concurrent-类-ThreadPoolExecutor"><a href="#java-util-concurrent-类-ThreadPoolExecutor" class="headerlink" title="java.util.concurrent 类 ThreadPoolExecutor"></a>java.util.concurrent 类 ThreadPoolExecutor</h3><pre><code class="bash">java.lang.Object
+  继承者 java.util.concurrent.AbstractExecutorService
+      继承者 java.util.concurrent.ThreadPoolExecutor
+所有已实现的接口：
+Executor, ExecutorService
+直接已知子类：
+ScheduledThreadPoolExecutor
+public class ThreadPoolExecutor
+
+
+      extends
+      AbstractExecutorService
+</code></pre>
 <blockquote>
 <p>一个 ExecutorService，它使用可能的几个池线程之一执行每个提交的任务，通常使用 Executors 工厂方法配置。</p>
 <p>线程池可以解决两个不同问题：由于减少了每个任务调用的开销，它们通常可以在执行大量异步任务时提供增强的性能，并且还可以提供绑定和管理资源（包括执行任务集时使用的线程）的方法。每个 ThreadPoolExecutor 还维护着一些基本的统计数据，如完成的任务数。</p>
@@ -251,7 +315,45 @@
 <h3 id="队列维护"><a href="#队列维护" class="headerlink" title="队列维护"></a>队列维护</h3><p>方法 getQueue() 允许出于监控和调试目的而访问工作队列。强烈反对出于其他任何目的而使用此方法。 remove(java.lang.Runnable) 和 purge() 这两种方法可用于在取消大量已排队任务时帮助进行存储回收。</p>
 <h3 id="终止"><a href="#终止" class="headerlink" title="终止"></a>终止</h3><p>程序 AND 不再引用的池没有剩余线程会自动 shutdown。如果希望确保回收取消引用的池（即使用户忘记调用 shutdown()），则必须安排未使用的线程最终终止：设置适当保持活动时间，使用 0 核心线程的下边界和/或设置 allowCoreThreadTimeOut(boolean)。</p>
 <h4 id="扩展示例。"><a href="#扩展示例。" class="headerlink" title="扩展示例。"></a>扩展示例。</h4><p>此类的大多数扩展可以重写一个或多个受保护的钩子 (hook) 方法。例如，下面是一个添加了简单的暂停/恢复功能的子类：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">PausableThreadPoolExecutor</span> <span class="keyword">extends</span> <span class="title">ThreadPoolExecutor</span> </span>&#123;</div><div class="line">  <span class="keyword">private</span> <span class="keyword">boolean</span> isPaused;</div><div class="line">  <span class="keyword">private</span> ReentrantLock pauseLock = <span class="keyword">new</span> ReentrantLock();</div><div class="line">  <span class="keyword">private</span> Condition unpaused = pauseLock.newCondition();</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="title">PausableThreadPoolExecutor</span><span class="params">(...)</span> </span>&#123; <span class="keyword">super</span>(...); &#125;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">beforeExecute</span><span class="params">(Thread t, Runnable r)</span> </span>&#123;</div><div class="line">    <span class="keyword">super</span>.beforeExecute(t, r);</div><div class="line">    pauseLock.lock();</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">      <span class="keyword">while</span> (isPaused) unpaused.await();</div><div class="line">    &#125; <span class="keyword">catch</span>(InterruptedException ie) &#123;</div><div class="line">      t.interrupt();</div><div class="line">    &#125; <span class="keyword">finally</span> &#123;</div><div class="line">      pauseLock.unlock();</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">pause</span><span class="params">()</span> </span>&#123;</div><div class="line">    pauseLock.lock();</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">      isPaused = <span class="keyword">true</span>;</div><div class="line">    &#125; <span class="keyword">finally</span> &#123;</div><div class="line">      pauseLock.unlock();</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">resume</span><span class="params">()</span> </span>&#123;</div><div class="line">    pauseLock.lock();</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">      isPaused = <span class="keyword">false</span>;</div><div class="line">      unpaused.signalAll();</div><div class="line">    &#125; <span class="keyword">finally</span> &#123;</div><div class="line">      pauseLock.unlock();</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="java"> class PausableThreadPoolExecutor extends ThreadPoolExecutor {
+   private boolean isPaused;
+   private ReentrantLock pauseLock = new ReentrantLock();
+   private Condition unpaused = pauseLock.newCondition();
+
+   public PausableThreadPoolExecutor(...) { super(...); }
+
+   protected void beforeExecute(Thread t, Runnable r) {
+     super.beforeExecute(t, r);
+     pauseLock.lock();
+     try {
+       while (isPaused) unpaused.await();
+     } catch(InterruptedException ie) {
+       t.interrupt();
+     } finally {
+       pauseLock.unlock();
+     }
+   }
+
+   public void pause() {
+     pauseLock.lock();
+     try {
+       isPaused = true;
+     } finally {
+       pauseLock.unlock();
+     }
+   }
+
+   public void resume() {
+     pauseLock.lock();
+     try {
+       isPaused = false;
+       unpaused.signalAll();
+     } finally {
+       pauseLock.unlock();
+     }
+   }
+ }
+</code></pre>
 <blockquote>
 <p>从以下版本开始：1.5</p>
 </blockquote>

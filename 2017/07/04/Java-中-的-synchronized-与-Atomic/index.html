@@ -15,17 +15,17 @@
     <meta name="keywords" content="Java,atomic,synchronized," />
   
 
-  <meta name="description" content="123456789101112131415// 代码1public class Sample &amp;#123;  private static int count = 0;  synchronized public static void increment() &amp;#123;    count++;  &amp;#125;&amp;#125;// 代码2public class Sample &amp;#123;  priv">
+  <meta name="description" content="// 代码1 public class Sample {   private static int count = 0;   synchronized public static void increment() {     count++;   } }  // 代码2 public class Sample {   private static AtomicInteger count = new">
 <meta name="keywords" content="Java,atomic,synchronized">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java 中 的 synchronized 与 Atomic">
 <meta property="og:url" content="https://emacsist.github.io/2017/07/04/Java-中-的-synchronized-与-Atomic/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="123456789101112131415// 代码1public class Sample &amp;#123;  private static int count = 0;  synchronized public static void increment() &amp;#123;    count++;  &amp;#125;&amp;#125;// 代码2public class Sample &amp;#123;  priv">
+<meta property="og:description" content="// 代码1 public class Sample {   private static int count = 0;   synchronized public static void increment() {     count++;   } }  // 代码2 public class Sample {   private static AtomicInteger count = new">
 <meta property="og:updated_time" content="2017-07-04T09:25:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 中 的 synchronized 与 Atomic">
-<meta name="twitter:description" content="123456789101112131415// 代码1public class Sample &amp;#123;  private static int count = 0;  synchronized public static void increment() &amp;#123;    count++;  &amp;#125;&amp;#125;// 代码2public class Sample &amp;#123;  priv">
+<meta name="twitter:description" content="// 代码1 public class Sample {   private static int count = 0;   synchronized public static void increment() {     count++;   } }  // 代码2 public class Sample {   private static AtomicInteger count = new">
 
   
 
@@ -206,7 +206,22 @@
 
     <div class="article-content">
         
-                            <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">// 代码1</div><div class="line">public class Sample &#123;</div><div class="line">  private static int count = 0;</div><div class="line">  synchronized public static void <span class="function"><span class="title">increment</span></span>() &#123;</div><div class="line">    count++;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 代码2</div><div class="line">public class Sample &#123;</div><div class="line">  private static AtomicInteger count = new AtomicInteger(0);</div><div class="line">  public static void <span class="function"><span class="title">increment</span></span>() &#123;</div><div class="line">    count.getAndIncrement();</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+                            <pre><code class="bash">// 代码1
+public class Sample {
+  private static int count = 0;
+  synchronized public static void increment() {
+    count++;
+  }
+}
+
+// 代码2
+public class Sample {
+  private static AtomicInteger count = new AtomicInteger(0);
+  public static void increment() {
+    count.getAndIncrement();
+  }
+}
+</code></pre>
 <p>虽然它们都可以实现相同的功能，那它们的区别到底是哪里呢？</p>
 <h1 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h1><p>这个是最底层的锁的功能，是Java语言层次的关键字，用来进行同步操作。在使用了 <em>synchronized</em> 的代码块中，所有的线程在执行这段代码的时候，都会变成 <em>串行</em> ，所以也就解决了多线程的问题。</p>
 <h1 id="Atomic"><a href="#Atomic" class="headerlink" title="Atomic"></a>Atomic</h1><p>这种类型使用的是 <em>CAS</em>(Compare And Swap) 机制来进行修改的。这种类型的操作，不会使用锁来进行同步，它只是进行比较然后交换。想象下这种情况:</p>

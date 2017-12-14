@@ -15,17 +15,17 @@
     <meta name="keywords" content="postgresql,database," />
   
 
-  <meta name="description" content="假设有个评论系统，要求支持无限层级的回复，就像一棵树那样 12345       文章     /      \    /        \评论1     评论2.... 注意可以有任意个子树以及做任意个叶子 大意的表结构12345678create table comments (    comment_id serial primary key,    parent_id bigint,">
+  <meta name="description" content="假设有个评论系统，要求支持无限层级的回复，就像一棵树那样        文章      /      \     /        \ 评论1     评论2 .... 注意可以有任意个子树以及做任意个叶子 大意的表结构create table comments (     comment_id serial primary key,     parent_id bigint,     bug_i">
 <meta name="keywords" content="postgresql,database">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用PostgreSQL无限递归 SELECT 评论系统">
 <meta property="og:url" content="https://emacsist.github.io/2015/01/05/使用PostgreSQL无限递归-SELECT-评论系统/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="假设有个评论系统，要求支持无限层级的回复，就像一棵树那样 12345       文章     /      \    /        \评论1     评论2.... 注意可以有任意个子树以及做任意个叶子 大意的表结构12345678create table comments (    comment_id serial primary key,    parent_id bigint,">
+<meta property="og:description" content="假设有个评论系统，要求支持无限层级的回复，就像一棵树那样        文章      /      \     /        \ 评论1     评论2 .... 注意可以有任意个子树以及做任意个叶子 大意的表结构create table comments (     comment_id serial primary key,     parent_id bigint,     bug_i">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用PostgreSQL无限递归 SELECT 评论系统">
-<meta name="twitter:description" content="假设有个评论系统，要求支持无限层级的回复，就像一棵树那样 12345       文章     /      \    /        \评论1     评论2.... 注意可以有任意个子树以及做任意个叶子 大意的表结构12345678create table comments (    comment_id serial primary key,    parent_id bigint,">
+<meta name="twitter:description" content="假设有个评论系统，要求支持无限层级的回复，就像一棵树那样        文章      /      \     /        \ 评论1     评论2 .... 注意可以有任意个子树以及做任意个叶子 大意的表结构create table comments (     comment_id serial primary key,     parent_id bigint,     bug_i">
 
   
 
@@ -202,12 +202,47 @@
     <div class="article-content">
         
                             <p>假设有个评论系统，要求支持无限层级的回复，就像一棵树那样</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">       文章</div><div class="line">     /      \</div><div class="line">    /        \</div><div class="line">评论1     评论2</div><div class="line">....</div></pre></td></tr></table></figure>
-<p>注意可以有任意个子树以及做任意个叶子</p>
-<h2 id="大意的表结构"><a href="#大意的表结构" class="headerlink" title="大意的表结构"></a>大意的表结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">create table comments (</div><div class="line">    comment_id serial primary key,</div><div class="line">    parent_id bigint,</div><div class="line">    bug_id bigint not null,</div><div class="line">    author varchar(20) not null,</div><div class="line">    comment text not null,</div><div class="line">    foreign key (parent_id) references comments(comment_id)</div><div class="line">);</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">test=# select * from comments;</div><div class="line"> comment_id | parent_id | bug_id | author |       comment      </div><div class="line">------------+-----------+--------+--------+---------------------</div><div class="line">          1 |           |      1 | Fran   | 这个bug的成因是什么</div><div class="line">          2 |         1 |      1 | Ollie  | 我觉得是一个空指针</div><div class="line">          3 |         2 |      1 | Fran   | 不，我查过了</div><div class="line">          4 |         1 |      1 | Kukla  | 我们需要查无效输入</div><div class="line">          5 |         4 |      1 | Ollie  | 是的，那是个问题</div><div class="line">          6 |         4 |      1 | Fran   | 好，查一下吧</div><div class="line">          7 |         6 |      1 | Kukla  | 解决了</div><div class="line">(7 rows)</div></pre></td></tr></table></figure>
-<h2 id="SQL语句"><a href="#SQL语句" class="headerlink" title="SQL语句"></a>SQL语句</h2><p>利用递归查询，可以查某篇文章评论组成的树结构。其中 depth是树的深度，显示的时候，按已经排序好的层次及相应的父结点显示出来就可以了。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">test=# with RECURSIVE  commenttree (comment_id, bug_id, parent_id, author, comment, depth) as (select comment_id, bug_id, parent_id, author, comment , 0 as depth from comments where parent_id is null union all select c.comment_id, c.bug_id, c.parent_id, c.author, c.comment, ct.depth+1 as depth from commenttree as ct join comments as c on (ct.comment_id = c.parent_id)) select * from commenttree where bug_id = 1;;</div><div class="line"> comment_id | bug_id | parent_id | author |       comment       | depth</div><div class="line">------------+--------+-----------+--------+---------------------+-------</div><div class="line">          1 |      1 |           | Fran   | 这个bug的成因是什么 |     0</div><div class="line">          2 |      1 |         1 | Ollie  | 我觉得是一个空指针  |     1</div><div class="line">          4 |      1 |         1 | Kukla  | 我们需要查无效输入  |     1</div><div class="line">          3 |      1 |         2 | Fran   | 不，我查过了        |     2</div><div class="line">          5 |      1 |         4 | Ollie  | 是的，那是个问题    |     2</div><div class="line">          6 |      1 |         4 | Fran   | 好，查一下吧        |     2</div><div class="line">          7 |      1 |         6 | Kukla  | 解决了              |     3</div><div class="line">(7 rows)</div><div class="line"> </div><div class="line">test=#</div></pre></td></tr></table></figure>
+<pre><code>       文章
+     /      \
+    /        \
+评论1     评论2
+....
+</code></pre><p>注意可以有任意个子树以及做任意个叶子</p>
+<h2 id="大意的表结构"><a href="#大意的表结构" class="headerlink" title="大意的表结构"></a>大意的表结构</h2><pre><code>create table comments (
+    comment_id serial primary key,
+    parent_id bigint,
+    bug_id bigint not null,
+    author varchar(20) not null,
+    comment text not null,
+    foreign key (parent_id) references comments(comment_id)
+);
+</code></pre><pre><code>test=# select * from comments;
+ comment_id | parent_id | bug_id | author |       comment      
+------------+-----------+--------+--------+---------------------
+          1 |           |      1 | Fran   | 这个bug的成因是什么
+          2 |         1 |      1 | Ollie  | 我觉得是一个空指针
+          3 |         2 |      1 | Fran   | 不，我查过了
+          4 |         1 |      1 | Kukla  | 我们需要查无效输入
+          5 |         4 |      1 | Ollie  | 是的，那是个问题
+          6 |         4 |      1 | Fran   | 好，查一下吧
+          7 |         6 |      1 | Kukla  | 解决了
+(7 rows)
+</code></pre><h2 id="SQL语句"><a href="#SQL语句" class="headerlink" title="SQL语句"></a>SQL语句</h2><p>利用递归查询，可以查某篇文章评论组成的树结构。其中 depth是树的深度，显示的时候，按已经排序好的层次及相应的父结点显示出来就可以了。</p>
+<pre><code class="sql">
+test=# with RECURSIVE  commenttree (comment_id, bug_id, parent_id, author, comment, depth) as (select comment_id, bug_id, parent_id, author, comment , 0 as depth from comments where parent_id is null union all select c.comment_id, c.bug_id, c.parent_id, c.author, c.comment, ct.depth+1 as depth from commenttree as ct join comments as c on (ct.comment_id = c.parent_id)) select * from commenttree where bug_id = 1;;
+ comment_id | bug_id | parent_id | author |       comment       | depth
+------------+--------+-----------+--------+---------------------+-------
+          1 |      1 |           | Fran   | 这个bug的成因是什么 |     0
+          2 |      1 |         1 | Ollie  | 我觉得是一个空指针  |     1
+          4 |      1 |         1 | Kukla  | 我们需要查无效输入  |     1
+          3 |      1 |         2 | Fran   | 不，我查过了        |     2
+          5 |      1 |         4 | Ollie  | 是的，那是个问题    |     2
+          6 |      1 |         4 | Fran   | 好，查一下吧        |     2
+          7 |      1 |         6 | Kukla  | 解决了              |     3
+(7 rows)
+
+test=#
+</code></pre>
 <p>注意PostgreSQL里，必须加 RECURSIVE 才能支持递归。</p>
 <p>内容来源资料：<br>[1]《SQL反模式》</p>
 

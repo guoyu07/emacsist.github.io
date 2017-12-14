@@ -15,17 +15,17 @@
     <meta name="keywords" content="mysql," />
   
 
-  <meta name="description" content="本文的测试环境为 Ubuntu 14.04.2 LTS 64 bit + MySQL 5.6 下载源码并安装及初始化数据库123456789101112131415161718192021222324252627282930313233343536cd ~/Downloadswget -c http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.26.">
+  <meta name="description" content="本文的测试环境为 Ubuntu 14.04.2 LTS 64 bit + MySQL 5.6 下载源码并安装及初始化数据库cd ~/Downloads  wget -c http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.26.tar.gz  tar -xvf mysql-5.6.26.tar.gz  cd mysql-5.6.26  sudo g">
 <meta name="keywords" content="mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL源码编译及使用单机多实例管理">
 <meta property="og:url" content="https://emacsist.github.io/2015/08/24/MySQL源码编译及使用单机多实例管理/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="本文的测试环境为 Ubuntu 14.04.2 LTS 64 bit + MySQL 5.6 下载源码并安装及初始化数据库123456789101112131415161718192021222324252627282930313233343536cd ~/Downloadswget -c http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.26.">
+<meta property="og:description" content="本文的测试环境为 Ubuntu 14.04.2 LTS 64 bit + MySQL 5.6 下载源码并安装及初始化数据库cd ~/Downloads  wget -c http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.26.tar.gz  tar -xvf mysql-5.6.26.tar.gz  cd mysql-5.6.26  sudo g">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL源码编译及使用单机多实例管理">
-<meta name="twitter:description" content="本文的测试环境为 Ubuntu 14.04.2 LTS 64 bit + MySQL 5.6 下载源码并安装及初始化数据库123456789101112131415161718192021222324252627282930313233343536cd ~/Downloadswget -c http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.26.">
+<meta name="twitter:description" content="本文的测试环境为 Ubuntu 14.04.2 LTS 64 bit + MySQL 5.6 下载源码并安装及初始化数据库cd ~/Downloads  wget -c http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.26.tar.gz  tar -xvf mysql-5.6.26.tar.gz  cd mysql-5.6.26  sudo g">
 
   
 
@@ -197,10 +197,80 @@
     <div class="article-content">
         
                             <p>本文的测试环境为 Ubuntu 14.04.2 LTS 64 bit + MySQL 5.6</p>
-<h2 id="下载源码并安装及初始化数据库"><a href="#下载源码并安装及初始化数据库" class="headerlink" title="下载源码并安装及初始化数据库"></a>下载源码并安装及初始化数据库</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ~/Downloads</div><div class="line"></div><div class="line">wget -c http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.26.tar.gz</div><div class="line"></div><div class="line">tar -xvf mysql-5.6.26.tar.gz</div><div class="line"></div><div class="line"><span class="built_in">cd</span> mysql-5.6.26</div><div class="line"></div><div class="line">sudo groupadd mysql</div><div class="line"></div><div class="line">sudo useradd -r -g mysql mysql</div><div class="line"></div><div class="line">sudo apt-get install cmake</div><div class="line"></div><div class="line">cmake . -DCMAKE_INSTALL_PREFIX=/usr/<span class="built_in">local</span>/mysql-5.6 -DMYSQL_USER=mysql</div><div class="line"></div><div class="line">sudo mkdir /usr/<span class="built_in">local</span>/mysql-5.6</div><div class="line"></div><div class="line">sudo make install</div><div class="line"></div><div class="line">sudo chown mysql:mysql -R /usr/<span class="built_in">local</span>/mysql-5.6</div><div class="line"></div><div class="line">sudo mkdir /usr/<span class="built_in">local</span>/mysql-data/3306 -p</div><div class="line">sudo mkdir /usr/<span class="built_in">local</span>/mysql-data/3307 -p</div><div class="line"></div><div class="line">sudo chown mysql:mysql /usr/<span class="built_in">local</span>/mysql-data/3306 -R</div><div class="line">sudo chown mysql:mysql /usr/<span class="built_in">local</span>/mysql-data/3307 -R</div><div class="line"></div><div class="line">sudo su</div><div class="line"></div><div class="line">su mysql</div><div class="line"></div><div class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/mysql-5.6</div><div class="line"></div><div class="line">scripts/mysql_install_db --datadir=/usr/<span class="built_in">local</span>/mysql-data/3306 --basedir=/usr/<span class="built_in">local</span>/mysql-5.6 --user=mysql</div><div class="line">scripts/mysql_install_db --datadir=/usr/<span class="built_in">local</span>/mysql-data/3307 --basedir=/usr/<span class="built_in">local</span>/mysql-5.6 --user=mysql</div></pre></td></tr></table></figure>
+<h2 id="下载源码并安装及初始化数据库"><a href="#下载源码并安装及初始化数据库" class="headerlink" title="下载源码并安装及初始化数据库"></a>下载源码并安装及初始化数据库</h2><pre><code class="bash">cd ~/Downloads
+
+wget -c http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.26.tar.gz
+
+tar -xvf mysql-5.6.26.tar.gz
+
+cd mysql-5.6.26
+
+sudo groupadd mysql
+
+sudo useradd -r -g mysql mysql
+
+sudo apt-get install cmake
+
+cmake . -DCMAKE_INSTALL_PREFIX=/usr/local/mysql-5.6 -DMYSQL_USER=mysql
+
+sudo mkdir /usr/local/mysql-5.6
+
+sudo make install
+
+sudo chown mysql:mysql -R /usr/local/mysql-5.6
+
+sudo mkdir /usr/local/mysql-data/3306 -p
+sudo mkdir /usr/local/mysql-data/3307 -p
+
+sudo chown mysql:mysql /usr/local/mysql-data/3306 -R
+sudo chown mysql:mysql /usr/local/mysql-data/3307 -R
+
+sudo su
+
+su mysql
+
+cd /usr/local/mysql-5.6
+
+scripts/mysql_install_db --datadir=/usr/local/mysql-data/3306 --basedir=/usr/local/mysql-5.6 --user=mysql
+scripts/mysql_install_db --datadir=/usr/local/mysql-data/3307 --basedir=/usr/local/mysql-5.6 --user=mysql
+</code></pre>
 <h2 id="配置my-conf"><a href="#配置my-conf" class="headerlink" title="配置my.conf"></a>配置my.conf</h2><p>文件位置： <code>/usr/local/mysql-5.6/my.cnf</code></p>
 <p>内容</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># For advice on how to change settings please see</span></div><div class="line"><span class="comment"># http://dev.mysql.com/doc/refman/5.6/en/server-configuration-defaults.html</span></div><div class="line"></div><div class="line">[mysqld_multi]</div><div class="line">mysqld     = /usr/<span class="built_in">local</span>/mysql-5.6/bin/mysqld_safe</div><div class="line">mysqladmin = /usr/<span class="built_in">local</span>/mysql-5.6/bin/mysqladmin</div><div class="line"><span class="built_in">log</span>        = /usr/<span class="built_in">local</span>/mysql-5.6/log.err</div><div class="line">user       = root</div><div class="line">password   = yang</div><div class="line"></div><div class="line"><span class="comment"># The MySQL server</span></div><div class="line">[mysqld1]</div><div class="line">port       = 3306</div><div class="line">socket     = /usr/<span class="built_in">local</span>/mysql-data/3306/3306.socket</div><div class="line">datadir    = /usr/<span class="built_in">local</span>/mysql-data/3306</div><div class="line">pid-file   = /usr/<span class="built_in">local</span>/mysql-data/3306/3306.pid</div><div class="line"><span class="built_in">log</span>-error    = /usr/<span class="built_in">local</span>/mysql-data/3306/3306.err</div><div class="line">slow_query_log = 1</div><div class="line">long_query_time = 0.3</div><div class="line">slow_query_log_file = /usr/<span class="built_in">local</span>/mysql-data/3306/query-slow.log</div><div class="line">general_log = /usr/<span class="built_in">local</span>/mysql-data/3306/general-log.log</div><div class="line">sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES</div><div class="line"></div><div class="line">[mysqld2]</div><div class="line">port       = 3307</div><div class="line">socket     = /usr/<span class="built_in">local</span>/mysql-data/3307/3307.socket</div><div class="line">datadir    = /usr/<span class="built_in">local</span>/mysql-data/3307</div><div class="line">pid-file   = /usr/<span class="built_in">local</span>/mysql-data/3307/3307.pid</div><div class="line"><span class="built_in">log</span>-error    = /usr/<span class="built_in">local</span>/mysql-data/3307/3307.err</div><div class="line">slow_query_log = 1</div><div class="line">long_query_time = 0.3</div><div class="line">slow_query_log_file = /usr/<span class="built_in">local</span>/mysql-data/3307/query-slow.log</div><div class="line">general_log = /usr/<span class="built_in">local</span>/mysql-data/3307/general-log.log</div><div class="line">sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES</div></pre></td></tr></table></figure>
+<pre><code class="bash"># For advice on how to change settings please see
+# http://dev.mysql.com/doc/refman/5.6/en/server-configuration-defaults.html
+
+[mysqld_multi]
+mysqld     = /usr/local/mysql-5.6/bin/mysqld_safe
+mysqladmin = /usr/local/mysql-5.6/bin/mysqladmin
+log        = /usr/local/mysql-5.6/log.err
+user       = root
+password   = yang
+
+# The MySQL server
+[mysqld1]
+port       = 3306
+socket     = /usr/local/mysql-data/3306/3306.socket
+datadir    = /usr/local/mysql-data/3306
+pid-file   = /usr/local/mysql-data/3306/3306.pid
+log-error    = /usr/local/mysql-data/3306/3306.err
+slow_query_log = 1
+long_query_time = 0.3
+slow_query_log_file = /usr/local/mysql-data/3306/query-slow.log
+general_log = /usr/local/mysql-data/3306/general-log.log
+sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES
+
+[mysqld2]
+port       = 3307
+socket     = /usr/local/mysql-data/3307/3307.socket
+datadir    = /usr/local/mysql-data/3307
+pid-file   = /usr/local/mysql-data/3307/3307.pid
+log-error    = /usr/local/mysql-data/3307/3307.err
+slow_query_log = 1
+long_query_time = 0.3
+slow_query_log_file = /usr/local/mysql-data/3307/query-slow.log
+general_log = /usr/local/mysql-data/3307/general-log.log
+sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES
+</code></pre>
 <h2 id="启动各个实例"><a href="#启动各个实例" class="headerlink" title="启动各个实例"></a>启动各个实例</h2><p><code>export PATH=/usr/local/mysql-5.6/bin:$PATH</code></p>
 <h3 id="查看各个实例状态"><a href="#查看各个实例状态" class="headerlink" title="查看各个实例状态"></a>查看各个实例状态</h3><p><code>mysqld_multi --defaults-file=/usr/local/mysql-5.6/my.cnf report</code></p>
 <h3 id="启动某个实例"><a href="#启动某个实例" class="headerlink" title="启动某个实例"></a>启动某个实例</h3><p><code>mysqld_multi --defaults-file=/usr/local/mysql-5.6/my.cnf start 1</code></p>
@@ -209,7 +279,9 @@
 <p>这表示启动<code>my.conf</code>文件里的<code>[mysqld1]</code>和<code>[mysqld2]</code></p>
 <h3 id="停止某个实例"><a href="#停止某个实例" class="headerlink" title="停止某个实例"></a>停止某个实例</h3><p><code>mysqld_multi --defaults-file=/usr/local/mysql-5.6/my.cnf stop 1</code></p>
 <h3 id="一次性停止多个实例"><a href="#一次性停止多个实例" class="headerlink" title="一次性停止多个实例"></a>一次性停止多个实例</h3><p><code>mysqld_multi --defaults-file=/usr/local/mysql-5.6/my.cnf stop 1-2</code></p>
-<h2 id="修改默认密码"><a href="#修改默认密码" class="headerlink" title="修改默认密码"></a>修改默认密码</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">/usr/<span class="built_in">local</span>/mysql-5.6/bin/mysqladmin -S /usr/<span class="built_in">local</span>/mysql-data/3306/3306.socket -u root password <span class="string">'yang'</span></div><div class="line">/usr/<span class="built_in">local</span>/mysql-5.6/bin/mysqladmin -S /usr/<span class="built_in">local</span>/mysql-data/3307/3307.socket -u root password <span class="string">'yang'</span></div></pre></td></tr></table></figure>
+<h2 id="修改默认密码"><a href="#修改默认密码" class="headerlink" title="修改默认密码"></a>修改默认密码</h2><pre><code class="bash">/usr/local/mysql-5.6/bin/mysqladmin -S /usr/local/mysql-data/3306/3306.socket -u root password &#39;yang&#39;
+/usr/local/mysql-5.6/bin/mysqladmin -S /usr/local/mysql-data/3307/3307.socket -u root password &#39;yang&#39;
+</code></pre>
 
                                 
     </div>

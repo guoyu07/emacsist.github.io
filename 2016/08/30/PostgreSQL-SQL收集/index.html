@@ -15,17 +15,17 @@
     <meta name="keywords" content="postgresql,database," />
   
 
-  <meta name="description" content="查看是否存在无效索引1SELECT * FROM pg_class, pg_index WHERE pg_index.indisvalid = false AND pg_index.indexrelid = pg_class.oid; 查看大小查看表大小:1\d+ 查看数据库大小:1\l+ 查看表，索引及总大小1234567891011121314151617SELECT    table_nam">
+  <meta name="description" content="查看是否存在无效索引SELECT * FROM pg_class, pg_index WHERE pg_index.indisvalid = false AND pg_index.indexrelid = pg_class.oid;  查看大小查看表大小: \d+  查看数据库大小: \l+  查看表，索引及总大小 SELECT     table_name,     pg_size_pretty">
 <meta name="keywords" content="postgresql,database">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PostgreSQL SQL收集">
 <meta property="og:url" content="https://emacsist.github.io/2016/08/30/PostgreSQL-SQL收集/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="查看是否存在无效索引1SELECT * FROM pg_class, pg_index WHERE pg_index.indisvalid = false AND pg_index.indexrelid = pg_class.oid; 查看大小查看表大小:1\d+ 查看数据库大小:1\l+ 查看表，索引及总大小1234567891011121314151617SELECT    table_nam">
+<meta property="og:description" content="查看是否存在无效索引SELECT * FROM pg_class, pg_index WHERE pg_index.indisvalid = false AND pg_index.indexrelid = pg_class.oid;  查看大小查看表大小: \d+  查看数据库大小: \l+  查看表，索引及总大小 SELECT     table_name,     pg_size_pretty">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PostgreSQL SQL收集">
-<meta name="twitter:description" content="查看是否存在无效索引1SELECT * FROM pg_class, pg_index WHERE pg_index.indisvalid = false AND pg_index.indexrelid = pg_class.oid; 查看大小查看表大小:1\d+ 查看数据库大小:1\l+ 查看表，索引及总大小1234567891011121314151617SELECT    table_nam">
+<meta name="twitter:description" content="查看是否存在无效索引SELECT * FROM pg_class, pg_index WHERE pg_index.indisvalid = false AND pg_index.indexrelid = pg_class.oid;  查看大小查看表大小: \d+  查看数据库大小: \l+  查看表，索引及总大小 SELECT     table_name,     pg_size_pretty">
 
   
 
@@ -201,16 +201,55 @@
 
     <div class="article-content">
         
-                            <h2 id="查看是否存在无效索引"><a href="#查看是否存在无效索引" class="headerlink" title="查看是否存在无效索引"></a>查看是否存在无效索引</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">SELECT * FROM pg_class, pg_index WHERE pg_index.indisvalid = <span class="literal">false</span> AND pg_index.indexrelid = pg_class.oid;</div></pre></td></tr></table></figure>
-<h2 id="查看大小"><a href="#查看大小" class="headerlink" title="查看大小"></a>查看大小</h2><p>查看表大小:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">\d+</div></pre></td></tr></table></figure></p>
-<p>查看数据库大小:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">\l+</div></pre></td></tr></table></figure></p>
-<p>查看表，索引及总大小<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">SELECT</div><div class="line">    table_name,</div><div class="line">    pg_size_pretty(table_size) AS table_size,</div><div class="line">    pg_size_pretty(indexes_size) AS indexes_size,</div><div class="line">    pg_size_pretty(total_size) AS total_size</div><div class="line">FROM (</div><div class="line">    SELECT</div><div class="line">        table_name,</div><div class="line">        pg_table_size(table_name) AS table_size,</div><div class="line">        pg_indexes_size(table_name) AS indexes_size,</div><div class="line">        pg_total_relation_size(table_name) AS total_size</div><div class="line">    FROM (</div><div class="line">        SELECT (&apos;&quot;&apos; || table_schema || &apos;&quot;.&quot;&apos; || table_name || &apos;&quot;&apos;) AS table_name</div><div class="line">        FROM information_schema.tables</div><div class="line">    ) AS all_tables</div><div class="line">    ORDER BY total_size DESC</div><div class="line">) AS pretty_sizes;</div></pre></td></tr></table></figure></p>
-<h2 id="表访问统计"><a href="#表访问统计" class="headerlink" title="表访问统计"></a>表访问统计</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">select schemaname,relname,seq_scan,idx_scan,cast(idx_scan as numeric) / (idx_scan + seq_scan)</div><div class="line"> as idx_scan_pct </div><div class="line"> from pg_stat_user_tables <span class="built_in">where</span> (idx_scan +seq_scan) &gt;0 order by idx_scan_pct;</div></pre></td></tr></table></figure>
-<h2 id="表I-O统计"><a href="#表I-O统计" class="headerlink" title="表I/O统计"></a>表I/O统计</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">select relname,cast(heap_blks_hit as numeric) /(heap_blks_hit +heap_blks_read) </div><div class="line"> as hit_pct,heap_blks_hit,heap_blks_read from pg_statio_user_tables </div><div class="line">  <span class="built_in">where</span> (heap_blks_hit + heap_blks_read) &gt;0 order by hit_pct;</div></pre></td></tr></table></figure>
-<h2 id="索引访问统计"><a href="#索引访问统计" class="headerlink" title="索引访问统计"></a>索引访问统计</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">select relname,cast(idx_blks_hit as numeric) /(idx_blks_hit + idx_blks_read )</div><div class="line">  as hit_pct,idx_blks_hit,idx_blks_read from pg_statio_user_tables </div><div class="line">  <span class="built_in">where</span> (idx_blks_hit +idx_blks_read) &gt;0 order by hit_pct;</div></pre></td></tr></table></figure>
-<h2 id="索引I-O统计"><a href="#索引I-O统计" class="headerlink" title="索引I/O统计"></a>索引I/O统计</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">select indexrelname,cast(idx_blks_hit as numeric) /( idx_blks_hit + idx_blks_read) </div><div class="line"> as hit_pct,idx_blks_hit,idx_blks_read from pg_statio_user_indexes </div><div class="line"> <span class="built_in">where</span> (idx_blks_hit +idx_blks_read)&gt;0 order by hit_pct ;</div></pre></td></tr></table></figure>
-<h2 id="按索引访问次统计"><a href="#按索引访问次统计" class="headerlink" title="按索引访问次统计"></a>按索引访问次统计</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">select schemaname,relname,indexrelname,idx_scan,pg_size_pretty(pg_relation_size(i.indexrelid)) </div><div class="line"> as index_size from pg_stat_user_indexes i join pg_index using (indexrelid)</div><div class="line"> <span class="built_in">where</span> indisunique is <span class="literal">false</span> order by idx_scan,relname;</div></pre></td></tr></table></figure>
-<h2 id="获取用户所属的schema"><a href="#获取用户所属的schema" class="headerlink" title="获取用户所属的schema"></a>获取用户所属的schema</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">\dn+</div></pre></td></tr></table></figure>
+                            <h2 id="查看是否存在无效索引"><a href="#查看是否存在无效索引" class="headerlink" title="查看是否存在无效索引"></a>查看是否存在无效索引</h2><pre><code class="bash">SELECT * FROM pg_class, pg_index WHERE pg_index.indisvalid = false AND pg_index.indexrelid = pg_class.oid;
+</code></pre>
+<h2 id="查看大小"><a href="#查看大小" class="headerlink" title="查看大小"></a>查看大小</h2><p>查看表大小:</p>
+<pre><code class="bash">\d+
+</code></pre>
+<p>查看数据库大小:</p>
+<pre><code class="bash">\l+
+</code></pre>
+<p>查看表，索引及总大小</p>
+<pre><code class="bahs">SELECT
+    table_name,
+    pg_size_pretty(table_size) AS table_size,
+    pg_size_pretty(indexes_size) AS indexes_size,
+    pg_size_pretty(total_size) AS total_size
+FROM (
+    SELECT
+        table_name,
+        pg_table_size(table_name) AS table_size,
+        pg_indexes_size(table_name) AS indexes_size,
+        pg_total_relation_size(table_name) AS total_size
+    FROM (
+        SELECT (&#39;&quot;&#39; || table_schema || &#39;&quot;.&quot;&#39; || table_name || &#39;&quot;&#39;) AS table_name
+        FROM information_schema.tables
+    ) AS all_tables
+    ORDER BY total_size DESC
+) AS pretty_sizes;
+</code></pre>
+<h2 id="表访问统计"><a href="#表访问统计" class="headerlink" title="表访问统计"></a>表访问统计</h2><pre><code class="bash">select schemaname,relname,seq_scan,idx_scan,cast(idx_scan as numeric) / (idx_scan + seq_scan)
+ as idx_scan_pct 
+ from pg_stat_user_tables where (idx_scan +seq_scan) &gt;0 order by idx_scan_pct;
+</code></pre>
+<h2 id="表I-O统计"><a href="#表I-O统计" class="headerlink" title="表I/O统计"></a>表I/O统计</h2><pre><code class="bash">select relname,cast(heap_blks_hit as numeric) /(heap_blks_hit +heap_blks_read) 
+ as hit_pct,heap_blks_hit,heap_blks_read from pg_statio_user_tables 
+  where (heap_blks_hit + heap_blks_read) &gt;0 order by hit_pct;
+</code></pre>
+<h2 id="索引访问统计"><a href="#索引访问统计" class="headerlink" title="索引访问统计"></a>索引访问统计</h2><pre><code class="bash">select relname,cast(idx_blks_hit as numeric) /(idx_blks_hit + idx_blks_read )
+  as hit_pct,idx_blks_hit,idx_blks_read from pg_statio_user_tables 
+  where (idx_blks_hit +idx_blks_read) &gt;0 order by hit_pct;
+</code></pre>
+<h2 id="索引I-O统计"><a href="#索引I-O统计" class="headerlink" title="索引I/O统计"></a>索引I/O统计</h2><pre><code class="bash">select indexrelname,cast(idx_blks_hit as numeric) /( idx_blks_hit + idx_blks_read) 
+ as hit_pct,idx_blks_hit,idx_blks_read from pg_statio_user_indexes 
+ where (idx_blks_hit +idx_blks_read)&gt;0 order by hit_pct ;
+</code></pre>
+<h2 id="按索引访问次统计"><a href="#按索引访问次统计" class="headerlink" title="按索引访问次统计"></a>按索引访问次统计</h2><pre><code class="bash">select schemaname,relname,indexrelname,idx_scan,pg_size_pretty(pg_relation_size(i.indexrelid)) 
+ as index_size from pg_stat_user_indexes i join pg_index using (indexrelid)
+ where indisunique is false order by idx_scan,relname;
+</code></pre>
+<h2 id="获取用户所属的schema"><a href="#获取用户所属的schema" class="headerlink" title="获取用户所属的schema"></a>获取用户所属的schema</h2><pre><code class="bash">\dn+
+</code></pre>
 
                                 
     </div>

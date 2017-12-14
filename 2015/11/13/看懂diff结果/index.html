@@ -214,8 +214,12 @@
 <p><code>-1,4</code>：表示原始文件，从第一行开始的4行（注意，不是到第四行）<br><code>+1,4</code>：表示目标文件，从第一行开始的4行（注意，不是到第四行）</p>
 <h1 id="patch"><a href="#patch" class="headerlink" title="patch"></a>patch</h1><p>f1, f2, diff.txt</p>
 <p>假设 <code>diff.txt</code> 是由 <code>diff -u f1 f2</code> 的结果.</p>
-<h2 id="删除f2，想要还原"><a href="#删除f2，想要还原" class="headerlink" title="删除f2，想要还原"></a>删除f2，想要还原</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cp f1 f2</div><div class="line">patch f2 &lt; diff.txt</div></pre></td></tr></table></figure>
-<h2 id="删除f1，想要还原"><a href="#删除f1，想要还原" class="headerlink" title="删除f1，想要还原"></a>删除f1，想要还原</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cp f2 f1</div><div class="line">patch -R f1 &lt; diff.txt</div></pre></td></tr></table></figure>
+<h2 id="删除f2，想要还原"><a href="#删除f2，想要还原" class="headerlink" title="删除f2，想要还原"></a>删除f2，想要还原</h2><pre><code class="bash">cp f1 f2
+patch f2 &lt; diff.txt
+</code></pre>
+<h2 id="删除f1，想要还原"><a href="#删除f1，想要还原" class="headerlink" title="删除f1，想要还原"></a>删除f1，想要还原</h2><pre><code class="bash">cp f2 f1
+patch -R f1 &lt; diff.txt
+</code></pre>
 <p>注意，有参数<code>-R</code></p>
 
                                 

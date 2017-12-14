@@ -15,17 +15,17 @@
     <meta name="keywords" content="postgresql,databasse," />
   
 
-  <meta name="description" content="查看复制状态在master上执行 1234567891011121314151617181920sky=# select * from pg_stat_replication;-[ RECORD 1 ]----+------------------------------pid              | 13321usesysid         | 17019usename">
+  <meta name="description" content="查看复制状态在master上执行 sky=# select * from pg_stat_replication; -[ RECORD 1 ]----+------------------------------ pid              | 13321 usesysid         | 17019 usename          | replication application_">
 <meta name="keywords" content="postgresql,databasse">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PostgreSQL查看复制状态">
 <meta property="og:url" content="https://emacsist.github.io/2016/08/11/PostgreSQL查看复制状态/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="查看复制状态在master上执行 1234567891011121314151617181920sky=# select * from pg_stat_replication;-[ RECORD 1 ]----+------------------------------pid              | 13321usesysid         | 17019usename">
+<meta property="og:description" content="查看复制状态在master上执行 sky=# select * from pg_stat_replication; -[ RECORD 1 ]----+------------------------------ pid              | 13321 usesysid         | 17019 usename          | replication application_">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PostgreSQL查看复制状态">
-<meta name="twitter:description" content="查看复制状态在master上执行 1234567891011121314151617181920sky=# select * from pg_stat_replication;-[ RECORD 1 ]----+------------------------------pid              | 13321usesysid         | 17019usename">
+<meta name="twitter:description" content="查看复制状态在master上执行 sky=# select * from pg_stat_replication; -[ RECORD 1 ]----+------------------------------ pid              | 13321 usesysid         | 17019 usename          | replication application_">
 
   
 
@@ -202,12 +202,56 @@
     <div class="article-content">
         
                             <h2 id="查看复制状态"><a href="#查看复制状态" class="headerlink" title="查看复制状态"></a>查看复制状态</h2><p>在<code>master</code>上执行</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># select * from pg_stat_replication;</span></div><div class="line">-[ RECORD 1 ]----+------------------------------</div><div class="line">pid              | 13321</div><div class="line">usesysid         | 17019</div><div class="line">usename          | replication</div><div class="line">application_name | walreceiver</div><div class="line">client_addr      | 10.0.0.81</div><div class="line">client_hostname  | </div><div class="line">client_port      | 42809</div><div class="line">backend_start    | 2016-08-11 10:57:35.856289+08</div><div class="line">backend_xmin     | </div><div class="line">state            | streaming</div><div class="line">sent_location    | 1/E0CE9750</div><div class="line">write_location   | 1/E0CE9750</div><div class="line">flush_location   | 1/E0CE9750</div><div class="line">replay_location  | 1/E0CE9750</div><div class="line">sync_priority    | 0</div><div class="line">sync_state       | async</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<pre><code class="bash">sky=# select * from pg_stat_replication;
+-[ RECORD 1 ]----+------------------------------
+pid              | 13321
+usesysid         | 17019
+usename          | replication
+application_name | walreceiver
+client_addr      | 10.0.0.81
+client_hostname  | 
+client_port      | 42809
+backend_start    | 2016-08-11 10:57:35.856289+08
+backend_xmin     | 
+state            | streaming
+sent_location    | 1/E0CE9750
+write_location   | 1/E0CE9750
+flush_location   | 1/E0CE9750
+replay_location  | 1/E0CE9750
+sync_priority    | 0
+sync_state       | async
+
+sky=#
+</code></pre>
 <p><code>pid</code>：　master的<code>sender</code>进程：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">╭─sky@sky-linux /ihome/db/postgresql  </div><div class="line">╰─➤  ps aux | grep 13321</div><div class="line">sky      13321  0.1  0.0 172320  2992 ?        Ss   10:57   0:03 postgres: wal sender process replication 10.0.0.81(42809) streaming 1/E0CE9750</div></pre></td></tr></table></figure>
+<pre><code class="bash">╭─sky@sky-linux /ihome/db/postgresql  
+╰─➤  ps aux | grep 13321
+sky      13321  0.1  0.0 172320  2992 ?        Ss   10:57   0:03 postgres: wal sender process replication 10.0.0.81(42809) streaming 1/E0CE9750
+</code></pre>
 <hr>
 <p><code>usesysid</code>: 复制的用户ID(17019)<br><code>usename</code> : 用户名</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># select * from pg_user;</span></div><div class="line">-[ RECORD 1 ]+------------</div><div class="line">usename      | sky</div><div class="line">usesysid     | 10</div><div class="line">usecreatedb  | t</div><div class="line">usesuper     | t</div><div class="line">userepl      | t</div><div class="line">usebypassrls | t</div><div class="line">passwd       | ********</div><div class="line">valuntil     | </div><div class="line">useconfig    | </div><div class="line">-[ RECORD 2 ]+------------</div><div class="line">usename      | replication</div><div class="line">usesysid     | 17019</div><div class="line">usecreatedb  | f</div><div class="line">usesuper     | f</div><div class="line">userepl      | t</div><div class="line">usebypassrls | f</div><div class="line">passwd       | ********</div><div class="line">valuntil     | </div><div class="line">useconfig    |</div></pre></td></tr></table></figure>
+<pre><code class="bash">sky=# select * from pg_user;
+-[ RECORD 1 ]+------------
+usename      | sky
+usesysid     | 10
+usecreatedb  | t
+usesuper     | t
+userepl      | t
+usebypassrls | t
+passwd       | ********
+valuntil     | 
+useconfig    | 
+-[ RECORD 2 ]+------------
+usename      | replication
+usesysid     | 17019
+usecreatedb  | f
+usesuper     | f
+userepl      | t
+usebypassrls | f
+passwd       | ********
+valuntil     | 
+useconfig    |
+</code></pre>
 <hr>
 <p><code>client_addr</code>: slave的IP地址</p>
 <hr>
@@ -234,14 +278,41 @@
 </ul>
 <hr>
 <h2 id="查看延迟多少"><a href="#查看延迟多少" class="headerlink" title="查看延迟多少"></a>查看延迟多少</h2><p>在<code>master</code>上执行以下SQL可以查看滞后程度,以字节为单位.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># select pg_xlog_location_diff(sent_location, replay_location) from pg_stat_replication; </span></div><div class="line"> pg_xlog_location_diff </div><div class="line">-----------------------</div><div class="line">                     0</div><div class="line">(1 row)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<pre><code class="bash">sky=# select pg_xlog_location_diff(sent_location, replay_location) from pg_stat_replication; 
+ pg_xlog_location_diff 
+-----------------------
+                     0
+(1 row)
+
+sky=#
+</code></pre>
 <p>或者</p>
 <p>在<code>slave</code>上执行以下SQL可以查看滞后时间.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># SELECT CASE WHEN pg_last_xlog_receive_location() = pg_last_xlog_replay_location()</span></div><div class="line">    THEN 0</div><div class="line">    ELSE EXTRACT (EPOCH FROM now() - pg_last_xact_replay_timestamp())</div><div class="line">    END AS log_delay;</div><div class="line"> log_delay </div><div class="line">-----------</div><div class="line">         0</div><div class="line">(1 row)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<pre><code class="bash">sky=# SELECT CASE WHEN pg_last_xlog_receive_location() = pg_last_xlog_replay_location()
+    THEN 0
+    ELSE EXTRACT (EPOCH FROM now() - pg_last_xact_replay_timestamp())
+    END AS log_delay;
+ log_delay 
+-----------
+         0
+(1 row)
+
+sky=#
+</code></pre>
 <p>如果没输出就表示完全同步了.</p>
-<h2 id="查看是否处于recovery模式"><a href="#查看是否处于recovery模式" class="headerlink" title="查看是否处于recovery模式"></a>查看是否处于<code>recovery</code>模式</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment">#  select pg_is_in_recovery();</span></div><div class="line"> pg_is_in_recovery </div><div class="line">-------------------</div><div class="line"> t</div><div class="line">(1 row)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<h2 id="查看是否处于recovery模式"><a href="#查看是否处于recovery模式" class="headerlink" title="查看是否处于recovery模式"></a>查看是否处于<code>recovery</code>模式</h2><pre><code class="bash">sky=#  select pg_is_in_recovery();
+ pg_is_in_recovery 
+-------------------
+ t
+(1 row)
+
+sky=#
+</code></pre>
 <p>如果处于复制模式的话, <code>select pg_last_xact_replay_timestamp();</code>和<code>select pg_last_xlog_replay_location();</code>会一直增加.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">select pg_last_xact_replay_timestamp();</div><div class="line"></div><div class="line">select pg_last_xlog_replay_location();</div></pre></td></tr></table></figure>
+<pre><code class="bash">select pg_last_xact_replay_timestamp();
+
+select pg_last_xlog_replay_location();
+</code></pre>
 
                                 
     </div>

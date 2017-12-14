@@ -15,17 +15,17 @@
     <meta name="keywords" content="postgresql,database," />
   
 
-  <meta name="description" content="注意123参数名：不区分大小写。参数值：布尔、整数、浮点数、字符串（大小写无关， 枚举参数值是不区分大小写的）布尔值可以是：on, off, true, false, yes, no, 1, 0 或这些东西的任意清晰无歧义的前缀。 123内存单位：kB(千字节), MB(兆字节), GB(吉字节)； 时间单位：ms(毫秒), s(秒), min(分钟), h(小时), d(天)。 内存单位中的&amp;q">
+  <meta name="description" content="注意参数名：不区分大小写。 参数值：布尔、整数、浮点数、字符串（大小写无关， 枚举参数值是不区分大小写的） 布尔值可以是：on, off, true, false, yes, no, 1, 0 或这些东西的任意清晰无歧义的前缀。  内存单位：kB(千字节), MB(兆字节), GB(吉字节)；  时间单位：ms(毫秒), s(秒), min(分钟), h(小时), d(天)。  内存单位中的&amp;qu">
 <meta name="keywords" content="postgresql,database">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PostgreSQL查看及设置参数、单位、描述等信息">
 <meta property="og:url" content="https://emacsist.github.io/2014/12/26/PostgreSQL查看及设置参数、单位、描述等信息/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="注意123参数名：不区分大小写。参数值：布尔、整数、浮点数、字符串（大小写无关， 枚举参数值是不区分大小写的）布尔值可以是：on, off, true, false, yes, no, 1, 0 或这些东西的任意清晰无歧义的前缀。 123内存单位：kB(千字节), MB(兆字节), GB(吉字节)； 时间单位：ms(毫秒), s(秒), min(分钟), h(小时), d(天)。 内存单位中的&amp;q">
+<meta property="og:description" content="注意参数名：不区分大小写。 参数值：布尔、整数、浮点数、字符串（大小写无关， 枚举参数值是不区分大小写的） 布尔值可以是：on, off, true, false, yes, no, 1, 0 或这些东西的任意清晰无歧义的前缀。  内存单位：kB(千字节), MB(兆字节), GB(吉字节)；  时间单位：ms(毫秒), s(秒), min(分钟), h(小时), d(天)。  内存单位中的&amp;qu">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PostgreSQL查看及设置参数、单位、描述等信息">
-<meta name="twitter:description" content="注意123参数名：不区分大小写。参数值：布尔、整数、浮点数、字符串（大小写无关， 枚举参数值是不区分大小写的）布尔值可以是：on, off, true, false, yes, no, 1, 0 或这些东西的任意清晰无歧义的前缀。 123内存单位：kB(千字节), MB(兆字节), GB(吉字节)； 时间单位：ms(毫秒), s(秒), min(分钟), h(小时), d(天)。 内存单位中的&amp;q">
+<meta name="twitter:description" content="注意参数名：不区分大小写。 参数值：布尔、整数、浮点数、字符串（大小写无关， 枚举参数值是不区分大小写的） 布尔值可以是：on, off, true, false, yes, no, 1, 0 或这些东西的任意清晰无歧义的前缀。  内存单位：kB(千字节), MB(兆字节), GB(吉字节)；  时间单位：ms(毫秒), s(秒), min(分钟), h(小时), d(天)。  内存单位中的&amp;qu">
 
   
 
@@ -201,14 +201,20 @@
 
     <div class="article-content">
         
-                            <h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">参数名：不区分大小写。</div><div class="line">参数值：布尔、整数、浮点数、字符串（大小写无关， 枚举参数值是不区分大小写的）</div><div class="line">布尔值可以是：on, off, <span class="literal">true</span>, <span class="literal">false</span>, yes, no, 1, 0 或这些东西的任意清晰无歧义的前缀。</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">内存单位：kB(千字节), MB(兆字节), GB(吉字节)； </div><div class="line">时间单位：ms(毫秒), s(秒), min(分钟), h(小时), d(天)。 </div><div class="line">内存单位中的&quot;千&quot;是1024， 不是1000。</div></pre></td></tr></table></figure>
-<h2 id="查看参数的默认单位"><a href="#查看参数的默认单位" class="headerlink" title="查看参数的默认单位"></a>查看参数的默认单位</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select name, unit from pg_settings;</div></pre></td></tr></table></figure>
-<h2 id="查看参数允许的枚举"><a href="#查看参数允许的枚举" class="headerlink" title="查看参数允许的枚举"></a>查看参数允许的枚举</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select name, enumvals from pg_settings;</div></pre></td></tr></table></figure>
-<h2 id="设置参数"><a href="#设置参数" class="headerlink" title="设置参数"></a>设置参数</h2><p>方式一：在 postgresql.conf设置</p>
+                            <h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><pre><code class="bash">参数名：不区分大小写。
+参数值：布尔、整数、浮点数、字符串（大小写无关， 枚举参数值是不区分大小写的）
+布尔值可以是：on, off, true, false, yes, no, 1, 0 或这些东西的任意清晰无歧义的前缀。
+</code></pre>
+<pre><code>内存单位：kB(千字节), MB(兆字节), GB(吉字节)； 
+时间单位：ms(毫秒), s(秒), min(分钟), h(小时), d(天)。 
+内存单位中的&quot;千&quot;是1024， 不是1000。
+</code></pre><h2 id="查看参数的默认单位"><a href="#查看参数的默认单位" class="headerlink" title="查看参数的默认单位"></a>查看参数的默认单位</h2><pre><code>select name, unit from pg_settings;
+</code></pre><h2 id="查看参数允许的枚举"><a href="#查看参数允许的枚举" class="headerlink" title="查看参数允许的枚举"></a>查看参数允许的枚举</h2><pre><code>select name, enumvals from pg_settings;
+</code></pre><h2 id="设置参数"><a href="#设置参数" class="headerlink" title="设置参数"></a>设置参数</h2><p>方式一：在 postgresql.conf设置</p>
 <p>方式二：在启动时传递参数：postgres -c log_connections=yes -c log_destination=’syslog’</p>
-<h2 id="在-psql-里查看及设置参数"><a href="#在-psql-里查看及设置参数" class="headerlink" title="在 psql 里查看及设置参数"></a>在 psql 里查看及设置参数</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">查看：show postgresql.conf中的参数名;</div><div class="line">设置：set postgresql.conf中的参数名 TO 参数值 | set postgresql.conf中的参数名=参数值</div></pre></td></tr></table></figure>
-
+<h2 id="在-psql-里查看及设置参数"><a href="#在-psql-里查看及设置参数" class="headerlink" title="在 psql 里查看及设置参数"></a>在 psql 里查看及设置参数</h2><pre><code>查看：show postgresql.conf中的参数名;
+设置：set postgresql.conf中的参数名 TO 参数值 | set postgresql.conf中的参数名=参数值
+</code></pre>
                                 
     </div>
 </article>

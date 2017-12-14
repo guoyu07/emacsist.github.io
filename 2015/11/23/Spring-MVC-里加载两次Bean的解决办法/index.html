@@ -15,17 +15,17 @@
     <meta name="keywords" content="java,spring," />
   
 
-  <meta name="description" content="SpringMVC 里上下文的概念web.xml 里的配置 1234567891011121314151617181920212223242526272829303132&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&amp;lt;web-app xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;">
+  <meta name="description" content="SpringMVC 里上下文的概念web.xml 里的配置 &amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt; &amp;lt;web-app xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;          xmlns=&amp;quot;http://j">
 <meta name="keywords" content="java,spring">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spring MVC 里加载两次Bean的解决办法">
 <meta property="og:url" content="https://emacsist.github.io/2015/11/23/Spring-MVC-里加载两次Bean的解决办法/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="SpringMVC 里上下文的概念web.xml 里的配置 1234567891011121314151617181920212223242526272829303132&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&amp;lt;web-app xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;">
+<meta property="og:description" content="SpringMVC 里上下文的概念web.xml 里的配置 &amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt; &amp;lt;web-app xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;          xmlns=&amp;quot;http://j">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring MVC 里加载两次Bean的解决办法">
-<meta name="twitter:description" content="SpringMVC 里上下文的概念web.xml 里的配置 1234567891011121314151617181920212223242526272829303132&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&amp;lt;web-app xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;">
+<meta name="twitter:description" content="SpringMVC 里上下文的概念web.xml 里的配置 &amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt; &amp;lt;web-app xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;          xmlns=&amp;quot;http://j">
 
   
 
@@ -202,33 +202,140 @@
     <div class="article-content">
         
                             <h2 id="SpringMVC-里上下文的概念"><a href="#SpringMVC-里上下文的概念" class="headerlink" title="SpringMVC 里上下文的概念"></a>SpringMVC 里上下文的概念</h2><p><code>web.xml</code> 里的配置</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</div><div class="line">&lt;web-app xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></div><div class="line">         xmlns=<span class="string">"http://java.sun.com/xml/ns/javaee"</span></div><div class="line">         xsi:schemaLocation=<span class="string">"http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"</span></div><div class="line">         version=<span class="string">"2.5"</span>&gt;</div><div class="line">    &lt;display-name&gt;uniweibov2&lt;/display-name&gt;</div><div class="line"></div><div class="line"></div><div class="line">    &lt;listener&gt;</div><div class="line">        &lt;listener-class&gt;org.springframework.web.context.ContextLoaderListener&lt;/listener-class&gt;</div><div class="line">    &lt;/listener&gt;</div><div class="line"></div><div class="line">    &lt;context-param&gt;</div><div class="line">        &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;</div><div class="line">        &lt;param-value&gt;classpath:spring.xml&lt;/param-value&gt;</div><div class="line">    &lt;/context-param&gt;</div><div class="line"></div><div class="line">    &lt;servlet&gt;</div><div class="line">        &lt;servlet-name&gt;mvc-dispatcher&lt;/servlet-name&gt;</div><div class="line">        &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;</div><div class="line">        &lt;init-param&gt;</div><div class="line">            &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;</div><div class="line">            &lt;param-value&gt;classpath:spring-servlet.xml&lt;/param-value&gt;</div><div class="line">        &lt;/init-param&gt;</div><div class="line">        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;</div><div class="line">    &lt;/servlet&gt;</div><div class="line">    &lt;servlet-mapping&gt;</div><div class="line">        &lt;servlet-name&gt;mvc-dispatcher&lt;/servlet-name&gt;</div><div class="line">        &lt;url-pattern&gt;/&lt;/url-pattern&gt;</div><div class="line">    &lt;/servlet-mapping&gt;</div><div class="line"></div><div class="line">&lt;/web-app&gt;</div></pre></td></tr></table></figure>
+<pre><code class="bash">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;web-app xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+         xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot;
+         xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&quot;
+         version=&quot;2.5&quot;&gt;
+    &lt;display-name&gt;uniweibov2&lt;/display-name&gt;
+
+
+    &lt;listener&gt;
+        &lt;listener-class&gt;org.springframework.web.context.ContextLoaderListener&lt;/listener-class&gt;
+    &lt;/listener&gt;
+
+    &lt;context-param&gt;
+        &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+        &lt;param-value&gt;classpath:spring.xml&lt;/param-value&gt;
+    &lt;/context-param&gt;
+
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;mvc-dispatcher&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+            &lt;param-value&gt;classpath:spring-servlet.xml&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+    &lt;/servlet&gt;
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;mvc-dispatcher&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;/&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+
+&lt;/web-app&gt;
+</code></pre>
 <p>在SpringMVC里，有两种上下文。一种是：<code>Application Context</code>，还有一种是<code>Web Application Context</code>.</p>
-<h3 id="application-context-parent"><a href="#application-context-parent" class="headerlink" title="application context (parent)"></a>application context (parent)</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;listener&gt;</div><div class="line">    &lt;listener-class&gt;org.springframework.web.context.ContextLoaderListener&lt;/listener-class&gt;</div><div class="line">&lt;/listener&gt;</div><div class="line"></div><div class="line">&lt;context-param&gt;</div><div class="line">    &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;</div><div class="line">    &lt;param-value&gt;classpath:spring.xml&lt;/param-value&gt;</div><div class="line">&lt;/context-param&gt;</div></pre></td></tr></table></figure>
+<h3 id="application-context-parent"><a href="#application-context-parent" class="headerlink" title="application context (parent)"></a>application context (parent)</h3><pre><code class="bash">    &lt;listener&gt;
+        &lt;listener-class&gt;org.springframework.web.context.ContextLoaderListener&lt;/listener-class&gt;
+    &lt;/listener&gt;
+
+    &lt;context-param&gt;
+        &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+        &lt;param-value&gt;classpath:spring.xml&lt;/param-value&gt;
+    &lt;/context-param&gt;
+</code></pre>
 <p>这样的配置，就是在配置<code>application context</code>，也就是<code>parent application context</code></p>
-<h3 id="web-application-context-child"><a href="#web-application-context-child" class="headerlink" title="web application context (child)"></a>web application context (child)</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&lt;servlet&gt;</div><div class="line">        &lt;servlet-name&gt;mvc-dispatcher&lt;/servlet-name&gt;</div><div class="line">        &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;</div><div class="line">        &lt;init-param&gt;</div><div class="line">            &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;</div><div class="line">            &lt;param-value&gt;classpath:spring-servlet.xml&lt;/param-value&gt;</div><div class="line">        &lt;/init-param&gt;</div><div class="line">        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;</div><div class="line">    &lt;/servlet&gt;</div><div class="line">    &lt;servlet-mapping&gt;</div><div class="line">        &lt;servlet-name&gt;mvc-dispatcher&lt;/servlet-name&gt;</div><div class="line">        &lt;url-pattern&gt;/&lt;/url-pattern&gt;</div><div class="line">    &lt;/servlet-mapping&gt;</div></pre></td></tr></table></figure>
+<h3 id="web-application-context-child"><a href="#web-application-context-child" class="headerlink" title="web application context (child)"></a>web application context (child)</h3><pre><code class="bash">&lt;servlet&gt;
+        &lt;servlet-name&gt;mvc-dispatcher&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+            &lt;param-value&gt;classpath:spring-servlet.xml&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+    &lt;/servlet&gt;
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;mvc-dispatcher&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;/&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+</code></pre>
 <p>parent 是共享于 child的，也就是说，在parent中定义的东西，都可以在child中使用.</p>
 <h2 id="Bean加载两次的原因："><a href="#Bean加载两次的原因：" class="headerlink" title="Bean加载两次的原因："></a>Bean加载两次的原因：</h2><p>这是由于在这两个context里，配置的时候导致Spring扫描时，扫描并加载了两次Bean.</p>
 <p>例如，在这两个<code>spring.xml</code>和<code>spring-servlet.xml</code>配置文件里，都配置了:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;context:component-scan base-package=<span class="string">"xx.yy"</span> /&gt;</div></pre></td></tr></table></figure>
+<pre><code class="bash"> &lt;context:component-scan base-package=&quot;xx.yy&quot; /&gt;
+</code></pre>
 <p>这样子，就会导致Spring加载了两次上下文环境。</p>
 <h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h2><h3 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h3><p>只使用一个上下文环境。即Bean的定义，只放在一个配置文件里，让另一个配置文件为空,即如下:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</div><div class="line">&lt;beans xmlns=<span class="string">"http://www.springframework.org/schema/beans"</span></div><div class="line">	xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span> xmlns:context=<span class="string">"http://www.springframework.org/schema/context"</span></div><div class="line">	xmlns:task=<span class="string">"http://www.springframework.org/schema/task"</span> xmlns:aop=<span class="string">"http://www.springframework.org/schema/aop"</span></div><div class="line">	xmlns:tx=<span class="string">"http://www.springframework.org/schema/tx"</span> xmlns:p=<span class="string">"http://www.springframework.org/schema/p"</span></div><div class="line">	xmlns:mvc=<span class="string">"http://www.springframework.org/schema/mvc"</span></div><div class="line">	xsi:schemaLocation=<span class="string">"</span></div><div class="line">			http://www.springframework.org/schema/beans</div><div class="line">			http://www.springframework.org/schema/beans/spring-beans-3.2.xsd</div><div class="line">			http://www.springframework.org/schema/context</div><div class="line">			http://www.springframework.org/schema/context/spring-context-3.2.xsd</div><div class="line">			http://www.springframework.org/schema/task</div><div class="line">			http://www.springframework.org/schema/task/spring-task-3.2.xsd</div><div class="line">			http://www.springframework.org/schema/aop</div><div class="line">			http://www.springframework.org/schema/aop/spring-aop-3.2.xsd</div><div class="line">			http://www.springframework.org/schema/tx</div><div class="line">			http://www.springframework.org/schema/tx/spring-tx-3.2.xsd</div><div class="line">			http://www.springframework.org/schema/mvc</div><div class="line">			http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd"&gt;</div><div class="line"></div><div class="line">&lt;/beans&gt;</div></pre></td></tr></table></figure>
+<pre><code class="bash">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+    xmlns:task=&quot;http://www.springframework.org/schema/task&quot; xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot;
+    xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot; xmlns:p=&quot;http://www.springframework.org/schema/p&quot;
+    xmlns:mvc=&quot;http://www.springframework.org/schema/mvc&quot;
+    xsi:schemaLocation=&quot;
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-3.2.xsd
+            http://www.springframework.org/schema/task
+            http://www.springframework.org/schema/task/spring-task-3.2.xsd
+            http://www.springframework.org/schema/aop
+            http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+            http://www.springframework.org/schema/tx
+            http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+            http://www.springframework.org/schema/mvc
+            http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd&quot;&gt;
+
+&lt;/beans&gt;
+</code></pre>
 <p>这两个，只要一个为空，另一个不为空即可.</p>
 <h3 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h3><p>在这两个配置文件里，只是没有配置重复的内容即可.即如果在parent里定义了的Bean，就不要在child里定义了。这时，可以使用如下的方式来配置：</p>
 <p>在<code>spring.xml</code>里配置:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;context:annotation-config /&gt;</div><div class="line">   &lt;context:component-scan base-package=<span class="string">"xx.yy"</span>&gt;</div><div class="line">       &lt;context:exclude-filter <span class="built_in">type</span>=<span class="string">"annotation"</span> expression=<span class="string">"org.springframework.stereotype.Controller"</span>/&gt;</div><div class="line">   &lt;/context:component-scan&gt;</div></pre></td></tr></table></figure>
+<pre><code class="bash">    &lt;context:annotation-config /&gt;
+    &lt;context:component-scan base-package=&quot;xx.yy&quot;&gt;
+        &lt;context:exclude-filter type=&quot;annotation&quot; expression=&quot;org.springframework.stereotype.Controller&quot;/&gt;
+    &lt;/context:component-scan&gt;
+</code></pre>
 <p>这样子，就表明扫描除了有<code>@Controller</code>之外的所有注解的Bean.</p>
 <p>在<code>spring-servlet.xml</code>里配置:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;mvc:annotation-driven /&gt;</div><div class="line">&lt;!-- Scans <span class="keyword">for</span> annotated @Controllers <span class="keyword">in</span> the classpath --&gt;</div><div class="line">&lt;context:component-scan base-package=<span class="string">"xx.yy"</span> use-default-filters=<span class="string">"false"</span>&gt;</div><div class="line">  	    &lt;context:include-filter <span class="built_in">type</span>=<span class="string">"annotation"</span> expression=<span class="string">"org.springframework.stereotype.Controller"</span>/&gt;</div><div class="line">&lt;/context:component-scan</div></pre></td></tr></table></figure>
+<pre><code class="bash">    &lt;mvc:annotation-driven /&gt;
+    &lt;!-- Scans for annotated @Controllers in the classpath --&gt;
+    &lt;context:component-scan base-package=&quot;xx.yy&quot; use-default-filters=&quot;false&quot;&gt;
+           &lt;context:include-filter type=&quot;annotation&quot; expression=&quot;org.springframework.stereotype.Controller&quot;/&gt;
+    &lt;/context:component-scan
+</code></pre>
 <p>这样子，就表明只扫描<code>@Controller</code>注解的Bean.注意这里的<code>user-default-filters=&quot;false&quot;</code></p>
 <h2 id="包扫描详解"><a href="#包扫描详解" class="headerlink" title="包扫描详解"></a>包扫描详解</h2><p><code>&lt;context:component-scan base-package=&quot;xx.yy&quot; use-default-filters=&quot;false&quot;&gt;</code></p>
 <p><code>base-package</code>：要扫描的包<br><code>use-default-filters</code>：是否使用默认的过滤器，默认为<code>true</code>，即扫描<code>@Component, @Repository, @Service, @Controller</code>这些注解的Bean<br><code>context:include-filter</code>：使用白名单过滤器<br><code>context:exclude-filter</code>：使用黑名单过滤器</p>
 <p>Spring 的使用顺序是： 先 <code>exclude-filter</code>，再到<code>include-filter</code>。</p>
 <p>在源码<code>org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider</code>的方法里:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">protected boolean isCandidateComponent(MetadataReader metadataReader) throws IOException &#123;</div><div class="line">	<span class="keyword">for</span> (TypeFilter tf : this.excludeFilters) &#123;</div><div class="line">		<span class="keyword">if</span> (tf.match(metadataReader, this.metadataReaderFactory)) &#123;</div><div class="line">			<span class="built_in">return</span> <span class="literal">false</span>;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">for</span> (TypeFilter tf : this.includeFilters) &#123;</div><div class="line">		<span class="keyword">if</span> (tf.match(metadataReader, this.metadataReaderFactory)) &#123;</div><div class="line">			AnnotationMetadata metadata = metadataReader.getAnnotationMetadata();</div><div class="line">			<span class="keyword">if</span> (!metadata.isAnnotated(Profile.class.getName())) &#123;</div><div class="line">				<span class="built_in">return</span> <span class="literal">true</span>;</div><div class="line">			&#125;</div><div class="line">			AnnotationAttributes profile = MetadataUtils.attributesFor(metadata, Profile.class);</div><div class="line">			<span class="built_in">return</span> this.environment.acceptsProfiles(profile.getStringArray(<span class="string">"value"</span>));</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="built_in">return</span> <span class="literal">false</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="bash">    protected boolean isCandidateComponent(MetadataReader metadataReader) throws IOException {
+        for (TypeFilter tf : this.excludeFilters) {
+            if (tf.match(metadataReader, this.metadataReaderFactory)) {
+                return false;
+            }
+        }
+        for (TypeFilter tf : this.includeFilters) {
+            if (tf.match(metadataReader, this.metadataReaderFactory)) {
+                AnnotationMetadata metadata = metadataReader.getAnnotationMetadata();
+                if (!metadata.isAnnotated(Profile.class.getName())) {
+                    return true;
+                }
+                AnnotationAttributes profile = MetadataUtils.attributesFor(metadata, Profile.class);
+                return this.environment.acceptsProfiles(profile.getStringArray(&quot;value&quot;));
+            }
+        }
+        return false;
+    }
+</code></pre>
 <p>type的类型还有:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">type</span>=`annotation`</div><div class="line"><span class="built_in">type</span>=`assignable`</div><div class="line"><span class="built_in">type</span>=`aspectj`</div><div class="line"><span class="built_in">type</span>=`regex`</div><div class="line"><span class="built_in">type</span>=`custom`</div></pre></td></tr></table></figure>
+<pre><code class="bash">type=`annotation`
+type=`assignable`
+type=`aspectj`
+type=`regex`
+type=`custom`
+</code></pre>
 
                                 
     </div>

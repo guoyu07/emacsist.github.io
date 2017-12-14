@@ -213,13 +213,21 @@
 <h2 id="什么是索引"><a href="#什么是索引" class="headerlink" title="什么是索引"></a>什么是索引</h2><p>索引是对记录按照多个字段进行排序的一种方式。对表中的某个字段建立索引会创建另一种数据结构，其中保存着字段的值，每个值又指向与它相关的记录。这种索引的数据结构是经过排序的，因而可以对其执行二分查找。</p>
 <p>索引的缺点是占用额外的磁盘空间。因为索引保存在MyISAM数据库中，所以如果为同一个表中的很多字段都建立索引，那这个文件可能会很快膨胀到文件系统规定的上限。</p>
 <h2 id="索引的原理"><a href="#索引的原理" class="headerlink" title="索引的原理"></a>索引的原理</h2><p>首先，来看一个示例数据库表的模式：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">字段名              数据类型         在磁盘上的大小</div><div class="line">id (Primary key)   Unsigned INT     4 字节</div><div class="line">firstName          Char(50)         50 字节</div><div class="line">lastName           Char(50)         50 字节</div><div class="line">emailAddress       Char(100)        100 字节</div></pre></td></tr></table></figure>
+<pre><code class="bash">字段名              数据类型         在磁盘上的大小
+id (Primary key)   Unsigned INT     4 字节
+firstName          Char(50)         50 字节
+lastName           Char(50)         50 字节
+emailAddress       Char(100)        100 字节
+</code></pre>
 <p>注意：这里用<code>char</code>而不用<code>varchar</code>是为了精确地描述数据占用磁盘的大小。这个示例数据库中包含500万行记录，而且没有建立索引。接下来我们就分析针对这个表的两个查询：一个查询使用<code>id</code>（经过排序的键字段），另一个查询使用<code>firstName</code>（未经排序的非键字段）。</p>
 <h2 id="示例分析一"><a href="#示例分析一" class="headerlink" title="示例分析一"></a>示例分析一</h2><p>对于这个拥有r = 5 000 000条记录的示例数据库，在磁盘上要为每条记录分配 R = 204字节的固定存储空间。这个表保存在MyISAM数据库中，而这个数据库默认的数据库块大小为 B = 1024字节。于是，我们可计算出这个表的分块因数为 bfr = (B/R) = 1024/204 = 5，即磁盘上每个数据块保存5条记录。那么，保存整个表所需的数据块数就是 N = (r/bfr) = 5000000/5 = 1 000 000。</p>
 <p>使用线性查找搜索id字段——这个字段是键字段（每个字段的值唯一），需要访问 N/2 ＝ 500 000个数据块才能找到目标值。不过，因为这个字段是经过排序的，所以可以使用二分查找法，而这样平均只需要访问log2 1000000 = 19.93 = 20 个块。显然，这会给性能带来极大的提升。</p>
 <p>再来看看firstName字段，这个字段是未经排序的，因此不可能使用二分查找，况且这个字段的值也不是唯一的，所以要从表的开头查找末尾，即要访问 N = 1 000 000个数据块。这种情况通过建立索引就能得到改善。</p>
-<p>如果一条索引记录只包含索引字段和一个指向原始记录的指针，那么这条记录肯定要比它所指向的包含更多字段的记录更小。也就是说，索引本身占用的磁盘空间比原来的表更少，因此需要遍历的数据块数也比搜索原来的表更少。以下是firstName字段索引的模式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">字段名         数据类型        在磁盘上的大小</div><div class="line">firstName     Char(50)        50 字节</div><div class="line">（记录指针）    Special         4 字节</div></pre></td></tr></table></figure></p>
-<p>注意：在MySQL中，根据表的大小，指针的大小可能是2、3、4或5字节。</p>
+<p>如果一条索引记录只包含索引字段和一个指向原始记录的指针，那么这条记录肯定要比它所指向的包含更多字段的记录更小。也就是说，索引本身占用的磁盘空间比原来的表更少，因此需要遍历的数据块数也比搜索原来的表更少。以下是firstName字段索引的模式：</p>
+<pre><code>字段名         数据类型        在磁盘上的大小
+firstName     Char(50)        50 字节
+（记录指针）    Special         4 字节
+</code></pre><p>注意：在MySQL中，根据表的大小，指针的大小可能是2、3、4或5字节。</p>
 <h2 id="示例分析二"><a href="#示例分析二" class="headerlink" title="示例分析二"></a>示例分析二</h2><p>对于这个拥有r = 5 000 000条记录的示例数据库，每条索引记录要占用 R = 54字节磁盘空间，而且同样使用默认的数据块大小 B = 1024字节。那么索引的分块因数就是 bfr = (B/R) = 1024/54 = 18。最终这个表的索引需要占用 N = (r/bfr) = 5000000/18 = 277 778个数据块。</p>
 <p>现在，再搜索firstName字段就可以使用索引来提高性能了。对索引使用二分查找，需要访问 log2 277778 = 18.09 = 19个数据块。再加上为找到实际记录的地址还要访问一个数据块，总共要访问 19 + 1 = 20个数据块，这与搜索未索引的表需要访问277 778个数据块相比，不啻于天壤之别。</p>
 <h2 id="什么时候用索引"><a href="#什么时候用索引" class="headerlink" title="什么时候用索引"></a>什么时候用索引</h2><p>创建索引要额外占用磁盘空间（比如，上面例子中要额外占用277 778个数据块），建立的索引太多可能导致磁盘空间不足。因此，在建立索引时，一定要慎重选择正确的字段。</p>

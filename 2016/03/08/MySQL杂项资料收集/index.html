@@ -223,9 +223,13 @@
 <p>要点就是：如果数据库必须在table列进行转换，那么就不能利用到索引.</p>
 <p>除此之外，数据库总是从<code>string</code>转换为<code>number</code>，因为这是确定性的。（不然，数字1可以被转换为字符串<code>&#39;01&#39;</code>, <code>&#39;001&#39;</code>）.<br>所以，我们可以看以以下同两条SQL:</p>
 </blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">-- index is used</div><div class="line">EXPLAIN SELECT * FROM a_table WHERE int_column = <span class="string">'1'</span>;</div></pre></td></tr></table></figure>
+<pre><code class="bash">-- index is used
+EXPLAIN SELECT * FROM a_table WHERE int_column = &#39;1&#39;;
+</code></pre>
 <p>数据库转换<code>&#39;1&#39;</code>到数字<code>1</code>，然后执行这条SQL。最终，在比较符两边都是int，所以，它可以利用到索引.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">-- index is NOT used. WTF?</div><div class="line">EXPLAIN SELECT * FROM a_table WHERE str_column = 1;</div></pre></td></tr></table></figure>
+<pre><code class="bash">-- index is NOT used. WTF?
+EXPLAIN SELECT * FROM a_table WHERE str_column = 1;
+</code></pre>
 <p>再次，它又将<code>string</code>转换为<code>numbers</code>。然而，这次，它必须将表列的数据进行转换。事实上，你就像执行类似 <code>cast(str_column as int) = 1</code>的查询。这意味着，你不能再通过索引来查询了，所以不能使用到索引。</p>
 
                                 

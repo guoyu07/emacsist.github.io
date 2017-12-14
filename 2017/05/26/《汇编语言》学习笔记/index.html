@@ -218,7 +218,8 @@
 <li>写： CPu -&gt; 地址总线：3号地址 -&gt; 控制总线信息：写 -&gt; CPU通过数据总线发送要写的数据给内存的3号单元</li>
 </ul>
 <h2 id="命令计算机读写"><a href="#命令计算机读写" class="headerlink" title="命令计算机读写"></a>命令计算机读写</h2><p>即机器码就是驱动CPU来进行读写的，例如：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">MOV AX, [3]</div></pre></td></tr></table></figure>
+<pre><code class="bash">MOV AX, [3]
+</code></pre>
 <p>表示传送3号单元的内容到AX</p>
 <h2 id="地址总线"><a href="#地址总线" class="headerlink" title="地址总线"></a>地址总线</h2><p>CPU是通过地址总线来指定存储单元的，可见地址总线上能传送多少个不同的信息，CPU就可以对多少个存储单元进行寻址。（即 CPU 的寻址单位是：一个存储单元，即一个字节）</p>
 <p>一个CPU有N根地址线，则可以说这个CPU的地址总线的宽度为N。这样的CPU最多可以寻找2^N次方个内存单元（即 2^N 个字节，注意，不是位）</p>
@@ -287,7 +288,8 @@
 </ol>
 <p>地址加法器采用： <em>物理地址=段地址 </em> 16 + 偏移地址* (即段地址左移4位) 的方法来合成物理地址。</p>
 <h2 id="段地址-16-偏移地址-物理地址-的本质含义"><a href="#段地址-16-偏移地址-物理地址-的本质含义" class="headerlink" title="段地址 * 16 + 偏移地址 = 物理地址 的本质含义"></a>段地址 * 16 + 偏移地址 = 物理地址 的本质含义</h2><p>即：CPU在访问内存时，用一个基础地址（段地址 <em> 16）和一个相对于基础地址的偏移地址相加，给出内存单元的 </em>物理地址* 。即：CPU在访问内存时</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">基础地址 + 偏移地址 = 物理地址</div></pre></td></tr></table></figure>
+<pre><code class="bash">基础地址 + 偏移地址 = 物理地址
+</code></pre>
 <p>为什么需要 <em>段地址 </em> 16* 呢？这是因为需要进一位，然后在此基础上再加上偏移地址，这才是正确的物理地址。（这是 8086 CPU 对地址计算的约定）</p>
 <h2 id="段寄存器"><a href="#段寄存器" class="headerlink" title="段寄存器"></a>段寄存器</h2><p>8086 CPU有四个段寄存器： CS, DS, SS, ES </p>
 <p>段地址在 8086 CPU中由段寄存器存放</p>
@@ -304,9 +306,11 @@
 <h2 id="修改CS，IP的指令"><a href="#修改CS，IP的指令" class="headerlink" title="修改CS，IP的指令"></a>修改CS，IP的指令</h2><p>程序员能够用指令读写的部件只有寄存器，可以通过改变寄存器中的内容实现对CPU的控制。CPU从何处执行指令，是由CS，IP中的内容决定的，程序员可以通过改变CS，IP中的内容来控制CPU执行目标指令。</p>
 <p>能够改变 CS，IP 的内容的指令被统称为 <em>转移指令</em> ，比如 JMP 指令。</p>
 <p>同时改变CS和IP：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jmp 段地址:偏移地址</div></pre></td></tr></table></figure>
+<pre><code class="bash">jmp 段地址:偏移地址
+</code></pre>
 <p>只改变IP：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jmp 某一合法寄存器</div></pre></td></tr></table></figure>
+<pre><code class="bash">jmp 某一合法寄存器
+</code></pre>
 <p>对于CPU来说，它只认为 CS:IP 指向的内存单元中的内容为指令。</p>
 <h2 id="Windows下的-Debug-工具"><a href="#Windows下的-Debug-工具" class="headerlink" title="Windows下的 Debug 工具"></a>Windows下的 Debug 工具</h2><ul>
 <li>R: 查看、改变CPU寄存器的内容. <em>r 寄存器</em> 回车，然后输入值，再回车即可修改 <em>寄存器</em> 的值</li>
@@ -321,8 +325,10 @@
 <h2 id="DS和-address"><a href="#DS和-address" class="headerlink" title="DS和[address]"></a>DS和[address]</h2><p>8086CPU中，内存地址=段地址+偏移地址 组成。 DS 寄存器通常用来存放要访问数据的段地址。[…] 表示一个内存单元、表示内存单元的偏移地址。</p>
 <p>8086CPU中，自动取 DS 中的数据为内存单元的段地址。</p>
 <p>MOV 指令中的 <em>[]</em> 说明操作对象是一个内存单元。<em>[]</em> 中的0，说明这个内存单元的偏移地址是0，它的段地址默认放在 DS 中。</p>
-<h2 id="内存的读写"><a href="#内存的读写" class="headerlink" title="内存的读写"></a>内存的读写</h2><h3 id="读"><a href="#读" class="headerlink" title="读"></a>读</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">MOV 寄存器, [内存单元地址]</div></pre></td></tr></table></figure>
-<h3 id="写"><a href="#写" class="headerlink" title="写"></a>写</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">MOV [内存单元地址]，寄存器</div></pre></td></tr></table></figure>
+<h2 id="内存的读写"><a href="#内存的读写" class="headerlink" title="内存的读写"></a>内存的读写</h2><h3 id="读"><a href="#读" class="headerlink" title="读"></a>读</h3><pre><code class="bash">MOV 寄存器, [内存单元地址]
+</code></pre>
+<h3 id="写"><a href="#写" class="headerlink" title="写"></a>写</h3><pre><code class="bash">MOV [内存单元地址]，寄存器
+</code></pre>
 <h2 id="数据段"><a href="#数据段" class="headerlink" title="数据段"></a>数据段</h2><p>将一段内存当作数据段，是我们在编程时的一种安排，可以在具体操作的时候，用 DS 存放数据段的段地址，再根据需要，用相关指令访问数据段中的具体单元。</p>
 <h2 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h2><p>LIFO（Last In First Out ，后进先出）</p>
 <h2 id="CPU提供的栈机制"><a href="#CPU提供的栈机制" class="headerlink" title="CPU提供的栈机制"></a>CPU提供的栈机制</h2><p>8086CPU中提供了相关的指令来以栈的方式访问内存空间。</p>
@@ -363,11 +369,15 @@
 </blockquote>
 <h1 id="第四章：第一个程序"><a href="#第四章：第一个程序" class="headerlink" title="第四章：第一个程序"></a>第四章：第一个程序</h1><h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><p>默认的源码后缀为 <em>.asm</em> ，非这个后缀的，则要写全文件名，包括后缀。</p>
 <p>假设源文件为： <em>c:\hello.asm</em></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">masm c:\hello;</div></pre></td></tr></table></figure>
-<h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">link hello;</div></pre></td></tr></table></figure>
-<h2 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">debug hello.exe</div></pre></td></tr></table></figure>
+<pre><code class="bash">masm c:\hello;
+</code></pre>
+<h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><pre><code class="bash">link hello;
+</code></pre>
+<h2 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h2><pre><code class="bash">debug hello.exe
+</code></pre>
 <p>注意，要 <em>hello.exe</em> 是要全名的，不能省略 <em>.exe</em></p>
-<h2 id="整个过程"><a href="#整个过程" class="headerlink" title="整个过程"></a>整个过程</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">编程 -&gt; 1.asm -&gt; 编译（masm) -&gt; 1.obj -&gt; 链接(link) -&gt; 1.exe -&gt; 加载（<span class="built_in">command</span>) -&gt; 内存中的程序 -&gt; 运行(CPU)</div></pre></td></tr></table></figure>
+<h2 id="整个过程"><a href="#整个过程" class="headerlink" title="整个过程"></a>整个过程</h2><pre><code class="bash">编程 -&gt; 1.asm -&gt; 编译（masm) -&gt; 1.obj -&gt; 链接(link) -&gt; 1.exe -&gt; 加载（command) -&gt; 内存中的程序 -&gt; 运行(CPU)
+</code></pre>
 <h3 id="DOS-的加载过程"><a href="#DOS-的加载过程" class="headerlink" title="DOS 的加载过程"></a>DOS 的加载过程</h3><ol>
 <li>找到一段起始地址为： SA:0000（即起始地址的偏移地址为0）的容量足够的空闲内存区</li>
 <li>在这段内存区的前 256 个字节中，创建一个称为程序段前缀（PSP）的数据区， DOS 要利用 PSP 来和被加载程序进行通信</li>
@@ -381,7 +391,11 @@
 <li>这个内存区的前 256 个字节中存放的是 <em>PSP</em> ， DOS 用来和程序进行通信。从 256 字节处向后的空间存放的是程序</li>
 </ol>
 <p>所以， 从 DS 中可以得到 PSP 的段地址 SA， PSP 的偏移地址为 0，则物理地址为 SA * 16 + 0<br>因为 PSP 占 256 （100H）字节，所以程序的物理地址为：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">SA * 16 + 0 + 256 = SA * 16 + 16 * 16 + 0 = (SA+16) * 16 + 0</div><div class="line"></div><div class="line">用段地址和偏移地址表示为：</div><div class="line">SA + 10H:0</div></pre></td></tr></table></figure>
+<pre><code class="bash">SA * 16 + 0 + 256 = SA * 16 + 16 * 16 + 0 = (SA+16) * 16 + 0
+
+用段地址和偏移地址表示为：
+SA + 10H:0
+</code></pre>
 <h2 id="单任务执行过程"><a href="#单任务执行过程" class="headerlink" title="单任务执行过程"></a>单任务执行过程</h2><ol>
 <li>由其他程序（debug, command或其他程序），将可执行文件中的程序加载入内存</li>
 <li>设置 CS:IP 指向程序的第一条要执行的指令（即程序的入口），从而使程序得以运行</li>
@@ -402,16 +416,30 @@
 <p>汇编源程序中，数据不能以字母开头</p>
 </blockquote>
 <h2 id="debug-中的-G-命令"><a href="#debug-中的-G-命令" class="headerlink" title="debug 中的 G 命令"></a>debug 中的 G 命令</h2><p>它可以让 CPU 一直执行到指定的地址中为止:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">G 0012</div></pre></td></tr></table></figure>
+<pre><code class="bash">G 0012
+</code></pre>
 <p>即将程序执行到 IP 地址为 0012H 的地方</p>
 <h2 id="debug-中的-P-命令"><a href="#debug-中的-P-命令" class="headerlink" title="debug 中的 P 命令"></a>debug 中的 P 命令</h2><p>它会自动重复执行循环中的指令，直到 CX = 0 为止 。即在 CS:IP 指向 <em>loop xxx</em> 时，输入 <em>p</em> 命令即可。</p>
 <p>当然，也可以用 G 命令来间接实现这个目的</p>
 <h2 id="debug-和汇编器-masm-对指令的不同处理"><a href="#debug-和汇编器-masm-对指令的不同处理" class="headerlink" title="debug 和汇编器 masm 对指令的不同处理"></a>debug 和汇编器 masm 对指令的不同处理</h2><p>debug 中: </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mov ax, [0]</div><div class="line"></div><div class="line">它表示将 ds:0 处的数据送入 ax 中</div></pre></td></tr></table></figure>
+<pre><code class="bash">mov ax, [0]
+
+它表示将 ds:0 处的数据送入 ax 中
+</code></pre>
 <p>masm 源代码中：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mov ax,[0]</div><div class="line"></div><div class="line">编译后，生成的是 </div><div class="line">mov ax, 0</div></pre></td></tr></table></figure>
+<pre><code class="bash">mov ax,[0]
+
+编译后，生成的是 
+mov ax, 0
+</code></pre>
 <p>所以，在 masm 这样子的要显式出给段地址:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">mov ax, ds:[0]</div><div class="line"></div><div class="line">或</div><div class="line"></div><div class="line">mov ax, [bx]</div><div class="line">这样子它就会默认是 DS:[bx] 了</div></pre></td></tr></table></figure>
+<pre><code class="bash">mov ax, ds:[0]
+
+或
+
+mov ax, [bx]
+这样子它就会默认是 DS:[bx] 了
+</code></pre>
 <h2 id="一段安全的空间"><a href="#一段安全的空间" class="headerlink" title="一段安全的空间"></a>一段安全的空间</h2><p>不能确定一段内存空间中是否存放着重要的数据或代码的时候，不能随意向其中写入内容。</p>
 <p>不要忘记，我们是在操作系统的环境中工作，操作系统管理所有的资源，也包括内存。如果我们需要向内存空间写入数据的话，要使用操作系统给我们分配的空间，而不应直接用地址任意指定内存单元，向里面写入。</p>
 <p>在CPU保护模式下的操作系统(Windows 2000, Unix)中，硬件已经被这些操作系统利用CPU保护模式所提供的功能全面而严格地管理了。</p>
@@ -426,11 +454,76 @@
 <li>程序来自于源程序中的汇编指令和定义的数据</li>
 <li>描述信息则主要是编译、连接程序对源程序中相关伪指令进行处理所得到的信息</li>
 </ul>
-<h2 id="只用一个段来写代码"><a href="#只用一个段来写代码" class="headerlink" title="只用一个段来写代码"></a>只用一个段来写代码</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">assume cs:code</div><div class="line"></div><div class="line">code segment</div><div class="line">   ...</div><div class="line">   数据</div><div class="line">   ...</div><div class="line"></div><div class="line">start:</div><div class="line">   ...</div><div class="line">   代码</div><div class="line">   ...</div><div class="line">code ends</div><div class="line"></div><div class="line">end start</div></pre></td></tr></table></figure>
-<h2 id="多段"><a href="#多段" class="headerlink" title="多段"></a>多段</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">assume cs:code, ds:data, ss:stack</div><div class="line"></div><div class="line">data segment</div><div class="line">    dw 0123h, 0456h, 0789h, 0abch, 0defh, 0fedh, 0cbah, 0987h</div><div class="line">data ends</div><div class="line"></div><div class="line">stack segment</div><div class="line">    dw 0,0,0,0,0,0,0,0,0,0</div><div class="line">stack ends</div><div class="line"></div><div class="line"></div><div class="line">code segment</div><div class="line"></div><div class="line">start:</div><div class="line">    mov ax, stack</div><div class="line">    mov ss, ax</div><div class="line">    mov sp, 20h</div><div class="line">    mov ax, data</div><div class="line">    mov ds, ax</div><div class="line">    mov bx, 0</div><div class="line">    mov cx, 8</div><div class="line"></div><div class="line">s:  </div><div class="line">    push [bx]</div><div class="line">    add bx, 2</div><div class="line">    loop s</div><div class="line"></div><div class="line">    mov bx,0</div><div class="line">    mov cx,8</div><div class="line"></div><div class="line">s0:</div><div class="line">    pop [bx]</div><div class="line">    add bx,2</div><div class="line">    loop s0</div><div class="line"></div><div class="line"></div><div class="line">    mov ax, 4c00</div><div class="line">    int 21h</div><div class="line"></div><div class="line">code ends</div><div class="line"></div><div class="line">end start</div></pre></td></tr></table></figure>
-<h1 id="第七章：更灵活的定位内存地址的方法"><a href="#第七章：更灵活的定位内存地址的方法" class="headerlink" title="第七章：更灵活的定位内存地址的方法"></a>第七章：更灵活的定位内存地址的方法</h1><h2 id="and-和-or-指令"><a href="#and-和-or-指令" class="headerlink" title="and 和 or 指令"></a>and 和 or 指令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mov al,01100011B</div><div class="line">add al,00111011B</div><div class="line"></div><div class="line">or al,00111011B</div></pre></td></tr></table></figure>
+<h2 id="只用一个段来写代码"><a href="#只用一个段来写代码" class="headerlink" title="只用一个段来写代码"></a>只用一个段来写代码</h2><pre><code class="bash">assume cs:code
+
+code segment
+   ...
+   数据
+   ...
+
+start:
+   ...
+   代码
+   ...
+code ends
+
+end start
+</code></pre>
+<h2 id="多段"><a href="#多段" class="headerlink" title="多段"></a>多段</h2><pre><code class="bash">assume cs:code, ds:data, ss:stack
+
+data segment
+    dw 0123h, 0456h, 0789h, 0abch, 0defh, 0fedh, 0cbah, 0987h
+data ends
+
+stack segment
+    dw 0,0,0,0,0,0,0,0,0,0
+stack ends
+
+
+code segment
+
+start:
+    mov ax, stack
+    mov ss, ax
+    mov sp, 20h
+    mov ax, data
+    mov ds, ax
+    mov bx, 0
+    mov cx, 8
+
+s:  
+    push [bx]
+    add bx, 2
+    loop s
+
+    mov bx,0
+    mov cx,8
+
+s0:
+    pop [bx]
+    add bx,2
+    loop s0
+
+
+    mov ax, 4c00
+    int 21h
+
+code ends
+
+end start
+</code></pre>
+<h1 id="第七章：更灵活的定位内存地址的方法"><a href="#第七章：更灵活的定位内存地址的方法" class="headerlink" title="第七章：更灵活的定位内存地址的方法"></a>第七章：更灵活的定位内存地址的方法</h1><h2 id="and-和-or-指令"><a href="#and-和-or-指令" class="headerlink" title="and 和 or 指令"></a>and 和 or 指令</h2><pre><code class="bash">mov al,01100011B
+add al,00111011B
+
+or al,00111011B
+</code></pre>
 <h2 id="bx-idata"><a href="#bx-idata" class="headerlink" title="[bx+idata]"></a>[bx+idata]</h2><p>[bx+idata] 表示一个内存单元，它的偏移地址为 [bx] + idata 。也可以写成如下格式:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">mov ax, [200+bx]</div><div class="line">或</div><div class="line">mov ax, 200[bx]</div><div class="line">或</div><div class="line">mov ax, [bx].200</div></pre></td></tr></table></figure>
+<pre><code class="bash">mov ax, [200+bx]
+或
+mov ax, 200[bx]
+或
+mov ax, [bx].200
+</code></pre>
 <h2 id="SI-和-DI"><a href="#SI-和-DI" class="headerlink" title="SI 和 DI"></a>SI 和 DI</h2><p>它们和 BX 功能相近。但 SI 和 DI 不能够分成两个8位寄存器来使用。</p>
 <h2 id="bx-si-和-bx-di"><a href="#bx-si-和-bx-di" class="headerlink" title="[bx+si] 和 [bx+di]"></a>[bx+si] 和 [bx+di]</h2><p>指明内存单元:</p>
 <ul>
@@ -466,14 +559,34 @@
 <li>内存</li>
 <li>端口</li>
 </ol>
-<h2 id="数据位置的表达"><a href="#数据位置的表达" class="headerlink" title="数据位置的表达"></a>数据位置的表达</h2><h3 id="立即数"><a href="#立即数" class="headerlink" title="立即数"></a>立即数</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mov ax, 1</div></pre></td></tr></table></figure>
-<h3 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mov ax, bx</div></pre></td></tr></table></figure>
-<h3 id="段地址（SA）和偏移地址（EA）"><a href="#段地址（SA）和偏移地址（EA）" class="headerlink" title="段地址（SA）和偏移地址（EA）"></a>段地址（SA）和偏移地址（EA）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mov ax, [0]</div></pre></td></tr></table></figure>
-<h2 id="寻址方式-1"><a href="#寻址方式-1" class="headerlink" title="寻址方式"></a>寻址方式</h2><h3 id="直接寻址"><a href="#直接寻址" class="headerlink" title="直接寻址"></a>直接寻址</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[idata]</div></pre></td></tr></table></figure>
-<h3 id="寄存器间接寻址"><a href="#寄存器间接寻址" class="headerlink" title="寄存器间接寻址"></a>寄存器间接寻址</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[bx]</div><div class="line">[si]</div><div class="line">[di]</div><div class="line">[bp]</div></pre></td></tr></table></figure>
-<h3 id="寄存器相对寻址"><a href="#寄存器相对寻址" class="headerlink" title="寄存器相对寻址"></a>寄存器相对寻址</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[bx+idata]</div><div class="line">[si+idata]</div><div class="line">[di+idata]</div><div class="line">[bp+idata]</div></pre></td></tr></table></figure>
-<h3 id="基址变址寻址"><a href="#基址变址寻址" class="headerlink" title="基址变址寻址"></a>基址变址寻址</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[bx+si]</div><div class="line">[bx+di]</div><div class="line">[bp+si]</div><div class="line">[bp+di]</div></pre></td></tr></table></figure>
-<h3 id="相对基址变址寻址"><a href="#相对基址变址寻址" class="headerlink" title="相对基址变址寻址"></a>相对基址变址寻址</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[bx+si+idata]</div><div class="line">[bx+di+idata]</div><div class="line">[bx+si+idata]</div><div class="line">[bp+di+idata]</div></pre></td></tr></table></figure>
+<h2 id="数据位置的表达"><a href="#数据位置的表达" class="headerlink" title="数据位置的表达"></a>数据位置的表达</h2><h3 id="立即数"><a href="#立即数" class="headerlink" title="立即数"></a>立即数</h3><pre><code class="bash">mov ax, 1
+</code></pre>
+<h3 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h3><pre><code class="bash">mov ax, bx
+</code></pre>
+<h3 id="段地址（SA）和偏移地址（EA）"><a href="#段地址（SA）和偏移地址（EA）" class="headerlink" title="段地址（SA）和偏移地址（EA）"></a>段地址（SA）和偏移地址（EA）</h3><pre><code class="bash">mov ax, [0]
+</code></pre>
+<h2 id="寻址方式-1"><a href="#寻址方式-1" class="headerlink" title="寻址方式"></a>寻址方式</h2><h3 id="直接寻址"><a href="#直接寻址" class="headerlink" title="直接寻址"></a>直接寻址</h3><pre><code class="bash">[idata]
+</code></pre>
+<h3 id="寄存器间接寻址"><a href="#寄存器间接寻址" class="headerlink" title="寄存器间接寻址"></a>寄存器间接寻址</h3><pre><code class="bash">[bx]
+[si]
+[di]
+[bp]
+</code></pre>
+<h3 id="寄存器相对寻址"><a href="#寄存器相对寻址" class="headerlink" title="寄存器相对寻址"></a>寄存器相对寻址</h3><pre><code class="bash">[bx+idata]
+[si+idata]
+[di+idata]
+[bp+idata]
+</code></pre>
+<h3 id="基址变址寻址"><a href="#基址变址寻址" class="headerlink" title="基址变址寻址"></a>基址变址寻址</h3><pre><code class="bash">[bx+si]
+[bx+di]
+[bp+si]
+[bp+di]
+</code></pre>
+<h3 id="相对基址变址寻址"><a href="#相对基址变址寻址" class="headerlink" title="相对基址变址寻址"></a>相对基址变址寻址</h3><pre><code class="bash">[bx+si+idata]
+[bx+di+idata]
+[bx+si+idata]
+[bp+di+idata]
+</code></pre>
 <h2 id="要处理数据的长度"><a href="#要处理数据的长度" class="headerlink" title="要处理数据的长度"></a>要处理数据的长度</h2><p>8086CPU 可以处理两种尺寸的数据： byte 和 word</p>
 <ol>
 <li>通过寄存器名指明处理的数据的尺寸</li>
@@ -485,7 +598,10 @@
 <li>被除数：默认放在AX或DX和AX中。如果除数为8位，被除数则为16位，默认在AX中存放；如果除数为16位，被除数则为32位，在DX和AX中存放，DX存放高16位，AX存放低16位</li>
 <li>结果：如果除数为8位，则AL存储除法操作的商，AH存储除法操作的余数；如果除数为16位，则AX存储除法操作的商，DX存储除法操作的余数</li>
 </ol>
-<h2 id="dup"><a href="#dup" class="headerlink" title="dup"></a>dup</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">db 重复次数 dup (重复的字节型数据)</div><div class="line">dw 重复次数 dup (重复的字型数据)</div><div class="line">dd 重复次数 dup (重复的双字型数据)</div></pre></td></tr></table></figure>
+<h2 id="dup"><a href="#dup" class="headerlink" title="dup"></a>dup</h2><pre><code class="bash">db 重复次数 dup (重复的字节型数据)
+dw 重复次数 dup (重复的字型数据)
+dd 重复次数 dup (重复的双字型数据)
+</code></pre>
 <h1 id="第九章：转移指令的原理"><a href="#第九章：转移指令的原理" class="headerlink" title="第九章：转移指令的原理"></a>第九章：转移指令的原理</h1><p>可以修改 IP 或同时修改 CS 和 IP 的指令统称为 <em>转移指令</em> </p>
 <ul>
 <li><p>只修改IP，称为段内转移，如: jmp ax</p>
@@ -510,16 +626,23 @@
 <li>转移的目的地址</li>
 <li>转移的距离（段间转移、段内短转移、段内近转移）</li>
 </ul>
-<h2 id="依据位移进行转移的-jmp-指令"><a href="#依据位移进行转移的-jmp-指令" class="headerlink" title="依据位移进行转移的 jmp 指令"></a>依据位移进行转移的 jmp 指令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jmp short 标号</div></pre></td></tr></table></figure>
+<h2 id="依据位移进行转移的-jmp-指令"><a href="#依据位移进行转移的-jmp-指令" class="headerlink" title="依据位移进行转移的 jmp 指令"></a>依据位移进行转移的 jmp 指令</h2><pre><code class="bash">jmp short 标号
+</code></pre>
 <p>它对IP的修改范围为 -128 ~ 127 ，即向前最多 128 个字节， 向后最多 127 个字节。</p>
 <p>注意：CPU 执行 JMP 指令的时候，并不需要转移的目的地址。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jmp short 标号</div></pre></td></tr></table></figure>
+<pre><code class="bash">jmp short 标号
+</code></pre>
 <p>并不包含转移的目的地址，而包含的是 <em>转移的位移</em> 。这个位移，是编译器根据汇编指令中的 <em>标号</em> 计算出来的。</p>
-<h2 id="转移的目的地址在指令中的-jmp-指令"><a href="#转移的目的地址在指令中的-jmp-指令" class="headerlink" title="转移的目的地址在指令中的 jmp 指令"></a>转移的目的地址在指令中的 jmp 指令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jmp far ptr 标号</div></pre></td></tr></table></figure>
+<h2 id="转移的目的地址在指令中的-jmp-指令"><a href="#转移的目的地址在指令中的-jmp-指令" class="headerlink" title="转移的目的地址在指令中的 jmp 指令"></a>转移的目的地址在指令中的 jmp 指令</h2><pre><code class="bash">jmp far ptr 标号
+</code></pre>
 <p>它是段间转移，又称为远转移。它会同时修改 CS 和 IP</p>
-<h2 id="转移地址在寄存器中的-jmp-指令"><a href="#转移地址在寄存器中的-jmp-指令" class="headerlink" title="转移地址在寄存器中的 jmp 指令"></a>转移地址在寄存器中的 jmp 指令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jmp 16位寄存器</div></pre></td></tr></table></figure>
+<h2 id="转移地址在寄存器中的-jmp-指令"><a href="#转移地址在寄存器中的-jmp-指令" class="headerlink" title="转移地址在寄存器中的 jmp 指令"></a>转移地址在寄存器中的 jmp 指令</h2><pre><code class="bash">jmp 16位寄存器
+</code></pre>
 <p>功能： IP = 16位寄存器的值</p>
-<h2 id="转移地址在内存中的-jmp-指令"><a href="#转移地址在内存中的-jmp-指令" class="headerlink" title="转移地址在内存中的 jmp 指令"></a>转移地址在内存中的 jmp 指令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">jmp word ptr 内存单元地址（段内转移）</div><div class="line"></div><div class="line">jmp dword prt 内存单元地址（段间转移）</div></pre></td></tr></table></figure>
+<h2 id="转移地址在内存中的-jmp-指令"><a href="#转移地址在内存中的-jmp-指令" class="headerlink" title="转移地址在内存中的 jmp 指令"></a>转移地址在内存中的 jmp 指令</h2><pre><code class="bash">jmp word ptr 内存单元地址（段内转移）
+
+jmp dword prt 内存单元地址（段间转移）
+</code></pre>
 <h2 id="jcxz-指令"><a href="#jcxz-指令" class="headerlink" title="jcxz 指令"></a>jcxz 指令</h2><p>它是条件转移指令。<br>所有的条件转移指令都是短转移，在对应的机器码中包含转移的位移，而不是目的地址。对IP的修改范围都为： -128 ~ 127</p>
 <p>如果 cx = 0 ，则转移到标号处执行，否则程序向下执行。</p>
 <h2 id="loop-指令-1"><a href="#loop-指令-1" class="headerlink" title="loop 指令"></a>loop 指令</h2><p>它是循环指令。<br>所有的循环指令都是短转移，在对应的机器码中包含转移的位移，而不是目的地址。对IP的修改范围都为：-128 ~ 127</p>
@@ -545,12 +668,14 @@
 <li>转移</li>
 </ol>
 <p>它不能实现短转移，除此之餐，它和 JMP 指令的原理相同。</p>
-<h2 id="依据位移进行转移的-call-指令"><a href="#依据位移进行转移的-call-指令" class="headerlink" title="依据位移进行转移的 call 指令"></a>依据位移进行转移的 call 指令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">call 标号（将当前IP压入栈后，转移到标号处执行指令）</div></pre></td></tr></table></figure>
+<h2 id="依据位移进行转移的-call-指令"><a href="#依据位移进行转移的-call-指令" class="headerlink" title="依据位移进行转移的 call 指令"></a>依据位移进行转移的 call 指令</h2><pre><code class="bash">call 标号（将当前IP压入栈后，转移到标号处执行指令）
+</code></pre>
 <ol>
 <li>SP = SP + 2; SS *16 + SP = IP</li>
 <li>IP = IP + 16位位移</li>
 </ol>
-<h2 id="转移的目的地址在指令中的-call-指令"><a href="#转移的目的地址在指令中的-call-指令" class="headerlink" title="转移的目的地址在指令中的 call 指令"></a>转移的目的地址在指令中的 call 指令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">call far prt 标号</div></pre></td></tr></table></figure>
+<h2 id="转移的目的地址在指令中的-call-指令"><a href="#转移的目的地址在指令中的-call-指令" class="headerlink" title="转移的目的地址在指令中的 call 指令"></a>转移的目的地址在指令中的 call 指令</h2><pre><code class="bash">call far prt 标号
+</code></pre>
 <p>它是段间转移。</p>
 <ol>
 <li>SP = SP - 2; SS <em> 16 + SP = CS; SP = SP - 2; SS </em> 16 + SP = IP</li>
@@ -558,7 +683,8 @@
 </ol>
 <p>相当于:</p>
 <p>push CS<br>push IP<br>jmp far prt 标号</p>
-<h2 id="转移地址在寄存器中的-call-指令"><a href="#转移地址在寄存器中的-call-指令" class="headerlink" title="转移地址在寄存器中的 call 指令"></a>转移地址在寄存器中的 call 指令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">call 16位寄存器</div></pre></td></tr></table></figure>
+<h2 id="转移地址在寄存器中的-call-指令"><a href="#转移地址在寄存器中的-call-指令" class="headerlink" title="转移地址在寄存器中的 call 指令"></a>转移地址在寄存器中的 call 指令</h2><pre><code class="bash">call 16位寄存器
+</code></pre>
 <ol>
 <li>SP = SP - 2 </li>
 <li>SS * 16 + SP = IP</li>
@@ -577,7 +703,9 @@
 <li>两个相乘数：要么都是8位，要么都是16位。如果是8位，则一个默认在 AL 中，另一个在 8 位寄存器或内存字节单元中。要么是 16 位，一个默认在 AX 中，另一个在 16 位或内存字节单元中。</li>
 <li>结果：8位的话，结果默认在 AX 中； 16 位，则默认高位在 DX 中，低位在 AX 中</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mul 寄存器</div><div class="line">mul 内存单元</div></pre></td></tr></table></figure>
+<pre><code class="bash">mul 寄存器
+mul 内存单元
+</code></pre>
 <h1 id="第十一章：标志寄存器"><a href="#第十一章：标志寄存器" class="headerlink" title="第十一章：标志寄存器"></a>第十一章：标志寄存器</h1><p>特殊的寄存器作用：</p>
 <ul>
 <li>存储相关指令的某些执行结果</li>
@@ -590,20 +718,36 @@
 <h2 id="4：AF"><a href="#4：AF" class="headerlink" title="4：AF"></a>4：AF</h2><h2 id="6：ZF"><a href="#6：ZF" class="headerlink" title="6：ZF"></a>6：ZF</h2><p>零标志位。它记录相关指令执行后，结果是否为0.如果为0，ZF=1，否则 ZF=0 </p>
 <h2 id="7：SF"><a href="#7：SF" class="headerlink" title="7：SF"></a>7：SF</h2><p>符号标志位。它记录相关指令执行后，其结果是否为负。如果为负，SF = 1， 如果非负， SF = 0</p>
 <h2 id="8：TF"><a href="#8：TF" class="headerlink" title="8：TF"></a>8：TF</h2><h2 id="9：IF"><a href="#9：IF" class="headerlink" title="9：IF"></a>9：IF</h2><p>IF = 0，在进入中断处理程序后，禁止其他的可屏蔽中断。<br>IF = 0，表示中断处理程序需要处理可屏蔽中断。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sti ：设置 IF = 1</div><div class="line">cli : 设置 IF = 0</div></pre></td></tr></table></figure>
+<pre><code class="bash">sti ：设置 IF = 1
+cli : 设置 IF = 0
+</code></pre>
 <h2 id="10：DF"><a href="#10：DF" class="headerlink" title="10：DF"></a>10：DF</h2><p>方向标志位。在串处理指令中，控制每次操作后 si, di 的增减。</p>
 <p>DF = 0 ：每次操作后， si, di 递增<br>DF = 1 : 每次操作后， si，di 递减</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cld 指令：将标志寄存器的 DF 位置0</div><div class="line">std 指令：将标志寄存器的 DF 位置1</div></pre></td></tr></table></figure>
+<pre><code class="bash">cld 指令：将标志寄存器的 DF 位置0
+std 指令：将标志寄存器的 DF 位置1
+</code></pre>
 <h2 id="11：OF"><a href="#11：OF" class="headerlink" title="11：OF"></a>11：OF</h2><p>溢出标志位。一般情况下，OF 记录了 <em>有符号</em> 运算的结果是否发生了溢出。如果溢出了， OF = 1 ，如果没有， OF = 0 </p>
 <p>注意， OF 是对有符号的。CF 是对无符号的</p>
 <h2 id="adc-指令"><a href="#adc-指令" class="headerlink" title="adc 指令"></a>adc 指令</h2><p>adc 是带进位加法指令。它利用了 CF 位上记录的进位值。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">adc 操作对象1，操作对象2</div><div class="line"></div><div class="line">结果为</div><div class="line">操作对象1 = 操作对象1 + 操作对象2 + CF</div></pre></td></tr></table></figure>
+<pre><code class="bash">adc 操作对象1，操作对象2
+
+结果为
+操作对象1 = 操作对象1 + 操作对象2 + CF
+</code></pre>
 <p>利用它，可以对任意大的数据进行加法运算。</p>
 <h2 id="sbb-指令"><a href="#sbb-指令" class="headerlink" title="sbb 指令"></a>sbb 指令</h2><p>它是带借位减法指令，它利用了 CF 位上记录的借位值。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sbb 操作对象1，操作对象2</div><div class="line"></div><div class="line">功能</div><div class="line">操作对象1 = 操作对象1 - 操作对象2 - CF</div></pre></td></tr></table></figure>
+<pre><code class="bash">sbb 操作对象1，操作对象2
+
+功能
+操作对象1 = 操作对象1 - 操作对象2 - CF
+</code></pre>
 <p>利用它，可以对任意大的数据进行减法运算。</p>
 <h2 id="cmp-指令"><a href="#cmp-指令" class="headerlink" title="cmp 指令"></a>cmp 指令</h2><p>它相当于减法，只是不保存结果。将对标志寄存器产生影响。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cmp 操作对象1， 操作对象2</div><div class="line"></div><div class="line">功能</div><div class="line">操作对象1 - 操作对象2 ，但并不保存结果，仅仅是对标志寄存器进行设置</div></pre></td></tr></table></figure>
+<pre><code class="bash">cmp 操作对象1， 操作对象2
+
+功能
+操作对象1 - 操作对象2 ，但并不保存结果，仅仅是对标志寄存器进行设置
+</code></pre>
 <h2 id="检测比较结果的条件转移指令"><a href="#检测比较结果的条件转移指令" class="headerlink" title="检测比较结果的条件转移指令"></a>检测比较结果的条件转移指令</h2><p>下面是常用的根据 <em>无符号</em> 数的比较结果进行转移的条件转移指令</p>
 <h3 id="je"><a href="#je" class="headerlink" title="je"></a>je</h3><p>equal</p>
 <p>等于则转移。检测的是 ZF = 1</p>
@@ -653,7 +797,8 @@
 <p>POP IP<br>POP CS<br>popf</p>
 <h2 id="响应中断的特殊情况"><a href="#响应中断的特殊情况" class="headerlink" title="响应中断的特殊情况"></a>响应中断的特殊情况</h2><p>举例：CPU在执行完 SS 指令后，不响应中断。</p>
 <p>这给连续设置 SS 和 SP 指向正确的栈顶提供了一个时机。</p>
-<h1 id="第十三章：int-指令"><a href="#第十三章：int-指令" class="headerlink" title="第十三章：int 指令"></a>第十三章：int 指令</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">int n</div></pre></td></tr></table></figure>
+<h1 id="第十三章：int-指令"><a href="#第十三章：int-指令" class="headerlink" title="第十三章：int 指令"></a>第十三章：int 指令</h1><pre><code class="bash">int n
+</code></pre>
 <p>它的功能是：引发中断号为 N 的中断过程</p>
 <h2 id="BIOS-和-DOS-中断例程的安装过程"><a href="#BIOS-和-DOS-中断例程的安装过程" class="headerlink" title="BIOS 和 DOS 中断例程的安装过程"></a>BIOS 和 DOS 中断例程的安装过程</h2><ol>
 <li>开机后， CPU一加电，初始化 CS = 0FFFFH， IP=0 ，自动从 FFFF:0 单元开始执行程序。FFFF:0 有一条转跳指令，CPU执行后，转去执行BIOS中的硬件系统检测和初始化程序。</li>
@@ -686,7 +831,8 @@
 <h2 id="PC-机键盘的处理过程"><a href="#PC-机键盘的处理过程" class="headerlink" title="PC 机键盘的处理过程"></a>PC 机键盘的处理过程</h2><p>按下一个键时产生的扫描码称为 <em>通码</em><br>松开一个键时产生的扫描码称为 <em>断码</em></p>
 <p>扫描码长度为：一个字节。通码的第7位为0，断码的第7位为1 。即：</p>
 <p>断码 = 通码 + 80H</p>
-<h1 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h1><h2 id="显存的物理地址"><a href="#显存的物理地址" class="headerlink" title="显存的物理地址"></a>显存的物理地址</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">B8000~BFFFF</div></pre></td></tr></table></figure>
+<h1 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h1><h2 id="显存的物理地址"><a href="#显存的物理地址" class="headerlink" title="显存的物理地址"></a>显存的物理地址</h2><pre><code class="bash">B8000~BFFFF
+</code></pre>
 <h2 id="ASCII-与-显卡文本模式显示"><a href="#ASCII-与-显卡文本模式显示" class="headerlink" title="ASCII 与 显卡文本模式显示"></a>ASCII 与 显卡文本模式显示</h2><p>ASCII 是7位代码，只用了一个字节中的低7比特，最高位通常置0 。这意味着，ASCII只包含 128 个字符的编码。</p>
 <p><code>屏幕上的每个字符，对应着显存中的两个连续字节。</code> 前一个字节是字符的ASCII代码，后一个字节是显示属性，包括字符颜色（前景色）和底色（背景色）。</p>
 <p>显示属性分为两部分，低4位定义的是前景色，高4位是背景色。<br>RGBK（背景色），其中K是闪烁位，0为不闪烁，1为闪烁。<br>RGBL（前景色），其中L是亮度位，0为正常亮度，1为高亮。</p>
@@ -704,11 +850,14 @@
 <h2 id="call-指令-1"><a href="#call-指令-1" class="headerlink" title="call 指令"></a>call 指令</h2><h3 id="相对近调用"><a href="#相对近调用" class="headerlink" title="相对近调用"></a>相对近调用</h3><p>这个是通过符号或立即数（立即数也要减去当前指令的汇编地址）给出的。</p>
 <p>计算过程：</p>
 <p>用目标过程的汇编地址送去当前 call 指令的汇编地址，于减去当前 call 以字节为单位的长度（3），保留16位的结果。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">call near xxx</div></pre></td></tr></table></figure>
+<pre><code class="bash">call near xxx
+</code></pre>
 <p>near 不是必须的，如果不提供任何关键字，则默认就是 near </p>
 <h3 id="绝对近调用"><a href="#绝对近调用" class="headerlink" title="绝对近调用"></a>绝对近调用</h3><p>这个是通过寄存器或内存单元给出目标地址的。</p>
-<h3 id="绝对远调用"><a href="#绝对远调用" class="headerlink" title="绝对远调用"></a>绝对远调用</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">call xxxx:yyyy</div></pre></td></tr></table></figure>
-<h3 id="间接绝对远调用"><a href="#间接绝对远调用" class="headerlink" title="间接绝对远调用"></a>间接绝对远调用</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">call far [xxx]</div></pre></td></tr></table></figure>
+<h3 id="绝对远调用"><a href="#绝对远调用" class="headerlink" title="绝对远调用"></a>绝对远调用</h3><pre><code class="bash">call xxxx:yyyy
+</code></pre>
+<h3 id="间接绝对远调用"><a href="#间接绝对远调用" class="headerlink" title="间接绝对远调用"></a>间接绝对远调用</h3><pre><code class="bash">call far [xxx]
+</code></pre>
 <p>它会使用 xxx 处的2个字（注意是字，第一个字是偏移地址，第二个字是段地址）来分别代替IP和CS的内容。</p>
 <h2 id="ret-和-retf-1"><a href="#ret-和-retf-1" class="headerlink" title="ret 和 retf"></a>ret 和 retf</h2><p>ret 和 retf 经常用做 call 和  call far 的配对指令。</p>
 <p>ret 是近返回：它只做一件事，就是从栈中弹出一个字到指令指针寄存器IP中</p>

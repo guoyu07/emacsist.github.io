@@ -15,17 +15,17 @@
     <meta name="keywords" content="java,OSGi,eclipse," />
   
 
-  <meta name="description" content="本文的测试环境使用的是: Mac + Eclipse 4.4.2 搭建基础环境打开Eclipse,然后 Run -&amp;gt; Run Configurations -&amp;gt; OSGi Framework,添加一个新的项目.Name就自己喜欢全名了. 然后在Bundles里,只勾选以下的bundles: 1234567891011121314151617181920javax.servletorg.">
+  <meta name="description" content="本文的测试环境使用的是: Mac + Eclipse 4.4.2 搭建基础环境打开Eclipse,然后 Run -&amp;gt; Run Configurations -&amp;gt; OSGi Framework,添加一个新的项目.Name就自己喜欢全名了. 然后在Bundles里,只勾选以下的bundles: javax.servlet  org.apache.felix.gogo.command org">
 <meta name="keywords" content="java,OSGi,eclipse">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OSGi之Web HelloWorld">
 <meta property="og:url" content="https://emacsist.github.io/2015/09/08/OSGi之Web-HelloWorld/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="本文的测试环境使用的是: Mac + Eclipse 4.4.2 搭建基础环境打开Eclipse,然后 Run -&amp;gt; Run Configurations -&amp;gt; OSGi Framework,添加一个新的项目.Name就自己喜欢全名了. 然后在Bundles里,只勾选以下的bundles: 1234567891011121314151617181920javax.servletorg.">
+<meta property="og:description" content="本文的测试环境使用的是: Mac + Eclipse 4.4.2 搭建基础环境打开Eclipse,然后 Run -&amp;gt; Run Configurations -&amp;gt; OSGi Framework,添加一个新的项目.Name就自己喜欢全名了. 然后在Bundles里,只勾选以下的bundles: javax.servlet  org.apache.felix.gogo.command org">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OSGi之Web HelloWorld">
-<meta name="twitter:description" content="本文的测试环境使用的是: Mac + Eclipse 4.4.2 搭建基础环境打开Eclipse,然后 Run -&amp;gt; Run Configurations -&amp;gt; OSGi Framework,添加一个新的项目.Name就自己喜欢全名了. 然后在Bundles里,只勾选以下的bundles: 1234567891011121314151617181920javax.servletorg.">
+<meta name="twitter:description" content="本文的测试环境使用的是: Mac + Eclipse 4.4.2 搭建基础环境打开Eclipse,然后 Run -&amp;gt; Run Configurations -&amp;gt; OSGi Framework,添加一个新的项目.Name就自己喜欢全名了. 然后在Bundles里,只勾选以下的bundles: javax.servlet  org.apache.felix.gogo.command org">
 
   
 
@@ -210,7 +210,27 @@
 <p>Mac + Eclipse 4.4.2</p>
 <h2 id="搭建基础环境"><a href="#搭建基础环境" class="headerlink" title="搭建基础环境"></a>搭建基础环境</h2><p>打开<code>Eclipse</code>,然后 <code>Run</code> -&gt; <code>Run Configurations</code> -&gt; <code>OSGi Framework</code>,添加一个新的项目.<code>Name</code>就自己喜欢全名了.</p>
 <p>然后在<code>Bundles</code>里,只勾选以下的bundles:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">javax.servlet</div><div class="line"></div><div class="line">org.apache.felix.gogo.command</div><div class="line">org.apache.felix.gogo.runtime</div><div class="line">org.apache.felix.gogo.shell</div><div class="line"></div><div class="line">org.eclipse.equinox.console</div><div class="line">org.eclipse.equinox.http.jetty</div><div class="line">org.eclipse.equinox.http.servlet</div><div class="line"></div><div class="line">org.eclipse.jetty.continuation</div><div class="line">org.eclipse.jetty.http</div><div class="line">org.eclipse.jetty.io</div><div class="line">org.eclipse.jetty.security</div><div class="line">org.eclipse.jetty.server</div><div class="line">org.eclipse.jetty.servlet</div><div class="line">org.eclipse.jetty.util</div><div class="line"></div><div class="line">org.eclipse.osgi</div><div class="line">org.eclipse.osgi.services</div></pre></td></tr></table></figure>
+<pre><code class="bash">javax.servlet
+
+org.apache.felix.gogo.command
+org.apache.felix.gogo.runtime
+org.apache.felix.gogo.shell
+
+org.eclipse.equinox.console
+org.eclipse.equinox.http.jetty
+org.eclipse.equinox.http.servlet
+
+org.eclipse.jetty.continuation
+org.eclipse.jetty.http
+org.eclipse.jetty.io
+org.eclipse.jetty.security
+org.eclipse.jetty.server
+org.eclipse.jetty.servlet
+org.eclipse.jetty.util
+
+org.eclipse.osgi
+org.eclipse.osgi.services
+</code></pre>
 <p>然后在 <code>Arguments</code> 里的 <code>VM arguments</code>里添加多一个以下的参数,用来个修改HTTP服务的端口(默认情况下是<code>80</code>端口)</p>
 <p><code>-Dorg.osgi.service.http.port=8000</code></p>
 <p>然后<code>apply</code> -&gt; <code>run</code> 就可以了.</p>

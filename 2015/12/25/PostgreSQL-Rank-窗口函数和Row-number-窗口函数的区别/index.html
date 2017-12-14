@@ -15,17 +15,17 @@
     <meta name="keywords" content="postgresql,database," />
   
 
-  <meta name="description" content="创建测试表和数据123456789101112131415postgres=# create table test(n int);CREATE TABLEpostgres=# insert into test(n) values (1);INSERT 0 1postgres=# insert into test(n) values (1);INSERT 0 1postgres=# insert i">
+  <meta name="description" content="创建测试表和数据postgres=# create table test(n int); CREATE TABLE postgres=# insert into test(n) values (1); INSERT 0 1 postgres=# insert into test(n) values (1); INSERT 0 1 postgres=# insert into test(n) val">
 <meta name="keywords" content="postgresql,database">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PostgreSQL Rank()窗口函数和Row_number()窗口函数的区别">
 <meta property="og:url" content="https://emacsist.github.io/2015/12/25/PostgreSQL-Rank-窗口函数和Row-number-窗口函数的区别/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="创建测试表和数据123456789101112131415postgres=# create table test(n int);CREATE TABLEpostgres=# insert into test(n) values (1);INSERT 0 1postgres=# insert into test(n) values (1);INSERT 0 1postgres=# insert i">
+<meta property="og:description" content="创建测试表和数据postgres=# create table test(n int); CREATE TABLE postgres=# insert into test(n) values (1); INSERT 0 1 postgres=# insert into test(n) values (1); INSERT 0 1 postgres=# insert into test(n) val">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PostgreSQL Rank()窗口函数和Row_number()窗口函数的区别">
-<meta name="twitter:description" content="创建测试表和数据123456789101112131415postgres=# create table test(n int);CREATE TABLEpostgres=# insert into test(n) values (1);INSERT 0 1postgres=# insert into test(n) values (1);INSERT 0 1postgres=# insert i">
+<meta name="twitter:description" content="创建测试表和数据postgres=# create table test(n int); CREATE TABLE postgres=# insert into test(n) values (1); INSERT 0 1 postgres=# insert into test(n) values (1); INSERT 0 1 postgres=# insert into test(n) val">
 
   
 
@@ -201,9 +201,48 @@
 
     <div class="article-content">
         
-                            <h2 id="创建测试表和数据"><a href="#创建测试表和数据" class="headerlink" title="创建测试表和数据"></a>创建测试表和数据</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">postgres=<span class="comment"># create table test(n int);</span></div><div class="line">CREATE TABLE</div><div class="line">postgres=<span class="comment"># insert into test(n) values (1);</span></div><div class="line">INSERT 0 1</div><div class="line">postgres=<span class="comment"># insert into test(n) values (1);</span></div><div class="line">INSERT 0 1</div><div class="line">postgres=<span class="comment"># insert into test(n) values (2);</span></div><div class="line">INSERT 0 1</div><div class="line">postgres=<span class="comment"># insert into test(n) values (3);</span></div><div class="line">INSERT 0 1</div><div class="line">postgres=<span class="comment"># insert into test(n) values (4);</span></div><div class="line">INSERT 0 1</div><div class="line">postgres=<span class="comment"># insert into test(n) values (5);</span></div><div class="line">INSERT 0 1</div><div class="line">postgres=<span class="comment">#</span></div></pre></td></tr></table></figure>
-<h2 id="rank-和-row-number"><a href="#rank-和-row-number" class="headerlink" title="rank() 和 row_number()"></a>rank() 和 row_number()</h2><h3 id="有order-by"><a href="#有order-by" class="headerlink" title="有order by"></a>有order by</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">postgres=<span class="comment"># select n, rank() over(order by n asc), row_number() over(order by n asc) from test;</span></div><div class="line"> n | rank | row_number</div><div class="line">---+------+------------</div><div class="line"> 1 |    1 |          1</div><div class="line"> 1 |    1 |          2</div><div class="line"> 2 |    3 |          3</div><div class="line"> 3 |    4 |          4</div><div class="line"> 4 |    5 |          5</div><div class="line"> 5 |    6 |          6</div><div class="line">(6 rows)</div><div class="line"></div><div class="line">postgres=<span class="comment">#</span></div></pre></td></tr></table></figure>
-<h3 id="不加order-by"><a href="#不加order-by" class="headerlink" title="不加order by"></a>不加order by</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">postgres=<span class="comment"># select n, rank() over(), row_number() over() from test;</span></div><div class="line"> n | rank | row_number</div><div class="line">---+------+------------</div><div class="line"> 1 |    1 |          1</div><div class="line"> 1 |    1 |          2</div><div class="line"> 2 |    1 |          3</div><div class="line"> 3 |    1 |          4</div><div class="line"> 4 |    1 |          5</div><div class="line"> 5 |    1 |          6</div><div class="line">(6 rows)</div><div class="line"></div><div class="line">postgres=<span class="comment">#</span></div></pre></td></tr></table></figure>
+                            <h2 id="创建测试表和数据"><a href="#创建测试表和数据" class="headerlink" title="创建测试表和数据"></a>创建测试表和数据</h2><pre><code class="bash">postgres=# create table test(n int);
+CREATE TABLE
+postgres=# insert into test(n) values (1);
+INSERT 0 1
+postgres=# insert into test(n) values (1);
+INSERT 0 1
+postgres=# insert into test(n) values (2);
+INSERT 0 1
+postgres=# insert into test(n) values (3);
+INSERT 0 1
+postgres=# insert into test(n) values (4);
+INSERT 0 1
+postgres=# insert into test(n) values (5);
+INSERT 0 1
+postgres=#
+</code></pre>
+<h2 id="rank-和-row-number"><a href="#rank-和-row-number" class="headerlink" title="rank() 和 row_number()"></a>rank() 和 row_number()</h2><h3 id="有order-by"><a href="#有order-by" class="headerlink" title="有order by"></a>有order by</h3><pre><code class="bash">postgres=# select n, rank() over(order by n asc), row_number() over(order by n asc) from test;
+ n | rank | row_number
+---+------+------------
+ 1 |    1 |          1
+ 1 |    1 |          2
+ 2 |    3 |          3
+ 3 |    4 |          4
+ 4 |    5 |          5
+ 5 |    6 |          6
+(6 rows)
+
+postgres=#
+</code></pre>
+<h3 id="不加order-by"><a href="#不加order-by" class="headerlink" title="不加order by"></a>不加order by</h3><pre><code class="bash">postgres=# select n, rank() over(), row_number() over() from test;
+ n | rank | row_number
+---+------+------------
+ 1 |    1 |          1
+ 1 |    1 |          2
+ 2 |    1 |          3
+ 3 |    1 |          4
+ 4 |    1 |          5
+ 5 |    1 |          6
+(6 rows)
+
+postgres=#
+</code></pre>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
 <li>rank()：排名函数，相同的排名，rank()的值是相同的，然后到间隔数值到下一名.（比如上面例子中的n，假设是分数，即1,1的排名是相同，都是第一名，2就是就三名了）</li>
 <li>row_number()：含义是行号，它是按出现的顺序来显示的（比如上面的例子，说法是1,2,3这样子下去）</li>

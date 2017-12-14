@@ -15,17 +15,17 @@
     <meta name="keywords" content="算法,啊哈！算法," />
   
 
-  <meta name="description" content="时间复杂度：O(M+N)M:桶的个数（也是该数值的最大数）N:待排序个数 Java实现随便输入N个不大于M的数字，然后从小到大输出：（从大到小，作一下小修改即可）1234567891011121314151617public static void main(String[] args) &amp;#123;    int M= 100;    int N = 5;    int[] array = ne">
+  <meta name="description" content="时间复杂度：O(M+N)M:桶的个数（也是该数值的最大数）N:待排序个数 Java实现随便输入N个不大于M的数字，然后从小到大输出：（从大到小，作一下小修改即可）     public static void main(String[] args) {         int M= 100;         int N = 5;         int[] array = new int[M+ 1">
 <meta name="keywords" content="算法,啊哈！算法">
 <meta property="og:type" content="article">
 <meta property="og:title" content="《啊哈！算法》学习笔记之桶排序">
 <meta property="og:url" content="https://emacsist.github.io/2015/01/06/《啊哈！算法》学习笔记之桶排序/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="时间复杂度：O(M+N)M:桶的个数（也是该数值的最大数）N:待排序个数 Java实现随便输入N个不大于M的数字，然后从小到大输出：（从大到小，作一下小修改即可）1234567891011121314151617public static void main(String[] args) &amp;#123;    int M= 100;    int N = 5;    int[] array = ne">
+<meta property="og:description" content="时间复杂度：O(M+N)M:桶的个数（也是该数值的最大数）N:待排序个数 Java实现随便输入N个不大于M的数字，然后从小到大输出：（从大到小，作一下小修改即可）     public static void main(String[] args) {         int M= 100;         int N = 5;         int[] array = new int[M+ 1">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《啊哈！算法》学习笔记之桶排序">
-<meta name="twitter:description" content="时间复杂度：O(M+N)M:桶的个数（也是该数值的最大数）N:待排序个数 Java实现随便输入N个不大于M的数字，然后从小到大输出：（从大到小，作一下小修改即可）1234567891011121314151617public static void main(String[] args) &amp;#123;    int M= 100;    int N = 5;    int[] array = ne">
+<meta name="twitter:description" content="时间复杂度：O(M+N)M:桶的个数（也是该数值的最大数）N:待排序个数 Java实现随便输入N个不大于M的数字，然后从小到大输出：（从大到小，作一下小修改即可）     public static void main(String[] args) {         int M= 100;         int N = 5;         int[] array = new int[M+ 1">
 
   
 
@@ -202,8 +202,25 @@
     <div class="article-content">
         
                             <h2 id="时间复杂度：O-M-N"><a href="#时间复杂度：O-M-N" class="headerlink" title="时间复杂度：O(M+N)"></a>时间复杂度：O(M+N)</h2><p>M:桶的个数（也是该数值的最大数）<br>N:待排序个数</p>
-<h2 id="Java实现"><a href="#Java实现" class="headerlink" title="Java实现"></a>Java实现</h2><p>随便输入N个不大于M的数字，然后从小到大输出：（从大到小，作一下小修改即可）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">public static void main(String[] args) &#123;</div><div class="line">    int M= 100;</div><div class="line">    int N = 5;</div><div class="line">    int[] array = new int[M+ 1];</div><div class="line">    Scanner scan = new Scanner(System.in);</div><div class="line">    int in = 0;</div><div class="line">    for (int i = 0; i &lt; N; i++) &#123;</div><div class="line">        in = scan.nextInt();</div><div class="line">        array[in] = array[in] + 1;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    for (int i = 0; i &lt; array.length; i++) &#123;</div><div class="line">        for (int j = 0; j &lt; array[i]; j++) &#123;</div><div class="line">            System.out.println(i);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h2 id="个人总结"><a href="#个人总结" class="headerlink" title="个人总结"></a>个人总结</h2><p>这种算法适合于范围比较小的排序，并且是需要知道输入的最大值。不然就不适用了。</p>
+<h2 id="Java实现"><a href="#Java实现" class="headerlink" title="Java实现"></a>Java实现</h2><p>随便输入N个不大于M的数字，然后从小到大输出：（从大到小，作一下小修改即可）</p>
+<pre><code>    public static void main(String[] args) {
+        int M= 100;
+        int N = 5;
+        int[] array = new int[M+ 1];
+        Scanner scan = new Scanner(System.in);
+        int in = 0;
+        for (int i = 0; i &lt; N; i++) {
+            in = scan.nextInt();
+            array[in] = array[in] + 1;
+        }
+
+        for (int i = 0; i &lt; array.length; i++) {
+            for (int j = 0; j &lt; array[i]; j++) {
+                System.out.println(i);
+            }
+        }
+    }
+</code></pre><h2 id="个人总结"><a href="#个人总结" class="headerlink" title="个人总结"></a>个人总结</h2><p>这种算法适合于范围比较小的排序，并且是需要知道输入的最大值。不然就不适用了。</p>
 
                                 
     </div>

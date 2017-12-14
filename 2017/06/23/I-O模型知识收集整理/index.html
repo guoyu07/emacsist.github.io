@@ -204,7 +204,31 @@
 <p>说到这里，你可以推断出这些概念间的区别了：同步通常意味着一个活动在线程向前移动之前，必须等待回复。 阻塞是指：线程处于等待状态（通常意味着它不会被调度执行，直到发生某些事件为止）。从这里可以得出结论：同步调用可能涉及阻塞行为，也可能不依赖于底层实现（即它也可能是在自旋，这意味着你正在使用异步调用模拟同步行为）</p>
 </blockquote>
 <p>这时引用知乎上面的一个 <a href="https://www.zhihu.com/question/19732473/answer/23434554" target="_blank" rel="external">回答</a> 可以参考一下。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">老张爱喝茶，废话不说，煮开水。出场人物：老张，水壶两把（普通水壶，简称水壶；会响的水壶，简称响水壶）。</div><div class="line"></div><div class="line">1 老张把水壶放到火上，立等水开。（同步阻塞）老张觉得自己有点傻</div><div class="line">2 老张把水壶放到火上，去客厅看电视，时不时去厨房看看水开没有。（同步非阻塞）</div><div class="line"></div><div class="line">老张还是觉得自己有点傻，于是变高端了，买了把会响笛的那种水壶。水开之后，能大声发出嘀~~~~的噪音。</div><div class="line"></div><div class="line">3 老张把响水壶放到火上，立等水开。（异步阻塞）老张觉得这样傻等意义不大</div><div class="line">4 老张把响水壶放到火上，去客厅看电视，水壶响之前不再去看它了，响了再去拿壶。（异步非阻塞）老张觉得自己聪明了。</div><div class="line"></div><div class="line">所谓同步异步，只是对于水壶而言。普通水壶，同步；响水壶，异步。虽然都能干活，但响水壶可以在自己完工之后，提示老张水开了。这是普通水壶所不能及的。同步只能让调用者去轮询自己（情况2中），造成老张效率的低下。</div><div class="line"></div><div class="line">所谓阻塞非阻塞，仅仅对于老张而言。立等的老张，阻塞；看电视的老张，非阻塞。</div><div class="line"></div><div class="line">情况1和情况3中老张就是阻塞的，媳妇喊他都不知道。虽然3中响水壶是异步的，可对于立等的老张没有太大的意义。</div><div class="line"></div><div class="line">所以一般异步是配合非阻塞使用的，这样才能发挥异步的效用。</div><div class="line"></div><div class="line">——来源网络，作者不明。</div><div class="line"></div><div class="line">作者：愚抄</div><div class="line">链接：https://www.zhihu.com/question/19732473/answer/23434554</div><div class="line">来源：知乎</div><div class="line">著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</div></pre></td></tr></table></figure>
+<pre><code class="bash">老张爱喝茶，废话不说，煮开水。出场人物：老张，水壶两把（普通水壶，简称水壶；会响的水壶，简称响水壶）。
+
+1 老张把水壶放到火上，立等水开。（同步阻塞）老张觉得自己有点傻
+2 老张把水壶放到火上，去客厅看电视，时不时去厨房看看水开没有。（同步非阻塞）
+
+老张还是觉得自己有点傻，于是变高端了，买了把会响笛的那种水壶。水开之后，能大声发出嘀~~~~的噪音。
+
+3 老张把响水壶放到火上，立等水开。（异步阻塞）老张觉得这样傻等意义不大
+4 老张把响水壶放到火上，去客厅看电视，水壶响之前不再去看它了，响了再去拿壶。（异步非阻塞）老张觉得自己聪明了。
+
+所谓同步异步，只是对于水壶而言。普通水壶，同步；响水壶，异步。虽然都能干活，但响水壶可以在自己完工之后，提示老张水开了。这是普通水壶所不能及的。同步只能让调用者去轮询自己（情况2中），造成老张效率的低下。
+
+所谓阻塞非阻塞，仅仅对于老张而言。立等的老张，阻塞；看电视的老张，非阻塞。
+
+情况1和情况3中老张就是阻塞的，媳妇喊他都不知道。虽然3中响水壶是异步的，可对于立等的老张没有太大的意义。
+
+所以一般异步是配合非阻塞使用的，这样才能发挥异步的效用。
+
+——来源网络，作者不明。
+
+作者：愚抄
+链接：https://www.zhihu.com/question/19732473/answer/23434554
+来源：知乎
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+</code></pre>
 <p>这样子理解就清楚好多了。我觉得一个人能用普通人都能理解的思维来表达知识的，一定是对知识掌握得非常透彻的，哈哈。</p>
 <h1 id="I-O-模型"><a href="#I-O-模型" class="headerlink" title="I/O 模型"></a>I/O 模型</h1><h2 id="单线程阻塞"><a href="#单线程阻塞" class="headerlink" title="单线程阻塞"></a>单线程阻塞</h2><h2 id="多线程阻塞"><a href="#多线程阻塞" class="headerlink" title="多线程阻塞"></a>多线程阻塞</h2><p>## </p>
 

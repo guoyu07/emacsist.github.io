@@ -15,17 +15,17 @@
     <meta name="keywords" content="java,zookeeper," />
   
 
-  <meta name="description" content="pubisher123456789101112public static void main(String[] args) throws Exception &amp;#123;    RetryPolicy retryPolicy = new RetryNTimes(3, 2 * 1000);    CuratorFramework cf = CuratorFrameworkFactory.newCli">
+  <meta name="description" content="pubisher    public static void main(String[] args) throws Exception {         RetryPolicy retryPolicy = new RetryNTimes(3, 2 * 1000);          CuratorFramework cf = CuratorFrameworkFactory.newClient(&amp;">
 <meta name="keywords" content="java,zookeeper">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ZooKeeper之发布-订阅例子">
 <meta property="og:url" content="https://emacsist.github.io/2016/05/13/ZooKeeper之发布-订阅例子/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="pubisher123456789101112public static void main(String[] args) throws Exception &amp;#123;    RetryPolicy retryPolicy = new RetryNTimes(3, 2 * 1000);    CuratorFramework cf = CuratorFrameworkFactory.newCli">
+<meta property="og:description" content="pubisher    public static void main(String[] args) throws Exception {         RetryPolicy retryPolicy = new RetryNTimes(3, 2 * 1000);          CuratorFramework cf = CuratorFrameworkFactory.newClient(&amp;">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ZooKeeper之发布-订阅例子">
-<meta name="twitter:description" content="pubisher123456789101112public static void main(String[] args) throws Exception &amp;#123;    RetryPolicy retryPolicy = new RetryNTimes(3, 2 * 1000);    CuratorFramework cf = CuratorFrameworkFactory.newCli">
+<meta name="twitter:description" content="pubisher    public static void main(String[] args) throws Exception {         RetryPolicy retryPolicy = new RetryNTimes(3, 2 * 1000);          CuratorFramework cf = CuratorFrameworkFactory.newClient(&amp;">
 
   
 
@@ -201,8 +201,46 @@
 
     <div class="article-content">
         
-                            <h2 id="pubisher"><a href="#pubisher" class="headerlink" title="pubisher"></a>pubisher</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public static void main(String[] args) throws Exception &#123;</div><div class="line">    RetryPolicy retryPolicy = new RetryNTimes(3, 2 * 1000);</div><div class="line"></div><div class="line">    CuratorFramework cf = CuratorFrameworkFactory.newClient(<span class="string">"127.0.0.1:2181"</span>, retryPolicy);</div><div class="line">    cf.start();</div><div class="line">    Stat <span class="built_in">stat</span> = cf.checkExists().forPath(<span class="string">"/topic"</span>);</div><div class="line">    <span class="keyword">if</span> (<span class="built_in">stat</span> == null) &#123;</div><div class="line">        cf.create().forPath(<span class="string">"/topic"</span>);</div><div class="line">    &#125;</div><div class="line">    cf.setData().forPath(<span class="string">"/topic"</span>, <span class="string">"hello new data"</span>.getBytes());</div><div class="line">    cf.close();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="subscriber"><a href="#subscriber" class="headerlink" title="subscriber"></a>subscriber</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">public static void main(String[] args) throws Exception &#123;</div><div class="line">    RetryPolicy retryPolicy = new RetryNTimes(3, 2 * 1000);</div><div class="line">    CuratorFramework cf = CuratorFrameworkFactory.newClient(<span class="string">"127.0.0.1:2181"</span>, retryPolicy);</div><div class="line"></div><div class="line"></div><div class="line">    cf.getCuratorListenable().addListener(new <span class="function"><span class="title">CuratorListener</span></span>() &#123;</div><div class="line">        @Override</div><div class="line">        public void eventReceived(CuratorFramework client, CuratorEvent event) throws Exception &#123;</div><div class="line">            System.out.println(<span class="string">"root --&gt;"</span> + event);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">    cf.start();</div><div class="line"></div><div class="line">    TreeCache treeCache = new TreeCache(cf, <span class="string">"/topic"</span>);</div><div class="line"></div><div class="line">    treeCache.getListenable().addListener(new <span class="function"><span class="title">TreeCacheListener</span></span>() &#123;</div><div class="line">        @Override</div><div class="line">        public void childEvent(CuratorFramework client, TreeCacheEvent event) throws Exception &#123;</div><div class="line">            System.out.println(<span class="string">"event --&gt;"</span> + event);</div><div class="line">            System.out.println(<span class="string">"change data -&gt; "</span> + new String(event.getData().getData()));</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">    treeCache.start();</div><div class="line">    Thread.sleep(60 * 1000 * 5);</div><div class="line">    System.out.println(<span class="string">"Exit"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+                            <h2 id="pubisher"><a href="#pubisher" class="headerlink" title="pubisher"></a>pubisher</h2><pre><code class="bash">    public static void main(String[] args) throws Exception {
+        RetryPolicy retryPolicy = new RetryNTimes(3, 2 * 1000);
+
+        CuratorFramework cf = CuratorFrameworkFactory.newClient(&quot;127.0.0.1:2181&quot;, retryPolicy);
+        cf.start();
+        Stat stat = cf.checkExists().forPath(&quot;/topic&quot;);
+        if (stat == null) {
+            cf.create().forPath(&quot;/topic&quot;);
+        }
+        cf.setData().forPath(&quot;/topic&quot;, &quot;hello new data&quot;.getBytes());
+        cf.close();
+    }
+</code></pre>
+<h2 id="subscriber"><a href="#subscriber" class="headerlink" title="subscriber"></a>subscriber</h2><pre><code class="bash">    public static void main(String[] args) throws Exception {
+        RetryPolicy retryPolicy = new RetryNTimes(3, 2 * 1000);
+        CuratorFramework cf = CuratorFrameworkFactory.newClient(&quot;127.0.0.1:2181&quot;, retryPolicy);
+
+
+        cf.getCuratorListenable().addListener(new CuratorListener() {
+            @Override
+            public void eventReceived(CuratorFramework client, CuratorEvent event) throws Exception {
+                System.out.println(&quot;root --&gt;&quot; + event);
+            }
+        });
+        cf.start();
+
+        TreeCache treeCache = new TreeCache(cf, &quot;/topic&quot;);
+
+        treeCache.getListenable().addListener(new TreeCacheListener() {
+            @Override
+            public void childEvent(CuratorFramework client, TreeCacheEvent event) throws Exception {
+                System.out.println(&quot;event --&gt;&quot; + event);
+                System.out.println(&quot;change data -&gt; &quot; + new String(event.getData().getData()));
+            }
+        });
+        treeCache.start();
+        Thread.sleep(60 * 1000 * 5);
+        System.out.println(&quot;Exit&quot;);
+    }
+</code></pre>
 
                                 
     </div>

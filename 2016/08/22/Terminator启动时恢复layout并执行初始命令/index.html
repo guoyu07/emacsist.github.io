@@ -206,7 +206,15 @@
 <h2 id="每个窗口启动时执行自定义命令"><a href="#每个窗口启动时执行自定义命令" class="headerlink" title="每个窗口启动时执行自定义命令"></a>每个窗口启动时执行自定义命令</h2><p>又打开<code>Preferences</code>-&gt;<code>layouts</code> -&gt; 在中间的<code>Tpe</code>类型中选择<code>Terminal</code>类型的，然后再在最右边的<code>Custom command</code>中填写启动时需要执行的命令。</p>
 <p>这时千万要注意命令的格式是类似：<code>df -h; zsh</code>，即以<code>;</code>分隔，后面跟着你使用的<code>shell</code>类型.即可.</p>
 <h2 id="更详细配置"><a href="#更详细配置" class="headerlink" title="更详细配置"></a>更详细配置</h2><p><code>vim ~/.config/terminator/config</code>，然后在类似以下节点中编辑你自定义的title等信息即可：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[[[terminal8]]]</div><div class="line">      <span class="built_in">command</span> = 想要执行的命令;zsh</div><div class="line">      order = 1</div><div class="line">      parent = child6</div><div class="line">      profile = defautlt</div><div class="line">      title = 你的标题</div><div class="line">      <span class="built_in">type</span> = Terminal</div><div class="line">      uuid = 350106f3-ab2c-4b3b-a970-f22bf43478f1</div></pre></td></tr></table></figure>
+<pre><code class="bash">[[[terminal8]]]
+      command = 想要执行的命令;zsh
+      order = 1
+      parent = child6
+      profile = defautlt
+      title = 你的标题
+      type = Terminal
+      uuid = 350106f3-ab2c-4b3b-a970-f22bf43478f1
+</code></pre>
 
                                 
     </div>

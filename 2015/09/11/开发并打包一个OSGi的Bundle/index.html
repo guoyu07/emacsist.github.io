@@ -208,7 +208,32 @@
 <p><code>File</code> -&gt; <code>New</code> -&gt; <code>Project</code> -&gt; <code>Plug-in Project</code>，然后输入bundle名，<code>target platform</code>选择 <code>an OSGi framework</code>, <code>standard</code>. -&gt; <code>Next</code> -&gt; 最后一个Next，不要勾选模板即可</p>
 <p>然后在项目的根目录，创建一个 <code>lib</code> 目录，将所依赖的<code>jar</code>，都放到这里（其实最好就做成bundle，运行成服务最好），然后<code>右键项目</code> -&gt; <code>Properties</code> -&gt; <code>Java Build Dath</code> -&gt; <code>Libraries</code> -&gt; <code>Add library</code> -&gt; <code>Directory Container</code> -&gt; 选择刚创建的那个<code>lib</code>目录即可，这时该目录下的所有jar包，都放到<code>build path</code>里了。</p>
 <p>Activator内容为：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> example;</div><div class="line"></div><div class="line"><span class="keyword">import</span> org.apache.commons.lang.StringUtils;</div><div class="line"><span class="keyword">import</span> org.osgi.framework.BundleActivator;</div><div class="line"><span class="keyword">import</span> org.osgi.framework.BundleContext;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Activator</span> <span class="keyword">implements</span> <span class="title">BundleActivator</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> BundleContext context;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">static</span> BundleContext <span class="title">getContext</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">return</span> context;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">(BundleContext bundleContext)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">		Activator.context = bundleContext;</div><div class="line">		System.out.println(<span class="string">"Hello World."</span>);</div><div class="line">		System.out.println(StringUtils.upperCase(<span class="string">"Hello OSGi"</span>));</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">(BundleContext bundleContext)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">		Activator.context = <span class="keyword">null</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="java">package example;
+
+import org.apache.commons.lang.StringUtils;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+
+public class Activator implements BundleActivator {
+
+    private static BundleContext context;
+
+    static BundleContext getContext() {
+        return context;
+    }
+
+    public void start(BundleContext bundleContext) throws Exception {
+        Activator.context = bundleContext;
+        System.out.println(&quot;Hello World.&quot;);
+        System.out.println(StringUtils.upperCase(&quot;Hello OSGi&quot;));
+    }
+
+    public void stop(BundleContext bundleContext) throws Exception {
+        Activator.context = null;
+    }
+
+}
+</code></pre>
 <p><strong> 注意 </strong></p>
 <p>检查下<code>右键项目</code> -&gt; <code>Properties</code> -&gt; <code>Java Build Dath</code>,看看<code>source</code>有没有其他的jar包文件，有的话，就删除掉，只保留源码目录。</p>
 <p>这时，只是对eclipse编译通过了而已，还是还要在Bundle的描述文件里，配置<code>Bundle-Classpath</code>。</p>
@@ -217,7 +242,14 @@
 <p><code>右键项目</code> -&gt; <code>Export</code> -&gt; <code>Plug-in Development</code> -&gt; <code>Deployable plug-ins and fragments</code> -&gt; 勾选项目，以及选择导出到某个目录即可。</p>
 <p>这样子就OK了。</p>
 <h2 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h2><p>直接放到 apache felix 安装目录的<code>bundle</code>目录，然后直接运行以下命令即可。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">➜  felix-framework-5.2.0  java -jar bin/felix.jar</div><div class="line">Hello World.</div><div class="line">HELLO OSGI</div><div class="line">____________________________</div><div class="line">Welcome to Apache Felix Gogo</div><div class="line"></div><div class="line">g!</div></pre></td></tr></table></figure>
+<pre><code class="bash">➜  felix-framework-5.2.0  java -jar bin/felix.jar
+Hello World.
+HELLO OSGI
+____________________________
+Welcome to Apache Felix Gogo
+
+g!
+</code></pre>
 
                                 
     </div>

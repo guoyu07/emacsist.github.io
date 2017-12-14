@@ -15,17 +15,17 @@
     <meta name="keywords" content="java,OSGi," />
   
 
-  <meta name="description" content="关于导入的版本处理问题1Import-Package: org.osgi.framework;version=&quot;1.8.0&quot; 这个表示，只要是org.osgi.framework包的版本，&amp;gt;=1.8.0的都可以。 1Import-Package: org.osgi.framework;version=&quot;[1.8.0,1.8.9)&quot; 这个表示，只要是org.osgi.framework包的版本">
+  <meta name="description" content="关于导入的版本处理问题Import-Package: org.osgi.framework;version=&amp;quot;1.8.0&amp;quot;  这个表示，只要是org.osgi.framework包的版本，&amp;gt;=1.8.0的都可以。 Import-Package: org.osgi.framework;version=&amp;quot;[1.8.0,1.8.9)&amp;quot;  这个表示，只要是or">
 <meta name="keywords" content="java,OSGi">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OSGi注意事项">
 <meta property="og:url" content="https://emacsist.github.io/2015/09/10/OSGi注意事项/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="关于导入的版本处理问题1Import-Package: org.osgi.framework;version=&quot;1.8.0&quot; 这个表示，只要是org.osgi.framework包的版本，&amp;gt;=1.8.0的都可以。 1Import-Package: org.osgi.framework;version=&quot;[1.8.0,1.8.9)&quot; 这个表示，只要是org.osgi.framework包的版本">
+<meta property="og:description" content="关于导入的版本处理问题Import-Package: org.osgi.framework;version=&amp;quot;1.8.0&amp;quot;  这个表示，只要是org.osgi.framework包的版本，&amp;gt;=1.8.0的都可以。 Import-Package: org.osgi.framework;version=&amp;quot;[1.8.0,1.8.9)&amp;quot;  这个表示，只要是or">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OSGi注意事项">
-<meta name="twitter:description" content="关于导入的版本处理问题1Import-Package: org.osgi.framework;version=&quot;1.8.0&quot; 这个表示，只要是org.osgi.framework包的版本，&amp;gt;=1.8.0的都可以。 1Import-Package: org.osgi.framework;version=&quot;[1.8.0,1.8.9)&quot; 这个表示，只要是org.osgi.framework包的版本">
+<meta name="twitter:description" content="关于导入的版本处理问题Import-Package: org.osgi.framework;version=&amp;quot;1.8.0&amp;quot;  这个表示，只要是org.osgi.framework包的版本，&amp;gt;=1.8.0的都可以。 Import-Package: org.osgi.framework;version=&amp;quot;[1.8.0,1.8.9)&amp;quot;  这个表示，只要是or">
 
   
 
@@ -201,19 +201,45 @@
 
     <div class="article-content">
         
-                            <h2 id="关于导入的版本处理问题"><a href="#关于导入的版本处理问题" class="headerlink" title="关于导入的版本处理问题"></a>关于导入的版本处理问题</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Import-Package: org.osgi.framework;version=<span class="string">"1.8.0"</span></div></pre></td></tr></table></figure>
+                            <h2 id="关于导入的版本处理问题"><a href="#关于导入的版本处理问题" class="headerlink" title="关于导入的版本处理问题"></a>关于导入的版本处理问题</h2><pre><code class="bash">Import-Package: org.osgi.framework;version=&quot;1.8.0&quot;
+</code></pre>
 <p>这个表示，只要是<code>org.osgi.framework</code>包的版本，<code>&gt;=1.8.0</code>的都可以。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Import-Package: org.osgi.framework;version=<span class="string">"[1.8.0,1.8.9)"</span></div></pre></td></tr></table></figure>
+<pre><code class="bash">Import-Package: org.osgi.framework;version=&quot;[1.8.0,1.8.9)&quot;
+</code></pre>
 <p>这个表示，只要是<code>org.osgi.framework</code>包的版本只能是 <code>1.8.0 &lt;= version &lt; 1.8.9</code>的都可以。其他的则不能.</p>
 <p>例如，我将项目的依赖的<code>org.osgi.framework</code>改为了<code>[1.1.0,1.1.9)</code>后，然后启动这个bundle，就会报如下类似的错误。这是因为找不到相应的版本的依赖bundle导致的。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">g! start file:/home/yang/Downloads/felix-framework-5.2.0/bundle/Example1_1.0.0.jar</div><div class="line">org.osgi.framework.BundleException: Unable to resolve Example1 [5](R 5.0): missing requirement [Example1 [5](R 5.0)] osgi.wiring.package; (&amp;(osgi.wiring.package=org.osgi.framework)(version&gt;=1.1.0)(!(version&gt;=1.1.9))) Unresolved requirements: [[Example1 [5](R 5.0)] osgi.wiring.package; (&amp;(osgi.wiring.package=org.osgi.framework)(version&gt;=1.1.0)(!(version&gt;=1.1.9)))]</div><div class="line">g!</div></pre></td></tr></table></figure>
+<pre><code class="bash">g! start file:/home/yang/Downloads/felix-framework-5.2.0/bundle/Example1_1.0.0.jar
+org.osgi.framework.BundleException: Unable to resolve Example1 [5](R 5.0): missing requirement [Example1 [5](R 5.0)] osgi.wiring.package; (&amp;(osgi.wiring.package=org.osgi.framework)(version&gt;=1.1.0)(!(version&gt;=1.1.9))) Unresolved requirements: [[Example1 [5](R 5.0)] osgi.wiring.package; (&amp;(osgi.wiring.package=org.osgi.framework)(version&gt;=1.1.0)(!(version&gt;=1.1.9)))]
+g!
+</code></pre>
 <h2 id="在Bundle中，导入第三方非Bundle的jar包"><a href="#在Bundle中，导入第三方非Bundle的jar包" class="headerlink" title="在Bundle中，导入第三方非Bundle的jar包"></a>在Bundle中，导入第三方非Bundle的jar包</h2><p>在项目的根目录下，创建一个目录<code>lib</code>，然后将所有的jar包，放到这里，然后修改<code>MANIFEST.MF</code>文件，添加以下配置:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Bundle-ClassPath: lib/commons-lang-2.6.jar,.</div></pre></td></tr></table></figure>
+<pre><code class="bash">Bundle-ClassPath: lib/commons-lang-2.6.jar,.
+</code></pre>
 <p>每一个jar以逗号分隔隔离开，注意，要定位到jar，而不能只写目录。我也不知道为什么。我使用的是<code>Apache Felix</code>的OSGi实现，版本为:<code>felix-framework-5.2.0</code>。</p>
 <p>测试过了下，如果不定位到jar包，改为目录级，如：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Bundle-ClassPath: lib/,.</div></pre></td></tr></table></figure>
+<pre><code class="bash">Bundle-ClassPath: lib/,.
+</code></pre>
 <p>会报以下的类似错误：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">ERROR: Bundle Example2 [1] Error starting file:/home/yang/Downloads/felix-framework-5.2.0/bundle/Example2_1.0.0.jar (org.osgi.framework.BundleException: Activator start error <span class="keyword">in</span> bundle Example2 [1].)</div><div class="line">java.lang.NoClassDefFoundError: org/apache/commons/lang/StringUtils</div><div class="line">	at example2.Activator.start(Activator.java:25)</div><div class="line">	at org.apache.felix.framework.util.SecureAction.startActivator(SecureAction.java:697)</div><div class="line">	at org.apache.felix.framework.Felix.activateBundle(Felix.java:2220)</div><div class="line">	at org.apache.felix.framework.Felix.startBundle(Felix.java:2138)</div><div class="line">	at org.apache.felix.framework.Felix.setActiveStartLevel(Felix.java:1365)</div><div class="line">	at org.apache.felix.framework.FrameworkStartLevelImpl.run(FrameworkStartLevelImpl.java:308)</div><div class="line">	at java.lang.Thread.run(Thread.java:745)</div><div class="line">Caused by: java.lang.ClassNotFoundException: org.apache.commons.lang.StringUtils not found by Example2 [1]</div><div class="line">	at org.apache.felix.framework.BundleWiringImpl.findClassOrResourceByDelegation(BundleWiringImpl.java:1558)</div><div class="line">	at org.apache.felix.framework.BundleWiringImpl.access<span class="variable">$400</span>(BundleWiringImpl.java:79)</div><div class="line">	at org.apache.felix.framework.BundleWiringImpl<span class="variable">$BundleClassLoader</span>.loadClass(BundleWiringImpl.java:1998)</div><div class="line">	at java.lang.ClassLoader.loadClass(ClassLoader.java:357)</div><div class="line">	... 7 more</div><div class="line">____________________________</div><div class="line">Welcome to Apache Felix Gogo</div><div class="line"></div><div class="line">g!</div></pre></td></tr></table></figure>
+<pre><code class="bash">ERROR: Bundle Example2 [1] Error starting file:/home/yang/Downloads/felix-framework-5.2.0/bundle/Example2_1.0.0.jar (org.osgi.framework.BundleException: Activator start error in bundle Example2 [1].)
+java.lang.NoClassDefFoundError: org/apache/commons/lang/StringUtils
+    at example2.Activator.start(Activator.java:25)
+    at org.apache.felix.framework.util.SecureAction.startActivator(SecureAction.java:697)
+    at org.apache.felix.framework.Felix.activateBundle(Felix.java:2220)
+    at org.apache.felix.framework.Felix.startBundle(Felix.java:2138)
+    at org.apache.felix.framework.Felix.setActiveStartLevel(Felix.java:1365)
+    at org.apache.felix.framework.FrameworkStartLevelImpl.run(FrameworkStartLevelImpl.java:308)
+    at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.ClassNotFoundException: org.apache.commons.lang.StringUtils not found by Example2 [1]
+    at org.apache.felix.framework.BundleWiringImpl.findClassOrResourceByDelegation(BundleWiringImpl.java:1558)
+    at org.apache.felix.framework.BundleWiringImpl.access$400(BundleWiringImpl.java:79)
+    at org.apache.felix.framework.BundleWiringImpl$BundleClassLoader.loadClass(BundleWiringImpl.java:1998)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+    ... 7 more
+____________________________
+Welcome to Apache Felix Gogo
+
+g!
+</code></pre>
 <p><strong>还要注意</strong></p>
 <p>这样子写了Jar包之后，千万不要再使用<code>Import-Package</code>来导入这些第三方包了。不然也会报以上的类似错误。</p>
 <h2 id="关于包的可见性问题"><a href="#关于包的可见性问题" class="headerlink" title="关于包的可见性问题"></a>关于包的可见性问题</h2><p>总之一句话, 除了<code>java.</code>开头的包对于任何的OSGi框架运行时都是可见的, 其他的都应该假设它是不可见的.包括<code>javax.</code>开头的包!!</p>

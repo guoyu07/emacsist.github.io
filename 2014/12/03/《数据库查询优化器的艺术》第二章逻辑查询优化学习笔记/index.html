@@ -391,15 +391,15 @@ select col_a from t_a where col_b &gt; 100;
 简单的视图（SPJ）可以被查询优化器较好地处理。
 但复杂视图则不能被查询优化器很好地处理。
 </code></pre><h1 id="等价谓词重写"><a href="#等价谓词重写" class="headerlink" title="等价谓词重写"></a>等价谓词重写</h1><pre><code>1）LIKE规则
-如：name like &apos;abc%&apos;
+如：name like &#39;abc%&#39;
 重写为
-name &gt;= &apos;abc&apos; and name &lt; &apos;abd&apos;;
+name &gt;= &#39;abc&#39; and name &lt; &#39;abd&#39;;
 应用like规则的好处：转换前针对 like 谓词只能进行全表扫描。如果name列上存在索引，则转换后可以进行索引范围扫描。
 
 如果没有通配符（%或_）。则是与 = 等价
-name like &apos;abc&apos;
+name like &#39;abc&#39;
 重写为
-name = &apos;abc&apos;
+name = &#39;abc&#39;
 
 2） BETWEEN-AND规则
 sno BETWEEN 10 AND 20 
@@ -439,9 +439,9 @@ NOT (col_1 != 2) 重写为 col_1 = 2 其他类似
 
 8）OR重写并集规则
 如：
-select * from student where ( sex = &apos;f&apos; and sno &gt; 15 ) or age &gt; 18；
+select * from student where ( sex = &#39;f&#39; and sno &gt; 15 ) or age &gt; 18；
 这条SQL会强迫查询优化器使用顺序存取，因为这个语句要检索的是OR操作的集合。假设，sex, age 上有索引，则可优化为：
-select * from student where sex = &apos;f&apos; and sno &gt; 15 union select * from student where age &gt; 18；
+select * from student where sex = &#39;f&#39; and sno &gt; 15 union select * from student where age &gt; 18；
 </code></pre><h1 id="条件简化"><a href="#条件简化" class="headerlink" title="条件简化"></a>条件简化</h1><pre><code>1）把HAVING条件并入WHERE条件。（只有SQL语句不存在 GROUP BY 条件 或聚集函数的情况下才可以使用）
 
 2）去除表达式中冗余的括号。这样子可以减少语法分析时产生的AND和OR树的层次。

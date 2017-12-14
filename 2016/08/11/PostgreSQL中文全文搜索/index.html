@@ -15,17 +15,17 @@
     <meta name="keywords" content="postgresql,database," />
   
 
-  <meta name="description" content="安装 zhparserzhparser 使用创建测试表: 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465create table ts (name varchar(1024));sky=# select">
+  <meta name="description" content="安装 zhparserzhparser 使用创建测试表: create table ts (name varchar(1024));  sky=# select * from ts limit 50;              name              ------------------------------  中国人民  中国人民解放军  中国人民解放军，军队  中国军人  中国军">
 <meta name="keywords" content="postgresql,database">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PostgreSQL中文全文搜索">
 <meta property="og:url" content="https://emacsist.github.io/2016/08/11/PostgreSQL中文全文搜索/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="安装 zhparserzhparser 使用创建测试表: 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465create table ts (name varchar(1024));sky=# select">
+<meta property="og:description" content="安装 zhparserzhparser 使用创建测试表: create table ts (name varchar(1024));  sky=# select * from ts limit 50;              name              ------------------------------  中国人民  中国人民解放军  中国人民解放军，军队  中国军人  中国军">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PostgreSQL中文全文搜索">
-<meta name="twitter:description" content="安装 zhparserzhparser 使用创建测试表: 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465create table ts (name varchar(1024));sky=# select">
+<meta name="twitter:description" content="安装 zhparserzhparser 使用创建测试表: create table ts (name varchar(1024));  sky=# select * from ts limit 50;              name              ------------------------------  中国人民  中国人民解放军  中国人民解放军，军队  中国军人  中国军">
 
   
 
@@ -203,16 +203,112 @@
         
                             <h2 id="安装-zhparser"><a href="#安装-zhparser" class="headerlink" title="安装 zhparser"></a>安装 zhparser</h2><p><a href="https://github.com/amutu/zhparser" target="_blank" rel="external">zhparser</a></p>
 <h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>创建测试表:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line">create table ts (name varchar(1024));</div><div class="line"></div><div class="line">sky=<span class="comment"># select * from ts limit 50;</span></div><div class="line">             name             </div><div class="line">------------------------------</div><div class="line"> 中国人民</div><div class="line"> 中国人民解放军</div><div class="line"> 中国人民解放军，军队</div><div class="line"> 中国军人</div><div class="line"> 中国军队</div><div class="line"> 中国军队1</div><div class="line"> 中国军队一二三</div><div class="line"> 中国军队一二三四</div><div class="line"> 军队一二三四</div><div class="line"> 中国军队一三四</div><div class="line"> 中国军队一三</div><div class="line"> 中国军队一</div><div class="line"> 中国军队</div><div class="line"> 中国</div><div class="line"> 中</div><div class="line"> 中国军</div><div class="line"> 中国军</div><div class="line"> 为什么</div><div class="line"> 为国</div><div class="line"> 中军队</div><div class="line"> 中军队你</div><div class="line"> 中军队，解放 </div><div class="line"> 中军队，解放军</div><div class="line"> 中军队，解放军队</div><div class="line"> 中军队，解放军军队</div><div class="line"> 中军队，解放军军队呀</div><div class="line"> 中军队，解放军军队呀哈哈</div><div class="line"> 中军队，解放军军队呀哈哈哈</div><div class="line"> 中军队，解放军军队呀哈哈哈哈</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line"> 你好</div><div class="line">....</div><div class="line"></div><div class="line"></div><div class="line">sky=<span class="comment"># select count(1) from ts;</span></div><div class="line"> count </div><div class="line">-------</div><div class="line"> 65565</div><div class="line">(1 row)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<pre><code class="bash">create table ts (name varchar(1024));
+
+sky=# select * from ts limit 50;
+             name             
+------------------------------
+ 中国人民
+ 中国人民解放军
+ 中国人民解放军，军队
+ 中国军人
+ 中国军队
+ 中国军队1
+ 中国军队一二三
+ 中国军队一二三四
+ 军队一二三四
+ 中国军队一三四
+ 中国军队一三
+ 中国军队一
+ 中国军队
+ 中国
+ 中
+ 中国军
+ 中国军
+ 为什么
+ 为国
+ 中军队
+ 中军队你
+ 中军队，解放 
+ 中军队，解放军
+ 中军队，解放军队
+ 中军队，解放军军队
+ 中军队，解放军军队呀
+ 中军队，解放军军队呀哈哈
+ 中军队，解放军军队呀哈哈哈
+ 中军队，解放军军队呀哈哈哈哈
+ 你好
+ 你好
+ 你好
+ 你好
+ 你好
+ 你好
+ 你好
+ 你好
+ 你好
+ 你好
+ 你好
+ 你好
+ 你好
+ 你好
+ 你好
+ 你好
+ 你好
+ 你好
+ 你好
+ 你好
+ 你好
+....
+
+
+sky=# select count(1) from ts;
+ count 
+-------
+ 65565
+(1 row)
+
+sky=#
+</code></pre>
 <p>插入足够多的测试数据。这里是65565条数据。</p>
 <h3 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h3><blockquote>
 <p>下面假设你已经安装并配置好了<code>zhparser</code>.</p>
 </blockquote>
 <p><code>zhparser.multi_short = on;</code>设置为全局级别后再创建索引.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">alter role all <span class="built_in">set</span> zhparser.multi_short=on;</div></pre></td></tr></table></figure>
+<pre><code class="bash">alter role all set zhparser.multi_short=on;
+</code></pre>
 <p>创建索引:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">create index idx_name on ts using gin(to_tsvector(<span class="string">'testzhcfg'</span>, name));</div></pre></td></tr></table></figure>
-<h2 id="全文搜索-VS-LKIE"><a href="#全文搜索-VS-LKIE" class="headerlink" title="全文搜索 VS LKIE"></a>全文搜索 VS LKIE</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># explain analyze select * from ts where to_tsvector('testzhcfg', name) @@ to_tsquery('testzhcfg', '军队');</span></div><div class="line">                                                     QUERY PLAN                                                      </div><div class="line">---------------------------------------------------------------------------------------------------------------------</div><div class="line"> Bitmap Heap Scan on ts  (cost=10.54..401.46 rows=328 width=7) (actual time=0.010..0.011 rows=20 loops=1)</div><div class="line">   Recheck Cond: (to_tsvector(<span class="string">'testzhcfg'</span>::regconfig, (name)::text) @@ <span class="string">''</span><span class="string">'军队'</span><span class="string">''</span>::tsquery)</div><div class="line">   Heap Blocks: exact=1</div><div class="line">   -&gt;  Bitmap Index Scan on idx_name  (cost=0.00..10.46 rows=328 width=0) (actual time=0.007..0.007 rows=20 loops=1)</div><div class="line">         Index Cond: (to_tsvector(<span class="string">'testzhcfg'</span>::regconfig, (name)::text) @@ <span class="string">''</span><span class="string">'军队'</span><span class="string">''</span>::tsquery)</div><div class="line"> Planning time: 0.071 ms</div><div class="line"> Execution time: 0.026 ms</div><div class="line">(7 rows)</div><div class="line"></div><div class="line">sky=<span class="comment"># </span></div><div class="line"></div><div class="line"></div><div class="line">LIKE:</div><div class="line"></div><div class="line"></div><div class="line">sky=<span class="comment"># explain analyze  select * from ts where name like '%军队%';</span></div><div class="line">                                           QUERY PLAN                                           </div><div class="line">------------------------------------------------------------------------------------------------</div><div class="line"> Seq Scan on ts  (cost=0.00..1110.56 rows=3 width=7) (actual time=0.008..5.212 rows=20 loops=1)</div><div class="line">   Filter: ((name)::text ~~ <span class="string">'%军队%'</span>::text)</div><div class="line">   Rows Removed by Filter: 65545</div><div class="line"> Planning time: 0.042 ms</div><div class="line"> Execution time: 5.223 ms</div><div class="line">(5 rows)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<pre><code class="bash">create index idx_name on ts using gin(to_tsvector(&#39;testzhcfg&#39;, name));
+</code></pre>
+<h2 id="全文搜索-VS-LKIE"><a href="#全文搜索-VS-LKIE" class="headerlink" title="全文搜索 VS LKIE"></a>全文搜索 VS LKIE</h2><pre><code class="bash">sky=# explain analyze select * from ts where to_tsvector(&#39;testzhcfg&#39;, name) @@ to_tsquery(&#39;testzhcfg&#39;, &#39;军队&#39;);
+                                                     QUERY PLAN                                                      
+---------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on ts  (cost=10.54..401.46 rows=328 width=7) (actual time=0.010..0.011 rows=20 loops=1)
+   Recheck Cond: (to_tsvector(&#39;testzhcfg&#39;::regconfig, (name)::text) @@ &#39;&#39;&#39;军队&#39;&#39;&#39;::tsquery)
+   Heap Blocks: exact=1
+   -&gt;  Bitmap Index Scan on idx_name  (cost=0.00..10.46 rows=328 width=0) (actual time=0.007..0.007 rows=20 loops=1)
+         Index Cond: (to_tsvector(&#39;testzhcfg&#39;::regconfig, (name)::text) @@ &#39;&#39;&#39;军队&#39;&#39;&#39;::tsquery)
+ Planning time: 0.071 ms
+ Execution time: 0.026 ms
+(7 rows)
+
+sky=# 
+
+
+LIKE:
+
+
+sky=# explain analyze  select * from ts where name like &#39;%军队%&#39;;
+                                           QUERY PLAN                                           
+------------------------------------------------------------------------------------------------
+ Seq Scan on ts  (cost=0.00..1110.56 rows=3 width=7) (actual time=0.008..5.212 rows=20 loops=1)
+   Filter: ((name)::text ~~ &#39;%军队%&#39;::text)
+   Rows Removed by Filter: 65545
+ Planning time: 0.042 ms
+ Execution time: 5.223 ms
+(5 rows)
+
+sky=#
+</code></pre>
 <p>看来还是挺不错的.</p>
 
                                 

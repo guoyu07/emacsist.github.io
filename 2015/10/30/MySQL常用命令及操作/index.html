@@ -15,17 +15,17 @@
     <meta name="keywords" content="database,bash,mysql," />
   
 
-  <meta name="description" content="查看当前活动线程1SELECT * FROM information_schema.processlist WHERE `INFO` LIKE &apos;SELECT %&apos;; INFO字段就是当前正在执行的命令. 创建唯一索引，并删除有违反唯一索引的数据1ALTER IGNORE TABLE keyword_status ADD UNIQUE INDEX ks_kid_mid (keyword_id, m">
+  <meta name="description" content="查看当前活动线程SELECT * FROM information_schema.processlist WHERE `INFO` LIKE &amp;#39;SELECT %&amp;#39;;  INFO字段就是当前正在执行的命令. 创建唯一索引，并删除有违反唯一索引的数据ALTER IGNORE TABLE keyword_status ADD UNIQUE INDEX ks_kid_mid (keywor">
 <meta name="keywords" content="database,bash,mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL常用命令及操作">
 <meta property="og:url" content="https://emacsist.github.io/2015/10/30/MySQL常用命令及操作/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="查看当前活动线程1SELECT * FROM information_schema.processlist WHERE `INFO` LIKE &apos;SELECT %&apos;; INFO字段就是当前正在执行的命令. 创建唯一索引，并删除有违反唯一索引的数据1ALTER IGNORE TABLE keyword_status ADD UNIQUE INDEX ks_kid_mid (keyword_id, m">
+<meta property="og:description" content="查看当前活动线程SELECT * FROM information_schema.processlist WHERE `INFO` LIKE &amp;#39;SELECT %&amp;#39;;  INFO字段就是当前正在执行的命令. 创建唯一索引，并删除有违反唯一索引的数据ALTER IGNORE TABLE keyword_status ADD UNIQUE INDEX ks_kid_mid (keywor">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL常用命令及操作">
-<meta name="twitter:description" content="查看当前活动线程1SELECT * FROM information_schema.processlist WHERE `INFO` LIKE &apos;SELECT %&apos;; INFO字段就是当前正在执行的命令. 创建唯一索引，并删除有违反唯一索引的数据1ALTER IGNORE TABLE keyword_status ADD UNIQUE INDEX ks_kid_mid (keyword_id, m">
+<meta name="twitter:description" content="查看当前活动线程SELECT * FROM information_schema.processlist WHERE `INFO` LIKE &amp;#39;SELECT %&amp;#39;;  INFO字段就是当前正在执行的命令. 创建唯一索引，并删除有违反唯一索引的数据ALTER IGNORE TABLE keyword_status ADD UNIQUE INDEX ks_kid_mid (keywor">
 
   
 
@@ -206,9 +206,11 @@
 
     <div class="article-content">
         
-                            <h2 id="查看当前活动线程"><a href="#查看当前活动线程" class="headerlink" title="查看当前活动线程"></a>查看当前活动线程</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">SELECT * FROM information_schema.processlist WHERE `INFO` LIKE <span class="string">'SELECT %'</span>;</div></pre></td></tr></table></figure>
+                            <h2 id="查看当前活动线程"><a href="#查看当前活动线程" class="headerlink" title="查看当前活动线程"></a>查看当前活动线程</h2><pre><code class="bash">SELECT * FROM information_schema.processlist WHERE `INFO` LIKE &#39;SELECT %&#39;;
+</code></pre>
 <p><code>INFO</code>字段就是当前正在执行的命令.</p>
-<h2 id="创建唯一索引，并删除有违反唯一索引的数据"><a href="#创建唯一索引，并删除有违反唯一索引的数据" class="headerlink" title="创建唯一索引，并删除有违反唯一索引的数据"></a>创建唯一索引，并删除有违反唯一索引的数据</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ALTER IGNORE TABLE keyword_status ADD UNIQUE INDEX ks_kid_mid (keyword_id, mid);</div></pre></td></tr></table></figure>
+<h2 id="创建唯一索引，并删除有违反唯一索引的数据"><a href="#创建唯一索引，并删除有违反唯一索引的数据" class="headerlink" title="创建唯一索引，并删除有违反唯一索引的数据"></a>创建唯一索引，并删除有违反唯一索引的数据</h2><pre><code class="bash">ALTER IGNORE TABLE keyword_status ADD UNIQUE INDEX ks_kid_mid (keyword_id, mid);
+</code></pre>
 
                                 
     </div>

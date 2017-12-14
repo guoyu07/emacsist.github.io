@@ -15,17 +15,17 @@
     <meta name="keywords" content="java,tomcat,source,Tomcat源码," />
   
 
-  <meta name="description" content="导入Tomcat源码这里使用的Tomcat的版本为apache-tomcat-8.0.36，源码目录在/ihome/java/tomcat/apache-tomcat-8.0.36-src。在这个根目录下，创建一pom.xml文件，内容如下： 123456789101112131415161718192021222324252627282930313233343536373839404142434">
+  <meta name="description" content="导入Tomcat源码这里使用的Tomcat的版本为apache-tomcat-8.0.36，源码目录在/ihome/java/tomcat/apache-tomcat-8.0.36-src。在这个根目录下，创建一pom.xml文件，内容如下： &amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt; &amp;lt;project x">
 <meta name="keywords" content="java,tomcat,source,Tomcat源码">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Tomcat 8 源码学习一之导入到IDEA">
 <meta property="og:url" content="https://emacsist.github.io/2016/06/27/Tomcat-8-源码学习一之导入到IDEA/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="导入Tomcat源码这里使用的Tomcat的版本为apache-tomcat-8.0.36，源码目录在/ihome/java/tomcat/apache-tomcat-8.0.36-src。在这个根目录下，创建一pom.xml文件，内容如下： 123456789101112131415161718192021222324252627282930313233343536373839404142434">
+<meta property="og:description" content="导入Tomcat源码这里使用的Tomcat的版本为apache-tomcat-8.0.36，源码目录在/ihome/java/tomcat/apache-tomcat-8.0.36-src。在这个根目录下，创建一pom.xml文件，内容如下： &amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt; &amp;lt;project x">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tomcat 8 源码学习一之导入到IDEA">
-<meta name="twitter:description" content="导入Tomcat源码这里使用的Tomcat的版本为apache-tomcat-8.0.36，源码目录在/ihome/java/tomcat/apache-tomcat-8.0.36-src。在这个根目录下，创建一pom.xml文件，内容如下： 123456789101112131415161718192021222324252627282930313233343536373839404142434">
+<meta name="twitter:description" content="导入Tomcat源码这里使用的Tomcat的版本为apache-tomcat-8.0.36，源码目录在/ihome/java/tomcat/apache-tomcat-8.0.36-src。在这个根目录下，创建一pom.xml文件，内容如下： &amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt; &amp;lt;project x">
 
   
 
@@ -212,7 +212,86 @@
     <div class="article-content">
         
                             <h2 id="导入Tomcat源码"><a href="#导入Tomcat源码" class="headerlink" title="导入Tomcat源码"></a>导入Tomcat源码</h2><p>这里使用的Tomcat的版本为<code>apache-tomcat-8.0.36</code>，源码目录在<code>/ihome/java/tomcat/apache-tomcat-8.0.36-src</code>。在这个根目录下，创建一<code>pom.xml</code>文件，内容如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</div><div class="line">&lt;project xmlns=<span class="string">"http://maven.apache.org/POM/4.0.0"</span></div><div class="line">         xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></div><div class="line">         xsi:schemaLocation=<span class="string">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span>&gt;</div><div class="line"></div><div class="line"></div><div class="line">    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</div><div class="line">    &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;Tomcat8.0&lt;/artifactId&gt;</div><div class="line">    &lt;name&gt;Tomcat8.0&lt;/name&gt;</div><div class="line">    &lt;version&gt;8.0&lt;/version&gt;</div><div class="line"></div><div class="line">    &lt;build&gt;</div><div class="line">        &lt;finalName&gt;Tomcat8.0&lt;/finalName&gt;</div><div class="line">        &lt;sourceDirectory&gt;java&lt;/sourceDirectory&gt;</div><div class="line">        &lt;testSourceDirectory&gt;<span class="built_in">test</span>&lt;/testSourceDirectory&gt;</div><div class="line">        &lt;resources&gt;</div><div class="line">            &lt;resource&gt;</div><div class="line">                &lt;directory&gt;java&lt;/directory&gt;</div><div class="line">            &lt;/resource&gt;</div><div class="line">        &lt;/resources&gt;</div><div class="line">        &lt;testResources&gt;</div><div class="line">            &lt;testResource&gt;</div><div class="line">                &lt;directory&gt;<span class="built_in">test</span>&lt;/directory&gt;</div><div class="line">            &lt;/testResource&gt;</div><div class="line">        &lt;/testResources&gt;</div><div class="line">        &lt;plugins&gt;</div><div class="line">            &lt;plugin&gt;</div><div class="line">                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</div><div class="line">                &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;</div><div class="line">                &lt;version&gt;2.3&lt;/version&gt;</div><div class="line"></div><div class="line">                &lt;configuration&gt;</div><div class="line">                    &lt;encoding&gt;UTF-8&lt;/encoding&gt;</div><div class="line">                    &lt;<span class="built_in">source</span>&gt;1.7&lt;/<span class="built_in">source</span>&gt;</div><div class="line">                    &lt;target&gt;1.7&lt;/target&gt;</div><div class="line">                &lt;/configuration&gt;</div><div class="line">            &lt;/plugin&gt;</div><div class="line">        &lt;/plugins&gt;</div><div class="line">    &lt;/build&gt;</div><div class="line"></div><div class="line">    &lt;dependencies&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;junit&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;junit&lt;/artifactId&gt;</div><div class="line">            &lt;version&gt;4.11&lt;/version&gt;</div><div class="line">            &lt;scope&gt;<span class="built_in">test</span>&lt;/scope&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;ant&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;ant&lt;/artifactId&gt;</div><div class="line">            &lt;version&gt;1.7.0&lt;/version&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;wsdl4j&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;wsdl4j&lt;/artifactId&gt;</div><div class="line">            &lt;version&gt;1.6.2&lt;/version&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;javax.xml&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;jaxrpc&lt;/artifactId&gt;</div><div class="line">            &lt;version&gt;1.1&lt;/version&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.eclipse.jdt.core.compiler&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;ecj&lt;/artifactId&gt;</div><div class="line">            &lt;version&gt;4.5&lt;/version&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">        &lt;!-- https://mvnrepository.com/artifact/org.easymock/easymock --&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.easymock&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;easymock&lt;/artifactId&gt;</div><div class="line">            &lt;version&gt;3.2&lt;/version&gt;</div><div class="line">            &lt;scope&gt;<span class="built_in">test</span>&lt;/scope&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line"></div><div class="line">    &lt;/dependencies&gt;</div><div class="line"></div><div class="line">&lt;/project&gt;</div></pre></td></tr></table></figure>
+<pre><code class="bash">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot;
+         xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+         xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;
+
+
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+    &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
+    &lt;artifactId&gt;Tomcat8.0&lt;/artifactId&gt;
+    &lt;name&gt;Tomcat8.0&lt;/name&gt;
+    &lt;version&gt;8.0&lt;/version&gt;
+
+    &lt;build&gt;
+        &lt;finalName&gt;Tomcat8.0&lt;/finalName&gt;
+        &lt;sourceDirectory&gt;java&lt;/sourceDirectory&gt;
+        &lt;testSourceDirectory&gt;test&lt;/testSourceDirectory&gt;
+        &lt;resources&gt;
+            &lt;resource&gt;
+                &lt;directory&gt;java&lt;/directory&gt;
+            &lt;/resource&gt;
+        &lt;/resources&gt;
+        &lt;testResources&gt;
+            &lt;testResource&gt;
+                &lt;directory&gt;test&lt;/directory&gt;
+            &lt;/testResource&gt;
+        &lt;/testResources&gt;
+        &lt;plugins&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+                &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+                &lt;version&gt;2.3&lt;/version&gt;
+
+                &lt;configuration&gt;
+                    &lt;encoding&gt;UTF-8&lt;/encoding&gt;
+                    &lt;source&gt;1.7&lt;/source&gt;
+                    &lt;target&gt;1.7&lt;/target&gt;
+                &lt;/configuration&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+    &lt;/build&gt;
+
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;junit&lt;/groupId&gt;
+            &lt;artifactId&gt;junit&lt;/artifactId&gt;
+            &lt;version&gt;4.11&lt;/version&gt;
+            &lt;scope&gt;test&lt;/scope&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;ant&lt;/groupId&gt;
+            &lt;artifactId&gt;ant&lt;/artifactId&gt;
+            &lt;version&gt;1.7.0&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;wsdl4j&lt;/groupId&gt;
+            &lt;artifactId&gt;wsdl4j&lt;/artifactId&gt;
+            &lt;version&gt;1.6.2&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;javax.xml&lt;/groupId&gt;
+            &lt;artifactId&gt;jaxrpc&lt;/artifactId&gt;
+            &lt;version&gt;1.1&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.eclipse.jdt.core.compiler&lt;/groupId&gt;
+            &lt;artifactId&gt;ecj&lt;/artifactId&gt;
+            &lt;version&gt;4.5&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;!-- https://mvnrepository.com/artifact/org.easymock/easymock --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.easymock&lt;/groupId&gt;
+            &lt;artifactId&gt;easymock&lt;/artifactId&gt;
+            &lt;version&gt;3.2&lt;/version&gt;
+            &lt;scope&gt;test&lt;/scope&gt;
+        &lt;/dependency&gt;
+
+    &lt;/dependencies&gt;
+
+&lt;/project&gt;
+</code></pre>
 <p>然后删除 <code>test/util/TestCookieFilter.java</code> 这个文件。</p>
 <p>最后，在IDEA中选择<code>File -&gt; New -&gt; Project from Existing Sources...</code>，然后定位到<code>/ihome/java/tomcat/apache-tomcat-8.0.36-src</code>即可.</p>
 <h2 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h2><p>选择<code>Run -&gt; Edit Configurations</code>.</p>

@@ -15,17 +15,17 @@
     <meta name="keywords" content="java,server,tomcat," />
   
 
-  <meta name="description" content="操作系统设置limit123456789101112131415161718╭─sky@sky-linux ~╰─➤  ulimit -a-t: cpu time (seconds)              unlimited-f: file size (blocks)              unlimited-d: data seg size (kbytes)          unlim">
+  <meta name="description" content="操作系统设置limit╭─sky@sky-linux ~ ╰─➤  ulimit -a -t: cpu time (seconds)              unlimited -f: file size (blocks)              unlimited -d: data seg size (kbytes)          unlimited -s: stack size (kb">
 <meta name="keywords" content="java,server,tomcat">
 <meta property="og:type" content="article">
 <meta property="og:title" content="生产环境部署Tomcat配置">
 <meta property="og:url" content="https://emacsist.github.io/2016/01/11/生产环境部署Tomcat配置/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="操作系统设置limit123456789101112131415161718╭─sky@sky-linux ~╰─➤  ulimit -a-t: cpu time (seconds)              unlimited-f: file size (blocks)              unlimited-d: data seg size (kbytes)          unlim">
+<meta property="og:description" content="操作系统设置limit╭─sky@sky-linux ~ ╰─➤  ulimit -a -t: cpu time (seconds)              unlimited -f: file size (blocks)              unlimited -d: data seg size (kbytes)          unlimited -s: stack size (kb">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="生产环境部署Tomcat配置">
-<meta name="twitter:description" content="操作系统设置limit123456789101112131415161718╭─sky@sky-linux ~╰─➤  ulimit -a-t: cpu time (seconds)              unlimited-f: file size (blocks)              unlimited-d: data seg size (kbytes)          unlim">
+<meta name="twitter:description" content="操作系统设置limit╭─sky@sky-linux ~ ╰─➤  ulimit -a -t: cpu time (seconds)              unlimited -f: file size (blocks)              unlimited -d: data seg size (kbytes)          unlimited -s: stack size (kb">
 
   
 
@@ -206,13 +206,45 @@
 
     <div class="article-content">
         
-                            <h2 id="操作系统设置"><a href="#操作系统设置" class="headerlink" title="操作系统设置"></a>操作系统设置</h2><h3 id="limit"><a href="#limit" class="headerlink" title="limit"></a>limit</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">╭─sky@sky-linux ~</div><div class="line">╰─➤  <span class="built_in">ulimit</span> -a</div><div class="line">-t: cpu time (seconds)              unlimited</div><div class="line">-f: file size (blocks)              unlimited</div><div class="line">-d: data seg size (kbytes)          unlimited</div><div class="line">-s: stack size (kbytes)             8192</div><div class="line">-c: core file size (blocks)         0</div><div class="line">-m: resident <span class="built_in">set</span> size (kbytes)      unlimited</div><div class="line">-u: processes                       63555</div><div class="line">-n: file descriptors                1024</div><div class="line">-l: locked-in-memory size (kbytes)  64</div><div class="line">-v: address space (kbytes)          unlimited</div><div class="line">-x: file locks                      unlimited</div><div class="line">-i: pending signals                 63555</div><div class="line">-q: bytes <span class="keyword">in</span> POSIX msg queues       819200</div><div class="line">-e: max nice                        0</div><div class="line">-r: max rt priority                 0</div><div class="line">-N 15:                              unlimited</div></pre></td></tr></table></figure>
+                            <h2 id="操作系统设置"><a href="#操作系统设置" class="headerlink" title="操作系统设置"></a>操作系统设置</h2><h3 id="limit"><a href="#limit" class="headerlink" title="limit"></a>limit</h3><pre><code class="bash">╭─sky@sky-linux ~
+╰─➤  ulimit -a
+-t: cpu time (seconds)              unlimited
+-f: file size (blocks)              unlimited
+-d: data seg size (kbytes)          unlimited
+-s: stack size (kbytes)             8192
+-c: core file size (blocks)         0
+-m: resident set size (kbytes)      unlimited
+-u: processes                       63555
+-n: file descriptors                1024
+-l: locked-in-memory size (kbytes)  64
+-v: address space (kbytes)          unlimited
+-x: file locks                      unlimited
+-i: pending signals                 63555
+-q: bytes in POSIX msg queues       819200
+-e: max nice                        0
+-r: max rt priority                 0
+-N 15:                              unlimited
+</code></pre>
 <h4 id="会话级别"><a href="#会话级别" class="headerlink" title="会话级别"></a>会话级别</h4><p>如果不想全局设置limit，可以在会话级别设置，即在启动程序之前，设置好limit后再启动程序</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 硬设置</span></div><div class="line"><span class="built_in">ulimit</span> -Hc unlimited</div><div class="line"><span class="built_in">ulimit</span> -Hn 65535</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 软设置</span></div><div class="line"><span class="built_in">ulimit</span> -Sc unlimited</div><div class="line"><span class="built_in">ulimit</span> -Sn 65535</div></pre></td></tr></table></figure>
+<pre><code class="bash"># 硬设置
+ulimit -Hc unlimited
+ulimit -Hn 65535
+
+
+# 软设置
+ulimit -Sc unlimited
+ulimit -Sn 65535
+</code></pre>
 <h4 id="全局设置limit"><a href="#全局设置limit" class="headerlink" title="全局设置limit"></a>全局设置limit</h4><p>编辑 <code>/etc/security/limits.conf</code> 文件.添加或修改为如下</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">*               soft    core            unlimited</div><div class="line">*				hard	core			unlimited</div><div class="line">* 				soft    nofile			65535</div><div class="line">*				hard	nofile			65535</div></pre></td></tr></table></figure>
-<h2 id="Tomcat自身设置"><a href="#Tomcat自身设置" class="headerlink" title="Tomcat自身设置"></a>Tomcat自身设置</h2><h3 id="统一UTF-8"><a href="#统一UTF-8" class="headerlink" title="统一UTF-8"></a>统一UTF-8</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;Connector port=<span class="string">"8095"</span> protocol=<span class="string">"HTTP/1.1"</span> connectionTimeout=<span class="string">"20000"</span> redirectPort=<span class="string">"8443"</span> URIEncoding=<span class="string">"UTF-8"</span> useBodyEncodingForURI=<span class="string">"true"</span>/&gt;</div></pre></td></tr></table></figure>
-<h3 id="关闭-auto-deploy"><a href="#关闭-auto-deploy" class="headerlink" title="关闭 auto-deploy"></a>关闭 auto-deploy</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;Host name=<span class="string">"localhost"</span>  appBase=<span class="string">"webapps"</span> unpackWARs=<span class="string">"true"</span> autoDeploy=<span class="string">"false"</span>&gt;</div></pre></td></tr></table></figure>
+<pre><code class="bash">*               soft    core            unlimited
+*                hard    core            unlimited
+*                 soft    nofile            65535
+*                hard    nofile            65535
+</code></pre>
+<h2 id="Tomcat自身设置"><a href="#Tomcat自身设置" class="headerlink" title="Tomcat自身设置"></a>Tomcat自身设置</h2><h3 id="统一UTF-8"><a href="#统一UTF-8" class="headerlink" title="统一UTF-8"></a>统一UTF-8</h3><pre><code class="bash">&lt;Connector port=&quot;8095&quot; protocol=&quot;HTTP/1.1&quot; connectionTimeout=&quot;20000&quot; redirectPort=&quot;8443&quot; URIEncoding=&quot;UTF-8&quot; useBodyEncodingForURI=&quot;true&quot;/&gt;
+</code></pre>
+<h3 id="关闭-auto-deploy"><a href="#关闭-auto-deploy" class="headerlink" title="关闭 auto-deploy"></a>关闭 auto-deploy</h3><pre><code class="bash">&lt;Host name=&quot;localhost&quot;  appBase=&quot;webapps&quot; unpackWARs=&quot;true&quot; autoDeploy=&quot;false&quot;&gt;
+</code></pre>
 <h3 id="Tomcat线程池"><a href="#Tomcat线程池" class="headerlink" title="Tomcat线程池"></a>Tomcat线程池</h3><ul>
 <li><code>threadPriority</code>： 线程的优先级</li>
 <li><code>minSpareThreads</code>：最小一定存活线程数，这个是会一直保持的，默认为<code>25</code></li>
@@ -224,11 +256,36 @@
 <li><code>threadRenewalDelay</code>: 重建线程池的线程的时间间隔。（前提是配置了<code>ThreadLocalLeakPreventionListener</code>。 默认为<code>1000</code>ms。如果为负，则不重建.</li>
 <li><code>namePrefix</code>：线程名前的前缀</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;Executor name=<span class="string">"tomcatThreadPool"</span> namePrefix=<span class="string">"mytomcat-exec-"</span> maxThreads=<span class="string">"150"</span> minSpareThreads=<span class="string">"4"</span>/&gt;</div></pre></td></tr></table></figure>
+<pre><code class="bash">&lt;Executor name=&quot;tomcatThreadPool&quot; namePrefix=&quot;mytomcat-exec-&quot; maxThreads=&quot;150&quot; minSpareThreads=&quot;4&quot;/&gt;
+</code></pre>
 <p>然后在<code>Connector里配置使用线程池</code></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;Connector port=<span class="string">"8095"</span> protocol=<span class="string">"HTTP/1.1"</span> connectionTimeout=<span class="string">"20000"</span> redirectPort=<span class="string">"8443"</span> URIEncoding=<span class="string">"UTF-8"</span> useBodyEncodingForURI=<span class="string">"true"</span> executor=<span class="string">"tomcatThreadPool"</span> /&gt;</div></pre></td></tr></table></figure>
+<pre><code class="bash">&lt;Connector port=&quot;8095&quot; protocol=&quot;HTTP/1.1&quot; connectionTimeout=&quot;20000&quot; redirectPort=&quot;8443&quot; URIEncoding=&quot;UTF-8&quot; useBodyEncodingForURI=&quot;true&quot; executor=&quot;tomcatThreadPool&quot; /&gt;
+</code></pre>
 <p><a href="http://tomcat.apache.org/tomcat-7.0-doc/config/executor.html" target="_blank" rel="external">Tomcat文档</a></p>
-<h3 id="JVM-配置"><a href="#JVM-配置" class="headerlink" title="JVM 配置"></a>JVM 配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line"></div><div class="line">JVM_TYPE = <span class="string">" -server"</span></div><div class="line"></div><div class="line">JVM_GC=<span class="string">" -XX:+PrintGCDateStamps -verbose:gc -XX:+PrintGCDetails -Xloggc:/tmp/gc.log -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=10M"</span></div><div class="line">JVM_DUMP=<span class="string">" -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp/jvm-dump-`date`.hprof"</span></div><div class="line"></div><div class="line">JVM_GC_TYPE=<span class="string">" -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:+UseCMSInitiatingOccupancyOnly -XX:CMSInitiatingOccupancyFraction=90  -XX:+ScavengeBeforeFullGC -XX:+CMSScavengeBeforeRemark"</span></div><div class="line"></div><div class="line"><span class="comment"># 单位：秒</span></div><div class="line">JVM_DNS_CACHE=<span class="string">" -Dsun.net.inetaddr.ttl=60"</span></div><div class="line"></div><div class="line"><span class="comment"># hostname如果为远程，则是外网的IP</span></div><div class="line">JVM_RMI=<span class="string">" -Djava.rmi.server.hostname=127.0.0.1 -Dcom.sun.management.jmxremote.port=8888 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"</span></div><div class="line"></div><div class="line"><span class="comment"># survivorratio = eden / from 的比值</span></div><div class="line"></div><div class="line">JVM_MEM=<span class="string">" -Xms512m -Xmx1024m  -XX:PermSize=512m -XX:MaxPermSize=1024m  -Xmn300m -XX:SurvivorRatio=8"</span></div><div class="line"></div><div class="line"></div><div class="line">JVM_DEBUG=<span class="string">" -Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n"</span></div><div class="line"></div><div class="line">CATALINA_OPTS=<span class="string">" -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager <span class="variable">$&#123;JVM_TYPE&#125;</span> <span class="variable">$&#123;JVM_GC_TYPE&#125;</span> <span class="variable">$&#123;JVM_GC&#125;</span> <span class="variable">$&#123;JVM_DUMP&#125;</span> <span class="variable">$&#123;JVM_DNS_CACHE&#125;</span> <span class="variable">$&#123;JVM_RMI&#125;</span> <span class="variable">$&#123;JVM_MEM&#125;</span> <span class="variable">$&#123;JVM_DEBUG&#125;</span> "</span></div></pre></td></tr></table></figure>
+<h3 id="JVM-配置"><a href="#JVM-配置" class="headerlink" title="JVM 配置"></a>JVM 配置</h3><pre><code class="bash">#!/bin/sh
+
+JVM_TYPE = &quot; -server&quot;
+
+JVM_GC=&quot; -XX:+PrintGCDateStamps -verbose:gc -XX:+PrintGCDetails -Xloggc:/tmp/gc.log -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=10M&quot;
+JVM_DUMP=&quot; -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp/jvm-dump-`date`.hprof&quot;
+
+JVM_GC_TYPE=&quot; -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:+UseCMSInitiatingOccupancyOnly -XX:CMSInitiatingOccupancyFraction=90  -XX:+ScavengeBeforeFullGC -XX:+CMSScavengeBeforeRemark&quot;
+
+# 单位：秒
+JVM_DNS_CACHE=&quot; -Dsun.net.inetaddr.ttl=60&quot;
+
+# hostname如果为远程，则是外网的IP
+JVM_RMI=&quot; -Djava.rmi.server.hostname=127.0.0.1 -Dcom.sun.management.jmxremote.port=8888 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false&quot;
+
+# survivorratio = eden / from 的比值
+
+JVM_MEM=&quot; -Xms512m -Xmx1024m  -XX:PermSize=512m -XX:MaxPermSize=1024m  -Xmn300m -XX:SurvivorRatio=8&quot;
+
+
+JVM_DEBUG=&quot; -Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n&quot;
+
+CATALINA_OPTS=&quot; -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager ${JVM_TYPE} ${JVM_GC_TYPE} ${JVM_GC} ${JVM_DUMP} ${JVM_DNS_CACHE} ${JVM_RMI} ${JVM_MEM} ${JVM_DEBUG} &quot;
+</code></pre>
 
                                 
     </div>

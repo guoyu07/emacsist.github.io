@@ -15,17 +15,17 @@
     <meta name="keywords" content="java,tomcat,Tomcat源码," />
   
 
-  <meta name="description" content="Tomcat内部Valve组件,与我们普通使用的Filter, Interceptor这些概念非常类似.只不过,Valve只是针对Tomcat内部的.而Filter是Servlet的标准, Interceptor是框架层次上的概念. 它们的工作方式都是一种责任链的传递来拦截Request, Response然后进行自定义的处理. Valve 接口12345678910111213141516171">
+  <meta name="description" content="Tomcat内部Valve组件,与我们普通使用的Filter, Interceptor这些概念非常类似.只不过,Valve只是针对Tomcat内部的.而Filter是Servlet的标准, Interceptor是框架层次上的概念. 它们的工作方式都是一种责任链的传递来拦截Request, Response然后进行自定义的处理. Valve 接口package org.apache.catalin">
 <meta name="keywords" content="java,tomcat,Tomcat源码">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Tomcat 8 源码学习八之Valve组件">
 <meta property="og:url" content="https://emacsist.github.io/2016/07/06/Tomcat-8-源码学习八之Valve组件/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="Tomcat内部Valve组件,与我们普通使用的Filter, Interceptor这些概念非常类似.只不过,Valve只是针对Tomcat内部的.而Filter是Servlet的标准, Interceptor是框架层次上的概念. 它们的工作方式都是一种责任链的传递来拦截Request, Response然后进行自定义的处理. Valve 接口12345678910111213141516171">
+<meta property="og:description" content="Tomcat内部Valve组件,与我们普通使用的Filter, Interceptor这些概念非常类似.只不过,Valve只是针对Tomcat内部的.而Filter是Servlet的标准, Interceptor是框架层次上的概念. 它们的工作方式都是一种责任链的传递来拦截Request, Response然后进行自定义的处理. Valve 接口package org.apache.catalin">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tomcat 8 源码学习八之Valve组件">
-<meta name="twitter:description" content="Tomcat内部Valve组件,与我们普通使用的Filter, Interceptor这些概念非常类似.只不过,Valve只是针对Tomcat内部的.而Filter是Servlet的标准, Interceptor是框架层次上的概念. 它们的工作方式都是一种责任链的传递来拦截Request, Response然后进行自定义的处理. Valve 接口12345678910111213141516171">
+<meta name="twitter:description" content="Tomcat内部Valve组件,与我们普通使用的Filter, Interceptor这些概念非常类似.只不过,Valve只是针对Tomcat内部的.而Filter是Servlet的标准, Interceptor是框架层次上的概念. 它们的工作方式都是一种责任链的传递来拦截Request, Response然后进行自定义的处理. Valve 接口package org.apache.catalin">
 
   
 
@@ -208,13 +208,72 @@
         
                             <p>Tomcat内部Valve组件,与我们普通使用的<code>Filter</code>, <code>Interceptor</code>这些概念非常类似.只不过,<code>Valve</code>只是针对<code>Tomcat</code>内部的.而<code>Filter</code>是<code>Servlet</code>的标准, <code>Interceptor</code>是框架层次上的概念.</p>
 <p>它们的工作方式都是一种责任链的传递来拦截<code>Request</code>, <code>Response</code>然后进行自定义的处理.</p>
-<h2 id="Valve-接口"><a href="#Valve-接口" class="headerlink" title="Valve 接口"></a>Valve 接口</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">package org.apache.catalina;</div><div class="line"></div><div class="line">import java.io.IOException;</div><div class="line">import javax.servlet.ServletException;</div><div class="line">import org.apache.catalina.comet.CometEvent;</div><div class="line">import org.apache.catalina.connector.Request;</div><div class="line">import org.apache.catalina.connector.Response;</div><div class="line"></div><div class="line">public interface Valve &#123;</div><div class="line">    Valve getNext();</div><div class="line"></div><div class="line">    void setNext(Valve var1);</div><div class="line"></div><div class="line">    void backgroundProcess();</div><div class="line"></div><div class="line">    void invoke(Request var1, Response var2) throws IOException, ServletException;</div><div class="line"></div><div class="line">    void event(Request var1, Response var2, CometEvent var3) throws IOException, ServletException;</div><div class="line"></div><div class="line">    boolean isAsyncSupported();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="Valve-接口"><a href="#Valve-接口" class="headerlink" title="Valve 接口"></a>Valve 接口</h2><pre><code class="bash">package org.apache.catalina;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import org.apache.catalina.comet.CometEvent;
+import org.apache.catalina.connector.Request;
+import org.apache.catalina.connector.Response;
+
+public interface Valve {
+    Valve getNext();
+
+    void setNext(Valve var1);
+
+    void backgroundProcess();
+
+    void invoke(Request var1, Response var2) throws IOException, ServletException;
+
+    void event(Request var1, Response var2, CometEvent var3) throws IOException, ServletException;
+
+    boolean isAsyncSupported();
+}
+</code></pre>
 <p>我们可以看到,Valve接口的参数,主要也是<code>Request</code>和<code>Response</code>,然后调用下一个<code>Valve</code>.</p>
 <h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><p>如果我们想添加一种对同一个Tomcat下所有的应用都生效的<code>Filter</code>,就可以使用<code>Valve</code>来处理了.而<code>Filter</code>, <code>Interceptor</code>这些,都只是在某个应用或框架中使用.</p>
 <h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p>创建一个自定义Valve的项目.(打包成jar).</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">package org.emacsist.valve;</div><div class="line"></div><div class="line">import org.apache.catalina.connector.Request;</div><div class="line">import org.apache.catalina.connector.Response;</div><div class="line">import org.apache.catalina.valves.ValveBase;</div><div class="line"></div><div class="line">import javax.servlet.ServletException;</div><div class="line">import java.io.IOException;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by sky on 16-7-6.</div><div class="line"> */</div><div class="line">public class ModifiedValve extends ValveBase &#123;</div><div class="line"></div><div class="line">    public void invoke(Request request, Response response) throws IOException, ServletException &#123;</div><div class="line">        // todo yourself logic </div><div class="line">        getNext().invoke(request, response);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="bash">package org.emacsist.valve;
+
+import org.apache.catalina.connector.Request;
+import org.apache.catalina.connector.Response;
+import org.apache.catalina.valves.ValveBase;
+
+import javax.servlet.ServletException;
+import java.io.IOException;
+
+/**
+ * Created by sky on 16-7-6.
+ */
+public class ModifiedValve extends ValveBase {
+
+    public void invoke(Request request, Response response) throws IOException, ServletException {
+        // todo yourself logic 
+        getNext().invoke(request, response);
+    }
+}
+</code></pre>
 <p>然后将项目打包, 然后放到Tomcat的<code>lib</code>目录下,然后再在<code>conf/server.xml</code>里配置<code>Valve</code>元素即可.例如:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">    &lt;Host name=<span class="string">"localhost"</span>  appBase=<span class="string">"webapps"</span></div><div class="line">          unpackWARs=<span class="string">"true"</span> autoDeploy=<span class="string">"true"</span>&gt;</div><div class="line"></div><div class="line">      &lt;!-- SingleSignOn valve, share authentication between web applications</div><div class="line">           Documentation at: /docs/config/valve.html --&gt;</div><div class="line">      &lt;!--</div><div class="line">      &lt;Valve className=<span class="string">"org.apache.catalina.authenticator.SingleSignOn"</span> /&gt;</div><div class="line">      --&gt;</div><div class="line"></div><div class="line">      &lt;!-- Access <span class="built_in">log</span> processes all example.</div><div class="line">           Documentation at: /docs/config/valve.html</div><div class="line">           Note: The pattern used is equivalent to using pattern=<span class="string">"common"</span> --&gt;</div><div class="line">      &lt;Valve className=<span class="string">"org.apache.catalina.valves.AccessLogValve"</span> directory=<span class="string">"logs"</span></div><div class="line">             prefix=<span class="string">"localhost_access_log."</span> suffix=<span class="string">".txt"</span></div><div class="line">             pattern=<span class="string">"%h %l %u %t &amp;quot;%r&amp;quot; %s %b"</span> /&gt;</div><div class="line"></div><div class="line">&lt;Valve className=<span class="string">"org.emacsist.valve.ModifiedValve"</span> /&gt;</div><div class="line">      </div><div class="line">    &lt;/Host&gt;</div></pre></td></tr></table></figure>
+<pre><code class="bash">      &lt;Host name=&quot;localhost&quot;  appBase=&quot;webapps&quot;
+            unpackWARs=&quot;true&quot; autoDeploy=&quot;true&quot;&gt;
+
+        &lt;!-- SingleSignOn valve, share authentication between web applications
+             Documentation at: /docs/config/valve.html --&gt;
+        &lt;!--
+        &lt;Valve className=&quot;org.apache.catalina.authenticator.SingleSignOn&quot; /&gt;
+        --&gt;
+
+        &lt;!-- Access log processes all example.
+             Documentation at: /docs/config/valve.html
+             Note: The pattern used is equivalent to using pattern=&quot;common&quot; --&gt;
+        &lt;Valve className=&quot;org.apache.catalina.valves.AccessLogValve&quot; directory=&quot;logs&quot;
+               prefix=&quot;localhost_access_log.&quot; suffix=&quot;.txt&quot;
+               pattern=&quot;%h %l %u %t &amp;quot;%r&amp;quot; %s %b&quot; /&gt;
+
+        &lt;Valve className=&quot;org.emacsist.valve.ModifiedValve&quot; /&gt;
+
+      &lt;/Host&gt;
+</code></pre>
 
                                 
     </div>

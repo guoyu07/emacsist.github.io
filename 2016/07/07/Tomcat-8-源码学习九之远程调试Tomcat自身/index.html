@@ -15,17 +15,17 @@
     <meta name="keywords" content="java,tomcat,Tomcat源码," />
   
 
-  <meta name="description" content="如果我们想要在远程服务器上, 来调试Tomcat自身的话, 那应该如何做呢. 今天本想为Tomcat添加一个功能时, 发现配置一直没生效, 而且Tomcat一直就打印Found no logging.properties. 实在没办法, 就想到远程调试一下Tomcat自身. 修改启动参数复制一个startup.sh, 假设复制后的文件名为debug.startup.sh 将原文件的 1exec &quot;">
+  <meta name="description" content="如果我们想要在远程服务器上, 来调试Tomcat自身的话, 那应该如何做呢. 今天本想为Tomcat添加一个功能时, 发现配置一直没生效, 而且Tomcat一直就打印Found no logging.properties. 实在没办法, 就想到远程调试一下Tomcat自身. 修改启动参数复制一个startup.sh, 假设复制后的文件名为debug.startup.sh 将原文件的 exec &amp;q">
 <meta name="keywords" content="java,tomcat,Tomcat源码">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Tomcat 8 源码学习九之远程调试Tomcat自身">
 <meta property="og:url" content="https://emacsist.github.io/2016/07/07/Tomcat-8-源码学习九之远程调试Tomcat自身/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="如果我们想要在远程服务器上, 来调试Tomcat自身的话, 那应该如何做呢. 今天本想为Tomcat添加一个功能时, 发现配置一直没生效, 而且Tomcat一直就打印Found no logging.properties. 实在没办法, 就想到远程调试一下Tomcat自身. 修改启动参数复制一个startup.sh, 假设复制后的文件名为debug.startup.sh 将原文件的 1exec &quot;">
+<meta property="og:description" content="如果我们想要在远程服务器上, 来调试Tomcat自身的话, 那应该如何做呢. 今天本想为Tomcat添加一个功能时, 发现配置一直没生效, 而且Tomcat一直就打印Found no logging.properties. 实在没办法, 就想到远程调试一下Tomcat自身. 修改启动参数复制一个startup.sh, 假设复制后的文件名为debug.startup.sh 将原文件的 exec &amp;q">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tomcat 8 源码学习九之远程调试Tomcat自身">
-<meta name="twitter:description" content="如果我们想要在远程服务器上, 来调试Tomcat自身的话, 那应该如何做呢. 今天本想为Tomcat添加一个功能时, 发现配置一直没生效, 而且Tomcat一直就打印Found no logging.properties. 实在没办法, 就想到远程调试一下Tomcat自身. 修改启动参数复制一个startup.sh, 假设复制后的文件名为debug.startup.sh 将原文件的 1exec &quot;">
+<meta name="twitter:description" content="如果我们想要在远程服务器上, 来调试Tomcat自身的话, 那应该如何做呢. 今天本想为Tomcat添加一个功能时, 发现配置一直没生效, 而且Tomcat一直就打印Found no logging.properties. 实在没办法, 就想到远程调试一下Tomcat自身. 修改启动参数复制一个startup.sh, 假设复制后的文件名为debug.startup.sh 将原文件的 exec &amp;q">
 
   
 
@@ -209,13 +209,21 @@
                             <p>如果我们想要在远程服务器上, 来调试Tomcat自身的话, 那应该如何做呢. 今天本想为Tomcat添加一个功能时, 发现配置一直没生效, 而且Tomcat一直就打印<code>Found no logging.properties</code>. 实在没办法, 就想到远程调试一下Tomcat自身.</p>
 <h2 id="修改启动参数"><a href="#修改启动参数" class="headerlink" title="修改启动参数"></a>修改启动参数</h2><p>复制一个<code>startup.sh</code>, 假设复制后的文件名为<code>debug.startup.sh</code></p>
 <p>将原文件的</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">exec</span> <span class="string">"<span class="variable">$PRGDIR</span>"</span>/<span class="string">"<span class="variable">$EXECUTABLE</span>"</span> start <span class="string">"<span class="variable">$@</span>"</span></div></pre></td></tr></table></figure>
+<pre><code class="bash">exec &quot;$PRGDIR&quot;/&quot;$EXECUTABLE&quot; start &quot;$@&quot;
+</code></pre>
 <p>修改为以下的内容:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="built_in">export</span> JPDA_TRANSPORT=dt_socket</div><div class="line"><span class="built_in">export</span> JPDA_ADDRESS=8000</div><div class="line"><span class="built_in">export</span> JPDA_SUSPEND=y</div><div class="line"></div><div class="line"><span class="built_in">exec</span> <span class="string">"<span class="variable">$PRGDIR</span>"</span>/<span class="string">"<span class="variable">$EXECUTABLE</span>"</span> jpda start <span class="string">"<span class="variable">$@</span>"</span></div></pre></td></tr></table></figure>
+<pre><code class="bash">
+export JPDA_TRANSPORT=dt_socket
+export JPDA_ADDRESS=8000
+export JPDA_SUSPEND=y
+
+exec &quot;$PRGDIR&quot;/&quot;$EXECUTABLE&quot; jpda start &quot;$@&quot;
+</code></pre>
 <p>即可.</p>
 <h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><p>直接运行<code>debug.startup.sh</code>即可.</p>
 <p>这时,你会发现, 它在启动的时候, 会停留在以下类似信息这里, 等待你的调试器的连接了:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Listening <span class="keyword">for</span> transport dt_socket at address: 8000</div></pre></td></tr></table></figure>
+<pre><code class="bash">Listening for transport dt_socket at address: 8000
+</code></pre>
 <p>这时, 通过 IDE 来进行远程Debug即可.</p>
 <p>关于如何将Tomcat源码导入到IDE中, 可以参考<a href="/2016/06/27/Tomcat-8-源码学习一之导入到IDEA/">/2016/06/27/Tomcat-8-源码学习一之导入到IDEA/</a></p>
 <p>这时就可以进行你的debug了. 这样子,Tomcat出现的问题, 都可以非常清楚地通过Debug来详细了解Tomcat内部的处理情况了.</p>

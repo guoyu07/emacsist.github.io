@@ -15,17 +15,17 @@
     <meta name="keywords" content="database,mysql," />
   
 
-  <meta name="description" content="问题在一次生产环境排查性能问题时, 发现有个请求在一些用户的数据量比较大的情况下, 最高耗时差不多要3s. 而且还是一个轮询的请求. 原因在排查问题时, 定位到是执行某条SQL时在用户的数据比较大的情况下, SQL执行耗时要1.5s. 1234567891011121314151617mysql&amp;gt; SELECT count(1)    -&amp;gt; FROM    -&amp;gt;   cc_ses">
+  <meta name="description" content="问题在一次生产环境排查性能问题时, 发现有个请求在一些用户的数据量比较大的情况下, 最高耗时差不多要3s. 而且还是一个轮询的请求. 原因在排查问题时, 定位到是执行某条SQL时在用户的数据比较大的情况下, SQL执行耗时要1.5s. mysql&amp;gt; SELECT count(1)     -&amp;gt; FROM     -&amp;gt;   cc_session cs     -&amp;gt;   LEF">
 <meta name="keywords" content="database,mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL中USE INDEX 和 FORCE INDEX">
 <meta property="og:url" content="https://emacsist.github.io/2016/07/15/MySQL中USE-INDEX-和-FORCE-INDEX/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="问题在一次生产环境排查性能问题时, 发现有个请求在一些用户的数据量比较大的情况下, 最高耗时差不多要3s. 而且还是一个轮询的请求. 原因在排查问题时, 定位到是执行某条SQL时在用户的数据比较大的情况下, SQL执行耗时要1.5s. 1234567891011121314151617mysql&amp;gt; SELECT count(1)    -&amp;gt; FROM    -&amp;gt;   cc_ses">
+<meta property="og:description" content="问题在一次生产环境排查性能问题时, 发现有个请求在一些用户的数据量比较大的情况下, 最高耗时差不多要3s. 而且还是一个轮询的请求. 原因在排查问题时, 定位到是执行某条SQL时在用户的数据比较大的情况下, SQL执行耗时要1.5s. mysql&amp;gt; SELECT count(1)     -&amp;gt; FROM     -&amp;gt;   cc_session cs     -&amp;gt;   LEF">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL中USE INDEX 和 FORCE INDEX">
-<meta name="twitter:description" content="问题在一次生产环境排查性能问题时, 发现有个请求在一些用户的数据量比较大的情况下, 最高耗时差不多要3s. 而且还是一个轮询的请求. 原因在排查问题时, 定位到是执行某条SQL时在用户的数据比较大的情况下, SQL执行耗时要1.5s. 1234567891011121314151617mysql&amp;gt; SELECT count(1)    -&amp;gt; FROM    -&amp;gt;   cc_ses">
+<meta name="twitter:description" content="问题在一次生产环境排查性能问题时, 发现有个请求在一些用户的数据量比较大的情况下, 最高耗时差不多要3s. 而且还是一个轮询的请求. 原因在排查问题时, 定位到是执行某条SQL时在用户的数据比较大的情况下, SQL执行耗时要1.5s. mysql&amp;gt; SELECT count(1)     -&amp;gt; FROM     -&amp;gt;   cc_session cs     -&amp;gt;   LEF">
 
   
 
@@ -203,17 +203,108 @@
         
                             <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>在一次生产环境排查性能问题时, 发现有个请求在一些用户的数据量比较大的情况下, 最高耗时差不多要3s. 而且还是一个轮询的请求.</p>
 <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>在排查问题时, 定位到是执行某条SQL时在用户的数据比较大的情况下, SQL执行耗时要<code>1.5s</code>.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">mysql&gt; SELECT count(1)</div><div class="line">    -&gt; FROM</div><div class="line">    -&gt;   cc_session cs</div><div class="line">    -&gt;   LEFT JOIN users_platform cp ON cs.user_id = cp.user_id</div><div class="line">    -&gt;                                  AND cs.to_openid = cp.open_id</div><div class="line">    -&gt; WHERE</div><div class="line">    -&gt;   cs.`status` = 0</div><div class="line">    -&gt;   AND cs.user_id = 219</div><div class="line">    -&gt;   AND cs.agent_user_id = 219</div><div class="line">    -&gt;   AND cs.create_time &lt; DATE_SUB(now(), INTERVAL 10 MINUTE)</div><div class="line">    -&gt; AND cp.cc_open = 1;</div><div class="line">+----------+</div><div class="line">| count(1) |</div><div class="line">+----------+</div><div class="line">|        0 |</div><div class="line">+----------+</div><div class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (1.50 sec)</div></pre></td></tr></table></figure>
+<pre><code class="bash">mysql&gt; SELECT count(1)
+    -&gt; FROM
+    -&gt;   cc_session cs
+    -&gt;   LEFT JOIN users_platform cp ON cs.user_id = cp.user_id
+    -&gt;                                  AND cs.to_openid = cp.open_id
+    -&gt; WHERE
+    -&gt;   cs.`status` = 0
+    -&gt;   AND cs.user_id = 219
+    -&gt;   AND cs.agent_user_id = 219
+    -&gt;   AND cs.create_time &lt; DATE_SUB(now(), INTERVAL 10 MINUTE)
+    -&gt; AND cp.cc_open = 1;
++----------+
+| count(1) |
++----------+
+|        0 |
++----------+
+1 row in set (1.50 sec)
+</code></pre>
 <p>它的执行计划如下:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">mysql&gt; explain SELECT count(1)        FROM   cc_session cs     LEFT JOIN users_platform cp             ON cs.user_id = cp.user_id                                   AND cs.to_openid = cp.open_id  WHERE    cs.`status` = 0    AND cs.user_id = 219    AND cs.agent_user_id = 219    AND cs.create_time &lt; DATE_SUB(now(), INTERVAL 10 MINUTE)  AND cp.cc_open = 1;</div><div class="line"></div><div class="line">+----+-------------+-------+------+---------------------------------------+---------------------+---------+------------------------+------+------------------------------------+</div><div class="line">| id | select_type | table | <span class="built_in">type</span> | possible_keys                         | key                 | key_len | ref                    | rows | Extra                              |</div><div class="line">+----+-------------+-------+------+---------------------------------------+---------------------+---------+------------------------+------+------------------------------------+</div><div class="line">|  1 | SIMPLE      | cp    | ref  | uid_opid                              | uid_opid            | 4       | const                  |   50 | Using index condition; Using <span class="built_in">where</span> |</div><div class="line">|  1 | SIMPLE      | cs    | ref  | id_from_to_close_uq,idx_user_agent_id | id_from_to_close_uq | 194     | uniweibo_v2.cp.open_id |  127 | Using index condition; Using <span class="built_in">where</span> |</div><div class="line">+----+-------------+-------+------+---------------------------------------+---------------------+---------+------------------------+------+------------------------------------+</div><div class="line">2 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div></pre></td></tr></table></figure>
+<pre><code class="bash">mysql&gt; explain SELECT count(1)        FROM   cc_session cs     LEFT JOIN users_platform cp             ON cs.user_id = cp.user_id                                   AND cs.to_openid = cp.open_id  WHERE    cs.`status` = 0    AND cs.user_id = 219    AND cs.agent_user_id = 219    AND cs.create_time &lt; DATE_SUB(now(), INTERVAL 10 MINUTE)  AND cp.cc_open = 1;
+
++----+-------------+-------+------+---------------------------------------+---------------------+---------+------------------------+------+------------------------------------+
+| id | select_type | table | type | possible_keys                         | key                 | key_len | ref                    | rows | Extra                              |
++----+-------------+-------+------+---------------------------------------+---------------------+---------+------------------------+------+------------------------------------+
+|  1 | SIMPLE      | cp    | ref  | uid_opid                              | uid_opid            | 4       | const                  |   50 | Using index condition; Using where |
+|  1 | SIMPLE      | cs    | ref  | id_from_to_close_uq,idx_user_agent_id | id_from_to_close_uq | 194     | uniweibo_v2.cp.open_id |  127 | Using index condition; Using where |
++----+-------------+-------+------+---------------------------------------+---------------------+---------+------------------------+------+------------------------------------+
+2 rows in set (0.00 sec)
+</code></pre>
 <p>两张表的索引如下:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show index from cc_session;</div><div class="line">+------------+------------+---------------------+--------------+---------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</div><div class="line">| Table      | Non_unique | Key_name            | Seq_in_index | Column_name   | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |</div><div class="line">+------------+------------+---------------------+--------------+---------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</div><div class="line">| cc_session |          0 | PRIMARY             |            1 | id            | A         |     3279492 |     NULL | NULL   |      | BTREE      |         |               |</div><div class="line">| cc_session |          0 | id_from_to_close_uq |            1 | to_openid     | A         |       25822 |     NULL | NULL   |      | BTREE      |         |               |</div><div class="line">| cc_session |          0 | id_from_to_close_uq |            2 | from_openid   | A         |     3279492 |     NULL | NULL   |      | BTREE      |         |               |</div><div class="line">| cc_session |          0 | id_from_to_close_uq |            3 | closed_time   | A         |     3279492 |     NULL | NULL   |      | BTREE      |         |               |</div><div class="line">| cc_session |          1 | idx_user_agent_id   |            1 | user_id       | A         |         513 |     NULL | NULL   |      | BTREE      |         |               |</div><div class="line">| cc_session |          1 | idx_user_agent_id   |            2 | agent_user_id | A         |        1886 |     NULL | NULL   |      | BTREE      |         |               |</div><div class="line">+------------+------------+---------------------+--------------+---------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</div><div class="line">6 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; show index from users_platform;</div><div class="line">+----------------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</div><div class="line">| Table          | Non_unique | Key_name | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |</div><div class="line">+----------------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</div><div class="line">| users_platform |          0 | PRIMARY  |            1 | id          | A         |         373 |     NULL | NULL   |      | BTREE      |         |               |</div><div class="line">| users_platform |          1 | uid_opid |            1 | user_id     | A         |         373 |     NULL | NULL   |      | BTREE      |         |               |</div><div class="line">| users_platform |          1 | uid_opid |            2 | open_id     | A         |         373 |     NULL | NULL   |      | BTREE      |         |               |</div><div class="line">+----------------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</div><div class="line">3 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
+<pre><code class="bash">mysql&gt; show index from cc_session;
++------------+------------+---------------------+--------------+---------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| Table      | Non_unique | Key_name            | Seq_in_index | Column_name   | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |
++------------+------------+---------------------+--------------+---------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| cc_session |          0 | PRIMARY             |            1 | id            | A         |     3279492 |     NULL | NULL   |      | BTREE      |         |               |
+| cc_session |          0 | id_from_to_close_uq |            1 | to_openid     | A         |       25822 |     NULL | NULL   |      | BTREE      |         |               |
+| cc_session |          0 | id_from_to_close_uq |            2 | from_openid   | A         |     3279492 |     NULL | NULL   |      | BTREE      |         |               |
+| cc_session |          0 | id_from_to_close_uq |            3 | closed_time   | A         |     3279492 |     NULL | NULL   |      | BTREE      |         |               |
+| cc_session |          1 | idx_user_agent_id   |            1 | user_id       | A         |         513 |     NULL | NULL   |      | BTREE      |         |               |
+| cc_session |          1 | idx_user_agent_id   |            2 | agent_user_id | A         |        1886 |     NULL | NULL   |      | BTREE      |         |               |
++------------+------------+---------------------+--------------+---------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+6 rows in set (0.00 sec)
+
+mysql&gt; show index from users_platform;
++----------------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| Table          | Non_unique | Key_name | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |
++----------------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| users_platform |          0 | PRIMARY  |            1 | id          | A         |         373 |     NULL | NULL   |      | BTREE      |         |               |
+| users_platform |          1 | uid_opid |            1 | user_id     | A         |         373 |     NULL | NULL   |      | BTREE      |         |               |
+| users_platform |          1 | uid_opid |            2 | open_id     | A         |         373 |     NULL | NULL   |      | BTREE      |         |               |
++----------------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+3 rows in set (0.00 sec)
+
+mysql&gt;
+</code></pre>
 <p>由执行计划可知,它分别使用了<code>cc_session</code>表的<code>id_from_to_close_uq</code>索引, 和<code>users_platform</code>表中的<code>uid_opid</code>索引.</p>
 <h2 id="使用-use-index-建议MySQL使用其他索引"><a href="#使用-use-index-建议MySQL使用其他索引" class="headerlink" title="使用 use index 建议MySQL使用其他索引"></a>使用 use index 建议MySQL使用其他索引</h2><p>修改之后的SQL如下:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">mysql&gt; SELECT count(1)</div><div class="line">    -&gt;        FROM</div><div class="line">    -&gt;   cc_session cs use index (idx_user_agent_id)</div><div class="line">    -&gt;    LEFT JOIN users_platform cp use INDEX (uid_opid)</div><div class="line">    -&gt;            ON cs.user_id = cp.user_id</div><div class="line">    -&gt;                                   AND cs.to_openid = cp.open_id</div><div class="line">    -&gt;  WHERE</div><div class="line">    -&gt;    cs.`status` = 0</div><div class="line">    -&gt;    AND cs.user_id = 219</div><div class="line">    -&gt;    AND cs.agent_user_id = 219</div><div class="line">    -&gt;    AND cs.create_time &lt; DATE_SUB(now(), INTERVAL 10 MINUTE)</div><div class="line">    -&gt;  AND cp.cc_open = 1;</div><div class="line">+----------+</div><div class="line">| count(1) |</div><div class="line">+----------+</div><div class="line">|        0 |</div><div class="line">+----------+</div><div class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.01 sec)</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
+<pre><code class="bash">mysql&gt; SELECT count(1)
+    -&gt;        FROM
+    -&gt;   cc_session cs use index (idx_user_agent_id)
+    -&gt;    LEFT JOIN users_platform cp use INDEX (uid_opid)
+    -&gt;            ON cs.user_id = cp.user_id
+    -&gt;                                   AND cs.to_openid = cp.open_id
+    -&gt;  WHERE
+    -&gt;    cs.`status` = 0
+    -&gt;    AND cs.user_id = 219
+    -&gt;    AND cs.agent_user_id = 219
+    -&gt;    AND cs.create_time &lt; DATE_SUB(now(), INTERVAL 10 MINUTE)
+    -&gt;  AND cp.cc_open = 1;
++----------+
+| count(1) |
++----------+
+|        0 |
++----------+
+1 row in set (0.01 sec)
+
+mysql&gt;
+</code></pre>
 <p>耗时从<code>1.5秒</code>,降低到<code>0.01秒</code></p>
 <p>执行计划如下:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">mysql&gt; explain SELECT count(1)</div><div class="line">    -&gt;        FROM</div><div class="line">    -&gt;   cc_session cs use index (idx_user_agent_id)</div><div class="line">    -&gt;    LEFT JOIN users_platform cp use INDEX (uid_opid)</div><div class="line">    -&gt;            ON cs.user_id = cp.user_id</div><div class="line">    -&gt;                                   AND cs.to_openid = cp.open_id</div><div class="line">    -&gt;  WHERE</div><div class="line">    -&gt;    cs.`status` = 0</div><div class="line">    -&gt;    AND cs.user_id = 219</div><div class="line">    -&gt;    AND cs.agent_user_id = 219</div><div class="line">    -&gt;    AND cs.create_time &lt; DATE_SUB(now(), INTERVAL 10 MINUTE)</div><div class="line">    -&gt;  AND cp.cc_open = 1;</div><div class="line">+----+-------------+-------+------+-------------------+-------------------+---------+--------------------------------+-------+------------------------------------+</div><div class="line">| id | select_type | table | <span class="built_in">type</span> | possible_keys     | key               | key_len | ref                            | rows  | Extra                              |</div><div class="line">+----+-------------+-------+------+-------------------+-------------------+---------+--------------------------------+-------+------------------------------------+</div><div class="line">|  1 | SIMPLE      | cs    | ref  | idx_user_agent_id | idx_user_agent_id | 8       | const,const                    | 22966 | Using <span class="built_in">where</span>                        |</div><div class="line">|  1 | SIMPLE      | cp    | ref  | uid_opid          | uid_opid          | 180     | const,uniweibo_v2.cs.to_openid |     1 | Using index condition; Using <span class="built_in">where</span> |</div><div class="line">+----+-------------+-------+------+-------------------+-------------------+---------+--------------------------------+-------+------------------------------------+</div><div class="line">2 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
+<pre><code class="bash">mysql&gt; explain SELECT count(1)
+    -&gt;        FROM
+    -&gt;   cc_session cs use index (idx_user_agent_id)
+    -&gt;    LEFT JOIN users_platform cp use INDEX (uid_opid)
+    -&gt;            ON cs.user_id = cp.user_id
+    -&gt;                                   AND cs.to_openid = cp.open_id
+    -&gt;  WHERE
+    -&gt;    cs.`status` = 0
+    -&gt;    AND cs.user_id = 219
+    -&gt;    AND cs.agent_user_id = 219
+    -&gt;    AND cs.create_time &lt; DATE_SUB(now(), INTERVAL 10 MINUTE)
+    -&gt;  AND cp.cc_open = 1;
++----+-------------+-------+------+-------------------+-------------------+---------+--------------------------------+-------+------------------------------------+
+| id | select_type | table | type | possible_keys     | key               | key_len | ref                            | rows  | Extra                              |
++----+-------------+-------+------+-------------------+-------------------+---------+--------------------------------+-------+------------------------------------+
+|  1 | SIMPLE      | cs    | ref  | idx_user_agent_id | idx_user_agent_id | 8       | const,const                    | 22966 | Using where                        |
+|  1 | SIMPLE      | cp    | ref  | uid_opid          | uid_opid          | 180     | const,uniweibo_v2.cs.to_openid |     1 | Using index condition; Using where |
++----+-------------+-------+------+-------------------+-------------------+---------+--------------------------------+-------+------------------------------------+
+2 rows in set (0.00 sec)
+
+mysql&gt;
+</code></pre>
 <h2 id="use-index-和-force-index"><a href="#use-index-和-force-index" class="headerlink" title="use index 和 force index"></a>use index 和 force index</h2><p>use index : 是建议MySQL去使用这个索引.最后到底是用不用, 还是由MySQL来决定. 如果MySQL还是觉得全表扫描来得快, 那即使是有索引, 它还是会使用全表扫描.<br>force index : 是强制MySQL去使用这个索引. 如果用不上, 就全表. 如果能用上, 就一定会使用该索引.</p>
 
                                 

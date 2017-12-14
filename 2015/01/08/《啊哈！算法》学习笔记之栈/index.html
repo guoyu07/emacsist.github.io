@@ -15,17 +15,17 @@
     <meta name="keywords" content="算法,啊哈！算法," />
   
 
-  <meta name="description" content="栈实现也很简单，只需要一个一维数组和一个指向栈顶的变量 top 就可以了。我们通过 top 来对栈进行插入和删除操作。 ##特点：后进先出 利用栈判断是否回文（java实现）1234567891011121314151617181920212223242526public static void main(String[] args) &amp;#123;    char[] character = &amp;#">
+  <meta name="description" content="栈实现也很简单，只需要一个一维数组和一个指向栈顶的变量 top 就可以了。我们通过 top 来对栈进行插入和删除操作。 ##特点：后进先出 利用栈判断是否回文（java实现）    public static void main(String[] args) {         char[] character = { &amp;#39;a&amp;#39;, &amp;#39;a&amp;#39;, &amp;#39;h&amp;#39;,">
 <meta name="keywords" content="算法,啊哈！算法">
 <meta property="og:type" content="article">
 <meta property="og:title" content="《啊哈！算法》学习笔记之栈">
 <meta property="og:url" content="https://emacsist.github.io/2015/01/08/《啊哈！算法》学习笔记之栈/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="栈实现也很简单，只需要一个一维数组和一个指向栈顶的变量 top 就可以了。我们通过 top 来对栈进行插入和删除操作。 ##特点：后进先出 利用栈判断是否回文（java实现）1234567891011121314151617181920212223242526public static void main(String[] args) &amp;#123;    char[] character = &amp;#">
+<meta property="og:description" content="栈实现也很简单，只需要一个一维数组和一个指向栈顶的变量 top 就可以了。我们通过 top 来对栈进行插入和删除操作。 ##特点：后进先出 利用栈判断是否回文（java实现）    public static void main(String[] args) {         char[] character = { &amp;#39;a&amp;#39;, &amp;#39;a&amp;#39;, &amp;#39;h&amp;#39;,">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《啊哈！算法》学习笔记之栈">
-<meta name="twitter:description" content="栈实现也很简单，只需要一个一维数组和一个指向栈顶的变量 top 就可以了。我们通过 top 来对栈进行插入和删除操作。 ##特点：后进先出 利用栈判断是否回文（java实现）1234567891011121314151617181920212223242526public static void main(String[] args) &amp;#123;    char[] character = &amp;#">
+<meta name="twitter:description" content="栈实现也很简单，只需要一个一维数组和一个指向栈顶的变量 top 就可以了。我们通过 top 来对栈进行插入和删除操作。 ##特点：后进先出 利用栈判断是否回文（java实现）    public static void main(String[] args) {         char[] character = { &amp;#39;a&amp;#39;, &amp;#39;a&amp;#39;, &amp;#39;h&amp;#39;,">
 
   
 
@@ -203,8 +203,33 @@
         
                             <h2 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h2><p>实现也很简单，只需要一个一维数组和一个指向栈顶的变量 top 就可以了。我们通过 top 来对栈进行插入和删除操作。</p>
 <p>##特点：后进先出</p>
-<h2 id="利用栈判断是否回文（java实现）"><a href="#利用栈判断是否回文（java实现）" class="headerlink" title="利用栈判断是否回文（java实现）"></a>利用栈判断是否回文（java实现）</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">public static void main(String[] args) &#123;</div><div class="line">    char[] character = &#123; &apos;a&apos;, &apos;a&apos;, &apos;h&apos;, &apos;a&apos;, &apos;a&apos; &#125;;</div><div class="line">    char[] stack = new char[10];</div><div class="line">    int top = -1;</div><div class="line">    int mid = character.length % 2 == 0 ? character.length / 2 - 1 : character.length / 2;</div><div class="line">    for (int i = 0; i &lt;= mid; i++) &#123;</div><div class="line">        top++;</div><div class="line">        stack[top] = character[i];</div><div class="line">    &#125;</div><div class="line">    if (character.length % 2 == 0) &#123;</div><div class="line">        mid++;</div><div class="line">    &#125;</div><div class="line">    for (int i = mid; i &lt; character.length; i++) &#123;</div><div class="line">        if (top &gt;= 0) &#123;</div><div class="line">            if (stack[top] != character[i]) &#123;</div><div class="line">                break;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        top--;</div><div class="line">    &#125;</div><div class="line">    if (top == -1) &#123;</div><div class="line">        System.out.println(&quot;YES&quot;);</div><div class="line">    &#125; else &#123;</div><div class="line">        System.out.println(&quot;NO&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
+<h2 id="利用栈判断是否回文（java实现）"><a href="#利用栈判断是否回文（java实现）" class="headerlink" title="利用栈判断是否回文（java实现）"></a>利用栈判断是否回文（java实现）</h2><pre><code>    public static void main(String[] args) {
+        char[] character = { &#39;a&#39;, &#39;a&#39;, &#39;h&#39;, &#39;a&#39;, &#39;a&#39; };
+        char[] stack = new char[10];
+        int top = -1;
+        int mid = character.length % 2 == 0 ? character.length / 2 - 1 : character.length / 2;
+        for (int i = 0; i &lt;= mid; i++) {
+            top++;
+            stack[top] = character[i];
+        }
+        if (character.length % 2 == 0) {
+            mid++;
+        }
+        for (int i = mid; i &lt; character.length; i++) {
+            if (top &gt;= 0) {
+                if (stack[top] != character[i]) {
+                    break;
+                }
+            }
+            top--;
+        }
+        if (top == -1) {
+            System.out.println(&quot;YES&quot;);
+        } else {
+            System.out.println(&quot;NO&quot;);
+        }
+    }
+</code></pre>
                                 
     </div>
 </article>

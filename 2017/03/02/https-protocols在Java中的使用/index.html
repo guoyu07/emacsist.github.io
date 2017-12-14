@@ -259,9 +259,147 @@
 <li><code>https.proxyHost</code> 和 <code>https.proxyPort</code> : 和上面一样，区别只是 HTTP 和 HTTPS</li>
 <li><code>http.proxyUser</code>,<code>http.proxyPassword</code>, <code>https.proxyUser</code>,<code>https.proxyPassword</code> : 认证用户名和密码。</li>
 </ul>
-<h1 id="查看服务器支持的-HTTPS-协议版本"><a href="#查看服务器支持的-HTTPS-协议版本" class="headerlink" title="查看服务器支持的 HTTPS 协议版本"></a>查看服务器支持的 HTTPS 协议版本</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nmap --script ssl-enum-ciphers -p 443 api.weibo.com</div></pre></td></tr></table></figure>
+<h1 id="查看服务器支持的-HTTPS-协议版本"><a href="#查看服务器支持的-HTTPS-协议版本" class="headerlink" title="查看服务器支持的 HTTPS 协议版本"></a>查看服务器支持的 HTTPS 协议版本</h1><pre><code class="bash">nmap --script ssl-enum-ciphers -p 443 api.weibo.com
+</code></pre>
 <p>返回的结果为:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">Starting Nmap 7.40 ( https://nmap.org ) at 2017-03-02 14:18 CST</div><div class="line">Nmap scan report <span class="keyword">for</span> api.weibo.com (180.149.135.176)</div><div class="line">Host is up (0.039s latency).</div><div class="line">Other addresses <span class="keyword">for</span> api.weibo.com (not scanned): 180.149.135.230</div><div class="line">PORT    STATE SERVICE</div><div class="line">443/tcp open  https</div><div class="line">| ssl-enum-ciphers:</div><div class="line">|   SSLv3:</div><div class="line">|     ciphers:</div><div class="line">|       TLS_RSA_WITH_AES_256_CBC_SHA (rsa 2048) - A</div><div class="line">|       TLS_RSA_WITH_CAMELLIA_256_CBC_SHA (rsa 2048) - A</div><div class="line">|       TLS_RSA_WITH_AES_128_CBC_SHA (rsa 2048) - A</div><div class="line">|       TLS_RSA_WITH_SEED_CBC_SHA (rsa 2048) - A</div><div class="line">|       TLS_RSA_WITH_CAMELLIA_128_CBC_SHA (rsa 2048) - A</div><div class="line">|       TLS_RSA_WITH_IDEA_CBC_SHA (rsa 2048) - A</div><div class="line">|       TLS_RSA_WITH_RC4_128_SHA (rsa 2048) - C</div><div class="line">|       TLS_RSA_WITH_3DES_EDE_CBC_SHA (rsa 2048) - C</div><div class="line">|       TLS_RSA_WITH_DES_CBC_SHA (rsa 2048) - C</div><div class="line">|       TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA (secp256r1) - A</div><div class="line">|       TLS_DHE_RSA_WITH_AES_256_CBC_SHA (dh 1024) - A</div><div class="line">|       TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA (dh 1024) - A</div><div class="line">|       TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA (secp256r1) - A</div><div class="line">|       TLS_DHE_RSA_WITH_AES_128_CBC_SHA (dh 1024) - A</div><div class="line">|       TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA (dh 1024) - A</div><div class="line">|       TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA (secp256r1) - C</div><div class="line">|       TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA (dh 1024) - D</div><div class="line">|     compressors:</div><div class="line">|       NULL</div><div class="line">|     cipher preference: server</div><div class="line">|     warnings:</div><div class="line">|       64-bit block cipher 3DES vulnerable to SWEET32 attack</div><div class="line">|       64-bit block cipher DES vulnerable to SWEET32 attack</div><div class="line">|       64-bit block cipher IDEA vulnerable to SWEET32 attack</div><div class="line">|       Broken cipher RC4 is deprecated by RFC 7465</div><div class="line">|       CBC-mode cipher <span class="keyword">in</span> SSLv3 (CVE-2014-3566)</div><div class="line">|       Key exchange (dh 1024) of lower strength than certificate key</div><div class="line">|   TLSv1.0:</div><div class="line">|     ciphers:</div><div class="line">|       TLS_RSA_WITH_AES_256_CBC_SHA (rsa 2048) - A</div><div class="line">|       TLS_RSA_WITH_CAMELLIA_256_CBC_SHA (rsa 2048) - A</div><div class="line">|       TLS_RSA_WITH_AES_128_CBC_SHA (rsa 2048) - A</div><div class="line">|       TLS_RSA_WITH_SEED_CBC_SHA (rsa 2048) - A</div><div class="line">|       TLS_RSA_WITH_CAMELLIA_128_CBC_SHA (rsa 2048) - A</div><div class="line">|       TLS_RSA_WITH_IDEA_CBC_SHA (rsa 2048) - A</div><div class="line">|       TLS_RSA_WITH_RC4_128_SHA (rsa 2048) - C</div><div class="line">|       TLS_RSA_WITH_3DES_EDE_CBC_SHA (rsa 2048) - C</div><div class="line">|       TLS_RSA_WITH_DES_CBC_SHA (rsa 2048) - C</div><div class="line">|       TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA (secp256r1) - A</div><div class="line">|       TLS_DHE_RSA_WITH_AES_256_CBC_SHA (dh 1024) - A</div><div class="line">|       TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA (dh 1024) - A</div><div class="line">|       TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA (secp256r1) - A</div><div class="line">|       TLS_DHE_RSA_WITH_AES_128_CBC_SHA (dh 1024) - A</div><div class="line">|       TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA (dh 1024) - A</div><div class="line">|       TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA (secp256r1) - C</div><div class="line">|       TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA (dh 1024) - D</div><div class="line">|     compressors:</div><div class="line">|       NULL</div><div class="line">|     cipher preference: server</div><div class="line">|     warnings:</div><div class="line">|       64-bit block cipher 3DES vulnerable to SWEET32 attack</div><div class="line">|       64-bit block cipher DES vulnerable to SWEET32 attack</div><div class="line">|       64-bit block cipher IDEA vulnerable to SWEET32 attack</div><div class="line">|       Broken cipher RC4 is deprecated by RFC 7465</div><div class="line">|       Key exchange (dh 1024) of lower strength than certificate key</div><div class="line">|   TLSv1.1:</div><div class="line">|     ciphers:</div><div class="line">|       TLS_RSA_WITH_AES_256_CBC_SHA (rsa 2048) - A</div><div class="line">|       TLS_RSA_WITH_CAMELLIA_256_CBC_SHA (rsa 2048) - A</div><div class="line">|       TLS_RSA_WITH_AES_128_CBC_SHA (rsa 2048) - A</div><div class="line">|       TLS_RSA_WITH_SEED_CBC_SHA (rsa 2048) - A</div><div class="line">|       TLS_RSA_WITH_CAMELLIA_128_CBC_SHA (rsa 2048) - A</div><div class="line">|       TLS_RSA_WITH_IDEA_CBC_SHA (rsa 2048) - A</div><div class="line">|       TLS_RSA_WITH_RC4_128_SHA (rsa 2048) - C</div><div class="line">|       TLS_RSA_WITH_3DES_EDE_CBC_SHA (rsa 2048) - C</div><div class="line">|       TLS_RSA_WITH_DES_CBC_SHA (rsa 2048) - C</div><div class="line">|       TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA (secp256r1) - A</div><div class="line">|       TLS_DHE_RSA_WITH_AES_256_CBC_SHA (dh 1024) - A</div><div class="line">|       TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA (dh 1024) - A</div><div class="line">|       TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA (secp256r1) - A</div><div class="line">|       TLS_DHE_RSA_WITH_AES_128_CBC_SHA (dh 1024) - A</div><div class="line">|       TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA (dh 1024) - A</div><div class="line">|       TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA (secp256r1) - C</div><div class="line">|       TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA (dh 1024) - D</div><div class="line">|     compressors:</div><div class="line">|       NULL</div><div class="line">|     cipher preference: server</div><div class="line">|     warnings:</div><div class="line">|       64-bit block cipher 3DES vulnerable to SWEET32 attack</div><div class="line">|       64-bit block cipher DES vulnerable to SWEET32 attack</div><div class="line">|       64-bit block cipher IDEA vulnerable to SWEET32 attack</div><div class="line">|       Broken cipher RC4 is deprecated by RFC 7465</div><div class="line">|       Key exchange (dh 1024) of lower strength than certificate key</div><div class="line">|   TLSv1.2:</div><div class="line">|     ciphers:</div><div class="line">|       TLS_RSA_WITH_AES_256_GCM_SHA384 (rsa 2048) - A</div><div class="line">|       TLS_RSA_WITH_AES_256_CBC_SHA256 (rsa 2048) - A</div><div class="line">|       TLS_RSA_WITH_AES_256_CBC_SHA (rsa 2048) - A</div><div class="line">|       TLS_RSA_WITH_CAMELLIA_256_CBC_SHA (rsa 2048) - A</div><div class="line">|       TLS_RSA_WITH_AES_128_GCM_SHA256 (rsa 2048) - A</div><div class="line">|       TLS_RSA_WITH_AES_128_CBC_SHA256 (rsa 2048) - A</div><div class="line">|       TLS_RSA_WITH_AES_128_CBC_SHA (rsa 2048) - A</div><div class="line">|       TLS_RSA_WITH_SEED_CBC_SHA (rsa 2048) - A</div><div class="line">|       TLS_RSA_WITH_CAMELLIA_128_CBC_SHA (rsa 2048) - A</div><div class="line">|       TLS_RSA_WITH_IDEA_CBC_SHA (rsa 2048) - A</div><div class="line">|       TLS_RSA_WITH_RC4_128_SHA (rsa 2048) - C</div><div class="line">|       TLS_RSA_WITH_3DES_EDE_CBC_SHA (rsa 2048) - C</div><div class="line">|       TLS_RSA_WITH_DES_CBC_SHA (rsa 2048) - C</div><div class="line">|       TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (secp256r1) - A</div><div class="line">|       TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384 (secp256r1) - A</div><div class="line">|       TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA (secp256r1) - A</div><div class="line">|       TLS_DHE_RSA_WITH_AES_256_GCM_SHA384 (dh 1024) - A</div><div class="line">|       TLS_DHE_RSA_WITH_AES_256_CBC_SHA256 (dh 1024) - A</div><div class="line">|       TLS_DHE_RSA_WITH_AES_256_CBC_SHA (dh 1024) - A</div><div class="line">|       TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA (dh 1024) - A</div><div class="line">|       TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (secp256r1) - A</div><div class="line">|       TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256 (secp256r1) - A</div><div class="line">|       TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA (secp256r1) - A</div><div class="line">|       TLS_DHE_RSA_WITH_AES_128_GCM_SHA256 (dh 1024) - A</div><div class="line">|       TLS_DHE_RSA_WITH_AES_128_CBC_SHA256 (dh 1024) - A</div><div class="line">|       TLS_DHE_RSA_WITH_AES_128_CBC_SHA (dh 1024) - A</div><div class="line">|       TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA (dh 1024) - A</div><div class="line">|       TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA (secp256r1) - C</div><div class="line">|       TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA (dh 1024) - D</div><div class="line">|     compressors:</div><div class="line">|       NULL</div><div class="line">|     cipher preference: server</div><div class="line">|     warnings:</div><div class="line">|       64-bit block cipher 3DES vulnerable to SWEET32 attack</div><div class="line">|       64-bit block cipher DES vulnerable to SWEET32 attack</div><div class="line">|       64-bit block cipher IDEA vulnerable to SWEET32 attack</div><div class="line">|       Broken cipher RC4 is deprecated by RFC 7465</div><div class="line">|       Key exchange (dh 1024) of lower strength than certificate key</div><div class="line">|_  least strength: D</div><div class="line"></div><div class="line">Nmap <span class="keyword">done</span>: 1 IP address (1 host up) scanned <span class="keyword">in</span> 10.99 seconds</div></pre></td></tr></table></figure>
+<pre><code class="bash">
+
+Starting Nmap 7.40 ( https://nmap.org ) at 2017-03-02 14:18 CST
+Nmap scan report for api.weibo.com (180.149.135.176)
+Host is up (0.039s latency).
+Other addresses for api.weibo.com (not scanned): 180.149.135.230
+PORT    STATE SERVICE
+443/tcp open  https
+| ssl-enum-ciphers:
+|   SSLv3:
+|     ciphers:
+|       TLS_RSA_WITH_AES_256_CBC_SHA (rsa 2048) - A
+|       TLS_RSA_WITH_CAMELLIA_256_CBC_SHA (rsa 2048) - A
+|       TLS_RSA_WITH_AES_128_CBC_SHA (rsa 2048) - A
+|       TLS_RSA_WITH_SEED_CBC_SHA (rsa 2048) - A
+|       TLS_RSA_WITH_CAMELLIA_128_CBC_SHA (rsa 2048) - A
+|       TLS_RSA_WITH_IDEA_CBC_SHA (rsa 2048) - A
+|       TLS_RSA_WITH_RC4_128_SHA (rsa 2048) - C
+|       TLS_RSA_WITH_3DES_EDE_CBC_SHA (rsa 2048) - C
+|       TLS_RSA_WITH_DES_CBC_SHA (rsa 2048) - C
+|       TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA (secp256r1) - A
+|       TLS_DHE_RSA_WITH_AES_256_CBC_SHA (dh 1024) - A
+|       TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA (dh 1024) - A
+|       TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA (secp256r1) - A
+|       TLS_DHE_RSA_WITH_AES_128_CBC_SHA (dh 1024) - A
+|       TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA (dh 1024) - A
+|       TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA (secp256r1) - C
+|       TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA (dh 1024) - D
+|     compressors:
+|       NULL
+|     cipher preference: server
+|     warnings:
+|       64-bit block cipher 3DES vulnerable to SWEET32 attack
+|       64-bit block cipher DES vulnerable to SWEET32 attack
+|       64-bit block cipher IDEA vulnerable to SWEET32 attack
+|       Broken cipher RC4 is deprecated by RFC 7465
+|       CBC-mode cipher in SSLv3 (CVE-2014-3566)
+|       Key exchange (dh 1024) of lower strength than certificate key
+|   TLSv1.0:
+|     ciphers:
+|       TLS_RSA_WITH_AES_256_CBC_SHA (rsa 2048) - A
+|       TLS_RSA_WITH_CAMELLIA_256_CBC_SHA (rsa 2048) - A
+|       TLS_RSA_WITH_AES_128_CBC_SHA (rsa 2048) - A
+|       TLS_RSA_WITH_SEED_CBC_SHA (rsa 2048) - A
+|       TLS_RSA_WITH_CAMELLIA_128_CBC_SHA (rsa 2048) - A
+|       TLS_RSA_WITH_IDEA_CBC_SHA (rsa 2048) - A
+|       TLS_RSA_WITH_RC4_128_SHA (rsa 2048) - C
+|       TLS_RSA_WITH_3DES_EDE_CBC_SHA (rsa 2048) - C
+|       TLS_RSA_WITH_DES_CBC_SHA (rsa 2048) - C
+|       TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA (secp256r1) - A
+|       TLS_DHE_RSA_WITH_AES_256_CBC_SHA (dh 1024) - A
+|       TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA (dh 1024) - A
+|       TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA (secp256r1) - A
+|       TLS_DHE_RSA_WITH_AES_128_CBC_SHA (dh 1024) - A
+|       TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA (dh 1024) - A
+|       TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA (secp256r1) - C
+|       TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA (dh 1024) - D
+|     compressors:
+|       NULL
+|     cipher preference: server
+|     warnings:
+|       64-bit block cipher 3DES vulnerable to SWEET32 attack
+|       64-bit block cipher DES vulnerable to SWEET32 attack
+|       64-bit block cipher IDEA vulnerable to SWEET32 attack
+|       Broken cipher RC4 is deprecated by RFC 7465
+|       Key exchange (dh 1024) of lower strength than certificate key
+|   TLSv1.1:
+|     ciphers:
+|       TLS_RSA_WITH_AES_256_CBC_SHA (rsa 2048) - A
+|       TLS_RSA_WITH_CAMELLIA_256_CBC_SHA (rsa 2048) - A
+|       TLS_RSA_WITH_AES_128_CBC_SHA (rsa 2048) - A
+|       TLS_RSA_WITH_SEED_CBC_SHA (rsa 2048) - A
+|       TLS_RSA_WITH_CAMELLIA_128_CBC_SHA (rsa 2048) - A
+|       TLS_RSA_WITH_IDEA_CBC_SHA (rsa 2048) - A
+|       TLS_RSA_WITH_RC4_128_SHA (rsa 2048) - C
+|       TLS_RSA_WITH_3DES_EDE_CBC_SHA (rsa 2048) - C
+|       TLS_RSA_WITH_DES_CBC_SHA (rsa 2048) - C
+|       TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA (secp256r1) - A
+|       TLS_DHE_RSA_WITH_AES_256_CBC_SHA (dh 1024) - A
+|       TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA (dh 1024) - A
+|       TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA (secp256r1) - A
+|       TLS_DHE_RSA_WITH_AES_128_CBC_SHA (dh 1024) - A
+|       TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA (dh 1024) - A
+|       TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA (secp256r1) - C
+|       TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA (dh 1024) - D
+|     compressors:
+|       NULL
+|     cipher preference: server
+|     warnings:
+|       64-bit block cipher 3DES vulnerable to SWEET32 attack
+|       64-bit block cipher DES vulnerable to SWEET32 attack
+|       64-bit block cipher IDEA vulnerable to SWEET32 attack
+|       Broken cipher RC4 is deprecated by RFC 7465
+|       Key exchange (dh 1024) of lower strength than certificate key
+|   TLSv1.2:
+|     ciphers:
+|       TLS_RSA_WITH_AES_256_GCM_SHA384 (rsa 2048) - A
+|       TLS_RSA_WITH_AES_256_CBC_SHA256 (rsa 2048) - A
+|       TLS_RSA_WITH_AES_256_CBC_SHA (rsa 2048) - A
+|       TLS_RSA_WITH_CAMELLIA_256_CBC_SHA (rsa 2048) - A
+|       TLS_RSA_WITH_AES_128_GCM_SHA256 (rsa 2048) - A
+|       TLS_RSA_WITH_AES_128_CBC_SHA256 (rsa 2048) - A
+|       TLS_RSA_WITH_AES_128_CBC_SHA (rsa 2048) - A
+|       TLS_RSA_WITH_SEED_CBC_SHA (rsa 2048) - A
+|       TLS_RSA_WITH_CAMELLIA_128_CBC_SHA (rsa 2048) - A
+|       TLS_RSA_WITH_IDEA_CBC_SHA (rsa 2048) - A
+|       TLS_RSA_WITH_RC4_128_SHA (rsa 2048) - C
+|       TLS_RSA_WITH_3DES_EDE_CBC_SHA (rsa 2048) - C
+|       TLS_RSA_WITH_DES_CBC_SHA (rsa 2048) - C
+|       TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (secp256r1) - A
+|       TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384 (secp256r1) - A
+|       TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA (secp256r1) - A
+|       TLS_DHE_RSA_WITH_AES_256_GCM_SHA384 (dh 1024) - A
+|       TLS_DHE_RSA_WITH_AES_256_CBC_SHA256 (dh 1024) - A
+|       TLS_DHE_RSA_WITH_AES_256_CBC_SHA (dh 1024) - A
+|       TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA (dh 1024) - A
+|       TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (secp256r1) - A
+|       TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256 (secp256r1) - A
+|       TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA (secp256r1) - A
+|       TLS_DHE_RSA_WITH_AES_128_GCM_SHA256 (dh 1024) - A
+|       TLS_DHE_RSA_WITH_AES_128_CBC_SHA256 (dh 1024) - A
+|       TLS_DHE_RSA_WITH_AES_128_CBC_SHA (dh 1024) - A
+|       TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA (dh 1024) - A
+|       TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA (secp256r1) - C
+|       TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA (dh 1024) - D
+|     compressors:
+|       NULL
+|     cipher preference: server
+|     warnings:
+|       64-bit block cipher 3DES vulnerable to SWEET32 attack
+|       64-bit block cipher DES vulnerable to SWEET32 attack
+|       64-bit block cipher IDEA vulnerable to SWEET32 attack
+|       Broken cipher RC4 is deprecated by RFC 7465
+|       Key exchange (dh 1024) of lower strength than certificate key
+|_  least strength: D
+
+Nmap done: 1 IP address (1 host up) scanned in 10.99 seconds
+</code></pre>
 <p>可知，它支持的协议有:</p>
 <ul>
 <li>SSLv3</li>
@@ -270,7 +408,9 @@
 <li>TLSv1.2</li>
 </ul>
 <h1 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h1><p>服务器为Linux + JDK7 + 64位。添加</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">System.setProperty(<span class="string">"https.protocols"</span>, <span class="string">"TLSv1.2"</span>);</div></pre></td></tr></table></figure>
+<pre><code class="bash">
+System.setProperty(&quot;https.protocols&quot;, &quot;TLSv1.2&quot;);
+</code></pre>
 <p>在爬虫爬取数据时，就没有报这类似的异常了。</p>
 <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
 <li><p><a href="https://blogs.oracle.com/java-platform-group/entry/diagnosing_tls_ssl_and_https" target="_blank" rel="external">Oracle 上关于 https.protocols 的文档</a></p>

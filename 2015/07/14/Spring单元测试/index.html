@@ -15,17 +15,17 @@
     <meta name="keywords" content="java,spring," />
   
 
-  <meta name="description" content="资源文件 将所有的资源文件, 放到测试包及测试资源下(如果没有的话).以免麻烦, 统一放到 classpath 下.  12345# 这放测试代码文件src/test/java# 这放测试资源文件src/test/resource 进行单元测试在要测试的类, 加上以下注解(类级别的) 12@RunWith(SpringJUnit4ClassRunner.class)@ContextConfigur">
+  <meta name="description" content="资源文件 将所有的资源文件, 放到测试包及测试资源下(如果没有的话).以免麻烦, 统一放到 classpath 下.  # 这放测试代码文件 src/test/java  # 这放测试资源文件 src/test/resource  进行单元测试在要测试的类, 加上以下注解(类级别的) @RunWith(SpringJUnit4ClassRunner.class) @ContextConfigura">
 <meta name="keywords" content="java,spring">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spring单元测试">
 <meta property="og:url" content="https://emacsist.github.io/2015/07/14/Spring单元测试/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="资源文件 将所有的资源文件, 放到测试包及测试资源下(如果没有的话).以免麻烦, 统一放到 classpath 下.  12345# 这放测试代码文件src/test/java# 这放测试资源文件src/test/resource 进行单元测试在要测试的类, 加上以下注解(类级别的) 12@RunWith(SpringJUnit4ClassRunner.class)@ContextConfigur">
+<meta property="og:description" content="资源文件 将所有的资源文件, 放到测试包及测试资源下(如果没有的话).以免麻烦, 统一放到 classpath 下.  # 这放测试代码文件 src/test/java  # 这放测试资源文件 src/test/resource  进行单元测试在要测试的类, 加上以下注解(类级别的) @RunWith(SpringJUnit4ClassRunner.class) @ContextConfigura">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring单元测试">
-<meta name="twitter:description" content="资源文件 将所有的资源文件, 放到测试包及测试资源下(如果没有的话).以免麻烦, 统一放到 classpath 下.  12345# 这放测试代码文件src/test/java# 这放测试资源文件src/test/resource 进行单元测试在要测试的类, 加上以下注解(类级别的) 12@RunWith(SpringJUnit4ClassRunner.class)@ContextConfigur">
+<meta name="twitter:description" content="资源文件 将所有的资源文件, 放到测试包及测试资源下(如果没有的话).以免麻烦, 统一放到 classpath 下.  # 这放测试代码文件 src/test/java  # 这放测试资源文件 src/test/resource  进行单元测试在要测试的类, 加上以下注解(类级别的) @RunWith(SpringJUnit4ClassRunner.class) @ContextConfigura">
 
   
 
@@ -204,12 +204,58 @@
                             <h2 id="资源文件"><a href="#资源文件" class="headerlink" title="资源文件"></a>资源文件</h2><blockquote>
 <p>将所有的资源文件, 放到测试包及测试资源下(如果没有的话).以免麻烦, 统一放到 <code>classpath</code> 下.</p>
 </blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 这放测试代码文件</span></div><div class="line">src/<span class="built_in">test</span>/java</div><div class="line"></div><div class="line"><span class="comment"># 这放测试资源文件</span></div><div class="line">src/<span class="built_in">test</span>/resource</div></pre></td></tr></table></figure>
+<pre><code class="bash"># 这放测试代码文件
+src/test/java
+
+# 这放测试资源文件
+src/test/resource
+</code></pre>
 <h2 id="进行单元测试"><a href="#进行单元测试" class="headerlink" title="进行单元测试"></a>进行单元测试</h2><p>在要测试的类, 加上以下注解(类级别的)</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">@RunWith(SpringJUnit4ClassRunner.class)</div><div class="line">@ContextConfiguration(<span class="string">"classpath:spring.xml"</span>)</div></pre></td></tr></table></figure>
+<pre><code class="bash">@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(&quot;classpath:spring.xml&quot;)
+</code></pre>
 <p>其中 <code>spring.xml</code> 为核心spring文件, 即容器统一管理的文件(不是<code>Spring MVC</code>的那个在<code>web.xml</code>里配置指向的文件,当然也可以是同一个,如果没有分开的话).</p>
 <p>示例代码</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@RunWith</span>(SpringJUnit4ClassRunner.class)</div><div class="line"><span class="meta">@ContextConfiguration</span>(<span class="string">"classpath:spring.xml"</span>)</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestSpring</span> </span>&#123;</div><div class="line">	<span class="meta">@Autowired</span></div><div class="line">	<span class="keyword">private</span> CCSessionMsgListener listener;</div><div class="line"></div><div class="line">	<span class="meta">@Autowired</span></div><div class="line">	<span class="keyword">private</span> RabbitTemplate rabbitTemplate;</div><div class="line"></div><div class="line">	<span class="meta">@Test</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</div><div class="line">		System.out.println(<span class="string">"11111111111111111"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="meta">@Test</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">listTest</span><span class="params">()</span> </span>&#123;</div><div class="line">		CcSessionMsg ccSessionMsg = inqueue(<span class="string">"yyy"</span>, <span class="string">"xxx"</span>, <span class="string">"test"</span>, System.currentTimeMillis(), <span class="keyword">new</span> Date());</div><div class="line">		rabbitTemplate.convertAndSend(<span class="string">"queue"</span>, ccSessionMsg);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="meta">@Test</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">outQueue</span><span class="params">()</span></span>&#123;</div><div class="line">		CcSessionMsg msg = (CcSessionMsg)rabbitTemplate.receiveAndConvert(<span class="string">"queue"</span>);</div><div class="line">		listener.getSessionMsg(msg);</div><div class="line">	&#125;</div><div class="line"></div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> CcSessionMsg <span class="title">inqueue</span><span class="params">(String fromOpenid, String toOpenid, String content, <span class="keyword">long</span> mid, Date createAt)</span> </span>&#123;</div><div class="line">		CcSessionMsg sessionMsg = <span class="keyword">new</span> CcSessionMsg();</div><div class="line">		sessionMsg.setContent(content);</div><div class="line">		sessionMsg.setMid(mid);</div><div class="line">		sessionMsg.setCreateAt(<span class="keyword">new</span> Timestamp(createAt.getTime()));</div><div class="line">		sessionMsg.setType(<span class="number">301</span>);</div><div class="line">		sessionMsg.setFromOpenid(fromOpenid);</div><div class="line">		sessionMsg.setToOpenid(toOpenid);</div><div class="line">		<span class="keyword">return</span> sessionMsg;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="java">@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(&quot;classpath:spring.xml&quot;)
+public class TestSpring {
+    @Autowired
+    private CCSessionMsgListener listener;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    @Test
+    public void test() {
+        System.out.println(&quot;11111111111111111&quot;);
+    }
+
+    @Test
+    public void listTest() {
+        CcSessionMsg ccSessionMsg = inqueue(&quot;yyy&quot;, &quot;xxx&quot;, &quot;test&quot;, System.currentTimeMillis(), new Date());
+        rabbitTemplate.convertAndSend(&quot;queue&quot;, ccSessionMsg);
+    }
+
+    @Test
+    public void outQueue(){
+        CcSessionMsg msg = (CcSessionMsg)rabbitTemplate.receiveAndConvert(&quot;queue&quot;);
+        listener.getSessionMsg(msg);
+    }
+
+
+    public CcSessionMsg inqueue(String fromOpenid, String toOpenid, String content, long mid, Date createAt) {
+        CcSessionMsg sessionMsg = new CcSessionMsg();
+        sessionMsg.setContent(content);
+        sessionMsg.setMid(mid);
+        sessionMsg.setCreateAt(new Timestamp(createAt.getTime()));
+        sessionMsg.setType(301);
+        sessionMsg.setFromOpenid(fromOpenid);
+        sessionMsg.setToOpenid(toOpenid);
+        return sessionMsg;
+    }
+
+}
+</code></pre>
 <p>注意: 在每个要测试的方法里, 不要忘记了添加上 <code>@Test</code> 注解哈.</p>
 
                                 

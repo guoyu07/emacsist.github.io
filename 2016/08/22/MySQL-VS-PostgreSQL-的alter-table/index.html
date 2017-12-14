@@ -15,17 +15,17 @@
     <meta name="keywords" content="postgresql,database,mysql," />
   
 
-  <meta name="description" content="版本PostgreSQL12345678[local]:5432 sky@sky=# select version();                                                  version                                                  ---------------------------------">
+  <meta name="description" content="版本PostgreSQL[local]:5432 sky@sky=# select version();                                                   version                                                   ---------------------------------------">
 <meta name="keywords" content="postgresql,database,mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL VS PostgreSQL 的alter table">
 <meta property="og:url" content="https://emacsist.github.io/2016/08/22/MySQL-VS-PostgreSQL-的alter-table/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="版本PostgreSQL12345678[local]:5432 sky@sky=# select version();                                                  version                                                  ---------------------------------">
+<meta property="og:description" content="版本PostgreSQL[local]:5432 sky@sky=# select version();                                                   version                                                   ---------------------------------------">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL VS PostgreSQL 的alter table">
-<meta name="twitter:description" content="版本PostgreSQL12345678[local]:5432 sky@sky=# select version();                                                  version                                                  ---------------------------------">
+<meta name="twitter:description" content="版本PostgreSQL[local]:5432 sky@sky=# select version();                                                   version                                                   ---------------------------------------">
 
   
 
@@ -206,17 +206,120 @@
 
     <div class="article-content">
         
-                            <h2 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h2><h3 id="PostgreSQL"><a href="#PostgreSQL" class="headerlink" title="PostgreSQL"></a>PostgreSQL</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># select version();</span></div><div class="line">                                                  version                                                  </div><div class="line">-----------------------------------------------------------------------------------------------------------</div><div class="line"> PostgreSQL 9.6beta4 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 4.8.4-2ubuntu1~14.04.3) 4.8.4, 64-bit</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.407 ms</div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
-<h3 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a>MySQL</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">mysql&gt; select version();</div><div class="line">+-------------------------------------+</div><div class="line">| version()                           |</div><div class="line">+-------------------------------------+</div><div class="line">| 5.7.12-1~exp1+deb.sury.org~trusty+1 |</div><div class="line">+-------------------------------------+</div><div class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
+                            <h2 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h2><h3 id="PostgreSQL"><a href="#PostgreSQL" class="headerlink" title="PostgreSQL"></a>PostgreSQL</h3><pre><code class="bash">[local]:5432 sky@sky=# select version();
+                                                  version                                                  
+-----------------------------------------------------------------------------------------------------------
+ PostgreSQL 9.6beta4 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 4.8.4-2ubuntu1~14.04.3) 4.8.4, 64-bit
+(1 row)
+
+Time: 0.407 ms
+[local]:5432 sky@sky=#
+</code></pre>
+<h3 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a>MySQL</h3><pre><code class="bash">mysql&gt; select version();
++-------------------------------------+
+| version()                           |
++-------------------------------------+
+| 5.7.12-1~exp1+deb.sury.org~trusty+1 |
++-------------------------------------+
+1 row in set (0.00 sec)
+
+mysql&gt;
+</code></pre>
 <h2 id="测试表"><a href="#测试表" class="headerlink" title="测试表"></a>测试表</h2><p>PostgreSQL:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># \d wb_status;</span></div><div class="line">                                           Table <span class="string">"public.wb_status"</span></div><div class="line">         Column         |            Type             |                       Modifiers                        </div><div class="line">------------------------+-----------------------------+--------------------------------------------------------</div><div class="line"> id                     | <span class="built_in">integer</span>                     | not null default nextval(<span class="string">'wb_status_id_seq'</span>::regclass)</div><div class="line"> sid                    | bigint                      | not null default <span class="string">'0'</span>::bigint</div><div class="line"> idstr                  | character varying(64)       | not null default <span class="string">''</span>::character varying</div><div class="line"> mid                    | bigint                      | default <span class="string">'0'</span>::bigint</div><div class="line"> user_id                | bigint                      | </div><div class="line"> user_screen_name       | character varying(32)       | not null default <span class="string">''</span>::character varying</div><div class="line"> user_profile_image_url | character varying(128)      | not null default <span class="string">''</span>::character varying</div><div class="line"> text                   | character varying(512)      | not null default <span class="string">''</span>::character varying</div><div class="line"> <span class="built_in">source</span>                 | character varying(256)      | not null default <span class="string">''</span>::character varying</div><div class="line"> thumbnail_pic          | character varying(256)      | not null default <span class="string">''</span>::character varying</div><div class="line"> bmiddle_pic            | character varying(256)      | not null default <span class="string">''</span>::character varying</div><div class="line"> original_pic           | character varying(256)      | not null default <span class="string">''</span>::character varying</div><div class="line"> retweeted_status_id    | character varying(32)       | not null default <span class="string">''</span>::character varying</div><div class="line"> geo                    | character varying(256)      | default <span class="string">''</span>::character varying</div><div class="line"> reposts_count          | <span class="built_in">integer</span>                     | default 0</div><div class="line"> comments_count         | <span class="built_in">integer</span>                     | default 0</div><div class="line"> attitudes_count        | <span class="built_in">integer</span>                     | default 0</div><div class="line"> visible                | character varying(64)       | not null default <span class="string">''</span>::character varying</div><div class="line"> pic_urls               | character varying(1024)     | not null default <span class="string">''</span>::character varying</div><div class="line"> create_at              | timestamp without time zone | not null default now()</div><div class="line"> update_at              | timestamp without time zone | not null default now()</div><div class="line"> ad                     | character varying(256)      | not null default <span class="string">''</span>::character varying</div><div class="line"> is_deleted             | smallint                    | not null default <span class="string">'0'</span>::smallint</div><div class="line"> </div><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># SELECT count(1) from wb_status;</span></div><div class="line">  count  </div><div class="line">---------</div><div class="line"> 1370996</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 84.686 ms</div></pre></td></tr></table></figure>
+<pre><code class="bash">[local]:5432 sky@sky=# \d wb_status;
+                                           Table &quot;public.wb_status&quot;
+         Column         |            Type             |                       Modifiers                        
+------------------------+-----------------------------+--------------------------------------------------------
+ id                     | integer                     | not null default nextval(&#39;wb_status_id_seq&#39;::regclass)
+ sid                    | bigint                      | not null default &#39;0&#39;::bigint
+ idstr                  | character varying(64)       | not null default &#39;&#39;::character varying
+ mid                    | bigint                      | default &#39;0&#39;::bigint
+ user_id                | bigint                      | 
+ user_screen_name       | character varying(32)       | not null default &#39;&#39;::character varying
+ user_profile_image_url | character varying(128)      | not null default &#39;&#39;::character varying
+ text                   | character varying(512)      | not null default &#39;&#39;::character varying
+ source                 | character varying(256)      | not null default &#39;&#39;::character varying
+ thumbnail_pic          | character varying(256)      | not null default &#39;&#39;::character varying
+ bmiddle_pic            | character varying(256)      | not null default &#39;&#39;::character varying
+ original_pic           | character varying(256)      | not null default &#39;&#39;::character varying
+ retweeted_status_id    | character varying(32)       | not null default &#39;&#39;::character varying
+ geo                    | character varying(256)      | default &#39;&#39;::character varying
+ reposts_count          | integer                     | default 0
+ comments_count         | integer                     | default 0
+ attitudes_count        | integer                     | default 0
+ visible                | character varying(64)       | not null default &#39;&#39;::character varying
+ pic_urls               | character varying(1024)     | not null default &#39;&#39;::character varying
+ create_at              | timestamp without time zone | not null default now()
+ update_at              | timestamp without time zone | not null default now()
+ ad                     | character varying(256)      | not null default &#39;&#39;::character varying
+ is_deleted             | smallint                    | not null default &#39;0&#39;::smallint
+
+[local]:5432 sky@sky=# SELECT count(1) from wb_status;
+  count  
+---------
+ 1370996
+(1 row)
+
+Time: 84.686 ms
+</code></pre>
 <p>MySQL:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">mysql&gt; desc wb_status;</div><div class="line">+------------------------+---------------+------+-----+---------------------+-----------------------------+</div><div class="line">| Field                  | Type          | Null | Key | Default             | Extra                       |</div><div class="line">+------------------------+---------------+------+-----+---------------------+-----------------------------+</div><div class="line">| id                     | int(11)       | NO   | PRI | NULL                | auto_increment              |</div><div class="line">| sid                    | bigint(20)    | NO   | UNI | 0                   |                             |</div><div class="line">| idstr                  | varchar(64)   | NO   |     |                     |                             |</div><div class="line">| mid                    | bigint(20)    | YES  |     | 0                   |                             |</div><div class="line">| user_id                | bigint(20)    | YES  | MUL | NULL                |                             |</div><div class="line">| user_screen_name       | varchar(64)   | NO   |     |                     |                             |</div><div class="line">| user_profile_image_url | varchar(128)  | NO   |     |                     |                             |</div><div class="line">| text                   | varchar(512)  | NO   | MUL |                     |                             |</div><div class="line">| <span class="built_in">source</span>                 | varchar(256)  | NO   |     |                     |                             |</div><div class="line">| thumbnail_pic          | varchar(256)  | NO   |     |                     |                             |</div><div class="line">| bmiddle_pic            | varchar(256)  | NO   |     |                     |                             |</div><div class="line">| original_pic           | varchar(256)  | NO   |     |                     |                             |</div><div class="line">| retweeted_status_id    | varchar(32)   | NO   |     |                     |                             |</div><div class="line">| geo                    | varchar(256)  | YES  |     |                     |                             |</div><div class="line">| reposts_count          | int(11)       | YES  |     | 0                   |                             |</div><div class="line">| comments_count         | int(11)       | YES  |     | 0                   |                             |</div><div class="line">| attitudes_count        | int(11)       | YES  |     | 0                   |                             |</div><div class="line">| visible                | varchar(64)   | NO   |     |                     |                             |</div><div class="line">| pic_urls               | varchar(1024) | NO   |     |                     |                             |</div><div class="line">| create_at              | timestamp     | NO   |     | 1998-07-01 00:00:00 |                             |</div><div class="line">| update_at              | timestamp     | NO   |     | CURRENT_TIMESTAMP   | on update CURRENT_TIMESTAMP |</div><div class="line">| ad                     | varchar(256)  | NO   |     |                     |                             |</div><div class="line">| is_deleted             | tinyint(4)    | NO   |     | 0                   |                             |</div><div class="line"></div><div class="line">mysql&gt; select count(1) from wb_status;</div><div class="line">+----------+</div><div class="line">| count(1) |</div><div class="line">+----------+</div><div class="line">|  1370996 |</div><div class="line">+----------+</div><div class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.44 sec)</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
+<pre><code class="bash">mysql&gt; desc wb_status;
++------------------------+---------------+------+-----+---------------------+-----------------------------+
+| Field                  | Type          | Null | Key | Default             | Extra                       |
++------------------------+---------------+------+-----+---------------------+-----------------------------+
+| id                     | int(11)       | NO   | PRI | NULL                | auto_increment              |
+| sid                    | bigint(20)    | NO   | UNI | 0                   |                             |
+| idstr                  | varchar(64)   | NO   |     |                     |                             |
+| mid                    | bigint(20)    | YES  |     | 0                   |                             |
+| user_id                | bigint(20)    | YES  | MUL | NULL                |                             |
+| user_screen_name       | varchar(64)   | NO   |     |                     |                             |
+| user_profile_image_url | varchar(128)  | NO   |     |                     |                             |
+| text                   | varchar(512)  | NO   | MUL |                     |                             |
+| source                 | varchar(256)  | NO   |     |                     |                             |
+| thumbnail_pic          | varchar(256)  | NO   |     |                     |                             |
+| bmiddle_pic            | varchar(256)  | NO   |     |                     |                             |
+| original_pic           | varchar(256)  | NO   |     |                     |                             |
+| retweeted_status_id    | varchar(32)   | NO   |     |                     |                             |
+| geo                    | varchar(256)  | YES  |     |                     |                             |
+| reposts_count          | int(11)       | YES  |     | 0                   |                             |
+| comments_count         | int(11)       | YES  |     | 0                   |                             |
+| attitudes_count        | int(11)       | YES  |     | 0                   |                             |
+| visible                | varchar(64)   | NO   |     |                     |                             |
+| pic_urls               | varchar(1024) | NO   |     |                     |                             |
+| create_at              | timestamp     | NO   |     | 1998-07-01 00:00:00 |                             |
+| update_at              | timestamp     | NO   |     | CURRENT_TIMESTAMP   | on update CURRENT_TIMESTAMP |
+| ad                     | varchar(256)  | NO   |     |                     |                             |
+| is_deleted             | tinyint(4)    | NO   |     | 0                   |                             |
+
+mysql&gt; select count(1) from wb_status;
++----------+
+| count(1) |
++----------+
+|  1370996 |
++----------+
+1 row in set (0.44 sec)
+
+mysql&gt;
+</code></pre>
 <h2 id="Alter-table-add-column"><a href="#Alter-table-add-column" class="headerlink" title="Alter table add column"></a>Alter table add column</h2><p>不带默认值,不带not null</p>
-<h3 id="PostgreSQL-1"><a href="#PostgreSQL-1" class="headerlink" title="PostgreSQL"></a>PostgreSQL</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># ALTER TABLE wb_status add column iii_id int;</span></div><div class="line">ALTER TABLE</div><div class="line">Time: 1.599 ms</div></pre></td></tr></table></figure>
-<h3 id="MySQL-1"><a href="#MySQL-1" class="headerlink" title="MySQL"></a>MySQL</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mysql&gt; alter table wb_status add column iii_id int;</div><div class="line">Query OK, 1370996 rows affected (14 min 7.60 sec)</div><div class="line">Records: 1370996  Duplicates: 0  Warnings: 0</div></pre></td></tr></table></figure>
-<h2 id="alter-table-add-column-not-null-default-0"><a href="#alter-table-add-column-not-null-default-0" class="headerlink" title="alter table add column not null default 0"></a>alter table add column not null default 0</h2><h3 id="PostgreSQL-2"><a href="#PostgreSQL-2" class="headerlink" title="PostgreSQL"></a>PostgreSQL</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">local</span>]:5432 sky@sky=<span class="comment"># ALTER TABLE wb_status add column ddd_id int not null default 0;</span></div><div class="line">ALTER TABLE</div><div class="line">Time: 2223.007 ms</div></pre></td></tr></table></figure>
-<h3 id="MySQL-2"><a href="#MySQL-2" class="headerlink" title="MySQL"></a>MySQL</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">mysql&gt; alter table wb_status add column eee_id int not null default 0;</div><div class="line">Query OK, 1370996 rows affected (12 min 31.77 sec)</div><div class="line">Records: 1370996  Duplicates: 0  Warnings: 0</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
+<h3 id="PostgreSQL-1"><a href="#PostgreSQL-1" class="headerlink" title="PostgreSQL"></a>PostgreSQL</h3><pre><code class="bash">[local]:5432 sky@sky=# ALTER TABLE wb_status add column iii_id int;
+ALTER TABLE
+Time: 1.599 ms
+</code></pre>
+<h3 id="MySQL-1"><a href="#MySQL-1" class="headerlink" title="MySQL"></a>MySQL</h3><pre><code class="bash">mysql&gt; alter table wb_status add column iii_id int;
+Query OK, 1370996 rows affected (14 min 7.60 sec)
+Records: 1370996  Duplicates: 0  Warnings: 0
+</code></pre>
+<h2 id="alter-table-add-column-not-null-default-0"><a href="#alter-table-add-column-not-null-default-0" class="headerlink" title="alter table add column not null default 0"></a>alter table add column not null default 0</h2><h3 id="PostgreSQL-2"><a href="#PostgreSQL-2" class="headerlink" title="PostgreSQL"></a>PostgreSQL</h3><pre><code class="bash">[local]:5432 sky@sky=# ALTER TABLE wb_status add column ddd_id int not null default 0;
+ALTER TABLE
+Time: 2223.007 ms
+</code></pre>
+<h3 id="MySQL-2"><a href="#MySQL-2" class="headerlink" title="MySQL"></a>MySQL</h3><pre><code class="bash">mysql&gt; alter table wb_status add column eee_id int not null default 0;
+Query OK, 1370996 rows affected (12 min 31.77 sec)
+Records: 1370996  Duplicates: 0  Warnings: 0
+
+mysql&gt;
+</code></pre>
 <h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p><code>alter table xx add column</code>如果不加<code>default</code>默认值，则PG是最快的。只需要在字典里添加一条数据，而对MySQL来说无论有没有，它都要重写整个表及数据.</p>
 <p>不过，即使有<code>not null default</code>，PostgreSQL相对于MySQL来说，也是很快的.</p>
 

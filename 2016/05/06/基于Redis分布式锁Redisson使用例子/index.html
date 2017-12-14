@@ -15,17 +15,17 @@
     <meta name="keywords" content="redis,分布式锁," />
   
 
-  <meta name="description" content="1234567891011121314151617181920212223@Testpublic void testDistributeLock() throws InterruptedException &amp;#123;    final CountDownLatch cdl = new CountDownLatch(10);    long time = System.currentTimeMil">
+  <meta name="description" content="@Test     public void testDistributeLock() throws InterruptedException {         final CountDownLatch cdl = new CountDownLatch(10);         long time = System.currentTimeMillis();         Redisson">
 <meta name="keywords" content="redis,分布式锁">
 <meta property="og:type" content="article">
 <meta property="og:title" content="基于Redis分布式锁Redisson使用例子">
 <meta property="og:url" content="https://emacsist.github.io/2016/05/06/基于Redis分布式锁Redisson使用例子/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="1234567891011121314151617181920212223@Testpublic void testDistributeLock() throws InterruptedException &amp;#123;    final CountDownLatch cdl = new CountDownLatch(10);    long time = System.currentTimeMil">
+<meta property="og:description" content="@Test     public void testDistributeLock() throws InterruptedException {         final CountDownLatch cdl = new CountDownLatch(10);         long time = System.currentTimeMillis();         Redisson">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基于Redis分布式锁Redisson使用例子">
-<meta name="twitter:description" content="1234567891011121314151617181920212223@Testpublic void testDistributeLock() throws InterruptedException &amp;#123;    final CountDownLatch cdl = new CountDownLatch(10);    long time = System.currentTimeMil">
+<meta name="twitter:description" content="@Test     public void testDistributeLock() throws InterruptedException {         final CountDownLatch cdl = new CountDownLatch(10);         long time = System.currentTimeMillis();         Redisson">
 
   
 
@@ -196,7 +196,30 @@
 
     <div class="article-content">
         
-                            <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">@Test</div><div class="line">public void testDistributeLock() throws InterruptedException &#123;</div><div class="line">    final CountDownLatch cdl = new CountDownLatch(10);</div><div class="line">    long time = System.currentTimeMillis();</div><div class="line">    RedissonClient redisson = Redisson.create();</div><div class="line">    final RLock rLock = redisson.getLock(<span class="string">"hello-lock"</span>);</div><div class="line">    final Map&lt;String, Integer&gt; map = new HashMap&lt;&gt;(1);</div><div class="line">    map.put(<span class="string">"hello"</span>, 0);</div><div class="line">    <span class="keyword">for</span> (int i = 0; i &lt; 10; i++) &#123;</div><div class="line">        new Thread(new <span class="function"><span class="title">Runnable</span></span>() &#123;</div><div class="line">            @Override</div><div class="line">            public void <span class="function"><span class="title">run</span></span>() &#123;</div><div class="line">                rLock.lock(10, TimeUnit.SECONDS);</div><div class="line">                map.put(<span class="string">"hello"</span>, map.get(<span class="string">"hello"</span>) + 1);</div><div class="line">                rLock.unlock();</div><div class="line">                cdl.countDown();</div><div class="line">            &#125;</div><div class="line">        &#125;).start();</div><div class="line">    &#125;</div><div class="line">    cdl.await();</div><div class="line">    System.out.println(<span class="string">"result -&gt;"</span> + map.get(<span class="string">"hello"</span>));</div><div class="line">    System.out.println(System.currentTimeMillis() - time);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+                            <pre><code class="bash">    @Test
+    public void testDistributeLock() throws InterruptedException {
+        final CountDownLatch cdl = new CountDownLatch(10);
+        long time = System.currentTimeMillis();
+        RedissonClient redisson = Redisson.create();
+        final RLock rLock = redisson.getLock(&quot;hello-lock&quot;);
+        final Map&lt;String, Integer&gt; map = new HashMap&lt;&gt;(1);
+        map.put(&quot;hello&quot;, 0);
+        for (int i = 0; i &lt; 10; i++) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    rLock.lock(10, TimeUnit.SECONDS);
+                    map.put(&quot;hello&quot;, map.get(&quot;hello&quot;) + 1);
+                    rLock.unlock();
+                    cdl.countDown();
+                }
+            }).start();
+        }
+        cdl.await();
+        System.out.println(&quot;result -&gt;&quot; + map.get(&quot;hello&quot;));
+        System.out.println(System.currentTimeMillis() - time);
+    }
+</code></pre>
 <p><a href="https://github.com/mrniko/redisson/wiki/5.-distributed-objects#54-lock" target="_blank" rel="external">redisson lock</a></p>
 
                                 

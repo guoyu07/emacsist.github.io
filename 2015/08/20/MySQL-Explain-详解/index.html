@@ -226,16 +226,28 @@
 <h4 id="system"><a href="#system" class="headerlink" title="system"></a>system</h4><p>表只有一行（=system table）.这个<code>const</code>连接类型的一个特例。</p>
 <h4 id="const"><a href="#const" class="headerlink" title="const"></a>const</h4><p>该表最多只有一条匹配的行，这是读取查询的开始。因为这里只有一行，该行这列的值可以被优化器的剩余部分认为是常量。<code>const</code>表是非常快的，因为它们只会读取一次。</p>
 <p><code>const</code>用于当你与主键或唯一索引的所有部分比较的是常量值时。在以下的查询中，<em>tal_name</em> 可以被用作<code>const</code>表：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">select</span> * <span class="keyword">from</span> tbl_name <span class="keyword">where</span> primary_key = <span class="number">1</span>;</div><div class="line"></div><div class="line"><span class="keyword">select</span> * <span class="keyword">from</span> tbl_name <span class="keyword">where</span> primary_key_part1 = <span class="number">1</span> <span class="keyword">and</span> primary_key_part2 = <span class="number">2</span></div></pre></td></tr></table></figure>
+<pre><code class="sql">select * from tbl_name where primary_key = 1;
+
+select * from tbl_name where primary_key_part1 = 1 and primary_key_part2 = 2
+</code></pre>
 <h4 id="eq-ref"><a href="#eq-ref" class="headerlink" title="eq_ref"></a>eq_ref</h4><p>从该表中读取一行与前一张表的所有行的每一种组合。除了<code>system</code>和<code>const</code>类型，这可能是最好的连接类型了。它通常于用在连接时使用了索引的所有部分，并且索引是一个<code>主键索引</code>或者<code>唯一非空索引</code>.</p>
 <p><code>eq_ref</code>可用于索引列使用<code>=</code>比较操作符的情况。比较的值可能是一个常量或者是 从读这表之前的表中使用的一个列表达式。比如下面的例子，MySQL能够使用<code>eq_ref</code>连接去处理<code>ref_table</code>表：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">select</span> * <span class="keyword">from</span> ref_table, other_table <span class="keyword">where</span> ref_table.key_column = other_table.column;</div><div class="line"></div><div class="line"><span class="keyword">select</span> * <span class="keyword">from</span> ref_table, other_table <span class="keyword">where</span> ref_table.key_column_part1 = other_table.column <span class="keyword">and</span> ref_table.key_column_part2 = <span class="number">1</span></div></pre></td></tr></table></figure>
+<pre><code class="sql">select * from ref_table, other_table where ref_table.key_column = other_table.column;
+
+select * from ref_table, other_table where ref_table.key_column_part1 = other_table.column and ref_table.key_column_part2 = 1
+</code></pre>
 <h4 id="ref"><a href="#ref" class="headerlink" title="ref"></a>ref</h4><p>所有索引匹配的行的值与前一张表的所有行的每一种组合。<code>ref</code>用于连接仅使用<code>最左前缀</code>索引或者索引不是主键索引，唯一索引（换句话说，连接不能基于该索引值选择一行 ）。如果索引用于匹配少数行，这是一个好的连接类型。</p>
 <p><code>ref</code>能够用于使用<code>=</code>或者<code>&lt;=&gt;</code>操作符的索引列中。比如下面的例子，MySQL能够使用<code>ref</code>连接去处理<code>ref_table</code>表：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">select</span> * <span class="keyword">from</span> ref_table <span class="keyword">where</span> key_column = expr;</div><div class="line"></div><div class="line"><span class="keyword">select</span> * <span class="keyword">from</span> ref_table , other_table <span class="keyword">where</span> ref_table.key_column = other_table.column;</div><div class="line"></div><div class="line"><span class="keyword">select</span> * <span class="keyword">from</span> ref_table, other_table <span class="keyword">where</span> ref_table.key_column_part1 = other_table.column <span class="keyword">and</span> ref_table.key_column_part2 = <span class="number">1</span>;</div></pre></td></tr></table></figure>
+<pre><code class="sql">select * from ref_table where key_column = expr;
+
+select * from ref_table , other_table where ref_table.key_column = other_table.column;
+
+select * from ref_table, other_table where ref_table.key_column_part1 = other_table.column and ref_table.key_column_part2 = 1;
+</code></pre>
 <h4 id="fulltext"><a href="#fulltext" class="headerlink" title="fulltext"></a>fulltext</h4><p>这个连接使用<code>fulltext</code>索引执行</p>
 <h4 id="ref-or-null"><a href="#ref-or-null" class="headerlink" title="ref_or_null"></a>ref_or_null</h4><p>这个连接类型是类似<code>ref</code>，但有些额外的不同：MySQL要做一些额外操作去搜索包含<code>NULL</code>值的行。这个连接类型通常用于优化执行子查询。在以下的例子里，MySQL 可以使用<code>ref_or_null</code>连接去处理<code>ref_table</code>.</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">select</span> * <span class="keyword">from</span> ref_table <span class="keyword">where</span> key_column = expr <span class="keyword">or</span> key_column <span class="keyword">is</span> <span class="literal">null</span>;</div></pre></td></tr></table></figure>
+<pre><code class="sql">select * from ref_table where key_column = expr or key_column is null;
+</code></pre>
 <h4 id="index-merge"><a href="#index-merge" class="headerlink" title="index_merge"></a>index_merge</h4><p>这个连接类型说明使用了索引合并优化。在这种情况下，在输出行的<code>key</code>列包含了一个使用索引的列表，并且<code>key_len</code>包含了使用了索引最长的那部分列表。</p>
 <h4 id="unique-subquery"><a href="#unique-subquery" class="headerlink" title="unique_subquery"></a>unique_subquery</h4><p>这个类型在以下格式的一些<code>IN</code>子查询是替代<code>ref</code>类型的。</p>
 <p><code>value IN (select primary_key from single_table where some_expr)</code></p>
@@ -244,7 +256,14 @@
 <p><code>value in (select key_column from single_table where some_expr)</code></p>
 <h4 id="range"><a href="#range" class="headerlink" title="range"></a>range</h4><p>仅在给定的范围使用索引检索行。在输出的行中的<code>key</code>列说明使用了哪个索引。<code>key_len</code>列包含了使用了索引的最长部分。对于这类型下，<code>ref</code>列的值为<code>NULL</code>。</p>
 <p><code>range</code>可以用于当索引列使用以下任一个操作符与<code>常量</code>比较时使用：<code>=</code>, <code>&lt;&gt;</code>, <code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>IS NULL</code>, <code>&lt;=&gt;</code>, <code>BETWEEN</code> 或者 <code>IN()</code></p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">select</span> * <span class="keyword">from</span> tbl_name <span class="keyword">where</span> key_column = <span class="number">10</span>;</div><div class="line"></div><div class="line"><span class="keyword">select</span> * <span class="keyword">from</span> tbl_name <span class="keyword">where</span> key_colum <span class="keyword">between</span> <span class="number">10</span> <span class="keyword">and</span> <span class="number">20</span>;</div><div class="line"></div><div class="line"><span class="keyword">select</span> * <span class="keyword">from</span> tbl_name <span class="keyword">where</span> key_column <span class="keyword">in</span> (<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>);</div><div class="line"></div><div class="line"><span class="keyword">select</span> * <span class="keyword">from</span> tbl_name <span class="keyword">where</span> key_part1 = <span class="number">10</span> <span class="keyword">and</span> key_part2 <span class="keyword">in</span> (<span class="number">10</span>,<span class="number">20</span>,<span class="number">30</span>);</div></pre></td></tr></table></figure>
+<pre><code class="sql">select * from tbl_name where key_column = 10;
+
+select * from tbl_name where key_colum between 10 and 20;
+
+select * from tbl_name where key_column in (10, 20, 30);
+
+select * from tbl_name where key_part1 = 10 and key_part2 in (10,20,30);
+</code></pre>
 <h4 id="index"><a href="#index" class="headerlink" title="index"></a>index</h4><p><code>index</code>索引连接类型与<code>all</code>相同，除了它是扫描索引树外（即全索引扫描）。这在两种情况下发生：</p>
 <ol>
 <li><p>如果索引对于查询来说是覆盖索引并且可用于满足要求表的数据要求，这时只有索引树会被扫描。在这种情况下，<code>Extra</code>列会显示为<code>Using index</code>。一个只读索引扫描通常比<code>ALL</code>更快，因为索引的大小通常是比表的大小更小。</p>

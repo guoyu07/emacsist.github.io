@@ -219,7 +219,10 @@
 <p>这…….</p>
 </blockquote>
 <p>经前端同事的指出，才知道Google Chrome浏览器，同一个<code>tab</code>对<code>同一域名</code>的最大同时连接数是有限制的.可以通过如下方式查看:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">在浏览器地址栏输入以下:</div><div class="line"></div><div class="line">chrome://net-internals/<span class="comment">#sockets</span></div></pre></td></tr></table></figure>
+<pre><code class="bash">在浏览器地址栏输入以下:
+
+chrome://net-internals/#sockets
+</code></pre>
 <h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>经过这次排查，发现自己一开始时的排查方向都是错的。因为问题的根源，并不是点击[对话]的URL的后端处理导致的。而是由于其他的URL，导致服务器没有能及时响应，而这些又是前端轮询的。所以，当服务器出现不能及时响应时，就会造成不少同时连接到同一域名，从而达到浏览器的连接上限，其他的请求，就只有挂起了。所以，才看到整个处理时间，前端与后端差别这么大。</p>
 <p>找到根源的那个URL请求，然后优化了下该代码就好了。</p>
 <h2 id="总结知识点"><a href="#总结知识点" class="headerlink" title="总结知识点"></a>总结知识点</h2><ul>
