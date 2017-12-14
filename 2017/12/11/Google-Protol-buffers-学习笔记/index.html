@@ -22,7 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2017/12/11/Google-Protol-buffers-学习笔记/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="什么是 protocol buffers?Google 官方文档是这样子介绍的  Protocol buffers 是 Google 的语言中立的, 平台中立的, 可扩展的序列化结构的数据机制, 类似  XML, 但是更小, 更快, 更简单. 你可以一次性定义数据的结构, 然后你可以使用生成的特殊代码来轻松写入和读取你的各种结构化数据, 并且可以使用多种语言来实现.  语言指南 (proto3)s">
-<meta property="og:updated_time" content="2017-12-11T06:46:32.148Z">
+<meta property="og:updated_time" content="2017-12-14T08:06:34.681Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Google Protol buffers  学习笔记">
 <meta name="twitter:description" content="什么是 protocol buffers?Google 官方文档是这样子介绍的  Protocol buffers 是 Google 的语言中立的, 平台中立的, 可扩展的序列化结构的数据机制, 类似  XML, 但是更小, 更快, 更简单. 你可以一次性定义数据的结构, 然后你可以使用生成的特殊代码来轻松写入和读取你的各种结构化数据, 并且可以使用多种语言来实现.  语言指南 (proto3)s">
@@ -147,7 +147,7 @@
 
   <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#什么是-protocol-buffers"><span class="toc-text">什么是 protocol buffers?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#语言指南-proto3"><span class="toc-text">语言指南 (proto3)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#示例"><span class="toc-text">示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分配标签"><span class="toc-text">分配标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#指定字段规则"><span class="toc-text">指定字段规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#添加更多的消息类型"><span class="toc-text">添加更多的消息类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#添加注释"><span class="toc-text">添加注释</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#保留字段"><span class="toc-text">保留字段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据类型对应"><span class="toc-text">数据类型对应</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#默认值"><span class="toc-text">默认值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#枚举-enum"><span class="toc-text">枚举 enum</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用其他的-message-类型"><span class="toc-text">使用其他的 message 类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#导入定义"><span class="toc-text">导入定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#嵌套类型"><span class="toc-text">嵌套类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#更新一个-message-类型"><span class="toc-text">更新一个 message 类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#未知字段"><span class="toc-text">未知字段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Any"><span class="toc-text">Any</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Oneof"><span class="toc-text">Oneof</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#向后兼容的问题"><span class="toc-text">向后兼容的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#标签重用的问题"><span class="toc-text">标签重用的问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#maps"><span class="toc-text">maps</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#向后兼容问题"><span class="toc-text">向后兼容问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#packages-包"><span class="toc-text">packages 包</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#包和名字解析"><span class="toc-text">包和名字解析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#定义服务"><span class="toc-text">定义服务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#json-映射"><span class="toc-text">json 映射</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#选项-options"><span class="toc-text">选项 options</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#生成你的类"><span class="toc-text">生成你的类</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#什么是-protocol-buffers"><span class="toc-text">什么是 protocol buffers?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#语言指南-proto3"><span class="toc-text">语言指南 (proto3)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#示例"><span class="toc-text">示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分配标签"><span class="toc-text">分配标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#指定字段规则"><span class="toc-text">指定字段规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#添加更多的消息类型"><span class="toc-text">添加更多的消息类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#添加注释"><span class="toc-text">添加注释</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#保留字段"><span class="toc-text">保留字段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据类型对应"><span class="toc-text">数据类型对应</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#默认值"><span class="toc-text">默认值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#枚举-enum"><span class="toc-text">枚举 enum</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用其他的-message-类型"><span class="toc-text">使用其他的 message 类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#导入定义"><span class="toc-text">导入定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#嵌套类型"><span class="toc-text">嵌套类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#更新一个-message-类型"><span class="toc-text">更新一个 message 类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#未知字段"><span class="toc-text">未知字段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Any"><span class="toc-text">Any</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Oneof"><span class="toc-text">Oneof</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#向后兼容的问题"><span class="toc-text">向后兼容的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#标签重用的问题"><span class="toc-text">标签重用的问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#maps"><span class="toc-text">maps</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#向后兼容问题"><span class="toc-text">向后兼容问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#packages-包"><span class="toc-text">packages 包</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#包和名字解析"><span class="toc-text">包和名字解析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#定义服务"><span class="toc-text">定义服务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#json-映射"><span class="toc-text">json 映射</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#选项-options"><span class="toc-text">选项 options</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#生成你的类"><span class="toc-text">生成你的类</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#与JSON的映射"><span class="toc-text">与JSON的映射</span></a></li></ol>
   </div>
 
 
@@ -207,14 +207,7 @@
 </blockquote>
 <h1 id="语言指南-proto3"><a href="#语言指南-proto3" class="headerlink" title="语言指南 (proto3)"></a>语言指南 (proto3)</h1><p><code>syntax = &quot;proto3&quot;;</code></p>
 <p>这表示使用哪个版本的 protocol . 它必须是文件的非空, 非注释的第一行.如果没写, 则编译器会假设为是 <code>proto2</code></p>
-<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><pre><code class="proto">syntax = &quot;proto3&quot;;
-
-message SearchRequest {
-  string query = 1;
-  int32 page_number = 2;
-  int32 result_per_page = 3;
-}
-</code></pre>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">syntax = &quot;proto3&quot;;</div><div class="line"></div><div class="line">message SearchRequest &#123;</div><div class="line">  string query = 1;</div><div class="line">  int32 page_number = 2;</div><div class="line">  int32 result_per_page = 3;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="分配标签"><a href="#分配标签" class="headerlink" title="分配标签"></a>分配标签</h2><p>可以看到上面的例子, 每个字段都有一个唯一的数字标签( unique numbered tag ).</p>
 <p>这些标签是用于在二进制格式消息里标识你的字段的, 并且一旦在你的消息类型中使用了, 就不应该再更改.</p>
 <p>1~15, 编码时会占用 1 个字节.(包含标识数字以及字段的类型)</p>
@@ -231,11 +224,7 @@ message SearchRequest {
 <h2 id="添加更多的消息类型"><a href="#添加更多的消息类型" class="headerlink" title="添加更多的消息类型"></a>添加更多的消息类型</h2><p>可以在单一的 <code>.proto</code> 文件定义多个消息类型.</p>
 <h2 id="添加注释"><a href="#添加注释" class="headerlink" title="添加注释"></a>添加注释</h2><p>同 <code>C/C++</code> 风格的注释一样.</p>
 <h2 id="保留字段"><a href="#保留字段" class="headerlink" title="保留字段"></a>保留字段</h2><p>如果你通过移除一个字段或注释掉一个字段来更新一条消息, 将来的用户可以重用这个标签数字. 如果它们延迟加载旧版本的 <code>.proto</code> 的话, 这可能导致一些问题. 一种防止这不会出现的方式是, 为这些字段标识为 <code>reserved</code> . 编译器会报错, 如果将来任意有人试图使用这些标识.</p>
-<pre><code class="proto">message Foo {
-  reserved 2, 15, 9 to 11;
-  reserved &quot;foo&quot;, &quot;bar&quot;;
-}
-</code></pre>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">message Foo &#123;</div><div class="line">  reserved 2, 15, 9 to 11;</div><div class="line">  reserved &quot;foo&quot;, &quot;bar&quot;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>注意, 在 <code>reserved</code> 语句中, 不能混合数字和名字.</p>
 <h2 id="数据类型对应"><a href="#数据类型对应" class="headerlink" title="数据类型对应"></a>数据类型对应</h2><p><a href="https://developers.google.com/protocol-buffers/docs/proto3" target="_blank" rel="external">doc</a></p>
 <h2 id="默认值"><a href="#默认值" class="headerlink" title="默认值"></a>默认值</h2><ul>
@@ -247,57 +236,16 @@ message SearchRequest {
 <li>message 字段 : 这是依赖于具体的语言的</li>
 <li>repeated 字段: 通常是一个空列表</li>
 </ul>
-<h2 id="枚举-enum"><a href="#枚举-enum" class="headerlink" title="枚举 enum"></a>枚举 enum</h2><pre><code class="proto">message SearchRequest {
-  string query = 1;
-  int32 page_number = 2;
-  int32 result_per_page = 3;
-  enum Corpus {
-    UNIVERSAL = 0;
-    WEB = 1;
-    IMAGES = 2;
-    LOCAL = 3;
-    NEWS = 4;
-    PRODUCTS = 5;
-    VIDEO = 6;
-  }
-  Corpus corpus = 4;
-}
-</code></pre>
+<h2 id="枚举-enum"><a href="#枚举-enum" class="headerlink" title="枚举 enum"></a>枚举 enum</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">message SearchRequest &#123;</div><div class="line">  string query = 1;</div><div class="line">  int32 page_number = 2;</div><div class="line">  int32 result_per_page = 3;</div><div class="line">  enum Corpus &#123;</div><div class="line">    UNIVERSAL = 0;</div><div class="line">    WEB = 1;</div><div class="line">    IMAGES = 2;</div><div class="line">    LOCAL = 3;</div><div class="line">    NEWS = 4;</div><div class="line">    PRODUCTS = 5;</div><div class="line">    VIDEO = 6;</div><div class="line">  &#125;</div><div class="line">  Corpus corpus = 4;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>注意, 枚举的第一个必须是0. (也出于兼容 proto2 的考虑), 并且必须是 32 位的 integer 范围</p>
 <p>你可以通过定义别名来允许同一个 value 赋值给不同的枚举常量.例如</p>
-<pre><code class="proto">enum EnumAllowingAlias {
-  option allow_alias = true;
-  UNKNOWN = 0;
-  STARTED = 1;
-  RUNNING = 1;
-}
-</code></pre>
-<h2 id="使用其他的-message-类型"><a href="#使用其他的-message-类型" class="headerlink" title="使用其他的 message 类型"></a>使用其他的 message 类型</h2><pre><code class="proto">message SearchResponse {
-  repeated Result results = 1;
-}
-
-message Result {
-  string url = 1;
-  string title = 2;
-  repeated string snippets = 3;
-}
-</code></pre>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">enum EnumAllowingAlias &#123;</div><div class="line">  option allow_alias = true;</div><div class="line">  UNKNOWN = 0;</div><div class="line">  STARTED = 1;</div><div class="line">  RUNNING = 1;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="使用其他的-message-类型"><a href="#使用其他的-message-类型" class="headerlink" title="使用其他的 message 类型"></a>使用其他的 message 类型</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">message SearchResponse &#123;</div><div class="line">  repeated Result results = 1;</div><div class="line">&#125;</div><div class="line"></div><div class="line">message Result &#123;</div><div class="line">  string url = 1;</div><div class="line">  string title = 2;</div><div class="line">  repeated string snippets = 3;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="导入定义"><a href="#导入定义" class="headerlink" title="导入定义"></a>导入定义</h2><p><code>import &quot;myproject/other_protos.proto&quot;;</code></p>
 <p>通过编译器参数 <code>-I 或 --proto_path</code> 来定义一系列的目录来搜索 <code>.proto</code> 文件</p>
-<h2 id="嵌套类型"><a href="#嵌套类型" class="headerlink" title="嵌套类型"></a>嵌套类型</h2><pre><code class="proto">message SearchResponse {
-  message Result {
-    string url = 1;
-    string title = 2;
-    repeated string snippets = 3;
-  }
-  repeated Result results = 1;
-}
-</code></pre>
+<h2 id="嵌套类型"><a href="#嵌套类型" class="headerlink" title="嵌套类型"></a>嵌套类型</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">message SearchResponse &#123;</div><div class="line">  message Result &#123;</div><div class="line">    string url = 1;</div><div class="line">    string title = 2;</div><div class="line">    repeated string snippets = 3;</div><div class="line">  &#125;</div><div class="line">  repeated Result results = 1;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>如果你想在外部使用这个嵌套的类型, 可以这样子:</p>
-<pre><code class="proto">message SomeOtherMessage {
-  SearchResponse.Result result = 1;
-}
-</code></pre>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">message SomeOtherMessage &#123;</div><div class="line">  SearchResponse.Result result = 1;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="更新一个-message-类型"><a href="#更新一个-message-类型" class="headerlink" title="更新一个 message 类型"></a>更新一个 message 类型</h2><p>仅记要遵从以下规则</p>
 <ul>
 <li>不要改变当前已存在的字段的 数字标签 (numeric tag)</li>
@@ -314,22 +262,10 @@ message Result {
 <p>这不同与 proto2, 未知字段总是会被保留和序列化的</p>
 <h2 id="Any"><a href="#Any" class="headerlink" title="Any"></a>Any</h2><p><code>Any</code> message 类型允许 你使用它来作为内嵌的类型而不必需要它们的 <code>.proto</code> 定义. <code>Any</code> 包含一个任意的序列化 message 为 <code>bytes</code> 类型.</p>
 <p>为了使用该类型, 你需要导入 <code>google/protobuf/any.proto</code></p>
-<pre><code class="proto">import &quot;google/protobuf/any.proto&quot;;
-
-message ErrorStatus {
-  string message = 1;
-  repeated google.protobuf.Any details = 2;
-}
-</code></pre>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">import &quot;google/protobuf/any.proto&quot;;</div><div class="line"></div><div class="line">message ErrorStatus &#123;</div><div class="line">  string message = 1;</div><div class="line">  repeated google.protobuf.Any details = 2;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>当前处于开发阶段.</p>
 <h2 id="Oneof"><a href="#Oneof" class="headerlink" title="Oneof"></a>Oneof</h2><p>类似于 C/C++ 中的共同体. 包含许多字段, 但同一时间, 只允许设置一个字段值.</p>
-<pre><code class="proto">message SampleMessage {
-  oneof test_oneof {
-    string name = 4;
-    SubMessage sub_message = 9;
-  }
-}
-</code></pre>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">message SampleMessage &#123;</div><div class="line">  oneof test_oneof &#123;</div><div class="line">    string name = 4;</div><div class="line">    SubMessage sub_message = 9;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>它的特点</p>
 <ul>
 <li>设置 oneof 字段时, 会自动清除其他成员. 因此, 当你设置了几次 oneof 字段后, 仅最后一次设置的字段仍保留值.</li>
@@ -339,30 +275,18 @@ message ErrorStatus {
 <li>如果你正使用C++, 请确保你的代码不会导致内存崩溃.</li>
 </ul>
 <p>例如</p>
-<pre><code class="proto">SampleMessage message;
-SubMessage* sub_message = message.mutable_sub_message();
-message.set_name(&quot;name&quot;);      // Will delete sub_message
-sub_message-&gt;set_...            // Crashes here
-</code></pre>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">SampleMessage message;</div><div class="line">SubMessage* sub_message = message.mutable_sub_message();</div><div class="line">message.set_name(&quot;name&quot;);      // Will delete sub_message</div><div class="line">sub_message-&gt;set_...            // Crashes here</div></pre></td></tr></table></figure>
 <ul>
 <li>还是C++, 如果你 <code>Swap()</code> 两个 oneof 的 message , 每一个 message 将结束于另一个的 oneof 的情况, 看以下例子. msg1 将有一个 <code>sub_message</code> 以及 <code>msg2</code> 将有一个 <code>name</code></li>
 </ul>
-<pre><code class="proto">SampleMessage msg1;
-msg1.set_name(&quot;name&quot;);
-SampleMessage msg2;
-msg2.mutable_sub_message();
-msg1.swap(&amp;msg2);
-CHECK(msg1.has_sub_message());
-CHECK(msg2.has_name());
-</code></pre>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">SampleMessage msg1;</div><div class="line">msg1.set_name(&quot;name&quot;);</div><div class="line">SampleMessage msg2;</div><div class="line">msg2.mutable_sub_message();</div><div class="line">msg1.swap(&amp;msg2);</div><div class="line">CHECK(msg1.has_sub_message());</div><div class="line">CHECK(msg2.has_name());</div></pre></td></tr></table></figure>
 <h3 id="向后兼容的问题"><a href="#向后兼容的问题" class="headerlink" title="向后兼容的问题"></a>向后兼容的问题</h3><p>要注意添加或删除 oneof 字段. 如果检查 oneof 的值返回的是 <code>None</code> 或 <code>NOT_SET</code> , 它可能表示 oneof 还没有设置或它已经设置到了不同版本的 oneof 字段.</p>
 <h3 id="标签重用的问题"><a href="#标签重用的问题" class="headerlink" title="标签重用的问题"></a>标签重用的问题</h3><ul>
 <li>移入或移出 oneof 字段: message 序列化和解析之后, 会丢失一些你的信息(一些字段会被清除)</li>
 <li>删除一个 oneof 字段 然后再添加它回来: message 序列化和解析之后, 你可能会清除你当前的 oneof 字段集合</li>
 <li>分割或合并 oneof : 这跟迁移普通的字段的问题一样</li>
 </ul>
-<h2 id="maps"><a href="#maps" class="headerlink" title="maps"></a>maps</h2><pre><code class="proto">map&lt;string, Project&gt; projects = 3;
-</code></pre>
+<h2 id="maps"><a href="#maps" class="headerlink" title="maps"></a>maps</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">map&lt;string, Project&gt; projects = 3;</div></pre></td></tr></table></figure>
 <ul>
 <li>map 字段不能是 <code>repeated</code> 的</li>
 <li>不能依赖于 map 的值的顺序.</li>
@@ -370,31 +294,14 @@ CHECK(msg2.has_name());
 <li>当合并 maps 时, 重复的 key 仅最后一个可见的 key 会被使用. 当解析为 text 格式时, 如果有重复的 keys 则会失败</li>
 </ul>
 <h3 id="向后兼容问题"><a href="#向后兼容问题" class="headerlink" title="向后兼容问题"></a>向后兼容问题</h3><p>map 的语法等同于以下写法. 如果 protocol buffers 的实现不支持 maps , 仍可处理人的数据</p>
-<pre><code class="proto">message MapFieldEntry {
-  key_type key = 1;
-  value_type value = 2;
-}
-
-repeated MapFieldEntry map_field = N;
-</code></pre>
-<h2 id="packages-包"><a href="#packages-包" class="headerlink" title="packages 包"></a>packages 包</h2><pre><code class="proto">package foo.bar;
-message Open { ... }
-</code></pre>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">message MapFieldEntry &#123;</div><div class="line">  key_type key = 1;</div><div class="line">  value_type value = 2;</div><div class="line">&#125;</div><div class="line"></div><div class="line">repeated MapFieldEntry map_field = N;</div></pre></td></tr></table></figure>
+<h2 id="packages-包"><a href="#packages-包" class="headerlink" title="packages 包"></a>packages 包</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">package foo.bar;</div><div class="line">message Open &#123; ... &#125;</div></pre></td></tr></table></figure>
 <p>然后可以这样子使用</p>
-<pre><code class="proto">
-message Foo {
-  ...
-  foo.bar.Open open = 1;
-  ...
-}
-</code></pre>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">message Foo &#123;</div><div class="line">  ...</div><div class="line">  foo.bar.Open open = 1;</div><div class="line">  ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h3 id="包和名字解析"><a href="#包和名字解析" class="headerlink" title="包和名字解析"></a>包和名字解析</h3><p>工作原理类似 C++.</p>
 <p>首先, 它会在最内层范围搜索, 然后到下一范围再搜索, 以此类推.</p>
 <h2 id="定义服务"><a href="#定义服务" class="headerlink" title="定义服务"></a>定义服务</h2><p>如果你想在 RPC 中使用你的 messages 类型. 你可以在 <code>.proto</code> 文件中定义一个 RPC 服务接口, 这样子编译器就会为你的语言生成服务接口了.例如</p>
-<pre><code class="proto">service SearchService {
-  rpc Search (SearchRequest) returns (SearchResponse);
-}
-</code></pre>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">service SearchService &#123;</div><div class="line">  rpc Search (SearchRequest) returns (SearchResponse);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>最直接使用 protocol buffers 的RPC系统就是 Google 开发的 gRPC了. 它是一个语言以及平台中立的开源RPC系统.</p>
 <h2 id="json-映射"><a href="#json-映射" class="headerlink" title="json 映射"></a>json 映射</h2><p>映射的情况, 参见文档</p>
 <p><a href="https://developers.google.com/protocol-buffers/docs/proto3" target="_blank" rel="external">doc</a></p>
@@ -420,9 +327,10 @@ message Foo {
 <li><code>objc_class_prefix</code> : (文件级别) object c 类前缀</li>
 <li><code>deprecated</code> : (字段级别)</li>
 </ul>
-<h2 id="生成你的类"><a href="#生成你的类" class="headerlink" title="生成你的类"></a>生成你的类</h2><pre><code class="bash">protoc --proto_path=IMPORT_PATH --cpp_out=DST_DIR --java_out=DST_DIR --python_out=DST_DIR --go_out=DST_DIR --ruby_out=DST_DIR --javanano_out=DST_DIR --objc_out=DST_DIR --csharp_out=DST_DIR path/to/file.proto
-</code></pre>
-
+<h2 id="生成你的类"><a href="#生成你的类" class="headerlink" title="生成你的类"></a>生成你的类</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">protoc --proto_path=IMPORT_PATH --cpp_out=DST_DIR --java_out=DST_DIR --python_out=DST_DIR --go_out=DST_DIR --ruby_out=DST_DIR --javanano_out=DST_DIR --objc_out=DST_DIR --csharp_out=DST_DIR path/to/file.proto</div></pre></td></tr></table></figure>
+<h1 id="与JSON的映射"><a href="#与JSON的映射" class="headerlink" title="与JSON的映射"></a>与JSON的映射</h1><p>所有选项的说明</p>
+<p><a href="https://github.com/google/protobuf/blob/master/src/google/protobuf/descriptor.proto" target="_blank" rel="external">https://github.com/google/protobuf/blob/master/src/google/protobuf/descriptor.proto</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">message accessTokenResponse &#123;</div><div class="line">    int32 errcode = 1 [json_name=&quot;errcode&quot;];</div><div class="line">    string errmsg = 2 [json_name=&quot;errmsg&quot;];</div><div class="line">    string accessToken = 3 [json_name=&quot;access_token&quot;];</div><div class="line">    int32 expiresIn = 4 [json_name=&quot;expires_in&quot;];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
                                 
     </div>
 </article>

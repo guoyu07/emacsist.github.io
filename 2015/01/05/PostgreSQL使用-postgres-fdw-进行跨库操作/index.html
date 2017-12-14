@@ -204,40 +204,13 @@
                             <h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>该 <code>postgres_fdw</code> 模块提供了 远程-数据 包装器 <code>postgres_fdw</code>，它能够用于访问一些保存在外部 PostgreSQL 服务器的数据。</p>
 <p>该模块提供的功能很大程度上与以前的<code>dblink</code>模块重叠。但是<code>postgres_fdw</code> 提供了更加透明和符合标准的语法来访问远程表，并且能够在某些情况下有更好的性能。</p>
 <h2 id="安装extension"><a href="#安装extension" class="headerlink" title="安装extension"></a>安装extension</h2><p>cd contrib/postgres_fdw<br>make install</p>
-<h2 id="安装到数据库"><a href="#安装到数据库" class="headerlink" title="安装到数据库"></a>安装到数据库</h2><pre><code>test=# CREATE EXTENSION postgres_fdw;
-CREATE EXTENSION
-test=#
-</code></pre><h2 id="检查是否安装成功"><a href="#检查是否安装成功" class="headerlink" title="检查是否安装成功"></a>检查是否安装成功</h2><pre><code>test=# \dx postgres_fdw;
-                             List of installed extensions
-     Name     | Version | Schema |                    Description                    
---------------+---------+--------+----------------------------------------------------
- postgres_fdw | 1.0     | public | foreign-data wrapper for remote PostgreSQL servers
-(1 row)
-
-test=#
-</code></pre><h2 id="创建并查看一个远程服务器"><a href="#创建并查看一个远程服务器" class="headerlink" title="创建并查看一个远程服务器"></a>创建并查看一个远程服务器</h2><pre><code>test=# \dx postgres_fdw;
-                             List of installed extensions
-     Name     | Version | Schema |                    Description                    
---------------+---------+--------+----------------------------------------------------
- postgres_fdw | 1.0     | public | foreign-data wrapper for remote PostgreSQL servers
-(1 row)
-
-test=# CREATE SERVER postgres_server FOREIGN DATA WRAPPER postgres_fdw OPTIONS (host &#39;10.0.0.10&#39;, port &#39;5432&#39;, dbname &#39;test&#39;);
-CREATE SERVER
-test=# \des;
-              List of foreign servers
-      Name       |  Owner   | Foreign-data wrapper
------------------+----------+----------------------
-postgres_server | postgres | postgres_fdw
-(1 row)
-
-test=#
-</code></pre><h2 id="创建一个远程映射用户"><a href="#创建一个远程映射用户" class="headerlink" title="创建一个远程映射用户"></a>创建一个远程映射用户</h2><pre><code> CREATE USER MAPPING FOR PUBLIC SERVER postgres_server OPTIONS (user &#39;postgres&#39;, password &#39;yang&#39;);
-</code></pre><p>user,password 是远程数据库上的用户名和密码</p>
-<h2 id="创建一个远程映射表"><a href="#创建一个远程映射表" class="headerlink" title="创建一个远程映射表"></a>创建一个远程映射表</h2><pre><code>test=# CREATE FOREIGN TABLE tcost_foreign (path integer, cost numeric) SERVER postgres_server OPTIONS (schema_name &#39;public&#39;, table_name &#39;tcost&#39;);
-CREATE FOREIGN TABLE
-test=#
-</code></pre><h2 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h2><p>像它在本地表一样操作就可以了。</p>
+<h2 id="安装到数据库"><a href="#安装到数据库" class="headerlink" title="安装到数据库"></a>安装到数据库</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">test=# CREATE EXTENSION postgres_fdw;</div><div class="line">CREATE EXTENSION</div><div class="line">test=#</div></pre></td></tr></table></figure>
+<h2 id="检查是否安装成功"><a href="#检查是否安装成功" class="headerlink" title="检查是否安装成功"></a>检查是否安装成功</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">test=# \dx postgres_fdw;</div><div class="line">                             List of installed extensions</div><div class="line">     Name     | Version | Schema |                    Description                    </div><div class="line">--------------+---------+--------+----------------------------------------------------</div><div class="line"> postgres_fdw | 1.0     | public | foreign-data wrapper for remote PostgreSQL servers</div><div class="line">(1 row)</div><div class="line"> </div><div class="line">test=#</div></pre></td></tr></table></figure>
+<h2 id="创建并查看一个远程服务器"><a href="#创建并查看一个远程服务器" class="headerlink" title="创建并查看一个远程服务器"></a>创建并查看一个远程服务器</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">test=# \dx postgres_fdw;</div><div class="line">                             List of installed extensions</div><div class="line">     Name     | Version | Schema |                    Description                    </div><div class="line">--------------+---------+--------+----------------------------------------------------</div><div class="line"> postgres_fdw | 1.0     | public | foreign-data wrapper for remote PostgreSQL servers</div><div class="line">(1 row)</div><div class="line"> </div><div class="line">test=# CREATE SERVER postgres_server FOREIGN DATA WRAPPER postgres_fdw OPTIONS (host &apos;10.0.0.10&apos;, port &apos;5432&apos;, dbname &apos;test&apos;);</div><div class="line">CREATE SERVER</div><div class="line">test=# \des;</div><div class="line">              List of foreign servers</div><div class="line">      Name       |  Owner   | Foreign-data wrapper</div><div class="line">-----------------+----------+----------------------</div><div class="line">postgres_server | postgres | postgres_fdw</div><div class="line">(1 row)</div><div class="line"> </div><div class="line">test=#</div></pre></td></tr></table></figure>
+<h2 id="创建一个远程映射用户"><a href="#创建一个远程映射用户" class="headerlink" title="创建一个远程映射用户"></a>创建一个远程映射用户</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CREATE USER MAPPING FOR PUBLIC SERVER postgres_server OPTIONS (user &apos;postgres&apos;, password &apos;yang&apos;);</div></pre></td></tr></table></figure>
+<p>user,password 是远程数据库上的用户名和密码</p>
+<h2 id="创建一个远程映射表"><a href="#创建一个远程映射表" class="headerlink" title="创建一个远程映射表"></a>创建一个远程映射表</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">test=# CREATE FOREIGN TABLE tcost_foreign (path integer, cost numeric) SERVER postgres_server OPTIONS (schema_name &apos;public&apos;, table_name &apos;tcost&apos;);</div><div class="line">CREATE FOREIGN TABLE</div><div class="line">test=#</div></pre></td></tr></table></figure>
+<h2 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h2><p>像它在本地表一样操作就可以了。</p>
 <p>资料：<br>[1] <a href="http://www.postgresql.org/docs/9.3/static/postgres-fdw.html" target="_blank" rel="external">官网</a></p>
 
                                 

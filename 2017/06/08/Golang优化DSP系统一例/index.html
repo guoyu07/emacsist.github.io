@@ -15,17 +15,17 @@
     <meta name="keywords" content="golang,dsp," />
   
 
-  <meta name="description" content="JSON 解析更新：2017-6-12！！这里有问题，参考下文 因为是与微博WAX那边对接，使用的是JSON序列化协议，但偏偏Golang的标准库里的JSON解析却极慢。然后使用了 ffjson ，到 easyjson ，最后到现在的 jsoniter : data, _ := ioutil.ReadAll(request.Body) var bidRequest bean.BidRequest">
+  <meta name="description" content="JSON 解析更新：2017-6-12！！这里有问题，参考下文 因为是与微博WAX那边对接，使用的是JSON序列化协议，但偏偏Golang的标准库里的JSON解析却极慢。然后使用了 ffjson ，到 easyjson ，最后到现在的 jsoniter : 123data, _ := ioutil.ReadAll(request.Body)var bidRequest bean.BidReques">
 <meta name="keywords" content="golang,dsp">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Golang优化DSP系统一例">
 <meta property="og:url" content="https://emacsist.github.io/2017/06/08/Golang优化DSP系统一例/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="JSON 解析更新：2017-6-12！！这里有问题，参考下文 因为是与微博WAX那边对接，使用的是JSON序列化协议，但偏偏Golang的标准库里的JSON解析却极慢。然后使用了 ffjson ，到 easyjson ，最后到现在的 jsoniter : data, _ := ioutil.ReadAll(request.Body) var bidRequest bean.BidRequest">
+<meta property="og:description" content="JSON 解析更新：2017-6-12！！这里有问题，参考下文 因为是与微博WAX那边对接，使用的是JSON序列化协议，但偏偏Golang的标准库里的JSON解析却极慢。然后使用了 ffjson ，到 easyjson ，最后到现在的 jsoniter : 123data, _ := ioutil.ReadAll(request.Body)var bidRequest bean.BidReques">
 <meta property="og:updated_time" content="2017-06-12T07:56:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Golang优化DSP系统一例">
-<meta name="twitter:description" content="JSON 解析更新：2017-6-12！！这里有问题，参考下文 因为是与微博WAX那边对接，使用的是JSON序列化协议，但偏偏Golang的标准库里的JSON解析却极慢。然后使用了 ffjson ，到 easyjson ，最后到现在的 jsoniter : data, _ := ioutil.ReadAll(request.Body) var bidRequest bean.BidRequest">
+<meta name="twitter:description" content="JSON 解析更新：2017-6-12！！这里有问题，参考下文 因为是与微博WAX那边对接，使用的是JSON序列化协议，但偏偏Golang的标准库里的JSON解析却极慢。然后使用了 ffjson ，到 easyjson ，最后到现在的 jsoniter : 123data, _ := ioutil.ReadAll(request.Body)var bidRequest bean.BidReques">
 
   
 
@@ -203,90 +203,19 @@
         
                             <h1 id="JSON-解析"><a href="#JSON-解析" class="headerlink" title="JSON 解析"></a>JSON 解析</h1><p>更新：2017-6-12<br>！！这里有问题，参考下文</p>
 <p>因为是与微博WAX那边对接，使用的是JSON序列化协议，但偏偏Golang的标准库里的JSON解析却极慢。然后使用了 <a href="https://github.com/pquerna/ffjson" target="_blank" rel="external">ffjson</a> ，到 <a href="https://github.com/mailru/easyjson" target="_blank" rel="external">easyjson</a> ，最后到现在的 <a href="https://github.com/json-iterator/go" target="_blank" rel="external">jsoniter</a> :</p>
-<pre><code class="bash">data, _ := ioutil.ReadAll(request.Body)
-var bidRequest bean.BidRequest
-err := jsoniter.Unmarshal(data, &amp;bidRequest)
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">data, _ := ioutil.ReadAll(request.Body)</div><div class="line">var bidRequest bean.BidRequest</div><div class="line">err := jsoniter.Unmarshal(data, &amp;bidRequest)</div></pre></td></tr></table></figure>
 <p>easyjson 比 ffjson 还快一点（但不是很明显），最后测试用了下 jsoniter ，发现差距还是很大（当然，要检测反序列化出来的结果是一致的，这个库还是有点限制，目前对自定义的 json 接口不友好）</p>
 <p>下面是使用 ffjson 时监测到的性能数据</p>
-<pre><code class="bash">         .          .     20:    if request.Method == &quot;POST&quot; {
-         .          .     21:        s := utils.CurrentMillis()
-         .      140ms     22:        data, _ := ioutil.ReadAll(request.Body)
-         .          .     23:        //logrus.Infof(&quot;receive body =&gt;%v&quot;, string(data))
-         .       20ms     24:        var bidRequest bean.BidRequest
-         .      490ms     25:        err := ffjson.UnmarshalFast(data, &amp;bidRequest)
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">.          .     20:	<span class="keyword">if</span> request.Method == <span class="string">"POST"</span> &#123;</div><div class="line">.          .     21:		s := utils.CurrentMillis()</div><div class="line">.      140ms     22:		data, _ := ioutil.ReadAll(request.Body)</div><div class="line">.          .     23:		//logrus.Infof(<span class="string">"receive body =&gt;%v"</span>, string(data))</div><div class="line">.       20ms     24:		var bidRequest bean.BidRequest</div><div class="line">.      490ms     25:		err := ffjson.UnmarshalFast(data, &amp;bidRequest)</div></pre></td></tr></table></figure>
 <p>下面是使用 jsoniter 时监测到的性能数据</p>
-<pre><code class="bash">         .          .     21:    if request.Method == &quot;POST&quot; {
-         .          .     22:        s := utils.CurrentMillis()
-         .      110ms     23:        data, _ := ioutil.ReadAll(request.Body)
-         .          .     24:        //logrus.Infof(&quot;receive body =&gt;%v&quot;, string(data))
-         .          .     25:        var bidRequest bean.BidRequest
-         .       80ms     26:        err := jsoniter.Unmarshal(data, &amp;bidRequest)
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">.          .     21:	<span class="keyword">if</span> request.Method == <span class="string">"POST"</span> &#123;</div><div class="line">.          .     22:		s := utils.CurrentMillis()</div><div class="line">.      110ms     23:		data, _ := ioutil.ReadAll(request.Body)</div><div class="line">.          .     24:		//logrus.Infof(<span class="string">"receive body =&gt;%v"</span>, string(data))</div><div class="line">.          .     25:		var bidRequest bean.BidRequest</div><div class="line">.       80ms     26:		err := jsoniter.Unmarshal(data, &amp;bidRequest)</div></pre></td></tr></table></figure>
 <p>可以看到，还是提升得很大的。</p>
 <h2 id="这个-jsoniter-有内存泄漏的问题-！！！！！"><a href="#这个-jsoniter-有内存泄漏的问题-！！！！！" class="headerlink" title="这个 jsoniter 有内存泄漏的问题 ！！！！！"></a>这个 jsoniter 有内存泄漏的问题 ！！！！！</h2><p>后感：看来以后用国产的东西，真心要注意，打醒十二万精神！！！还是弃用它了，凡是打着高性能的旗号的，极可能写的代码是有问题的！换了这个JSON库后，内存升到 54% 多了（8GB物理内存），一般情况下，该进程占用的内存为 2%, 3 % 左右。</p>
 <h1 id="异步获取数据"><a href="#异步获取数据" class="headerlink" title="异步获取数据"></a>异步获取数据</h1><p>在进行性能监测时，发现有个方法占用了极大的总时间:</p>
-<pre><code class="bash">         0      960ms (flat, cum) 24.55% of Total
-         .          .      3:import &quot;github.com/company/golang-dsp-bid/bean&quot;
-         .          .      4:
-         .          .      5:// CheckServiceISOk :
-         .          .      6:// check ok
-         .          .      7:func CheckServiceISOk(task *bean.TaskPostAd, price int32) bool {
-         .      520ms      8:    taskMoneyMap := GetTaskMoneyRedis(task)
-         .      250ms      9:    clientMoneyMap := GetClientMoney(task.UserID, task.ClientID)
-         .      190ms     10:    userMoneyMap := GetUserMoney(task.UserID)
-         .          .     11:
-         .          .     12:    if len(taskMoneyMap) == 0 || len(clientMoneyMap) == 0 || len(userMoneyMap) == 0 {
-         .          .     13:        return false
-         .          .     14:    }
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">0      960ms (flat, cum) 24.55% of Total</div><div class="line">.          .      3:import <span class="string">"github.com/company/golang-dsp-bid/bean"</span></div><div class="line">.          .      4:</div><div class="line">.          .      5:// CheckServiceISOk :</div><div class="line">.          .      6:// check ok</div><div class="line">.          .      7:func CheckServiceISOk(task *bean.TaskPostAd, price int32) bool &#123;</div><div class="line">.      520ms      8:	taskMoneyMap := GetTaskMoneyRedis(task)</div><div class="line">.      250ms      9:	clientMoneyMap := GetClientMoney(task.UserID, task.ClientID)</div><div class="line">.      190ms     10:	userMoneyMap := GetUserMoney(task.UserID)</div><div class="line">.          .     11:</div><div class="line">.          .     12:	<span class="keyword">if</span> len(taskMoneyMap) == 0 || len(clientMoneyMap) == 0 || len(userMoneyMap) == 0 &#123;</div><div class="line">.          .     13:		<span class="built_in">return</span> <span class="literal">false</span></div><div class="line">.          .     14:	&#125;</div></pre></td></tr></table></figure>
 <p>这个是检测金额是否OK的，因为这里是串行了，所以时间是累加的，这里的结果是取样时累计的耗时(即30秒内，这个方法累计耗时)为 960ms 。</p>
 <p>其实这里是可以分3个 goroutine 来获取，然后再汇总:</p>
-<pre><code class="bash">/Users/emacsist/Documents/go/company/dsp-bid/src/github.com/company/golang-dsp-bid/service/CheckService.go
-         0      410ms (flat, cum)  9.40% of Total
-         .          .     12:
-         .          .     13:    var taskMoneyMap map[string]string
-         .          .     14:    wg.Add(1)
-         .          .     15:    go func(wg *sync.WaitGroup) {
-         .          .     16:        defer wg.Done()
-         .      370ms     17:        taskMoneyMap = GetTaskMoneyRedis(task)
-         .       40ms     18:    }(&amp;wg)
-         .          .     19:
-         .          .     20:    var clientMoneyMap map[string]string
-         .          .     21:    wg.Add(1)
-         .          .     22:    go func(wg *sync.WaitGroup) {
-         .          .     23:        defer wg.Done()
-ROUTINE ======================== github.com/company/golang-dsp-bid/service.CheckServiceISOk.func2 in /Users/emacsist/Documents/go/company/dsp-bid/src/github.com/company/golang-dsp-bid/service/CheckService.go
-      10ms      170ms (flat, cum)  3.90% of Total
-         .          .     17:        taskMoneyMap = GetTaskMoneyRedis(task)
-         .          .     18:    }(&amp;wg)
-         .          .     19:
-         .          .     20:    var clientMoneyMap map[string]string
-         .          .     21:    wg.Add(1)
-      10ms       10ms     22:    go func(wg *sync.WaitGroup) {
-         .          .     23:        defer wg.Done()
-         .      160ms     24:        clientMoneyMap = GetClientMoney(task.UserID, task.ClientID)
-         .          .     25:    }(&amp;wg)
-         .          .     26:
-         .          .     27:    var userMoneyMap map[string]string
-         .          .     28:    wg.Add(1)
-         .          .     29:    go func(wg *sync.WaitGroup) {
-ROUTINE ======================== github.com/company/golang-dsp-bid/service.CheckServiceISOk.func3 in /Users/emacsist/Documents/go/company/dsp-bid/src/github.com/company/golang-dsp-bid/service/CheckService.go
-         0      190ms (flat, cum)  4.36% of Total
-         .          .     26:
-         .          .     27:    var userMoneyMap map[string]string
-         .          .     28:    wg.Add(1)
-         .          .     29:    go func(wg *sync.WaitGroup) {
-         .          .     30:        defer wg.Done()
-         .      180ms     31:        userMoneyMap = GetUserMoney(task.UserID)
-         .       10ms     32:    }(&amp;wg)
-         .          .     33:
-         .          .     34:    wg.Wait()
-         .          .     35:
-         .          .     36:    if len(taskMoneyMap) == 0 || len(clientMoneyMap) == 0 || len(userMoneyMap) == 0 {
-         .          .     37:        return false
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">/Users/emacsist/Documents/go/company/dsp-bid/src/github.com/company/golang-dsp-bid/service/CheckService.go</div><div class="line">         0      410ms (flat, cum)  9.40% of Total</div><div class="line">         .          .     12:</div><div class="line">         .          .     13:	var taskMoneyMap map[string]string</div><div class="line">         .          .     14:	wg.Add(1)</div><div class="line">         .          .     15:	go func(wg *sync.WaitGroup) &#123;</div><div class="line">         .          .     16:		defer wg.Done()</div><div class="line">         .      370ms     17:		taskMoneyMap = GetTaskMoneyRedis(task)</div><div class="line">         .       40ms     18:	&#125;(&amp;wg)</div><div class="line">         .          .     19:</div><div class="line">         .          .     20:	var clientMoneyMap map[string]string</div><div class="line">         .          .     21:	wg.Add(1)</div><div class="line">         .          .     22:	go func(wg *sync.WaitGroup) &#123;</div><div class="line">         .          .     23:		defer wg.Done()</div><div class="line">ROUTINE ======================== github.com/company/golang-dsp-bid/service.CheckServiceISOk.func2 <span class="keyword">in</span> /Users/emacsist/Documents/go/company/dsp-bid/src/github.com/company/golang-dsp-bid/service/CheckService.go</div><div class="line">      10ms      170ms (flat, cum)  3.90% of Total</div><div class="line">         .          .     17:		taskMoneyMap = GetTaskMoneyRedis(task)</div><div class="line">         .          .     18:	&#125;(&amp;wg)</div><div class="line">         .          .     19:</div><div class="line">         .          .     20:	var clientMoneyMap map[string]string</div><div class="line">         .          .     21:	wg.Add(1)</div><div class="line">      10ms       10ms     22:	go func(wg *sync.WaitGroup) &#123;</div><div class="line">         .          .     23:		defer wg.Done()</div><div class="line">         .      160ms     24:		clientMoneyMap = GetClientMoney(task.UserID, task.ClientID)</div><div class="line">         .          .     25:	&#125;(&amp;wg)</div><div class="line">         .          .     26:</div><div class="line">         .          .     27:	var userMoneyMap map[string]string</div><div class="line">         .          .     28:	wg.Add(1)</div><div class="line">         .          .     29:	go func(wg *sync.WaitGroup) &#123;</div><div class="line">ROUTINE ======================== github.com/company/golang-dsp-bid/service.CheckServiceISOk.func3 <span class="keyword">in</span> /Users/emacsist/Documents/go/company/dsp-bid/src/github.com/company/golang-dsp-bid/service/CheckService.go</div><div class="line">         0      190ms (flat, cum)  4.36% of Total</div><div class="line">         .          .     26:</div><div class="line">         .          .     27:	var userMoneyMap map[string]string</div><div class="line">         .          .     28:	wg.Add(1)</div><div class="line">         .          .     29:	go func(wg *sync.WaitGroup) &#123;</div><div class="line">         .          .     30:		defer wg.Done()</div><div class="line">         .      180ms     31:		userMoneyMap = GetUserMoney(task.UserID)</div><div class="line">         .       10ms     32:	&#125;(&amp;wg)</div><div class="line">         .          .     33:</div><div class="line">         .          .     34:	wg.Wait()</div><div class="line">         .          .     35:</div><div class="line">         .          .     36:	<span class="keyword">if</span> len(taskMoneyMap) == 0 || len(clientMoneyMap) == 0 || len(userMoneyMap) == 0 &#123;</div><div class="line">         .          .     37:		<span class="built_in">return</span> <span class="literal">false</span></div></pre></td></tr></table></figure>
 <p>优化完后，可以看到降低到 410ms 了（因为是异步，所以总时间是最大那个的耗时）</p>
 
                                 

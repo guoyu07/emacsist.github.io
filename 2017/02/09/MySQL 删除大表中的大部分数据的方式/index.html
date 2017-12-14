@@ -15,17 +15,17 @@
     <meta name="keywords" content="database,mysql," />
   
 
-  <meta name="description" content="昨晚要删除一张原有 2 亿多条日志表的数据，只保留 今年 2017 及之后的数据，删除之前的，以释放磁盘空间，发现 delete from t where id &amp;lt; 2亿; 发现这样子删除实在是太慢了，而且效率性能低下  创建一个中间表 create table t_copy like 原表名;  不删除的数据复制到中间表 insert into t_copy select * from">
+  <meta name="description" content="昨晚要删除一张原有 2 亿多条日志表的数据，只保留 今年 2017 及之后的数据，删除之前的，以释放磁盘空间，发现 delete from t where id &amp;lt; 2亿; 发现这样子删除实在是太慢了，而且效率性能低下  创建一个中间表12create table t_copy like 原表名; 不删除的数据复制到中间表12insert into t_copy select * from">
 <meta name="keywords" content="database,mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL 删除大表中的大部分数据的方式">
 <meta property="og:url" content="https://emacsist.github.io/2017/02/09/MySQL 删除大表中的大部分数据的方式/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="昨晚要删除一张原有 2 亿多条日志表的数据，只保留 今年 2017 及之后的数据，删除之前的，以释放磁盘空间，发现 delete from t where id &amp;lt; 2亿; 发现这样子删除实在是太慢了，而且效率性能低下  创建一个中间表 create table t_copy like 原表名;  不删除的数据复制到中间表 insert into t_copy select * from">
+<meta property="og:description" content="昨晚要删除一张原有 2 亿多条日志表的数据，只保留 今年 2017 及之后的数据，删除之前的，以释放磁盘空间，发现 delete from t where id &amp;lt; 2亿; 发现这样子删除实在是太慢了，而且效率性能低下  创建一个中间表12create table t_copy like 原表名; 不删除的数据复制到中间表12insert into t_copy select * from">
 <meta property="og:updated_time" content="2017-02-09T06:10:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL 删除大表中的大部分数据的方式">
-<meta name="twitter:description" content="昨晚要删除一张原有 2 亿多条日志表的数据，只保留 今年 2017 及之后的数据，删除之前的，以释放磁盘空间，发现 delete from t where id &amp;lt; 2亿; 发现这样子删除实在是太慢了，而且效率性能低下  创建一个中间表 create table t_copy like 原表名;  不删除的数据复制到中间表 insert into t_copy select * from">
+<meta name="twitter:description" content="昨晚要删除一张原有 2 亿多条日志表的数据，只保留 今年 2017 及之后的数据，删除之前的，以释放磁盘空间，发现 delete from t where id &amp;lt; 2亿; 发现这样子删除实在是太慢了，而且效率性能低下  创建一个中间表12create table t_copy like 原表名; 不删除的数据复制到中间表12insert into t_copy select * from">
 
   
 
@@ -204,19 +204,10 @@
                             <blockquote>
 <p>昨晚要删除一张原有 2 亿多条日志表的数据，只保留 今年 2017 及之后的数据，删除之前的，以释放磁盘空间，发现 delete from t where id &lt; 2亿; 发现这样子删除实在是太慢了，而且效率性能低下</p>
 </blockquote>
-<h2 id="创建一个中间表"><a href="#创建一个中间表" class="headerlink" title="创建一个中间表"></a>创建一个中间表</h2><pre><code class="bash">
-create table t_copy like 原表名;
-</code></pre>
-<h2 id="不删除的数据复制到中间表"><a href="#不删除的数据复制到中间表" class="headerlink" title="不删除的数据复制到中间表"></a>不删除的数据复制到中间表</h2><pre><code class="bash">
-insert into t_copy select * from 原表名 where ...
-</code></pre>
-<h2 id="重命名表"><a href="#重命名表" class="headerlink" title="重命名表"></a>重命名表</h2><pre><code class="bash">
-rename table 原表名 to t_old, t_copy to 原表名;
-</code></pre>
-<h2 id="删除整张表"><a href="#删除整张表" class="headerlink" title="删除整张表"></a>删除整张表</h2><pre><code class="bash">
-drop table t_old
-</code></pre>
-
+<h2 id="创建一个中间表"><a href="#创建一个中间表" class="headerlink" title="创建一个中间表"></a>创建一个中间表</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">create table t_copy like 原表名;</div></pre></td></tr></table></figure>
+<h2 id="不删除的数据复制到中间表"><a href="#不删除的数据复制到中间表" class="headerlink" title="不删除的数据复制到中间表"></a>不删除的数据复制到中间表</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">insert into t_copy select * from 原表名 <span class="built_in">where</span> ...</div></pre></td></tr></table></figure>
+<h2 id="重命名表"><a href="#重命名表" class="headerlink" title="重命名表"></a>重命名表</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">rename table 原表名 to t_old, t_copy to 原表名;</div></pre></td></tr></table></figure>
+<h2 id="删除整张表"><a href="#删除整张表" class="headerlink" title="删除整张表"></a>删除整张表</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">drop table t_old</div></pre></td></tr></table></figure>
                                 
     </div>
 </article>

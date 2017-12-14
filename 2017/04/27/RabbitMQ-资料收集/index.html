@@ -227,14 +227,7 @@
 <h2 id="RabbitMQ-3-6-0-版本"><a href="#RabbitMQ-3-6-0-版本" class="headerlink" title="RabbitMQ 3.6.0 版本"></a>RabbitMQ 3.6.0 版本</h2><p>这不是一个好的 RabbitMQ 版本——它有大量的问题，并且在新的版本中被修复了。</p>
 <h1 id="RabbitMQ-默认启动参数"><a href="#RabbitMQ-默认启动参数" class="headerlink" title="RabbitMQ 默认启动参数"></a>RabbitMQ 默认启动参数</h1><p>版本为 3.6.9 ，Erlang版本为 Erlang/OTP 18</p>
 <p><a href="http://erlang.org/doc/man/erl.html" target="_blank" rel="external">erlang erl man</a></p>
-<pre><code class="bash">-W w :
--A 128 
--P 1048576 
--t 5000000 
--stbt db 
--zdbbl 32000 
--K true
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">-W w :</div><div class="line">-A 128 </div><div class="line">-P 1048576 </div><div class="line">-t 5000000 </div><div class="line">-stbt db </div><div class="line">-zdbbl 32000 </div><div class="line">-K <span class="literal">true</span></div></pre></td></tr></table></figure>
 <h1 id="RabbitMQ-添加交换机的性能"><a href="#RabbitMQ-添加交换机的性能" class="headerlink" title="RabbitMQ 添加交换机的性能"></a>RabbitMQ 添加交换机的性能</h1><p>今天测试了下，将不同的队列，绑定到不同的交换机，有没有能提高性能。结果是：No</p>
 <p>测试的情况是，使用2个交换机(hello-exchange, hello-exchange2)和两个队列(hello-queue-name, hello-queue-name2)分别一一对应，然后再使用一个队列 hello-queue 绑定到默认的交换机(default)。它们入队的消息数分别为 2000,2000,4000。测试结果是它们的总耗时是差不多的。</p>
 

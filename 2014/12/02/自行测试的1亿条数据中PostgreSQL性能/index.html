@@ -15,17 +15,17 @@
     <meta name="keywords" content="postgresql,database," />
   
 
-  <meta name="description" content="插入一亿条数据test=# insert into tbl_time1 select generate_series(1,100000000),clock_timestamp(),now(); INSERT 0 100000000 Time: 525833.218 ms  约:8.7分钟 COUNT，没有索引，1亿条数据。test=# select count(1) from tbl_time1;">
+  <meta name="description" content="插入一亿条数据12345test=# insert into tbl_time1 select generate_series(1,100000000),clock_timestamp(),now();INSERT 0 100000000Time: 525833.218 ms约:8.7分钟 COUNT，没有索引，1亿条数据。123456789test=# select count(1) from">
 <meta name="keywords" content="postgresql,database">
 <meta property="og:type" content="article">
 <meta property="og:title" content="自行测试的1亿条数据中PostgreSQL性能">
 <meta property="og:url" content="https://emacsist.github.io/2014/12/02/自行测试的1亿条数据中PostgreSQL性能/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="插入一亿条数据test=# insert into tbl_time1 select generate_series(1,100000000),clock_timestamp(),now(); INSERT 0 100000000 Time: 525833.218 ms  约:8.7分钟 COUNT，没有索引，1亿条数据。test=# select count(1) from tbl_time1;">
+<meta property="og:description" content="插入一亿条数据12345test=# insert into tbl_time1 select generate_series(1,100000000),clock_timestamp(),now();INSERT 0 100000000Time: 525833.218 ms约:8.7分钟 COUNT，没有索引，1亿条数据。123456789test=# select count(1) from">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="自行测试的1亿条数据中PostgreSQL性能">
-<meta name="twitter:description" content="插入一亿条数据test=# insert into tbl_time1 select generate_series(1,100000000),clock_timestamp(),now(); INSERT 0 100000000 Time: 525833.218 ms  约:8.7分钟 COUNT，没有索引，1亿条数据。test=# select count(1) from tbl_time1;">
+<meta name="twitter:description" content="插入一亿条数据12345test=# insert into tbl_time1 select generate_series(1,100000000),clock_timestamp(),now();INSERT 0 100000000Time: 525833.218 ms约:8.7分钟 COUNT，没有索引，1亿条数据。123456789test=# select count(1) from">
 
   
 
@@ -201,127 +201,23 @@
 
     <div class="article-content">
         
-                            <h1 id="插入一亿条数据"><a href="#插入一亿条数据" class="headerlink" title="插入一亿条数据"></a>插入一亿条数据</h1><pre><code>test=# insert into tbl_time1 select generate_series(1,100000000),clock_timestamp(),now();
-INSERT 0 100000000
-Time: 525833.218 ms
-
-约:8.7分钟
-</code></pre><h1 id="COUNT，没有索引，1亿条数据。"><a href="#COUNT，没有索引，1亿条数据。" class="headerlink" title="COUNT，没有索引，1亿条数据。"></a>COUNT，没有索引，1亿条数据。</h1><pre><code>test=# select count(1) from tbl_time1;
-
-   count   
------------
- 100000000
-(1 row)
-
-Time: 3070658.058 ms
-约:51.2分钟
-</code></pre><h1 id="添加主键索引耗时"><a href="#添加主键索引耗时" class="headerlink" title="添加主键索引耗时"></a>添加主键索引耗时</h1><pre><code>test=# alter table tbl_time1 add primary key (id);
-ALTER TABLE
-Time: 981276.804 ms
-
-约：16.4分钟
-</code></pre><p>再 explain 一下看看</p>
-<pre><code>test=# explain select count(id) from tbl_time1;
-                                 QUERY PLAN                                 
------------------------------------------------------------------------------
- Aggregate  (cost=7770150.00..7770150.01 rows=1 width=4)
-   -&gt;  Seq Scan on tbl_time1  (cost=0.00..7520150.00 rows=100000000 width=4)
-(2 rows)
-</code></pre><p>虽然 id 上有索引，但是依然是使用顺序扫描。</p>
+                            <h1 id="插入一亿条数据"><a href="#插入一亿条数据" class="headerlink" title="插入一亿条数据"></a>插入一亿条数据</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">test=# insert into tbl_time1 select generate_series(1,100000000),clock_timestamp(),now();</div><div class="line">INSERT 0 100000000</div><div class="line">Time: 525833.218 ms</div><div class="line"></div><div class="line">约:8.7分钟</div></pre></td></tr></table></figure>
+<h1 id="COUNT，没有索引，1亿条数据。"><a href="#COUNT，没有索引，1亿条数据。" class="headerlink" title="COUNT，没有索引，1亿条数据。"></a>COUNT，没有索引，1亿条数据。</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">test=# select count(1) from tbl_time1;</div><div class="line"></div><div class="line">   count   </div><div class="line">-----------</div><div class="line"> 100000000</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 3070658.058 ms</div><div class="line">约:51.2分钟</div></pre></td></tr></table></figure>
+<h1 id="添加主键索引耗时"><a href="#添加主键索引耗时" class="headerlink" title="添加主键索引耗时"></a>添加主键索引耗时</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">test=# alter table tbl_time1 add primary key (id);</div><div class="line">ALTER TABLE</div><div class="line">Time: 981276.804 ms</div><div class="line"></div><div class="line">约：16.4分钟</div></pre></td></tr></table></figure>
+<p>再 explain 一下看看<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">test=# explain select count(id) from tbl_time1;</div><div class="line">                                 QUERY PLAN                                 </div><div class="line">-----------------------------------------------------------------------------</div><div class="line"> Aggregate  (cost=7770150.00..7770150.01 rows=1 width=4)</div><div class="line">   -&gt;  Seq Scan on tbl_time1  (cost=0.00..7520150.00 rows=100000000 width=4)</div><div class="line">(2 rows)</div></pre></td></tr></table></figure></p>
+<p>虽然 id 上有索引，但是依然是使用顺序扫描。</p>
 <p>#COUNT，有索引(主键），1亿条数据，还要注意有没有 where id &gt; 0 的条件的差别</p>
-<pre><code>这个有 where id &gt; 0
-test=#  select count(id) from tbl_time1 where id &gt; 0;
-   count   
------------
- 100000000
-(1 row)
-
-Time: 244243.112 ms
-约：4.071分钟
-
-test=# explain select count(id) from tbl_time1 where id &gt; 0;
-                                          QUERY PLAN                                          
------------------------------------------------------------------------------------------------
- Aggregate  (cost=7644075.89..7644075.90 rows=1 width=4)
-   -&gt;  Bitmap Heap Scan on tbl_time1  (cost=623925.90..7560742.56 rows=33333333 width=4)
-         Recheck Cond: (id &gt; 0)
-         -&gt;  Bitmap Index Scan on tbl_time1_pkey  (cost=0.00..615592.57 rows=33333333 width=0)
-               Index Cond: (id &gt; 0)
-(5 rows)
-
-Time: 0.767 ms
-
-
-这个无 where id &gt; 0
-test=#  select count(id) from tbl_time1;
-   count   
------------
- 100000000
-(1 row)
-
-Time: 548650.606 ms
-约：9.144分钟
-
-test=# explain select count(id) from tbl_time1;
-                                 QUERY PLAN                                 
------------------------------------------------------------------------------
- Aggregate  (cost=7770150.00..7770150.01 rows=1 width=4)
-   -&gt;  Seq Scan on tbl_time1  (cost=0.00..7520150.00 rows=100000000 width=4)
-(2 rows)
-
-Time: 1.253 ms
-</code></pre><h1 id="COUNT-结论：（9-3-5的版本，默认配置）"><a href="#COUNT-结论：（9-3-5的版本，默认配置）" class="headerlink" title="COUNT 结论：（9.3.5的版本，默认配置）"></a>COUNT 结论：（9.3.5的版本，默认配置）</h1><pre><code>无论你的数据有没有索引，COUNT都只会进行全表扫描。（条件是没有where， 或有where，但经过查询计划估算代价时，还是决定使用顺序全表扫描）。比如在上面的表，id 有索引。大概原因是说：因为MVCC的影响。
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">这个有 where id &gt; 0</div><div class="line">test=#  select count(id) from tbl_time1 where id &gt; 0;</div><div class="line">   count   </div><div class="line">-----------</div><div class="line"> 100000000</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 244243.112 ms</div><div class="line">约：4.071分钟</div><div class="line"></div><div class="line">test=# explain select count(id) from tbl_time1 where id &gt; 0;</div><div class="line">                                          QUERY PLAN                                          </div><div class="line">-----------------------------------------------------------------------------------------------</div><div class="line"> Aggregate  (cost=7644075.89..7644075.90 rows=1 width=4)</div><div class="line">   -&gt;  Bitmap Heap Scan on tbl_time1  (cost=623925.90..7560742.56 rows=33333333 width=4)</div><div class="line">         Recheck Cond: (id &gt; 0)</div><div class="line">         -&gt;  Bitmap Index Scan on tbl_time1_pkey  (cost=0.00..615592.57 rows=33333333 width=0)</div><div class="line">               Index Cond: (id &gt; 0)</div><div class="line">(5 rows)</div><div class="line"> </div><div class="line">Time: 0.767 ms</div><div class="line"></div><div class="line"></div><div class="line">这个无 where id &gt; 0</div><div class="line">test=#  select count(id) from tbl_time1;</div><div class="line">   count   </div><div class="line">-----------</div><div class="line"> 100000000</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 548650.606 ms</div><div class="line">约：9.144分钟</div><div class="line"></div><div class="line">test=# explain select count(id) from tbl_time1;</div><div class="line">                                 QUERY PLAN                                 </div><div class="line">-----------------------------------------------------------------------------</div><div class="line"> Aggregate  (cost=7770150.00..7770150.01 rows=1 width=4)</div><div class="line">   -&gt;  Seq Scan on tbl_time1  (cost=0.00..7520150.00 rows=100000000 width=4)</div><div class="line">(2 rows)</div><div class="line"> </div><div class="line">Time: 1.253 ms</div></pre></td></tr></table></figure>
+<h1 id="COUNT-结论：（9-3-5的版本，默认配置）"><a href="#COUNT-结论：（9-3-5的版本，默认配置）" class="headerlink" title="COUNT 结论：（9.3.5的版本，默认配置）"></a>COUNT 结论：（9.3.5的版本，默认配置）</h1><pre><code>无论你的数据有没有索引，COUNT都只会进行全表扫描。（条件是没有where， 或有where，但经过查询计划估算代价时，还是决定使用顺序全表扫描）。比如在上面的表，id 有索引。大概原因是说：因为MVCC的影响。
 
 select count(id) from tbl_time1 where id &gt; 0;
 经过PG的查询优化器估算时，它最后还是决定使用 Seq Scan 扫描。
-</code></pre><pre><code>test=# explain select count(id) from tbl_time2 where id &gt; 0;
-                               QUERY PLAN                               
--------------------------------------------------------------------------
- Aggregate  (cost=21370.00..21370.01 rows=1 width=4)
-   -&gt;  Seq Scan on tbl_time2  (cost=0.00..18870.00 rows=1000000 width=4)
-         Filter: (id &gt; 0)
-(3 rows)
-
-Time: 0.872 ms
-</code></pre><pre><code>Postgres中通过需要扫描来计数count(*)的成本比较高. 没有别的办法来来对行数计数并返回结果除了扫描全部数据.
-</code></pre><h1 id="通过修改配置文件调优，时间从-：51-2分钟–-gt-9-144分钟–-gt-4-071分钟–-gt-1-456分钟"><a href="#通过修改配置文件调优，时间从-：51-2分钟–-gt-9-144分钟–-gt-4-071分钟–-gt-1-456分钟" class="headerlink" title="通过修改配置文件调优，时间从 ：51.2分钟–&gt;9.144分钟–&gt;4.071分钟–&gt;1.456分钟"></a>通过修改配置文件调优，时间从 ：51.2分钟–&gt;9.144分钟–&gt;4.071分钟–&gt;1.456分钟</h1><pre><code>enable_bitmapscan = off
-enable_hashagg = on
-enable_hashjoin = on
-enable_indexscan = on
-enable_indexonlyscan = on
-#enable_material = on
-#enable_mergejoin = on
-#enable_nestloop = on
-enable_seqscan = off
-#enable_sort = on
-enable_tidscan = off
-实测在如此配置的情况下，indexonlyscan优先!
-
-所谓的 IndexOnlyScan，表示只在索引取数据，不用再定位物理位置后再取数据。性能最快。
-</code></pre><p>通过以上的配置，重启下服务器。再执行查询计划时可以看到：</p>
-<pre><code>test=# explain select count(id) from tbl_time1 where id &gt; 0;
-                                                QUERY PLAN                                                
-----------------------------------------------------------------------------------------------------------
- Aggregate  (cost=118803211.23..118803211.24 rows=1 width=4)
-   -&gt;  Index Only Scan using tbl_time1_pkey on tbl_time1  (cost=0.57..118719877.89 rows=33333333 width=4)
-         Index Cond: (id &gt; 0)
-(3 rows)
-
-Time: 16.033 ms
-
-这时变成了：Index Only Scan 了。
-不过耗时还是需要 
-
-test=# select count(id) from tbl_time1 where id &gt; 0;
-   count  
------------
-100000000
-(1 row)
-
-Time: 87501.151 ms
-
-约：1.456分钟
-</code></pre><h1 id="估算表大小"><a href="#估算表大小" class="headerlink" title="估算表大小"></a>估算表大小</h1><pre><code>SELECT reltuples FROM pg_class WHERE relname = &#39;tb_name&#39;;
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">test=# explain select count(id) from tbl_time2 where id &gt; 0;</div><div class="line">                               QUERY PLAN                               </div><div class="line">-------------------------------------------------------------------------</div><div class="line"> Aggregate  (cost=21370.00..21370.01 rows=1 width=4)</div><div class="line">   -&gt;  Seq Scan on tbl_time2  (cost=0.00..18870.00 rows=1000000 width=4)</div><div class="line">         Filter: (id &gt; 0)</div><div class="line">(3 rows)</div><div class="line"> </div><div class="line">Time: 0.872 ms</div></pre></td></tr></table></figure>
+<pre><code>Postgres中通过需要扫描来计数count(*)的成本比较高. 没有别的办法来来对行数计数并返回结果除了扫描全部数据.
+</code></pre><h1 id="通过修改配置文件调优，时间从-：51-2分钟–-gt-9-144分钟–-gt-4-071分钟–-gt-1-456分钟"><a href="#通过修改配置文件调优，时间从-：51-2分钟–-gt-9-144分钟–-gt-4-071分钟–-gt-1-456分钟" class="headerlink" title="通过修改配置文件调优，时间从 ：51.2分钟–&gt;9.144分钟–&gt;4.071分钟–&gt;1.456分钟"></a>通过修改配置文件调优，时间从 ：51.2分钟–&gt;9.144分钟–&gt;4.071分钟–&gt;1.456分钟</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">enable_bitmapscan = off</div><div class="line">enable_hashagg = on</div><div class="line">enable_hashjoin = on</div><div class="line">enable_indexscan = on</div><div class="line">enable_indexonlyscan = on</div><div class="line">#enable_material = on</div><div class="line">#enable_mergejoin = on</div><div class="line">#enable_nestloop = on</div><div class="line">enable_seqscan = off</div><div class="line">#enable_sort = on</div><div class="line">enable_tidscan = off</div><div class="line">实测在如此配置的情况下，indexonlyscan优先!</div><div class="line"></div><div class="line">所谓的 IndexOnlyScan，表示只在索引取数据，不用再定位物理位置后再取数据。性能最快。</div></pre></td></tr></table></figure>
+<p>通过以上的配置，重启下服务器。再执行查询计划时可以看到：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">test=# explain select count(id) from tbl_time1 where id &gt; 0;</div><div class="line">                                                QUERY PLAN                                                </div><div class="line">----------------------------------------------------------------------------------------------------------</div><div class="line"> Aggregate  (cost=118803211.23..118803211.24 rows=1 width=4)</div><div class="line">   -&gt;  Index Only Scan using tbl_time1_pkey on tbl_time1  (cost=0.57..118719877.89 rows=33333333 width=4)</div><div class="line">         Index Cond: (id &gt; 0)</div><div class="line">(3 rows)</div><div class="line"></div><div class="line">Time: 16.033 ms</div><div class="line"></div><div class="line">这时变成了：Index Only Scan 了。</div><div class="line">不过耗时还是需要 </div><div class="line"></div><div class="line">test=# select count(id) from tbl_time1 where id &gt; 0;</div><div class="line">   count  </div><div class="line">-----------</div><div class="line">100000000</div><div class="line">(1 row)</div><div class="line"> </div><div class="line">Time: 87501.151 ms</div><div class="line"></div><div class="line">约：1.456分钟</div></pre></td></tr></table></figure>
+<h1 id="估算表大小"><a href="#估算表大小" class="headerlink" title="估算表大小"></a>估算表大小</h1><pre><code>SELECT reltuples FROM pg_class WHERE relname = &apos;tb_name&apos;;
 </code></pre><h1 id="并发方式建立索引"><a href="#并发方式建立索引" class="headerlink" title="并发方式建立索引"></a>并发方式建立索引</h1><pre><code>当Postgres建立你的索引的时候， 和其他数据库一样, 在建立索引的时候是会锁表的. 对于小数据量来说没什么关系， 但是通常可能是我们对一个大数据量的表加索引, 这意味着要获得性能改进应用必须收到停机一段时间. 至少那一张表会受影响. Postgres有能力在创建索引的时候不锁表, 通过使用 CREATE INDEX CONCURRENTLY , 例如:
 
 CREATE INDEX CONCURRENTLY idx_salary ON employees(last_name, salary);

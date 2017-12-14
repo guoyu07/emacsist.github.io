@@ -224,21 +224,17 @@
 <p>##为什么我的查询没有用上索引？</p>
 <p>有许多原因导致为什么Postgres查询计划没有选择使用索引。大多数的时候，查询计划器是正确的，即使它不是那么明显地为什么会这样。<br>如果相同的查询有几次会使用索引扫描，但其他时候不使用索引扫描，这是没问题的。从表中检索到的行数可以基于特定的常数值的查询检索而变化。（我注：即不同的常量值，会导致不同的结果行数）。因此，例如，查询计划器对于查询<code>select * from foo where bar = 1</code>使用索引可能是正确的，但对于查询<code>select * from foo where bar = 2</code>却可能不使用索引，这发生于对于<code>bar</code>值为2的行有比较多的话。发生这种情况时，顺序扫描实际上是最有可能比索引扫描快得多，因此，查询计划器实际上是判断正确的，这时顺序扫描的性能代价相比索引扫描更低。</p>
 <h2 id="部分索引"><a href="#部分索引" class="headerlink" title="部分索引"></a>部分索引</h2><p>部分索引包含表数据的一个子集。它是一个带有<code>WHERE</code>子句的索引。这个概念是为了提高索引的效率,减少索引的大小。小的索引占更少的存储空间，易于维护，扫描更快。</p>
-<p>例如，假设你允许用户评论你的网站，从而设置标记布尔值为真（true）。然后你批量处理标标记的评论。你可能想创建一个类似这样子的索引：</p>
-<pre><code>CREATE INDEX articles_flagged_created_at_index ON articles(created_at) WHERE flagged IS TRUE;
-</code></pre><p>这个索引将会是相当小的， 在复杂查询中也能使用其他索引来结合它一起使用。</p>
-<h2 id="表达式索引"><a href="#表达式索引" class="headerlink" title="表达式索引"></a>表达式索引</h2><p>表达式索引对于匹配一些函数或修改的数据是有用的。Postgres允许你索引函数结果，以便搜索变得像通过原始数据值搜索一样有效。例如，你可能要求用户保存他们的邮箱登录地址，但你想大小写不敏感的认证。在这种情况下可以保存邮件地址，但是搜索上使用<code>WHERE lower(email) = &#39;&lt;lowercased-email&gt;&#39;</code>。在这种查询下，唯一使用索引的方式是通过表达式索引，例如这样：</p>
-<pre><code>CREATE INDEX users_lower_email ON users(lower(email));
-</code></pre><p>另一个常见例子是，查找给定日期的行，这里我们已经保存时间戳在一个<code>datatime</code>字段，但是想通过转换的<code>date</code>值来查找他们。一个像这样子的索引：</p>
-<pre><code>CREATE INDEX articles_day ON articles ( date(published_at) )
-</code></pre><p>可以用在包含<code>WHERE date(articles.created_at) = date(&#39;2011-03-07&#39;)</code>的查询中使用。</p>
+<p>例如，假设你允许用户评论你的网站，从而设置标记布尔值为真（true）。然后你批量处理标标记的评论。你可能想创建一个类似这样子的索引：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CREATE INDEX articles_flagged_created_at_index ON articles(created_at) WHERE flagged IS TRUE;</div></pre></td></tr></table></figure></p>
+<p>这个索引将会是相当小的， 在复杂查询中也能使用其他索引来结合它一起使用。</p>
+<h2 id="表达式索引"><a href="#表达式索引" class="headerlink" title="表达式索引"></a>表达式索引</h2><p>表达式索引对于匹配一些函数或修改的数据是有用的。Postgres允许你索引函数结果，以便搜索变得像通过原始数据值搜索一样有效。例如，你可能要求用户保存他们的邮箱登录地址，但你想大小写不敏感的认证。在这种情况下可以保存邮件地址，但是搜索上使用<code>WHERE lower(email) = &#39;&lt;lowercased-email&gt;&#39;</code>。在这种查询下，唯一使用索引的方式是通过表达式索引，例如这样：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CREATE INDEX users_lower_email ON users(lower(email));</div></pre></td></tr></table></figure></p>
+<p>另一个常见例子是，查找给定日期的行，这里我们已经保存时间戳在一个<code>datatime</code>字段，但是想通过转换的<code>date</code>值来查找他们。一个像这样子的索引：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CREATE INDEX articles_day ON articles ( date(published_at) )</div></pre></td></tr></table></figure></p>
+<p>可以用在包含<code>WHERE date(articles.created_at) = date(&#39;2011-03-07&#39;)</code>的查询中使用。</p>
 <h2 id="唯一索引"><a href="#唯一索引" class="headerlink" title="唯一索引"></a>唯一索引</h2><p>唯一索引保证表不会有超过1行的相同值的行。创建唯一索引的有利的两个原因：数据完整和性能。在唯一索引上查找通常是非常快的。<br>在数据完整性方面，使用模型类的<code>validates_uniqueness_of</code>并不是真正保证唯一的，因为这可能在并发用户时会创建无效的记录。<br>因此，你应该问题在数据库级别创建约束——通过索引或者唯一约束。</p>
 <p>唯一索引和唯一约束之间有点差别。唯一索引可以想成是更低级别，因为表达式索引和部分索引不能创建唯一约束。表达式上的部分唯一索引就有可能。</p>
 <h2 id="多列索引"><a href="#多列索引" class="headerlink" title="多列索引"></a>多列索引</h2><p>虽然Postgres已经能够创建多列索引，重要的是要理解这样子做的意义。Postgres查询计划器通过位图索引扫描（bitmap index scan）在一条多列查询中有能力结合和使用多个单列索引。通常，你可以在覆盖查询条件的每个列上创建索引并且大部分情况下Postgres将会使用到它们，所以在你创建一个多列索引之前做一个基准测试并证明创建一个多列索引是有效的。正如之前一样，索引是有代价的，并且一个多列索引仅能在查询引用的列是与创建索引时的列的顺序是一样的才会被优化，虽然多个单列索引提供大量的查询的性能改进。</p>
 <p>然而在某些情况下,一个多列索引显然是有意义的。一个在列（a,b）上的索引能够用在查询包含<code>WHERE a = x AND b = y</code>，或者查询仅使用<code>WHERE a = x</code>的情况，但是不会用于查询使用<code>WHERE b = y</code>的情况。所以，如果这匹配到你的应用程序的查询模式，多列索引就是值得考虑的。也要注意在本例中创建一个独立的索引（我注：我理解是在这种情况下，创建多个单列索引）是多余的。</p>
-<h2 id="B树和排序"><a href="#B树和排序" class="headerlink" title="B树和排序"></a>B树和排序</h2><p>B树索引项默认按升序排序保存的。在某些情况下,它可以为索引提供一个不同的排序顺序。比如当你正分页显示文章的情况，首先按最近发布的来排序。我们在<code>articles</code>表上可能有一列<code>published_at</code>。对于未发表的文章，<code>published_at</code>的值是<code>NULL</code>。在这种情况下，我们可以创建一个这样子的索引：</p>
-<pre><code>CREATE INDEX articles_published_at_index ON articles(published_at DESC NULLS LAST);
-</code></pre><blockquote>
+<h2 id="B树和排序"><a href="#B树和排序" class="headerlink" title="B树和排序"></a>B树和排序</h2><p>B树索引项默认按升序排序保存的。在某些情况下,它可以为索引提供一个不同的排序顺序。比如当你正分页显示文章的情况，首先按最近发布的来排序。我们在<code>articles</code>表上可能有一列<code>published_at</code>。对于未发表的文章，<code>published_at</code>的值是<code>NULL</code>。在这种情况下，我们可以创建一个这样子的索引：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CREATE INDEX articles_published_at_index ON articles(published_at DESC NULLS LAST);</div></pre></td></tr></table></figure></p>
+<blockquote>
 <p>在Postgre 9.2及之后版本，值得注意的是索引并不总是需要去查找表的，我们可以提供一切需要从索引得到的数据。（也就是，没有索引的列是不感兴趣的）。这个特性叫“只读索引扫描”。</p>
 </blockquote>
 <p>由于我们会按<code>published_at</code>排序以及限制结果数来查询表，我们可以从创建同样的顺序的索引中得到一些好处。Postgres会以正确的顺序在索引中找到这些行，然后去数据块里检索数据。如果索引不是排序的，Postgres就有一个好机会来顺序读取数据块并且排序结果。</p>

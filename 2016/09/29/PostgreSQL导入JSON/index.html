@@ -15,17 +15,17 @@
     <meta name="keywords" content="postgresql,database," />
   
 
-  <meta name="description" content="过滤Unicode字符sed -i &amp;#39;s/\u0000//g&amp;#39; json.txt  使用pgfutterGithub pgfutter pgfutter --jsonb json 你的json文件  创建唯一索引CREATE UNIQUE INDEX status_id_uniq  ON status ( (data-&amp;gt;&amp;gt;&amp;#39;id&amp;#39;) );  注意，-&amp;g">
+  <meta name="description" content="过滤Unicode字符1sed -i &apos;s/\u0000//g&apos; json.txt 使用pgfutterGithub pgfutter 1pgfutter --jsonb json 你的json文件 创建唯一索引1CREATE UNIQUE INDEX status_id_uniq  ON status ( (data-&amp;gt;&amp;gt;&apos;id&apos;) ); 注意，-&amp;gt;返回的是jsonb，-&amp;gt">
 <meta name="keywords" content="postgresql,database">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PostgreSQL导入JSON">
 <meta property="og:url" content="https://emacsist.github.io/2016/09/29/PostgreSQL导入JSON/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="过滤Unicode字符sed -i &amp;#39;s/\u0000//g&amp;#39; json.txt  使用pgfutterGithub pgfutter pgfutter --jsonb json 你的json文件  创建唯一索引CREATE UNIQUE INDEX status_id_uniq  ON status ( (data-&amp;gt;&amp;gt;&amp;#39;id&amp;#39;) );  注意，-&amp;g">
+<meta property="og:description" content="过滤Unicode字符1sed -i &apos;s/\u0000//g&apos; json.txt 使用pgfutterGithub pgfutter 1pgfutter --jsonb json 你的json文件 创建唯一索引1CREATE UNIQUE INDEX status_id_uniq  ON status ( (data-&amp;gt;&amp;gt;&apos;id&apos;) ); 注意，-&amp;gt;返回的是jsonb，-&amp;gt">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PostgreSQL导入JSON">
-<meta name="twitter:description" content="过滤Unicode字符sed -i &amp;#39;s/\u0000//g&amp;#39; json.txt  使用pgfutterGithub pgfutter pgfutter --jsonb json 你的json文件  创建唯一索引CREATE UNIQUE INDEX status_id_uniq  ON status ( (data-&amp;gt;&amp;gt;&amp;#39;id&amp;#39;) );  注意，-&amp;g">
+<meta name="twitter:description" content="过滤Unicode字符1sed -i &apos;s/\u0000//g&apos; json.txt 使用pgfutterGithub pgfutter 1pgfutter --jsonb json 你的json文件 创建唯一索引1CREATE UNIQUE INDEX status_id_uniq  ON status ( (data-&amp;gt;&amp;gt;&apos;id&apos;) ); 注意，-&amp;gt;返回的是jsonb，-&amp;gt">
 
   
 
@@ -201,46 +201,18 @@
 
     <div class="article-content">
         
-                            <h2 id="过滤Unicode字符"><a href="#过滤Unicode字符" class="headerlink" title="过滤Unicode字符"></a>过滤Unicode字符</h2><pre><code class="bash">sed -i &#39;s/\u0000//g&#39; json.txt
-</code></pre>
+                            <h2 id="过滤Unicode字符"><a href="#过滤Unicode字符" class="headerlink" title="过滤Unicode字符"></a>过滤Unicode字符</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sed -i <span class="string">'s/\u0000//g'</span> json.txt</div></pre></td></tr></table></figure>
 <h2 id="使用pgfutter"><a href="#使用pgfutter" class="headerlink" title="使用pgfutter"></a>使用pgfutter</h2><p><a href="https://github.com/lukasmartinelli/pgfutter" target="_blank" rel="external">Github pgfutter</a></p>
-<pre><code class="bash">pgfutter --jsonb json 你的json文件
-</code></pre>
-<h2 id="创建唯一索引"><a href="#创建唯一索引" class="headerlink" title="创建唯一索引"></a>创建唯一索引</h2><pre><code class="bash">CREATE UNIQUE INDEX status_id_uniq  ON status ( (data-&gt;&gt;&#39;id&#39;) );
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pgfutter --jsonb json 你的json文件</div></pre></td></tr></table></figure>
+<h2 id="创建唯一索引"><a href="#创建唯一索引" class="headerlink" title="创建唯一索引"></a>创建唯一索引</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CREATE UNIQUE INDEX status_id_uniq  ON status ( (data-&gt;&gt;<span class="string">'id'</span>) );</div></pre></td></tr></table></figure>
 <p>注意，<code>-&gt;</code>返回的是jsonb，<code>-&gt;&gt;</code>返回的是text.</p>
 <h2 id="插入数据"><a href="#插入数据" class="headerlink" title="插入数据"></a>插入数据</h2><p>导入的json对象是</p>
-<pre><code class="bash">{
-&quot;result&quot;:{
-    &quot;statuees&quot;:[
-    {
-    &quot;id&quot;:111,
-    &quot;text&quot;:&quot;data&quot;
-    }
-    ]
-}
-}
-
-然后只抽取 statuses 的来插入到另一张表里.即将数组元素拆分成每个元素（即每一条微博），然后导入到另一个表里，每一行代表一条微博.
-</code></pre>
-<pre><code class="bash">insert into status select jsonb_array_elements(data-&gt;&#39;result&#39;-&gt;&#39;statuses&#39;)   from import_status where jsonb_array_length(data-&gt;&#39;result&#39;-&gt;&#39;statuses&#39;) &gt; 0 ON CONFLICT DO NOTHING;
-</code></pre>
-<h2 id="创建时间索引"><a href="#创建时间索引" class="headerlink" title="创建时间索引"></a>创建时间索引</h2><pre><code class="bash">create index status_created_at on status (((data-&gt;&gt;&#39;created_at&#39;)::timestamp with time zone));
-
-ERROR:  42P17: functions in index expression must be marked IMMUTABLE
-LOCATION:  ComputeIndexAttrs, indexcmds.c:1108
-Time: 0.354 ms
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"><span class="string">"result"</span>:&#123;</div><div class="line">    <span class="string">"statuees"</span>:[</div><div class="line">    &#123;</div><div class="line">    <span class="string">"id"</span>:111,</div><div class="line">    <span class="string">"text"</span>:<span class="string">"data"</span></div><div class="line">    &#125;</div><div class="line">    ]</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">然后只抽取 statuses 的来插入到另一张表里.即将数组元素拆分成每个元素（即每一条微博），然后导入到另一个表里，每一行代表一条微博.</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">insert into status select jsonb_array_elements(data-&gt;<span class="string">'result'</span>-&gt;<span class="string">'statuses'</span>)   from import_status <span class="built_in">where</span> jsonb_array_length(data-&gt;<span class="string">'result'</span>-&gt;<span class="string">'statuses'</span>) &gt; 0 ON CONFLICT DO NOTHING;</div></pre></td></tr></table></figure>
+<h2 id="创建时间索引"><a href="#创建时间索引" class="headerlink" title="创建时间索引"></a>创建时间索引</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">create index status_created_at on status (((data-&gt;&gt;<span class="string">'created_at'</span>)::timestamp with time zone));</div><div class="line"></div><div class="line">ERROR:  42P17: <span class="built_in">functions</span> <span class="keyword">in</span> index expression must be marked IMMUTABLE</div><div class="line">LOCATION:  ComputeIndexAttrs, indexcmds.c:1108</div><div class="line">Time: 0.354 ms</div></pre></td></tr></table></figure>
 <p><a href="http://justatheory.com/computers/databases/postgresql/use-timestamptz.html" target="_blank" rel="external">use-timestamptz</a></p>
 <p>解决办法:</p>
-<pre><code class="bash">CREATE OR REPLACE FUNCTION f_to_imts(text)
-  RETURNS timestamptz AS
-$$SELECT $1::timestamp with time zone $$
-  LANGUAGE sql IMMUTABLE;
-
-
-create index status_created_at on status ( f_to_imts(data-&gt;&gt;&#39;created_at&#39;) );
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">CREATE OR REPLACE FUNCTION f_to_imts(text)</div><div class="line">  RETURNS timestamptz AS</div><div class="line">$<span class="variable">$SELECT</span> <span class="variable">$1</span>::timestamp with time zone $$</div><div class="line">  LANGUAGE sql IMMUTABLE;</div><div class="line">  </div><div class="line">  </div><div class="line">create index status_created_at on status ( f_to_imts(data-&gt;&gt;<span class="string">'created_at'</span>) );</div></pre></td></tr></table></figure>
 
                                 
     </div>

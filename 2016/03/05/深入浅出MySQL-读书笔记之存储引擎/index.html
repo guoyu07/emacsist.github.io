@@ -15,17 +15,17 @@
     <meta name="keywords" content="database,mysql," />
   
 
-  <meta name="description" content="涉及的命令 查看表的默认引擎: show variables like &amp;#39;table_type&amp;#39;; 这个旧版本的用法,新的版本用法如下:  mysql&amp;gt; show variables like &amp;#39;%engine%&amp;#39;; +----------------------------------+--------+ | Variable_name">
+  <meta name="description" content="涉及的命令 查看表的默认引擎: show variables like &amp;#39;table_type&amp;#39;; 这个旧版本的用法,新的版本用法如下:  12345678910mysql&amp;gt; show variables like &apos;%engine%&apos;;+----------------------------------+--------+| Variable_name">
 <meta name="keywords" content="database,mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="&lt;深入浅出MySQL&gt;读书笔记之存储引擎">
 <meta property="og:url" content="https://emacsist.github.io/2016/03/05/深入浅出MySQL-读书笔记之存储引擎/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="涉及的命令 查看表的默认引擎: show variables like &amp;#39;table_type&amp;#39;; 这个旧版本的用法,新的版本用法如下:  mysql&amp;gt; show variables like &amp;#39;%engine%&amp;#39;; +----------------------------------+--------+ | Variable_name">
+<meta property="og:description" content="涉及的命令 查看表的默认引擎: show variables like &amp;#39;table_type&amp;#39;; 这个旧版本的用法,新的版本用法如下:  12345678910mysql&amp;gt; show variables like &apos;%engine%&apos;;+----------------------------------+--------+| Variable_name">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt;深入浅出MySQL&gt;读书笔记之存储引擎">
-<meta name="twitter:description" content="涉及的命令 查看表的默认引擎: show variables like &amp;#39;table_type&amp;#39;; 这个旧版本的用法,新的版本用法如下:  mysql&amp;gt; show variables like &amp;#39;%engine%&amp;#39;; +----------------------------------+--------+ | Variable_name">
+<meta name="twitter:description" content="涉及的命令 查看表的默认引擎: show variables like &amp;#39;table_type&amp;#39;; 这个旧版本的用法,新的版本用法如下:  12345678910mysql&amp;gt; show variables like &apos;%engine%&apos;;+----------------------------------+--------+| Variable_name">
 
   
 
@@ -204,17 +204,7 @@
                             <h2 id="涉及的命令"><a href="#涉及的命令" class="headerlink" title="涉及的命令"></a>涉及的命令</h2><ul>
 <li>查看表的默认引擎: <code>show variables like &#39;table_type&#39;;</code> 这个旧版本的用法,新的版本用法如下:</li>
 </ul>
-<pre><code class="bash">mysql&gt; show variables like &#39;%engine%&#39;;
-+----------------------------------+--------+
-| Variable_name                    | Value  |
-+----------------------------------+--------+
-| default_storage_engine           | InnoDB |
-| default_tmp_storage_engine       | InnoDB |
-| disabled_storage_engines         |        |
-| internal_tmp_disk_storage_engine | InnoDB |
-+----------------------------------+--------+
-4 rows in set (0.00 sec)
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show variables like <span class="string">'%engine%'</span>;</div><div class="line">+----------------------------------+--------+</div><div class="line">| Variable_name                    | Value  |</div><div class="line">+----------------------------------+--------+</div><div class="line">| default_storage_engine           | InnoDB |</div><div class="line">| default_tmp_storage_engine       | InnoDB |</div><div class="line">| disabled_storage_engines         |        |</div><div class="line">| internal_tmp_disk_storage_engine | InnoDB |</div><div class="line">+----------------------------------+--------+</div><div class="line">4 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div></pre></td></tr></table></figure>
 <ul>
 <li>查看支持的引擎: <code>show engines\G</code></li>
 </ul>

@@ -15,17 +15,17 @@
     <meta name="keywords" content="ubuntu,ssd," />
   
 
-  <meta name="description" content="检查4K对齐✗ sudo fdisk -lu  Disk /dev/sda: 500.1 GB, 500107862016 bytes 255 heads, 63 sectors/track, 60801 cylinders, total 976773168 sectors Units = sectors of 1 * 512 = 512 bytes Sector size (logical/ph">
+  <meta name="description" content="检查4K对齐12345678910111213141516171819✗ sudo fdisk -luDisk /dev/sda: 500.1 GB, 500107862016 bytes255 heads, 63 sectors/track, 60801 cylinders, total 976773168 sectorsUnits = sectors of 1 * 512 = 512 byte">
 <meta name="keywords" content="ubuntu,ssd">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Ubuntu下SSD优化">
 <meta property="og:url" content="https://emacsist.github.io/2015/08/03/Ubuntu下SSD优化/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="检查4K对齐✗ sudo fdisk -lu  Disk /dev/sda: 500.1 GB, 500107862016 bytes 255 heads, 63 sectors/track, 60801 cylinders, total 976773168 sectors Units = sectors of 1 * 512 = 512 bytes Sector size (logical/ph">
+<meta property="og:description" content="检查4K对齐12345678910111213141516171819✗ sudo fdisk -luDisk /dev/sda: 500.1 GB, 500107862016 bytes255 heads, 63 sectors/track, 60801 cylinders, total 976773168 sectorsUnits = sectors of 1 * 512 = 512 byte">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ubuntu下SSD优化">
-<meta name="twitter:description" content="检查4K对齐✗ sudo fdisk -lu  Disk /dev/sda: 500.1 GB, 500107862016 bytes 255 heads, 63 sectors/track, 60801 cylinders, total 976773168 sectors Units = sectors of 1 * 512 = 512 bytes Sector size (logical/ph">
+<meta name="twitter:description" content="检查4K对齐12345678910111213141516171819✗ sudo fdisk -luDisk /dev/sda: 500.1 GB, 500107862016 bytes255 heads, 63 sectors/track, 60801 cylinders, total 976773168 sectorsUnits = sectors of 1 * 512 = 512 byte">
 
   
 
@@ -201,26 +201,7 @@
 
     <div class="article-content">
         
-                            <h2 id="检查4K对齐"><a href="#检查4K对齐" class="headerlink" title="检查4K对齐"></a>检查4K对齐</h2><pre><code class="bash">✗ sudo fdisk -lu
-
-Disk /dev/sda: 500.1 GB, 500107862016 bytes
-255 heads, 63 sectors/track, 60801 cylinders, total 976773168 sectors
-Units = sectors of 1 * 512 = 512 bytes
-Sector size (logical/physical): 512 bytes / 512 bytes
-I/O size (minimum/optimal): 512 bytes / 512 bytes
-Disk identifier: 0x1abd1abc
-
-   Device Boot      Start         End      Blocks   Id  System
-/dev/sda1   *        2048      782335      390144   83  Linux
-/dev/sda2          784382   976768064   487991841+   f  W95 Ext&#39;d (LBA)
-/dev/sda5       159385672   432015439   136314884    7  HPFS/NTFS/exFAT
-/dev/sda6       432015504   704645271   136314884    7  HPFS/NTFS/exFAT
-/dev/sda7       704645336   976768064   136061364+   7  HPFS/NTFS/exFAT
-/dev/sda8          784384    16406527     7811072   82  Linux swap / Solaris
-/dev/sda9        16408576   159381503    71486464   83  Linux
-
-Partition table entries are not in disk order
-</code></pre>
+                            <h2 id="检查4K对齐"><a href="#检查4K对齐" class="headerlink" title="检查4K对齐"></a>检查4K对齐</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">✗ sudo fdisk -lu</div><div class="line"></div><div class="line">Disk /dev/sda: 500.1 GB, 500107862016 bytes</div><div class="line">255 heads, 63 sectors/track, 60801 cylinders, total 976773168 sectors</div><div class="line">Units = sectors of 1 * 512 = 512 bytes</div><div class="line">Sector size (logical/physical): 512 bytes / 512 bytes</div><div class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</div><div class="line">Disk identifier: 0x1abd1abc</div><div class="line"></div><div class="line">   Device Boot      Start         End      Blocks   Id  System</div><div class="line">/dev/sda1   *        2048      782335      390144   83  Linux</div><div class="line">/dev/sda2          784382   976768064   487991841+   f  W95 Ext<span class="string">'d (LBA)</span></div><div class="line">/dev/sda5       159385672   432015439   136314884    7  HPFS/NTFS/exFAT</div><div class="line">/dev/sda6       432015504   704645271   136314884    7  HPFS/NTFS/exFAT</div><div class="line">/dev/sda7       704645336   976768064   136061364+   7  HPFS/NTFS/exFAT</div><div class="line">/dev/sda8          784384    16406527     7811072   82  Linux swap / Solaris</div><div class="line">/dev/sda9        16408576   159381503    71486464   83  Linux</div><div class="line"></div><div class="line">Partition table entries are not in disk order</div></pre></td></tr></table></figure>
 <p><code>Units</code> 是512字节，4K = 8 × 512 byte。所以只要看分区的<code>Start</code>地址能否整除<code>8</code>,可以的话这个分区就是4K对齐的。</p>
 <p>一般来说，Linux下默认分区时，就自动进行4K对齐了</p>
 <h2 id="开启-AHCI"><a href="#开启-AHCI" class="headerlink" title="开启 AHCI"></a>开启 AHCI</h2><p>开机进入 <code>BIOS</code> 设置好 <code>AHCI</code></p>

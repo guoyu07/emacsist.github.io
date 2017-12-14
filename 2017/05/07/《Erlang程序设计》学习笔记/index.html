@@ -15,17 +15,17 @@
     <meta name="keywords" content="erlang," />
   
 
-  <meta name="description" content="动态代码载入每当调用 someModule:someFunction(…) 时，调用的总是最新模块里的最新版函数，哪怕当代码在模块里运行时重新编译了该模块也是如此。 在任一时刻，Erlang允许一个模块的 两个版本 同时运行。 保存预处理的输出erlc -P some_module.erl  它会生成 some_module.P 文件 表达式和表达式序列任何可以执行并生成一个值的事物，都被称为表达">
+  <meta name="description" content="动态代码载入每当调用 someModule:someFunction(…) 时，调用的总是最新模块里的最新版函数，哪怕当代码在模块里运行时重新编译了该模块也是如此。 在任一时刻，Erlang允许一个模块的 两个版本 同时运行。 保存预处理的输出1erlc -P some_module.erl 它会生成 some_module.P 文件 表达式和表达式序列任何可以执行并生成一个值的事物，都被称为表达">
 <meta name="keywords" content="erlang">
 <meta property="og:type" content="article">
 <meta property="og:title" content="《Erlang程序设计》学习笔记">
 <meta property="og:url" content="https://emacsist.github.io/2017/05/07/《Erlang程序设计》学习笔记/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="动态代码载入每当调用 someModule:someFunction(…) 时，调用的总是最新模块里的最新版函数，哪怕当代码在模块里运行时重新编译了该模块也是如此。 在任一时刻，Erlang允许一个模块的 两个版本 同时运行。 保存预处理的输出erlc -P some_module.erl  它会生成 some_module.P 文件 表达式和表达式序列任何可以执行并生成一个值的事物，都被称为表达">
+<meta property="og:description" content="动态代码载入每当调用 someModule:someFunction(…) 时，调用的总是最新模块里的最新版函数，哪怕当代码在模块里运行时重新编译了该模块也是如此。 在任一时刻，Erlang允许一个模块的 两个版本 同时运行。 保存预处理的输出1erlc -P some_module.erl 它会生成 some_module.P 文件 表达式和表达式序列任何可以执行并生成一个值的事物，都被称为表达">
 <meta property="og:updated_time" content="2017-08-25T09:08:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《Erlang程序设计》学习笔记">
-<meta name="twitter:description" content="动态代码载入每当调用 someModule:someFunction(…) 时，调用的总是最新模块里的最新版函数，哪怕当代码在模块里运行时重新编译了该模块也是如此。 在任一时刻，Erlang允许一个模块的 两个版本 同时运行。 保存预处理的输出erlc -P some_module.erl  它会生成 some_module.P 文件 表达式和表达式序列任何可以执行并生成一个值的事物，都被称为表达">
+<meta name="twitter:description" content="动态代码载入每当调用 someModule:someFunction(…) 时，调用的总是最新模块里的最新版函数，哪怕当代码在模块里运行时重新编译了该模块也是如此。 在任一时刻，Erlang允许一个模块的 两个版本 同时运行。 保存预处理的输出1erlc -P some_module.erl 它会生成 some_module.P 文件 表达式和表达式序列任何可以执行并生成一个值的事物，都被称为表达">
 
   
 
@@ -198,8 +198,7 @@
         
                             <h2 id="动态代码载入"><a href="#动态代码载入" class="headerlink" title="动态代码载入"></a>动态代码载入</h2><p>每当调用 <em>someModule:someFunction(…)</em> 时，调用的总是最新模块里的最新版函数，哪怕当代码在模块里运行时重新编译了该模块也是如此。</p>
 <p>在任一时刻，Erlang允许一个模块的 <em>两个版本</em> 同时运行。</p>
-<h2 id="保存预处理的输出"><a href="#保存预处理的输出" class="headerlink" title="保存预处理的输出"></a>保存预处理的输出</h2><pre><code class="bash">erlc -P some_module.erl
-</code></pre>
+<h2 id="保存预处理的输出"><a href="#保存预处理的输出" class="headerlink" title="保存预处理的输出"></a>保存预处理的输出</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">erlc -P some_module.erl</div></pre></td></tr></table></figure>
 <p>它会生成 <em>some_module.P</em> 文件</p>
 <h2 id="表达式和表达式序列"><a href="#表达式和表达式序列" class="headerlink" title="表达式和表达式序列"></a>表达式和表达式序列</h2><p>任何可以执行并生成一个值的事物，都被称为表达式。</p>
 <p>表达式序列，是由一系列逗号分隔的表达式。它们在 <em>-&gt;</em> 箭头之后随处可见。表达式序列 <em>E1, E2, E3,…,En</em> 的值，被定义为序列最后那个表达式的值，而该表达式在计算时可以使用 E1, E2 等表达式所创建的绑定。定价于 LISP 里的 <em>progn</em></p>
@@ -207,71 +206,37 @@
 <li>fun LocalFunc/Arity</li>
 <li>fun Mod:RemoteFunc/Arity</li>
 </ul>
-<h2 id="包含文件"><a href="#包含文件" class="headerlink" title="包含文件"></a>包含文件</h2><pre><code class="bash">-include(FileName).
-</code></pre>
+<h2 id="包含文件"><a href="#包含文件" class="headerlink" title="包含文件"></a>包含文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-include(FileName).</div></pre></td></tr></table></figure>
 <p>包含库的头文件：</p>
-<pre><code class="bash">-include_lib(Name).
-</code></pre>
-<h2 id="列表操作"><a href="#列表操作" class="headerlink" title="列表操作"></a>列表操作</h2><h3 id=""><a href="#" class="headerlink" title="++"></a>++</h3><pre><code class="bash">A ++ B
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-include_lib(Name).</div></pre></td></tr></table></figure>
+<h2 id="列表操作"><a href="#列表操作" class="headerlink" title="列表操作"></a>列表操作</h2><h3 id=""><a href="#" class="headerlink" title="++"></a>++</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">A ++ B</div></pre></td></tr></table></figure>
 <p>即 A 列表和 B 列表相加</p>
-<pre><code class="bash">1&gt; [1,2,3] ++ [4,5,6].
-[1,2,3,4,5,6]
-2&gt;
-</code></pre>
-<h3 id="–"><a href="#–" class="headerlink" title="–"></a>–</h3><pre><code class="bash">A -- B
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">1&gt; [1,2,3] ++ [4,5,6].</div><div class="line">[1,2,3,4,5,6]</div><div class="line">2&gt;</div></pre></td></tr></table></figure>
+<h3 id="–"><a href="#–" class="headerlink" title="–"></a>–</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">A -- B</div></pre></td></tr></table></figure>
 <p>从列表 A 中移除列表 B 。移除的意思是 B 中所有元素都会从 A 里去除。请注意，如果符号 X 在 B里出现了 K 次，那么A只会移除前K个X。</p>
-<pre><code class="bash">2&gt; [1,2,3,4,5,6,1,2] -- [1].
-[2,3,4,5,6,1,2]
-3&gt; [1,2,3,4,5,6,1,2] -- [1,1].
-[2,3,4,5,6,2]
-4&gt;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">2&gt; [1,2,3,4,5,6,1,2] -- [1].</div><div class="line">[2,3,4,5,6,1,2]</div><div class="line">3&gt; [1,2,3,4,5,6,1,2] -- [1,1].</div><div class="line">[2,3,4,5,6,2]</div><div class="line">4&gt;</div></pre></td></tr></table></figure>
 <h2 id="短路布尔表达式"><a href="#短路布尔表达式" class="headerlink" title="短路布尔表达式"></a>短路布尔表达式</h2><ul>
 <li>Expr1 orelse Expr2</li>
 <li>Expr1 andalso Expr2</li>
 </ul>
 <p>下面的并不是短路表达式:</p>
-<pre><code class="bash">A or B
-A and B
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">A or B</div><div class="line">A and B</div></pre></td></tr></table></figure>
 <p>这种两边的参数总会被执行，即使表达式的真值只需要第一个表达式的值就能确定也是如此。</p>
-<h2 id="设置代码搜索路径"><a href="#设置代码搜索路径" class="headerlink" title="设置代码搜索路径"></a>设置代码搜索路径</h2><p>查看</p>
-<pre><code class="bash">code:get_path().
-</code></pre>
+<h2 id="设置代码搜索路径"><a href="#设置代码搜索路径" class="headerlink" title="设置代码搜索路径"></a>设置代码搜索路径</h2><p>查看<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">code:get_path().</div></pre></td></tr></table></figure></p>
 <p>设置</p>
-<pre><code class="bash">erl -pa Dir1 -pa Dir2 .... -pz DirK1 -pz DirK2
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">erl -pa Dir1 -pa Dir2 .... -pz DirK1 -pz DirK2</div></pre></td></tr></table></figure>
 <p>pa 表示添加到搜索的开头<br>pz 表示添加到搜索的结尾</p>
-<h2 id="导出所有函数"><a href="#导出所有函数" class="headerlink" title="导出所有函数"></a>导出所有函数</h2><pre><code class="bash">-compile(export_all).
-</code></pre>
+<h2 id="导出所有函数"><a href="#导出所有函数" class="headerlink" title="导出所有函数"></a>导出所有函数</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-compile(export_all).</div></pre></td></tr></table></figure>
 <h2 id="系统启动时执行一组命令"><a href="#系统启动时执行一组命令" class="headerlink" title="系统启动时执行一组命令"></a>系统启动时执行一组命令</h2><p>在用户主目录的 <em>.erlang</em> 文件里的所有命令，都会有 erlang 启动时执行:</p>
-<pre><code class="bash">[12:41:01] emacsist:~ $ cat ~/.erlang
-io:format(&quot;Hi, I&#39;m in your .erlang file ~n&quot;).
-[12:41:05] emacsist:~ $ erl
-Erlang/OTP 19 [erts-8.3] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false] [dtrace]
-
-Hi, I&#39;m in your .erlang file
-Eshell V8.3  (abort with ^G)
-1&gt;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[12:41:01] emacsist:~ $ cat ~/.erlang</div><div class="line">io:format(<span class="string">"Hi, I'm in your .erlang file ~n"</span>).</div><div class="line">[12:41:05] emacsist:~ $ erl</div><div class="line">Erlang/OTP 19 [erts-8.3] [<span class="built_in">source</span>] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:<span class="literal">false</span>] [dtrace]</div><div class="line"></div><div class="line">Hi, I<span class="string">'m in your .erlang file</span></div><div class="line">Eshell V8.3  (abort with ^G)</div><div class="line">1&gt;</div></pre></td></tr></table></figure>
 <p>查看用户主目录位置:</p>
-<pre><code class="bash">init:get_argument(home).
-</code></pre>
-<h2 id="在命令提示符里编译和运行"><a href="#在命令提示符里编译和运行" class="headerlink" title="在命令提示符里编译和运行"></a>在命令提示符里编译和运行</h2><pre><code class="bash">erlc hello.erl
-erl -noshell -s hello start -s init stop
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">init:get_argument(home).</div></pre></td></tr></table></figure>
+<h2 id="在命令提示符里编译和运行"><a href="#在命令提示符里编译和运行" class="headerlink" title="在命令提示符里编译和运行"></a>在命令提示符里编译和运行</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">erlc hello.erl</div><div class="line">erl -noshell -s hello start -s init stop</div></pre></td></tr></table></figure>
 <h2 id="使用-Escript-运行"><a href="#使用-Escript-运行" class="headerlink" title="使用 Escript 运行"></a>使用 Escript 运行</h2><p>文件 <em>hello</em> 的内容:</p>
-<pre><code class="bash">#!/usr/bin/env escript
-main(Args) -&gt;
-    io:format(&quot;hello world~n&quot;).
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env escript</span></div><div class="line">main(Args) -&gt;</div><div class="line">    io:format(<span class="string">"hello world~n"</span>).</div></pre></td></tr></table></figure>
 <p>Args 是一个原子列表</p>
 <p>执行:</p>
-<pre><code class="bash">chmod u+x hello
-./hello
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">chmod u+x hello</div><div class="line">./hello</div></pre></td></tr></table></figure>
 <h2 id="停止Erlang"><a href="#停止Erlang" class="headerlink" title="停止Erlang"></a>停止Erlang</h2><p>有时Erlang停不了下来，以下是可能的原因</p>
 <ul>
 <li>shell 没反应</li>
@@ -280,35 +245,15 @@ main(Args) -&gt;
 <li>erlang 启动时设置了 <em>-heart Cmd</em> 选项。它会建立一个操作系统进程来监控Eralng的操作系统进程。如果Eralng的操作系统进程崩溃了，Cmd就会被执行。通常Cmd只是简单地重启Erlang系统。</li>
 <li>某处出现了严重的问题，导致Erlang进程为僵尸进程</li>
 </ul>
-<h2 id="分析转储文件-erl-crash-dump"><a href="#分析转储文件-erl-crash-dump" class="headerlink" title="分析转储文件 erl_crash.dump"></a>分析转储文件 erl_crash.dump</h2><pre><code class="bash">crashdump_viewer.start().
-</code></pre>
-<h2 id="获取帮助"><a href="#获取帮助" class="headerlink" title="获取帮助"></a>获取帮助</h2><pre><code class="bash">erl -man erl
-erl -man lists
-</code></pre>
-<h2 id="基本并发函数"><a href="#基本并发函数" class="headerlink" title="基本并发函数"></a>基本并发函数</h2><pre><code class="bash">Pid = spawn(Mod, Func, Args)
-Pid = spawn(Fun)
-
-
-Pid ! Message
-
-receive ... end
-</code></pre>
-<h3 id="带超时的接收"><a href="#带超时的接收" class="headerlink" title="带超时的接收"></a>带超时的接收</h3><pre><code class="bash">receive 
-    ...
-after Time -&gt;
-     Expressions
-end
-</code></pre>
+<h2 id="分析转储文件-erl-crash-dump"><a href="#分析转储文件-erl-crash-dump" class="headerlink" title="分析转储文件 erl_crash.dump"></a>分析转储文件 erl_crash.dump</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">crashdump_viewer.start().</div></pre></td></tr></table></figure>
+<h2 id="获取帮助"><a href="#获取帮助" class="headerlink" title="获取帮助"></a>获取帮助</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">erl -man erl</div><div class="line">erl -man lists</div></pre></td></tr></table></figure>
+<h2 id="基本并发函数"><a href="#基本并发函数" class="headerlink" title="基本并发函数"></a>基本并发函数</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Pid = spawn(Mod, Func, Args)</div><div class="line">Pid = spawn(Fun)</div><div class="line"></div><div class="line"></div><div class="line">Pid ! Message</div><div class="line"></div><div class="line">receive ... end</div></pre></td></tr></table></figure>
+<h3 id="带超时的接收"><a href="#带超时的接收" class="headerlink" title="带超时的接收"></a>带超时的接收</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">receive </div><div class="line">    ...</div><div class="line">after Time -&gt;</div><div class="line">     Expressions</div><div class="line">end</div></pre></td></tr></table></figure>
 <p>Time 为毫秒数</p>
 <p>注意， receive 里面的表达式可以忽略。而只保留超时</p>
-<pre><code class="bash">receive
-after T -&gt;
-    Exp
-end.
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">receive</div><div class="line">after T -&gt;</div><div class="line">    Exp</div><div class="line">end.</div></pre></td></tr></table></figure>
 <p>如果 Time 为0，则会先尝试匹配 receive 里的模式，如果没有匹配，则直接执行 after 的表达式，而不会挂起。</p>
-<h2 id="获取最大进程限制数"><a href="#获取最大进程限制数" class="headerlink" title="获取最大进程限制数"></a>获取最大进程限制数</h2><pre><code class="bash">erlang:system_info(process_limit)
-</code></pre>
+<h2 id="获取最大进程限制数"><a href="#获取最大进程限制数" class="headerlink" title="获取最大进程限制数"></a>获取最大进程限制数</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">erlang:system_info(process_limit)</div></pre></td></tr></table></figure>
 <p>这个数可以通过虚拟机参数 <em>+P 100000</em> 来设置</p>
 <h2 id="注册进程"><a href="#注册进程" class="headerlink" title="注册进程"></a>注册进程</h2><ul>
 <li>register(AnAtom, Pid)</li>
@@ -324,11 +269,8 @@ end.
 <h2 id="设立防火墙"><a href="#设立防火墙" class="headerlink" title="设立防火墙"></a>设立防火墙</h2><p>即不想系统里的错误继续扩散</p>
 <p>在某个进程上，执行 <em>process_flag(trap_exit, true)</em> 这样子，错误扩散到该进程，就不会继续扩散了。</p>
 <h2 id="监视"><a href="#监视" class="headerlink" title="监视"></a>监视</h2><p>监视是 <em>单向</em> 的。如果A监视B，而B挂了，就会向A发送一个退出消息，反过来而不会如此。</p>
-<h2 id="RPC调用"><a href="#RPC调用" class="headerlink" title="RPC调用"></a>RPC调用</h2><pre><code class="bash">rpc:call(Node, Mod, Func, [Arg1, Arg2, Arg3,...,ArgN]).
-</code></pre>
-<h2 id="Magic-Cookie"><a href="#Magic-Cookie" class="headerlink" title="Magic Cookie"></a>Magic Cookie</h2><p>设置:</p>
-<pre><code class="bash">erl -setcookie ABSFSDFSADFSDFSDFSDFSF
-</code></pre>
+<h2 id="RPC调用"><a href="#RPC调用" class="headerlink" title="RPC调用"></a>RPC调用</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rpc:call(Node, Mod, Func, [Arg1, Arg2, Arg3,...,ArgN]).</div></pre></td></tr></table></figure>
+<h2 id="Magic-Cookie"><a href="#Magic-Cookie" class="headerlink" title="Magic Cookie"></a>Magic Cookie</h2><p>设置:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">erl -setcookie ABSFSDFSADFSDFSDFSDFSF</div></pre></td></tr></table></figure></p>
 <p>这一般只是在测试时使用，因为使用 <em>ps aux</em> 可以查看它的 cookie 。</p>
 <p>或保存在 <em>~/.erlang.cookie</em></p>
 <p>或使用函数来设置： <em>erlang:set_cookie(node(), C)</em> 即将cookie设置为C</p>
@@ -339,8 +281,7 @@ end.
 </blockquote>
 <h3 id="相连进程"><a href="#相连进程" class="headerlink" title="相连进程"></a>相连进程</h3><p>创建端口的进程被称为该端口的相连进程。所有发往端口的消息，都必须标明相连进程的PID，所有来自外部程序的消息都会发往相连进程。</p>
 <h3 id="创建端口"><a href="#创建端口" class="headerlink" title="创建端口"></a>创建端口</h3><p><em>open_port(PortName, [Opt]) -&gt; Port</em></p>
-<h3 id="向端口发送消息"><a href="#向端口发送消息" class="headerlink" title="向端口发送消息"></a>向端口发送消息</h3><pre><code class="bash">Port ! {PidC, {...}}
-</code></pre>
+<h3 id="向端口发送消息"><a href="#向端口发送消息" class="headerlink" title="向端口发送消息"></a>向端口发送消息</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Port ! &#123;PidC, &#123;...&#125;&#125;</div></pre></td></tr></table></figure>
 <h2 id="Erlang中调用外部语言代码"><a href="#Erlang中调用外部语言代码" class="headerlink" title="Erlang中调用外部语言代码"></a>Erlang中调用外部语言代码</h2><p>这是一种不安全的做法。</p>
 <h2 id="ETS与DETS"><a href="#ETS与DETS" class="headerlink" title="ETS与DETS"></a>ETS与DETS</h2><p>它们可以在进程间共享！（但它不会被GC）</p>
 <p>它们保存的，都是元组。默认情况下，第一个是该表的 键。</p>
@@ -361,53 +302,26 @@ end.
 <p>DETS的最大文件大小是 2GB </p>
 <h2 id="Mnesia数据库"><a href="#Mnesia数据库" class="headerlink" title="Mnesia数据库"></a>Mnesia数据库</h2><p>它是用Erlang编写的数据库。<br>它支持事务，并有自己的查询语言。支持保存在内存，也可以保存在磁盘。在集群里，不同的节点可以是不同的存储类型。</p>
 <p>它保存的是 Erlang 中的 <em>记录</em> （record)</p>
-<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><pre><code class="bash">mnesia:create_schema([node()]).
-</code></pre>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mnesia:create_schema([node()]).</div></pre></td></tr></table></figure>
 <p>在非集群里，它会自动创建一个 <em>Mnesia.nodename@hostname</em> 的目录来保存数据库。也可以在启动时，指定保存的目录，而不是默认的 <em>Mnesia.nodename@hostname</em> ，像这样子:</p>
-<pre><code class="bash">erl -mnesia dir &#39;&quot;/home/emacsist/Mnesia&quot;&#39;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">erl -mnesia dir <span class="string">'"/home/emacsist/Mnesia"'</span></div></pre></td></tr></table></figure>
 <p>注意，单引号里面的双引号。</p>
-<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><pre><code class="bash">mnesia:start()
-</code></pre>
+<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mnesia:start()</div></pre></td></tr></table></figure>
 <p>其他的就不继续写的，详细直接看文档。</p>
 <h2 id="代码性能分析工具"><a href="#代码性能分析工具" class="headerlink" title="代码性能分析工具"></a>代码性能分析工具</h2><ul>
 <li>cprof ：统计各个函数被调用的次数。在 online 系统上运行，会增加 5~10%的负载</li>
 <li>fprof ：显示调用和被调用函数的时间，结果会输出到一个文件。重量分析，会显著增加系统负载</li>
 <li>eprof ：测量erlang程序是如何使用时间的。它是 fprof的前身，适用于小规模的性能分析。</li>
 </ul>
-<pre><code class="bash">cprof:start().
-
-执行你的代码 Mod:xx
-
-cprof:pause().
-
-cprof:analyse(Mod)
-
-cprof:stop().
-</code></pre>
-<h2 id="代码覆盖测试"><a href="#代码覆盖测试" class="headerlink" title="代码覆盖测试"></a>代码覆盖测试</h2><pre><code class="bash">cover:start().
-
-cover:compile(你的模块).
-
-你的模块:函数().
-
-执行一段时间后。。。。。
-
-cover:analyse_to_file(你的模块).
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">cprof:start().</div><div class="line"></div><div class="line">执行你的代码 Mod:xx</div><div class="line"></div><div class="line">cprof:pause().</div><div class="line"></div><div class="line">cprof:analyse(Mod)</div><div class="line"></div><div class="line">cprof:stop().</div></pre></td></tr></table></figure>
+<h2 id="代码覆盖测试"><a href="#代码覆盖测试" class="headerlink" title="代码覆盖测试"></a>代码覆盖测试</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">cover:start().</div><div class="line"></div><div class="line">cover:compile(你的模块).</div><div class="line"></div><div class="line">你的模块:函数().</div><div class="line"></div><div class="line">执行一段时间后。。。。。</div><div class="line"></div><div class="line">cover:analyse_to_file(你的模块).</div></pre></td></tr></table></figure>
 <h2 id="生成交叉引用"><a href="#生成交叉引用" class="headerlink" title="生成交叉引用"></a>生成交叉引用</h2><p>注意，只有在代码编译时设置了 <em>debug_info</em> 才可以使用 xref 模块</p>
-<pre><code class="bash">erlc +debug_info *.erl
-erl
-1&gt;xref:d(&#39;.&#39;).
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">erlc +debug_info *.erl</div><div class="line">erl</div><div class="line">1&gt;xref:d(<span class="string">'.'</span>).</div></pre></td></tr></table></figure>
 <h2 id="跟踪消息与进程执行"><a href="#跟踪消息与进程执行" class="headerlink" title="跟踪消息与进程执行"></a>跟踪消息与进程执行</h2><p>参考手册下面的这个文档</p>
-<pre><code class="bash">erlang:trace/3
-</code></pre>
-<h2 id="配置错误记录器"><a href="#配置错误记录器" class="headerlink" title="配置错误记录器"></a>配置错误记录器</h2><h3 id="标准错误记录器"><a href="#标准错误记录器" class="headerlink" title="标准错误记录器"></a>标准错误记录器</h3><pre><code class="bash">erl -boot start_clean
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">erlang:trace/3</div></pre></td></tr></table></figure>
+<h2 id="配置错误记录器"><a href="#配置错误记录器" class="headerlink" title="配置错误记录器"></a>配置错误记录器</h2><h3 id="标准错误记录器"><a href="#标准错误记录器" class="headerlink" title="标准错误记录器"></a>标准错误记录器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">erl -boot start_clean</div></pre></td></tr></table></figure>
 <p>它创建一个适合进行开发的环境，只提供一种简单的错误记录形式。（不带参数的 erl 命令，就等同 erl -boot start_clean）</p>
-<pre><code class="bash">erl -boot start_sasl
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">erl -boot start_sasl</div></pre></td></tr></table></figure>
 <p>它会创建一个适合运行生产系统的环境。</p>
 
                                 

@@ -15,18 +15,18 @@
     <meta name="keywords" content="golang,go," />
   
 
-  <meta name="description" content="思路data = [3 2 6 1  2 7]  middle = 3  ? 2 6 1 2 7  //第一轮: // data[i] = 2 // middle = 3 if data[i] &amp;lt; middle {     //则与头指针进行交换     //然后 i++     //头指针也 ++     //即头指针一直指向那个 ？的值. }   第二轮时 data[i] = 6 hea">
+  <meta name="description" content="思路12345678910111213141516171819202122232425262728293031323334data = [3 2 6 1  2 7]middle = 3? 2 6 1 2 7//第一轮:// data[i] = 2// middle = 3if data[i] &amp;lt; middle &amp;#123;    //则与头指针进行交换    //然后 i++    //头指">
 <meta name="keywords" content="golang,go">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Golang 快速排序">
 <meta property="og:url" content="https://emacsist.github.io/2016/11/21/Golang 快速排序/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="思路data = [3 2 6 1  2 7]  middle = 3  ? 2 6 1 2 7  //第一轮: // data[i] = 2 // middle = 3 if data[i] &amp;lt; middle {     //则与头指针进行交换     //然后 i++     //头指针也 ++     //即头指针一直指向那个 ？的值. }   第二轮时 data[i] = 6 hea">
+<meta property="og:description" content="思路12345678910111213141516171819202122232425262728293031323334data = [3 2 6 1  2 7]middle = 3? 2 6 1 2 7//第一轮:// data[i] = 2// middle = 3if data[i] &amp;lt; middle &amp;#123;    //则与头指针进行交换    //然后 i++    //头指">
 <meta property="og:image" content="https://emacsist.github.io/img/qsort.png">
 <meta property="og:updated_time" content="2016-11-21T15:57:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Golang 快速排序">
-<meta name="twitter:description" content="思路data = [3 2 6 1  2 7]  middle = 3  ? 2 6 1 2 7  //第一轮: // data[i] = 2 // middle = 3 if data[i] &amp;lt; middle {     //则与头指针进行交换     //然后 i++     //头指针也 ++     //即头指针一直指向那个 ？的值. }   第二轮时 data[i] = 6 hea">
+<meta name="twitter:description" content="思路12345678910111213141516171819202122232425262728293031323334data = [3 2 6 1  2 7]middle = 3? 2 6 1 2 7//第一轮:// data[i] = 2// middle = 3if data[i] &amp;lt; middle &amp;#123;    //则与头指针进行交换    //然后 i++    //头指">
 <meta name="twitter:image" content="https://emacsist.github.io/img/qsort.png">
 
   
@@ -203,95 +203,9 @@
 
     <div class="article-content">
         
-                            <h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><pre><code class="bash">data = [3 2 6 1  2 7]
-
-middle = 3
-
-? 2 6 1 2 7
-
-//第一轮:
-// data[i] = 2
-// middle = 3
-if data[i] &lt; middle {
-    //则与头指针进行交换
-    //然后 i++
-    //头指针也 ++
-    //即头指针一直指向那个 ？的值.
-} 
-
-第二轮时
-data[i] = 6
-head = 1
-此时就会进入 else 那个分支了：
-
-将它从尾开始交换后变成：
-
-2 ? 7 1 2 6
-
-变化：
-head 不变：因为头是在?那里，位置 没有交换过，则不用改变
-i 不变： 因为它与尾的值交换了，但原来的那个尾的值还没有比较，所以，还是从 i 的位置开始比较
-tail -- ： 因为尾那里已经将元素交换过去了，那个元素就不用再进行比较了
-
-
-第一次完成后，进行递归，递归前，要将原来的 miidle 的值保存到 ? 的位置(data[head])
-
-然后开始递归
-</code></pre>
+                            <h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">data = [3 2 6 1  2 7]</div><div class="line"></div><div class="line">middle = 3</div><div class="line"></div><div class="line">? 2 6 1 2 7</div><div class="line"></div><div class="line">//第一轮:</div><div class="line">// data[i] = 2</div><div class="line">// middle = 3</div><div class="line"><span class="keyword">if</span> data[i] &lt; middle &#123;</div><div class="line">    //则与头指针进行交换</div><div class="line">    //然后 i++</div><div class="line">    //头指针也 ++</div><div class="line">    //即头指针一直指向那个 ？的值.</div><div class="line">&#125; </div><div class="line"></div><div class="line">第二轮时</div><div class="line">data[i] = 6</div><div class="line">head = 1</div><div class="line">此时就会进入 <span class="keyword">else</span> 那个分支了：</div><div class="line"></div><div class="line">将它从尾开始交换后变成：</div><div class="line"></div><div class="line">2 ? 7 1 2 6</div><div class="line"></div><div class="line">变化：</div><div class="line">head 不变：因为头是在?那里，位置 没有交换过，则不用改变</div><div class="line">i 不变： 因为它与尾的值交换了，但原来的那个尾的值还没有比较，所以，还是从 i 的位置开始比较</div><div class="line">tail -- ： 因为尾那里已经将元素交换过去了，那个元素就不用再进行比较了</div><div class="line"></div><div class="line"></div><div class="line">第一次完成后，进行递归，递归前，要将原来的 miidle 的值保存到 ? 的位置(data[head])</div><div class="line"></div><div class="line">然后开始递归</div></pre></td></tr></table></figure>
 <p><img src="/img/qsort.png" alt="img"></p>
-<h2 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h2><pre><code class="bash">package main
-
-import &quot;helper/number&quot;
-import &quot;helper/time&quot;
-import &quot;fmt&quot;
-
-func main() {
-    //待排序的数据
-    data := number.GenerateInt(29, 1000)
-    fmt.Printf(&quot;before %v\n&quot;, data)
-    start := time.CurrentMillis()
-    quitSort(data)
-    fmt.Printf(&quot;after %v\n&quot;, data)
-    fmt.Printf(&quot;quitSort %v ms&quot;, time.CurrentMillis()-start)
-}
-
-func quitSort(data []int) {
-    if len(data) &lt;= 1 {
-        return
-    }
-
-    //假设第一个元素为 0，并且假设为&quot;中值&quot;
-    middleValue := data[0]
-
-    //这个是索引值了，不是表示大小了, 头尾指针
-    head, tail := 0, len(data)-1
-
-    //
-    i := 1
-
-    for head &lt; tail {
-        //如果下一个元素，比中值小，那从头开始交换位置
-        if data[i] &lt; middleValue {
-            data[head], data[i] = data[i], data[head]
-
-            //因为已经交换了，头指针向前移动一个
-            head++
-            //则进行下一个元素比较
-            i++
-        } else {
-            //这个表示下一个元素比中值大，则从 尾开始交换
-            data[tail], data[i] = data[i], data[tail]
-            tail--
-        }
-    }
-
-    data[head] = middleValue
-    quitSort(data[:head])
-
-    quitSort(data[head+1:])
-
-}
-</code></pre>
+<h2 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line">package main</div><div class="line"></div><div class="line">import <span class="string">"helper/number"</span></div><div class="line">import <span class="string">"helper/time"</span></div><div class="line">import <span class="string">"fmt"</span></div><div class="line"></div><div class="line">func <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">	//待排序的数据</div><div class="line">	data := number.GenerateInt(29, 1000)</div><div class="line">	fmt.Printf(<span class="string">"before %v\n"</span>, data)</div><div class="line">	start := time.CurrentMillis()</div><div class="line">	quitSort(data)</div><div class="line">	fmt.Printf(<span class="string">"after %v\n"</span>, data)</div><div class="line">	fmt.Printf(<span class="string">"quitSort %v ms"</span>, time.CurrentMillis()-start)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func quitSort(data []int) &#123;</div><div class="line">	<span class="keyword">if</span> len(data) &lt;= 1 &#123;</div><div class="line">		<span class="built_in">return</span></div><div class="line">	&#125;</div><div class="line"></div><div class="line">	//假设第一个元素为 0，并且假设为<span class="string">"中值"</span></div><div class="line">	middleValue := data[0]</div><div class="line"></div><div class="line">	//这个是索引值了，不是表示大小了, 头尾指针</div><div class="line">	head, tail := 0, len(data)-1</div><div class="line"></div><div class="line">	//</div><div class="line">	i := 1</div><div class="line"></div><div class="line">	<span class="keyword">for</span> head &lt; tail &#123;</div><div class="line">		//如果下一个元素，比中值小，那从头开始交换位置</div><div class="line">		<span class="keyword">if</span> data[i] &lt; middleValue &#123;</div><div class="line">			data[head], data[i] = data[i], data[head]</div><div class="line"></div><div class="line">			//因为已经交换了，头指针向前移动一个</div><div class="line">			head++</div><div class="line">			//则进行下一个元素比较</div><div class="line">			i++</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			//这个表示下一个元素比中值大，则从 尾开始交换</div><div class="line">			data[tail], data[i] = data[i], data[tail]</div><div class="line">			tail--</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	data[head] = middleValue</div><div class="line">	quitSort(data[:head])</div><div class="line"></div><div class="line">	quitSort(data[head+1:])</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
                                 
     </div>

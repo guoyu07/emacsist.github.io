@@ -220,13 +220,7 @@
 <p>适合存储Java对象.Key就是对象有唯一标识, HashKey就是对象的属性标识, value就是属性的值.<br>Object -&gt; HashMap -&gt; Redis<br>Redis -&gt; HashMap -&gt; Object</p>
 </blockquote>
 <p>可以使用 <code>apache common</code> 包来进行 <code>HashMap和Object的相互转换</code></p>
-<pre><code class="bash">
-#HashMap to Object
-BeanUtils.populate(bean, properties)
-
-#Object to HashMap
-Map&lt;String, Object&gt; objectAsMap = BeanUtils.describe(bean);
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">#HashMap to Object</span></div><div class="line">BeanUtils.populate(bean, properties)</div><div class="line"></div><div class="line"><span class="comment">#Object to HashMap</span></div><div class="line">Map&lt;String, Object&gt; objectAsMap = BeanUtils.describe(bean);</div></pre></td></tr></table></figure>
 <p>为什么要这样子呢, 因为如果使用 <code>String</code> 数据类型, 只是修改一个字段的话, 每次都要加载所有Redis中的数据(如果对象比较大的话, 就更严重了).然后修改完, 最后再序列化到Redis.<br>但如果使用<code>Hash</code>就不会这样子了, 只是修改一个字段的话, 可以直接去修改该字段即可.</p>
 <h2 id="List-结构"><a href="#List-结构" class="headerlink" title="List 结构"></a>List 结构</h2><blockquote>
 <p>就是链表.</p>

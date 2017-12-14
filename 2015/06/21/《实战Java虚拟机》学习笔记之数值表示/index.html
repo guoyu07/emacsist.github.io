@@ -15,17 +15,17 @@
     <meta name="keywords" content="java,jvm," />
   
 
-  <meta name="description" content="原码 在数值前直接加一符号位的表示法。  [+7]原= 0 0000111 B  [-7]原= 1 0000111 B   -127～+127  反码 负数的反码，符号位为“1”，数值部分按位取反。  [+7]反= 0 0000111 B  [-7]反= 1 1111000 B   -127～+127  补码 正数的补码和原码相同 负数的补码则是符号位为“1”。并且，这个“1”既是符号位，也是数值">
+  <meta name="description" content="原码 在数值前直接加一符号位的表示法。  123[+7]原= 0 0000111 B[-7]原= 1 0000111 B  -127～+127  反码 负数的反码，符号位为“1”，数值部分按位取反。  123[+7]反= 0 0000111 B[-7]反= 1 1111000 B  -127～+127  补码 正数的补码和原码相同 负数的补码则是符号位为“1”。并且，这个“1”既是符号位，也是数值">
 <meta name="keywords" content="java,jvm">
 <meta property="og:type" content="article">
 <meta property="og:title" content="《实战Java虚拟机》学习笔记之数值表示">
 <meta property="og:url" content="https://emacsist.github.io/2015/06/21/《实战Java虚拟机》学习笔记之数值表示/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="原码 在数值前直接加一符号位的表示法。  [+7]原= 0 0000111 B  [-7]原= 1 0000111 B   -127～+127  反码 负数的反码，符号位为“1”，数值部分按位取反。  [+7]反= 0 0000111 B  [-7]反= 1 1111000 B   -127～+127  补码 正数的补码和原码相同 负数的补码则是符号位为“1”。并且，这个“1”既是符号位，也是数值">
+<meta property="og:description" content="原码 在数值前直接加一符号位的表示法。  123[+7]原= 0 0000111 B[-7]原= 1 0000111 B  -127～+127  反码 负数的反码，符号位为“1”，数值部分按位取反。  123[+7]反= 0 0000111 B[-7]反= 1 1111000 B  -127～+127  补码 正数的补码和原码相同 负数的补码则是符号位为“1”。并且，这个“1”既是符号位，也是数值">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《实战Java虚拟机》学习笔记之数值表示">
-<meta name="twitter:description" content="原码 在数值前直接加一符号位的表示法。  [+7]原= 0 0000111 B  [-7]原= 1 0000111 B   -127～+127  反码 负数的反码，符号位为“1”，数值部分按位取反。  [+7]反= 0 0000111 B  [-7]反= 1 1111000 B   -127～+127  补码 正数的补码和原码相同 负数的补码则是符号位为“1”。并且，这个“1”既是符号位，也是数值">
+<meta name="twitter:description" content="原码 在数值前直接加一符号位的表示法。  123[+7]原= 0 0000111 B[-7]原= 1 0000111 B  -127～+127  反码 负数的反码，符号位为“1”，数值部分按位取反。  123[+7]反= 0 0000111 B[-7]反= 1 1111000 B  -127～+127  补码 正数的补码和原码相同 负数的补码则是符号位为“1”。并且，这个“1”既是符号位，也是数值">
 
   
 
@@ -204,20 +204,14 @@
                             <h2 id="原码"><a href="#原码" class="headerlink" title="原码"></a>原码</h2><blockquote>
 <p>在数值前直接加一符号位的表示法。</p>
 </blockquote>
-<pre><code class="bash">[+7]原= 0 0000111 B
-
-[-7]原= 1 0000111 B
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[+7]原= 0 0000111 B</div><div class="line"></div><div class="line">[-7]原= 1 0000111 B</div></pre></td></tr></table></figure>
 <blockquote>
 <p>-127～+127</p>
 </blockquote>
 <h2 id="反码"><a href="#反码" class="headerlink" title="反码"></a>反码</h2><blockquote>
 <p>负数的反码，符号位为“1”，数值部分按位取反。</p>
 </blockquote>
-<pre><code class="bash">[+7]反= 0 0000111 B
-
-[-7]反= 1 1111000 B
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[+7]反= 0 0000111 B</div><div class="line"></div><div class="line">[-7]反= 1 1111000 B</div></pre></td></tr></table></figure>
 <blockquote>
 <p>-127～+127</p>
 </blockquote>
@@ -225,10 +219,7 @@
 <p>正数的补码和原码相同</p>
 <p>负数的补码则是符号位为“1”。并且，这个“1”既是符号位，也是数值位。<br>数值部分按位取反后再在末位（最低位）加1。也就是“反码+1”</p>
 </blockquote>
-<pre><code class="bash">[+7]补= 0 0000111 B
-
-[-7]补= 1 1111001 B
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[+7]补= 0 0000111 B</div><div class="line"></div><div class="line">[-7]补= 1 1111001 B</div></pre></td></tr></table></figure>
 <blockquote>
 <p>-128～+127</p>
 </blockquote>

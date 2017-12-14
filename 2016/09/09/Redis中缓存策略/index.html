@@ -215,48 +215,14 @@
 <li>no-enviction：禁用淘汰策略</li>
 </ul>
 <p>默认的缓存策略为:</p>
-<pre><code class="bash"># The default is:
-#
-# maxmemory-policy noeviction
-</code></pre>
-<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><pre><code class="bash">127.0.0.1:6379&gt; keys *
- 1) &quot;heloo719999sfsadf&quot;
- 2) &quot;heloo71&quot;
- 3) &quot;heloo712&quot;
- 4) &quot;heloo89&quot;
- 5) &quot;heloo713&quot;
- 6) &quot;heloo717&quot;
- 7) &quot;heloo732&quot;
- 8) &quot;heloo731&quot;
- 9) &quot;heloo715&quot;
-10) &quot;heloo719999&quot;
-127.0.0.1:6379&gt; CONFIG SET maxmemory-policy noeviction
-OK
-</code></pre>
-<h3 id="noeviction"><a href="#noeviction" class="headerlink" title="noeviction"></a>noeviction</h3><pre><code class="bash">127.0.0.1:6379&gt; set he wolsdkfasldkf
-(error) OOM command not allowed when used memory &gt; &#39;maxmemory&#39;.
-</code></pre>
-<h3 id="allkeys-random"><a href="#allkeys-random" class="headerlink" title="allkeys-random"></a>allkeys-random</h3><pre><code class="bash">127.0.0.1:6379&gt; CONFIG SET maxmemory-policy allkeys-random
-OK
-127.0.0.1:6379&gt; set he123123 wolsdkfasldksdf21342134
-OK
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># The default is:</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment"># maxmemory-policy noeviction</span></div></pre></td></tr></table></figure>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">127.0.0.1:6379&gt; keys *</div><div class="line"> 1) <span class="string">"heloo719999sfsadf"</span></div><div class="line"> 2) <span class="string">"heloo71"</span></div><div class="line"> 3) <span class="string">"heloo712"</span></div><div class="line"> 4) <span class="string">"heloo89"</span></div><div class="line"> 5) <span class="string">"heloo713"</span></div><div class="line"> 6) <span class="string">"heloo717"</span></div><div class="line"> 7) <span class="string">"heloo732"</span></div><div class="line"> 8) <span class="string">"heloo731"</span></div><div class="line"> 9) <span class="string">"heloo715"</span></div><div class="line">10) <span class="string">"heloo719999"</span></div><div class="line">127.0.0.1:6379&gt; CONFIG SET maxmemory-policy noeviction</div><div class="line">OK</div></pre></td></tr></table></figure>
+<h3 id="noeviction"><a href="#noeviction" class="headerlink" title="noeviction"></a>noeviction</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">127.0.0.1:6379&gt; <span class="built_in">set</span> he wolsdkfasldkf</div><div class="line">(error) OOM <span class="built_in">command</span> not allowed when used memory &gt; <span class="string">'maxmemory'</span>.</div></pre></td></tr></table></figure>
+<h3 id="allkeys-random"><a href="#allkeys-random" class="headerlink" title="allkeys-random"></a>allkeys-random</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">127.0.0.1:6379&gt; CONFIG SET maxmemory-policy allkeys-random</div><div class="line">OK</div><div class="line">127.0.0.1:6379&gt; <span class="built_in">set</span> he123123 wolsdkfasldksdf21342134</div><div class="line">OK</div></pre></td></tr></table></figure>
 <p>可以看到，这种策略，一般是不会出现OOM的。因为它会不断的淘汰原有的key，释放内存给新的key.</p>
-<h3 id="allkeys-lru"><a href="#allkeys-lru" class="headerlink" title="allkeys-lru"></a>allkeys-lru</h3><pre><code class="bah">127.0.0.1:6379&gt; CONFIG SET maxmemory-policy allkeys-lru
-OK
-127.0.0.1:6379&gt; set he123123123 wolsdkfasldksdf21342134123
-OK
-</code></pre>
+<h3 id="allkeys-lru"><a href="#allkeys-lru" class="headerlink" title="allkeys-lru"></a>allkeys-lru</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">127.0.0.1:6379&gt; CONFIG SET maxmemory-policy allkeys-lru</div><div class="line">OK</div><div class="line">127.0.0.1:6379&gt; set he123123123 wolsdkfasldksdf21342134123</div><div class="line">OK</div></pre></td></tr></table></figure>
 <p>可以看到，这种策略，一般是不会出现OOM的。因为它会不断的淘汰原有的key，释放内存给新的key.只是这个是以最近最少使用为原则.</p>
-<h3 id="volatile-random"><a href="#volatile-random" class="headerlink" title="volatile-random"></a>volatile-random</h3><pre><code class="bash">127.0.0.1:6379&gt; CONFIG SET maxmemory-policy volatile-random
-OK
-127.0.0.1:6379&gt; set sdfhe123123123123 wolsdkfasldksdf21342134sdfasdfasdfsafasfasfsadfsdfsdfsdasdfsdfsdfsafsdf
-(error) OOM command not allowed when used memory &gt; &#39;maxmemory&#39;.
-127.0.0.1:6379&gt; EXPIRE sdfhe123123123123 360
-(integer) 1
-127.0.0.1:6379&gt; set h1 wl2
-OK
-</code></pre>
+<h3 id="volatile-random"><a href="#volatile-random" class="headerlink" title="volatile-random"></a>volatile-random</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">127.0.0.1:6379&gt; CONFIG SET maxmemory-policy volatile-random</div><div class="line">OK</div><div class="line">127.0.0.1:6379&gt; <span class="built_in">set</span> sdfhe123123123123 wolsdkfasldksdf21342134sdfasdfasdfsafasfasfsadfsdfsdfsdasdfsdfsdfsafsdf</div><div class="line">(error) OOM <span class="built_in">command</span> not allowed when used memory &gt; <span class="string">'maxmemory'</span>.</div><div class="line">127.0.0.1:6379&gt; EXPIRE sdfhe123123123123 360</div><div class="line">(<span class="built_in">integer</span>) 1</div><div class="line">127.0.0.1:6379&gt; <span class="built_in">set</span> h1 wl2</div><div class="line">OK</div></pre></td></tr></table></figure>
 <p>其他的两个<code>volatile-xxx</code>的，也同理，只是一个是最近最少使用，一个是按<code>ttl</code>最短来淘汰.</p>
 
                                 

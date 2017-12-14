@@ -15,17 +15,17 @@
     <meta name="keywords" content="java,tomcat," />
   
 
-  <meta name="description" content="框架图纯手工打造…              |----service1(最少要有一个service)            |----service2         |------connector1(http)                                                     |---host1            |----service3">
+  <meta name="description" content="框架图纯手工打造… 123456789           |----service1(最少要有一个service)           |----service2         |------connector1(http)                                                     |---host1           |----service3">
 <meta name="keywords" content="java,tomcat">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Tomcat 基本概念">
 <meta property="og:url" content="https://emacsist.github.io/2015/12/28/Tomcat-基本概念/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="框架图纯手工打造…              |----service1(最少要有一个service)            |----service2         |------connector1(http)                                                     |---host1            |----service3">
+<meta property="og:description" content="框架图纯手工打造… 123456789           |----service1(最少要有一个service)           |----service2         |------connector1(http)                                                     |---host1           |----service3">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tomcat 基本概念">
-<meta name="twitter:description" content="框架图纯手工打造…              |----service1(最少要有一个service)            |----service2         |------connector1(http)                                                     |---host1            |----service3">
+<meta name="twitter:description" content="框架图纯手工打造… 123456789           |----service1(最少要有一个service)           |----service2         |------connector1(http)                                                     |---host1           |----service3">
 
   
 
@@ -202,16 +202,7 @@
     <div class="article-content">
         
                             <h2 id="框架图"><a href="#框架图" class="headerlink" title="框架图"></a>框架图</h2><p>纯手工打造…</p>
-<pre><code class="bash">
-
-           |----service1(最少要有一个service)
-           |----service2         |------connector1(http)                                                     |---host1
-           |----service3         |------connector2(https)                                                    |---host2
-Server ----|----service4---------|------connector3（可以有多个connector，创建request,response)                |---host3           |--context1   |--wrapper1
-           |----service5         |------container(只有一个container，负责处理servlet) ---------------Engine---|---host4-----------|--context2---|--wrapper2(即一个servlet)
-           |----service6         |------connector4                                                           |---host5           |--context3   |--wrapper3
-           |----service7         |------connector5                                                           |---host6
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">           |----service1(最少要有一个service)</div><div class="line">           |----service2         |------connector1(http)                                                     |---host1</div><div class="line">           |----service3         |------connector2(https)                                                    |---host2</div><div class="line">Server ----|----service4---------|------connector3（可以有多个connector，创建request,response)                |---host3           |--context1   |--wrapper1</div><div class="line">           |----service5         |------container(只有一个container，负责处理servlet) ---------------Engine---|---host4-----------|--context2---|--wrapper2(即一个servlet)</div><div class="line">           |----service6         |------connector4                                                           |---host5           |--context3   |--wrapper3</div><div class="line">           |----service7         |------connector5                                                           |---host6</div></pre></td></tr></table></figure>
 <p>后一部分，共享前一部分.</p>
 <h3 id="Server"><a href="#Server" class="headerlink" title="Server"></a>Server</h3><p>即对应一个Tomcat实例.</p>
 <h3 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h3><p>即Tomcat中提供的服务.它是由一个或多个connector共享一个<code>container</code>组成的.</p>

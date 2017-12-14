@@ -218,16 +218,9 @@
 <li><code>jstack -l pid &gt; /tmp/thread.txt</code>: 导出指定Java应用的所有线程.</li>
 </ul>
 <p>然后查看 <code>nid=xxx</code>(即第二步里线程号的线程),即可定位到某段代码.</p>
-<h2 id="进制转换"><a href="#进制转换" class="headerlink" title="进制转换"></a>进制转换</h2><h3 id="十进制转换十六进制"><a href="#十进制转换十六进制" class="headerlink" title="十进制转换十六进制"></a>十进制转换十六进制</h3><pre><code class="bash">printf &quot;%x\n&quot; 十进制数字
-</code></pre>
-<h3 id="十六进制转换十进制"><a href="#十六进制转换十进制" class="headerlink" title="十六进制转换十进制"></a>十六进制转换十进制</h3><pre><code class="bash">echo $((0x十六进制数字))
-</code></pre>
-<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><pre><code class="bash">➜  ~  printf &quot;%x\n&quot; 20202
-4eea
-➜  ~  echo $((0x4eea))
-20202
-➜  ~
-</code></pre>
+<h2 id="进制转换"><a href="#进制转换" class="headerlink" title="进制转换"></a>进制转换</h2><h3 id="十进制转换十六进制"><a href="#十进制转换十六进制" class="headerlink" title="十进制转换十六进制"></a>十进制转换十六进制</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">printf</span> <span class="string">"%x\n"</span> 十进制数字</div></pre></td></tr></table></figure>
+<h3 id="十六进制转换十进制"><a href="#十六进制转换十进制" class="headerlink" title="十六进制转换十进制"></a>十六进制转换十进制</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">echo</span> $((0x十六进制数字))</div></pre></td></tr></table></figure>
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">➜  ~  <span class="built_in">printf</span> <span class="string">"%x\n"</span> 20202</div><div class="line">4eea</div><div class="line">➜  ~  <span class="built_in">echo</span> $((0x4eea))</div><div class="line">20202</div><div class="line">➜  ~</div></pre></td></tr></table></figure>
 
                                 
     </div>

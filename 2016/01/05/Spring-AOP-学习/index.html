@@ -209,197 +209,23 @@
                             <h2 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h2><blockquote>
 <p>面向切面编程.百度百科里的定义是：在软件业，AOP为Aspect Oriented Programming的缩写，意为：面向切面编程，通过预编译方式和运行期动态代理实现程序功能的统一维护的一种技术。AOP是OOP的延续，是软件开发中的一个热点，也是Spring框架中的一个重要内容，是函数式编程的一种衍生范型。利用AOP可以对业务逻辑的各个部分进行隔离，从而使得业务逻辑各部分之间的耦合度降低，提高程序的可重用性，同时提高了开发的效率。</p>
 </blockquote>
-<h2 id="在Spring中使用AOP"><a href="#在Spring中使用AOP" class="headerlink" title="在Spring中使用AOP"></a>在Spring中使用AOP</h2><h3 id="定义一个组件"><a href="#定义一个组件" class="headerlink" title="定义一个组件"></a>定义一个组件</h3><pre><code class="bash">package com.spring.service.aop;
-
-import org.springframework.stereotype.Component;
-
-/**
- * Created by sky on 16-1-5.
- */
-@Component
-public class Hello {
-
-    public String sayHello(){
-        return &quot;hello world from hello&quot;;
-    }
-}
-</code></pre>
-<h3 id="组件的使用"><a href="#组件的使用" class="headerlink" title="组件的使用"></a>组件的使用</h3><pre><code class="bash">    @Autowired
-    private Hello hello;
-
-    public String index() {
-        return hello.sayHello();
-    }
-</code></pre>
+<h2 id="在Spring中使用AOP"><a href="#在Spring中使用AOP" class="headerlink" title="在Spring中使用AOP"></a>在Spring中使用AOP</h2><h3 id="定义一个组件"><a href="#定义一个组件" class="headerlink" title="定义一个组件"></a>定义一个组件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">package com.spring.service.aop;</div><div class="line"></div><div class="line">import org.springframework.stereotype.Component;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by sky on 16-1-5.</div><div class="line"> */</div><div class="line">@Component</div><div class="line">public class Hello &#123;</div><div class="line"></div><div class="line">    public String <span class="function"><span class="title">sayHello</span></span>()&#123;</div><div class="line">        <span class="built_in">return</span> <span class="string">"hello world from hello"</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="组件的使用"><a href="#组件的使用" class="headerlink" title="组件的使用"></a>组件的使用</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@Autowired</div><div class="line">private Hello hello;</div><div class="line"></div><div class="line">public String <span class="function"><span class="title">index</span></span>() &#123;</div><div class="line">    <span class="built_in">return</span> hello.sayHello();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>在其他组件中，调用Hello组件.</p>
-<h3 id="使用AOP进行无侵入记录调用Hello-sayHello的日志"><a href="#使用AOP进行无侵入记录调用Hello-sayHello的日志" class="headerlink" title="使用AOP进行无侵入记录调用Hello.sayHello的日志"></a>使用AOP进行无侵入记录调用Hello.sayHello的日志</h3><pre><code class="bash">package com.spring.service.aop;
-
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.Aspect;
-import org.springframework.stereotype.Component;
-
-/**
- * Created by sky on 16-1-5.
- */
-@Aspect
-@Component
-public class HelloAop {
-
-    @After(&quot;execution(* com.spring.service.aop.Hello.sayHello() )&quot;)
-    public void sayAfter(){
-        System.out.println(&quot;aop after sayHello&quot;);
-    }
-
-}
-</code></pre>
-<h3 id="Spring配置"><a href="#Spring配置" class="headerlink" title="Spring配置"></a>Spring配置</h3><pre><code class="bash">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
-    xmlns:task=&quot;http://www.springframework.org/schema/task&quot; xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot;
-    xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot; xmlns:p=&quot;http://www.springframework.org/schema/p&quot;
-    xmlns:mvc=&quot;http://www.springframework.org/schema/mvc&quot;
-    xsi:schemaLocation=&quot;
-            http://www.springframework.org/schema/beans
-            http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
-            http://www.springframework.org/schema/context
-            http://www.springframework.org/schema/context/spring-context-3.2.xsd
-            http://www.springframework.org/schema/task
-            http://www.springframework.org/schema/task/spring-task-3.2.xsd
-            http://www.springframework.org/schema/aop
-            http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
-            http://www.springframework.org/schema/tx
-            http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
-            http://www.springframework.org/schema/mvc
-            http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd&quot;&gt;
-
-    &lt;context:annotation-config /&gt;
-    &lt;context:component-scan base-package=&quot;com.spring&quot; /&gt;
-
-    &lt;!-- 使用CGLIB 方式进行代理，这样子可以在普通类上，也可以进行切入，而不需要接口--&gt;
-    &lt;aop:aspectj-autoproxy proxy-target-class=&quot;true&quot; /&gt;
-
-&lt;/beans&gt;
-</code></pre>
+<h3 id="使用AOP进行无侵入记录调用Hello-sayHello的日志"><a href="#使用AOP进行无侵入记录调用Hello-sayHello的日志" class="headerlink" title="使用AOP进行无侵入记录调用Hello.sayHello的日志"></a>使用AOP进行无侵入记录调用Hello.sayHello的日志</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">package com.spring.service.aop;</div><div class="line"></div><div class="line">import org.aspectj.lang.annotation.After;</div><div class="line">import org.aspectj.lang.annotation.Aspect;</div><div class="line">import org.springframework.stereotype.Component;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by sky on 16-1-5.</div><div class="line"> */</div><div class="line">@Aspect</div><div class="line">@Component</div><div class="line">public class HelloAop &#123;</div><div class="line"></div><div class="line">    @After(<span class="string">"execution(* com.spring.service.aop.Hello.sayHello() )"</span>)</div><div class="line">    public void <span class="function"><span class="title">sayAfter</span></span>()&#123;</div><div class="line">        System.out.println(<span class="string">"aop after sayHello"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Spring配置"><a href="#Spring配置" class="headerlink" title="Spring配置"></a>Spring配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</div><div class="line">&lt;beans xmlns=<span class="string">"http://www.springframework.org/schema/beans"</span></div><div class="line">	xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span> xmlns:context=<span class="string">"http://www.springframework.org/schema/context"</span></div><div class="line">	xmlns:task=<span class="string">"http://www.springframework.org/schema/task"</span> xmlns:aop=<span class="string">"http://www.springframework.org/schema/aop"</span></div><div class="line">	xmlns:tx=<span class="string">"http://www.springframework.org/schema/tx"</span> xmlns:p=<span class="string">"http://www.springframework.org/schema/p"</span></div><div class="line">	xmlns:mvc=<span class="string">"http://www.springframework.org/schema/mvc"</span></div><div class="line">	xsi:schemaLocation=<span class="string">"</span></div><div class="line">			http://www.springframework.org/schema/beans</div><div class="line">			http://www.springframework.org/schema/beans/spring-beans-3.2.xsd</div><div class="line">			http://www.springframework.org/schema/context</div><div class="line">			http://www.springframework.org/schema/context/spring-context-3.2.xsd</div><div class="line">			http://www.springframework.org/schema/task</div><div class="line">			http://www.springframework.org/schema/task/spring-task-3.2.xsd</div><div class="line">			http://www.springframework.org/schema/aop</div><div class="line">			http://www.springframework.org/schema/aop/spring-aop-3.2.xsd</div><div class="line">			http://www.springframework.org/schema/tx</div><div class="line">			http://www.springframework.org/schema/tx/spring-tx-3.2.xsd</div><div class="line">			http://www.springframework.org/schema/mvc</div><div class="line">			http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd"&gt;</div><div class="line"></div><div class="line">	&lt;context:annotation-config /&gt;</div><div class="line">    &lt;context:component-scan base-package=<span class="string">"com.spring"</span> /&gt;</div><div class="line"></div><div class="line">	&lt;!-- 使用CGLIB 方式进行代理，这样子可以在普通类上，也可以进行切入，而不需要接口--&gt;</div><div class="line">	&lt;aop:aspectj-autoproxy proxy-target-class=<span class="string">"true"</span> /&gt;</div><div class="line"></div><div class="line">&lt;/beans&gt;</div></pre></td></tr></table></figure>
 <p>当其他组件调用Hello.sayHello时，就会打印出如下文本:</p>
-<pre><code class="bash">aop after sayHello
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">aop after sayHello</div></pre></td></tr></table></figure>
 <h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><blockquote>
 <p>要切入的组件（Hello.sayHello()) 必须是Spring接管的（这里使用了<code>@Component</code>，让Spring扫描到，然后放到BeanFactory里）</p>
 </blockquote>
 <h2 id="AOP的用途"><a href="#AOP的用途" class="headerlink" title="AOP的用途"></a>AOP的用途</h2><p>上面的例子，只是简单的记录下日志，那AOP最常见的用途是什么呢？在Spring里，最常用的，可能是声明式事务了，即(<code>@Transactional</code>)这个注解。</p>
-<h3 id="实现声明式事务"><a href="#实现声明式事务" class="headerlink" title="实现声明式事务"></a>实现声明式事务</h3><h4 id="定义一个事务注解"><a href="#定义一个事务注解" class="headerlink" title="定义一个事务注解"></a>定义一个事务注解</h4><pre><code class="bash">package com.spring.aop;
-
-import java.lang.annotation.*;
-
-/**
- * Created by sky on 16-1-5.
- */
-
-@Target({ElementType.METHOD})
-@Retention(RetentionPolicy.RUNTIME)
-@Inherited
-@Documented
-public @interface MyTransactional {
-}
-</code></pre>
-<h4 id="定义一个DB-Service"><a href="#定义一个DB-Service" class="headerlink" title="定义一个DB Service"></a>定义一个DB Service</h4><pre><code class="bash">package com.spring.aop;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
-
-/**
- * Created by sky on 16-1-5.
- */
-@Component
-public class MyService {
-
-    @Autowired
-    private DataSource dataSource;
-
-    @MyTransactional
-    public void doDB(String hello) throws SQLException {
-        Connection connection = TransactionAOP.connectionThreadLocal.get();
-        if(connection==null){
-            connection = dataSource.getConnection();
-            TransactionAOP.connectionThreadLocal.set(connection);
-        }
-        // do with connection.
-        System.out.println(&quot;update db for table &quot; + hello);
-    }
-}
-</code></pre>
-<h4 id="定义一个事务的AOP"><a href="#定义一个事务的AOP" class="headerlink" title="定义一个事务的AOP"></a>定义一个事务的AOP</h4><pre><code class="bash">package com.spring.aop;
-
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLDataException;
-import java.sql.SQLException;
-
-/**
- * Created by sky on 16-1-5.
- */
-@Aspect
-@Component
-public class TransactionAOP {
-
-    @Pointcut(&quot;@annotation(com.uniweibov2.aop.MyTransactional)&quot;)
-    public void transactionPointCut() {
-
-    }
-
-    @Autowired
-    private DataSource dataSource;
-
-    private static final ThreadLocal&lt;Connection&gt; connectionThreadLocal = new ThreadLocal&lt;&gt;();
-
-    @Before(&quot;transactionPointCut()&quot;)
-    public void doTransaction() throws SQLException {
-        Connection connection = connectionThreadLocal.get();
-        if (connection == null) {
-            connection = dataSource.getConnection();
-            connectionThreadLocal.set(connection);
-        }
-        connection.setAutoCommit(false);
-        System.out.println(&quot;开启事务&quot;);
-    }
-
-    @After(&quot;transactionPointCut()&quot;)
-    public void commit() throws SQLException {
-        Connection connection = connectionThreadLocal.get();
-        if (connection != null) {
-            connection.commit();
-            connection.close();
-            System.out.println(&quot;提交事务，并关闭连接&quot;);
-        } else {
-            throw new SQLDataException(&quot;connection is closed ...&quot;);
-        }
-
-    }
-}
-</code></pre>
-<h4 id="Controller-层使用Db-service"><a href="#Controller-层使用Db-service" class="headerlink" title="Controller 层使用Db service"></a>Controller 层使用Db service</h4><pre><code class="bash">
-    @RequestMapping(&quot;/index&quot;)
-    public String index() throws SQLException {
-        myService.doDB(&quot;[hello world]&quot;);
-        return &quot;hello&quot;;
-    }
-</code></pre>
+<h3 id="实现声明式事务"><a href="#实现声明式事务" class="headerlink" title="实现声明式事务"></a>实现声明式事务</h3><h4 id="定义一个事务注解"><a href="#定义一个事务注解" class="headerlink" title="定义一个事务注解"></a>定义一个事务注解</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">package com.spring.aop;</div><div class="line"></div><div class="line">import java.lang.annotation.*;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by sky on 16-1-5.</div><div class="line"> */</div><div class="line"></div><div class="line">@Target(&#123;ElementType.METHOD&#125;)</div><div class="line">@Retention(RetentionPolicy.RUNTIME)</div><div class="line">@Inherited</div><div class="line">@Documented</div><div class="line">public @interface MyTransactional &#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="定义一个DB-Service"><a href="#定义一个DB-Service" class="headerlink" title="定义一个DB Service"></a>定义一个DB Service</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">package com.spring.aop;</div><div class="line"></div><div class="line">import org.springframework.beans.factory.annotation.Autowired;</div><div class="line">import org.springframework.stereotype.Component;</div><div class="line"></div><div class="line">import javax.sql.DataSource;</div><div class="line">import java.sql.Connection;</div><div class="line">import java.sql.SQLException;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by sky on 16-1-5.</div><div class="line"> */</div><div class="line">@Component</div><div class="line">public class MyService &#123;</div><div class="line"></div><div class="line">    @Autowired</div><div class="line">    private DataSource dataSource;</div><div class="line"></div><div class="line">    @MyTransactional</div><div class="line">    public void doDB(String hello) throws SQLException &#123;</div><div class="line">        Connection connection = TransactionAOP.connectionThreadLocal.get();</div><div class="line">        <span class="keyword">if</span>(connection==null)&#123;</div><div class="line">            connection = dataSource.getConnection();</div><div class="line">            TransactionAOP.connectionThreadLocal.set(connection);</div><div class="line">        &#125;</div><div class="line">        // <span class="keyword">do</span> with connection.</div><div class="line">        System.out.println(<span class="string">"update db for table "</span> + hello);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="定义一个事务的AOP"><a href="#定义一个事务的AOP" class="headerlink" title="定义一个事务的AOP"></a>定义一个事务的AOP</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line">package com.spring.aop;</div><div class="line"></div><div class="line">import org.aspectj.lang.annotation.After;</div><div class="line">import org.aspectj.lang.annotation.Aspect;</div><div class="line">import org.aspectj.lang.annotation.Before;</div><div class="line">import org.aspectj.lang.annotation.Pointcut;</div><div class="line">import org.springframework.beans.factory.annotation.Autowired;</div><div class="line">import org.springframework.stereotype.Component;</div><div class="line"></div><div class="line">import javax.sql.DataSource;</div><div class="line">import java.sql.Connection;</div><div class="line">import java.sql.SQLDataException;</div><div class="line">import java.sql.SQLException;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by sky on 16-1-5.</div><div class="line"> */</div><div class="line">@Aspect</div><div class="line">@Component</div><div class="line">public class TransactionAOP &#123;</div><div class="line"></div><div class="line">    @Pointcut(<span class="string">"@annotation(com.uniweibov2.aop.MyTransactional)"</span>)</div><div class="line">    public void <span class="function"><span class="title">transactionPointCut</span></span>() &#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Autowired</div><div class="line">    private DataSource dataSource;</div><div class="line"></div><div class="line">    private static final ThreadLocal&lt;Connection&gt; connectionThreadLocal = new ThreadLocal&lt;&gt;();</div><div class="line"></div><div class="line">    @Before(<span class="string">"transactionPointCut()"</span>)</div><div class="line">    public void doTransaction() throws SQLException &#123;</div><div class="line">        Connection connection = connectionThreadLocal.get();</div><div class="line">        <span class="keyword">if</span> (connection == null) &#123;</div><div class="line">            connection = dataSource.getConnection();</div><div class="line">            connectionThreadLocal.set(connection);</div><div class="line">        &#125;</div><div class="line">        connection.setAutoCommit(<span class="literal">false</span>);</div><div class="line">        System.out.println(<span class="string">"开启事务"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @After(<span class="string">"transactionPointCut()"</span>)</div><div class="line">    public void commit() throws SQLException &#123;</div><div class="line">        Connection connection = connectionThreadLocal.get();</div><div class="line">        <span class="keyword">if</span> (connection != null) &#123;</div><div class="line">            connection.commit();</div><div class="line">            connection.close();</div><div class="line">            System.out.println(<span class="string">"提交事务，并关闭连接"</span>);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            throw new SQLDataException(<span class="string">"connection is closed ..."</span>);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="Controller-层使用Db-service"><a href="#Controller-层使用Db-service" class="headerlink" title="Controller 层使用Db service"></a>Controller 层使用Db service</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@RequestMapping(<span class="string">"/index"</span>)</div><div class="line">public String index() throws SQLException &#123;</div><div class="line">    myService.doDB(<span class="string">"[hello world]"</span>);</div><div class="line">    <span class="built_in">return</span> <span class="string">"hello"</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>执行结果如下:</p>
-<pre><code class="bash">开启事务
-update db for table [hello world]
-提交事务，并关闭连接
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">开启事务</div><div class="line">update db <span class="keyword">for</span> table [hello world]</div><div class="line">提交事务，并关闭连接</div></pre></td></tr></table></figure>
 <p>这样子，我们就完成了一个简单的声明式事务管理啦.当然，还有很多要完善的地方，这里只是演示下，如何实现.</p>
 
                                 

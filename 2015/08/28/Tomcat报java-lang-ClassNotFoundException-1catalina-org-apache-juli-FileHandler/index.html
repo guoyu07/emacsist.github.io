@@ -205,10 +205,7 @@
 <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>这个极有可能是因为你修改了<code>catalina.sh</code>文件（比如，你想修改下JVM的参数等）。</p>
 <p>这个错误，会导致在Tomcat的<code>logs</code>目录下的<code>localhost.yyyy-MM-dd</code>这类的日志文件不会进行记录的了。</p>
 <h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h2><p>正确的处理方式为： 在Tomcat的安装目录下的<code>bin</code>目录下，创建一个 <code>setenv.sh</code>的文件，然后写入你想要修改的参数，比如我的如下：</p>
-<pre><code class="bash">#!/bin/sh
-
-CATALINA_OPTS=&quot;-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n&quot;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line"></div><div class="line">CATALINA_OPTS=<span class="string">"-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n"</span></div></pre></td></tr></table></figure>
 <p>说明：</p>
 <p><code>-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager</code>:这个参数就是解决上面报的问题的<br><code>-Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n</code>: 这个参数是使用远程调试的</p>
 <p>还有一点要特别注意的是：它是使用<code>CATALINA_OPTS</code>参数，而不是<code>JAVA_OPTS</code>。不知道为什么，我在<code>JAVA_OPTS</code>里修改，一直没有生效。<code>*_*</code></p>

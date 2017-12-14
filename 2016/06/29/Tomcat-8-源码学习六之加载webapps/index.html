@@ -15,17 +15,17 @@
     <meta name="keywords" content="java,tomcat,Tomcat源码," />
   
 
-  <meta name="description" content="Tomcat中的层次 Catalina -&amp;gt; Server ---                        |---globalNamingResources                       |---namingContextListener                       |---多个Service --------------------|">
+  <meta name="description" content="Tomcat中的层次 123456Catalina -&amp;gt; Server ---                       |---globalNamingResources                      |---namingContextListener                      |---多个Service --------------------|">
 <meta name="keywords" content="java,tomcat,Tomcat源码">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Tomcat 8 源码学习六之加载webapps">
 <meta property="og:url" content="https://emacsist.github.io/2016/06/29/Tomcat-8-源码学习六之加载webapps/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="Tomcat中的层次 Catalina -&amp;gt; Server ---                        |---globalNamingResources                       |---namingContextListener                       |---多个Service --------------------|">
+<meta property="og:description" content="Tomcat中的层次 123456Catalina -&amp;gt; Server ---                       |---globalNamingResources                      |---namingContextListener                      |---多个Service --------------------|">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tomcat 8 源码学习六之加载webapps">
-<meta name="twitter:description" content="Tomcat中的层次 Catalina -&amp;gt; Server ---                        |---globalNamingResources                       |---namingContextListener                       |---多个Service --------------------|">
+<meta name="twitter:description" content="Tomcat中的层次 123456Catalina -&amp;gt; Server ---                       |---globalNamingResources                      |---namingContextListener                      |---多个Service --------------------|">
 
   
 
@@ -207,110 +207,29 @@
     <div class="article-content">
         
                             <p>Tomcat中的层次</p>
-<pre><code class="bash">Catalina -&gt; Server --- 
-                      |---globalNamingResources
-                      |---namingContextListener
-                      |---多个Service --------------------|
-                      |---catalina.home                  |---Engine(每个Service最多一个) ---多个Container(比如host)
-                      |---catalina.base
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Catalina -&gt; Server --- </div><div class="line">                      |---globalNamingResources</div><div class="line">                      |---namingContextListener</div><div class="line">                      |---多个Service --------------------|</div><div class="line">                      |---catalina.home                  |---Engine(每个Service最多一个) ---多个Container(比如host)</div><div class="line">                      |---catalina.base</div></pre></td></tr></table></figure>
 <p>Tomcat有明显的层次关系上层只会对自己直接下一层的组件负责初始化,然后下一组件再对自己的子组件进行初始化.</p>
 <p>可以看到,Tomcat中如果部署多个应用时,每一个Host,就代表了一主机.可以这样了比作:</p>
-<pre><code class="bash">Catalina或Server就是一个服务器.
-
-Host就是该服务器上的一个虚拟主机.
-
-Application就是虚拟主机上的一个应用.(webapss目录下的每一个目录就对应一个application,在Tomcat里,用 org.apache.catalina.startup.HostConfig 类的内部类 DeployedApplication 来表示.)
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Catalina或Server就是一个服务器.</div><div class="line"></div><div class="line">Host就是该服务器上的一个虚拟主机.</div><div class="line"></div><div class="line">Application就是虚拟主机上的一个应用.(webapss目录下的每一个目录就对应一个application,在Tomcat里,用 org.apache.catalina.startup.HostConfig 类的内部类 DeployedApplication 来表示.)</div></pre></td></tr></table></figure>
 <h2 id="初始化一个-Host"><a href="#初始化一个-Host" class="headerlink" title="初始化一个 Host"></a>初始化一个 Host</h2><p>每一个Host,都有一个<code>org.apache.catalina.startup.HostConfig</code>对象代表.它会根据配置文件<code>conf/server.xml</code>中的<code>&lt;host&gt;</code>节点相匹配.</p>
 <p>部署的代码为:</p>
-<pre><code class="bash">    protected void deployApps() {
-
-        File appBase = host.getAppBaseFile();
-        File configBase = host.getConfigBaseFile();
-        String[] filteredAppPaths = filterAppPaths(appBase.list());
-        // Deploy XML descriptors from configBase
-        deployDescriptors(configBase, configBase.list());
-        // Deploy WARs
-        deployWARs(appBase, filteredAppPaths);
-        // Deploy expanded folders
-        deployDirectories(appBase, filteredAppPaths);
-
-    }
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">protected void <span class="function"><span class="title">deployApps</span></span>() &#123;</div><div class="line"></div><div class="line">    File appBase = host.getAppBaseFile();</div><div class="line">    File configBase = host.getConfigBaseFile();</div><div class="line">    String[] filteredAppPaths = filterAppPaths(appBase.list());</div><div class="line">    // Deploy XML descriptors from configBase</div><div class="line">    deployDescriptors(configBase, configBase.list());</div><div class="line">    // Deploy WARs</div><div class="line">    deployWARs(appBase, filteredAppPaths);</div><div class="line">    // Deploy expanded folders</div><div class="line">    deployDirectories(appBase, filteredAppPaths);</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h3 id="部署-deployDescriptors"><a href="#部署-deployDescriptors" class="headerlink" title="部署 deployDescriptors"></a>部署 deployDescriptors</h3><p>先部署<code>deployDescriptors()</code>,它的描述文件目录在<code>conf/Catalina/localhost</code>这个虚拟主机目录下.比如,创建一个文件名为<code>myapp.xml</code>,内容为:</p>
-<pre><code class="bash">&lt;Context path=&quot;/myapp&quot; docBase=&quot;/home/sky/ROOT&quot; debug=&quot;0&quot; privileged=&quot;true&quot;&gt;&lt;/Context&gt;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;Context path=<span class="string">"/myapp"</span> docBase=<span class="string">"/home/sky/ROOT"</span> debug=<span class="string">"0"</span> privileged=<span class="string">"true"</span>&gt;&lt;/Context&gt;</div></pre></td></tr></table></figure>
 <p>它就会根据该目录下的<code>myapp.xml</code>文件配置来部署应用.比如上面的例子,它会部署一个<code>path</code>为<code>/myapp</code>, 部署的目录为<code>/home/sky/ROOT</code>.这样子,就可以通过<code>http://localhost:8080/myapp</code>来访问了.<br>这种方式,可以不必将应用程序的目录,放到<code>webapps</code>目录下.</p>
 <h3 id="部署-wars"><a href="#部署-wars" class="headerlink" title="部署 wars"></a>部署 wars</h3><p>它会根据在配置文件<code>conf/server.xml</code>中的<code>&lt;host&gt;</code>的<code>appBase</code>属性的值所在的目录(默认为webapps)下查找<code>.war</code>结尾的文件, 然后再判断是否需要解压(根据配置文件中的 <code>unpackWARs</code> 属性).</p>
 <p>如果解压了,就和部署目录的逻辑是一样的.</p>
 <h3 id="部署-目录"><a href="#部署-目录" class="headerlink" title="部署 目录"></a>部署 目录</h3><p>它的代码如下,可以看到,对于每个目录,它是通过多线程来进行部署的.每一个目录都有一条线程去负责部署.而且是利用Host的<code>getStartStopExecutor</code>来执行的.</p>
-<pre><code class="bash">    private static class DeployDirectory implements Runnable {
-
-        private HostConfig config;
-        private ContextName cn;
-        private File dir;
-
-        public DeployDirectory(HostConfig config, ContextName cn, File dir) {
-            this.config = config;
-            this.cn = cn;
-            this.dir = dir;
-        }
-
-        @Override
-        public void run() {
-            config.deployDirectory(cn, dir);
-        }
-    }
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">private static class DeployDirectory implements Runnable &#123;</div><div class="line"></div><div class="line">    private HostConfig config;</div><div class="line">    private ContextName cn;</div><div class="line">    private File dir;</div><div class="line"></div><div class="line">    public DeployDirectory(HostConfig config, ContextName cn, File dir) &#123;</div><div class="line">        this.config = config;</div><div class="line">        this.cn = cn;</div><div class="line">        this.dir = dir;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void <span class="function"><span class="title">run</span></span>() &#123;</div><div class="line">        config.deployDirectory(cn, dir);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>部署的主要逻辑,是初始化一个<code>StandardContext</code>对象(还带有一个 <code>ContextConfig</code> 对象, 这个config对象,就是<code>web.xml</code>的代表. ).代表该应用的上下文对象.然后将host的listener(相当于host对所有应用都生效的listener,即对host来说是全局应用到每个应用的)添加到该<code>application</code>的Listener生命周期中.代码逻辑如下:</p>
-<pre><code class="bash">Class&lt;?&gt; clazz = Class.forName(host.getConfigClass());
-LifecycleListener listener =  (LifecycleListener) clazz.newInstance(); # 这里就添加了一个 ContextConfig 对象.它随着 StandardContext的生命周期一起存灭.
-
-context.addLifecycleListener(listener);
-context.setName(cn.getName());
-context.setPath(cn.getPath());
-context.setWebappVersion(cn.getVersion());
-context.setDocBase(cn.getBaseName());
-host.addChild(context);
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Class&lt;?&gt; clazz = Class.forName(host.getConfigClass());</div><div class="line">LifecycleListener listener =  (LifecycleListener) clazz.newInstance(); <span class="comment"># 这里就添加了一个 ContextConfig 对象.它随着 StandardContext的生命周期一起存灭.</span></div><div class="line"></div><div class="line">context.addLifecycleListener(listener);</div><div class="line">context.setName(cn.getName());</div><div class="line">context.setPath(cn.getPath());</div><div class="line">context.setWebappVersion(cn.getVersion());</div><div class="line">context.setDocBase(cn.getBaseName());</div><div class="line">host.addChild(context);</div></pre></td></tr></table></figure>
 <p>cn为<code>ContextName</code>,它的构造逻辑如下:</p>
 <p>根据<code>webapps</code>目录下的目录名,创建相应的<code>应用名</code>(里面有个特殊判断,如果目录名为ROOT,这个名字是硬编码写死的.那么它的path为”/“,即不需要通过应用名即可访问.)</p>
 <h4 id="ContextConfig-类"><a href="#ContextConfig-类" class="headerlink" title="ContextConfig 类"></a>ContextConfig 类</h4><p>它会解析 StandardContext 以及 Webxml , 逻辑在 init 方法中:</p>
-<pre><code class="bash"> protected void init() {
-        // Called from StandardContext.init()
-
-        Digester contextDigester = createContextDigester(); 
-        contextDigester.getParser();
-
-        if (log.isDebugEnabled()) {
-            log.debug(sm.getString(&quot;contextConfig.init&quot;));
-        }
-        context.setConfigured(false);
-        ok = true;
-
-        contextConfig(contextDigester);
-
-        webXmlParser = new WebXmlParser(context.getXmlNamespaceAware(),
-                context.getXmlValidation(), context.getXmlBlockExternal()); # 解析web.xml
-    }
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">protected void <span class="function"><span class="title">init</span></span>() &#123;</div><div class="line">       // Called from StandardContext.init()</div><div class="line"></div><div class="line">       Digester contextDigester = createContextDigester(); </div><div class="line">       contextDigester.getParser();</div><div class="line"></div><div class="line">       <span class="keyword">if</span> (log.isDebugEnabled()) &#123;</div><div class="line">           log.debug(sm.getString(<span class="string">"contextConfig.init"</span>));</div><div class="line">       &#125;</div><div class="line">       context.setConfigured(<span class="literal">false</span>);</div><div class="line">       ok = <span class="literal">true</span>;</div><div class="line"></div><div class="line">       contextConfig(contextDigester);</div><div class="line"></div><div class="line">       webXmlParser = new WebXmlParser(context.getXmlNamespaceAware(),</div><div class="line">               context.getXmlValidation(), context.getXmlBlockExternal()); <span class="comment"># 解析web.xml</span></div><div class="line">   &#125;</div></pre></td></tr></table></figure>
 <p>它和解析Tomcat的<code>conf/server.xml</code>这些类似,都是初始化相应的组件.</p>
 <p><code>web.xml</code>所有组件,都在<code>org.apache.tomcat.util.descriptor.web.WebRuleSet</code>里可以看到.(这里只列出部分,以免占太多篇幅)</p>
-<pre><code class="bash">
-        digester.addCallMethod(fullPrefix + &quot;/servlet/servlet-class&quot;,
-                              &quot;setServletClass&quot;, 0);
-        digester.addCallMethod(fullPrefix + &quot;/servlet/servlet-name&quot;,
-                              &quot;setServletName&quot;, 0);
-
-        digester.addObjectCreate(fullPrefix + &quot;/servlet/multipart-config&quot;,
-                                 &quot;org.apache.tomcat.util.descriptor.web.MultipartDef&quot;);
-        digester.addSetNext(fullPrefix + &quot;/servlet/multipart-config&quot;,
-                            &quot;setMultipartDef&quot;,
-                            &quot;org.apache.tomcat.util.descriptor.web.MultipartDef&quot;);
-        digester.addCallMethod(fullPrefix + &quot;/servlet/multipart-config/location&quot;,
-                               &quot;setLocation&quot;, 0);
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">digester.addCallMethod(fullPrefix + <span class="string">"/servlet/servlet-class"</span>,</div><div class="line">                      <span class="string">"setServletClass"</span>, 0);</div><div class="line">digester.addCallMethod(fullPrefix + <span class="string">"/servlet/servlet-name"</span>,</div><div class="line">                      <span class="string">"setServletName"</span>, 0);</div><div class="line"></div><div class="line">digester.addObjectCreate(fullPrefix + <span class="string">"/servlet/multipart-config"</span>,</div><div class="line">                         <span class="string">"org.apache.tomcat.util.descriptor.web.MultipartDef"</span>);</div><div class="line">digester.addSetNext(fullPrefix + <span class="string">"/servlet/multipart-config"</span>,</div><div class="line">                    <span class="string">"setMultipartDef"</span>,</div><div class="line">                    <span class="string">"org.apache.tomcat.util.descriptor.web.MultipartDef"</span>);</div><div class="line">digester.addCallMethod(fullPrefix + <span class="string">"/servlet/multipart-config/location"</span>,</div><div class="line">                       <span class="string">"setLocation"</span>, 0);</div></pre></td></tr></table></figure>
 <p>比如Filter,Listener, Session参数等等.</p>
 <h4 id="web-xml-的对应类-WebXml"><a href="#web-xml-的对应类-WebXml" class="headerlink" title="web.xml 的对应类 WebXml"></a>web.xml 的对应类 WebXml</h4><p><code>WebXml</code>类是<code>web.xml</code>的对应代表类.</p>
 <h4 id="各个-web-xml-版本对应的J2EE版本"><a href="#各个-web-xml-版本对应的J2EE版本" class="headerlink" title="各个 web.xml 版本对应的J2EE版本."></a>各个 web.xml 版本对应的J2EE版本.</h4><p><code>org.apache.tomcat.util.descriptor.DigesterFactory</code> 在这人类有明确的对照表.</p>

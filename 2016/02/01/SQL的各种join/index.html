@@ -15,16 +15,16 @@
     <meta name="keywords" content="Golang, Java, PostgreSQL, Postgres, MySQL, emacsist, RabbitMQ, Go, emacs, orgmode" />
   
 
-  <meta name="description" content="测试表数据t1sky=# select * from t1;  id | name ----+------   1 | n1   2 | n2   3 | n3   4 | n4   5 | n5   6 | n6   7 | n7   8 | n8   9 | n9  10 | n10   1 | n11 (11 rows)  sky=#  t2sky=# select * from t2;">
+  <meta name="description" content="测试表数据t11234567891011121314151617sky=# select * from t1; id | name----+------  1 | n1  2 | n2  3 | n3  4 | n4  5 | n5  6 | n6  7 | n7  8 | n8  9 | n9 10 | n10  1 | n11(11 rows)sky=# t212345678910111213">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SQL的各种join">
 <meta property="og:url" content="https://emacsist.github.io/2016/02/01/SQL的各种join/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="测试表数据t1sky=# select * from t1;  id | name ----+------   1 | n1   2 | n2   3 | n3   4 | n4   5 | n5   6 | n6   7 | n7   8 | n8   9 | n9  10 | n10   1 | n11 (11 rows)  sky=#  t2sky=# select * from t2;">
+<meta property="og:description" content="测试表数据t11234567891011121314151617sky=# select * from t1; id | name----+------  1 | n1  2 | n2  3 | n3  4 | n4  5 | n5  6 | n6  7 | n7  8 | n8  9 | n9 10 | n10  1 | n11(11 rows)sky=# t212345678910111213">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SQL的各种join">
-<meta name="twitter:description" content="测试表数据t1sky=# select * from t1;  id | name ----+------   1 | n1   2 | n2   3 | n3   4 | n4   5 | n5   6 | n6   7 | n7   8 | n8   9 | n9  10 | n10   1 | n11 (11 rows)  sky=#  t2sky=# select * from t2;">
+<meta name="twitter:description" content="测试表数据t11234567891011121314151617sky=# select * from t1; id | name----+------  1 | n1  2 | n2  3 | n3  4 | n4  5 | n5  6 | n6  7 | n7  8 | n8  9 | n9 10 | n10  1 | n11(11 rows)sky=# t212345678910111213">
 
   
 
@@ -184,115 +184,12 @@
 
     <div class="article-content">
         
-                            <h2 id="测试表数据"><a href="#测试表数据" class="headerlink" title="测试表数据"></a>测试表数据</h2><h3 id="t1"><a href="#t1" class="headerlink" title="t1"></a>t1</h3><pre><code class="bash">sky=# select * from t1;
- id | name
-----+------
-  1 | n1
-  2 | n2
-  3 | n3
-  4 | n4
-  5 | n5
-  6 | n6
-  7 | n7
-  8 | n8
-  9 | n9
- 10 | n10
-  1 | n11
-(11 rows)
-
-sky=#
-</code></pre>
-<h3 id="t2"><a href="#t2" class="headerlink" title="t2"></a>t2</h3><pre><code class="bash">sky=# select * from t2;
- id | age | t1_id
-----+-----+-------
-  1 |  11 |     1
-  2 |  12 |     1
-  7 |  17 |     2
-  3 |  13 |     4
-  4 |  14 |     4
-  5 |  15 |     5
-  6 |  16 |     5
-  8 |  18 |     7
-  9 |  19 |     7
- 10 |  20 |     7
-(10 rows)
-
-sky=#
-</code></pre>
-<h2 id="inner-join"><a href="#inner-join" class="headerlink" title="inner join"></a>inner join</h2><pre><code class="bash">sky=# explain analyze verbose select * from t1 inner join t2 on t1.id = t2.t1_id;
-                                                     QUERY PLAN
----------------------------------------------------------------------------------------------------------------------
- Merge Join  (cost=223.19..406.47 rows=11832 width=54) (actual time=0.015..0.018 rows=12 loops=1)
-   Output: t1.id, t1.name, t2.id, t2.age, t2.t1_id
-   Merge Cond: (t1.id = t2.t1_id)
-   -&gt;  Sort  (cost=80.64..83.54 rows=1160 width=42) (actual time=0.010..0.011 rows=9 loops=1)
-         Output: t1.id, t1.name
-         Sort Key: t1.id
-         Sort Method: quicksort  Memory: 25kB
-         -&gt;  Seq Scan on public.t1  (cost=0.00..21.60 rows=1160 width=42) (actual time=0.003..0.005 rows=11 loops=1)
-               Output: t1.id, t1.name
-   -&gt;  Sort  (cost=142.54..147.64 rows=2040 width=12) (actual time=0.003..0.004 rows=12 loops=1)
-         Output: t2.id, t2.age, t2.t1_id
-         Sort Key: t2.t1_id
-         Sort Method: quicksort  Memory: 25kB
-         -&gt;  Seq Scan on public.t2  (cost=0.00..30.40 rows=2040 width=12) (actual time=0.002..0.002 rows=10 loops=1)
-               Output: t2.id, t2.age, t2.t1_id
- Planning time: 0.055 ms
- Execution time: 0.035 ms
-(17 rows)
-
-sky=#
-
-sky=# explain analyze verbose select * from t1, t2 where t1.id = t2.t1_id;
-                                                     QUERY PLAN
----------------------------------------------------------------------------------------------------------------------
- Merge Join  (cost=223.19..406.47 rows=11832 width=54) (actual time=0.016..0.020 rows=12 loops=1)
-   Output: t1.id, t1.name, t2.id, t2.age, t2.t1_id
-   Merge Cond: (t1.id = t2.t1_id)
-   -&gt;  Sort  (cost=80.64..83.54 rows=1160 width=42) (actual time=0.009..0.009 rows=9 loops=1)
-         Output: t1.id, t1.name
-         Sort Key: t1.id
-         Sort Method: quicksort  Memory: 25kB
-         -&gt;  Seq Scan on public.t1  (cost=0.00..21.60 rows=1160 width=42) (actual time=0.004..0.005 rows=11 loops=1)
-               Output: t1.id, t1.name
-   -&gt;  Sort  (cost=142.54..147.64 rows=2040 width=12) (actual time=0.004..0.005 rows=12 loops=1)
-         Output: t2.id, t2.age, t2.t1_id
-         Sort Key: t2.t1_id
-         Sort Method: quicksort  Memory: 25kB
-         -&gt;  Seq Scan on public.t2  (cost=0.00..30.40 rows=2040 width=12) (actual time=0.001..0.001 rows=10 loops=1)
-               Output: t2.id, t2.age, t2.t1_id
- Planning time: 0.052 ms
- Execution time: 0.036 ms
-(17 rows)
-
-sky=#
-</code></pre>
+                            <h2 id="测试表数据"><a href="#测试表数据" class="headerlink" title="测试表数据"></a>测试表数据</h2><h3 id="t1"><a href="#t1" class="headerlink" title="t1"></a>t1</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># select * from t1;</span></div><div class="line"> id | name</div><div class="line">----+------</div><div class="line">  1 | n1</div><div class="line">  2 | n2</div><div class="line">  3 | n3</div><div class="line">  4 | n4</div><div class="line">  5 | n5</div><div class="line">  6 | n6</div><div class="line">  7 | n7</div><div class="line">  8 | n8</div><div class="line">  9 | n9</div><div class="line"> 10 | n10</div><div class="line">  1 | n11</div><div class="line">(11 rows)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<h3 id="t2"><a href="#t2" class="headerlink" title="t2"></a>t2</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># select * from t2;</span></div><div class="line"> id | age | t1_id</div><div class="line">----+-----+-------</div><div class="line">  1 |  11 |     1</div><div class="line">  2 |  12 |     1</div><div class="line">  7 |  17 |     2</div><div class="line">  3 |  13 |     4</div><div class="line">  4 |  14 |     4</div><div class="line">  5 |  15 |     5</div><div class="line">  6 |  16 |     5</div><div class="line">  8 |  18 |     7</div><div class="line">  9 |  19 |     7</div><div class="line"> 10 |  20 |     7</div><div class="line">(10 rows)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
+<h2 id="inner-join"><a href="#inner-join" class="headerlink" title="inner join"></a>inner join</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># explain analyze verbose select * from t1 inner join t2 on t1.id = t2.t1_id;</span></div><div class="line">                                                     QUERY PLAN</div><div class="line">---------------------------------------------------------------------------------------------------------------------</div><div class="line"> Merge Join  (cost=223.19..406.47 rows=11832 width=54) (actual time=0.015..0.018 rows=12 loops=1)</div><div class="line">   Output: t1.id, t1.name, t2.id, t2.age, t2.t1_id</div><div class="line">   Merge Cond: (t1.id = t2.t1_id)</div><div class="line">   -&gt;  Sort  (cost=80.64..83.54 rows=1160 width=42) (actual time=0.010..0.011 rows=9 loops=1)</div><div class="line">         Output: t1.id, t1.name</div><div class="line">         Sort Key: t1.id</div><div class="line">         Sort Method: quicksort  Memory: 25kB</div><div class="line">         -&gt;  Seq Scan on public.t1  (cost=0.00..21.60 rows=1160 width=42) (actual time=0.003..0.005 rows=11 loops=1)</div><div class="line">               Output: t1.id, t1.name</div><div class="line">   -&gt;  Sort  (cost=142.54..147.64 rows=2040 width=12) (actual time=0.003..0.004 rows=12 loops=1)</div><div class="line">         Output: t2.id, t2.age, t2.t1_id</div><div class="line">         Sort Key: t2.t1_id</div><div class="line">         Sort Method: quicksort  Memory: 25kB</div><div class="line">         -&gt;  Seq Scan on public.t2  (cost=0.00..30.40 rows=2040 width=12) (actual time=0.002..0.002 rows=10 loops=1)</div><div class="line">               Output: t2.id, t2.age, t2.t1_id</div><div class="line"> Planning time: 0.055 ms</div><div class="line"> Execution time: 0.035 ms</div><div class="line">(17 rows)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div><div class="line"></div><div class="line">sky=<span class="comment"># explain analyze verbose select * from t1, t2 where t1.id = t2.t1_id;</span></div><div class="line">                                                     QUERY PLAN</div><div class="line">---------------------------------------------------------------------------------------------------------------------</div><div class="line"> Merge Join  (cost=223.19..406.47 rows=11832 width=54) (actual time=0.016..0.020 rows=12 loops=1)</div><div class="line">   Output: t1.id, t1.name, t2.id, t2.age, t2.t1_id</div><div class="line">   Merge Cond: (t1.id = t2.t1_id)</div><div class="line">   -&gt;  Sort  (cost=80.64..83.54 rows=1160 width=42) (actual time=0.009..0.009 rows=9 loops=1)</div><div class="line">         Output: t1.id, t1.name</div><div class="line">         Sort Key: t1.id</div><div class="line">         Sort Method: quicksort  Memory: 25kB</div><div class="line">         -&gt;  Seq Scan on public.t1  (cost=0.00..21.60 rows=1160 width=42) (actual time=0.004..0.005 rows=11 loops=1)</div><div class="line">               Output: t1.id, t1.name</div><div class="line">   -&gt;  Sort  (cost=142.54..147.64 rows=2040 width=12) (actual time=0.004..0.005 rows=12 loops=1)</div><div class="line">         Output: t2.id, t2.age, t2.t1_id</div><div class="line">         Sort Key: t2.t1_id</div><div class="line">         Sort Method: quicksort  Memory: 25kB</div><div class="line">         -&gt;  Seq Scan on public.t2  (cost=0.00..30.40 rows=2040 width=12) (actual time=0.001..0.001 rows=10 loops=1)</div><div class="line">               Output: t2.id, t2.age, t2.t1_id</div><div class="line"> Planning time: 0.052 ms</div><div class="line"> Execution time: 0.036 ms</div><div class="line">(17 rows)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
 <p>由此可知：<code>inner join</code>与<code>from t1,t2 where t1.xx = t2.xx</code>是一样的.</p>
 <p><code>它的结果行数=SUM(t1中的每一行 * t2中的每一行中t2.xx=t1.xx)</code><br>比如，上面的结果()，它就是（结果行数12 = <code>t1中1的为2行，t2中的1也为2行</code>即2<em>2=4,<br><code>t1中的2为1行, t2中的2也为1行</code>，即1</em>1 = 1<br><code>t1中的4为1行，t2中的4为2行</code>,即1<em>2 = 2<br><code>t1中的5为1行，t2中的5为2行</code>，即1</em>2 = 2<br><code>t1中的7为1行，t2中的7为3行</code>，即1*3 = 3<br>所以，总行数=4+1+2+2+3=12行.</p>
-<h2 id="left-join"><a href="#left-join" class="headerlink" title="left join"></a>left join</h2><pre><code class="bash">sky=# explain analyze verbose select * from t1 left join t2 on t1.id = t2.t1_id;
-                                                     QUERY PLAN
----------------------------------------------------------------------------------------------------------------------
- Merge Left Join  (cost=223.19..406.47 rows=11832 width=54) (actual time=0.025..0.028 rows=17 loops=1)
-   Output: t1.id, t1.name, t2.id, t2.age, t2.t1_id
-   Merge Cond: (t1.id = t2.t1_id)
-   -&gt;  Sort  (cost=80.64..83.54 rows=1160 width=42) (actual time=0.018..0.018 rows=11 loops=1)
-         Output: t1.id, t1.name
-         Sort Key: t1.id
-         Sort Method: quicksort  Memory: 25kB
-         -&gt;  Seq Scan on public.t1  (cost=0.00..21.60 rows=1160 width=42) (actual time=0.012..0.013 rows=11 loops=1)
-               Output: t1.id, t1.name
-   -&gt;  Sort  (cost=142.54..147.64 rows=2040 width=12) (actual time=0.004..0.004 rows=12 loops=1)
-         Output: t2.id, t2.age, t2.t1_id
-         Sort Key: t2.t1_id
-         Sort Method: quicksort  Memory: 25kB
-         -&gt;  Seq Scan on public.t2  (cost=0.00..30.40 rows=2040 width=12) (actual time=0.002..0.002 rows=10 loops=1)
-               Output: t2.id, t2.age, t2.t1_id
- Planning time: 0.060 ms
- Execution time: 0.046 ms
-(17 rows)
-
-sky=#
-</code></pre>
+<h2 id="left-join"><a href="#left-join" class="headerlink" title="left join"></a>left join</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">sky=<span class="comment"># explain analyze verbose select * from t1 left join t2 on t1.id = t2.t1_id;</span></div><div class="line">                                                     QUERY PLAN</div><div class="line">---------------------------------------------------------------------------------------------------------------------</div><div class="line"> Merge Left Join  (cost=223.19..406.47 rows=11832 width=54) (actual time=0.025..0.028 rows=17 loops=1)</div><div class="line">   Output: t1.id, t1.name, t2.id, t2.age, t2.t1_id</div><div class="line">   Merge Cond: (t1.id = t2.t1_id)</div><div class="line">   -&gt;  Sort  (cost=80.64..83.54 rows=1160 width=42) (actual time=0.018..0.018 rows=11 loops=1)</div><div class="line">         Output: t1.id, t1.name</div><div class="line">         Sort Key: t1.id</div><div class="line">         Sort Method: quicksort  Memory: 25kB</div><div class="line">         -&gt;  Seq Scan on public.t1  (cost=0.00..21.60 rows=1160 width=42) (actual time=0.012..0.013 rows=11 loops=1)</div><div class="line">               Output: t1.id, t1.name</div><div class="line">   -&gt;  Sort  (cost=142.54..147.64 rows=2040 width=12) (actual time=0.004..0.004 rows=12 loops=1)</div><div class="line">         Output: t2.id, t2.age, t2.t1_id</div><div class="line">         Sort Key: t2.t1_id</div><div class="line">         Sort Method: quicksort  Memory: 25kB</div><div class="line">         -&gt;  Seq Scan on public.t2  (cost=0.00..30.40 rows=2040 width=12) (actual time=0.002..0.002 rows=10 loops=1)</div><div class="line">               Output: t2.id, t2.age, t2.t1_id</div><div class="line"> Planning time: 0.060 ms</div><div class="line"> Execution time: 0.046 ms</div><div class="line">(17 rows)</div><div class="line"></div><div class="line">sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
 
                                 
     </div>

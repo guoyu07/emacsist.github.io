@@ -15,17 +15,17 @@
     <meta name="keywords" content="golang,go," />
   
 
-  <meta name="description" content="package main  import (     &amp;quot;fmt&amp;quot;     &amp;quot;time&amp;quot;     &amp;quot;sync&amp;quot; )  type resultData struct {     Job int     Result bool }  func main() {     n := 10     jobs := make(chan int, n)">
+  <meta name="description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849package mainimport (	&quot;fmt&quot;	&quot;time&quot;	&quot;sync&quot;)type resultData struct &amp;#123;    Job int    Result bool&amp;#125;func main">
 <meta name="keywords" content="golang,go">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Golang中的select使用">
 <meta property="og:url" content="https://emacsist.github.io/2016/11/10/Golang中的select使用/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="package main  import (     &amp;quot;fmt&amp;quot;     &amp;quot;time&amp;quot;     &amp;quot;sync&amp;quot; )  type resultData struct {     Job int     Result bool }  func main() {     n := 10     jobs := make(chan int, n)">
+<meta property="og:description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849package mainimport (	&quot;fmt&quot;	&quot;time&quot;	&quot;sync&quot;)type resultData struct &amp;#123;    Job int    Result bool&amp;#125;func main">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Golang中的select使用">
-<meta name="twitter:description" content="package main  import (     &amp;quot;fmt&amp;quot;     &amp;quot;time&amp;quot;     &amp;quot;sync&amp;quot; )  type resultData struct {     Job int     Result bool }  func main() {     n := 10     jobs := make(chan int, n)">
+<meta name="twitter:description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849package mainimport (	&quot;fmt&quot;	&quot;time&quot;	&quot;sync&quot;)type resultData struct &amp;#123;    Job int    Result bool&amp;#125;func main">
 
   
 
@@ -196,82 +196,9 @@
 
     <div class="article-content">
         
-                            <pre><code class="bash">package main
-
-import (
-    &quot;fmt&quot;
-    &quot;time&quot;
-    &quot;sync&quot;
-)
-
-type resultData struct {
-    Job int
-    Result bool
-}
-
-func main() {
-    n := 10
-    jobs := make(chan int, n)
-    result := make(chan resultData, n)
-
-    var wg sync.WaitGroup
-    wg.Add(n)
-    go publishJob(jobs, n)
-    go daemon(jobs, result, &amp;wg)
-    wg.Wait()
-    fmt.Printf(&quot;finish %v jobs&quot;, n)
-}
-
-func publishJob(jobs chan int, n int)  {
-    for i:=0;i&lt;n ;i++{
-        jobs &lt;- i
-        //time.Sleep(time.Duration(i) * time.Millisecond)
-    }
-}
-
-func daemon(jobs chan int, result chan resultData, wg *sync.WaitGroup)  {
-    for {
-        select {
-        case j := &lt;- jobs :
-            fmt.Printf(&quot;have jobs %v\n&quot;, j)
-            r := resultData{Job:j, Result:true}
-            result &lt;- r
-            time.Sleep(time.Millisecond * 3)
-        case r := &lt;- result :
-            fmt.Printf(&quot;job = %v, result = %v\n&quot;, r.Job, r.Result)
-            wg.Done()
-        default :
-            //fmt.Printf(&quot;in default \n&quot;)    
-        }
-    }
-}
-</code></pre>
+                            <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line">package main</div><div class="line"></div><div class="line">import (</div><div class="line">	<span class="string">"fmt"</span></div><div class="line">	<span class="string">"time"</span></div><div class="line">	<span class="string">"sync"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="built_in">type</span> resultData struct &#123;</div><div class="line">    Job int</div><div class="line">    Result bool</div><div class="line">&#125;</div><div class="line"></div><div class="line">func <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">    n := 10</div><div class="line">    <span class="built_in">jobs</span> := make(chan int, n)</div><div class="line">    result := make(chan resultData, n)</div><div class="line"></div><div class="line">    var wg sync.WaitGroup</div><div class="line">    wg.Add(n)</div><div class="line">    go publishJob(<span class="built_in">jobs</span>, n)</div><div class="line">    go daemon(<span class="built_in">jobs</span>, result, &amp;wg)</div><div class="line">    wg.Wait()</div><div class="line">    fmt.Printf(<span class="string">"finish %v jobs"</span>, n)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func publishJob(<span class="built_in">jobs</span> chan int, n int)  &#123;</div><div class="line">    <span class="keyword">for</span> i:=0;i&lt;n ;i++&#123;</div><div class="line">        <span class="built_in">jobs</span> &lt;- i</div><div class="line">        //time.Sleep(time.Duration(i) * time.Millisecond)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">func daemon(<span class="built_in">jobs</span> chan int, result chan resultData, wg *sync.WaitGroup)  &#123;</div><div class="line">    <span class="keyword">for</span> &#123;</div><div class="line">        select &#123;</div><div class="line">        <span class="keyword">case</span> j := &lt;- <span class="built_in">jobs</span> :</div><div class="line">            fmt.Printf(<span class="string">"have jobs %v\n"</span>, j)</div><div class="line">            r := resultData&#123;Job:j, Result:<span class="literal">true</span>&#125;</div><div class="line">            result &lt;- r</div><div class="line">            time.Sleep(time.Millisecond * 3)</div><div class="line">        <span class="keyword">case</span> r := &lt;- result :</div><div class="line">            fmt.Printf(<span class="string">"job = %v, result = %v\n"</span>, r.Job, r.Result)</div><div class="line">            wg.Done()</div><div class="line">        default :</div><div class="line">            //fmt.Printf(<span class="string">"in default \n"</span>)    </div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>输出结果如下：</p>
-<pre><code class="bash">[Running] go run &quot;/home/sky/go-dsp/src/test2/main.go&quot;
-have jobs 0
-job = 0, result = true
-have jobs 1
-have jobs 2
-have jobs 3
-job = 1, result = true
-job = 2, result = true
-have jobs 4
-have jobs 5
-have jobs 6
-job = 3, result = true
-job = 4, result = true
-have jobs 7
-job = 5, result = true
-job = 6, result = true
-job = 7, result = true
-have jobs 8
-have jobs 9
-job = 8, result = true
-job = 9, result = true
-finish 10 jobs
-[Done] exited with code=0 in 0.142 seconds
-</code></pre>
-
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">[Running] go run <span class="string">"/home/sky/go-dsp/src/test2/main.go"</span></div><div class="line">have <span class="built_in">jobs</span> 0</div><div class="line">job = 0, result = <span class="literal">true</span></div><div class="line">have <span class="built_in">jobs</span> 1</div><div class="line">have <span class="built_in">jobs</span> 2</div><div class="line">have <span class="built_in">jobs</span> 3</div><div class="line">job = 1, result = <span class="literal">true</span></div><div class="line">job = 2, result = <span class="literal">true</span></div><div class="line">have <span class="built_in">jobs</span> 4</div><div class="line">have <span class="built_in">jobs</span> 5</div><div class="line">have <span class="built_in">jobs</span> 6</div><div class="line">job = 3, result = <span class="literal">true</span></div><div class="line">job = 4, result = <span class="literal">true</span></div><div class="line">have <span class="built_in">jobs</span> 7</div><div class="line">job = 5, result = <span class="literal">true</span></div><div class="line">job = 6, result = <span class="literal">true</span></div><div class="line">job = 7, result = <span class="literal">true</span></div><div class="line">have <span class="built_in">jobs</span> 8</div><div class="line">have <span class="built_in">jobs</span> 9</div><div class="line">job = 8, result = <span class="literal">true</span></div><div class="line">job = 9, result = <span class="literal">true</span></div><div class="line">finish 10 <span class="built_in">jobs</span></div><div class="line">[Done] exited with code=0 <span class="keyword">in</span> 0.142 seconds</div></pre></td></tr></table></figure>
                                 
     </div>
 </article>

@@ -213,43 +213,16 @@
 <p>我不打算贴出这条命令的输出结果, 因为它几乎有700多行. 除了打印标准版本的信息之外,它还可以打印一个几乎是你JDK构建的版本的所有JVM参数列表,它是一个拥有5列的表格, 这是我这篇文章所要讲解的.</p>
 <p><code>Type | Name | Operator | Value | Application</code></p>
 <p>来看单个参数的例子</p>
-<pre><code class="bash">java -XX:+PrintFlagsFinal -version | grep UseConcMarkSweepGC
-
-bool UseConcMarkSweepGC                       := true            {product}
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">java -XX:+PrintFlagsFinal -version | grep UseConcMarkSweepGC</div><div class="line"></div><div class="line">bool UseConcMarkSweepGC                       := <span class="literal">true</span>            &#123;product&#125;</div></pre></td></tr></table></figure>
 <p>你可以看到 <em>boolean</em> 标识, <em>UseConcMarkSweepGC</em>, 它的值被修改为 <em>true</em> 并且它适用于所有情况.</p>
 <p>利用一些 <code>*nix</code> 魔术, 我们可以看到每一列的唯一的值</p>
-<pre><code class="bash">java -XX:+PrintFlagsFinal -version | awk &#39;{if (NR!=1) {print $1}}&#39; | sort | uniq
-
-bool
-ccstr
-ccstrlist
-double
-int
-intx
-uint64_t
-uintx
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">java -XX:+PrintFlagsFinal -version | awk <span class="string">'&#123;if (NR!=1) &#123;print $1&#125;&#125;'</span> | sort | uniq</div><div class="line"></div><div class="line">bool</div><div class="line">ccstr</div><div class="line">ccstrlist</div><div class="line">double</div><div class="line">int</div><div class="line">intx</div><div class="line">uint64_t</div><div class="line">uintx</div></pre></td></tr></table></figure>
 <p>这些类型(<code>type</code>列)是自解释的. 修改上面的命令中的<code>$1</code>为<code>$2</code>,你会获取所有可用的没带有想着元信息的标识名.</p>
 <p>继续修改为<code>$3</code>, 结果只有以下两行</p>
-<pre><code class="bash">:=
-=
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">:=</div><div class="line">=</div></pre></td></tr></table></figure>
 <p><code>:=</code>意味着值是被修改的, <code>=</code>表示默认值.</p>
 <p>只获取唯一值的列表是没什么用的, 所以我会继续用一个特定的适用的参数. 由于空格是不规则的, 我们需要一个稍微不同的方式:</p>
-<pre><code class="bash">java -XX:+PrintFlagsFinal -version | awk -F &#39;\\{&#39; &#39;{if(NR!=1) {print &quot;\{&quot;$2}}&#39; | sort | uniq
-
-{C1 pd product}
-{C1 product}
-{C2 diagnostic}
-{C2 pd product}
-{C2 product}
-{lp64_product}
-{manageable}
-{pd product}
-{product rw}
-{product}
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">java -XX:+PrintFlagsFinal -version | awk -F <span class="string">'\\&#123;'</span> <span class="string">'&#123;if(NR!=1) &#123;print "\&#123;"$2&#125;&#125;'</span> | sort | uniq</div><div class="line"></div><div class="line">&#123;C1 pd product&#125;</div><div class="line">&#123;C1 product&#125;</div><div class="line">&#123;C2 diagnostic&#125;</div><div class="line">&#123;C2 pd product&#125;</div><div class="line">&#123;C2 product&#125;</div><div class="line">&#123;lp64_product&#125;</div><div class="line">&#123;manageable&#125;</div><div class="line">&#123;pd product&#125;</div><div class="line">&#123;product rw&#125;</div><div class="line">&#123;product&#125;</div></pre></td></tr></table></figure>
 <p>这些目录是由 <code>复合标识符</code> 来描述一个给定的标识符的适用情况.在进行一些深入挖掘后, <a href="http://hg.openjdk.java.net/jdk6/jdk6/hotspot/file/tip/src/share/vm/runtime/globals.hpp" target="_blank" rel="external">我在源码里发现它们的意思</a></p>
 <ul>
 <li><p>product – 官方支持, JVM内部选项</p>
@@ -272,84 +245,12 @@ uintx
 </li>
 </ul>
 <p>有了这些新知识, 你可以开始看看<code>client</code>与<code>server</code>虚拟机的不同之处:</p>
-<pre><code class="bash">diff &lt;(java -XX:+PrintFlagsFinal -server -version) &lt;(java -XX:+PrintFlagsFinal -client -version)
-
-
-&lt;      bool CMSCleanOnEnter                           = true            {product}
-&gt;      bool CMSCleanOnEnter                           = false           {product}
-&lt;     uintx ConcGCThreads                             = 0               {product}
-&gt;     uintx ConcGCThreads                             = 2               {product}
-&lt;     uintx InitialHeapSize                          := 268435456       {product}
-&gt;     uintx InitialHeapSize                           = 0               {product}
-&lt;     uintx MaxHeapSize                              := 4294967296      {product}
-&gt;     uintx MaxHeapSize                               = 132120576       {product}
-&lt;     uintx MaxNewSize                                = 18446744073709486080{product}
-&gt;     uintx MaxNewSize                               := 174456832       {product}
-&lt;      intx MaxTenuringThreshold                      = 15              {product}
-&gt;      intx MaxTenuringThreshold                     := 4               {product}
-&lt;      intx NewRatio                                  = 2               {product}
-&lt;     uintx NewSize                                   = 1310720         {product}
-&gt;      intx NewRatio                                 := 7               {product}
-&gt;     uintx NewSize                                  := 21757952        {product}
-&lt;     uintx OldPLABSize                               = 1024            {product}
-&gt;     uintx OldPLABSize                              := 16              {product}
-&lt;     uintx OldSize                                   = 5439488         {product}
-&gt;     uintx OldSize                                  := 65404928        {product}
-&lt;      bool ParGCUseLocalOverflow                     = false           {product}
-&gt;      bool ParGCUseLocalOverflow                     = true            {product}
-&lt;     uintx ParallelGCThreads                        := 8               {product}
-&gt;     uintx ParallelGCThreads                         = 8               {product}
-&lt;      bool UseAdaptiveSizePolicy                     = true            {product}
-&gt;      bool UseAdaptiveSizePolicy                     = false           {product}
-&lt;      bool UseConcMarkSweepGC                        = false           {product}
-&gt;      bool UseConcMarkSweepGC                       := true            {product}
-&lt;      bool UseParNewGC                               = false           {product}
-&gt;      bool UseParNewGC                              := true            {product}
-&lt;      bool UseParallelGC                            := true            {product}
-&gt;      bool UseParallelGC                             = false           {product}
-&lt;     uintx YoungPLABSize                             = 4096            {product}
-&gt;     uintx YoungPLABSize                             = 1024            {product}
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">diff &lt;(java -XX:+PrintFlagsFinal -server -version) &lt;(java -XX:+PrintFlagsFinal -client -version)</div><div class="line"></div><div class="line"></div><div class="line">&lt;      bool CMSCleanOnEnter                           = <span class="literal">true</span>            &#123;product&#125;</div><div class="line">&gt;      bool CMSCleanOnEnter                           = <span class="literal">false</span>           &#123;product&#125;</div><div class="line">&lt;     uintx ConcGCThreads                             = 0               &#123;product&#125;</div><div class="line">&gt;     uintx ConcGCThreads                             = 2               &#123;product&#125;</div><div class="line">&lt;     uintx InitialHeapSize                          := 268435456       &#123;product&#125;</div><div class="line">&gt;     uintx InitialHeapSize                           = 0               &#123;product&#125;</div><div class="line">&lt;     uintx MaxHeapSize                              := 4294967296      &#123;product&#125;</div><div class="line">&gt;     uintx MaxHeapSize                               = 132120576       &#123;product&#125;</div><div class="line">&lt;     uintx MaxNewSize                                = 18446744073709486080&#123;product&#125;</div><div class="line">&gt;     uintx MaxNewSize                               := 174456832       &#123;product&#125;</div><div class="line">&lt;      intx MaxTenuringThreshold                      = 15              &#123;product&#125;</div><div class="line">&gt;      intx MaxTenuringThreshold                     := 4               &#123;product&#125;</div><div class="line">&lt;      intx NewRatio                                  = 2               &#123;product&#125;</div><div class="line">&lt;     uintx NewSize                                   = 1310720         &#123;product&#125;</div><div class="line">&gt;      intx NewRatio                                 := 7               &#123;product&#125;</div><div class="line">&gt;     uintx NewSize                                  := 21757952        &#123;product&#125;</div><div class="line">&lt;     uintx OldPLABSize                               = 1024            &#123;product&#125;</div><div class="line">&gt;     uintx OldPLABSize                              := 16              &#123;product&#125;</div><div class="line">&lt;     uintx OldSize                                   = 5439488         &#123;product&#125;</div><div class="line">&gt;     uintx OldSize                                  := 65404928        &#123;product&#125;</div><div class="line">&lt;      bool ParGCUseLocalOverflow                     = <span class="literal">false</span>           &#123;product&#125;</div><div class="line">&gt;      bool ParGCUseLocalOverflow                     = <span class="literal">true</span>            &#123;product&#125;</div><div class="line">&lt;     uintx ParallelGCThreads                        := 8               &#123;product&#125;</div><div class="line">&gt;     uintx ParallelGCThreads                         = 8               &#123;product&#125;</div><div class="line">&lt;      bool UseAdaptiveSizePolicy                     = <span class="literal">true</span>            &#123;product&#125;</div><div class="line">&gt;      bool UseAdaptiveSizePolicy                     = <span class="literal">false</span>           &#123;product&#125;</div><div class="line">&lt;      bool UseConcMarkSweepGC                        = <span class="literal">false</span>           &#123;product&#125;</div><div class="line">&gt;      bool UseConcMarkSweepGC                       := <span class="literal">true</span>            &#123;product&#125;</div><div class="line">&lt;      bool UseParNewGC                               = <span class="literal">false</span>           &#123;product&#125;</div><div class="line">&gt;      bool UseParNewGC                              := <span class="literal">true</span>            &#123;product&#125;</div><div class="line">&lt;      bool UseParallelGC                            := <span class="literal">true</span>            &#123;product&#125;</div><div class="line">&gt;      bool UseParallelGC                             = <span class="literal">false</span>           &#123;product&#125;</div><div class="line">&lt;     uintx YoungPLABSize                             = 4096            &#123;product&#125;</div><div class="line">&gt;     uintx YoungPLABSize                             = 1024            &#123;product&#125;</div></pre></td></tr></table></figure>
 <p>或者在我的例子里, 我可以看到当<code>-XX:+AggressiveOpts</code>参数设置时,导致的参数更改. 这是在Google搜索时使我使用了这条途径:</p>
-<pre><code class="bash">diff &lt;(java -XX:+PrintFlagsFinal -XX:+AggressiveOpts -version) &lt;(java -XX:+PrintFlagsFinal -version) | grep &quot;&gt;\|&lt;&quot;
-
-&lt;      bool AggressiveOpts                           := true            {product}
-&gt;      bool AggressiveOpts                            = false           {product}
-&lt;      intx AutoBoxCacheMax                           = 20000           {C2 product}
-&gt;      intx AutoBoxCacheMax                           = 128             {C2 product}
-&lt;      intx BiasedLockingStartupDelay                 = 500             {product}
-&gt;      intx BiasedLockingStartupDelay                 = 4000            {product}
-&lt;      bool EliminateAutoBox                          = true            {C2 diagnostic}
-&gt;      bool EliminateAutoBox                          = false           {C2 diagnostic}
-&lt;      bool OptimizeFill                              = true            {C2 product}
-&lt;      bool OptimizeStringConcat                      = true            {C2 product}
-&gt;      bool OptimizeFill                              = false           {C2 product}
-&gt;      bool OptimizeStringConcat                      = false           {C2 product}
-&lt;      bool UseFPUForSpilling                         = true            {C2 product}
-&gt;      bool UseFPUForSpilling                         = false           {C2 product}
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">diff &lt;(java -XX:+PrintFlagsFinal -XX:+AggressiveOpts -version) &lt;(java -XX:+PrintFlagsFinal -version) | grep <span class="string">"&gt;\|&lt;"</span></div><div class="line"></div><div class="line">&lt;      bool AggressiveOpts                           := <span class="literal">true</span>            &#123;product&#125;</div><div class="line">&gt;      bool AggressiveOpts                            = <span class="literal">false</span>           &#123;product&#125;</div><div class="line">&lt;      intx AutoBoxCacheMax                           = 20000           &#123;C2 product&#125;</div><div class="line">&gt;      intx AutoBoxCacheMax                           = 128             &#123;C2 product&#125;</div><div class="line">&lt;      intx BiasedLockingStartupDelay                 = 500             &#123;product&#125;</div><div class="line">&gt;      intx BiasedLockingStartupDelay                 = 4000            &#123;product&#125;</div><div class="line">&lt;      bool EliminateAutoBox                          = <span class="literal">true</span>            &#123;C2 diagnostic&#125;</div><div class="line">&gt;      bool EliminateAutoBox                          = <span class="literal">false</span>           &#123;C2 diagnostic&#125;</div><div class="line">&lt;      bool OptimizeFill                              = <span class="literal">true</span>            &#123;C2 product&#125;</div><div class="line">&lt;      bool OptimizeStringConcat                      = <span class="literal">true</span>            &#123;C2 product&#125;</div><div class="line">&gt;      bool OptimizeFill                              = <span class="literal">false</span>           &#123;C2 product&#125;</div><div class="line">&gt;      bool OptimizeStringConcat                      = <span class="literal">false</span>           &#123;C2 product&#125;</div><div class="line">&lt;      bool UseFPUForSpilling                         = <span class="literal">true</span>            &#123;C2 product&#125;</div><div class="line">&gt;      bool UseFPUForSpilling                         = <span class="literal">false</span>           &#123;C2 product&#125;</div></pre></td></tr></table></figure>
 <p>要切记的是 <code>AggressiveOpts</code> 参数在每一个Java的<code>minor</code>(次)版本中都可能是不同的.</p>
 <h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>以上的命令, 我自己也亲自运行了一次, 都是可以执行的. 实践才出真知, 不然翻译出来, 别人发现运行不了这些命令就不好了. 注意,  以上的命令是基于<code>*nix</code>系统的.在我的Mac上的例子如下:</p>
-<pre><code class="bash">yangzhiyong@yangzhiyongdeMacBook-Pro:~
-&gt; diff &lt;(java -XX:+PrintFlagsFinal -XX:+AggressiveOpts -version) &lt;(java -XX:+PrintFlagsFinal -version) | grep &quot;&gt;\|&lt;&quot;
-java version &quot;1.8.0_31&quot;
-Java(TM) SE Runtime Environment (build 1.8.0_31-b13)
-Java HotSpot(TM) 64-Bit Server VM (build 25.31-b07, mixed mode)
-java version &quot;1.8.0_31&quot;
-Java(TM) SE Runtime Environment (build 1.8.0_31-b13)
-Java HotSpot(TM) 64-Bit Server VM (build 25.31-b07, mixed mode)
-&lt;      bool AggressiveOpts                           := true                                {product}
-&gt;      bool AggressiveOpts                            = false                               {product}
-&lt;      intx AutoBoxCacheMax                           = 20000                               {C2 product}
-&gt;      intx AutoBoxCacheMax                           = 128                                 {C2 product}
-&lt;      intx BiasedLockingStartupDelay                 = 500                                 {product}
-&gt;      intx BiasedLockingStartupDelay                 = 4000                                {product}
-&lt;      bool UseFPUForSpilling                         = true                                {C2 product}
-&gt;      bool UseFPUForSpilling                         = false                               {C2 product}
-
-yangzhiyong@yangzhiyongdeMacBook-Pro:~
-&gt;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">yangzhiyong@yangzhiyongdeMacBook-Pro:~</div><div class="line">&gt; diff &lt;(java -XX:+PrintFlagsFinal -XX:+AggressiveOpts -version) &lt;(java -XX:+PrintFlagsFinal -version) | grep <span class="string">"&gt;\|&lt;"</span></div><div class="line">java version <span class="string">"1.8.0_31"</span></div><div class="line">Java(TM) SE Runtime Environment (build 1.8.0_31-b13)</div><div class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.31-b07, mixed mode)</div><div class="line">java version <span class="string">"1.8.0_31"</span></div><div class="line">Java(TM) SE Runtime Environment (build 1.8.0_31-b13)</div><div class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.31-b07, mixed mode)</div><div class="line">&lt;      bool AggressiveOpts                           := <span class="literal">true</span>                                &#123;product&#125;</div><div class="line">&gt;      bool AggressiveOpts                            = <span class="literal">false</span>                               &#123;product&#125;</div><div class="line">&lt;      intx AutoBoxCacheMax                           = 20000                               &#123;C2 product&#125;</div><div class="line">&gt;      intx AutoBoxCacheMax                           = 128                                 &#123;C2 product&#125;</div><div class="line">&lt;      intx BiasedLockingStartupDelay                 = 500                                 &#123;product&#125;</div><div class="line">&gt;      intx BiasedLockingStartupDelay                 = 4000                                &#123;product&#125;</div><div class="line">&lt;      bool UseFPUForSpilling                         = <span class="literal">true</span>                                &#123;C2 product&#125;</div><div class="line">&gt;      bool UseFPUForSpilling                         = <span class="literal">false</span>                               &#123;C2 product&#125;</div><div class="line"></div><div class="line">yangzhiyong@yangzhiyongdeMacBook-Pro:~</div><div class="line">&gt;</div></pre></td></tr></table></figure>
 <p><code>java -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+PrintFlagsFinal</code>：这条命令可以解放隐藏的参数。</p>
 
                                 

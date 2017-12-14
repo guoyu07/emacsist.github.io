@@ -15,17 +15,17 @@
     <meta name="keywords" content="mysql,percona," />
   
 
-  <meta name="description" content="安装Doc 使用pt-mysql-summarypt-mysql-summary --host=127.0.0.1 --port=6606 --password=xxx 说明： 显示MySQL服务器的概况. pt-align将输出的文本对齐. 例子: #echo -e &amp;quot;hello owrld\n                            Hello world&amp;quot;">
+  <meta name="description" content="安装Doc 使用pt-mysql-summarypt-mysql-summary --host=127.0.0.1 --port=6606 --password=xxx 说明： 显示MySQL服务器的概况. pt-align将输出的文本对齐. 例子: 123456789#echo -e &quot;hello owrld\n                            Hello world&quot; |">
 <meta name="keywords" content="mysql,percona">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Percona的MySQL维护及监控工具使用">
 <meta property="og:url" content="https://emacsist.github.io/2016/04/25/Percona的MySQL维护及监控工具使用/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="安装Doc 使用pt-mysql-summarypt-mysql-summary --host=127.0.0.1 --port=6606 --password=xxx 说明： 显示MySQL服务器的概况. pt-align将输出的文本对齐. 例子: #echo -e &amp;quot;hello owrld\n                            Hello world&amp;quot;">
+<meta property="og:description" content="安装Doc 使用pt-mysql-summarypt-mysql-summary --host=127.0.0.1 --port=6606 --password=xxx 说明： 显示MySQL服务器的概况. pt-align将输出的文本对齐. 例子: 123456789#echo -e &quot;hello owrld\n                            Hello world&quot; |">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Percona的MySQL维护及监控工具使用">
-<meta name="twitter:description" content="安装Doc 使用pt-mysql-summarypt-mysql-summary --host=127.0.0.1 --port=6606 --password=xxx 说明： 显示MySQL服务器的概况. pt-align将输出的文本对齐. 例子: #echo -e &amp;quot;hello owrld\n                            Hello world&amp;quot;">
+<meta name="twitter:description" content="安装Doc 使用pt-mysql-summarypt-mysql-summary --host=127.0.0.1 --port=6606 --password=xxx 说明： 显示MySQL服务器的概况. pt-align将输出的文本对齐. 例子: 123456789#echo -e &quot;hello owrld\n                            Hello world&quot; |">
 
   
 
@@ -206,145 +206,50 @@
 <p>说明： 显示MySQL服务器的概况.</p>
 <h3 id="pt-align"><a href="#pt-align" class="headerlink" title="pt-align"></a>pt-align</h3><p>将输出的文本对齐.</p>
 <p>例子:</p>
-<pre><code class="bash">#echo -e &quot;hello owrld\n                            Hello world&quot; | pt-align 
-hello owrld
-Hello world
-
-如果没有pt-align，则输出如下：
-
-#echo -e &quot;hello owrld\n                            Hello world&quot;
-hello owrld
-                            Hello world
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#echo -e "hello owrld\n                            Hello world" | pt-align </span></div><div class="line">hello owrld</div><div class="line">Hello world</div><div class="line"></div><div class="line">如果没有pt-align，则输出如下：</div><div class="line"></div><div class="line"><span class="comment">#echo -e "hello owrld\n                            Hello world"</span></div><div class="line">hello owrld</div><div class="line">                            Hello world</div></pre></td></tr></table></figure>
 <h3 id="pt-archiver"><a href="#pt-archiver" class="headerlink" title="pt-archiver"></a>pt-archiver</h3><p>将mysql数据库中表的记录归档到另外一个表或者文件.</p>
-<pre><code class="bash">pt-archiver --source h=127.0.0.1,D=dbName,t=tableName --user=root --password=123456 \
---dest h=127.0.0.1,D=destDBName,t=destTableName --file &#39;/var/log/logToFileName&#39; --where &quot;id&lt;=100000&quot; --commit-each
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">pt-archiver --<span class="built_in">source</span> h=127.0.0.1,D=dbName,t=tableName --user=root --password=123456 \</div><div class="line">--dest h=127.0.0.1,D=destDBName,t=destTableName --file <span class="string">'/var/log/logToFileName'</span> --<span class="built_in">where</span> <span class="string">"id&lt;=100000"</span> --commit-each</div></pre></td></tr></table></figure>
 <p>默认会删除源表的数据.</p>
 <h3 id="pt-config-diff"><a href="#pt-config-diff" class="headerlink" title="pt-config-diff"></a>pt-config-diff</h3><p>配置文件比较工具</p>
 <p><code>pt-config-diff my.conf1 my.conf2 ...</code></p>
 <h3 id="pt-deadlock-logger"><a href="#pt-deadlock-logger" class="headerlink" title="pt-deadlock-logger"></a>pt-deadlock-logger</h3><p>死锁检测输出日志工具，这里将它输出到test数据库中的deadlocks表中.</p>
-<pre><code class="bash">pt-deadlock-logger --ask-pass --run-time=10 --interval=3 --create-dest-table --dest D=test,t=deadlocks u=root,P=6606,h=127.0.0.1
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pt-deadlock-logger --ask-pass --run-time=10 --interval=3 --create-dest-table --dest D=<span class="built_in">test</span>,t=deadlocks u=root,P=6606,h=127.0.0.1</div></pre></td></tr></table></figure>
 <h3 id="pt-diskstats"><a href="#pt-diskstats" class="headerlink" title="pt-diskstats"></a>pt-diskstats</h3><p>打印磁盘io统计信息</p>
 <h3 id="pt-duplicate-key-checker"><a href="#pt-duplicate-key-checker" class="headerlink" title="pt-duplicate-key-checker"></a>pt-duplicate-key-checker</h3><p>重复索引检测工具.</p>
-<pre><code class="bash">pt-duplicate-key-checker --host=127.0.0.1 --user=root --databases=db1,db2,db3 --port=6606 --password=xxxx
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pt-duplicate-key-checker --host=127.0.0.1 --user=root --databases=db1,db2,db3 --port=6606 --password=xxxx</div></pre></td></tr></table></figure>
 <h3 id="pt-fifo-split"><a href="#pt-fifo-split" class="headerlink" title="pt-fifo-split"></a>pt-fifo-split</h3><p>可以模拟切割文件，并通过管道传递给先入先出队列而不用真正的切割文件</p>
-<pre><code class="bash">源文件 /tmp/hello.world 内容
-
-cat /tmp/hello.world 
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-
-先创建fifo文件
-pt-fifo-split /tmp/hello.world --fifo=/tmp/hello.world.fifo --lines=3 &amp;
-
-然后就可以不断向 /tmp/cmbcc.fifo 文件读取文件了.结果如下：
-
-cat /tmp/hello.world.fifo 
-1
-2
-3
-
-cat /tmp/hello.world.fifo 
-4
-5
-6
-
-cat /tmp/hello.world.fifo 
-7
-8
-9
-
-...
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">源文件 /tmp/hello.world 内容</div><div class="line"></div><div class="line">cat /tmp/hello.world </div><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line"></div><div class="line">先创建fifo文件</div><div class="line">pt-fifo-split /tmp/hello.world --fifo=/tmp/hello.world.fifo --lines=3 &amp;</div><div class="line"></div><div class="line">然后就可以不断向 /tmp/cmbcc.fifo 文件读取文件了.结果如下：</div><div class="line"></div><div class="line">cat /tmp/hello.world.fifo </div><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line"></div><div class="line">cat /tmp/hello.world.fifo </div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line"></div><div class="line">cat /tmp/hello.world.fifo </div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line"></div><div class="line">...</div></pre></td></tr></table></figure>
 <h3 id="pt-find"><a href="#pt-find" class="headerlink" title="pt-find"></a>pt-find</h3><p>对MySQL的数据库或表进行类似GNU find的操作并执行一些命令</p>
-<pre><code class="bash">打印MySQL中的所有数据库及表名
-pt-find --ask-pass --host=127.0.0.1 --user=root --port=6606
-
-打印指定数据库中的表
-pt-find --ask-pass --host=127.0.0.1 --user=root --port=6606 db1 db2 db3
-
-找出表大小超过100M的表
-pt-find --ask-pass --host=127.0.0.1 --user=root --port=6606 --tablesize +100M  db1 db2
-
-显示所有表的大小并排序
-pt-find --ask-pass --host=127.0.0.1 --user=root --port=6606 --printf &quot;%T\t%D.%N\n&quot; | sort -rn
-
-所有大小信息
-pt-find --ask-pass --host=127.0.0.1 --user=root --port=6606 --printf &quot;DB=%D, TB=%N, Auto_increment=%a, Engine=%E,  ROWS=%S, Row_format=%R, Max_data_length=%M, Avg_row_length=%A, Collation=%L, Data_length=%d, Index_length=%I, Table_length=%T\n\n&quot; db1 db2 db3 | sort -rn
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">打印MySQL中的所有数据库及表名</div><div class="line">pt-find --ask-pass --host=127.0.0.1 --user=root --port=6606</div><div class="line"></div><div class="line">打印指定数据库中的表</div><div class="line">pt-find --ask-pass --host=127.0.0.1 --user=root --port=6606 db1 db2 db3</div><div class="line"></div><div class="line">找出表大小超过100M的表</div><div class="line">pt-find --ask-pass --host=127.0.0.1 --user=root --port=6606 --tablesize +100M  db1 db2</div><div class="line"></div><div class="line">显示所有表的大小并排序</div><div class="line">pt-find --ask-pass --host=127.0.0.1 --user=root --port=6606 --<span class="built_in">printf</span> <span class="string">"%T\t%D.%N\n"</span> | sort -rn</div><div class="line"> </div><div class="line">所有大小信息</div><div class="line">pt-find --ask-pass --host=127.0.0.1 --user=root --port=6606 --<span class="built_in">printf</span> <span class="string">"DB=%D, TB=%N, Auto_increment=%a, Engine=%E,  ROWS=%S, Row_format=%R, Max_data_length=%M, Avg_row_length=%A, Collation=%L, Data_length=%d, Index_length=%I, Table_length=%T\n\n"</span> db1 db2 db3 | sort -rn</div></pre></td></tr></table></figure>
 <p><a href="https://www.percona.com/doc/percona-toolkit/2.1/pt-find.html" target="_blank" rel="external">官方文档</a></p>
 <h3 id="pt-fingerprint"><a href="#pt-fingerprint" class="headerlink" title="pt-fingerprint"></a>pt-fingerprint</h3><p>将查询转化为带参查询</p>
-<pre><code class="bash">pt-fingerprint --query &quot;select a, b, c from users where id = 500&quot;
-
-select a, b, c from users where id = ?
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">pt-fingerprint --query <span class="string">"select a, b, c from users where id = 500"</span></div><div class="line"></div><div class="line">select a, b, c from users <span class="built_in">where</span> id = ?</div></pre></td></tr></table></figure>
 <h3 id="pt-fk-error-logger"><a href="#pt-fk-error-logger" class="headerlink" title="pt-fk-error-logger"></a>pt-fk-error-logger</h3><p>提取和记录mysql外键错误信息.</p>
-<pre><code class="bash">pt-fk-error-logger --ask-pass -h127.0.0.1 -P6606 --run-time=10 --interval=3 -uroot --dest D=test t=foreign_key_errors h=127.0.0.1,u=root,P=6606
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pt-fk-error-logger --ask-pass -h127.0.0.1 -P6606 --run-time=10 --interval=3 -uroot --dest D=<span class="built_in">test</span> t=foreign_key_errors h=127.0.0.1,u=root,P=6606</div></pre></td></tr></table></figure>
 <h3 id="pt-heartbeat"><a href="#pt-heartbeat" class="headerlink" title="pt-heartbeat"></a>pt-heartbeat</h3><p>监控MySQL复制延迟.</p>
 <p><a href="https://www.percona.com/doc/percona-toolkit/2.1/pt-heartbeat.html" target="_blank" rel="external">官方文档</a></p>
 <h3 id="pt-index-usage"><a href="#pt-index-usage" class="headerlink" title="pt-index-usage"></a>pt-index-usage</h3><p>从慢查询中分析索引使用情况</p>
-<pre><code class="bash">pt-index-usage /path/to/slow.log -h127.0.0.1 -uroot -P6606 --password=xxx
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pt-index-usage /path/to/slow.log -h127.0.0.1 -uroot -P6606 --password=xxx</div></pre></td></tr></table></figure>
 <h3 id="pt-online-schema-change"><a href="#pt-online-schema-change" class="headerlink" title="pt-online-schema-change"></a>pt-online-schema-change</h3><p>在线更改表结构，既不阻塞read，也不会阻塞写</p>
-<pre><code class="bash">pt-online-schema-change --alter &quot;ADD COLUMN c1 INT&quot; D=sakila,t=actor
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pt-online-schema-change --alter <span class="string">"ADD COLUMN c1 INT"</span> D=sakila,t=actor</div></pre></td></tr></table></figure>
 <p><a href="https://www.percona.com/doc/percona-toolkit/2.1/pt-online-schema-change.html" target="_blank" rel="external">官方文档</a></p>
 <h3 id="pt-query-digest"><a href="#pt-query-digest" class="headerlink" title="pt-query-digest"></a>pt-query-digest</h3><p>从日志，processlist, tcpdump分析MySQL的查询.</p>
-<pre><code class="bash">pt-query-digest slow.log
-
-pt-query-digest --processlist h=host1
-
-pt-query-digest --review h=host2 --no-report slow.log
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">pt-query-digest slow.log</div><div class="line"></div><div class="line">pt-query-digest --processlist h=host1</div><div class="line"></div><div class="line">pt-query-digest --review h=host2 --no-report slow.log</div></pre></td></tr></table></figure>
 <p><a href="https://www.percona.com/doc/percona-toolkit/2.2/pt-query-digest.html" target="_blank" rel="external">官方文档</a></p>
 <h3 id="pt-show-grants"><a href="#pt-show-grants" class="headerlink" title="pt-show-grants"></a>pt-show-grants</h3><p>显示服务器的用户及相应的权限</p>
-<pre><code class="bash">pt-show-grants --user=root --port=6606 --host=127.0.0.1 --ask-pass
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pt-show-grants --user=root --port=6606 --host=127.0.0.1 --ask-pass</div></pre></td></tr></table></figure>
 <h3 id="pt-sift"><a href="#pt-sift" class="headerlink" title="pt-sift"></a>pt-sift</h3><p>浏览由  pt-stalk 生成的文件</p>
 <h3 id="pt-stalk"><a href="#pt-stalk" class="headerlink" title="pt-stalk"></a>pt-stalk</h3><p>问题诊断工具.</p>
-<pre><code class="bash">pt-stalk --collect-tcpdump --function status \
---variable Threads_connected --threshold 2500 \
---daemonize -- --user=root --password=YOURPASSWORD
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">pt-stalk --collect-tcpdump --<span class="keyword">function</span> status \</div><div class="line">--variable Threads_connected --threshold 2500 \</div><div class="line">--daemonize -- --user=root --password=YOURPASSWORD</div></pre></td></tr></table></figure>
 <p>当MySQL的参数 threads_connected 达到 2500 时， 就收集它的服务器状态信息.</p>
 <h3 id="pt-table-checksum"><a href="#pt-table-checksum" class="headerlink" title="pt-table-checksum"></a>pt-table-checksum</h3><p>用于检测MySQL主、从库的数据是否一致</p>
 <p><a href="http://seanlook.com/2015/12/29/mysql_replica_pt-table-checksum/" target="_blank" rel="external">博客资料</a></p>
 <h3 id="pt-table-sync"><a href="#pt-table-sync" class="headerlink" title="pt-table-sync"></a>pt-table-sync</h3><p>同于主从同步.</p>
 <p>pt-table-checksum 发现不一致时，就用它来进行同步.</p>
 <h3 id="pt-variable-advisor"><a href="#pt-variable-advisor" class="headerlink" title="pt-variable-advisor"></a>pt-variable-advisor</h3><p>查看变量及其提供建议.</p>
-<pre><code class="bash">pt-variable-advisor --user=root --host=127.0.0.1 --port=6606 -p password h=127.0.0.1
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pt-variable-advisor --user=root --host=127.0.0.1 --port=6606 -p password h=127.0.0.1</div></pre></td></tr></table></figure>
 <h3 id="pt-visual-explain"><a href="#pt-visual-explain" class="headerlink" title="pt-visual-explain"></a>pt-visual-explain</h3><p>可视化explain</p>
-<pre><code class="bash">mysql -h127.0.0.1 -uroot -p -P6606 -D yourDbName -e &quot;explain select * from users limit 1&quot; | pt-visual-explain 
-Enter password: 
-
-Table scan
-rows           422
-+- Table
-   table          users
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">mysql -h127.0.0.1 -uroot -p -P6606 -D yourDbName -e <span class="string">"explain select * from users limit 1"</span> | pt-visual-explain </div><div class="line">Enter password: </div><div class="line"></div><div class="line">Table scan</div><div class="line">rows           422</div><div class="line">+- Table</div><div class="line">   table          users</div></pre></td></tr></table></figure>
 
                                 
     </div>

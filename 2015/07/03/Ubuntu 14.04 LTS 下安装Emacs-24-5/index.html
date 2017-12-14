@@ -15,17 +15,17 @@
     <meta name="keywords" content="emacs,ubuntu," />
   
 
-  <meta name="description" content="先删除以前的 emacs 版本可以进入 Ubuntu Software Center 里进行删除. 如果熟悉命令行, 也可以使用 sudo apt-get remove emacs 来进行删除. 安装核心依赖sudo apt-get install build-essential  sudo apt-get build-dep emacs24  下载 Emacs 24.5 源码 GNU Emacs">
+  <meta name="description" content="先删除以前的 emacs 版本可以进入 Ubuntu Software Center 里进行删除. 如果熟悉命令行, 也可以使用 sudo apt-get remove emacs 来进行删除. 安装核心依赖123sudo apt-get install build-essentialsudo apt-get build-dep emacs24 下载 Emacs 24.5 源码 GNU Emacs">
 <meta name="keywords" content="emacs,ubuntu">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Ubuntu 14.04 LTS 下安装Emacs 24.5">
 <meta property="og:url" content="https://emacsist.github.io/2015/07/03/Ubuntu 14.04 LTS 下安装Emacs-24-5/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="先删除以前的 emacs 版本可以进入 Ubuntu Software Center 里进行删除. 如果熟悉命令行, 也可以使用 sudo apt-get remove emacs 来进行删除. 安装核心依赖sudo apt-get install build-essential  sudo apt-get build-dep emacs24  下载 Emacs 24.5 源码 GNU Emacs">
+<meta property="og:description" content="先删除以前的 emacs 版本可以进入 Ubuntu Software Center 里进行删除. 如果熟悉命令行, 也可以使用 sudo apt-get remove emacs 来进行删除. 安装核心依赖123sudo apt-get install build-essentialsudo apt-get build-dep emacs24 下载 Emacs 24.5 源码 GNU Emacs">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ubuntu 14.04 LTS 下安装Emacs 24.5">
-<meta name="twitter:description" content="先删除以前的 emacs 版本可以进入 Ubuntu Software Center 里进行删除. 如果熟悉命令行, 也可以使用 sudo apt-get remove emacs 来进行删除. 安装核心依赖sudo apt-get install build-essential  sudo apt-get build-dep emacs24  下载 Emacs 24.5 源码 GNU Emacs">
+<meta name="twitter:description" content="先删除以前的 emacs 版本可以进入 Ubuntu Software Center 里进行删除. 如果熟悉命令行, 也可以使用 sudo apt-get remove emacs 来进行删除. 安装核心依赖123sudo apt-get install build-essentialsudo apt-get build-dep emacs24 下载 Emacs 24.5 源码 GNU Emacs">
 
   
 
@@ -203,38 +203,14 @@
         
                             <h2 id="先删除以前的-emacs-版本"><a href="#先删除以前的-emacs-版本" class="headerlink" title="先删除以前的 emacs 版本"></a>先删除以前的 emacs 版本</h2><p>可以进入 <code>Ubuntu Software Center</code> 里进行删除. 如果熟悉命令行, 也可以使用</p>
 <p><code>sudo apt-get remove emacs</code> 来进行删除.</p>
-<h2 id="安装核心依赖"><a href="#安装核心依赖" class="headerlink" title="安装核心依赖"></a>安装核心依赖</h2><pre><code class="bash">sudo apt-get install build-essential
-
-sudo apt-get build-dep emacs24
-</code></pre>
+<h2 id="安装核心依赖"><a href="#安装核心依赖" class="headerlink" title="安装核心依赖"></a>安装核心依赖</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install build-essential</div><div class="line"></div><div class="line">sudo apt-get build-dep emacs24</div></pre></td></tr></table></figure>
 <h2 id="下载-Emacs-24-5-源码"><a href="#下载-Emacs-24-5-源码" class="headerlink" title="下载 Emacs 24.5 源码"></a>下载 <code>Emacs 24.5 源码</code></h2><ul>
 <li><a href="http://ftp.gnu.org/gnu/emacs/emacs-24.5.tar.gz" target="_blank" rel="external">GNU Emacs 24.5</a></li>
 </ul>
-<pre><code class="bash">cd ~/Downloads &amp;&amp; wget -c http://ftp.gnu.org/gnu/emacs/emacs-24.5.tar.gz
-</code></pre>
-<h2 id="解压并进入该目录"><a href="#解压并进入该目录" class="headerlink" title="解压并进入该目录"></a>解压并进入该目录</h2><pre><code class="bash">cd ~/Downloads &amp;&amp; tar -xf emacs-24.5.tar.* &amp;&amp; cd emacs-24.5
-</code></pre>
-<h2 id="检测并安装"><a href="#检测并安装" class="headerlink" title="检测并安装"></a>检测并安装</h2><pre><code class="bash">./configure
-
-如果 configure 这一步出错, 一般是缺少其他相对应的依赖的, 这时, 可以使用 `aptitude` 这个工具来解决依赖的问题.
-
-make -j 4
-
-sudo make install
-</code></pre>
-<h2 id="添加为-Unity-启动图标"><a href="#添加为-Unity-启动图标" class="headerlink" title="添加为 Unity 启动图标"></a>添加为 <code>Unity</code> 启动图标</h2><pre><code class="bash">[Desktop Entry]
-Version=1.0
-Name=Emacs-24.5
-Exec=env UBUNTU_MENUPROXY=0 /usr/local/bin/emacs
-Terminal=false
-Icon=emacs
-Type=Application
-Categories=IDE
-X-Ayatana-Desktop-Shortcuts=NewWindow
-[NewWindow Shortcut Group]
-Name=New Window
-TargetEnvironment=Unity
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ~/Downloads &amp;&amp; wget -c http://ftp.gnu.org/gnu/emacs/emacs-24.5.tar.gz</div></pre></td></tr></table></figure>
+<h2 id="解压并进入该目录"><a href="#解压并进入该目录" class="headerlink" title="解压并进入该目录"></a>解压并进入该目录</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ~/Downloads &amp;&amp; tar -xf emacs-24.5.tar.* &amp;&amp; <span class="built_in">cd</span> emacs-24.5</div></pre></td></tr></table></figure>
+<h2 id="检测并安装"><a href="#检测并安装" class="headerlink" title="检测并安装"></a>检测并安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">./configure</div><div class="line"></div><div class="line">如果 configure 这一步出错, 一般是缺少其他相对应的依赖的, 这时, 可以使用 `aptitude` 这个工具来解决依赖的问题.</div><div class="line"></div><div class="line">make -j 4</div><div class="line"></div><div class="line">sudo make install</div></pre></td></tr></table></figure>
+<h2 id="添加为-Unity-启动图标"><a href="#添加为-Unity-启动图标" class="headerlink" title="添加为 Unity 启动图标"></a>添加为 <code>Unity</code> 启动图标</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[Desktop Entry]</div><div class="line">Version=1.0</div><div class="line">Name=Emacs-24.5</div><div class="line">Exec=env UBUNTU_MENUPROXY=0 /usr/<span class="built_in">local</span>/bin/emacs</div><div class="line">Terminal=<span class="literal">false</span></div><div class="line">Icon=emacs</div><div class="line">Type=Application</div><div class="line">Categories=IDE</div><div class="line">X-Ayatana-Desktop-Shortcuts=NewWindow</div><div class="line">[NewWindow Shortcut Group]</div><div class="line">Name=New Window</div><div class="line">TargetEnvironment=Unity</div></pre></td></tr></table></figure>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
 <li><p><a href="http://askubuntu.com/questions/437255/how-to-install-emacs-24-4-on-ubuntu" target="_blank" rel="external">Askubuntu</a></p>
 </li>

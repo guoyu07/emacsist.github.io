@@ -211,74 +211,11 @@
                             <h2 id="一次请求的调用栈"><a href="#一次请求的调用栈" class="headerlink" title="一次请求的调用栈"></a>一次请求的调用栈</h2><p><img src="/img/tomcat-source-debug-http.png" alt=""></p>
 <p>从上面的线程调用栈,可以看到一次请求的调用过程.</p>
 <p>注意中间那些以<code>Valve</code>结尾的类,它是Tomcat的里的责任链的组件.每一个组件,在Tomcat里都有自己对请求时可以进行自定义的处理.比如<code>AccessLogValve</code>就是记录访问日志的<code>Valve</code>.Tomcat自带的Valve,可以在包<code>org.apache.catalina.valves</code>下可以看到所有的列表.</p>
-<h2 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h2><h3 id="HelloServlet"><a href="#HelloServlet" class="headerlink" title="HelloServlet"></a>HelloServlet</h3><pre><code class="bash">package com.example;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
-/**
- * Created by sky on 16-6-30.
- */
-public class HelloServlet extends HttpServlet {
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.getWriter().write(&quot;hello world&quot;);
-        resp.getWriter().flush();
-        resp.getWriter().close();
-    }
-}
-</code></pre>
-<h3 id="web-xml"><a href="#web-xml" class="headerlink" title="web.xml"></a>web.xml</h3><pre><code class="bash">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
-&lt;!--
- Licensed to the Apache Software Foundation (ASF) under one or more
-  contributor license agreements.  See the NOTICE file distributed with
-  this work for additional information regarding copyright ownership.
-  The ASF licenses this file to You under the Apache License, Version 2.0
-  (the &quot;License&quot;); you may not use this file except in compliance with
-  the License.  You may obtain a copy of the License at
-
-      http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
---&gt;
-&lt;web-app xmlns=&quot;http://xmlns.jcp.org/xml/ns/javaee&quot;
-  xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-  xsi:schemaLocation=&quot;http://xmlns.jcp.org/xml/ns/javaee
-                      http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd&quot;
-  version=&quot;3.1&quot;
-  metadata-complete=&quot;true&quot;&gt;
-
-  &lt;display-name&gt;Welcome to Tomcat&lt;/display-name&gt;
-  &lt;description&gt;
-     Welcome to Tomcat
-  &lt;/description&gt;
-
-    &lt;servlet&gt;
-        &lt;servlet-name&gt;hello-servlet&lt;/servlet-name&gt;
-        &lt;servlet-class&gt;com.example.HelloServlet&lt;/servlet-class&gt;
-        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
-    &lt;/servlet&gt;
-    &lt;servlet-mapping&gt;
-        &lt;servlet-name&gt;hello-servlet&lt;/servlet-name&gt;
-        &lt;url-pattern&gt;/hello&lt;/url-pattern&gt;
-    &lt;/servlet-mapping&gt;
-
-&lt;/web-app&gt;
-</code></pre>
+<h2 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h2><h3 id="HelloServlet"><a href="#HelloServlet" class="headerlink" title="HelloServlet"></a>HelloServlet</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">package com.example;</div><div class="line"></div><div class="line">import javax.servlet.ServletException;</div><div class="line">import javax.servlet.http.HttpServlet;</div><div class="line">import javax.servlet.http.HttpServletRequest;</div><div class="line">import javax.servlet.http.HttpServletResponse;</div><div class="line">import java.io.IOException;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by sky on 16-6-30.</div><div class="line"> */</div><div class="line">public class HelloServlet extends HttpServlet &#123;</div><div class="line">    @Override</div><div class="line">    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123;</div><div class="line">        resp.getWriter().write(<span class="string">"hello world"</span>);</div><div class="line">        resp.getWriter().flush();</div><div class="line">        resp.getWriter().close();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="web-xml"><a href="#web-xml" class="headerlink" title="web.xml"></a>web.xml</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"ISO-8859-1"</span>?&gt;</div><div class="line">&lt;!--</div><div class="line"> Licensed to the Apache Software Foundation (ASF) under one or more</div><div class="line">  contributor license agreements.  See the NOTICE file distributed with</div><div class="line">  this work <span class="keyword">for</span> additional information regarding copyright ownership.</div><div class="line">  The ASF licenses this file to You under the Apache License, Version 2.0</div><div class="line">  (the <span class="string">"License"</span>); you may not use this file except <span class="keyword">in</span> compliance with</div><div class="line">  the License.  You may obtain a copy of the License at</div><div class="line"></div><div class="line">      http://www.apache.org/licenses/LICENSE-2.0</div><div class="line"></div><div class="line">  Unless required by applicable law or agreed to <span class="keyword">in</span> writing, software</div><div class="line">  distributed under the License is distributed on an <span class="string">"AS IS"</span> BASIS,</div><div class="line">  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</div><div class="line">  See the License <span class="keyword">for</span> the specific language governing permissions and</div><div class="line">  limitations under the License.</div><div class="line">--&gt;</div><div class="line">&lt;web-app xmlns=<span class="string">"http://xmlns.jcp.org/xml/ns/javaee"</span></div><div class="line">  xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></div><div class="line">  xsi:schemaLocation=<span class="string">"http://xmlns.jcp.org/xml/ns/javaee</span></div><div class="line">                      http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"</div><div class="line">  version=<span class="string">"3.1"</span></div><div class="line">  metadata-complete=<span class="string">"true"</span>&gt;</div><div class="line"></div><div class="line">  &lt;display-name&gt;Welcome to Tomcat&lt;/display-name&gt;</div><div class="line">  &lt;description&gt;</div><div class="line">     Welcome to Tomcat</div><div class="line">  &lt;/description&gt;</div><div class="line"></div><div class="line">    &lt;servlet&gt;</div><div class="line">        &lt;servlet-name&gt;hello-servlet&lt;/servlet-name&gt;</div><div class="line">        &lt;servlet-class&gt;com.example.HelloServlet&lt;/servlet-class&gt;</div><div class="line">        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;</div><div class="line">    &lt;/servlet&gt;</div><div class="line">    &lt;servlet-mapping&gt;</div><div class="line">        &lt;servlet-name&gt;hello-servlet&lt;/servlet-name&gt;</div><div class="line">        &lt;url-pattern&gt;/hello&lt;/url-pattern&gt;</div><div class="line">    &lt;/servlet-mapping&gt;</div><div class="line"></div><div class="line">&lt;/web-app&gt;</div></pre></td></tr></table></figure>
 <h2 id="解析HTTP协议"><a href="#解析HTTP协议" class="headerlink" title="解析HTTP协议"></a>解析HTTP协议</h2><p>Tomcat8默认使用 NIO 来处理HTTP了.看调用栈,可以知道,它通过<code>org.apache.coyote.http11.AbstractInputBuffer.parseRequestLine()</code>来解析请求头的.</p>
 <p>请求头的内容,保存在以下这个字段里.</p>
-<pre><code class="bash">/**
-* Pointer to the current read buffer.
-*/
-protected byte[] buf;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">* Pointer to the current <span class="built_in">read</span> buffer.</div><div class="line">*/</div><div class="line">protected byte[] buf;</div></pre></td></tr></table></figure>
 <p>解析完成后,就创建了一个<code>org.apache.catalina.connector.Request</code>对象.</p>
 <h2 id="调用相应的责任链"><a href="#调用相应的责任链" class="headerlink" title="调用相应的责任链"></a>调用相应的责任链</h2><p>通过Requset对象,再查找相应的Servlet(应该说是调用链,在Tomcat里,它用<code>StandardWrapper</code>对象表示, 在这里就是<code>hello-servlet</code>)(代码是 <code>StandardWrapper wrapper = (StandardWrapper) getContainer();</code> )<br>最后,Tomcat就会调用名为<code>hello-servlet</code>的Servlet来执行代码了.</p>
 <h2 id="Tomcat到SpringMVC"><a href="#Tomcat到SpringMVC" class="headerlink" title="Tomcat到SpringMVC"></a>Tomcat到SpringMVC</h2><p>上面就已经执行到了我们自定义的<code>hello-servlet</code>了,只要将这个Servlet,替换成Spring的<code>org.springframework.web.servlet.DispatcherServlet</code>即可.它是SpringMVC的总控制及转发器(路由器,因为SpringMVC并不是使用传统的Servlet来对应每一个请求,而是使用Bean的某个方法来处理).</p>

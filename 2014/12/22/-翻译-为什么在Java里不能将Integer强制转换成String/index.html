@@ -15,17 +15,17 @@
     <meta name="keywords" content="java 基础学习,java," />
   
 
-  <meta name="description" content="为何Integer不能转换为String原文 因为 String 和 Integer 不是在同一个对象阶层。       Object      /      \     /        \ String     Integer 当你尝试强制转换时，仅仅会在同一个对象阶层转换。比如：      Object      /     /    A   / / B 在这种情况，(A)objB 或者 (">
+  <meta name="description" content="为何Integer不能转换为String原文 因为 String 和 Integer 不是在同一个对象阶层。 1234      Object     /      \    /        \String     Integer 当你尝试强制转换时，仅仅会在同一个对象阶层转换。比如： 1234567     Object     /    /   A  //B 在这种情况，(A)objB 或者">
 <meta name="keywords" content="java 基础学习,java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[翻译]为什么在Java里不能将Integer强制转换成String">
 <meta property="og:url" content="https://emacsist.github.io/2014/12/22/-翻译-为什么在Java里不能将Integer强制转换成String/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="为何Integer不能转换为String原文 因为 String 和 Integer 不是在同一个对象阶层。       Object      /      \     /        \ String     Integer 当你尝试强制转换时，仅仅会在同一个对象阶层转换。比如：      Object      /     /    A   / / B 在这种情况，(A)objB 或者 (">
+<meta property="og:description" content="为何Integer不能转换为String原文 因为 String 和 Integer 不是在同一个对象阶层。 1234      Object     /      \    /        \String     Integer 当你尝试强制转换时，仅仅会在同一个对象阶层转换。比如： 1234567     Object     /    /   A  //B 在这种情况，(A)objB 或者">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[翻译]为什么在Java里不能将Integer强制转换成String">
-<meta name="twitter:description" content="为何Integer不能转换为String原文 因为 String 和 Integer 不是在同一个对象阶层。       Object      /      \     /        \ String     Integer 当你尝试强制转换时，仅仅会在同一个对象阶层转换。比如：      Object      /     /    A   / / B 在这种情况，(A)objB 或者 (">
+<meta name="twitter:description" content="为何Integer不能转换为String原文 因为 String 和 Integer 不是在同一个对象阶层。 1234      Object     /      \    /        \String     Integer 当你尝试强制转换时，仅仅会在同一个对象阶层转换。比如： 1234567     Object     /    /   A  //B 在这种情况，(A)objB 或者">
 
   
 
@@ -203,19 +203,10 @@
         
                             <h2 id="为何Integer不能转换为String"><a href="#为何Integer不能转换为String" class="headerlink" title="为何Integer不能转换为String"></a>为何Integer不能转换为String</h2><p><a href="http://stackoverflow.com/a/8973685/3815425" target="_blank" rel="external">原文</a></p>
 <p>因为 <code>String</code> 和 <code>Integer</code> 不是在同一个对象阶层。</p>
-<pre><code>      Object
-     /      \
-    /        \
-String     Integer
-</code></pre><p>当你尝试强制转换时，仅仅会在同一个对象阶层转换。比如：</p>
-<pre><code>     Object
-     /
-    /
-   A
-  /
-/
-B
-</code></pre><p>在这种情况，<code>(A)objB</code> 或者 <code>(Object)objB</code> 或者 <code>(Object)objA</code> 可以进行转换。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">      Object</div><div class="line">     /      \</div><div class="line">    /        \</div><div class="line">String     Integer</div></pre></td></tr></table></figure>
+<p>当你尝试强制转换时，仅仅会在同一个对象阶层转换。比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">     Object</div><div class="line">     /</div><div class="line">    /</div><div class="line">   A</div><div class="line">  /</div><div class="line">/</div><div class="line">B</div></pre></td></tr></table></figure>
+<p>在这种情况，<code>(A)objB</code> 或者 <code>(Object)objB</code> 或者 <code>(Object)objA</code> 可以进行转换。</p>
 <p>正如其他人已经提到，将<code>integer</code>转换成<code>String</code>可以使用以下方法：</p>
 <p>基本类型的整型时使用：<code>String.valueOf(integer)</code>或者<code>Integer.toString(integer)</code> 来转换成<code>String</code>。<br><code>Integer</code>对象型时使用：<code>Integer.toString()</code>转换成<code>String</code></p>
 <hr>

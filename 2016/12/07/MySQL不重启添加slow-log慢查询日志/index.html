@@ -15,17 +15,17 @@
     <meta name="keywords" content="database,mysql," />
   
 
-  <meta name="description" content="## 开启慢查询 mysql&amp;gt; set global slow_query_log = &amp;#39;ON&amp;#39;; Query OK, 0 rows affected (0.78 sec)  ## 检查变量值 mysql&amp;gt; show global variables like &amp;#39;%slow%&amp;#39;; +---------------------------+--------">
+  <meta name="description" content="1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162## 开启慢查询mysql&amp;gt; set global slow_query_log = &apos;ON&apos;;Query OK, 0 rows affected (0.78 se">
 <meta name="keywords" content="database,mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL不重启添加slow log慢查询日志">
 <meta property="og:url" content="https://emacsist.github.io/2016/12/07/MySQL不重启添加slow-log慢查询日志/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="## 开启慢查询 mysql&amp;gt; set global slow_query_log = &amp;#39;ON&amp;#39;; Query OK, 0 rows affected (0.78 sec)  ## 检查变量值 mysql&amp;gt; show global variables like &amp;#39;%slow%&amp;#39;; +---------------------------+--------">
+<meta property="og:description" content="1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162## 开启慢查询mysql&amp;gt; set global slow_query_log = &apos;ON&apos;;Query OK, 0 rows affected (0.78 se">
 <meta property="og:updated_time" content="2016-12-07T13:26:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL不重启添加slow log慢查询日志">
-<meta name="twitter:description" content="## 开启慢查询 mysql&amp;gt; set global slow_query_log = &amp;#39;ON&amp;#39;; Query OK, 0 rows affected (0.78 sec)  ## 检查变量值 mysql&amp;gt; show global variables like &amp;#39;%slow%&amp;#39;; +---------------------------+--------">
+<meta name="twitter:description" content="1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162## 开启慢查询mysql&amp;gt; set global slow_query_log = &apos;ON&apos;;Query OK, 0 rows affected (0.78 se">
 
   
 
@@ -196,70 +196,7 @@
 
     <div class="article-content">
         
-                            <pre><code class="bash">## 开启慢查询
-mysql&gt; set global slow_query_log = &#39;ON&#39;;
-Query OK, 0 rows affected (0.78 sec)
-
-## 检查变量值
-mysql&gt; show global variables like &#39;%slow%&#39;;
-+---------------------------+------------------------------------------------------+
-| Variable_name             | Value                                                |
-+---------------------------+------------------------------------------------------+
-| log_slow_admin_statements | OFF                                                  |
-| log_slow_slave_statements | OFF                                                  |
-| slow_launch_time          | 2                                                    |
-| slow_query_log            | ON                                                   |
-| slow_query_log_file       | /home/username/mysql/data/db/logs/myql-slow.log      |
-+---------------------------+------------------------------------------------------+
-5 rows in set (0.00 sec)
-
-## 记录不使用索引的语句
-mysql&gt; set global log_queries_not_using_indexes = &#39;ON&#39;;
-Query OK, 0 rows affected (0.00 sec)
-
-mysql&gt; show global variables like &#39;%indexes%&#39;;
-+----------------------------------------+-------+
-| Variable_name                          | Value |
-+----------------------------------------+-------+
-| log_queries_not_using_indexes          | ON    |
-| log_throttle_queries_not_using_indexes | 0     |
-+----------------------------------------+-------+
-2 rows in set (0.00 sec)
-
-## 设置慢查询日志的位置
-
-mysql&gt; set global slow_query_log_file =&#39;/home/username/mysql/data/db/logs/myql-slow.log&#39;;
-Query OK, 0 rows affected (0.01 sec)
-
-mysql&gt; show variables like &#39;%slow%&#39;;
-+---------------------------+------------------------------------------------------+
-| Variable_name             | Value                                                |
-+---------------------------+------------------------------------------------------+
-| log_slow_admin_statements | OFF                                                  |
-| log_slow_slave_statements | OFF                                                  |
-| slow_launch_time          | 2                                                    |
-| slow_query_log            | ON                                                   |
-| slow_query_log_file       | /home/username/mysql/data/db/logs/myql-slow.log |
-+---------------------------+------------------------------------------------------+
-5 rows in set (0.00 sec)
-
-## 按需要修改记录慢于该时间的语句
-mysql&gt; show variables like &#39;%query_time%&#39;;
-+-----------------+----------+
-| Variable_name   | Value    |
-+-----------------+----------+
-| long_query_time | 1.000000 |
-+-----------------+----------+
-1 row in set (0.00 sec)
-
-## 刷新即可生效
-
-mysql&gt; FLUSH LOGS;
-Query OK, 0 rows affected (0.22 sec)
-
-mysql&gt;
-</code></pre>
-
+                            <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div></pre></td><td class="code"><pre><div class="line"><span class="comment">## 开启慢查询</span></div><div class="line">mysql&gt; <span class="built_in">set</span> global slow_query_log = <span class="string">'ON'</span>;</div><div class="line">Query OK, 0 rows affected (0.78 sec)</div><div class="line"></div><div class="line"><span class="comment">## 检查变量值</span></div><div class="line">mysql&gt; show global variables like <span class="string">'%slow%'</span>;</div><div class="line">+---------------------------+------------------------------------------------------+</div><div class="line">| Variable_name             | Value                                                |</div><div class="line">+---------------------------+------------------------------------------------------+</div><div class="line">| log_slow_admin_statements | OFF                                                  |</div><div class="line">| log_slow_slave_statements | OFF                                                  |</div><div class="line">| slow_launch_time          | 2                                                    |</div><div class="line">| slow_query_log            | ON                                                   |</div><div class="line">| slow_query_log_file       | /home/username/mysql/data/db/logs/myql-slow.log      |</div><div class="line">+---------------------------+------------------------------------------------------+</div><div class="line">5 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line"><span class="comment">## 记录不使用索引的语句</span></div><div class="line">mysql&gt; <span class="built_in">set</span> global log_queries_not_using_indexes = <span class="string">'ON'</span>;</div><div class="line">Query OK, 0 rows affected (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; show global variables like <span class="string">'%indexes%'</span>;</div><div class="line">+----------------------------------------+-------+</div><div class="line">| Variable_name                          | Value |</div><div class="line">+----------------------------------------+-------+</div><div class="line">| log_queries_not_using_indexes          | ON    |</div><div class="line">| log_throttle_queries_not_using_indexes | 0     |</div><div class="line">+----------------------------------------+-------+</div><div class="line">2 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line"><span class="comment">## 设置慢查询日志的位置</span></div><div class="line"></div><div class="line">mysql&gt; <span class="built_in">set</span> global slow_query_log_file =<span class="string">'/home/username/mysql/data/db/logs/myql-slow.log'</span>;</div><div class="line">Query OK, 0 rows affected (0.01 sec)</div><div class="line"></div><div class="line">mysql&gt; show variables like <span class="string">'%slow%'</span>;</div><div class="line">+---------------------------+------------------------------------------------------+</div><div class="line">| Variable_name             | Value                                                |</div><div class="line">+---------------------------+------------------------------------------------------+</div><div class="line">| log_slow_admin_statements | OFF                                                  |</div><div class="line">| log_slow_slave_statements | OFF                                                  |</div><div class="line">| slow_launch_time          | 2                                                    |</div><div class="line">| slow_query_log            | ON                                                   |</div><div class="line">| slow_query_log_file       | /home/username/mysql/data/db/logs/myql-slow.log |</div><div class="line">+---------------------------+------------------------------------------------------+</div><div class="line">5 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line"><span class="comment">## 按需要修改记录慢于该时间的语句</span></div><div class="line">mysql&gt; show variables like <span class="string">'%query_time%'</span>;</div><div class="line">+-----------------+----------+</div><div class="line">| Variable_name   | Value    |</div><div class="line">+-----------------+----------+</div><div class="line">| long_query_time | 1.000000 |</div><div class="line">+-----------------+----------+</div><div class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line"><span class="comment">## 刷新即可生效</span></div><div class="line"></div><div class="line">mysql&gt; FLUSH LOGS;</div><div class="line">Query OK, 0 rows affected (0.22 sec)</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
                                 
     </div>
 </article>

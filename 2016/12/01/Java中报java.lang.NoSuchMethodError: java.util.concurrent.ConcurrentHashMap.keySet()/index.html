@@ -15,17 +15,17 @@
     <meta name="keywords" content="java,ConcurrentHashMap," />
   
 
-  <meta name="description" content="原因公司某生产环境在Tomcat启动时，报如下错误: java.lang.NoSuchMethodError: java.util.concurrent.ConcurrentHashMap.keySet()Ljava/util/concurrent/ConcurrentHashMap$KeySetView;  然后 Google 了下，发现在Github上也有在讨论: gist.github.co">
+  <meta name="description" content="原因公司某生产环境在Tomcat启动时，报如下错误: 1java.lang.NoSuchMethodError: java.util.concurrent.ConcurrentHashMap.keySet()Ljava/util/concurrent/ConcurrentHashMap$KeySetView; 然后 Google 了下，发现在Github上也有在讨论: gist.github.co">
 <meta name="keywords" content="java,ConcurrentHashMap">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java中报java.lang.NoSuchMethodError: java.util.concurrent.ConcurrentHashMap.keySet()">
 <meta property="og:url" content="https://emacsist.github.io/2016/12/01/Java中报java.lang.NoSuchMethodError: java.util.concurrent.ConcurrentHashMap.keySet()/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="原因公司某生产环境在Tomcat启动时，报如下错误: java.lang.NoSuchMethodError: java.util.concurrent.ConcurrentHashMap.keySet()Ljava/util/concurrent/ConcurrentHashMap$KeySetView;  然后 Google 了下，发现在Github上也有在讨论: gist.github.co">
+<meta property="og:description" content="原因公司某生产环境在Tomcat启动时，报如下错误: 1java.lang.NoSuchMethodError: java.util.concurrent.ConcurrentHashMap.keySet()Ljava/util/concurrent/ConcurrentHashMap$KeySetView; 然后 Google 了下，发现在Github上也有在讨论: gist.github.co">
 <meta property="og:updated_time" content="2016-12-01T15:25:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java中报java.lang.NoSuchMethodError: java.util.concurrent.ConcurrentHashMap.keySet()">
-<meta name="twitter:description" content="原因公司某生产环境在Tomcat启动时，报如下错误: java.lang.NoSuchMethodError: java.util.concurrent.ConcurrentHashMap.keySet()Ljava/util/concurrent/ConcurrentHashMap$KeySetView;  然后 Google 了下，发现在Github上也有在讨论: gist.github.co">
+<meta name="twitter:description" content="原因公司某生产环境在Tomcat启动时，报如下错误: 1java.lang.NoSuchMethodError: java.util.concurrent.ConcurrentHashMap.keySet()Ljava/util/concurrent/ConcurrentHashMap$KeySetView; 然后 Google 了下，发现在Github上也有在讨论: gist.github.co">
 
   
 
@@ -202,8 +202,7 @@
     <div class="article-content">
         
                             <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>公司某生产环境在Tomcat启动时，报如下错误:</p>
-<pre><code class="bash">java.lang.NoSuchMethodError: java.util.concurrent.ConcurrentHashMap.keySet()Ljava/util/concurrent/ConcurrentHashMap$KeySetView;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">java.lang.NoSuchMethodError: java.util.concurrent.ConcurrentHashMap.keySet()Ljava/util/concurrent/ConcurrentHashMap<span class="variable">$KeySetView</span>;</div></pre></td></tr></table></figure>
 <p>然后 Google 了下，发现在Github上也有在讨论:</p>
 <p><a href="https://gist.github.com/AlainODea/1375759b8720a3f9f094" target="_blank" rel="external">gist.github.com</a></p>
 <p>导致原因：</p>
@@ -211,24 +210,11 @@
 <h2 id="重现"><a href="#重现" class="headerlink" title="重现"></a>重现</h2><p>所以，在本机测试了下。按gist上面的步骤来重现：</p>
 <p>在1.8的环境下编译，也将项目的级别设置为1.7，然后使用JDK1.7的JVM来运行:</p>
 <p>java代码:</p>
-<pre><code class="bash">import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
-public class HelloConvariance {
-  public static void main(String[] args) {
-    ConcurrentHashMap&lt;String, String&gt; properties = new ConcurrentHashMap&lt;&gt;();
-    Set&lt;String&gt; keySet = properties.keySet();
-  }
-}
-</code></pre>
-<pre><code class="bash">└─[1] &lt;&gt; /ihome/java/jdk/jdk1.7.0_79/bin/java com.github.emacsist.App
-Exception in thread &quot;main&quot; java.lang.NoSuchMethodError: java.util.concurrent.ConcurrentHashMap.keySet()Ljava/util/concurrent/ConcurrentHashMap$KeySetView;
-    at com.github.emacsist.App.main(App.java:12)
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">import java.util.Set;</div><div class="line">import java.util.concurrent.ConcurrentHashMap;</div><div class="line"></div><div class="line">public class HelloConvariance &#123;</div><div class="line">  public static void main(String[] args) &#123;</div><div class="line">    ConcurrentHashMap&lt;String, String&gt; properties = new ConcurrentHashMap&lt;&gt;();</div><div class="line">    Set&lt;String&gt; keySet = properties.keySet();</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">└─[1] &lt;&gt; /ihome/java/jdk/jdk1.7.0_79/bin/java com.github.emacsist.App</div><div class="line">Exception <span class="keyword">in</span> thread <span class="string">"main"</span> java.lang.NoSuchMethodError: java.util.concurrent.ConcurrentHashMap.keySet()Ljava/util/concurrent/ConcurrentHashMap<span class="variable">$KeySetView</span>;</div><div class="line">	at com.github.emacsist.App.main(App.java:12)</div></pre></td></tr></table></figure>
 <h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><h3 id="一"><a href="#一" class="headerlink" title="一"></a>一</h3><p>将开发人员的JDK也设置为1.7</p>
 <h3 id="二"><a href="#二" class="headerlink" title="二"></a>二</h3><p>在编译的时候，指定<code>bootclasspath</code>为1.7的，即按上面的gist的处理:</p>
-<pre><code class="bash">$ /usr/lib/jvm/java-8-oracle/bin/javac -source 1.7 -target 1.7 HelloCovariance.java -bootclasspath /usr/lib/jvm/java-1.7.0-openjdk-amd64/jre/lib/rt.jar
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ /usr/lib/jvm/java-8-oracle/bin/javac -<span class="built_in">source</span> 1.7 -target 1.7 HelloCovariance.java -bootclasspath /usr/lib/jvm/java-1.7.0-openjdk-amd64/jre/lib/rt.jar</div></pre></td></tr></table></figure>
 
                                 
     </div>

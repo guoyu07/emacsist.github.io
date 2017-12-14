@@ -15,17 +15,17 @@
     <meta name="keywords" content="http,tcp,header," />
   
 
-  <meta name="description" content="HTTP 请求头 Range 请求资源的部分内容(不包括响应头的大小), 单位是byte,即字节,从0开始.  如果服务器能够正常响应的话，服务器会返回206 Partial Content的状态码及说明.如果不能处理这种Range的话，就会返回整个资源以及响应状态码为200 OK.（这个要注意，要分段下载时，要先判断这个） 比如：类似下面的 ➜  /tmp  curl -H &amp;quot;Rang">
+  <meta name="description" content="HTTP 请求头 Range 请求资源的部分内容(不包括响应头的大小), 单位是byte,即字节,从0开始.  如果服务器能够正常响应的话，服务器会返回206 Partial Content的状态码及说明.如果不能处理这种Range的话，就会返回整个资源以及响应状态码为200 OK.（这个要注意，要分段下载时，要先判断这个） 比如：类似下面的 123456789101112131415161718">
 <meta name="keywords" content="http,tcp,header">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Http 协议中的Range请求头例子">
 <meta property="og:url" content="https://emacsist.github.io/2015/12/29/Http-协议中的Range请求头例子/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="HTTP 请求头 Range 请求资源的部分内容(不包括响应头的大小), 单位是byte,即字节,从0开始.  如果服务器能够正常响应的话，服务器会返回206 Partial Content的状态码及说明.如果不能处理这种Range的话，就会返回整个资源以及响应状态码为200 OK.（这个要注意，要分段下载时，要先判断这个） 比如：类似下面的 ➜  /tmp  curl -H &amp;quot;Rang">
+<meta property="og:description" content="HTTP 请求头 Range 请求资源的部分内容(不包括响应头的大小), 单位是byte,即字节,从0开始.  如果服务器能够正常响应的话，服务器会返回206 Partial Content的状态码及说明.如果不能处理这种Range的话，就会返回整个资源以及响应状态码为200 OK.（这个要注意，要分段下载时，要先判断这个） 比如：类似下面的 123456789101112131415161718">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Http 协议中的Range请求头例子">
-<meta name="twitter:description" content="HTTP 请求头 Range 请求资源的部分内容(不包括响应头的大小), 单位是byte,即字节,从0开始.  如果服务器能够正常响应的话，服务器会返回206 Partial Content的状态码及说明.如果不能处理这种Range的话，就会返回整个资源以及响应状态码为200 OK.（这个要注意，要分段下载时，要先判断这个） 比如：类似下面的 ➜  /tmp  curl -H &amp;quot;Rang">
+<meta name="twitter:description" content="HTTP 请求头 Range 请求资源的部分内容(不包括响应头的大小), 单位是byte,即字节,从0开始.  如果服务器能够正常响应的话，服务器会返回206 Partial Content的状态码及说明.如果不能处理这种Range的话，就会返回整个资源以及响应状态码为200 OK.（这个要注意，要分段下载时，要先判断这个） 比如：类似下面的 123456789101112131415161718">
 
   
 
@@ -211,35 +211,9 @@
 </blockquote>
 <p>如果服务器能够正常响应的话，服务器会返回<code>206 Partial Content</code>的状态码及说明.<br>如果不能处理这种Range的话，就会返回整个资源以及响应状态码为<code>200 OK</code>.（这个要注意，要分段下载时，要先判断这个）</p>
 <p>比如：类似下面的</p>
-<pre><code class="bash">➜  /tmp  curl -H &quot;Range: bytes=0-10&quot; http://127.0.0.1:8180/bg-upper.png -v
-* Hostname was NOT found in DNS cache
-*   Trying 127.0.0.1...
-* Connected to 127.0.0.1 (127.0.0.1) port 8180 (#0)
-&gt; GET /bg-upper.png HTTP/1.1
-&gt; User-Agent: curl/7.35.0
-&gt; Host: 127.0.0.1:8180
-&gt; Accept: */*
-&gt; Range: bytes=0-10
-&gt;
-&lt; HTTP/1.1 206 Partial Content
-* Server Apache-Coyote/1.1 is not blacklisted
-&lt; Server: Apache-Coyote/1.1
-&lt; Accept-Ranges: bytes
-&lt; ETag: W/&quot;3103-1435633968000&quot;
-&lt; Last-Modified: Tue, 30 Jun 2015 03:12:48 GMT
-&lt; Content-Range: bytes 0-10/3103
-&lt; Content-Type: image/png
-&lt; Content-Length: 11
-&lt; Date: Tue, 29 Dec 2015 09:18:36 GMT
-&lt;
-PNG
-
-* Connection #0 to host 127.0.0.1 left intact
-➜
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">➜  /tmp  curl -H <span class="string">"Range: bytes=0-10"</span> http://127.0.0.1:8180/<span class="built_in">bg</span>-upper.png -v</div><div class="line">* Hostname was NOT found <span class="keyword">in</span> DNS cache</div><div class="line">*   Trying 127.0.0.1...</div><div class="line">* Connected to 127.0.0.1 (127.0.0.1) port 8180 (<span class="comment">#0)</span></div><div class="line">&gt; GET /<span class="built_in">bg</span>-upper.png HTTP/1.1</div><div class="line">&gt; User-Agent: curl/7.35.0</div><div class="line">&gt; Host: 127.0.0.1:8180</div><div class="line">&gt; Accept: */*</div><div class="line">&gt; Range: bytes=0-10</div><div class="line">&gt;</div><div class="line">&lt; HTTP/1.1 206 Partial Content</div><div class="line">* Server Apache-Coyote/1.1 is not blacklisted</div><div class="line">&lt; Server: Apache-Coyote/1.1</div><div class="line">&lt; Accept-Ranges: bytes</div><div class="line">&lt; ETag: W/<span class="string">"3103-1435633968000"</span></div><div class="line">&lt; Last-Modified: Tue, 30 Jun 2015 03:12:48 GMT</div><div class="line">&lt; Content-Range: bytes 0-10/3103</div><div class="line">&lt; Content-Type: image/png</div><div class="line">&lt; Content-Length: 11</div><div class="line">&lt; Date: Tue, 29 Dec 2015 09:18:36 GMT</div><div class="line">&lt;</div><div class="line">PNG</div><div class="line"></div><div class="line">* Connection <span class="comment">#0 to host 127.0.0.1 left intact</span></div><div class="line">➜</div></pre></td></tr></table></figure>
 <p>响应头就是<code>HTTP/1.1 206 Partial Content</code></p>
-<h3 id="Range-请求头格式"><a href="#Range-请求头格式" class="headerlink" title="Range 请求头格式"></a>Range 请求头格式</h3><pre><code class="bash">Range: bytes=start-end
-</code></pre>
+<h3 id="Range-请求头格式"><a href="#Range-请求头格式" class="headerlink" title="Range 请求头格式"></a>Range 请求头格式</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Range: bytes=start-end</div></pre></td></tr></table></figure>
 <p>例如：</p>
 <p><code>Range: bytes=10-</code>：第10个字节及最后个字节的数据<br><code>Range: bytes=40-100</code>：第40个字节到第100个字节之间的数据.</p>
 <p><em>注意，这个表示[start,end]，即是包含请求头的start及end字节的，所以，下一个请求，应该是上一个请求的[end+1, nextEnd]</em></p>
@@ -261,92 +235,13 @@ PNG
 <p><code>ETag: W/&quot;12342423&quot;</code></p>
 <h2 id="分段下载"><a href="#分段下载" class="headerlink" title="分段下载"></a>分段下载</h2><p>利用这个特点，我们可以使用分段下载（多线程下载，分布式下载）</p>
 <p>思想:先请求一个<code>HEAD</code>方法的请求，获取总文件大小：</p>
-<h3 id="HEAD-请求"><a href="#HEAD-请求" class="headerlink" title="HEAD 请求"></a>HEAD 请求</h3><pre><code class="bash">➜  /tmp  curl -X HEAD http://127.0.0.1:8180/bg-upper.png -v
-* Hostname was NOT found in DNS cache
-*   Trying 127.0.0.1...
-* Connected to 127.0.0.1 (127.0.0.1) port 8180 (#0)
-&gt; HEAD /bg-upper.png HTTP/1.1
-&gt; User-Agent: curl/7.35.0
-&gt; Host: 127.0.0.1:8180
-&gt; Accept: */*
-&gt;
-&lt; HTTP/1.1 200 OK
-* Server Apache-Coyote/1.1 is not blacklisted
-&lt; Server: Apache-Coyote/1.1
-&lt; Accept-Ranges: bytes
-&lt; ETag: W/&quot;3103-1435633968000&quot;
-&lt; Last-Modified: Tue, 30 Jun 2015 03:12:48 GMT
-&lt; Content-Type: image/png
-&lt; Content-Length: 3103
-&lt; Date: Tue, 29 Dec 2015 10:16:16 GMT
-&lt;
-* transfer closed with 3103 bytes remaining to read
-* Closing connection 0
-curl: (18) transfer closed with 3103 bytes remaining to read
-➜  /tmp
-</code></pre>
+<h3 id="HEAD-请求"><a href="#HEAD-请求" class="headerlink" title="HEAD 请求"></a>HEAD 请求</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">➜  /tmp  curl -X HEAD http://127.0.0.1:8180/<span class="built_in">bg</span>-upper.png -v</div><div class="line">* Hostname was NOT found <span class="keyword">in</span> DNS cache</div><div class="line">*   Trying 127.0.0.1...</div><div class="line">* Connected to 127.0.0.1 (127.0.0.1) port 8180 (<span class="comment">#0)</span></div><div class="line">&gt; HEAD /<span class="built_in">bg</span>-upper.png HTTP/1.1</div><div class="line">&gt; User-Agent: curl/7.35.0</div><div class="line">&gt; Host: 127.0.0.1:8180</div><div class="line">&gt; Accept: */*</div><div class="line">&gt;</div><div class="line">&lt; HTTP/1.1 200 OK</div><div class="line">* Server Apache-Coyote/1.1 is not blacklisted</div><div class="line">&lt; Server: Apache-Coyote/1.1</div><div class="line">&lt; Accept-Ranges: bytes</div><div class="line">&lt; ETag: W/<span class="string">"3103-1435633968000"</span></div><div class="line">&lt; Last-Modified: Tue, 30 Jun 2015 03:12:48 GMT</div><div class="line">&lt; Content-Type: image/png</div><div class="line">&lt; Content-Length: 3103</div><div class="line">&lt; Date: Tue, 29 Dec 2015 10:16:16 GMT</div><div class="line">&lt;</div><div class="line">* transfer closed with 3103 bytes remaining to <span class="built_in">read</span></div><div class="line">* Closing connection 0</div><div class="line">curl: (18) transfer closed with 3103 bytes remaining to <span class="built_in">read</span></div><div class="line">➜  /tmp</div></pre></td></tr></table></figure>
 <p>那个响应头的<code>Content-Length</code>就是总字节大小了（3103）字节.</p>
 <h3 id="多线程下载"><a href="#多线程下载" class="headerlink" title="多线程下载"></a>多线程下载</h3><p>假设分2条线程</p>
-<h4 id="线程1-下载"><a href="#线程1-下载" class="headerlink" title="线程1 下载"></a>线程1 下载</h4><pre><code class="bash">3103 / 2 = 1551
-
-➜  /tmp  curl -H &quot;Range: bytes=0-1551&quot; http://127.0.0.1:8180/bg-upper.png -v -o 0-1151.png
-* Hostname was NOT found in DNS cache
-*   Trying 127.0.0.1...
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* Connected to 127.0.0.1 (127.0.0.1) port 8180 (#0)
-&gt; GET /bg-upper.png HTTP/1.1
-&gt; User-Agent: curl/7.35.0
-&gt; Host: 127.0.0.1:8180
-&gt; Accept: */*
-&gt; Range: bytes=0-1551
-&gt;
-&lt; HTTP/1.1 206 Partial Content
-* Server Apache-Coyote/1.1 is not blacklisted
-&lt; Server: Apache-Coyote/1.1
-&lt; Accept-Ranges: bytes
-&lt; ETag: W/&quot;3103-1435633968000&quot;
-&lt; Last-Modified: Tue, 30 Jun 2015 03:12:48 GMT
-&lt; Content-Range: bytes 0-1551/3103
-&lt; Content-Type: image/png
-&lt; Content-Length: 1552
-&lt; Date: Tue, 29 Dec 2015 10:19:43 GMT
-&lt;
-{ [data not shown]
-100  1552  100  1552    0     0  1376k      0 --:--:-- --:--:-- --:--:-- 1515k
-* Connection #0 to host 127.0.0.1 left intact
-➜  /tmp
-</code></pre>
+<h4 id="线程1-下载"><a href="#线程1-下载" class="headerlink" title="线程1 下载"></a>线程1 下载</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">3103 / 2 = 1551</div><div class="line"></div><div class="line">➜  /tmp  curl -H <span class="string">"Range: bytes=0-1551"</span> http://127.0.0.1:8180/<span class="built_in">bg</span>-upper.png -v -o 0-1151.png</div><div class="line">* Hostname was NOT found <span class="keyword">in</span> DNS cache</div><div class="line">*   Trying 127.0.0.1...</div><div class="line">  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</div><div class="line">                                 Dload  Upload   Total   Spent    Left  Speed</div><div class="line">  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* Connected to 127.0.0.1 (127.0.0.1) port 8180 (<span class="comment">#0)</span></div><div class="line">&gt; GET /<span class="built_in">bg</span>-upper.png HTTP/1.1</div><div class="line">&gt; User-Agent: curl/7.35.0</div><div class="line">&gt; Host: 127.0.0.1:8180</div><div class="line">&gt; Accept: */*</div><div class="line">&gt; Range: bytes=0-1551</div><div class="line">&gt;</div><div class="line">&lt; HTTP/1.1 206 Partial Content</div><div class="line">* Server Apache-Coyote/1.1 is not blacklisted</div><div class="line">&lt; Server: Apache-Coyote/1.1</div><div class="line">&lt; Accept-Ranges: bytes</div><div class="line">&lt; ETag: W/<span class="string">"3103-1435633968000"</span></div><div class="line">&lt; Last-Modified: Tue, 30 Jun 2015 03:12:48 GMT</div><div class="line">&lt; Content-Range: bytes 0-1551/3103</div><div class="line">&lt; Content-Type: image/png</div><div class="line">&lt; Content-Length: 1552</div><div class="line">&lt; Date: Tue, 29 Dec 2015 10:19:43 GMT</div><div class="line">&lt;</div><div class="line">&#123; [data not shown]</div><div class="line">100  1552  100  1552    0     0  1376k      0 --:--:-- --:--:-- --:--:-- 1515k</div><div class="line">* Connection <span class="comment">#0 to host 127.0.0.1 left intact</span></div><div class="line">➜  /tmp</div></pre></td></tr></table></figure>
 <p>这样子，线程1就下载了（0-1551）字节的数据了.</p>
-<h4 id="线程2-下载"><a href="#线程2-下载" class="headerlink" title="线程2 下载"></a>线程2 下载</h4><pre><code class="bash">➜  /tmp  curl -H &quot;Range: bytes=1552-3103&quot; http://127.0.0.1:8180/bg-upper.png -v -o 1552-end.png
-* Hostname was NOT found in DNS cache
-*   Trying 127.0.0.1...
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* Connected to 127.0.0.1 (127.0.0.1) port 8180 (#0)
-&gt; GET /bg-upper.png HTTP/1.1
-&gt; User-Agent: curl/7.35.0
-&gt; Host: 127.0.0.1:8180
-&gt; Accept: */*
-&gt; Range: bytes=1552
-&gt;
-&lt; HTTP/1.1 416 Requested Range Not Satisfiable
-* Server Apache-Coyote/1.1 is not blacklisted
-&lt; Server: Apache-Coyote/1.1
-&lt; Accept-Ranges: bytes
-&lt; Content-Range: bytes */3103
-&lt; Content-Type: text/html;charset=utf-8
-&lt; Content-Language: en
-&lt; Content-Length: 954
-&lt; Date: Tue, 29 Dec 2015 10:26:18 GMT
-&lt;
-{ [data not shown]
-100   954  100   954    0     0   457k      0 --:--:-- --:--:-- --:--:--  931k
-* Connection #0 to host 127.0.0.1 left intact
-➜  /tmp
-</code></pre>
-<h4 id="合并"><a href="#合并" class="headerlink" title="合并"></a>合并</h4><pre><code class="bash">cat 0-1151.png 1552-end.png &gt; filename.png
-</code></pre>
+<h4 id="线程2-下载"><a href="#线程2-下载" class="headerlink" title="线程2 下载"></a>线程2 下载</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">➜  /tmp  curl -H <span class="string">"Range: bytes=1552-3103"</span> http://127.0.0.1:8180/<span class="built_in">bg</span>-upper.png -v -o 1552-end.png</div><div class="line">* Hostname was NOT found <span class="keyword">in</span> DNS cache</div><div class="line">*   Trying 127.0.0.1...</div><div class="line">  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</div><div class="line">                                 Dload  Upload   Total   Spent    Left  Speed</div><div class="line">  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* Connected to 127.0.0.1 (127.0.0.1) port 8180 (<span class="comment">#0)</span></div><div class="line">&gt; GET /<span class="built_in">bg</span>-upper.png HTTP/1.1</div><div class="line">&gt; User-Agent: curl/7.35.0</div><div class="line">&gt; Host: 127.0.0.1:8180</div><div class="line">&gt; Accept: */*</div><div class="line">&gt; Range: bytes=1552</div><div class="line">&gt;</div><div class="line">&lt; HTTP/1.1 416 Requested Range Not Satisfiable</div><div class="line">* Server Apache-Coyote/1.1 is not blacklisted</div><div class="line">&lt; Server: Apache-Coyote/1.1</div><div class="line">&lt; Accept-Ranges: bytes</div><div class="line">&lt; Content-Range: bytes */3103</div><div class="line">&lt; Content-Type: text/html;charset=utf-8</div><div class="line">&lt; Content-Language: en</div><div class="line">&lt; Content-Length: 954</div><div class="line">&lt; Date: Tue, 29 Dec 2015 10:26:18 GMT</div><div class="line">&lt;</div><div class="line">&#123; [data not shown]</div><div class="line">100   954  100   954    0     0   457k      0 --:--:-- --:--:-- --:--:--  931k</div><div class="line">* Connection <span class="comment">#0 to host 127.0.0.1 left intact</span></div><div class="line">➜  /tmp</div></pre></td></tr></table></figure>
+<h4 id="合并"><a href="#合并" class="headerlink" title="合并"></a>合并</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat 0-1151.png 1552-end.png &gt; filename.png</div></pre></td></tr></table></figure>
 <p>这样子就OK了.</p>
 <h2 id="HTTP-请求头注意"><a href="#HTTP-请求头注意" class="headerlink" title="HTTP 请求头注意"></a>HTTP 请求头注意</h2><p>根据HTTP规范，HTTP的消息头部的字段名，是不区分大小写的.</p>
 <blockquote>

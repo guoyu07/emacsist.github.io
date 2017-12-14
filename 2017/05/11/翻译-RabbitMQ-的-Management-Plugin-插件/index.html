@@ -214,8 +214,7 @@
 <li>发送和接收消息（对于开发环境以及分析解决问题比较有用）</li>
 </ul>
 <h1 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h1><p><em>management plugin</em> 插件是包含在 RabbitMQ 发行版中的。为了开启它，使用 <a href="https://www.rabbitmq.com/man/rabbitmq-plugins.1.man.html" target="_blank" rel="external">rabbitmq-plugins</a>:</p>
-<pre><code class="bash">rabbitmq-plugins enable rabbitmq_management
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rabbitmq-plugins <span class="built_in">enable</span> rabbitmq_management</div></pre></td></tr></table></figure>
 <blockquote>
 <p>Web界面的地址在： <a href="http://server-name:15672/" target="_blank" rel="external">http://server-name:15672/</a></p>
 <p>在插件里Web界面同样使用该插件来提供一个 HTTP API 。查看 API 文档可以访问： <a href="http://server-host:15672/api/" target="_blank" rel="external">http://server-host:15672/api/</a> 或者我们 <a href="https://rawcdn.githack.com/rabbitmq/rabbitmq-management/rabbitmq_v3_6_9/priv/www/api/index.html" target="_blank" rel="external">这里最新的 HTTP API 文档</a></p>
@@ -259,12 +258,7 @@
 <h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><p>这时有几个影响 <em>management plugin</em> 插件的配置选项。它们是通过 RabbitMQ <a href="https://www.rabbitmq.com/configure.html#configuration-file" target="_blank" rel="external">主配置文件</a> 进行管理的.</p>
 <h2 id="启动时加载定义"><a href="#启动时加载定义" class="headerlink" title="启动时加载定义"></a>启动时加载定义</h2><p><em>management plugin</em> 插件允许你导出所有包含 Broker 对象（队列、交换机、绑定、用户、虚拟主机、权限和参数）定义的JOSN文件。在某些情况下，确定在启动时都存在这些对象可能是有用的。</p>
 <p>为此，请将 <em>rabbitmq_management.load_definitions</em> 的配置项，指向你先前导出的JSON文件的路径：</p>
-<pre><code class="bash">[
-{rabbitmq_management, [
-  {load_definitions, &quot;/path/to/definitions/file.json&quot;}
-  ]}
-].
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">&#123;rabbitmq_management, [</div><div class="line">  &#123;load_definitions, <span class="string">"/path/to/definitions/file.json"</span>&#125;</div><div class="line">  ]&#125;</div><div class="line">].</div></pre></td></tr></table></figure>
 <p>注意，文件中的定义将会覆盖现存在 Broker 中的所有内容。使用这个选项并不会删除任何已经存在的内容。但是，如果从完全重置的 Broker 中开始的话，使用这个选项将会阻止创建默认的 用户/虚拟机/权限 。</p>
 <h2 id="消息速率"><a href="#消息速率" class="headerlink" title="消息速率"></a>消息速率</h2><p>默认情况下，<em>management plugin</em> 插件显示全局的消息速率，以及每条队列、每个Channel、每个交换机和虚拟主机。这些被称为 <em>basic</em> 消息速率</p>
 <p>它还可以显示所有 channel -&gt; exchange ， exchange -&gt; queue 和 queue -&gt; channel 组合的消息速率。这些被称为 <em>detailed</em> 消息速率。默认情况下是禁用 <em>detailed</em> 消息速率的，因为当存在大量的 channel 、queue 和 exchange 组合时，它们可能会占用大量的内存。</p>
@@ -275,46 +269,14 @@
 <h2 id="HTTP-请求记录"><a href="#HTTP-请求记录" class="headerlink" title="HTTP 请求记录"></a>HTTP 请求记录</h2><p>为了生成简单的 HTTP API 请求访问日志，请将 <em>rabbit_management</em> 应用程序中的 <em>http_log_dir</em> 变量的值设置为日志所在的目录，然后重启 RabbitMQ 。注意，只有请求的API为 <em>/api</em> 的才会被记录，而不是组成浏览器的GUI的静态文件的请求。</p>
 <h2 id="事件积压"><a href="#事件积压" class="headerlink" title="事件积压"></a>事件积压</h2><p>在高负载下，统计事件的处理会增加内存消耗。为了减少这种情况，可以调节 channel 和 queue 统计信息收集器的最大积压数。在 <em>rabbitmq_management</em> 应用的 <em>stats_event_max_backlog</em> 的变量值可设置它们的最大大小。默认为 250 </p>
 <h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p>用户切换请求日志记录目录、统计间隔为 10000ms 以及其他显式设置相关参数值为默认值的配置例子如下:</p>
-<pre><code class="bash">[
-  {rabbit,                    [ {tcp_listeners,               [5672]},
-                                {collect_statistics_interval, 10000} ] },
-  {rabbitmq_management,       [ {http_log_dir,  &quot;/tmp/rabbit-mgmt&quot;},
-                                {rates_mode,    basic}] }
-].
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">  &#123;rabbit,                    [ &#123;tcp_listeners,               [5672]&#125;,</div><div class="line">                                &#123;collect_statistics_interval, 10000&#125; ] &#125;,</div><div class="line">  &#123;rabbitmq_management,       [ &#123;http_log_dir,  <span class="string">"/tmp/rabbit-mgmt"</span>&#125;,</div><div class="line">                                &#123;rates_mode,    basic&#125;] &#125;</div><div class="line">].</div></pre></td></tr></table></figure>
 <h2 id="配置-HTTP-监听器"><a href="#配置-HTTP-监听器" class="headerlink" title="配置 HTTP 监听器"></a>配置 HTTP 监听器</h2><p>可以配置 <em>rabbitmq-web-dispatch</em> 来为 <em>management plugin</em> 监听不同的端口或网卡、开启SSL等。为此，你应该配置 <em>listener</em> 配置项，例如更改端口:</p>
-<pre><code class="bash">[
-  ...
-  {rabbitmq_management, [{listener, [{port, 12345}]}]},
-  ...
-].
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">  ...</div><div class="line">  &#123;rabbitmq_management, [&#123;listener, [&#123;port, 12345&#125;]&#125;]&#125;,</div><div class="line">  ...</div><div class="line">].</div></pre></td></tr></table></figure>
 <p>或者为 <em>management plugin</em> 开启HTTPS:</p>
-<pre><code class="bash">[{rabbitmq_management,
-  [{listener, [{port,     15671},
-               {ssl,      true},
-               {ssl_opts, [{cacertfile, &quot;/path/to/cacert.pem&quot;},
-                           {certfile,   &quot;/path/to/cert.pem&quot;},
-                           {keyfile,    &quot;/path/to/key.pem&quot;}]}
-              ]}
-  ]}
-].
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[&#123;rabbitmq_management,</div><div class="line">  [&#123;listener, [&#123;port,     15671&#125;,</div><div class="line">               &#123;ssl,      <span class="literal">true</span>&#125;,</div><div class="line">               &#123;ssl_opts, [&#123;cacertfile, <span class="string">"/path/to/cacert.pem"</span>&#125;,</div><div class="line">                           &#123;certfile,   <span class="string">"/path/to/cert.pem"</span>&#125;,</div><div class="line">                           &#123;keyfile,    <span class="string">"/path/to/key.pem"</span>&#125;]&#125;</div><div class="line">              ]&#125;</div><div class="line">  ]&#125;</div><div class="line">].</div></pre></td></tr></table></figure>
 <p>查看 <a href="https://www.rabbitmq.com/web-dispatch.html" target="_blank" rel="external">rabbitmq-web-dispatch</a> 指南来获取更多细节</p>
 <h2 id="样本保留策略-sample-retention-policies"><a href="#样本保留策略-sample-retention-policies" class="headerlink" title="样本保留策略(sample retention policies)"></a>样本保留策略(sample retention policies)</h2><p><em>management plugin</em> 会保留一些数据的样本，例如：消息速率和队列长度。你可以配置这些数据保留多长时间。</p>
-<pre><code class="bash">[
-  ...
-  {rabbitmq_management,
-    [{sample_retention_policies,
-      %% List of {MaxAgeInSeconds, SampleEveryNSeconds}
-      [{global,   [{605, 5}, {3660, 60}, {29400, 600}, {86400, 1800}]},
-       {basic,    [{605, 5}, {3600, 60}]},
-       {detailed, [{10, 5}]}]
-    }]
-  },
-  ...
-].
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">  ...</div><div class="line">  &#123;rabbitmq_management,</div><div class="line">    [&#123;sample_retention_policies,</div><div class="line">      %% List of &#123;MaxAgeInSeconds, SampleEveryNSeconds&#125;</div><div class="line">      [&#123;global,   [&#123;605, 5&#125;, &#123;3660, 60&#125;, &#123;29400, 600&#125;, &#123;86400, 1800&#125;]&#125;,</div><div class="line">       &#123;basic,    [&#123;605, 5&#125;, &#123;3600, 60&#125;]&#125;,</div><div class="line">       &#123;detailed, [&#123;10, 5&#125;]&#125;]</div><div class="line">    &#125;]</div><div class="line">  &#125;,</div><div class="line">  ...</div><div class="line">].</div></pre></td></tr></table></figure>
 <p>有三个策略：</p>
 <ul>
 <li>global : 保留概要和虚拟主机页面的数据的时间</li>
@@ -323,64 +285,37 @@
 </ul>
 <p>此配置（默认值）将全局数据以固定5秒（即每5秒采样一次）持续10分钟5秒，然后以固定1分钟持续我小时1分钟采样，然后以固定10分钟持续大约8小时。它保留 <em>basic</em> 数据在固定5秒持续1分5秒，然后固定1分持续1小时； <em>detailed</em> 数据仅持续10秒。 所有三个策略是强制性的，并且必须包含至少一个保留对 <em>{MaxAgeInSeconds, SampleEveryNSeconds}</em> 。</p>
 <h2 id="跨域资源共享-CROS"><a href="#跨域资源共享-CROS" class="headerlink" title="跨域资源共享(CROS)"></a>跨域资源共享(CROS)</h2><p><em>management plugin</em> 的API默认情况下不允许访问托管在不同来源的网站。要允许的来源网站必须显式地列出在白名单中:</p>
-<pre><code class="bash">[
-  ...
-  {rabbitmq_management,
-    [{cors_allow_origins, [&quot;http://rabbitmq.com&quot;, &quot;http://example.org&quot;]}]},
-  ...
-].
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">  ...</div><div class="line">  &#123;rabbitmq_management,</div><div class="line">    [&#123;cors_allow_origins, [<span class="string">"http://rabbitmq.com"</span>, <span class="string">"http://example.org"</span>]&#125;]&#125;,</div><div class="line">  ...</div><div class="line">].</div></pre></td></tr></table></figure>
 <p>可以允许任何来源来使用 API 。但是，如果API可以从外部访问的话，则不建议。</p>
-<pre><code class="bash">[
-  ...
-  {rabbitmq_management,
-    [{cors_allow_origins, [&quot;*&quot;]}]},
-  ...
-].
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">  ...</div><div class="line">  &#123;rabbitmq_management,</div><div class="line">    [&#123;cors_allow_origins, [<span class="string">"*"</span>]&#125;]&#125;,</div><div class="line">  ...</div><div class="line">].</div></pre></td></tr></table></figure>
 <p>CROS 的 <em>pre-flight</em> 请求会被浏览器缓存。 默认情况下， <em>management plugin</em> 插件定义了超时时间为 30 分钟。你可以在配置文件中修改此值。它的单位为秒。</p>
-<pre><code class="bash">[
-  ...
-  {rabbitmq_management,
-    [{cors_allow_origins, [&quot;http://rabbitmq.com&quot;, &quot;http://example.org&quot;]},
-     {cors_max_age, 3600}]},
-  ...
-].
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">  ...</div><div class="line">  &#123;rabbitmq_management,</div><div class="line">    [&#123;cors_allow_origins, [<span class="string">"http://rabbitmq.com"</span>, <span class="string">"http://example.org"</span>]&#125;,</div><div class="line">     &#123;cors_max_age, 3600&#125;]&#125;,</div><div class="line">  ...</div><div class="line">].</div></pre></td></tr></table></figure>
 <h1 id="集群注意事项"><a href="#集群注意事项" class="headerlink" title="集群注意事项"></a>集群注意事项</h1><p><em>management plugin</em> 插件是会感知集群的。你可以在集群中的一个或多个节点上启用它，并且无论你连接到哪个节点，都可以查看整个集群的信息。</p>
 <p>如果要部署一个没有完全开启 <em>management plugin</em> 的集群节点，则仍然需要在每个节点上启用 <em>rabbitmq-management-agent</em> 插件。</p>
 <p>当在集群时，<em>management plugin</em> 执行集群范围查询时，这意味着它可能受到各种网络事件（如 <a href="https://www.rabbitmq.com/nettick.html" target="_blank" rel="external">分区</a>）的影响。</p>
 <h1 id="代理设置"><a href="#代理设置" class="headerlink" title="代理设置"></a>代理设置</h1><p>可以通过符合 RFC 1738 的任何代理使 Web UI 可用。以下 Apache 配置示例说明了使用Apache作为代理性的最少必须指令。它假定 <em>management plugin</em> 的 Web UI 在默认端口 15672 。</p>
 <h1 id="重启统计数据库"><a href="#重启统计数据库" class="headerlink" title="重启统计数据库"></a>重启统计数据库</h1><p>统计数据库是完全存储在内存中的。应该对待它们的所有内容都是短暂的。在 <em>3.6.7</em> 版本之前，统计数据存储在单个节点上。从 <em>3.6.7</em> 开始，每个节点都有自己的统计数据库，其中包含在该节点上记录的统计数据。可以重启这些统计数据库。</p>
 <p>在 RabbitMQ 3.6.2 之前，统计数据库是存储在 <em>stats</em> 进程的内存中的，并且在 RabbitMQ <em>3.6.2</em> 开始，它们是存储在 ETS 表中的。在 <em>3.6.2</em> 之前的版本中，要重启数据库可以使用:</p>
-<pre><code class="bash">rabbitmqctl eval &#39;exit(erlang:whereis(rabbit_mgmt_db), please_terminate).&#39;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rabbitmqctl <span class="built_in">eval</span> <span class="string">'exit(erlang:whereis(rabbit_mgmt_db), please_terminate).'</span></div></pre></td></tr></table></figure>
 <p>从 RabbitMQ 3.6.2 到 3.6.5 ，可以使用:</p>
-<pre><code class="bash">rabbitmqctl eval &#39;supervisor2:terminate_child(rabbit_mgmt_sup_sup, rabbit_mgmt_sup),rabbit_mgmt_sup_sup:start_child().&#39;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rabbitmqctl <span class="built_in">eval</span> <span class="string">'supervisor2:terminate_child(rabbit_mgmt_sup_sup, rabbit_mgmt_sup),rabbit_mgmt_sup_sup:start_child().'</span></div></pre></td></tr></table></figure>
 <p>这些命令必须要托管数据库的节点上执行。从 3.6.7 开始，可以使用下面命令来重置每个节点的数据库:</p>
-<pre><code class="bash">rabbitmqctl eval &#39;rabbit_mgmt_storage:reset().&#39;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rabbitmqctl <span class="built_in">eval</span> <span class="string">'rabbit_mgmt_storage:reset().'</span></div></pre></td></tr></table></figure>
 <p>要重置所有节点的数据库：</p>
-<pre><code class="bash">rabbitmqctl eval &#39;rabbit_mgmt_storage:reset_all().&#39;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rabbitmqctl <span class="built_in">eval</span> <span class="string">'rabbit_mgmt_storage:reset_all().'</span></div></pre></td></tr></table></figure>
 <p>也可以通过 HTTP API 端重置整个数据库:</p>
-<pre><code class="bash">DELETE /api/reset
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">DELETE /api/reset</div></pre></td></tr></table></figure>
 <p>重置单个节点:</p>
-<pre><code class="bash">DELETE /api/reset/:node
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">DELETE /api/reset/:node</div></pre></td></tr></table></figure>
 <h1 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h1><p>可以使用 <em>rabbitmqctl</em> 来获取 <em>management database</em> 的内存使用情况：</p>
-<pre><code class="bash">rabbitmqctl status
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rabbitmqctl status</div></pre></td></tr></table></figure>
 <p>或者通过 <a href="https://cdn.rawgit.com/rabbitmq/rabbitmq-management/rabbitmq_v3_6_9/priv/www/api/index.html" target="_blank" rel="external">HTTP API</a> 发送一个 <em>GET</em> 请求到 <em>/api/nodes/name</em> </p>
 <p>统计数据是按照上述统计间隔进行的，或者当某些组件被 创建/声明 时（例如，一条新的 connection 或 channel 被打开，或一个队列被声明）或者 关闭/删除时。消息速率不会直接影响 <em>management database</em> 的内存使用。</p>
 <p>统计数据库的内存消耗总量取决于事件的触发间隔，有效的速率模式和保留策略。</p>
 <p>将 <em>rabbit.collect_statistics_interval</em> 的值增加到 30-60s （注意，该值应以毫秒为单位来设置，例如： 30000) 将减少具有大量 队列/channel/连接 的系统的内存消耗。调整保留策略以保留较少的数据也将有所帮助。</p>
 <p>通过使用参数 <em>stats_event_max_backlog</em> 设置最大积压队列大小可以限制 channel 和统计收集器进程的内存使用情况。如果积压队列已满，则新的 channel 和 队列收集将被丢弃，直到前面的队列处理完毕。</p>
 <p>统计间隔也可以在运行时更改。这样做对现有的 连接、channel 或 队列没有影响。只会影响新的统计收集实体。</p>
-<pre><code class="bash">rabbitmqctl eval &#39;application:set_env(rabbit, collect_statistics_interval, 60000).&#39;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rabbitmqctl <span class="built_in">eval</span> <span class="string">'application:set_env(rabbit, collect_statistics_interval, 60000).'</span></div></pre></td></tr></table></figure>
 <p>统计数据库也可以被重启（见上面），因此它会强制释放所有内存。</p>
 <h1 id="译者题外话"><a href="#译者题外话" class="headerlink" title="译者题外话"></a>译者题外话</h1><p>今天在公司里发现中间件 RabbitMQ 队列数据基本没有，但是还是发现它占用了 9GB 多的内存:</p>
 <p><img src="/img/rabbit-mq-memory.jpg" alt="img"></p>

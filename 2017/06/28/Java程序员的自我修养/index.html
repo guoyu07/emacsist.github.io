@@ -241,105 +241,12 @@
 <p>一般的调优都是从</p>
 <p>内存、GC类型</p>
 <p><img src="/img/Java-Memory-Model.png" alt="Java-Memory-Model.png"></p>
-<pre><code class="bash">[11:17:44] emacsist:~ $ java -X
-    -Xmixed           混合模式执行 (默认)
-    -Xint             仅解释模式执行
-    -Xbootclasspath:&lt;用 : 分隔的目录和 zip/jar 文件&gt;
-                      设置搜索路径以引导类和资源
-    -Xbootclasspath/a:&lt;用 : 分隔的目录和 zip/jar 文件&gt;
-                      附加在引导类路径末尾
-    -Xbootclasspath/p:&lt;用 : 分隔的目录和 zip/jar 文件&gt;
-                      置于引导类路径之前
-    -Xdiag            显示附加诊断消息
-    -Xnoclassgc       禁用类垃圾收集
-    -Xincgc           启用增量垃圾收集
-    -Xloggc:&lt;file&gt;    将 GC 状态记录在文件中 (带时间戳)
-    -Xbatch           禁用后台编译
-    -Xms&lt;size&gt;        设置初始 Java 堆大小
-    -Xmx&lt;size&gt;        设置最大 Java 堆大小
-    -Xss&lt;size&gt;        设置 Java 线程堆栈大小
-    -Xprof            输出 cpu 配置文件数据
-    -Xfuture          启用最严格的检查, 预期将来的默认值
-    -Xrs              减少 Java/VM 对操作系统信号的使用 (请参阅文档)
-    -Xcheck:jni       对 JNI 函数执行其他检查
-    -Xshare:off       不尝试使用共享类数据
-    -Xshare:auto      在可能的情况下使用共享类数据 (默认)
-    -Xshare:on        要求使用共享类数据, 否则将失败。
-    -XshowSettings    显示所有设置并继续
-    -XshowSettings:all
-                      显示所有设置并继续
-    -XshowSettings:vm 显示所有与 vm 相关的设置并继续
-    -XshowSettings:properties
-                      显示所有属性设置并继续
-    -XshowSettings:locale
-                      显示所有与区域设置相关的设置并继续
-
--X 选项是非标准选项, 如有更改, 恕不另行通知。
-
-
-以下选项为 Mac OS X 特定的选项:
-    -XstartOnFirstThread
-                      在第一个 (AppKit) 线程上运行 main() 方法
-    -Xdock:name=&lt;应用程序名称&gt;&quot;
-                      覆盖停靠栏中显示的默认应用程序名称
-    -Xdock:icon=&lt;图标文件的路径&gt;
-                      覆盖停靠栏中显示的默认图标
-
-
-[11:27:06] emacsist:~ $
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">[11:17:44] emacsist:~ $ java -X</div><div class="line">    -Xmixed           混合模式执行 (默认)</div><div class="line">    -Xint             仅解释模式执行</div><div class="line">    -Xbootclasspath:&lt;用 : 分隔的目录和 zip/jar 文件&gt;</div><div class="line">                      设置搜索路径以引导类和资源</div><div class="line">    -Xbootclasspath/a:&lt;用 : 分隔的目录和 zip/jar 文件&gt;</div><div class="line">                      附加在引导类路径末尾</div><div class="line">    -Xbootclasspath/p:&lt;用 : 分隔的目录和 zip/jar 文件&gt;</div><div class="line">                      置于引导类路径之前</div><div class="line">    -Xdiag            显示附加诊断消息</div><div class="line">    -Xnoclassgc       禁用类垃圾收集</div><div class="line">    -Xincgc           启用增量垃圾收集</div><div class="line">    -Xloggc:&lt;file&gt;    将 GC 状态记录在文件中 (带时间戳)</div><div class="line">    -Xbatch           禁用后台编译</div><div class="line">    -Xms&lt;size&gt;        设置初始 Java 堆大小</div><div class="line">    -Xmx&lt;size&gt;        设置最大 Java 堆大小</div><div class="line">    -Xss&lt;size&gt;        设置 Java 线程堆栈大小</div><div class="line">    -Xprof            输出 cpu 配置文件数据</div><div class="line">    -Xfuture          启用最严格的检查, 预期将来的默认值</div><div class="line">    -Xrs              减少 Java/VM 对操作系统信号的使用 (请参阅文档)</div><div class="line">    -Xcheck:jni       对 JNI 函数执行其他检查</div><div class="line">    -Xshare:off       不尝试使用共享类数据</div><div class="line">    -Xshare:auto      在可能的情况下使用共享类数据 (默认)</div><div class="line">    -Xshare:on        要求使用共享类数据, 否则将失败。</div><div class="line">    -XshowSettings    显示所有设置并继续</div><div class="line">    -XshowSettings:all</div><div class="line">                      显示所有设置并继续</div><div class="line">    -XshowSettings:vm 显示所有与 vm 相关的设置并继续</div><div class="line">    -XshowSettings:properties</div><div class="line">                      显示所有属性设置并继续</div><div class="line">    -XshowSettings:locale</div><div class="line">                      显示所有与区域设置相关的设置并继续</div><div class="line"></div><div class="line">-X 选项是非标准选项, 如有更改, 恕不另行通知。</div><div class="line"></div><div class="line"></div><div class="line">以下选项为 Mac OS X 特定的选项:</div><div class="line">    -XstartOnFirstThread</div><div class="line">                      在第一个 (AppKit) 线程上运行 main() 方法</div><div class="line">    -Xdock:name=&lt;应用程序名称&gt;<span class="string">"</span></div><div class="line">                      覆盖停靠栏中显示的默认应用程序名称</div><div class="line">    -Xdock:icon=&lt;图标文件的路径&gt;</div><div class="line">                      覆盖停靠栏中显示的默认图标</div><div class="line"></div><div class="line"></div><div class="line">[11:27:06] emacsist:~ $</div></pre></td></tr></table></figure>
 <h1 id="Java-自带工具"><a href="#Java-自带工具" class="headerlink" title="Java 自带工具"></a>Java 自带工具</h1><blockquote>
 <p>Mac 上查看Java安装目录： </p>
 </blockquote>
-<pre><code class="bash">[18:37:34] emacsist:~ $ /usr/libexec/java_home
-/Library/Java/JavaVirtualMachines/jdk1.8.0_74.jdk/Contents/Home
-[18:37:37] emacsist:~ $
-</code></pre>
-<pre><code class="bash">appletviewer =&gt; applet 查看器，开发 applet 才会用到
-extcheck =&gt; 用于检测 Jar 包与当前JDK是否有冲突，这个极少用到，一般是JDK更新扩展 ext 包时使用
-idlj =&gt; 为Java语言来使用 CORBA 功能的 .java 文件进行生成代码用到的。
-jar =&gt; jar 文件处理工具。类似 zip ，虽然 jar 本质上也是一个 zip 文件
-jarsigner =&gt; jar 文件签名工具
-java =&gt; Java 程序启动器
-javac =&gt; Java源码编译器
-javadoc =&gt; JavaDoc 处理工具
-javafxpackager =&gt; 开发 JavaFX 
-javah =&gt; 开发本地代码，如 C 时用来处理头文件的
-javap =&gt; Java 类文件反编译器
-javapackager =&gt; 执行与Java和 JavaFX程序打包和签名相关的任务。比如可以将你的应用捆绑JRE，然后打包发布～
-jcmd =&gt; JVM诊断命令工具，发送诊断命令请求到一个正在运行的JVM(比如导出内存信息，栈信息等，jmap)
-jconsole =&gt; 基于 JMX 的图形化监控JVM的工具
-jdb =&gt; Java调试器
-jdeps =&gt; Java 类依赖分析器
-jhat =&gt; 查看 Java 堆 dump 文件的
-jinfo =&gt; 查看Java进程的配置信息
-jjs =&gt; 运行 Nashorn （JVM上的JavaScript解释器） 命令行脚本 Shell
-jmap =&gt; 获取Java进程的内存映像
-jmc =&gt; The Java Mission Control (JMC) ，Java 程序的性能监控和分析工具
-jps =&gt; 列出Java进程
-jrunscript =&gt; Java的脚本 shell
-jsadebugd =&gt; Javar 调试守护服务代理者，类似一个远程的 debug 服务器
-jstack =&gt; 获取Java进程当前所有线程栈
-jstat =&gt; 获取 Java 进程的状态信息
-jstatd =&gt; jstat 的守护进程
-jvisualvm =&gt; 可视化的VM工具
-keytool =&gt; 密钥工具
-native2ascii =&gt; 将文本文件转换为 Unicode Latin-1 编码
-orbd =&gt; CORBA 相关的工具。
-pack200 =&gt; 将 jar 文件转换为 pack200 类型的文件（高度压缩版的 jar 文件，可减少带宽和下载时间等）
-policytool =&gt; 策略工具
-rmic =&gt; RMI 编译器
-rmid =&gt; RMI 守护进程
-rmiregistry =&gt; RMI注册器
-schemagen =&gt; XML schema 生成器
-serialver =&gt; 序列化版本查看器。即查看 serialVersionUID 的值
-servertool =&gt; 不太明了。。
-tnameserv =&gt; 不太明了。。
-unpack200 =&gt; 解压缩 pack200 文件的工具
-wsgen =&gt; 生成 JAX-WS 相关的工具
-wsimport =&gt; 导入 JAX-WS 相关的工具
-xjc =&gt; 根据 XML schema 生成 Java 类
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[18:37:34] emacsist:~ $ /usr/libexec/java_home</div><div class="line">/Library/Java/JavaVirtualMachines/jdk1.8.0_74.jdk/Contents/Home</div><div class="line">[18:37:37] emacsist:~ $</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">appletviewer =&gt; applet 查看器，开发 applet 才会用到</div><div class="line">extcheck =&gt; 用于检测 Jar 包与当前JDK是否有冲突，这个极少用到，一般是JDK更新扩展 ext 包时使用</div><div class="line">idlj =&gt; 为Java语言来使用 CORBA 功能的 .java 文件进行生成代码用到的。</div><div class="line">jar =&gt; jar 文件处理工具。类似 zip ，虽然 jar 本质上也是一个 zip 文件</div><div class="line">jarsigner =&gt; jar 文件签名工具</div><div class="line">java =&gt; Java 程序启动器</div><div class="line">javac =&gt; Java源码编译器</div><div class="line">javadoc =&gt; JavaDoc 处理工具</div><div class="line">javafxpackager =&gt; 开发 JavaFX </div><div class="line">javah =&gt; 开发本地代码，如 C 时用来处理头文件的</div><div class="line">javap =&gt; Java 类文件反编译器</div><div class="line">javapackager =&gt; 执行与Java和 JavaFX程序打包和签名相关的任务。比如可以将你的应用捆绑JRE，然后打包发布～</div><div class="line">jcmd =&gt; JVM诊断命令工具，发送诊断命令请求到一个正在运行的JVM(比如导出内存信息，栈信息等，jmap)</div><div class="line">jconsole =&gt; 基于 JMX 的图形化监控JVM的工具</div><div class="line">jdb =&gt; Java调试器</div><div class="line">jdeps =&gt; Java 类依赖分析器</div><div class="line">jhat =&gt; 查看 Java 堆 dump 文件的</div><div class="line">jinfo =&gt; 查看Java进程的配置信息</div><div class="line">jjs =&gt; 运行 Nashorn （JVM上的JavaScript解释器） 命令行脚本 Shell</div><div class="line">jmap =&gt; 获取Java进程的内存映像</div><div class="line">jmc =&gt; The Java Mission Control (JMC) ，Java 程序的性能监控和分析工具</div><div class="line">jps =&gt; 列出Java进程</div><div class="line">jrunscript =&gt; Java的脚本 shell</div><div class="line">jsadebugd =&gt; Javar 调试守护服务代理者，类似一个远程的 debug 服务器</div><div class="line">jstack =&gt; 获取Java进程当前所有线程栈</div><div class="line">jstat =&gt; 获取 Java 进程的状态信息</div><div class="line">jstatd =&gt; jstat 的守护进程</div><div class="line">jvisualvm =&gt; 可视化的VM工具</div><div class="line">keytool =&gt; 密钥工具</div><div class="line">native2ascii =&gt; 将文本文件转换为 Unicode Latin-1 编码</div><div class="line">orbd =&gt; CORBA 相关的工具。</div><div class="line">pack200 =&gt; 将 jar 文件转换为 pack200 类型的文件（高度压缩版的 jar 文件，可减少带宽和下载时间等）</div><div class="line">policytool =&gt; 策略工具</div><div class="line">rmic =&gt; RMI 编译器</div><div class="line">rmid =&gt; RMI 守护进程</div><div class="line">rmiregistry =&gt; RMI注册器</div><div class="line">schemagen =&gt; XML schema 生成器</div><div class="line">serialver =&gt; 序列化版本查看器。即查看 serialVersionUID 的值</div><div class="line">servertool =&gt; 不太明了。。</div><div class="line">tnameserv =&gt; 不太明了。。</div><div class="line">unpack200 =&gt; 解压缩 pack200 文件的工具</div><div class="line">wsgen =&gt; 生成 JAX-WS 相关的工具</div><div class="line">wsimport =&gt; 导入 JAX-WS 相关的工具</div><div class="line">xjc =&gt; 根据 XML schema 生成 Java 类</div></pre></td></tr></table></figure>
 <p><a href="https://docs.oracle.com/javase/8/docs/technotes/tools/" target="_blank" rel="external">JDK Tools and Utilities</a></p>
 <h1 id="各种性能工具"><a href="#各种性能工具" class="headerlink" title="各种性能工具"></a>各种性能工具</h1><ul>
 <li><a href="https://github.com/alibaba/TProfiler" target="_blank" rel="external">TProfiler-alibaba</a></li>
@@ -351,108 +258,29 @@ xjc =&gt; 根据 XML schema 生成 Java 类
 <li>JDK自带的 jvisualvm</li>
 </ul>
 <h1 id="各种-OutOfMemory-Stackoverflow"><a href="#各种-OutOfMemory-Stackoverflow" class="headerlink" title="各种 OutOfMemory, Stackoverflow"></a>各种 OutOfMemory, Stackoverflow</h1><h2 id="Stackoverflow-的代码"><a href="#Stackoverflow-的代码" class="headerlink" title="Stackoverflow 的代码"></a>Stackoverflow 的代码</h2><p>JVM 参数:（将栈调小点，让它快点出现问题）</p>
-<pre><code class="bash">-Xss170k
-</code></pre>
-<pre><code class="bash">package com.github.emacsist.memory;
-
-public class StackoverFlow {
-
-    public static void main(String[] args) {
-        hello();
-    }
-
-    public static void hello() {
-        hello();
-    }
-}
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-Xss170k</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">package com.github.emacsist.memory;</div><div class="line"></div><div class="line">public class StackoverFlow &#123;</div><div class="line"></div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        hello();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static void <span class="function"><span class="title">hello</span></span>() &#123;</div><div class="line">        hello();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>然后它就会报:</p>
-<pre><code class="bash">Exception in thread &quot;main&quot; java.lang.StackOverflowError
-    at com.github.emacsist.memory.StackoverFlow.hello(StackoverFlow.java:10)
-    at com.github.emacsist.memory.StackoverFlow.hello(StackoverFlow.java:10)
-    at com.github.emacsist.memory.StackoverFlow.hello(StackoverFlow.java:10)
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Exception <span class="keyword">in</span> thread <span class="string">"main"</span> java.lang.StackOverflowError</div><div class="line">	at com.github.emacsist.memory.StackoverFlow.hello(StackoverFlow.java:10)</div><div class="line">	at com.github.emacsist.memory.StackoverFlow.hello(StackoverFlow.java:10)</div><div class="line">	at com.github.emacsist.memory.StackoverFlow.hello(StackoverFlow.java:10)</div></pre></td></tr></table></figure>
 <h2 id="HeapOutOfMemory-的代码"><a href="#HeapOutOfMemory-的代码" class="headerlink" title="HeapOutOfMemory 的代码"></a>HeapOutOfMemory 的代码</h2><p>JVM参数:（调小堆大小，让它早点出现异常）</p>
-<pre><code class="bash">-Xms5m  -Xmx5m
-</code></pre>
-<pre><code class="bash">package com.github.emacsist.memory;
-
-import java.util.ArrayList;
-import java.util.List;
-
-/**
- * Created by emacsist on 2017/6/29.
- */
-public class HeapOutOfMemory {
-    public static void main(String[] args) {
-        List&lt;Object&gt; container = new ArrayList&lt;&gt;();
-        while (true) {
-            container.add(new Object());
-        }
-    }
-}
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-Xms5m  -Xmx5m</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">package com.github.emacsist.memory;</div><div class="line"></div><div class="line">import java.util.ArrayList;</div><div class="line">import java.util.List;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by emacsist on 2017/6/29.</div><div class="line"> */</div><div class="line">public class HeapOutOfMemory &#123;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        List&lt;Object&gt; container = new ArrayList&lt;&gt;();</div><div class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</div><div class="line">            container.add(new Object());</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>输出</p>
-<pre><code class="bash">Exception in thread &quot;main&quot; java.lang.OutOfMemoryError: Java heap space
-    at java.util.Arrays.copyOf(Arrays.java:3210)
-    at java.util.Arrays.copyOf(Arrays.java:3181)
-    at java.util.ArrayList.grow(ArrayList.java:261)
-    at java.util.ArrayList.ensureExplicitCapacity(ArrayList.java:235)
-    at java.util.ArrayList.ensureCapacityInternal(ArrayList.java:227)
-    at java.util.ArrayList.add(ArrayList.java:458)
-    at com.github.emacsist.memory.HeapOutOfMemory.main(HeapOutOfMemory.java:13)
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Exception <span class="keyword">in</span> thread <span class="string">"main"</span> java.lang.OutOfMemoryError: Java heap space</div><div class="line">	at java.util.Arrays.copyOf(Arrays.java:3210)</div><div class="line">	at java.util.Arrays.copyOf(Arrays.java:3181)</div><div class="line">	at java.util.ArrayList.grow(ArrayList.java:261)</div><div class="line">	at java.util.ArrayList.ensureExplicitCapacity(ArrayList.java:235)</div><div class="line">	at java.util.ArrayList.ensureCapacityInternal(ArrayList.java:227)</div><div class="line">	at java.util.ArrayList.add(ArrayList.java:458)</div><div class="line">	at com.github.emacsist.memory.HeapOutOfMemory.main(HeapOutOfMemory.java:13)</div></pre></td></tr></table></figure>
 <h2 id="Young-OutOfMemory-的代码"><a href="#Young-OutOfMemory-的代码" class="headerlink" title="Young OutOfMemory 的代码"></a>Young OutOfMemory 的代码</h2><p>JVM参数:（ -Xmn 是控制 Young 区的内存大小的）</p>
-<pre><code class="bash">-Xms10m -Xmx10m -Xmn6m
-</code></pre>
-<pre><code class="bash">package com.github.emacsist.memory;
-
-/**
- * Created by emacsist on 2017/6/29.
- */
-public class YoungOutOfMemory {
-    public static void main(String[] args) {
-        byte[] _10MB = new byte[1024 * 1024 * 10];
-        System.out.println(&quot;OK =&gt; &quot; + _10MB.length);
-    }
-}
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-Xms10m -Xmx10m -Xmn6m</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">package com.github.emacsist.memory;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by emacsist on 2017/6/29.</div><div class="line"> */</div><div class="line">public class YoungOutOfMemory &#123;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        byte[] _10MB = new byte[1024 * 1024 * 10];</div><div class="line">        System.out.println(<span class="string">"OK =&gt; "</span> + _10MB.length);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>输出</p>
-<pre><code class="bash">Exception in thread &quot;main&quot; java.lang.OutOfMemoryError: Java heap space
-    at com.github.emacsist.memory.YoungOutOfMemory.main(YoungOutOfMemory.java:8)
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Exception <span class="keyword">in</span> thread <span class="string">"main"</span> java.lang.OutOfMemoryError: Java heap space</div><div class="line">	at com.github.emacsist.memory.YoungOutOfMemory.main(YoungOutOfMemory.java:8)</div></pre></td></tr></table></figure>
 <h2 id="关于常量池异常代码的问题"><a href="#关于常量池异常代码的问题" class="headerlink" title="关于常量池异常代码的问题"></a>关于常量池异常代码的问题</h2><p>因为它在不同版本的JDK的实现不同。可以参考:</p>
 <p><a href="http://java-performance.info/string-intern-in-java-6-7-8/" target="_blank" rel="external">String.intern in Java 6, 7 and 8 – string pooling</a></p>
 <h2 id="DirectMemory-的代码"><a href="#DirectMemory-的代码" class="headerlink" title="DirectMemory 的代码"></a>DirectMemory 的代码</h2><p>JVM参数:（默认为0，即无限）</p>
-<pre><code class="bash">-XX:MaxDirectMemorySize=8m
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-XX:MaxDirectMemorySize=8m</div></pre></td></tr></table></figure>
 <p>查看:</p>
-<pre><code class="bash">[12:32:36] emacsist:~ $ java -XX:+PrintFlagsFinal -version | grep MaxDirectMemorySize
-    uintx MaxDirectMemorySize                       = 0                                   {product}
-java version &quot;1.8.0_74&quot;
-Java(TM) SE Runtime Environment (build 1.8.0_74-b02)
-Java HotSpot(TM) 64-Bit Server VM (build 25.74-b02, mixed mode)
-</code></pre>
-<pre><code class="bash">package com.github.emacsist.memory;
-
-import java.nio.ByteBuffer;
-
-/**
- * Created by emacsist on 2017/6/29.
- */
-public class MaxDirectOutOfMemory {
-    public static void main(String[] args) {
-        ByteBuffer _10MB = ByteBuffer.allocateDirect(1024 * 1024 * 10);
-    }
-}
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[12:32:36] emacsist:~ $ java -XX:+PrintFlagsFinal -version | grep MaxDirectMemorySize</div><div class="line">    uintx MaxDirectMemorySize                       = 0                                   &#123;product&#125;</div><div class="line">java version <span class="string">"1.8.0_74"</span></div><div class="line">Java(TM) SE Runtime Environment (build 1.8.0_74-b02)</div><div class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.74-b02, mixed mode)</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">package com.github.emacsist.memory;</div><div class="line"></div><div class="line">import java.nio.ByteBuffer;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by emacsist on 2017/6/29.</div><div class="line"> */</div><div class="line">public class MaxDirectOutOfMemory &#123;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        ByteBuffer _10MB = ByteBuffer.allocateDirect(1024 * 1024 * 10);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>输出</p>
-<pre><code class="bash">Exception in thread &quot;main&quot; java.lang.OutOfMemoryError: Direct buffer memory
-    at java.nio.Bits.reserveMemory(Bits.java:693)
-    at java.nio.DirectByteBuffer.&lt;init&gt;(DirectByteBuffer.java:123)
-    at java.nio.ByteBuffer.allocateDirect(ByteBuffer.java:311)
-    at com.github.emacsist.memory.MaxDirectOutOfMemory.main(MaxDirectOutOfMemory.java:10)
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Exception <span class="keyword">in</span> thread <span class="string">"main"</span> java.lang.OutOfMemoryError: Direct buffer memory</div><div class="line">	at java.nio.Bits.reserveMemory(Bits.java:693)</div><div class="line">	at java.nio.DirectByteBuffer.&lt;init&gt;(DirectByteBuffer.java:123)</div><div class="line">	at java.nio.ByteBuffer.allocateDirect(ByteBuffer.java:311)</div><div class="line">	at com.github.emacsist.memory.MaxDirectOutOfMemory.main(MaxDirectOutOfMemory.java:10)</div></pre></td></tr></table></figure>
 <h1 id="个人关于对内存问题分析思路"><a href="#个人关于对内存问题分析思路" class="headerlink" title="个人关于对内存问题分析思路"></a>个人关于对内存问题分析思路</h1><p>一般都是先将当前JVM的堆栈 dump 出来、获取当前JVM的内存配置，然后使用 MAT 分析内存占用，看看有没有异常，对比内存的配置是否合理。</p>
 <p>使用 jstat 输出GC的统计，查看各种GC的收集程度及其统计信息。</p>
 <p>然后再看看具体出现的是哪种 OutOfMemory ，结合上面MAT的内存分析（如果代码有问题，完善代码） 然后再合理配置相应的内存区域大小。</p>

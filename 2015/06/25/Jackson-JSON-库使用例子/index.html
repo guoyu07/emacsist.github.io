@@ -15,17 +15,17 @@
     <meta name="keywords" content="java,json,jackson," />
   
 
-  <meta name="description" content="ObjectMapper它是线程安全的，所以建议使用它时，作为单例使用：  private static final ObjectMapper mapper = new ObjectMapper(); Quick ParsingString jsonString = &amp;quot;{\&amp;quot;k1\&amp;quot;:\&amp;quot;v1\&amp;quot;,\&amp;quot;k2\&amp;quot;:\&amp;quot;v">
+  <meta name="description" content="ObjectMapper123它是线程安全的，所以建议使用它时，作为单例使用：private static final ObjectMapper mapper = new ObjectMapper(); Quick Parsing1234String jsonString = &amp;quot;&amp;#123;\&amp;quot;k1\&amp;quot;:\&amp;quot;v1\&amp;quot;,\&amp;quot;k2\&amp;quot">
 <meta name="keywords" content="java,json,jackson">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Jackson JSON 库使用例子">
 <meta property="og:url" content="https://emacsist.github.io/2015/06/25/Jackson-JSON-库使用例子/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="ObjectMapper它是线程安全的，所以建议使用它时，作为单例使用：  private static final ObjectMapper mapper = new ObjectMapper(); Quick ParsingString jsonString = &amp;quot;{\&amp;quot;k1\&amp;quot;:\&amp;quot;v1\&amp;quot;,\&amp;quot;k2\&amp;quot;:\&amp;quot;v">
+<meta property="og:description" content="ObjectMapper123它是线程安全的，所以建议使用它时，作为单例使用：private static final ObjectMapper mapper = new ObjectMapper(); Quick Parsing1234String jsonString = &amp;quot;&amp;#123;\&amp;quot;k1\&amp;quot;:\&amp;quot;v1\&amp;quot;,\&amp;quot;k2\&amp;quot">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Jackson JSON 库使用例子">
-<meta name="twitter:description" content="ObjectMapper它是线程安全的，所以建议使用它时，作为单例使用：  private static final ObjectMapper mapper = new ObjectMapper(); Quick ParsingString jsonString = &amp;quot;{\&amp;quot;k1\&amp;quot;:\&amp;quot;v1\&amp;quot;,\&amp;quot;k2\&amp;quot;:\&amp;quot;v">
+<meta name="twitter:description" content="ObjectMapper123它是线程安全的，所以建议使用它时，作为单例使用：private static final ObjectMapper mapper = new ObjectMapper(); Quick Parsing1234String jsonString = &amp;quot;&amp;#123;\&amp;quot;k1\&amp;quot;:\&amp;quot;v1\&amp;quot;,\&amp;quot;k2\&amp;quot">
 
   
 
@@ -206,54 +206,17 @@
 
     <div class="article-content">
         
-                            <h2 id="ObjectMapper"><a href="#ObjectMapper" class="headerlink" title="ObjectMapper"></a>ObjectMapper</h2><pre><code>它是线程安全的，所以建议使用它时，作为单例使用：
+                            <h2 id="ObjectMapper"><a href="#ObjectMapper" class="headerlink" title="ObjectMapper"></a>ObjectMapper</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">它是线程安全的，所以建议使用它时，作为单例使用：</div><div class="line"></div><div class="line">private static final ObjectMapper mapper = new ObjectMapper();</div></pre></td></tr></table></figure>
+<h2 id="Quick-Parsing"><a href="#Quick-Parsing" class="headerlink" title="Quick Parsing"></a>Quick Parsing</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">String jsonString = &quot;&#123;\&quot;k1\&quot;:\&quot;v1\&quot;,\&quot;k2\&quot;:\&quot;v2\&quot;&#125;&quot;;</div><div class="line">ObjectMapper mapper = new ObjectMapper();</div><div class="line">JsonNode actualObj = mapper.readTree(jsonString);</div><div class="line">assertNotNull(actualObj);</div></pre></td></tr></table></figure>
+<h2 id="Convert-JSON-to-Java-Map"><a href="#Convert-JSON-to-Java-Map" class="headerlink" title="Convert JSON to Java Map"></a>Convert JSON to Java Map</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">JsonFactory factory = new JsonFactory();</div><div class="line">ObjectMapper mapper = new ObjectMapper(factory);</div><div class="line">File from = new File(&quot;albumnList.txt&quot;);</div><div class="line">TypeReference&lt;HashMap&lt;String,Object&gt;&gt; typeRef = new TypeReference&lt;HashMap&lt;String,Object&gt;&gt;() &#123;&#125;;</div><div class="line">HashMap&lt;String,Object&gt; o = mapper.readValue(from, typeRef);</div><div class="line">System.out.println(&quot;Got &quot; + o);</div></pre></td></tr></table></figure>
+<h2 id="Convert-JSON-to-Java-List"><a href="#Convert-JSON-to-Java-List" class="headerlink" title="Convert JSON to Java List"></a>Convert JSON to Java List</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">String value = &quot;&#123;json string&#125;&quot;</div><div class="line">ObjectMapper om = new ObjectMapper();</div><div class="line">List&lt;Integer&gt; agentList = om.readValue(value, om.getTypeFactory().constructCollectionType(List.class, Integer.class));</div></pre></td></tr></table></figure>
+<h2 id="Convert-JSON-to-Java-object"><a href="#Convert-JSON-to-Java-object" class="headerlink" title="Convert JSON to Java object"></a>Convert JSON to Java object</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ObjectMapper mapper = new ObjectMapper();</div><div class="line">User user = mapper.readValue(new File(&quot;c:\\user.json&quot;), User.class);</div></pre></td></tr></table></figure>
+<h2 id="Convert-JavaObject-to-JSON-String"><a href="#Convert-JavaObject-to-JSON-String" class="headerlink" title="Convert JavaObject to JSON String"></a>Convert JavaObject to JSON String</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mapper.writeValue(new File(&quot;c:\\user.json&quot;), user);</div><div class="line"> // display to console</div><div class="line"> System.out.println(mapper.writeValueAsString(user));</div></pre></td></tr></table></figure>
+<h2 id="Low-Level-Parsing"><a href="#Low-Level-Parsing" class="headerlink" title="Low Level Parsing"></a>Low Level Parsing</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">String jsonString = &quot;&#123;\&quot;k1\&quot;:\&quot;v1\&quot;,\&quot;k2\&quot;:\&quot;v2\&quot;&#125;&quot;;</div><div class="line"> </div><div class="line">ObjectMapper mapper = new ObjectMapper();</div><div class="line">JsonFactory factory = mapper.getFactory();</div><div class="line">JsonParser parser = factory.createParser(jsonString);</div><div class="line">JsonNode actualObj = mapper.readTree(parser);</div><div class="line"> assertNotNull(actualObj);</div></pre></td></tr></table></figure>
+<h2 id="Use-jsonNode"><a href="#Use-jsonNode" class="headerlink" title="Use jsonNode"></a>Use jsonNode</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">String jsonString = &quot;&#123;\&quot;k1\&quot;:\&quot;v1\&quot;,\&quot;k2\&quot;:\&quot;v2\&quot;&#125;&quot;;</div><div class="line">ObjectMapper mapper = new ObjectMapper();</div><div class="line"> JsonNode actualObj = mapper.readTree(jsonString);</div><div class="line"> </div><div class="line"> // When</div><div class="line"> JsonNode jsonNode1 = actualObj.get(&quot;k1&quot;);</div><div class="line"> assertThat(jsonNode1.textValue(), equalTo(&quot;v1&quot;));</div></pre></td></tr></table></figure>
+<h2 id="timestamp解析-string-–-gt-timestamp"><a href="#timestamp解析-string-–-gt-timestamp" class="headerlink" title="timestamp解析, string –&gt; timestamp"></a>timestamp解析, string –&gt; timestamp</h2><p><a href="http://stackoverflow.com/questions/20635698/how-do-i-deserialize-timestamps-that-are-in-seconds-with-jackson" target="_blank" rel="external">stackoverflow</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">class UnixTimestampDeserializer extends JsonDeserializer&lt;DateTime&gt; </div><div class="line"></div><div class="line">class TimestampThing &#123;</div><div class="line">    @JsonDeserialize(using = UnixTimestampDeserializer.class)</div><div class="line">    DateTime timestamp</div><div class="line"> </div><div class="line">    @JsonCreator</div><div class="line">    public TimestampThing(@JsonProperty(&apos;timestamp&apos;) DateTime timestamp) &#123;</div><div class="line">        this.timestamp = timestamp</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
-private static final ObjectMapper mapper = new ObjectMapper();
-</code></pre><h2 id="Quick-Parsing"><a href="#Quick-Parsing" class="headerlink" title="Quick Parsing"></a>Quick Parsing</h2><pre><code>String jsonString = &quot;{\&quot;k1\&quot;:\&quot;v1\&quot;,\&quot;k2\&quot;:\&quot;v2\&quot;}&quot;;
-ObjectMapper mapper = new ObjectMapper();
-JsonNode actualObj = mapper.readTree(jsonString);
-assertNotNull(actualObj);
-</code></pre><h2 id="Convert-JSON-to-Java-Map"><a href="#Convert-JSON-to-Java-Map" class="headerlink" title="Convert JSON to Java Map"></a>Convert JSON to Java Map</h2><pre><code> JsonFactory factory = new JsonFactory();
- ObjectMapper mapper = new ObjectMapper(factory);
- File from = new File(&quot;albumnList.txt&quot;);
- TypeReference&lt;HashMap&lt;String,Object&gt;&gt; typeRef = new TypeReference&lt;HashMap&lt;String,Object&gt;&gt;() {};
- HashMap&lt;String,Object&gt; o = mapper.readValue(from, typeRef);
- System.out.println(&quot;Got &quot; + o);
-</code></pre><h2 id="Convert-JSON-to-Java-List"><a href="#Convert-JSON-to-Java-List" class="headerlink" title="Convert JSON to Java List"></a>Convert JSON to Java List</h2><pre><code>String value = &quot;{json string}&quot;
-ObjectMapper om = new ObjectMapper();
-List&lt;Integer&gt; agentList = om.readValue(value, om.getTypeFactory().constructCollectionType(List.class, Integer.class));
-</code></pre><h2 id="Convert-JSON-to-Java-object"><a href="#Convert-JSON-to-Java-object" class="headerlink" title="Convert JSON to Java object"></a>Convert JSON to Java object</h2><pre><code>ObjectMapper mapper = new ObjectMapper();
-User user = mapper.readValue(new File(&quot;c:\\user.json&quot;), User.class);
-</code></pre><h2 id="Convert-JavaObject-to-JSON-String"><a href="#Convert-JavaObject-to-JSON-String" class="headerlink" title="Convert JavaObject to JSON String"></a>Convert JavaObject to JSON String</h2><pre><code>mapper.writeValue(new File(&quot;c:\\user.json&quot;), user);
- // display to console
- System.out.println(mapper.writeValueAsString(user));
-</code></pre><h2 id="Low-Level-Parsing"><a href="#Low-Level-Parsing" class="headerlink" title="Low Level Parsing"></a>Low Level Parsing</h2><pre><code>String jsonString = &quot;{\&quot;k1\&quot;:\&quot;v1\&quot;,\&quot;k2\&quot;:\&quot;v2\&quot;}&quot;;
-
-ObjectMapper mapper = new ObjectMapper();
-JsonFactory factory = mapper.getFactory();
-JsonParser parser = factory.createParser(jsonString);
-JsonNode actualObj = mapper.readTree(parser);
- assertNotNull(actualObj);
-</code></pre><h2 id="Use-jsonNode"><a href="#Use-jsonNode" class="headerlink" title="Use jsonNode"></a>Use jsonNode</h2><pre><code>String jsonString = &quot;{\&quot;k1\&quot;:\&quot;v1\&quot;,\&quot;k2\&quot;:\&quot;v2\&quot;}&quot;;
-ObjectMapper mapper = new ObjectMapper();
- JsonNode actualObj = mapper.readTree(jsonString);
-
- // When
- JsonNode jsonNode1 = actualObj.get(&quot;k1&quot;);
- assertThat(jsonNode1.textValue(), equalTo(&quot;v1&quot;));
-</code></pre><h2 id="timestamp解析-string-–-gt-timestamp"><a href="#timestamp解析-string-–-gt-timestamp" class="headerlink" title="timestamp解析, string –&gt; timestamp"></a>timestamp解析, string –&gt; timestamp</h2><p><a href="http://stackoverflow.com/questions/20635698/how-do-i-deserialize-timestamps-that-are-in-seconds-with-jackson" target="_blank" rel="external">stackoverflow</a></p>
-<pre><code>class UnixTimestampDeserializer extends JsonDeserializer&lt;DateTime&gt; 
-
-class TimestampThing {
-    @JsonDeserialize(using = UnixTimestampDeserializer.class)
-    DateTime timestamp
-
-    @JsonCreator
-    public TimestampThing(@JsonProperty(&#39;timestamp&#39;) DateTime timestamp) {
-        this.timestamp = timestamp
-    }
-}
-</code></pre>
                                 
     </div>
 </article>

@@ -15,17 +15,17 @@
     <meta name="keywords" content="emacs," />
   
 
-  <meta name="description" content="Prelude 它是一个高度可配置的开箱即用的Emacs配置文件集合.   Github Prelude  开启里面的modules 默认情况下, 安装好 prelude 是没有开启它的模块功能的,要开启自己想要的模块, 可以按以下做:  cd ~/.eamcs.d/ cp sample/prelude-modules.el . emacs prelude-modules.el  然后按里面的模块">
+  <meta name="description" content="Prelude 它是一个高度可配置的开箱即用的Emacs配置文件集合.   Github Prelude  开启里面的modules 默认情况下, 安装好 prelude 是没有开启它的模块功能的,要开启自己想要的模块, 可以按以下做:  123cd ~/.eamcs.d/cp sample/prelude-modules.el .emacs prelude-modules.el 然后按里面的模块">
 <meta name="keywords" content="emacs">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Emacs配置文件之prelude">
 <meta property="og:url" content="https://emacsist.github.io/2015/07/03/Emacs配置文件之prelude/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="Prelude 它是一个高度可配置的开箱即用的Emacs配置文件集合.   Github Prelude  开启里面的modules 默认情况下, 安装好 prelude 是没有开启它的模块功能的,要开启自己想要的模块, 可以按以下做:  cd ~/.eamcs.d/ cp sample/prelude-modules.el . emacs prelude-modules.el  然后按里面的模块">
+<meta property="og:description" content="Prelude 它是一个高度可配置的开箱即用的Emacs配置文件集合.   Github Prelude  开启里面的modules 默认情况下, 安装好 prelude 是没有开启它的模块功能的,要开启自己想要的模块, 可以按以下做:  123cd ~/.eamcs.d/cp sample/prelude-modules.el .emacs prelude-modules.el 然后按里面的模块">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Emacs配置文件之prelude">
-<meta name="twitter:description" content="Prelude 它是一个高度可配置的开箱即用的Emacs配置文件集合.   Github Prelude  开启里面的modules 默认情况下, 安装好 prelude 是没有开启它的模块功能的,要开启自己想要的模块, 可以按以下做:  cd ~/.eamcs.d/ cp sample/prelude-modules.el . emacs prelude-modules.el  然后按里面的模块">
+<meta name="twitter:description" content="Prelude 它是一个高度可配置的开箱即用的Emacs配置文件集合.   Github Prelude  开启里面的modules 默认情况下, 安装好 prelude 是没有开启它的模块功能的,要开启自己想要的模块, 可以按以下做:  123cd ~/.eamcs.d/cp sample/prelude-modules.el .emacs prelude-modules.el 然后按里面的模块">
 
   
 
@@ -205,23 +205,18 @@
 <h2 id="开启里面的modules"><a href="#开启里面的modules" class="headerlink" title="开启里面的modules"></a>开启里面的modules</h2><blockquote>
 <p>默认情况下, 安装好 <code>prelude</code> 是没有开启它的模块功能的,要开启自己想要的模块, 可以按以下做:</p>
 </blockquote>
-<pre><code class="bash">cd ~/.eamcs.d/
-cp sample/prelude-modules.el .
-emacs prelude-modules.el
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ~/.eamcs.d/</div><div class="line">cp sample/prelude-modules.el .</div><div class="line">emacs prelude-modules.el</div></pre></td></tr></table></figure>
 <p>然后按里面的模块, 根据自己的需要, 去开启或者关闭.</p>
 <h2 id="自定义自己的额外配置"><a href="#自定义自己的额外配置" class="headerlink" title="自定义自己的额外配置"></a>自定义自己的额外配置</h2><blockquote>
 <p>将自己的配置文件放到 <code>~/.emacs.d/personal/preload/</code> 目录下即可.</p>
 </blockquote>
 <p>例如, 我有一个配置文件 <code>~/.emacs.d/personal/preload/yang.el</code> , 这样子 <code>prelude</code> 就会自动加载这个配置文件了.</p>
 <p>我刚开始做 <code>prelude</code> , 我只是暂时添加了自己喜欢的主题, <code>yang.el</code> 的内容就只有以下一行:</p>
-<pre><code class="bash">(setq prelude-theme &#39;solarized-dark)
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(setq prelude-theme <span class="string">'solarized-dark)</span></div></pre></td></tr></table></figure>
 <blockquote>
 <p>注意, 默认情况下, <code>prelude</code> 并没有安装这个主题, 所以先要安装下这个主题先:</p>
 </blockquote>
-<pre><code class="bash">M-x package-install RET solarized-theme
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">M-x package-install RET solarized-theme</div></pre></td></tr></table></figure>
 <h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>为了升级方便, 其他地方的文件自己不要随便添加或者修改, 最好按 <code>prelude</code> 的约定来做:</p>
 <ul>
 <li><p><code>~/.emacs.d/prelude-modules.el</code> : 这里开启或关闭自己需要的模块.</p>

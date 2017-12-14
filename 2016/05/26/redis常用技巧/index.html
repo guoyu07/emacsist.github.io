@@ -15,17 +15,17 @@
     <meta name="keywords" content="redis,nosql," />
   
 
-  <meta name="description" content="批量删除keycat /tmp/keys.txst | xargs -I{} -P 3 -t  -n 10 ./redis-cli -p 6379 -n 0 del {}  查询QPSwatch -n 60 &amp;#39;/home/redis/bin/redis-cli -h 10.*.*.* -p 6379  info |grep total_commands_processe &amp;gt;&amp;gt;">
+  <meta name="description" content="批量删除key1cat /tmp/keys.txst | xargs -I&amp;#123;&amp;#125; -P 3 -t  -n 10 ./redis-cli -p 6379 -n 0 del &amp;#123;&amp;#125; 查询QPS1watch -n 60 &apos;/home/redis/bin/redis-cli -h 10.*.*.* -p 6379  info |grep total_commands_p">
 <meta name="keywords" content="redis,nosql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="redis常用技巧">
 <meta property="og:url" content="https://emacsist.github.io/2016/05/26/redis常用技巧/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="批量删除keycat /tmp/keys.txst | xargs -I{} -P 3 -t  -n 10 ./redis-cli -p 6379 -n 0 del {}  查询QPSwatch -n 60 &amp;#39;/home/redis/bin/redis-cli -h 10.*.*.* -p 6379  info |grep total_commands_processe &amp;gt;&amp;gt;">
+<meta property="og:description" content="批量删除key1cat /tmp/keys.txst | xargs -I&amp;#123;&amp;#125; -P 3 -t  -n 10 ./redis-cli -p 6379 -n 0 del &amp;#123;&amp;#125; 查询QPS1watch -n 60 &apos;/home/redis/bin/redis-cli -h 10.*.*.* -p 6379  info |grep total_commands_p">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="redis常用技巧">
-<meta name="twitter:description" content="批量删除keycat /tmp/keys.txst | xargs -I{} -P 3 -t  -n 10 ./redis-cli -p 6379 -n 0 del {}  查询QPSwatch -n 60 &amp;#39;/home/redis/bin/redis-cli -h 10.*.*.* -p 6379  info |grep total_commands_processe &amp;gt;&amp;gt;">
+<meta name="twitter:description" content="批量删除key1cat /tmp/keys.txst | xargs -I&amp;#123;&amp;#125; -P 3 -t  -n 10 ./redis-cli -p 6379 -n 0 del &amp;#123;&amp;#125; 查询QPS1watch -n 60 &apos;/home/redis/bin/redis-cli -h 10.*.*.* -p 6379  info |grep total_commands_p">
 
   
 
@@ -201,10 +201,8 @@
 
     <div class="article-content">
         
-                            <h2 id="批量删除key"><a href="#批量删除key" class="headerlink" title="批量删除key"></a>批量删除key</h2><pre><code class="bash">cat /tmp/keys.txst | xargs -I{} -P 3 -t  -n 10 ./redis-cli -p 6379 -n 0 del {}
-</code></pre>
-<h2 id="查询QPS"><a href="#查询QPS" class="headerlink" title="查询QPS"></a>查询QPS</h2><pre><code class="bash">watch -n 60 &#39;/home/redis/bin/redis-cli -h 10.*.*.* -p 6379  info |grep total_commands_processe &gt;&gt; /tmp/qps2.txt &amp;&amp; date &gt;&gt; /tmp/qps2.txt&#39;
-</code></pre>
+                            <h2 id="批量删除key"><a href="#批量删除key" class="headerlink" title="批量删除key"></a>批量删除key</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat /tmp/keys.txst | xargs -I&#123;&#125; -P 3 -t  -n 10 ./redis-cli -p 6379 -n 0 del &#123;&#125;</div></pre></td></tr></table></figure>
+<h2 id="查询QPS"><a href="#查询QPS" class="headerlink" title="查询QPS"></a>查询QPS</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">watch -n 60 <span class="string">'/home/redis/bin/redis-cli -h 10.*.*.* -p 6379  info |grep total_commands_processe &gt;&gt; /tmp/qps2.txt &amp;&amp; date &gt;&gt; /tmp/qps2.txt'</span></div></pre></td></tr></table></figure>
 
                                 
     </div>

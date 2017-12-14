@@ -15,17 +15,17 @@
     <meta name="keywords" content="redis,nosql," />
   
 
-  <meta name="description" content="创建一个新的实例wget http://download.redis.io/redis-stable.tar.gz  tar -xvf redis-stable.tar.gz cd redis-stable make make PREFIX=/some/other/directory install  启动slave实例 /some/other/directory/bin/redis-server">
+  <meta name="description" content="创建一个新的实例123456wget http://download.redis.io/redis-stable.tar.gztar -xvf redis-stable.tar.gzcd redis-stablemakemake PREFIX=/some/other/directory install 启动slave实例 1/some/other/directory/bin/redis-serve">
 <meta name="keywords" content="redis,nosql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis升级">
 <meta property="og:url" content="https://emacsist.github.io/2015/11/23/Redis升级/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="创建一个新的实例wget http://download.redis.io/redis-stable.tar.gz  tar -xvf redis-stable.tar.gz cd redis-stable make make PREFIX=/some/other/directory install  启动slave实例 /some/other/directory/bin/redis-server">
+<meta property="og:description" content="创建一个新的实例123456wget http://download.redis.io/redis-stable.tar.gztar -xvf redis-stable.tar.gzcd redis-stablemakemake PREFIX=/some/other/directory install 启动slave实例 1/some/other/directory/bin/redis-serve">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis升级">
-<meta name="twitter:description" content="创建一个新的实例wget http://download.redis.io/redis-stable.tar.gz  tar -xvf redis-stable.tar.gz cd redis-stable make make PREFIX=/some/other/directory install  启动slave实例 /some/other/directory/bin/redis-server">
+<meta name="twitter:description" content="创建一个新的实例123456wget http://download.redis.io/redis-stable.tar.gztar -xvf redis-stable.tar.gzcd redis-stablemakemake PREFIX=/some/other/directory install 启动slave实例 1/some/other/directory/bin/redis-serve">
 
   
 
@@ -201,35 +201,21 @@
 
     <div class="article-content">
         
-                            <h2 id="创建一个新的实例"><a href="#创建一个新的实例" class="headerlink" title="创建一个新的实例"></a>创建一个新的实例</h2><pre><code class="bash">wget http://download.redis.io/redis-stable.tar.gz
-
-tar -xvf redis-stable.tar.gz
-cd redis-stable
-make
-make PREFIX=/some/other/directory install
-</code></pre>
+                            <h2 id="创建一个新的实例"><a href="#创建一个新的实例" class="headerlink" title="创建一个新的实例"></a>创建一个新的实例</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">wget http://download.redis.io/redis-stable.tar.gz</div><div class="line"></div><div class="line">tar -xvf redis-stable.tar.gz</div><div class="line"><span class="built_in">cd</span> redis-stable</div><div class="line">make</div><div class="line">make PREFIX=/some/other/directory install</div></pre></td></tr></table></figure>
 <p>启动slave实例</p>
-<pre><code class="bash">/some/other/directory/bin/redis-server /path/to/redis/redis.conf
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/some/other/directory/bin/redis-server /path/to/redis/redis.conf</div></pre></td></tr></table></figure>
 <h2 id="开启复制"><a href="#开启复制" class="headerlink" title="开启复制"></a>开启复制</h2><p>如果master要认证的话，要先认证下先,在slave的实例中的redis-cli启动后，输入以下命令</p>
-<pre><code class="bash">config set masterauth &lt;password&gt;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">config <span class="built_in">set</span> masterauth &lt;password&gt;</div></pre></td></tr></table></figure>
 <p>然后开始复制:</p>
-<pre><code class="bash">slaveof materIP masterPort
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">slaveof materIP masterPort</div></pre></td></tr></table></figure>
 <h2 id="检查是否复制完成"><a href="#检查是否复制完成" class="headerlink" title="检查是否复制完成"></a>检查是否复制完成</h2><p>检查从slave的日志文件，如果出现如下的提示，表明复制成功:</p>
-<pre><code class="bash">15293:S 23 Nov 16:21:37.560 * MASTER &lt;-&gt; SLAVE sync: Flushing old data
-15293:S 23 Nov 16:21:37.560 * MASTER &lt;-&gt; SLAVE sync: Loading DB in memory
-15293:S 23 Nov 16:21:50.799 * MASTER &lt;-&gt; SLAVE sync: Finished with success
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">15293:S 23 Nov 16:21:37.560 * MASTER &lt;-&gt; SLAVE sync: Flushing old data</div><div class="line">15293:S 23 Nov 16:21:37.560 * MASTER &lt;-&gt; SLAVE sync: Loading DB <span class="keyword">in</span> memory</div><div class="line">15293:S 23 Nov 16:21:50.799 * MASTER &lt;-&gt; SLAVE sync: Finished with success</div></pre></td></tr></table></figure>
 <h2 id="查看主从的INFO信息"><a href="#查看主从的INFO信息" class="headerlink" title="查看主从的INFO信息"></a>查看主从的INFO信息</h2><p>在主从实例中，都执行<code>INFO</code>命令，查看键数等是否一致.</p>
 <h2 id="允许从实例进行写操作"><a href="#允许从实例进行写操作" class="headerlink" title="允许从实例进行写操作"></a>允许从实例进行写操作</h2><p>默认情况下,redis的从slave实例是只读的，要开启写的话，可以在slave上执行:</p>
-<pre><code class="bash">config set slave-read-only no
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">config <span class="built_in">set</span> slave-read-only no</div></pre></td></tr></table></figure>
 <p>配置你的应用（客户端使用新的slave的连接信息）</p>
 <h2 id="从切换为主"><a href="#从切换为主" class="headerlink" title="从切换为主"></a>从切换为主</h2><p>在slave上执行以下命令（要在没有命令执行的情况下进行切换，可以在slave上执行<code>MONITOR</code>命令查看情况)，如果没有的话，就可以切换了:</p>
-<pre><code class="bash">SLAVEOF NO ONE
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">SLAVEOF NO ONE</div></pre></td></tr></table></figure>
 <p>即可关闭复制，成为主实例.</p>
 
                                 

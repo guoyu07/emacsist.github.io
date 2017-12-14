@@ -15,17 +15,17 @@
     <meta name="keywords" content="database,mysql," />
   
 
-  <meta name="description" content="锁类型 表级锁：开销小，加锁快；不会出现死锁；锁定粒度大，发生锁冲突的概率最高,并发度最低。   行级锁：开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低,并发度也最高。   页面锁：开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般。   表级锁查看表级锁的争夺情况mysql&amp;gt; show global status like &amp;#39;tab">
+  <meta name="description" content="锁类型 表级锁：开销小，加锁快；不会出现死锁；锁定粒度大，发生锁冲突的概率最高,并发度最低。   行级锁：开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低,并发度也最高。   页面锁：开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般。   表级锁查看表级锁的争夺情况12345678mysql&amp;gt; show global status like">
 <meta name="keywords" content="database,mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="&lt;深入浅出MySQL&gt;读书笔记之锁">
 <meta property="og:url" content="https://emacsist.github.io/2016/03/06/深入浅出MySQL-读书笔记之锁/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="锁类型 表级锁：开销小，加锁快；不会出现死锁；锁定粒度大，发生锁冲突的概率最高,并发度最低。   行级锁：开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低,并发度也最高。   页面锁：开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般。   表级锁查看表级锁的争夺情况mysql&amp;gt; show global status like &amp;#39;tab">
+<meta property="og:description" content="锁类型 表级锁：开销小，加锁快；不会出现死锁；锁定粒度大，发生锁冲突的概率最高,并发度最低。   行级锁：开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低,并发度也最高。   页面锁：开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般。   表级锁查看表级锁的争夺情况12345678mysql&amp;gt; show global status like">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt;深入浅出MySQL&gt;读书笔记之锁">
-<meta name="twitter:description" content="锁类型 表级锁：开销小，加锁快；不会出现死锁；锁定粒度大，发生锁冲突的概率最高,并发度最低。   行级锁：开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低,并发度也最高。   页面锁：开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般。   表级锁查看表级锁的争夺情况mysql&amp;gt; show global status like &amp;#39;tab">
+<meta name="twitter:description" content="锁类型 表级锁：开销小，加锁快；不会出现死锁；锁定粒度大，发生锁冲突的概率最高,并发度最低。   行级锁：开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低,并发度也最高。   页面锁：开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般。   表级锁查看表级锁的争夺情况12345678mysql&amp;gt; show global status like">
 
   
 
@@ -209,15 +209,7 @@
 <li><p>页面锁：开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般。</p>
 </li>
 </ul>
-<h2 id="表级锁"><a href="#表级锁" class="headerlink" title="表级锁"></a>表级锁</h2><h3 id="查看表级锁的争夺情况"><a href="#查看表级锁的争夺情况" class="headerlink" title="查看表级锁的争夺情况"></a>查看表级锁的争夺情况</h3><pre><code class="bash">mysql&gt; show global status like &#39;table_lock%&#39;;
-+-----------------------+-------+
-| Variable_name         | Value |
-+-----------------------+-------+
-| Table_locks_immediate | 201   |
-| Table_locks_waited    | 0     |
-+-----------------------+-------+
-2 rows in set (0.01 sec)
-</code></pre>
+<h2 id="表级锁"><a href="#表级锁" class="headerlink" title="表级锁"></a>表级锁</h2><h3 id="查看表级锁的争夺情况"><a href="#查看表级锁的争夺情况" class="headerlink" title="查看表级锁的争夺情况"></a>查看表级锁的争夺情况</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show global status like <span class="string">'table_lock%'</span>;</div><div class="line">+-----------------------+-------+</div><div class="line">| Variable_name         | Value |</div><div class="line">+-----------------------+-------+</div><div class="line">| Table_locks_immediate | 201   |</div><div class="line">| Table_locks_waited    | 0     |</div><div class="line">+-----------------------+-------+</div><div class="line">2 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.01 sec)</div></pre></td></tr></table></figure>
 <p>如果<code>Table_locks_waited</code>的值比较高，则说明存在着较严重的表级锁争用情况。</p>
 <h3 id="表级锁的模式"><a href="#表级锁的模式" class="headerlink" title="表级锁的模式"></a>表级锁的模式</h3><p>MySQL的表级锁有两种模式：</p>
 <ul>
@@ -252,18 +244,7 @@
 </li>
 </ul>
 <p>数据库的事务隔离越严格，并发副作用越小，但付出的代价也就越大，因为事务隔离实质上就是使事务在一定程度上“串行化”进行.</p>
-<h3 id="InnoDB行锁竞争情况"><a href="#InnoDB行锁竞争情况" class="headerlink" title="InnoDB行锁竞争情况"></a>InnoDB行锁竞争情况</h3><pre><code class="bash">mysql&gt; show global status like &#39;%innodb_row_lock%&#39;;
-+-------------------------------+-------+
-| Variable_name                 | Value |
-+-------------------------------+-------+
-| Innodb_row_lock_current_waits | 0     |
-| Innodb_row_lock_time          | 0     |
-| Innodb_row_lock_time_avg      | 0     |
-| Innodb_row_lock_time_max      | 0     |
-| Innodb_row_lock_waits         | 0     |
-+-------------------------------+-------+
-5 rows in set (0.00 sec)
-</code></pre>
+<h3 id="InnoDB行锁竞争情况"><a href="#InnoDB行锁竞争情况" class="headerlink" title="InnoDB行锁竞争情况"></a>InnoDB行锁竞争情况</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show global status like <span class="string">'%innodb_row_lock%'</span>;</div><div class="line">+-------------------------------+-------+</div><div class="line">| Variable_name                 | Value |</div><div class="line">+-------------------------------+-------+</div><div class="line">| Innodb_row_lock_current_waits | 0     |</div><div class="line">| Innodb_row_lock_time          | 0     |</div><div class="line">| Innodb_row_lock_time_avg      | 0     |</div><div class="line">| Innodb_row_lock_time_max      | 0     |</div><div class="line">| Innodb_row_lock_waits         | 0     |</div><div class="line">+-------------------------------+-------+</div><div class="line">5 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div></pre></td></tr></table></figure>
 <p><code>InnoDB_row_lock_waits</code>和<code>InnoDB_row_lock_time_avg</code>的值比较高，可以通过查询 <code>information_schema</code> 数据库中相关的表来查看锁情况，或者通过设置<code>InnoDB Monitors</code>来进一步观察发生锁冲突的表、数据行等，并分析锁争用的原因。</p>
 <ul>
 <li><p>查看innodb锁信息: <code>select * from information_schema.innodb_locks\G</code></p>

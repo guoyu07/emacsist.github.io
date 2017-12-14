@@ -15,17 +15,17 @@
     <meta name="keywords" content="database,mysql," />
   
 
-  <meta name="description" content="问题产品中有个业务是定时发通知的，现有的逻辑是，只有通知数&amp;gt;0时，才会发通知，现在PM说要修改为无论有没有消息数，都要在定时的时间发送通知。 原SQLSELECT count(1) as total, max(mws.id) as maxRuleStatusId, mwr.user_id as userId, mwr.id as ruleId, mwr.wx_openids as wxOpe">
+  <meta name="description" content="问题产品中有个业务是定时发通知的，现有的逻辑是，只有通知数&amp;gt;0时，才会发通知，现在PM说要修改为无论有没有消息数，都要在定时的时间发送通知。 原SQL123SELECT count(1) as total, max(mws.id) as maxRuleStatusId, mwr.user_id as userId, mwr.id as ruleId, mwr.wx_openids as wx">
 <meta name="keywords" content="database,mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL中按条件count">
 <meta property="og:url" content="https://emacsist.github.io/2016/10/17/MySQL中按条件count/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="问题产品中有个业务是定时发通知的，现有的逻辑是，只有通知数&amp;gt;0时，才会发通知，现在PM说要修改为无论有没有消息数，都要在定时的时间发送通知。 原SQLSELECT count(1) as total, max(mws.id) as maxRuleStatusId, mwr.user_id as userId, mwr.id as ruleId, mwr.wx_openids as wxOpe">
+<meta property="og:description" content="问题产品中有个业务是定时发通知的，现有的逻辑是，只有通知数&amp;gt;0时，才会发通知，现在PM说要修改为无论有没有消息数，都要在定时的时间发送通知。 原SQL123SELECT count(1) as total, max(mws.id) as maxRuleStatusId, mwr.user_id as userId, mwr.id as ruleId, mwr.wx_openids as wx">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL中按条件count">
-<meta name="twitter:description" content="问题产品中有个业务是定时发通知的，现有的逻辑是，只有通知数&amp;gt;0时，才会发通知，现在PM说要修改为无论有没有消息数，都要在定时的时间发送通知。 原SQLSELECT count(1) as total, max(mws.id) as maxRuleStatusId, mwr.user_id as userId, mwr.id as ruleId, mwr.wx_openids as wxOpe">
+<meta name="twitter:description" content="问题产品中有个业务是定时发通知的，现有的逻辑是，只有通知数&amp;gt;0时，才会发通知，现在PM说要修改为无论有没有消息数，都要在定时的时间发送通知。 原SQL123SELECT count(1) as total, max(mws.id) as maxRuleStatusId, mwr.user_id as userId, mwr.id as ruleId, mwr.wx_openids as wx">
 
   
 
@@ -202,17 +202,11 @@
     <div class="article-content">
         
                             <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>产品中有个业务是定时发通知的，现有的逻辑是，只有通知数&gt;0时，才会发通知，现在PM说要修改为无论有没有消息数，都要在定时的时间发送通知。</p>
-<h2 id="原SQL"><a href="#原SQL" class="headerlink" title="原SQL"></a>原SQL</h2><pre><code class="bash">SELECT count(1) as total, max(mws.id) as maxRuleStatusId, mwr.user_id as userId, mwr.id as ruleId, mwr.wx_openids as wxOpenIds from micro_warning_status mws INNER JOIN micro_warning_rule as mwr ON mws.micro_warning_rule_id = mwr.id
-WHERE mwr.notice_interval = #{noticeInterval} AND mws.id &gt; mwr.last_notice_id
-group by mwr.user_id, mwr.id;
-</code></pre>
+<h2 id="原SQL"><a href="#原SQL" class="headerlink" title="原SQL"></a>原SQL</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">SELECT count(1) as total, max(mws.id) as maxRuleStatusId, mwr.user_id as userId, mwr.id as ruleId, mwr.wx_openids as wxOpenIds from micro_warning_status mws INNER JOIN micro_warning_rule as mwr ON mws.micro_warning_rule_id = mwr.id</div><div class="line">WHERE mwr.notice_interval = <span class="comment">#&#123;noticeInterval&#125; AND mws.id &gt; mwr.last_notice_id</span></div><div class="line">group by mwr.user_id, mwr.id;</div></pre></td></tr></table></figure>
 <p>last_notice_id：表示上一次已经通知的id，<code>mws.id &gt; mwr.last_notice_id</code> 表示距离上一次通知后，有多少条新的消息.</p>
 <p>因为这个条件在<code>where</code>里，所以只有在定时的时间内，有新的消息时，此SQL才不会为空。</p>
 <h2 id="新SQL"><a href="#新SQL" class="headerlink" title="新SQL"></a>新SQL</h2><p>因为PM要求无论有没有新消息数，都要进行通知。所以要修改一下SQL，新SQL如下:</p>
-<pre><code class="bash">      SELECT sum(if(mws.id &gt; mwr.last_notice_id, 1, 0)) as total, max(mws.id) as maxRuleStatusId, mwr.user_id as userId, mwr.id as ruleId, mwr.wx_openids as wxOpenIds from micro_warning_status mws INNER JOIN micro_warning_rule as mwr ON mws.micro_warning_rule_id = mwr.id
-      WHERE mwr.notice_interval = #{noticeInterval}
-      group by mwr.user_id, mwr.id;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">SELECT sum(<span class="keyword">if</span>(mws.id &gt; mwr.last_notice_id, 1, 0)) as total, max(mws.id) as maxRuleStatusId, mwr.user_id as userId, mwr.id as ruleId, mwr.wx_openids as wxOpenIds from micro_warning_status mws INNER JOIN micro_warning_rule as mwr ON mws.micro_warning_rule_id = mwr.id</div><div class="line">WHERE mwr.notice_interval = <span class="comment">#&#123;noticeInterval&#125;</span></div><div class="line">group by mwr.user_id, mwr.id;</div></pre></td></tr></table></figure>
 <p>通过<code>sum</code>+<code>if</code>来有条件地进行<code>count</code>操作即可达到目的。</p>
 
                                 

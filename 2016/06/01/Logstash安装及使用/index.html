@@ -15,16 +15,16 @@
     <meta name="keywords" content="Golang, Java, PostgreSQL, Postgres, MySQL, emacsist, RabbitMQ, Go, emacs, orgmode" />
   
 
-  <meta name="description" content="依赖：Java运行环境。这个就不多写了。 安装LogstashDownload Logstash 这时以2.3.1 带全插件的版本 下载完后，假设安装在目录/ihome/ELK/logstash-2.3.1目录下。 假设变量 logstash_home=/ihome/ELK/logstash-2.3.1 Hello Worldcd ${logstash_home}  ╭─sky@sky-linux">
+  <meta name="description" content="依赖：Java运行环境。这个就不多写了。 安装LogstashDownload Logstash 这时以2.3.1 带全插件的版本 下载完后，假设安装在目录/ihome/ELK/logstash-2.3.1目录下。 假设变量 logstash_home=/ihome/ELK/logstash-2.3.1 Hello World12345678910111213cd $&amp;#123;logstash_">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Logstash安装及使用">
 <meta property="og:url" content="https://emacsist.github.io/2016/06/01/Logstash安装及使用/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="依赖：Java运行环境。这个就不多写了。 安装LogstashDownload Logstash 这时以2.3.1 带全插件的版本 下载完后，假设安装在目录/ihome/ELK/logstash-2.3.1目录下。 假设变量 logstash_home=/ihome/ELK/logstash-2.3.1 Hello Worldcd ${logstash_home}  ╭─sky@sky-linux">
+<meta property="og:description" content="依赖：Java运行环境。这个就不多写了。 安装LogstashDownload Logstash 这时以2.3.1 带全插件的版本 下载完后，假设安装在目录/ihome/ELK/logstash-2.3.1目录下。 假设变量 logstash_home=/ihome/ELK/logstash-2.3.1 Hello World12345678910111213cd $&amp;#123;logstash_">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Logstash安装及使用">
-<meta name="twitter:description" content="依赖：Java运行环境。这个就不多写了。 安装LogstashDownload Logstash 这时以2.3.1 带全插件的版本 下载完后，假设安装在目录/ihome/ELK/logstash-2.3.1目录下。 假设变量 logstash_home=/ihome/ELK/logstash-2.3.1 Hello Worldcd ${logstash_home}  ╭─sky@sky-linux">
+<meta name="twitter:description" content="依赖：Java运行环境。这个就不多写了。 安装LogstashDownload Logstash 这时以2.3.1 带全插件的版本 下载完后，假设安装在目录/ihome/ELK/logstash-2.3.1目录下。 假设变量 logstash_home=/ihome/ELK/logstash-2.3.1 Hello World12345678910111213cd $&amp;#123;logstash_">
 
   
 
@@ -189,52 +189,13 @@
 <p>这时以<code>2.3.1 带全插件的版本</code></p>
 <p>下载完后，假设安装在目录<code>/ihome/ELK/logstash-2.3.1</code>目录下。</p>
 <p>假设变量 <code>logstash_home=/ihome/ELK/logstash-2.3.1</code></p>
-<h2 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h2><pre><code class="bash">cd ${logstash_home}
-
-╭─sky@sky-linux /ihome/ELK/logstash-2.3.1  
-╰─➤  bin/logstash -e &#39;input { stdin {} } output { stdout {codec=&gt;rubydebug} }&#39;
-Settings: Default pipeline workers: 4
-Pipeline main started
-hello world
-{
-       &quot;message&quot; =&gt; &quot;hello world&quot;,
-      &quot;@version&quot; =&gt; &quot;1&quot;,
-    &quot;@timestamp&quot; =&gt; &quot;2016-06-01T10:39:20.879Z&quot;,
-          &quot;host&quot; =&gt; &quot;sky-linux&quot;
-}
-</code></pre>
+<h2 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> <span class="variable">$&#123;logstash_home&#125;</span></div><div class="line"></div><div class="line">╭─sky@sky-linux /ihome/ELK/logstash-2.3.1  </div><div class="line">╰─➤  bin/logstash -e <span class="string">'input &#123; stdin &#123;&#125; &#125; output &#123; stdout &#123;codec=&gt;rubydebug&#125; &#125;'</span></div><div class="line">Settings: Default pipeline workers: 4</div><div class="line">Pipeline main started</div><div class="line">hello world</div><div class="line">&#123;</div><div class="line">       <span class="string">"message"</span> =&gt; <span class="string">"hello world"</span>,</div><div class="line">      <span class="string">"@version"</span> =&gt; <span class="string">"1"</span>,</div><div class="line">    <span class="string">"@timestamp"</span> =&gt; <span class="string">"2016-06-01T10:39:20.879Z"</span>,</div><div class="line">          <span class="string">"host"</span> =&gt; <span class="string">"sky-linux"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="使用配置文件方式"><a href="#使用配置文件方式" class="headerlink" title="使用配置文件方式:"></a>使用配置文件方式:</h2><p>创建一个文件<code>logstash.conf</code>在<code>${logstash_home}</code>目录下，内容如下：</p>
-<pre><code class="bash">input {
-    stdin {}
-}
-
-output {
-    stdout {
-        codec =&gt; rubydebug {}
-    }
-}
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">input &#123;</div><div class="line">	stdin &#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">output &#123;</div><div class="line">	stdout &#123;</div><div class="line">		codec =&gt; rubydebug &#123;&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>执行:</p>
-<pre><code class="bash">cd ${logstash_home}
-
-╭─sky@sky-linux /ihome/ELK/logstash-2.3.1  
-╰─➤  bin/logstash -f logstash.conf
-Settings: Default pipeline workers: 4
-Pipeline main started
-Hello World
-{
-       &quot;message&quot; =&gt; &quot;Hello World&quot;,
-      &quot;@version&quot; =&gt; &quot;1&quot;,
-    &quot;@timestamp&quot; =&gt; &quot;2016-06-01T10:47:10.391Z&quot;,
-          &quot;host&quot; =&gt; &quot;sky-linux&quot;
-}
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> <span class="variable">$&#123;logstash_home&#125;</span></div><div class="line"></div><div class="line">╭─sky@sky-linux /ihome/ELK/logstash-2.3.1  </div><div class="line">╰─➤  bin/logstash -f logstash.conf</div><div class="line">Settings: Default pipeline workers: 4</div><div class="line">Pipeline main started</div><div class="line">Hello World</div><div class="line">&#123;</div><div class="line">       <span class="string">"message"</span> =&gt; <span class="string">"Hello World"</span>,</div><div class="line">      <span class="string">"@version"</span> =&gt; <span class="string">"1"</span>,</div><div class="line">    <span class="string">"@timestamp"</span> =&gt; <span class="string">"2016-06-01T10:47:10.391Z"</span>,</div><div class="line">          <span class="string">"host"</span> =&gt; <span class="string">"sky-linux"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="logstash-配置文件语法"><a href="#logstash-配置文件语法" class="headerlink" title="logstash 配置文件语法"></a>logstash 配置文件语法</h2><h3 id="Section"><a href="#Section" class="headerlink" title="Section, {}"></a>Section, {}</h3><p>如:</p>
-<pre><code class="bash">input {
-    stdin {
-    }
-}
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">input &#123;</div><div class="line">	stdin &#123;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><p>布尔： <code>debug =&gt; true</code><br>字符串： <code>host =&gt; &quot;hostname&quot;</code><br>数值： <code>port =&gt; 123</code><br>数组: <code>match =&gt; [&quot;date&quot;, &quot;unix&quot;, &quot;ISO&quot;]
 哈希:</code>options =&gt; {k1 =&gt; “value1”, k2 =&gt; “value2”}`</p>
 <h3 id="字段引用"><a href="#字段引用" class="headerlink" title="字段引用"></a>字段引用</h3><p><code>[字段名]</code>：即可得到字段的值了.</p>
@@ -248,20 +209,10 @@ Hello World
 <h2 id="命令行参数"><a href="#命令行参数" class="headerlink" title="命令行参数"></a>命令行参数</h2><p><code>-e</code>：直接执行后面的内容：如上面的Hello World.</p>
 <p><code>-f或--config</code>：执行后面参数代表的文件里的内容.如上面的Hello World带文件的例子。</p>
 <p><code>-t或--configtest</code>：测试配置文件语法是否正确.如:</p>
-<pre><code class="bash">╭─sky@sky-linux /ihome/ELK/logstash-2.3.1  
-╰─➤  bin/logstash -t logstash.conf 
-Configuration OK
-╭─sky@sky-linux /ihome/ELK/logstash-2.3.1  
-╰─➤  bin/logstash --configtest logstash.conf
-Configuration OK
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">╭─sky@sky-linux /ihome/ELK/logstash-2.3.1  </div><div class="line">╰─➤  bin/logstash -t logstash.conf </div><div class="line">Configuration OK</div><div class="line">╭─sky@sky-linux /ihome/ELK/logstash-2.3.1  </div><div class="line">╰─➤  bin/logstash --configtest logstash.conf</div><div class="line">Configuration OK</div></pre></td></tr></table></figure>
 <p><code>-l或--log</code>：默认情况下logstash输出到标准输出中。-l，可以指定件输出到文件.</p>
 <p><code>-w或--pipeline-workers</code>：工作线程.<code>-w 5</code>。如:</p>
-<pre><code class="bash">╭─sky@sky-linux /ihome/ELK/logstash-2.3.1  
-╰─➤  bin/logstash -f logstash.conf -w 5     
-Settings: User set pipeline workers: 5, Default pipeline workers: 4
-Pipeline main started
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">╭─sky@sky-linux /ihome/ELK/logstash-2.3.1  </div><div class="line">╰─➤  bin/logstash -f logstash.conf -w 5     </div><div class="line">Settings: User <span class="built_in">set</span> pipeline workers: 5, Default pipeline workers: 4</div><div class="line">Pipeline main started</div></pre></td></tr></table></figure>
 <p><code>-p或--pluginpath</code>：插件路径.可以自己写插件，然后这样子加载它.<code>-p /home/logstash/plugins</code></p>
 <p><code>--verbose</code>：详细输出</p>
 <p><code>--debug</code>：调试</p>
@@ -272,22 +223,8 @@ Pipeline main started
 <p><code>type</code>和<code>tags</code>是 logstash 中两个特殊的字段。<code>type</code>标识类型。<code>tags</code>由后面的插件来添加或删除.</p>
 <h4 id="stdin"><a href="#stdin" class="headerlink" title="stdin"></a>stdin</h4><p>标准输入.</p>
 <h4 id="file"><a href="#file" class="headerlink" title="file"></a>file</h4><p>文件输入.</p>
-<pre><code class="bash">input {
-    file {
-        path =&gt; [&quot;/path/to/file1&quot;, &quot;/path/to/file2&quot;]
-        type =&gt; &quot;system&quot;
-        start_position =&gt; &quot;beginning&quot;
-    }
-}
-</code></pre>
-<h4 id="TCP输入"><a href="#TCP输入" class="headerlink" title="TCP输入"></a>TCP输入</h4><pre><code class="bash">input {
-    tcp {
-        port =&gt; 8888
-        mode =&gt; &quot;server&quot;
-        ssl_enable =&gt; false
-    }
-}
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">input &#123;</div><div class="line">    file &#123;</div><div class="line">        path =&gt; [<span class="string">"/path/to/file1"</span>, <span class="string">"/path/to/file2"</span>]</div><div class="line">        <span class="built_in">type</span> =&gt; <span class="string">"system"</span></div><div class="line">        start_position =&gt; <span class="string">"beginning"</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="TCP输入"><a href="#TCP输入" class="headerlink" title="TCP输入"></a>TCP输入</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">input &#123;</div><div class="line">    tcp &#123;</div><div class="line">        port =&gt; 8888</div><div class="line">        mode =&gt; <span class="string">"server"</span></div><div class="line">        ssl_enable =&gt; <span class="literal">false</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>etc..</p>
 <h2 id="后台运行"><a href="#后台运行" class="headerlink" title="后台运行"></a>后台运行</h2><p><code>nohup COMMAND &amp;</code></p>
 <h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul>

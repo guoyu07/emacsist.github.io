@@ -210,168 +210,17 @@
 <h2 id="使用hashCode-和equals"><a href="#使用hashCode-和equals" class="headerlink" title="使用hashCode()和equals()"></a>使用hashCode()和equals()</h2><p>hashCode()方法被用来获取给定对象的唯一整数。这个整数被用来确定对象被存储在HashTable类似的结构中的位置。默认的，Object类的hashCode()方法返回这个对象存储的内存地址的编号</p>
 <h2 id="重写默认的实现"><a href="#重写默认的实现" class="headerlink" title="重写默认的实现"></a>重写默认的实现</h2><p>如果你不重写这两个方法，将几乎不遇到任何问题，但是有的时候程序要求我们必须改变一些对象的默认实现。</p>
 <p>来看看这个例子，让我们创建一个简单的类Employee</p>
-<pre><code class="java">public class Employee
-{
-    private Integer id;
-    private String firstname;
-    private String lastName;
-    private String department;
-
-    public Integer getId() {
-        return id;
-    }
-    public void setId(Integer id) {
-        this.id = id;
-    }
-    public String getFirstname() {
-        return firstname;
-    }
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-    public String getLastName() {
-        return lastName;
-    }
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-    public String getDepartment() {
-        return department;
-    }
-    public void setDepartment(String department) {
-        this.department = department;
-    }
-}
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Employee</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">private</span> Integer id;</div><div class="line">    <span class="keyword">private</span> String firstname;</div><div class="line">    <span class="keyword">private</span> String lastName;</div><div class="line">    <span class="keyword">private</span> String department;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getId</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> id;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(Integer id)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.id = id;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFirstname</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> firstname;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setFirstname</span><span class="params">(String firstname)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.firstname = firstname;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getLastName</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> lastName;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setLastName</span><span class="params">(String lastName)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.lastName = lastName;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getDepartment</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> department;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDepartment</span><span class="params">(String department)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.department = department;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>上面的Employee类只是有一些非常基础的属性和getter、setter.现在来考虑一个你需要比较两个employee的情形。</p>
-<pre><code class="java">public class EqualsTest {
-    public static void main(String[] args) {
-        Employee e1 = new Employee();
-        Employee e2 = new Employee();
-
-        e1.setId(100);
-        e2.setId(100);
-        //Prints false in console
-        System.out.println(e1.equals(e2));
-    }
-}
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EqualsTest</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        Employee e1 = <span class="keyword">new</span> Employee();</div><div class="line">        Employee e2 = <span class="keyword">new</span> Employee();</div><div class="line"></div><div class="line">        e1.setId(<span class="number">100</span>);</div><div class="line">        e2.setId(<span class="number">100</span>);</div><div class="line">        <span class="comment">//Prints false in console</span></div><div class="line">        System.out.println(e1.equals(e2));</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>毫无疑问，上面的程序将输出false，但是，事实上上面两个对象代表的是通过一个employee。真正的商业逻辑希望我们返回true。<br>为了达到这个目的，我们需要重写equals方法。</p>
-<pre><code class="java">public boolean equals(Object o) {
-        if(o == null)
-        {
-            return false;
-        }
-        if (o == this)
-        {
-           return true;
-        }
-        if (getClass() != o.getClass())
-        {
-            return false;
-        }
-        Employee e = (Employee) o;
-        return (this.getId() == e.getId());
-}
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object o)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span>(o == <span class="keyword">null</span>)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (o == <span class="keyword">this</span>)</div><div class="line">        &#123;</div><div class="line">           <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (getClass() != o.getClass())</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">        &#125;</div><div class="line">        Employee e = (Employee) o;</div><div class="line">        <span class="keyword">return</span> (<span class="keyword">this</span>.getId() == e.getId());</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>在上面的类中添加这个方法，EauqlsTest将会输出true。<br>So are we done?没有，让我们换一种测试方法来看看。</p>
-<pre><code class="java">import java.util.HashSet;
-import java.util.Set;
-
-public class EqualsTest
-{
-    public static void main(String[] args)
-    {
-        Employee e1 = new Employee();
-        Employee e2 = new Employee();
-
-        e1.setId(100);
-        e2.setId(100);
-
-        //Prints &#39;true&#39;
-        System.out.println(e1.equals(e2));
-
-        Set&lt;Employee&gt; employees = new HashSet&lt;Employee&gt;();
-        employees.add(e1);
-        employees.add(e2);
-        //Prints two objects
-        System.out.println(employees);
-    }
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.util.HashSet;</div><div class="line"><span class="keyword">import</span> java.util.Set;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EqualsTest</span></span></div><div class="line">&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span></div><div class="line">    &#123;</div><div class="line">        Employee e1 = <span class="keyword">new</span> Employee();</div><div class="line">        Employee e2 = <span class="keyword">new</span> Employee();</div><div class="line"></div><div class="line">        e1.setId(<span class="number">100</span>);</div><div class="line">        e2.setId(<span class="number">100</span>);</div><div class="line"></div><div class="line">        <span class="comment">//Prints 'true'</span></div><div class="line">        System.out.println(e1.equals(e2));</div><div class="line"></div><div class="line">        Set&lt;Employee&gt; employees = <span class="keyword">new</span> HashSet&lt;Employee&gt;();</div><div class="line">        employees.add(e1);</div><div class="line">        employees.add(e2);</div><div class="line">        <span class="comment">//Prints two objects</span></div><div class="line">        System.out.println(employees);</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
 <p>上面的程序输出的结果是两个。如果两个employee对象equals返回true，Set中应该只存储一个对象才对，问题在哪里呢？<br>我们忘掉了第二个重要的方法hashCode()。就像JDK的Javadoc中所说的一样，如果重写equals()方法必须要重写hashCode()方法。我们加上下面这个方法，程序将执行正确</p>
-<pre><code class="java">@Override
- public int hashCode()
- {
-    final int PRIME = 31;
-    int result = 1;
-    result = PRIME * result + getId();
-    return result;
- }
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span></span></div><div class="line"> &#123;</div><div class="line">    <span class="keyword">final</span> <span class="keyword">int</span> PRIME = <span class="number">31</span>;</div><div class="line">    <span class="keyword">int</span> result = <span class="number">1</span>;</div><div class="line">    result = PRIME * result + getId();</div><div class="line">    <span class="keyword">return</span> result;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
 <h2 id="使用Apache-Commons-Lang包重写hashCode-和equals-方法"><a href="#使用Apache-Commons-Lang包重写hashCode-和equals-方法" class="headerlink" title="使用Apache Commons Lang包重写hashCode() 和equals()方法"></a>使用Apache Commons Lang包重写hashCode() 和equals()方法</h2><p>Apache Commons 包提供了两个非常优秀的类来生成hashCode()和equals()方法。看下面的程序。</p>
-<pre><code class="java">import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
-public class Employee {
-    private Integer id;
-    private String firstname;
-    private String lastName;
-    private String department;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(String department) {
-        this.department = department;
-    }
-
-    @Override
-    public int hashCode() {
-        final int PRIME = 31;
-        return new HashCodeBuilder(getId() % 2 == 0 ? getId() + 1 : getId(), PRIME).
-                toHashCode();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null)
-            return false;
-        if (o == this)
-            return true;
-        if (o.getClass() != getClass())
-            return false;
-        Employee e = (Employee) o;
-        return new EqualsBuilder().
-                append(getId(), e.getId()).
-                isEquals();
-    }
-}
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> org.apache.commons.lang3.builder.EqualsBuilder;</div><div class="line"><span class="keyword">import</span> org.apache.commons.lang3.builder.HashCodeBuilder;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Employee</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> Integer id;</div><div class="line">    <span class="keyword">private</span> String firstname;</div><div class="line">    <span class="keyword">private</span> String lastName;</div><div class="line">    <span class="keyword">private</span> String department;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getId</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> id;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(Integer id)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.id = id;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFirstname</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> firstname;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setFirstname</span><span class="params">(String firstname)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.firstname = firstname;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getLastName</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> lastName;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setLastName</span><span class="params">(String lastName)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.lastName = lastName;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getDepartment</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> department;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDepartment</span><span class="params">(String department)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.department = department;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">final</span> <span class="keyword">int</span> PRIME = <span class="number">31</span>;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> HashCodeBuilder(getId() % <span class="number">2</span> == <span class="number">0</span> ? getId() + <span class="number">1</span> : getId(), PRIME).</div><div class="line">                toHashCode();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object o)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (o == <span class="keyword">null</span>)</div><div class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">        <span class="keyword">if</span> (o == <span class="keyword">this</span>)</div><div class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">        <span class="keyword">if</span> (o.getClass() != getClass())</div><div class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">        Employee e = (Employee) o;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> EqualsBuilder().</div><div class="line">                append(getId(), e.getId()).</div><div class="line">                isEquals();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>如果你使用Eclipse或者其他的IDE，IDE也可能会提供生成良好的hashCode()方法和equals()方法。</p>
 <p><img src="/img/java-hash-code-equals.png" alt="img"></p>
 <h2 id="需要注意记住的事情"><a href="#需要注意记住的事情" class="headerlink" title="需要注意记住的事情"></a>需要注意记住的事情</h2><ul>

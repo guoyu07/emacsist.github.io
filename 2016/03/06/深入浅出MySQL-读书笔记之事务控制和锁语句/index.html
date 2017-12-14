@@ -207,20 +207,7 @@
 <h2 id="锁表"><a href="#锁表" class="headerlink" title="锁表"></a>锁表</h2><p><code>LOCK TABLES</code>: 可以锁定用于当前线的表。如果表被其他线程锁定，则当前线程会等待，直到可以获取所有锁定为止.</p>
 <p><code>UNLOCK TABLES</code>: 可以释放当前线程获得的任何锁定。当前线程执行另一个 LOCK TABLES时，或当与服务器的连接被关闭时，所有由当前线程锁定的表被隐含地解锁.</p>
 <p><strong>语法</strong></p>
-<pre><code class="bash">mysql&gt; ? lock
-Name: &#39;LOCK&#39;
-Description:
-Syntax:
-LOCK TABLES
-    tbl_name [[AS] alias] lock_type
-    [, tbl_name [[AS] alias] lock_type] ...
-
-lock_type:
-    READ [LOCAL]
-  | [LOW_PRIORITY] WRITE
-
-UNLOCK TABLES
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">mysql&gt; ? lock</div><div class="line">Name: <span class="string">'LOCK'</span></div><div class="line">Description:</div><div class="line">Syntax:</div><div class="line">LOCK TABLES</div><div class="line">    tbl_name [[AS] <span class="built_in">alias</span>] lock_type</div><div class="line">    [, tbl_name [[AS] <span class="built_in">alias</span>] lock_type] ...</div><div class="line"></div><div class="line">lock_type:</div><div class="line">    READ [LOCAL]</div><div class="line">  | [LOW_PRIORITY] WRITE</div><div class="line"></div><div class="line">UNLOCK TABLES</div></pre></td></tr></table></figure>
 <h2 id="事务控制"><a href="#事务控制" class="headerlink" title="事务控制"></a>事务控制</h2><p>默认情况下, MySQL是自动提交事务的.</p>
 <p>更详细的帮助, 可以查看:</p>
 <p><code>mysql&gt; ? start transaction</code></p>

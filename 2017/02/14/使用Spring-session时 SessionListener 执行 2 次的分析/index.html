@@ -15,19 +15,19 @@
     <meta name="keywords" content="java,spring,redis,nosql," />
   
 
-  <meta name="description" content="项目中使用 Spring-session 这个分布式 session 作为负载均衡的 session 中间件，以便统一 session 的管理。  然后我们自己添加了一个 HttpSessionListener, 但是发现它执行了 2 次，实在是太诡异了。（其实是太菜了） 首先项目里的配置大概如下:      &amp;lt;bean class=&amp;quot;org.springframework.se">
+  <meta name="description" content="项目中使用 Spring-session 这个分布式 session 作为负载均衡的 session 中间件，以便统一 session 的管理。  然后我们自己添加了一个 HttpSessionListener, 但是发现它执行了 2 次，实在是太诡异了。（其实是太菜了） 首先项目里的配置大概如下: 12345678910&amp;lt;bean class=&quot;org.springframework.s">
 <meta name="keywords" content="java,spring,redis,nosql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用Spring session时 SessionListener 执行 2 次的分析">
 <meta property="og:url" content="https://emacsist.github.io/2017/02/14/使用Spring-session时 SessionListener 执行 2 次的分析/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="项目中使用 Spring-session 这个分布式 session 作为负载均衡的 session 中间件，以便统一 session 的管理。  然后我们自己添加了一个 HttpSessionListener, 但是发现它执行了 2 次，实在是太诡异了。（其实是太菜了） 首先项目里的配置大概如下:      &amp;lt;bean class=&amp;quot;org.springframework.se">
+<meta property="og:description" content="项目中使用 Spring-session 这个分布式 session 作为负载均衡的 session 中间件，以便统一 session 的管理。  然后我们自己添加了一个 HttpSessionListener, 但是发现它执行了 2 次，实在是太诡异了。（其实是太菜了） 首先项目里的配置大概如下: 12345678910&amp;lt;bean class=&quot;org.springframework.s">
 <meta property="og:image" content="https://emacsist.github.io/img/spring-session-debug-1.jpeg">
 <meta property="og:image" content="https://emacsist.github.io/img/spring-session-debug-2.jpeg">
 <meta property="og:updated_time" content="2017-02-14T09:15:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Spring session时 SessionListener 执行 2 次的分析">
-<meta name="twitter:description" content="项目中使用 Spring-session 这个分布式 session 作为负载均衡的 session 中间件，以便统一 session 的管理。  然后我们自己添加了一个 HttpSessionListener, 但是发现它执行了 2 次，实在是太诡异了。（其实是太菜了） 首先项目里的配置大概如下:      &amp;lt;bean class=&amp;quot;org.springframework.se">
+<meta name="twitter:description" content="项目中使用 Spring-session 这个分布式 session 作为负载均衡的 session 中间件，以便统一 session 的管理。  然后我们自己添加了一个 HttpSessionListener, 但是发现它执行了 2 次，实在是太诡异了。（其实是太菜了） 首先项目里的配置大概如下: 12345678910&amp;lt;bean class=&quot;org.springframework.s">
 <meta name="twitter:image" content="https://emacsist.github.io/img/spring-session-debug-1.jpeg">
 
   
@@ -219,38 +219,15 @@
 </blockquote>
 <p>然后我们自己添加了一个 <code>HttpSessionListener</code>, 但是发现它执行了 2 次，实在是太诡异了。（其实是太菜了）</p>
 <p>首先项目里的配置大概如下:</p>
-<pre><code class="bash">
-    &lt;bean class=&quot;org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration&quot;/&gt;
-    &lt;bean id=&quot;l&quot; class=&quot;org.springframework.session.web.http.SessionEventHttpSessionListenerAdapter&quot;&gt;
-            &lt;constructor-arg&gt;
-                &lt;list&gt;
-                    &lt;ref bean=&quot;webHttpSessionListener&quot; /&gt;
-                &lt;/list&gt;
-            &lt;/constructor-arg&gt;
-    &lt;/bean&gt;
-    &lt;bean class=&quot;org.springframework.security.web.session.HttpSessionEventPublisher&quot;/&gt;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&lt;bean class=<span class="string">"org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration"</span>/&gt;</div><div class="line">&lt;bean id=<span class="string">"l"</span> class=<span class="string">"org.springframework.session.web.http.SessionEventHttpSessionListenerAdapter"</span>&gt;</div><div class="line">        &lt;constructor-arg&gt;</div><div class="line">            &lt;list&gt;</div><div class="line">                &lt;ref bean=<span class="string">"webHttpSessionListener"</span> /&gt;</div><div class="line">            &lt;/list&gt;</div><div class="line">        &lt;/constructor-arg&gt;</div><div class="line">&lt;/bean&gt;</div><div class="line">&lt;bean class=<span class="string">"org.springframework.security.web.session.HttpSessionEventPublisher"</span>/&gt;</div></pre></td></tr></table></figure>
 <h2 id="定位问题"><a href="#定位问题" class="headerlink" title="定位问题"></a>定位问题</h2><p>这个之前是看了下 SpringSecurity 项目中大概的配置的，使用 <code>SessionEventHttpSessionListenerAdapter</code> 来添加<code>HttpSessionListener</code>，那就怀疑是这里出了问题。所以打开该类的源码，定位到相应的初始化 <code>listeners</code> 的方法。</p>
 <p>发现它初始化了 2 次！</p>
 <p>第一次：<br><img src="/img/spring-session-debug-1.jpeg" alt="img"></p>
 <p>第二次：<br><img src="/img/spring-session-debug-2.jpeg" alt="img"></p>
-<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><pre><code class="bash">
- &lt;bean class=&quot;org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration&quot;/&gt;
-</code></pre>
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&lt;bean class=<span class="string">"org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration"</span>/&gt;</div></pre></td></tr></table></figure>
 <p>再通过详细查看资料，发现 Spring-session 这个类是进行自动配置的（spring-boot 风格），所以不用再显式添加下面的 listener 这些配置了的。</p>
 <p>所以，直接注释掉这段代码即可：</p>
-<pre><code class="bash">
-    &lt;bean id=&quot;l&quot; class=&quot;org.springframework.session.web.http.SessionEventHttpSessionListenerAdapter&quot;&gt;
-            &lt;constructor-arg&gt;
-                &lt;list&gt;
-                    &lt;ref bean=&quot;webHttpSessionListener&quot; /&gt;
-                &lt;/list&gt;
-            &lt;/constructor-arg&gt;
-    &lt;/bean&gt;
-    &lt;bean class=&quot;org.springframework.security.web.session.HttpSessionEventPublisher&quot;/&gt;
-
-`
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">    &lt;bean id=<span class="string">"l"</span> class=<span class="string">"org.springframework.session.web.http.SessionEventHttpSessionListenerAdapter"</span>&gt;</div><div class="line">            &lt;constructor-arg&gt;</div><div class="line">                &lt;list&gt;</div><div class="line">                    &lt;ref bean=<span class="string">"webHttpSessionListener"</span> /&gt;</div><div class="line">                &lt;/list&gt;</div><div class="line">            &lt;/constructor-arg&gt;</div><div class="line">    &lt;/bean&gt;</div><div class="line">    &lt;bean class=<span class="string">"org.springframework.security.web.session.HttpSessionEventPublisher"</span>/&gt;</div><div class="line"></div><div class="line">`</div></pre></td></tr></table></figure>
 <h2 id="实现监听器-HttpSessionListener"><a href="#实现监听器-HttpSessionListener" class="headerlink" title="实现监听器 HttpSessionListener"></a>实现监听器 HttpSessionListener</h2><p>自定义的类，实现了该接口，并且注册到 Spring 容器，那么它就会自动添加到 SessionListener 容器里的，就不用再进行其他额外的配置了。看来，以前看的文档还不够详细，只是匆匆忙忙赶着能用的态度。没有注意到该 listener 被注册了多次的问题！</p>
 
                                 

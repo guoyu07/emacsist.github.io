@@ -15,17 +15,17 @@
     <meta name="keywords" content="database,mysql," />
   
 
-  <meta name="description" content="analyze作用：   分析表主要作用是分析并保存索引的分布.  analyze-table MySQL document 语法: ANALYZE [NO_WRITE_TO_BINLOG | LOCAL] TABLE     tbl_name [, tbl_name] ...   使用ANALYZE TABLE分析表的过程中，数据库系统会对表加一个只读锁。在分析期间，只能读取表中的记录，不能更新">
+  <meta name="description" content="analyze作用：   分析表主要作用是分析并保存索引的分布.  analyze-table MySQL document 语法: 12ANALYZE [NO_WRITE_TO_BINLOG | LOCAL] TABLE    tbl_name [, tbl_name] ...  使用ANALYZE TABLE分析表的过程中，数据库系统会对表加一个只读锁。在分析期间，只能读取表中的记录，不能更新">
 <meta name="keywords" content="database,mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL中的analyze与optimize">
 <meta property="og:url" content="https://emacsist.github.io/2016/09/26/MySQL中的analyze与optimize/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="analyze作用：   分析表主要作用是分析并保存索引的分布.  analyze-table MySQL document 语法: ANALYZE [NO_WRITE_TO_BINLOG | LOCAL] TABLE     tbl_name [, tbl_name] ...   使用ANALYZE TABLE分析表的过程中，数据库系统会对表加一个只读锁。在分析期间，只能读取表中的记录，不能更新">
+<meta property="og:description" content="analyze作用：   分析表主要作用是分析并保存索引的分布.  analyze-table MySQL document 语法: 12ANALYZE [NO_WRITE_TO_BINLOG | LOCAL] TABLE    tbl_name [, tbl_name] ...  使用ANALYZE TABLE分析表的过程中，数据库系统会对表加一个只读锁。在分析期间，只能读取表中的记录，不能更新">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL中的analyze与optimize">
-<meta name="twitter:description" content="analyze作用：   分析表主要作用是分析并保存索引的分布.  analyze-table MySQL document 语法: ANALYZE [NO_WRITE_TO_BINLOG | LOCAL] TABLE     tbl_name [, tbl_name] ...   使用ANALYZE TABLE分析表的过程中，数据库系统会对表加一个只读锁。在分析期间，只能读取表中的记录，不能更新">
+<meta name="twitter:description" content="analyze作用：   分析表主要作用是分析并保存索引的分布.  analyze-table MySQL document 语法: 12ANALYZE [NO_WRITE_TO_BINLOG | LOCAL] TABLE    tbl_name [, tbl_name] ...  使用ANALYZE TABLE分析表的过程中，数据库系统会对表加一个只读锁。在分析期间，只能读取表中的记录，不能更新">
 
   
 
@@ -207,65 +207,22 @@
 </blockquote>
 <p><a href="https://dev.mysql.com/doc/refman/5.5/en/analyze-table.html" target="_blank" rel="external">analyze-table MySQL document</a></p>
 <p>语法:</p>
-<pre><code class="bash">ANALYZE [NO_WRITE_TO_BINLOG | LOCAL] TABLE
-    tbl_name [, tbl_name] ...
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ANALYZE [NO_WRITE_TO_BINLOG | LOCAL] TABLE</div><div class="line">    tbl_name [, tbl_name] ...</div></pre></td></tr></table></figure>
 <blockquote>
 <p>使用ANALYZE TABLE分析表的过程中，数据库系统会对表加一个只读锁。在分析期间，只能读取表中的记录，不能更新和插入记录。ANALYZE TABLE语句能够分析InnoDB和MyISAM类型的表。</p>
 </blockquote>
 <p>例如：</p>
-<pre><code class="bash">mysql&gt; show index from wb_status;
-+-----------+------------+-------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
-| Table     | Non_unique | Key_name    | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |
-+-----------+------------+-------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
-| wb_status |          0 | PRIMARY     |            1 | id          | A         |     1195935 |     NULL | NULL   |      | BTREE      |         |               |
-| wb_status |          0 | idx_sid     |            1 | sid         | A         |     1196049 |     NULL | NULL   |      | BTREE      |         |               |
-| wb_status |          1 | idx_user_id |            1 | user_id     | A         |      678760 |     NULL | NULL   | YES  | BTREE      |         |               |
-| wb_status |          1 | ngram_idx   |            1 | text        | NULL      |     1196049 |     NULL | NULL   |      | FULLTEXT   |         |               |
-+-----------+------------+-------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
-4 rows in set (0.00 sec)
-
-mysql&gt; analyze table wb_status;
-+----------------+---------+----------+----------+
-| Table          | Op      | Msg_type | Msg_text |
-+----------------+---------+----------+----------+
-| test.wb_status | analyze | status   | OK       |
-+----------------+---------+----------+----------+
-1 row in set (0.03 sec)
-
-mysql&gt; show index from wb_status;
-+-----------+------------+-------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
-| Table     | Non_unique | Key_name    | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |
-+-----------+------------+-------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
-| wb_status |          0 | PRIMARY     |            1 | id          | A         |     1279457 |     NULL | NULL   |      | BTREE      |         |               |
-| wb_status |          0 | idx_sid     |            1 | sid         | A         |     1279457 |     NULL | NULL   |      | BTREE      |         |               |
-| wb_status |          1 | idx_user_id |            1 | user_id     | A         |      887945 |     NULL | NULL   | YES  | BTREE      |         |               |
-| wb_status |          1 | ngram_idx   |            1 | text        | NULL      |     1279457 |     NULL | NULL   |      | FULLTEXT   |         |               |
-+-----------+------------+-------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
-4 rows in set (0.00 sec)
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show index from wb_status;</div><div class="line">+-----------+------------+-------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</div><div class="line">| Table     | Non_unique | Key_name    | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |</div><div class="line">+-----------+------------+-------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</div><div class="line">| wb_status |          0 | PRIMARY     |            1 | id          | A         |     1195935 |     NULL | NULL   |      | BTREE      |         |               |</div><div class="line">| wb_status |          0 | idx_sid     |            1 | sid         | A         |     1196049 |     NULL | NULL   |      | BTREE      |         |               |</div><div class="line">| wb_status |          1 | idx_user_id |            1 | user_id     | A         |      678760 |     NULL | NULL   | YES  | BTREE      |         |               |</div><div class="line">| wb_status |          1 | ngram_idx   |            1 | text        | NULL      |     1196049 |     NULL | NULL   |      | FULLTEXT   |         |               |</div><div class="line">+-----------+------------+-------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</div><div class="line">4 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; analyze table wb_status;</div><div class="line">+----------------+---------+----------+----------+</div><div class="line">| Table          | Op      | Msg_type | Msg_text |</div><div class="line">+----------------+---------+----------+----------+</div><div class="line">| test.wb_status | analyze | status   | OK       |</div><div class="line">+----------------+---------+----------+----------+</div><div class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.03 sec)</div><div class="line"></div><div class="line">mysql&gt; show index from wb_status;</div><div class="line">+-----------+------------+-------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</div><div class="line">| Table     | Non_unique | Key_name    | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |</div><div class="line">+-----------+------------+-------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</div><div class="line">| wb_status |          0 | PRIMARY     |            1 | id          | A         |     1279457 |     NULL | NULL   |      | BTREE      |         |               |</div><div class="line">| wb_status |          0 | idx_sid     |            1 | sid         | A         |     1279457 |     NULL | NULL   |      | BTREE      |         |               |</div><div class="line">| wb_status |          1 | idx_user_id |            1 | user_id     | A         |      887945 |     NULL | NULL   | YES  | BTREE      |         |               |</div><div class="line">| wb_status |          1 | ngram_idx   |            1 | text        | NULL      |     1279457 |     NULL | NULL   |      | FULLTEXT   |         |               |</div><div class="line">+-----------+------------+-------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</div><div class="line">4 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div></pre></td></tr></table></figure>
 <h2 id="optimize"><a href="#optimize" class="headerlink" title="optimize"></a>optimize</h2><p>作用:</p>
 <blockquote>
 </blockquote>
 <p>语法:</p>
-<pre><code class="bash">OPTIMIZE [NO_WRITE_TO_BINLOG | LOCAL] TABLE
-    tbl_name [, tbl_name] ...
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">OPTIMIZE [NO_WRITE_TO_BINLOG | LOCAL] TABLE</div><div class="line">    tbl_name [, tbl_name] ...</div></pre></td></tr></table></figure>
 <blockquote>
 <p>该语句对InnoDB和MyISAM类型的表都有效.重新组织表数据和索引数据的物理存储，以减少存储空间以及提高I/O的效率.具体的操作，还要依赖于表的存储引擎的类型. 无法用于视图，但可用于分区表.</p>
 </blockquote>
 <p>如果用于视图的话，会报如下类似错误:</p>
-<pre><code class="bash">mysql&gt; optimize table wsv;
-+----------+----------+----------+------------------------------+
-| Table    | Op       | Msg_type | Msg_text                     |
-+----------+----------+----------+------------------------------+
-| test.wsv | optimize | Error    | &#39;test.wsv&#39; is not BASE TABLE |
-| test.wsv | optimize | status   | Operation failed             |
-+----------+----------+----------+------------------------------+
-2 rows in set (0.00 sec)
-
-mysql&gt;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">mysql&gt; optimize table wsv;</div><div class="line">+----------+----------+----------+------------------------------+</div><div class="line">| Table    | Op       | Msg_type | Msg_text                     |</div><div class="line">+----------+----------+----------+------------------------------+</div><div class="line">| test.wsv | optimize | Error    | <span class="string">'test.wsv'</span> is not BASE TABLE |</div><div class="line">| test.wsv | optimize | status   | Operation failed             |</div><div class="line">+----------+----------+----------+------------------------------+</div><div class="line">2 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://dba.stackexchange.com/questions/35520/what-is-the-difference-between-optimize-table-and-analyze-table-in-mysql" target="_blank" rel="external">stackexchange</a></p>
 <p><a href="http://dev.mysql.com/doc/refman/5.7/en/analyze-table.html" target="_blank" rel="external">analyze-table</a></p>
 <p><a href="http://dev.mysql.com/doc/refman/5.7/en/optimize-table.html" target="_blank" rel="external">optimize-table</a></p>

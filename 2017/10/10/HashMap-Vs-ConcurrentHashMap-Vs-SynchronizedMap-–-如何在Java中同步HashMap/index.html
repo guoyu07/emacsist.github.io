@@ -222,15 +222,7 @@
 <li>使用 <code>ConcurrentHashMap</code></li>
 </ol>
 <p>HashMap Vs. synchronizedMap Vs. ConcurrentHashMap</p>
-<pre><code class="java">//Hashtable
-Map&lt;String, String&gt; normalMap = new Hashtable&lt;String, String&gt;();
-
-//synchronizedMap
-synchronizedHashMap = Collections.synchronizedMap(new HashMap&lt;String, String&gt;());
-
-//ConcurrentHashMap
-concurrentHashMap = new ConcurrentHashMap&lt;String, String&gt;();
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//Hashtable</span></div><div class="line">Map&lt;String, String&gt; normalMap = <span class="keyword">new</span> Hashtable&lt;String, String&gt;();</div><div class="line"> </div><div class="line"><span class="comment">//synchronizedMap</span></div><div class="line">synchronizedHashMap = Collections.synchronizedMap(<span class="keyword">new</span> HashMap&lt;String, String&gt;());</div><div class="line"> </div><div class="line"><span class="comment">//ConcurrentHashMap</span></div><div class="line">concurrentHashMap = <span class="keyword">new</span> ConcurrentHashMap&lt;String, String&gt;();</div></pre></td></tr></table></figure>
 <h1 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h1><ul>
 <li>当在你的项目中需要非常高并发的时候，你应该使用 <code>ConcurrentHashMap</code></li>
 <li>它是线程安全的，并且不需要同步整个 <code>Map</code></li>
@@ -256,114 +248,8 @@ concurrentHashMap = new ConcurrentHashMap&lt;String, String&gt;();
 <li>我们将使用 <a href="http://crunchify.com/how-to-run-multiple-threads-concurrently-in-java-executorservice-approach/" target="_blank" rel="external">ExecutorService</a> 来并行地执行5条线程</li>
 </ol>
 <p><code>CrunchifyConcurrentHashMapVsSynchronizedMap.java</code></p>
-<pre><code class="java">package crunchify.com.tutorials;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
-/**
- * @author Crunchify.com
- *
- */
-
-public class CrunchifyConcurrentHashMapVsSynchronizedMap {
-
-    public final static int THREAD_POOL_SIZE = 5;
-
-    public static Map&lt;String, Integer&gt; crunchifyHashTableObject = null;
-    public static Map&lt;String, Integer&gt; crunchifySynchronizedMapObject = null;
-    public static Map&lt;String, Integer&gt; crunchifyConcurrentHashMapObject = null;
-
-    public static void main(String[] args) throws InterruptedException {
-
-        // Test with Hashtable Object
-        crunchifyHashTableObject = new Hashtable&lt;String, Integer&gt;();
-        crunchifyPerformTest(crunchifyHashTableObject);
-
-        // Test with synchronizedMap Object
-        crunchifySynchronizedMapObject = Collections.synchronizedMap(new HashMap&lt;String, Integer&gt;());
-        crunchifyPerformTest(crunchifySynchronizedMapObject);
-
-        // Test with ConcurrentHashMap Object
-        crunchifyConcurrentHashMapObject = new ConcurrentHashMap&lt;String, Integer&gt;();
-        crunchifyPerformTest(crunchifyConcurrentHashMapObject);
-
-    }
-
-    public static void crunchifyPerformTest(final Map&lt;String, Integer&gt; crunchifyThreads) throws InterruptedException {
-
-        System.out.println(&quot;Test started for: &quot; + crunchifyThreads.getClass());
-        long averageTime = 0;
-        for (int i = 0; i &lt; 5; i++) {
-
-            long startTime = System.nanoTime();
-            ExecutorService crunchifyExServer = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
-
-            for (int j = 0; j &lt; THREAD_POOL_SIZE; j++) {
-                crunchifyExServer.execute(new Runnable() {
-                    @SuppressWarnings(&quot;unused&quot;)
-                    @Override
-                    public void run() {
-
-                        for (int i = 0; i &lt; 500000; i++) {
-                            Integer crunchifyRandomNumber = (int) Math.ceil(Math.random() * 550000);
-
-                            // Retrieve value. We are not using it anywhere
-                            Integer crunchifyValue = crunchifyThreads.get(String.valueOf(crunchifyRandomNumber));
-
-                            // Put value
-                            crunchifyThreads.put(String.valueOf(crunchifyRandomNumber), crunchifyRandomNumber);
-                        }
-                    }
-                });
-            }
-
-            // Make sure executor stops
-            crunchifyExServer.shutdown();
-
-            // Blocks until all tasks have completed execution after a shutdown request
-            crunchifyExServer.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
-
-            long entTime = System.nanoTime();
-            long totalTime = (entTime - startTime) / 1000000L;
-            averageTime += totalTime;
-            System.out.println(&quot;2500K entried added/retrieved in &quot; + totalTime + &quot; ms&quot;);
-        }
-        System.out.println(&quot;For &quot; + crunchifyThreads.getClass() + &quot; the average time is &quot; + averageTime / 5 + &quot; ms\n&quot;);
-    }
-}
-</code></pre>
-<h1 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h1><pre><code class="html">Test started for: class java.util.Hashtable
-500K entried added/retrieved in 1432 ms
-500K entried added/retrieved in 1425 ms
-500K entried added/retrieved in 1373 ms
-500K entried added/retrieved in 1369 ms
-500K entried added/retrieved in 1438 ms
-For class java.util.Hashtable the average time 1407 ms
-
-Test started for: class java.util.Collections$SynchronizedMap
-500K entried added/retrieved in 1431 ms
-500K entried added/retrieved in 1460 ms
-500K entried added/retrieved in 1387 ms
-500K entried added/retrieved in 1456 ms
-500K entried added/retrieved in 1406 ms
-For class java.util.Collections$SynchronizedMap the average time 1428 ms
-
-Test started for: class java.util.concurrent.ConcurrentHashMap
-500K entried added/retrieved in 413 ms
-500K entried added/retrieved in 351 ms
-500K entried added/retrieved in 427 ms
-500K entried added/retrieved in 337 ms
-500K entried added/retrieved in 339 ms
-For class java.util.concurrent.ConcurrentHashMap the average time 373 ms  &lt;== Much faster
-</code></pre>
-
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> crunchify.com.tutorials;</div><div class="line"> </div><div class="line"><span class="keyword">import</span> java.util.Collections;</div><div class="line"><span class="keyword">import</span> java.util.HashMap;</div><div class="line"><span class="keyword">import</span> java.util.Hashtable;</div><div class="line"><span class="keyword">import</span> java.util.Map;</div><div class="line"><span class="keyword">import</span> java.util.concurrent.ConcurrentHashMap;</div><div class="line"><span class="keyword">import</span> java.util.concurrent.ExecutorService;</div><div class="line"><span class="keyword">import</span> java.util.concurrent.Executors;</div><div class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit;</div><div class="line"> </div><div class="line"><span class="comment">/**</span></div><div class="line"> * <span class="doctag">@author</span> Crunchify.com</div><div class="line"> *</div><div class="line"> */</div><div class="line"> </div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CrunchifyConcurrentHashMapVsSynchronizedMap</span> </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> THREAD_POOL_SIZE = <span class="number">5</span>;</div><div class="line"> </div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Map&lt;String, Integer&gt; crunchifyHashTableObject = <span class="keyword">null</span>;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Map&lt;String, Integer&gt; crunchifySynchronizedMapObject = <span class="keyword">null</span>;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Map&lt;String, Integer&gt; crunchifyConcurrentHashMapObject = <span class="keyword">null</span>;</div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// Test with Hashtable Object</span></div><div class="line">        crunchifyHashTableObject = <span class="keyword">new</span> Hashtable&lt;String, Integer&gt;();</div><div class="line">        crunchifyPerformTest(crunchifyHashTableObject);</div><div class="line"> </div><div class="line">        <span class="comment">// Test with synchronizedMap Object</span></div><div class="line">        crunchifySynchronizedMapObject = Collections.synchronizedMap(<span class="keyword">new</span> HashMap&lt;String, Integer&gt;());</div><div class="line">        crunchifyPerformTest(crunchifySynchronizedMapObject);</div><div class="line"> </div><div class="line">        <span class="comment">// Test with ConcurrentHashMap Object</span></div><div class="line">        crunchifyConcurrentHashMapObject = <span class="keyword">new</span> ConcurrentHashMap&lt;String, Integer&gt;();</div><div class="line">        crunchifyPerformTest(crunchifyConcurrentHashMapObject);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">crunchifyPerformTest</span><span class="params">(<span class="keyword">final</span> Map&lt;String, Integer&gt; crunchifyThreads)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</div><div class="line"> </div><div class="line">        System.out.println(<span class="string">"Test started for: "</span> + crunchifyThreads.getClass());</div><div class="line">        <span class="keyword">long</span> averageTime = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</div><div class="line"> </div><div class="line">            <span class="keyword">long</span> startTime = System.nanoTime();</div><div class="line">            ExecutorService crunchifyExServer = Executors.newFixedThreadPool(THREAD_POOL_SIZE);</div><div class="line"> </div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; THREAD_POOL_SIZE; j++) &#123;</div><div class="line">                crunchifyExServer.execute(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">                    <span class="meta">@SuppressWarnings</span>(<span class="string">"unused"</span>)</div><div class="line">                    <span class="meta">@Override</span></div><div class="line">                    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line"> </div><div class="line">                        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">500000</span>; i++) &#123;</div><div class="line">                            Integer crunchifyRandomNumber = (<span class="keyword">int</span>) Math.ceil(Math.random() * <span class="number">550000</span>);</div><div class="line"> </div><div class="line">                            <span class="comment">// Retrieve value. We are not using it anywhere</span></div><div class="line">                            Integer crunchifyValue = crunchifyThreads.get(String.valueOf(crunchifyRandomNumber));</div><div class="line"> </div><div class="line">                            <span class="comment">// Put value</span></div><div class="line">                            crunchifyThreads.put(String.valueOf(crunchifyRandomNumber), crunchifyRandomNumber);</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                &#125;);</div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            <span class="comment">// Make sure executor stops</span></div><div class="line">            crunchifyExServer.shutdown();</div><div class="line"> </div><div class="line">            <span class="comment">// Blocks until all tasks have completed execution after a shutdown request</span></div><div class="line">            crunchifyExServer.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);</div><div class="line"> </div><div class="line">            <span class="keyword">long</span> entTime = System.nanoTime();</div><div class="line">            <span class="keyword">long</span> totalTime = (entTime - startTime) / <span class="number">1000000L</span>;</div><div class="line">            averageTime += totalTime;</div><div class="line">            System.out.println(<span class="string">"2500K entried added/retrieved in "</span> + totalTime + <span class="string">" ms"</span>);</div><div class="line">        &#125;</div><div class="line">        System.out.println(<span class="string">"For "</span> + crunchifyThreads.getClass() + <span class="string">" the average time is "</span> + averageTime / <span class="number">5</span> + <span class="string">" ms\n"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h1><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">Test started for: class java.util.Hashtable</div><div class="line">500K entried added/retrieved in 1432 ms</div><div class="line">500K entried added/retrieved in 1425 ms</div><div class="line">500K entried added/retrieved in 1373 ms</div><div class="line">500K entried added/retrieved in 1369 ms</div><div class="line">500K entried added/retrieved in 1438 ms</div><div class="line">For class java.util.Hashtable the average time 1407 ms</div><div class="line"> </div><div class="line">Test started for: class java.util.Collections$SynchronizedMap</div><div class="line">500K entried added/retrieved in 1431 ms</div><div class="line">500K entried added/retrieved in 1460 ms</div><div class="line">500K entried added/retrieved in 1387 ms</div><div class="line">500K entried added/retrieved in 1456 ms</div><div class="line">500K entried added/retrieved in 1406 ms</div><div class="line">For class java.util.Collections$SynchronizedMap the average time 1428 ms</div><div class="line"> </div><div class="line">Test started for: class java.util.concurrent.ConcurrentHashMap</div><div class="line">500K entried added/retrieved in 413 ms</div><div class="line">500K entried added/retrieved in 351 ms</div><div class="line">500K entried added/retrieved in 427 ms</div><div class="line">500K entried added/retrieved in 337 ms</div><div class="line">500K entried added/retrieved in 339 ms</div><div class="line">For class java.util.concurrent.ConcurrentHashMap the average time 373 ms  <span class="tag">&lt;<span class="name">==</span> <span class="attr">Much</span> <span class="attr">faster</span></span></div></pre></td></tr></table></figure>
                                 
     </div>
 </article>

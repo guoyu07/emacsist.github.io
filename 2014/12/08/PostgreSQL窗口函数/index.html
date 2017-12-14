@@ -206,16 +206,13 @@
 <p>窗口函数提供跨行相关的当前查询行集执行计算的能力。仅当调用跟着OVER子句的聚集函数，作为窗口函数；否则它们作为常规的聚合函数。</p>
 <p>我个人的理解：窗口也是一种分组，但和 group by 的分组不同。窗口，可以提供分组之外，还可以执行对每个窗口进行计算。可以相像成是group by 后，然后对每个分组进行计算，而不像Group by ，只是单纯地分组。</p>
 </blockquote>
-<h2 id="窗口函数的语法"><a href="#窗口函数的语法" class="headerlink" title="窗口函数的语法"></a>窗口函数的语法</h2><pre><code>function_name ([expression [, expression ... ]]) OVER window_name
-function_name ([expression [, expression ... ]]) OVER ( window_definition )
-function_name ( * ) OVER window_name
-function_name ( * ) OVER ( window_definition )
-</code></pre><blockquote>
+<h2 id="窗口函数的语法"><a href="#窗口函数的语法" class="headerlink" title="窗口函数的语法"></a>窗口函数的语法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">function_name ([expression [, expression ... ]]) OVER window_name</div><div class="line">function_name ([expression [, expression ... ]]) OVER ( window_definition )</div><div class="line">function_name ( * ) OVER window_name</div><div class="line">function_name ( * ) OVER ( window_definition )</div></pre></td></tr></table></figure>
+<blockquote>
 <p>窗口函数的调用总是包含一个OVER子句，即窗口函数的名称和参数。 该语法区别于普通函数或聚合功能。OVER子句决定究竟将 查询的行如何通过窗口函数拆分处理。OVER子句内的PARTITION BY分区指定 行划分成组，或分区，共享相同的PARTITION BY值。 对于每一行，窗口函数通过同一个分区作为当前行的行进行计算</p>
 <p>如果OVER不使用PARTITION BY时即代表整个表。</p>
 </blockquote>
-<h2 id="典型的窗口函数用法"><a href="#典型的窗口函数用法" class="headerlink" title="典型的窗口函数用法"></a>典型的窗口函数用法</h2><pre><code>select path, cost, sum(cost) over (partition by path ) as sum_cost from tcost;
-</code></pre><h2 id="内置的窗口函数"><a href="#内置的窗口函数" class="headerlink" title="内置的窗口函数"></a>内置的窗口函数</h2><table>
+<h2 id="典型的窗口函数用法"><a href="#典型的窗口函数用法" class="headerlink" title="典型的窗口函数用法"></a>典型的窗口函数用法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select path, cost, sum(cost) over (partition by path ) as sum_cost from tcost;</div></pre></td></tr></table></figure>
+<h2 id="内置的窗口函数"><a href="#内置的窗口函数" class="headerlink" title="内置的窗口函数"></a>内置的窗口函数</h2><table>
 <thead>
 <tr>
 <th style="text-align:left">Function</th>

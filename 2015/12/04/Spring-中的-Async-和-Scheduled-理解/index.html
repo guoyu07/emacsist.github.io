@@ -15,17 +15,17 @@
     <meta name="keywords" content="java,spring,task,executor,scheduled," />
   
 
-  <meta name="description" content="@Asyncspring-test.xml文件 &amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt; &amp;lt;beans xmlns=&amp;quot;http://www.springframework.org/schema/beans&amp;quot;        xmlns:xsi=&amp;quot;http://www.w3.or">
+  <meta name="description" content="@Asyncspring-test.xml文件 12345678910111213141516171819&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&amp;lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;       xmlns:xsi=&quot;http://www.w3.org/2001/X">
 <meta name="keywords" content="java,spring,task,executor,scheduled">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spring 中的 @Async 和 @Scheduled 理解">
 <meta property="og:url" content="https://emacsist.github.io/2015/12/04/Spring-中的-Async-和-Scheduled-理解/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="@Asyncspring-test.xml文件 &amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt; &amp;lt;beans xmlns=&amp;quot;http://www.springframework.org/schema/beans&amp;quot;        xmlns:xsi=&amp;quot;http://www.w3.or">
+<meta property="og:description" content="@Asyncspring-test.xml文件 12345678910111213141516171819&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&amp;lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;       xmlns:xsi=&quot;http://www.w3.org/2001/X">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring 中的 @Async 和 @Scheduled 理解">
-<meta name="twitter:description" content="@Asyncspring-test.xml文件 &amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt; &amp;lt;beans xmlns=&amp;quot;http://www.springframework.org/schema/beans&amp;quot;        xmlns:xsi=&amp;quot;http://www.w3.or">
+<meta name="twitter:description" content="@Asyncspring-test.xml文件 12345678910111213141516171819&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&amp;lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;       xmlns:xsi=&quot;http://www.w3.org/2001/X">
 
   
 
@@ -217,136 +217,20 @@
     <div class="article-content">
         
                             <h2 id="Async"><a href="#Async" class="headerlink" title="@Async"></a>@Async</h2><p><code>spring-test.xml</code>文件</p>
-<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
-       xmlns:task=&quot;http://www.springframework.org/schema/task&quot;
-       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
-            http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
-            http://www.springframework.org/schema/context
-            http://www.springframework.org/schema/context/spring-context-3.2.xsd
-            http://www.springframework.org/schema/task
-            http://www.springframework.org/schema/task/spring-task-3.2.xsd&quot;&gt;
-
-    &lt;task:annotation-driven scheduler=&quot;myScheduler&quot; executor=&quot;myExecutor&quot;/&gt;
-    &lt;task:executor id=&quot;myExecutor&quot; pool-size=&quot;20&quot;/&gt;
-    &lt;task:scheduler id=&quot;myScheduler&quot; pool-size=&quot;5&quot;/&gt;
-
-    &lt;bean id=&quot;hello&quot; class=&quot;hello.world.task.TestTask&quot; /&gt;
-
-&lt;/beans&gt;
-</code></pre>
-<p>spring官网例子</p>
-<pre><code class="bash">import java.util.concurrent.Future;
-
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
-@Service
-public class GitHubLookupService {
-
-    RestTemplate restTemplate = new RestTemplate();
-
-    @Async
-    public Future&lt;User&gt; findUser(String user) throws InterruptedException {
-        System.out.println(&quot;Looking up &quot; + user);
-        User results = restTemplate.getForObject(&quot;https://api.github.com/users/&quot; + user, User.class);
-        // Artificial delay of 1s for demonstration purposes
-        Thread.sleep(1000L);
-        return new AsyncResult&lt;User&gt;(results);
-    }
-
-}
-</code></pre>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</div><div class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">"http://www.springframework.org/schema/beans"</span></span></div><div class="line">       <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></div><div class="line">       <span class="attr">xmlns:context</span>=<span class="string">"http://www.springframework.org/schema/context"</span></div><div class="line">       <span class="attr">xmlns:task</span>=<span class="string">"http://www.springframework.org/schema/task"</span></div><div class="line">       <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://www.springframework.org/schema/beans</span></div><div class="line">			http://www.springframework.org/schema/beans/spring-beans-3.2.xsd</div><div class="line">			http://www.springframework.org/schema/context</div><div class="line">			http://www.springframework.org/schema/context/spring-context-3.2.xsd</div><div class="line">			http://www.springframework.org/schema/task</div><div class="line">			http://www.springframework.org/schema/task/spring-task-3.2.xsd"&gt;</div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">task:annotation-driven</span> <span class="attr">scheduler</span>=<span class="string">"myScheduler"</span> <span class="attr">executor</span>=<span class="string">"myExecutor"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">task:executor</span> <span class="attr">id</span>=<span class="string">"myExecutor"</span> <span class="attr">pool-size</span>=<span class="string">"20"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">task:scheduler</span> <span class="attr">id</span>=<span class="string">"myScheduler"</span> <span class="attr">pool-size</span>=<span class="string">"5"</span>/&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"hello"</span> <span class="attr">class</span>=<span class="string">"hello.world.task.TestTask"</span> /&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>spring官网例子<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">import java.util.concurrent.Future;</div><div class="line"></div><div class="line">import org.springframework.scheduling.annotation.Async;</div><div class="line">import org.springframework.scheduling.annotation.AsyncResult;</div><div class="line">import org.springframework.stereotype.Service;</div><div class="line">import org.springframework.web.client.RestTemplate;</div><div class="line"></div><div class="line">@Service</div><div class="line">public class GitHubLookupService &#123;</div><div class="line"></div><div class="line">    RestTemplate restTemplate = new RestTemplate();</div><div class="line"></div><div class="line">    @Async</div><div class="line">    public Future&lt;User&gt; findUser(String user) throws InterruptedException &#123;</div><div class="line">        System.out.println(<span class="string">"Looking up "</span> + user);</div><div class="line">        User results = restTemplate.getForObject(<span class="string">"https://api.github.com/users/"</span> + user, User.class);</div><div class="line">        // Artificial delay of 1s <span class="keyword">for</span> demonstration purposes</div><div class="line">        Thread.sleep(1000L);</div><div class="line">        <span class="built_in">return</span> new AsyncResult&lt;User&gt;(results);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p><code>Async动作类</code></p>
-<pre><code class="java">package hello.world.task;
-
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
-
-import java.util.concurrent.Future;
-
-/**
- * Created by yang on 15-12-3.
- */
-public class TestTask {
-
-    @Async
-    public Future&lt;String&gt; run() throws InterruptedException {
-        System.out.println(Thread.currentThread().getName());
-        Thread.sleep(20 * 1000);
-        return new AsyncResult&lt;String&gt;(&quot;hello&quot;);
-    }
-}
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> hello.world.task;</div><div class="line"></div><div class="line"><span class="keyword">import</span> org.springframework.scheduling.annotation.Async;</div><div class="line"><span class="keyword">import</span> org.springframework.scheduling.annotation.AsyncResult;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.util.concurrent.Future;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Created by yang on 15-12-3.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestTask</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="meta">@Async</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Future&lt;String&gt; <span class="title">run</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</div><div class="line">        System.out.println(Thread.currentThread().getName());</div><div class="line">        Thread.sleep(<span class="number">20</span> * <span class="number">1000</span>);</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> AsyncResult&lt;String&gt;(<span class="string">"hello"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p><code>java测试类</code></p>
-<pre><code class="java">package hello.world;
-
-import hello.world.task.TestTask;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
-/**
- * Created by yang on 15-11-9.
- */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(&quot;classpath:spring-test.xml&quot;)
-
-public class HelloTest {
-
-    @Autowired
-    private TestTask testTask;
-
-    @Test
-    public void run() throws ExecutionException, InterruptedException {
-        Future&lt;String&gt; hello = testTask.run();
-        System.out.println(&quot;after 20 s?&quot;);
-        String h = hello.get();
-        System.out.println(h);
-    }
-
-}
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> hello.world;</div><div class="line"></div><div class="line"><span class="keyword">import</span> hello.world.task.TestTask;</div><div class="line"><span class="keyword">import</span> org.junit.Test;</div><div class="line"><span class="keyword">import</span> org.junit.runner.RunWith;</div><div class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</div><div class="line"><span class="keyword">import</span> org.springframework.test.context.ContextConfiguration;</div><div class="line"><span class="keyword">import</span> org.springframework.test.context.junit4.SpringJUnit4ClassRunner;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.util.concurrent.ExecutionException;</div><div class="line"><span class="keyword">import</span> java.util.concurrent.Future;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Created by yang on 15-11-9.</div><div class="line"> */</div><div class="line"><span class="meta">@RunWith</span>(SpringJUnit4ClassRunner.class)</div><div class="line"><span class="meta">@ContextConfiguration</span>(<span class="string">"classpath:spring-test.xml"</span>)</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloTest</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="meta">@Autowired</span></div><div class="line">    <span class="keyword">private</span> TestTask testTask;</div><div class="line"></div><div class="line">    <span class="meta">@Test</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> <span class="keyword">throws</span> ExecutionException, InterruptedException </span>&#123;</div><div class="line">        Future&lt;String&gt; hello = testTask.run();</div><div class="line">        System.out.println(<span class="string">"after 20 s?"</span>);</div><div class="line">        String h = hello.get();</div><div class="line">        System.out.println(h);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>以上，它是以<code>myexecutor</code>的线程池来执行的.</p>
 <h2 id="Scheduled"><a href="#Scheduled" class="headerlink" title="@Scheduled"></a>@Scheduled</h2><p>将<code>@Async</code>改为<code>@Scheduled</code></p>
-<pre><code class="java">public class TestTask {
-
-    @Scheduled(cron = &quot;*/2 * * * * *&quot;)
-    public void run() throws InterruptedException {
-        System.out.println(Thread.currentThread().getName());
-    }
-}
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestTask</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="meta">@Scheduled</span>(cron = <span class="string">"*/2 * * * * *"</span>)</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</div><div class="line">        System.out.println(Thread.currentThread().getName());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>看执行结果，它是以<code>myscheduler</code>的线程池来执行的，而且返回值只能是<code>void</code>.</p>
 <h2 id="同时使用-Scheduled-和-Async"><a href="#同时使用-Scheduled-和-Async" class="headerlink" title="同时使用 @Scheduled 和 @Async"></a>同时使用 @Scheduled 和 @Async</h2><p>不过注意，如果这样子使用了，异步执行的返回结果<code>Future</code>就不要这样子使用了，这时返回值只能是<code>void</code>.</p>
 <p>同时使用这两个注解的效果，相当于<code>@Scheduled</code>负责调度，而<code>executor</code>负责执行。</p>
 <p>看打印的线程可知:</p>
-<pre><code class="bash">myExecutor-1
-myExecutor-2
-myExecutor-3
-myExecutor-4
-myExecutor-5
-myExecutor-6
-myExecutor-7
-myExecutor-8
-myExecutor-9
-myExecutor-10
-myExecutor-11
-myExecutor-12
-myExecutor-13
-myExecutor-14
-myExecutor-15
-myExecutor-16
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">myExecutor-1</div><div class="line">myExecutor-2</div><div class="line">myExecutor-3</div><div class="line">myExecutor-4</div><div class="line">myExecutor-5</div><div class="line">myExecutor-6</div><div class="line">myExecutor-7</div><div class="line">myExecutor-8</div><div class="line">myExecutor-9</div><div class="line">myExecutor-10</div><div class="line">myExecutor-11</div><div class="line">myExecutor-12</div><div class="line">myExecutor-13</div><div class="line">myExecutor-14</div><div class="line">myExecutor-15</div><div class="line">myExecutor-16</div></pre></td></tr></table></figure>
 <p>它是非常有规律的：每一个任务，都是下一条线程。然后轮回。</p>
 
                                 

@@ -333,20 +333,7 @@
 <li><p>用or分割开的条件，如果or前的条件中的列有索引，而后面的列中没有索引，那么涉及的索引都不会被用到，因为 or 后面的条件列中没有索引，那么后面的查询肯定要走全表扫描，在存在全表扫描的情况下，就没有必要多一次索引扫描增加I/O访问，一次全表扫描过滤条件就足够了.</p>
 </li>
 </ul>
-<h2 id="查看索引使用情况"><a href="#查看索引使用情况" class="headerlink" title="查看索引使用情况"></a>查看索引使用情况</h2><pre><code class="bash">mysql&gt; show global status like &#39;%handler_read%&#39;;
-+-----------------------+-------+
-| Variable_name         | Value |
-+-----------------------+-------+
-| Handler_read_first    | 54    |
-| Handler_read_key      | 174   |
-| Handler_read_last     | 0     |
-| Handler_read_next     | 125   |
-| Handler_read_prev     | 0     |
-| Handler_read_rnd      | 6     |
-| Handler_read_rnd_next | 18857 |
-+-----------------------+-------+
-7 rows in set (0.00 sec)
-</code></pre>
+<h2 id="查看索引使用情况"><a href="#查看索引使用情况" class="headerlink" title="查看索引使用情况"></a>查看索引使用情况</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show global status like <span class="string">'%handler_read%'</span>;</div><div class="line">+-----------------------+-------+</div><div class="line">| Variable_name         | Value |</div><div class="line">+-----------------------+-------+</div><div class="line">| Handler_read_first    | 54    |</div><div class="line">| Handler_read_key      | 174   |</div><div class="line">| Handler_read_last     | 0     |</div><div class="line">| Handler_read_next     | 125   |</div><div class="line">| Handler_read_prev     | 0     |</div><div class="line">| Handler_read_rnd      | 6     |</div><div class="line">| Handler_read_rnd_next | 18857 |</div><div class="line">+-----------------------+-------+</div><div class="line">7 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div></pre></td></tr></table></figure>
 <p>结果说明:<br><code>Handler_read_key</code> 的值将很高，这个值代表了一个行被索引值读的次数，很低的值表明增加索引得到的性能改善不高，因为索引并不经常使用。</p>
 <p><code>Handler_read_rnd_next</code> `的值高则意味着查询运行低效，并且应该建立索引补救。这个值的含义是在数据文件中读下一行的请求数。如果正进行大量的表扫描，Handler_read_rnd_next的值较高，则通常说明表索引不正确或写入的查询没有利用索引</p>
 <h2 id="简单实用的优化方法"><a href="#简单实用的优化方法" class="headerlink" title="简单实用的优化方法"></a>简单实用的优化方法</h2><h3 id="定期分析表和检查表"><a href="#定期分析表和检查表" class="headerlink" title="定期分析表和检查表"></a>定期分析表和检查表</h3><ul>
@@ -360,10 +347,7 @@
 </ul>
 <p><strong>注意</strong>, 以上的操作, 会导致锁表!.</p>
 <h2 id="常用SQL优化"><a href="#常用SQL优化" class="headerlink" title="常用SQL优化"></a>常用SQL优化</h2><h3 id="大批量导入数据"><a href="#大批量导入数据" class="headerlink" title="大批量导入数据"></a>大批量导入数据</h3><h4 id="MyISAM表的-load"><a href="#MyISAM表的-load" class="headerlink" title="MyISAM表的 load"></a>MyISAM表的 load</h4><p>对于MyISAM存储引擎的表，可以通过以下方式快速地导入大量的数据。 </p>
-<pre><code class="bash">ALTER TABLE tbl_name DISABLE KEYS; 
-loading the data
-ALTER TABLE tbl_name ENABLE KEYS;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ALTER TABLE tbl_name DISABLE KEYS; </div><div class="line">loading the data</div><div class="line">ALTER TABLE tbl_name ENABLE KEYS;</div></pre></td></tr></table></figure>
 <p>对于InnoDB类型的表，这种方式并不能提高导入数据的效率.</p>
 <h4 id="InnoDB表的-load"><a href="#InnoDB表的-load" class="headerlink" title="InnoDB表的 load"></a>InnoDB表的 load</h4><ul>
 <li><p>因为InnoDB类型的表是按照主键的顺序保存的，所以将导入的数据按照主键的顺序排列，可以有效地提高导入数据的效率.</p>
@@ -442,14 +426,7 @@ ALTER TABLE tbl_name ENABLE KEYS;
 <h2 id="使用外健注意"><a href="#使用外健注意" class="headerlink" title="使用外健注意"></a>使用外健注意</h2><p>在MySQL中，InnoDB存储引擎支持对外部关键字约束条件的检查。而对于其他类型存储引擎的表，当使用REFERENCES tbl_name(col_name)子句定义列时可以使用外部关键字，但是该子句没有实际的效果，只作为备忘录或注释来提醒用户目前正定义的列指向另一个表中的一个列.如果用InnoDB存储引擎建表的话，外键就会起作用.</p>
 <p>用 show create table命令查看建表语句的时候，发现MyISAM存储引擎并不显示外键的语句，而InnoDB存储引擎就会显示外键语句.</p>
 <h2 id="优化表对象"><a href="#优化表对象" class="headerlink" title="优化表对象"></a>优化表对象</h2><h3 id="优化数据类型"><a href="#优化数据类型" class="headerlink" title="优化数据类型"></a>优化数据类型</h3><p>在MySQL中，可以使用函数<code>PROCEDURE ANALYSE()</code>对当前应用的表进行分析，该函数可以对数据表中列的数据类型提出优化建议，用户可以根据应用的实际情况酌情考虑是否实施优化.执行例子:</p>
-<pre><code class="bash">mysql&gt; select * from t procedure analyse();
-+------------+-----------+-----------+------------+------------+------------------+-------+-------------------------+--------+------------------------+
-| Field_name | Min_value | Max_value | Min_length | Max_length | Empties_or_zeros | Nulls | Avg_value_or_avg_length | Std    | Optimal_fieldtype      |
-+------------+-----------+-----------+------------+------------+------------------+-------+-------------------------+--------+------------------------+
-| test.t.id  | 1         | 2         |          1 |          1 |                0 |     0 | 1.3333                  | 0.4714 | ENUM(&#39;1&#39;,&#39;2&#39;) NOT NULL |
-+------------+-----------+-----------+------------+------------+------------------+-------+-------------------------+--------+------------------------+
-1 row in set (0.01 sec)
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">mysql&gt; select * from t procedure analyse();</div><div class="line">+------------+-----------+-----------+------------+------------+------------------+-------+-------------------------+--------+------------------------+</div><div class="line">| Field_name | Min_value | Max_value | Min_length | Max_length | Empties_or_zeros | Nulls | Avg_value_or_avg_length | Std    | Optimal_fieldtype      |</div><div class="line">+------------+-----------+-----------+------------+------------+------------------+-------+-------------------------+--------+------------------------+</div><div class="line">| test.t.id  | 1         | 2         |          1 |          1 |                0 |     0 | 1.3333                  | 0.4714 | ENUM(<span class="string">'1'</span>,<span class="string">'2'</span>) NOT NULL |</div><div class="line">+------------+-----------+-----------+------------+------------+------------------+-------+-------------------------+--------+------------------------+</div><div class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.01 sec)</div></pre></td></tr></table></figure>
 <h3 id="拆分表"><a href="#拆分表" class="headerlink" title="拆分表"></a>拆分表</h3><h4 id="垂直拆分"><a href="#垂直拆分" class="headerlink" title="垂直拆分"></a>垂直拆分</h4><p>即按列拆分.</p>
 <p>如果一个表中某些列常用，而另一些列不常用，则可以采用垂直拆分.</p>
 <h4 id="水平拆分"><a href="#水平拆分" class="headerlink" title="水平拆分"></a>水平拆分</h4><p>即按行拆分.</p>
@@ -513,19 +490,7 @@ ALTER TABLE tbl_name ENABLE KEYS;
 </li>
 </ul>
 <p>建议使用的buffer大小设置</p>
-<pre><code class="bash">SELECT CONCAT(CEILING(RIBPS/POWER(1024,pw)),SUBSTR(&#39; KMGT&#39;,pw+1,1))
-Recommended_InnoDB_Buffer_Pool_Size FROM
-(
-    SELECT RIBPS,FLOOR(LOG(RIBPS)/LOG(1024)) pw
-    FROM
-    (
-        SELECT SUM(data_length+index_length)*1.1*growth RIBPS
-        FROM information_schema.tables AAA,
-        (SELECT 1 growth) BBB
-        WHERE ENGINE=&#39;InnoDB&#39;
-    ) AA
-) A;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">SELECT CONCAT(CEILING(RIBPS/POWER(1024,pw)),SUBSTR(<span class="string">' KMGT'</span>,pw+1,1))</div><div class="line">Recommended_InnoDB_Buffer_Pool_Size FROM</div><div class="line">(</div><div class="line">    SELECT RIBPS,FLOOR(LOG(RIBPS)/LOG(1024)) pw</div><div class="line">    FROM</div><div class="line">    (</div><div class="line">        SELECT SUM(data_length+index_length)*1.1*growth RIBPS</div><div class="line">        FROM information_schema.tables AAA,</div><div class="line">        (SELECT 1 growth) BBB</div><div class="line">        WHERE ENGINE=<span class="string">'InnoDB'</span></div><div class="line">    ) AA</div><div class="line">) A;</div></pre></td></tr></table></figure>
 <p>参考资料</p>
 <ol>
 <li><a href="http://dba.stackexchange.com/questions/27471/how-much-memory-do-i-need-for-innodb-buffer-pool" target="_blank" rel="external">dba.stackexchange.com</a></li>

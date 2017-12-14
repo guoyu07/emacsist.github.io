@@ -15,17 +15,17 @@
     <meta name="keywords" content="redis,cluster," />
   
 
-  <meta name="description" content="安装git clone https://github.com/twitter/twemproxy.git cd twemproxy autoreconf -fvi ./configure --enable-debug=full --prefix=/ihome/db/redis/twemproxy make -j8 make install  安装完毕的结构： ╭─sky@sky-linux /ih">
+  <meta name="description" content="安装123456git clone https://github.com/twitter/twemproxy.gitcd twemproxyautoreconf -fvi./configure --enable-debug=full --prefix=/ihome/db/redis/twemproxymake -j8make install 安装完毕的结构： 1234567891011╭─sky@">
 <meta name="keywords" content="redis,cluster">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis集群之twemproxy">
 <meta property="og:url" content="https://emacsist.github.io/2016/05/18/Redis集群之twemproxy/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="安装git clone https://github.com/twitter/twemproxy.git cd twemproxy autoreconf -fvi ./configure --enable-debug=full --prefix=/ihome/db/redis/twemproxy make -j8 make install  安装完毕的结构： ╭─sky@sky-linux /ih">
+<meta property="og:description" content="安装123456git clone https://github.com/twitter/twemproxy.gitcd twemproxyautoreconf -fvi./configure --enable-debug=full --prefix=/ihome/db/redis/twemproxymake -j8make install 安装完毕的结构： 1234567891011╭─sky@">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis集群之twemproxy">
-<meta name="twitter:description" content="安装git clone https://github.com/twitter/twemproxy.git cd twemproxy autoreconf -fvi ./configure --enable-debug=full --prefix=/ihome/db/redis/twemproxy make -j8 make install  安装完毕的结构： ╭─sky@sky-linux /ih">
+<meta name="twitter:description" content="安装123456git clone https://github.com/twitter/twemproxy.gitcd twemproxyautoreconf -fvi./configure --enable-debug=full --prefix=/ihome/db/redis/twemproxymake -j8make install 安装完毕的结构： 1234567891011╭─sky@">
 
   
 
@@ -201,57 +201,17 @@
 
     <div class="article-content">
         
-                            <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><pre><code class="bash">git clone https://github.com/twitter/twemproxy.git
-cd twemproxy
-autoreconf -fvi
-./configure --enable-debug=full --prefix=/ihome/db/redis/twemproxy
-make -j8
-make install
-</code></pre>
+                            <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">git <span class="built_in">clone</span> https://github.com/twitter/twemproxy.git</div><div class="line"><span class="built_in">cd</span> twemproxy</div><div class="line">autoreconf -fvi</div><div class="line">./configure --<span class="built_in">enable</span>-debug=full --prefix=/ihome/db/redis/twemproxy</div><div class="line">make -j8</div><div class="line">make install</div></pre></td></tr></table></figure>
 <p>安装完毕的结构：</p>
-<pre><code class="bash">╭─sky@sky-linux /ihome/db/redis/twemproxy  
-╰─➤  tree .
-.
-├── sbin
-│   └── nutcracker
-└── share
-    └── man
-        └── man8
-            └── nutcracker.8
-
-4 directories, 2 files
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">╭─sky@sky-linux /ihome/db/redis/twemproxy  </div><div class="line">╰─➤  tree .</div><div class="line">.</div><div class="line">├── sbin</div><div class="line">│   └── nutcracker</div><div class="line">└── share</div><div class="line">    └── man</div><div class="line">        └── man8</div><div class="line">            └── nutcracker.8</div><div class="line"></div><div class="line">4 directories, 2 files</div></pre></td></tr></table></figure>
 <h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><p>创建一个配置文件在安装目录的<code>conf</code>下，假设为: <code>twemproxy.yml</code>,内容如下:</p>
-<pre><code class="bash">alpha:
-  listen: 127.0.0.1:22121
-  hash: fnv1a_64
-  distribution: ketama
-  auto_eject_hosts: true
-  redis: true
-  server_retry_timeout: 2000
-  server_failure_limit: 1
-
-  servers:
-   - 127.0.0.1:6379:1 server1
-   - 127.0.0.1:6479:1 server2
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">alpha:</div><div class="line">  listen: 127.0.0.1:22121</div><div class="line">  <span class="built_in">hash</span>: fnv1a_64</div><div class="line">  distribution: ketama</div><div class="line">  auto_eject_hosts: <span class="literal">true</span></div><div class="line">  redis: <span class="literal">true</span></div><div class="line">  server_retry_timeout: 2000</div><div class="line">  server_failure_limit: 1</div><div class="line">  </div><div class="line">  servers:</div><div class="line">   - 127.0.0.1:6379:1 server1</div><div class="line">   - 127.0.0.1:6479:1 server2</div></pre></td></tr></table></figure>
 <p>测试配置文件的语法:</p>
-<pre><code class="bash">╭─sky@sky-linux /ihome/db/redis/twemproxy  
-╰─➤  ./sbin/nutcracker -t -c conf/twemproxy.yml 
-nutcracker: configuration file &#39;conf/twemproxy.yml&#39; syntax is ok
-╭─sky@sky-linux /ihome/db/redis/twemproxy  
-╰─➤
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">╭─sky@sky-linux /ihome/db/redis/twemproxy  </div><div class="line">╰─➤  ./sbin/nutcracker -t -c conf/twemproxy.yml </div><div class="line">nutcracker: configuration file <span class="string">'conf/twemproxy.yml'</span> syntax is ok</div><div class="line">╭─sky@sky-linux /ihome/db/redis/twemproxy  </div><div class="line">╰─➤</div></pre></td></tr></table></figure>
 <p>启动:</p>
-<pre><code class="bash">╭─sky@sky-linux /ihome/db/redis/twemproxy  
-╰─➤  ./sbin/nutcracker -d -c conf/twemproxy.yml -p twemproxy.pid -o twemproxy.log
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">╭─sky@sky-linux /ihome/db/redis/twemproxy  </div><div class="line">╰─➤  ./sbin/nutcracker -d -c conf/twemproxy.yml -p twemproxy.pid -o twemproxy.log</div></pre></td></tr></table></figure>
 <p>然后直接连接到代理:</p>
-<pre><code class="bash">╭─sky@sky-linux /ihome/db/redis/redis-current/bin  
-╰─➤  ./redis-cli -p 22121
-127.0.0.1:22121&gt; get hello1
-&quot;1&quot;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">╭─sky@sky-linux /ihome/db/redis/redis-current/bin  </div><div class="line">╰─➤  ./redis-cli -p 22121</div><div class="line">127.0.0.1:22121&gt; get hello1</div><div class="line"><span class="string">"1"</span></div></pre></td></tr></table></figure>
 <p>即可.</p>
 <h2 id="支持和不支持的命令说明"><a href="#支持和不支持的命令说明" class="headerlink" title="支持和不支持的命令说明"></a>支持和不支持的命令说明</h2><p><a href="https://github.com/twitter/twemproxy/blob/master/notes/redis.md" target="_blank" rel="external">Github</a></p>
 <h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>如果集群的redis中有一台挂了，会导致使用不了.</p>

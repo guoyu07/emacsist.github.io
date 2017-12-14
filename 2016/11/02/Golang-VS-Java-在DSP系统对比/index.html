@@ -15,17 +15,17 @@
     <meta name="keywords" content="golang,go," />
   
 
-  <meta name="description" content="起因最近一段时间在学Golang，突然间想着，将公司现在的DSP的产品（竞价部分的逻辑），翻译为Golang来试一试它们的性能。 测试的环境: Golang 1.7 JDK 1.8 Tomcat 7.0  以上都是使用默认配置  i5 CPU 4核心 16 GB内存  下面是AB后的结果Go┌─[sky@sky-linux] - [~] - [2016-11-02 12:36:44] └─[0]">
+  <meta name="description" content="起因最近一段时间在学Golang，突然间想着，将公司现在的DSP的产品（竞价部分的逻辑），翻译为Golang来试一试它们的性能。 测试的环境: 12345678Golang 1.7JDK 1.8Tomcat 7.0以上都是使用默认配置i5 CPU 4核心16 GB内存 下面是AB后的结果Go123456789101112131415161718192021222324252627282930313">
 <meta name="keywords" content="golang,go">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Golang VS Java 在DSP系统对比">
 <meta property="og:url" content="https://emacsist.github.io/2016/11/02/Golang-VS-Java-在DSP系统对比/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="起因最近一段时间在学Golang，突然间想着，将公司现在的DSP的产品（竞价部分的逻辑），翻译为Golang来试一试它们的性能。 测试的环境: Golang 1.7 JDK 1.8 Tomcat 7.0  以上都是使用默认配置  i5 CPU 4核心 16 GB内存  下面是AB后的结果Go┌─[sky@sky-linux] - [~] - [2016-11-02 12:36:44] └─[0]">
+<meta property="og:description" content="起因最近一段时间在学Golang，突然间想着，将公司现在的DSP的产品（竞价部分的逻辑），翻译为Golang来试一试它们的性能。 测试的环境: 12345678Golang 1.7JDK 1.8Tomcat 7.0以上都是使用默认配置i5 CPU 4核心16 GB内存 下面是AB后的结果Go123456789101112131415161718192021222324252627282930313">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Golang VS Java 在DSP系统对比">
-<meta name="twitter:description" content="起因最近一段时间在学Golang，突然间想着，将公司现在的DSP的产品（竞价部分的逻辑），翻译为Golang来试一试它们的性能。 测试的环境: Golang 1.7 JDK 1.8 Tomcat 7.0  以上都是使用默认配置  i5 CPU 4核心 16 GB内存  下面是AB后的结果Go┌─[sky@sky-linux] - [~] - [2016-11-02 12:36:44] └─[0]">
+<meta name="twitter:description" content="起因最近一段时间在学Golang，突然间想着，将公司现在的DSP的产品（竞价部分的逻辑），翻译为Golang来试一试它们的性能。 测试的环境: 12345678Golang 1.7JDK 1.8Tomcat 7.0以上都是使用默认配置i5 CPU 4核心16 GB内存 下面是AB后的结果Go123456789101112131415161718192021222324252627282930313">
 
   
 
@@ -203,133 +203,9 @@
         
                             <h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>最近一段时间在学Golang，突然间想着，将公司现在的DSP的产品（竞价部分的逻辑），翻译为Golang来试一试它们的性能。</p>
 <p>测试的环境:</p>
-<pre><code class="bash">Golang 1.7
-JDK 1.8
-Tomcat 7.0
-
-以上都是使用默认配置
-
-i5 CPU 4核心
-16 GB内存
-</code></pre>
-<h2 id="下面是AB后的结果"><a href="#下面是AB后的结果" class="headerlink" title="下面是AB后的结果"></a>下面是AB后的结果</h2><h3 id="Go"><a href="#Go" class="headerlink" title="Go"></a>Go</h3><pre><code class="bash">┌─[sky@sky-linux] - [~] - [2016-11-02 12:36:44]
-└─[0] &lt;&gt; ab -n 10000  -c 100 -p /tmp/post.data -T &#39;application/x-www-form-urlencoded&#39; http://localhost:9090/dsp/recbid
-This is ApacheBench, Version 2.3 &lt;$Revision: 1528965 $&gt;
-Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
-Licensed to The Apache Software Foundation, http://www.apache.org/
-
-Benchmarking localhost (be patient)
-Completed 1000 requests
-Completed 2000 requests
-Completed 3000 requests
-Completed 4000 requests
-Completed 5000 requests
-Completed 6000 requests
-Completed 7000 requests
-Completed 8000 requests
-Completed 9000 requests
-Completed 10000 requests
-Finished 10000 requests
-
-
-Server Software:        
-Server Hostname:        localhost
-Server Port:            9090
-
-Document Path:          /dsp/recbid
-Document Length:        786 bytes
-
-Concurrency Level:      100
-Time taken for tests:   3.713 seconds
-Complete requests:      10000
-Failed requests:        0
-Total transferred:      9040000 bytes
-Total body sent:        8060000
-HTML transferred:       7860000 bytes
-Requests per second:    2693.39 [#/sec] (mean)
-Time per request:       37.128 [ms] (mean)
-Time per request:       0.371 [ms] (mean, across all concurrent requests)
-Transfer rate:          2377.75 [Kbytes/sec] received
-                        2119.99 kb/s sent
-                        4497.74 kb/s total
-
-Connection Times (ms)
-              min  mean[+/-sd] median   max
-Connect:        0    0   0.1      0       1
-Processing:     1   37  27.4     31     425
-Waiting:        1   37  27.4     31     425
-Total:          1   37  27.4     31     425
-
-Percentage of the requests served within a certain time (ms)
-  50%     31
-  66%     39
-  75%     46
-  80%     50
-  90%     61
-  95%     69
-  98%     79
-  99%     92
- 100%    425 (longest request)
-</code></pre>
-<h3 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h3><pre><code class="bash">┌─[sky@sky-linux] - [~] - [2016-11-02 11:04:09]
-└─[0] &lt;&gt; ab -n 10000  -c 100 -p /tmp/post.data -T &#39;application/x-www-form-urlencoded&#39; http://localhost:8080/dsp/recbid
-This is ApacheBench, Version 2.3 &lt;$Revision: 1528965 $&gt;
-Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
-Licensed to The Apache Software Foundation, http://www.apache.org/
-
-Benchmarking localhost (be patient)
-Completed 1000 requests
-Completed 2000 requests
-Completed 3000 requests
-Completed 4000 requests
-Completed 5000 requests
-Completed 6000 requests
-Completed 7000 requests
-Completed 8000 requests
-Completed 9000 requests
-Completed 10000 requests
-Finished 10000 requests
-
-
-Server Software:        Apache-Coyote/1.1
-Server Hostname:        localhost
-Server Port:            8080
-
-Document Path:          /dsp/recbid
-Document Length:        810 bytes
-
-Concurrency Level:      100
-Time taken for tests:   1.558 seconds
-Complete requests:      10000
-Failed requests:        0
-Total transferred:      9580000 bytes
-Total body sent:        8060000
-HTML transferred:       8100000 bytes
-Requests per second:    6419.10 [#/sec] (mean)
-Time per request:       15.579 [ms] (mean)
-Time per request:       0.156 [ms] (mean, across all concurrent requests)
-Transfer rate:          6005.37 [Kbytes/sec] received
-                        5052.53 kb/s sent
-                        11057.90 kb/s total
-
-Connection Times (ms)
-              min  mean[+/-sd] median   max
-Connect:        0    0   0.1      0       1
-Processing:     1   15  21.7      8     319
-Waiting:        1   15  21.7      8     319
-Total:          1   15  21.7      8     319
-
-Percentage of the requests served within a certain time (ms)
-  50%      8
-  66%     11
-  75%     16
-  80%     21
-  90%     37
-  95%     56
-  98%     86
-  99%    105
- 100%    319 (longest request)
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Golang 1.7</div><div class="line">JDK 1.8</div><div class="line">Tomcat 7.0</div><div class="line"></div><div class="line">以上都是使用默认配置</div><div class="line"></div><div class="line">i5 CPU 4核心</div><div class="line">16 GB内存</div></pre></td></tr></table></figure>
+<h2 id="下面是AB后的结果"><a href="#下面是AB后的结果" class="headerlink" title="下面是AB后的结果"></a>下面是AB后的结果</h2><h3 id="Go"><a href="#Go" class="headerlink" title="Go"></a>Go</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line">┌─[sky@sky-linux] - [~] - [2016-11-02 12:36:44]</div><div class="line">└─[0] &lt;&gt; ab -n 10000  -c 100 -p /tmp/post.data -T <span class="string">'application/x-www-form-urlencoded'</span> http://localhost:9090/dsp/recbid</div><div class="line">This is ApacheBench, Version 2.3 &lt;<span class="variable">$Revision</span>: 1528965 $&gt;</div><div class="line">Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/</div><div class="line">Licensed to The Apache Software Foundation, http://www.apache.org/</div><div class="line"></div><div class="line">Benchmarking localhost (be patient)</div><div class="line">Completed 1000 requests</div><div class="line">Completed 2000 requests</div><div class="line">Completed 3000 requests</div><div class="line">Completed 4000 requests</div><div class="line">Completed 5000 requests</div><div class="line">Completed 6000 requests</div><div class="line">Completed 7000 requests</div><div class="line">Completed 8000 requests</div><div class="line">Completed 9000 requests</div><div class="line">Completed 10000 requests</div><div class="line">Finished 10000 requests</div><div class="line"></div><div class="line"></div><div class="line">Server Software:        </div><div class="line">Server Hostname:        localhost</div><div class="line">Server Port:            9090</div><div class="line"></div><div class="line">Document Path:          /dsp/recbid</div><div class="line">Document Length:        786 bytes</div><div class="line"></div><div class="line">Concurrency Level:      100</div><div class="line">Time taken <span class="keyword">for</span> tests:   3.713 seconds</div><div class="line">Complete requests:      10000</div><div class="line">Failed requests:        0</div><div class="line">Total transferred:      9040000 bytes</div><div class="line">Total body sent:        8060000</div><div class="line">HTML transferred:       7860000 bytes</div><div class="line">Requests per second:    2693.39 [<span class="comment">#/sec] (mean)</span></div><div class="line">Time per request:       37.128 [ms] (mean)</div><div class="line">Time per request:       0.371 [ms] (mean, across all concurrent requests)</div><div class="line">Transfer rate:          2377.75 [Kbytes/sec] received</div><div class="line">                        2119.99 kb/s sent</div><div class="line">                        4497.74 kb/s total</div><div class="line"></div><div class="line">Connection Times (ms)</div><div class="line">              min  mean[+/-sd] median   max</div><div class="line">Connect:        0    0   0.1      0       1</div><div class="line">Processing:     1   37  27.4     31     425</div><div class="line">Waiting:        1   37  27.4     31     425</div><div class="line">Total:          1   37  27.4     31     425</div><div class="line"></div><div class="line">Percentage of the requests served within a certain time (ms)</div><div class="line">  50%     31</div><div class="line">  66%     39</div><div class="line">  75%     46</div><div class="line">  80%     50</div><div class="line">  90%     61</div><div class="line">  95%     69</div><div class="line">  98%     79</div><div class="line">  99%     92</div><div class="line"> 100%    425 (longest request)</div></pre></td></tr></table></figure>
+<h3 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line">┌─[sky@sky-linux] - [~] - [2016-11-02 11:04:09]</div><div class="line">└─[0] &lt;&gt; ab -n 10000  -c 100 -p /tmp/post.data -T <span class="string">'application/x-www-form-urlencoded'</span> http://localhost:8080/dsp/recbid</div><div class="line">This is ApacheBench, Version 2.3 &lt;<span class="variable">$Revision</span>: 1528965 $&gt;</div><div class="line">Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/</div><div class="line">Licensed to The Apache Software Foundation, http://www.apache.org/</div><div class="line"></div><div class="line">Benchmarking localhost (be patient)</div><div class="line">Completed 1000 requests</div><div class="line">Completed 2000 requests</div><div class="line">Completed 3000 requests</div><div class="line">Completed 4000 requests</div><div class="line">Completed 5000 requests</div><div class="line">Completed 6000 requests</div><div class="line">Completed 7000 requests</div><div class="line">Completed 8000 requests</div><div class="line">Completed 9000 requests</div><div class="line">Completed 10000 requests</div><div class="line">Finished 10000 requests</div><div class="line"></div><div class="line"></div><div class="line">Server Software:        Apache-Coyote/1.1</div><div class="line">Server Hostname:        localhost</div><div class="line">Server Port:            8080</div><div class="line"></div><div class="line">Document Path:          /dsp/recbid</div><div class="line">Document Length:        810 bytes</div><div class="line"></div><div class="line">Concurrency Level:      100</div><div class="line">Time taken <span class="keyword">for</span> tests:   1.558 seconds</div><div class="line">Complete requests:      10000</div><div class="line">Failed requests:        0</div><div class="line">Total transferred:      9580000 bytes</div><div class="line">Total body sent:        8060000</div><div class="line">HTML transferred:       8100000 bytes</div><div class="line">Requests per second:    6419.10 [<span class="comment">#/sec] (mean)</span></div><div class="line">Time per request:       15.579 [ms] (mean)</div><div class="line">Time per request:       0.156 [ms] (mean, across all concurrent requests)</div><div class="line">Transfer rate:          6005.37 [Kbytes/sec] received</div><div class="line">                        5052.53 kb/s sent</div><div class="line">                        11057.90 kb/s total</div><div class="line"></div><div class="line">Connection Times (ms)</div><div class="line">              min  mean[+/-sd] median   max</div><div class="line">Connect:        0    0   0.1      0       1</div><div class="line">Processing:     1   15  21.7      8     319</div><div class="line">Waiting:        1   15  21.7      8     319</div><div class="line">Total:          1   15  21.7      8     319</div><div class="line"></div><div class="line">Percentage of the requests served within a certain time (ms)</div><div class="line">  50%      8</div><div class="line">  66%     11</div><div class="line">  75%     16</div><div class="line">  80%     21</div><div class="line">  90%     37</div><div class="line">  95%     56</div><div class="line">  98%     86</div><div class="line">  99%    105</div><div class="line"> 100%    319 (longest request)</div></pre></td></tr></table></figure>
 <h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>这个是平均多次执行后对比的最后结果，按照这些数据来看，Golang还是远远比不上Java的性能。</p>
 <h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>刚开始学Golang时，越发觉得是个好东西，就是感觉很容易上手，语法这些也很容易熟悉。学了半个星期，然后用半个星期将公司的DSP产品翻译为Golang版本。在这过程中，对Golang也渐渐更加了解点。不过，按照目前这情况，Golang的性能，还是比不上Java的。毕竟JVM和JIT的时间都有20多个年头的，这真的不是开玩笑的。Golang未来还是要有很长一段时间要走。</p>
 <p>给我最大的感觉，大概就是Golang的非常简洁的语法及丰富的库。写个Web服务，本身并不需要依赖其他第三方库就已经很方便实现了。内置的对JSON的天生支持（encode和decode），非常简单的并发 <code>go function(...)</code>，以及管道的同步。结构体之间的继承以及接口类型+反射，这些都是个很好的东西，相对于纯OO语言来说，这种实现显得更加优雅点。不过，到目前为至，还没有支持泛型，虽然可以通过反射<code>interface{}</code>类型来实现，不过，总觉得这种太挫了。</p>

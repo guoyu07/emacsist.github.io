@@ -15,17 +15,17 @@
     <meta name="keywords" content="database,mysql," />
   
 
-  <meta name="description" content="create table new_table_name like old_table_name; alter table new_table_name add column new_column int not null default 0 comment &amp;#39;your comment&amp;#39;;  insert into new_table_name (col1, col2, col3..">
+  <meta name="description" content="123456789create table new_table_name like old_table_name;alter table new_table_name add column new_column int not null default 0 comment &apos;your comment&apos;;insert into new_table_name (col1, col2, col3...)">
 <meta name="keywords" content="database,mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL 为生产环境在线添加字段">
 <meta property="og:url" content="https://emacsist.github.io/2016/04/11/MySQL-为生产环境在线添加字段/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="create table new_table_name like old_table_name; alter table new_table_name add column new_column int not null default 0 comment &amp;#39;your comment&amp;#39;;  insert into new_table_name (col1, col2, col3..">
+<meta property="og:description" content="123456789create table new_table_name like old_table_name;alter table new_table_name add column new_column int not null default 0 comment &apos;your comment&apos;;insert into new_table_name (col1, col2, col3...)">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL 为生产环境在线添加字段">
-<meta name="twitter:description" content="create table new_table_name like old_table_name; alter table new_table_name add column new_column int not null default 0 comment &amp;#39;your comment&amp;#39;;  insert into new_table_name (col1, col2, col3..">
+<meta name="twitter:description" content="123456789create table new_table_name like old_table_name;alter table new_table_name add column new_column int not null default 0 comment &apos;your comment&apos;;insert into new_table_name (col1, col2, col3...)">
 
   
 
@@ -196,16 +196,7 @@
 
     <div class="article-content">
         
-                            <pre><code class="bash">create table new_table_name like old_table_name;
-alter table new_table_name add column new_column int not null default 0 comment &#39;your comment&#39;;
-
-insert into new_table_name (col1, col2, col3...) select (col1, col2, col3...) from old_table_name where id &lt; xxxx;
-
-begin;
-insert into new_table_name (col1, col2, col3...) select (col1, col2, col3...) from old_table_name where id &gt;= xxxx
-rename old_table_name to old_table_bak, new_table_name to old_table_name;
-commit;
-</code></pre>
+                            <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">create table new_table_name like old_table_name;</div><div class="line">alter table new_table_name add column new_column int not null default 0 comment <span class="string">'your comment'</span>;</div><div class="line"></div><div class="line">insert into new_table_name (col1, col2, col3...) select (col1, col2, col3...) from old_table_name <span class="built_in">where</span> id &lt; xxxx;</div><div class="line"></div><div class="line">begin;</div><div class="line">insert into new_table_name (col1, col2, col3...) select (col1, col2, col3...) from old_table_name <span class="built_in">where</span> id &gt;= xxxx</div><div class="line">rename old_table_name to old_table_bak, new_table_name to old_table_name;</div><div class="line">commit;</div></pre></td></tr></table></figure>
 
                                 
     </div>

@@ -15,17 +15,17 @@
     <meta name="keywords" content="java,performance," />
   
 
-  <meta name="description" content="JETM 下载Download 使用    @Test     public void hello() throws InterruptedException {         BasicEtmConfigurator.configure(true);         etmMonitor.start();         EtmPoint etmPoint = etmMonitor.creat">
+  <meta name="description" content="JETM 下载Download 使用1234567891011121314151617181920212223242526272829303132333435@Testpublic void hello() throws InterruptedException &amp;#123;    BasicEtmConfigurator.configure(true);    etmMonitor.start(">
 <meta name="keywords" content="java,performance">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java监控方法调用树以及方法性能">
 <meta property="og:url" content="https://emacsist.github.io/2016/05/23/Java监控方法调用树以及方法性能/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="JETM 下载Download 使用    @Test     public void hello() throws InterruptedException {         BasicEtmConfigurator.configure(true);         etmMonitor.start();         EtmPoint etmPoint = etmMonitor.creat">
+<meta property="og:description" content="JETM 下载Download 使用1234567891011121314151617181920212223242526272829303132333435@Testpublic void hello() throws InterruptedException &amp;#123;    BasicEtmConfigurator.configure(true);    etmMonitor.start(">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java监控方法调用树以及方法性能">
-<meta name="twitter:description" content="JETM 下载Download 使用    @Test     public void hello() throws InterruptedException {         BasicEtmConfigurator.configure(true);         etmMonitor.start();         EtmPoint etmPoint = etmMonitor.creat">
+<meta name="twitter:description" content="JETM 下载Download 使用1234567891011121314151617181920212223242526272829303132333435@Testpublic void hello() throws InterruptedException &amp;#123;    BasicEtmConfigurator.configure(true);    etmMonitor.start(">
 
   
 
@@ -202,61 +202,9 @@
     <div class="article-content">
         
                             <h2 id="JETM-下载"><a href="#JETM-下载" class="headerlink" title="JETM 下载"></a>JETM 下载</h2><p><a href="http://jetm.void.fm/files.html" target="_blank" rel="external">Download</a></p>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><pre><code class="bash">    @Test
-    public void hello() throws InterruptedException {
-        BasicEtmConfigurator.configure(true);
-        etmMonitor.start();
-        EtmPoint etmPoint = etmMonitor.createPoint(&quot;SETest:hello&quot;);
-        System.out.println(&quot;hello world&quot;);
-        Thread.currentThread().sleep(2 * 1000);
-
-        nested();
-        nested();
-        sayf();
-
-        etmPoint.collect();
-
-        // visualize results
-        etmMonitor.render(new SimpleTextRenderer());
-
-
-        etmMonitor.stop();
-    }
-
-    private static void nested() throws InterruptedException {
-        EtmPoint etmPoint = etmMonitor.createPoint(&quot;SETest:nested&quot;);
-        System.out.println(&quot;in nested&quot;);
-        Thread.currentThread().sleep(2*1000);
-        etmPoint.collect();
-    }
-
-    private static void sayf() throws InterruptedException {
-        EtmPoint etmPoint = etmMonitor.createPoint(&quot;SETest:sayf&quot;);
-        System.out.println(&quot;in nested&quot;);
-        Thread.currentThread().sleep(2*1000);
-        nested();
-        etmPoint.collect();
-    }
-</code></pre>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">@Test</div><div class="line">public void hello() throws InterruptedException &#123;</div><div class="line">    BasicEtmConfigurator.configure(<span class="literal">true</span>);</div><div class="line">    etmMonitor.start();</div><div class="line">    EtmPoint etmPoint = etmMonitor.createPoint(<span class="string">"SETest:hello"</span>);</div><div class="line">    System.out.println(<span class="string">"hello world"</span>);</div><div class="line">    Thread.currentThread().sleep(2 * 1000);</div><div class="line"></div><div class="line">    nested();</div><div class="line">    nested();</div><div class="line">    sayf();</div><div class="line"></div><div class="line">    etmPoint.collect();</div><div class="line"></div><div class="line">    // visualize results</div><div class="line">    etmMonitor.render(new SimpleTextRenderer());</div><div class="line"></div><div class="line"></div><div class="line">    etmMonitor.stop();</div><div class="line">&#125;</div><div class="line"></div><div class="line">private static void nested() throws InterruptedException &#123;</div><div class="line">    EtmPoint etmPoint = etmMonitor.createPoint(<span class="string">"SETest:nested"</span>);</div><div class="line">    System.out.println(<span class="string">"in nested"</span>);</div><div class="line">    Thread.currentThread().sleep(2*1000);</div><div class="line">    etmPoint.collect();</div><div class="line">&#125;</div><div class="line"></div><div class="line">private static void sayf() throws InterruptedException &#123;</div><div class="line">    EtmPoint etmPoint = etmMonitor.createPoint(<span class="string">"SETest:sayf"</span>);</div><div class="line">    System.out.println(<span class="string">"in nested"</span>);</div><div class="line">    Thread.currentThread().sleep(2*1000);</div><div class="line">    nested();</div><div class="line">    etmPoint.collect();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>输出结果:</p>
-<pre><code class="bash">[INFO ] [EtmMonitor] JETM 1.2.3 started.
-hello world
-in nested
-in nested
-in nested
-in nested
-|-------------------|---|------------|------------|------------|------------|
-| Measurement Point | # |   Average  |     Min    |     Max    |    Total   |
-|-------------------|---|------------|------------|------------|------------|
-| SETest:hello      | 1 | 10,000.900 | 10,000.900 | 10,000.900 | 10,000.900 |
-|   SETest:sayf     | 1 |  4,000.296 |  4,000.296 |  4,000.296 |  4,000.296 |
-|     SETest:nested | 1 |  2,000.118 |  2,000.118 |  2,000.118 |  2,000.118 |
-|   SETest:nested   | 2 |  2,000.159 |  2,000.136 |  2,000.182 |  4,000.317 |
-|-------------------|---|------------|------------|------------|------------|
-[INFO ] [EtmMonitor] Shutting down JETM.
-
-Process finished with exit code 0
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">[INFO ] [EtmMonitor] JETM 1.2.3 started.</div><div class="line">hello world</div><div class="line"><span class="keyword">in</span> nested</div><div class="line"><span class="keyword">in</span> nested</div><div class="line"><span class="keyword">in</span> nested</div><div class="line"><span class="keyword">in</span> nested</div><div class="line">|-------------------|---|------------|------------|------------|------------|</div><div class="line">| Measurement Point | <span class="comment"># |   Average  |     Min    |     Max    |    Total   |</span></div><div class="line">|-------------------|---|------------|------------|------------|------------|</div><div class="line">| SETest:hello      | 1 | 10,000.900 | 10,000.900 | 10,000.900 | 10,000.900 |</div><div class="line">|   SETest:sayf     | 1 |  4,000.296 |  4,000.296 |  4,000.296 |  4,000.296 |</div><div class="line">|     SETest:nested | 1 |  2,000.118 |  2,000.118 |  2,000.118 |  2,000.118 |</div><div class="line">|   SETest:nested   | 2 |  2,000.159 |  2,000.136 |  2,000.182 |  4,000.317 |</div><div class="line">|-------------------|---|------------|------------|------------|------------|</div><div class="line">[INFO ] [EtmMonitor] Shutting down JETM.</div><div class="line"></div><div class="line">Process finished with <span class="built_in">exit</span> code 0</div></pre></td></tr></table></figure>
 
                                 
     </div>

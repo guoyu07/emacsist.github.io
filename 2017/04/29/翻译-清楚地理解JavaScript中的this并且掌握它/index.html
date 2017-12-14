@@ -220,66 +220,21 @@
 <p>在 JavaScript 中<code>this</code>关键字同样困惑着 JavaScript 新手以及经验丰富的开发者。本文的目标就是完整地解释<code>this</code>。当我们学习完这篇文章后，JavaScript 中的<code>this</code>关键字这部分  我们就不必再担心了。我们将会明白如何在每个脚本里正确地使用<code>this</code>，包括那些难以捉摸和棘手情况的地方。</p>
 <p>我们使用<code>this</code>，类似于我们在自然语言比如英语和法语中的代词。我们写 ：“John 正在飞快地跑着，因为他正在试图追上火车“。</p>
 <p>注意代词 <code>他</code> 的使用。我们可以写成这样子：“John 正在飞快地跑着，因为 John 正在试图追上火车”。我们不要以这种方式重复地使用<code>John</code>，如果我们这样子做了，我们的家人、朋友和同事会很嫌弃我们。是的，他们肯定会这样子。好吧，也许不是你的家人，而是我们的那些酒肉朋友和同事。以类似的优雅方式，在 JavaScript 中， 我们使用<code>this</code>关键字作为一个快捷方式，一个引用；它引用一个对象；也就是在上下文中的主语，或者是正在执行代码的主体。思考下下面的例子：</p>
-<pre><code class="bash"> var person = {
-    firstName: &quot;Penelope&quot;,
-    lastName: &quot;Barrymore&quot;,
-    fullName: function () {
-    // 注意我们使用`this`就像我们上面例句中使用的`他` ：
-        console.log(this.firstName + &quot; &quot; + this.lastName);
-    ​// 我们也可以写成这样子：
-        console.log(person.firstName + &quot; &quot; + person.lastName);
-    }
-}
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"> var person = &#123;</div><div class="line">    firstName: <span class="string">"Penelope"</span>,</div><div class="line">    lastName: <span class="string">"Barrymore"</span>,</div><div class="line">    fullName: <span class="function"><span class="title">function</span></span> () &#123;</div><div class="line">    // 注意我们使用`this`就像我们上面例句中使用的`他` ：</div><div class="line">        console.log(this.firstName + <span class="string">" "</span> + this.lastName);</div><div class="line">    ​// 我们也可以写成这样子：</div><div class="line">        console.log(person.firstName + <span class="string">" "</span> + person.lastName);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>如果我们使用<code>person.firstName</code>和<code>person.lastName</code>，在上面的例子中，我们的代码会变得含糊。考虑下有另一个名为<code>person</code>的全局变量（我们可能或根本就没有意识到）。然后，引用 <code>person.firstName</code>，可能试图访问这个<code>person</code>的全局变量的<code>firstName</code>属性，并且会导致难以调试的错误。所以，我们使用<code>this</code>关键字不仅为了美学（例如，作为一个指示词），更为了准确；它的使用实际上使我们的代码更加明确，正如代词<code>他</code>使我们的句子更加清晰一样。它告诉我们：我们正在引用的是在句子开头特定的<code>John</code>。</p>
 <p>就像代词<code>他</code>是用于指示先行词（先行词是代词指示的名词），<code>this</code>关键字类似地用于指示一个函数（<code>this</code>就是被用在这里）所绑定的对象。<code>this</code>关键字不仅是引用一个对象，并且它也包含对象的值。就像代词，<code>this</code>可以被用作一个快捷方式（或者一个相当明确的替代）来引用之前在上下文中的对象（“先行词对象”）。我们迟些将学习更多关于上下文的知识。</p>
 <h2 id="JavaScript的this关键字的基础知识"><a href="#JavaScript的this关键字的基础知识" class="headerlink" title="JavaScript的this关键字的基础知识"></a>JavaScript的<code>this</code>关键字的基础知识</h2><p>首先，我们知道 JavaScript 中的所有函数都有属性，就像对象有属性一样。并且，当一个函数执行的时候，它就获得了<code>this</code>属性 ———— <code>this</code>是用于一个带有调用函数的对象的值的变量。<code>this</code>引用总是指示（并且持有值）一个对象 ———— 一个单一对象 ———— 并且它通常用在一个函数或者方法中，尽管它也可以用于全局作用域的函数外部。注意，当我们使用<code>strict mode</code>模式时，<code>this</code>在全局函数中持有<code>undefined</code>的值，并且在匿名函数里并没有绑定任何对象。</p>
 <blockquote>
 <p>译者注：可以用下面的例子来演示：</p>
 </blockquote>
-<pre><code class="bash">&quot;use strict&quot;;
-
-console.info(this);
-
-(function() {console.info(this) }())
-
-function hello(){
-    console.info(this);
-}
-
-hello()
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="string">"use strict"</span>;</div><div class="line"></div><div class="line">console.info(this);</div><div class="line"></div><div class="line">(<span class="function"><span class="title">function</span></span>() &#123;console.info(this) &#125;())</div><div class="line"></div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">hello</span></span>()&#123;</div><div class="line">    console.info(this);</div><div class="line">&#125;</div><div class="line"></div><div class="line">hello()</div></pre></td></tr></table></figure>
 <p>输出的结果为:</p>
-<pre><code class="bash">[Running] node &quot;/var/folders/lz/mpwxkp6s7rq62r08vt2h_j480000gn/T/temp-sgwrfzpgrf.javascript&quot;
-{}
-undefined
-undefined
-
-[Done] exited with code=0 in 0.137 seconds
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[Running] node <span class="string">"/var/folders/lz/mpwxkp6s7rq62r08vt2h_j480000gn/T/temp-sgwrfzpgrf.javascript"</span></div><div class="line">&#123;&#125;</div><div class="line">undefined</div><div class="line">undefined</div><div class="line"></div><div class="line">[Done] exited with code=0 <span class="keyword">in</span> 0.137 seconds</div></pre></td></tr></table></figure>
 <p><code>this</code>用于函数内部（让我们假设是函数 A）并且它包含了调用函数 A 的对象的值。我们需要<code>this</code>来访问调用函数 A 的对象的方法和属性，特别地，由于我们并不总是知道调用对象的名字，而且有时是没有名字来引用调用者对象的。确实，<code>this</code>实际上仅仅是一个快捷引用“先行词对象”————调用者对象。</p>
 <p>反复思考一下以下这个在 JavaScript 中使用 <code>this</code>的基本例子：</p>
-<pre><code class="bash">var person = {
-    firstName   :&quot;Penelope&quot;,
-    lastName    :&quot;Barrymore&quot;,
-    // `this` 关键字用在 showFullName 方法里，并且 showFullName 方法是定义在 person 对象上,
-    // `this` 关键字就会拥有 person 对象的值，因为 person 对象将会调用 showFullName()
-    showFullName:function () {
-    console.log (this.firstName + &quot; &quot; + this.lastName);
-    }
-​}
-​
-person.showFullName (); // Penelope Barrymore
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">var person = &#123;</div><div class="line">    firstName   :<span class="string">"Penelope"</span>,</div><div class="line">    lastName    :<span class="string">"Barrymore"</span>,</div><div class="line">    // `this` 关键字用在 showFullName 方法里，并且 showFullName 方法是定义在 person 对象上,</div><div class="line">    // `this` 关键字就会拥有 person 对象的值，因为 person 对象将会调用 showFullName()</div><div class="line">    showFullName:<span class="function"><span class="title">function</span></span> () &#123;</div><div class="line">    console.log (this.firstName + <span class="string">" "</span> + this.lastName);</div><div class="line">    &#125;</div><div class="line">​&#125;</div><div class="line">​</div><div class="line">person.showFullName (); // Penelope Barrymore</div></pre></td></tr></table></figure>
 <p>并且再思考下 jQuery 中 this 的基础用法例子：</p>
-<pre><code class="bash"> // jQuery 中常见的代码片段
-​
-    $ (&quot;button&quot;).click (function (event) {
-    // $(this) 将拥有 button ($(&quot;button&quot;))对象的值
-    ​// 因为 button 对象调用 click
-    console.log ($ (this).prop (&quot;name&quot;));
-    });
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"> // jQuery 中常见的代码片段</div><div class="line">​</div><div class="line">    $ (<span class="string">"button"</span>).click (<span class="keyword">function</span> (event) &#123;</div><div class="line">    // $(this) 将拥有 button ($(<span class="string">"button"</span>))对象的值</div><div class="line">    ​// 因为 button 对象调用 click</div><div class="line">    console.log ($ (this).prop (<span class="string">"name"</span>));</div><div class="line">    &#125;);</div></pre></td></tr></table></figure>
 <p>我将详解前面的 jQuery的例子：<code>$(this)</code> 的使用，它是 JavaScript 中的 <code>this</code> 关键字在 jQuery 中的语法，用在一个匿名函数里面，并且匿名函数是被 button 的 click() 函数执行。<code>$(this)</code> 被绑定到 button 对象的原因，是由于 jQuery 库绑定了 <code>$(this)</code> 到那些调用 click 方法的对象身上。因此，<code>$(this)</code> 将拥有 jQuery button (<code>$(&quot;button&quot;)</code>)对象的值，尽管 <code>$(this)</code> 是被定义在一个匿名函数的内部，在匿名函数的外部，它是不能访问自身的<code>this</code>变量的。</p>
 <p>注意：button 是一个在 HTML 页面的 DOM 元素，并且它也是一个对象；在这情况下，它是一个 jQuery 对象，因为我们在 jQuery $() 函数包住了它。</p>
 <blockquote>
@@ -289,91 +244,18 @@ person.showFullName (); // Penelope Barrymore
 <p>尽管<code>this</code>的出现是指示定义它的对象，它是直到一个对象调用<code>this 函数</code>时才会真正地赋值的。并且这值是完全基于那个调用<code>this 函数</code>的对象的。在绝大部分情况下，<code>this</code> 有一个调用对象。然而，有极少情况下，<code>this</code>是没有调用者对象的值的。迟些会接触到这些情况。</p>
 <h2 id="在全局作用域范围中使用this"><a href="#在全局作用域范围中使用this" class="headerlink" title="在全局作用域范围中使用this"></a>在全局作用域范围中使用<code>this</code></h2><p>在全局作用域范围，当代码正在浏览器中执行时，所有全局变量和函数都被定义在一个<code>window</code>对象上。因此，当我们在全局函数中使用<code>this</code>时，它是引用（并且拥有值）全局的<code>window</code>对象（不是在<code>strict</code>模式，这个在前面提到过了），它是整个 JavaScript 应用程序或者web 页面的主要容器。</p>
 <p>这样：</p>
-<pre><code class="bash">    var firstName = &quot;Peter&quot;,
-    lastName = &quot;Ally&quot;;
-​
-    function showFullName () {
-    // `this`在该函数里将拥有 `window` 对象的值
-    // 因为 showFullName() 函数是定义在全局作用域范围，就像 firstName 和 lastName 一样
-    console.log (this.firstName + &quot; &quot; + this.lastName);
-    }
-​
-    var person = {
-    firstName   :&quot;Penelope&quot;,
-    lastName    :&quot;Barrymore&quot;,
-    showFullName:function () {
-    // 在下面的`this`引用的是 person 对象，因为 showFullName 函数将被 person 对象调用
-    console.log (this.firstName + &quot; &quot; + this.lastName);
-    }
-    }
-​
-    showFullName (); // Peter Ally​
-​
-    // window 是所有全局变量和函数定义所在的地方，因此
-    window.showFullName (); // Peter Ally​
-​
-    // `this`定义在 person 对象的 showFullName() 方法内部，所以仍然引用的是 person 对象，因此：
-    person.showFullName (); // Penelope Barrymore
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">    var firstName = <span class="string">"Peter"</span>,</div><div class="line">    lastName = <span class="string">"Ally"</span>;</div><div class="line">​</div><div class="line">    <span class="keyword">function</span> <span class="function"><span class="title">showFullName</span></span> () &#123;</div><div class="line">    // `this`在该函数里将拥有 `window` 对象的值</div><div class="line">    // 因为 showFullName() 函数是定义在全局作用域范围，就像 firstName 和 lastName 一样</div><div class="line">    console.log (this.firstName + <span class="string">" "</span> + this.lastName);</div><div class="line">    &#125;</div><div class="line">​</div><div class="line">    var person = &#123;</div><div class="line">    firstName   :<span class="string">"Penelope"</span>,</div><div class="line">    lastName    :<span class="string">"Barrymore"</span>,</div><div class="line">    showFullName:<span class="function"><span class="title">function</span></span> () &#123;</div><div class="line">    // 在下面的`this`引用的是 person 对象，因为 showFullName 函数将被 person 对象调用</div><div class="line">    console.log (this.firstName + <span class="string">" "</span> + this.lastName);</div><div class="line">    &#125;</div><div class="line">    &#125;</div><div class="line">​</div><div class="line">    showFullName (); // Peter Ally​</div><div class="line">​</div><div class="line">    // window 是所有全局变量和函数定义所在的地方，因此</div><div class="line">    window.showFullName (); // Peter Ally​</div><div class="line">​</div><div class="line">    // `this`定义在 person 对象的 showFullName() 方法内部，所以仍然引用的是 person 对象，因此：</div><div class="line">    person.showFullName (); // Penelope Barrymore</div></pre></td></tr></table></figure>
 <h2 id="当-this-最容易曲解以及变得棘手时"><a href="#当-this-最容易曲解以及变得棘手时" class="headerlink" title="当 this 最容易曲解以及变得棘手时"></a>当 <code>this</code> 最容易曲解以及变得棘手时</h2><p>当我们通过方法来使用<code>this</code>时、当我们通过<code>this</code>将一个方法赋值到一个变量时、当一个函数使用回调(callback)函数使用 <code>this</code>时、以及当<code>this</code>被用在一个闭包里面———— 一个内部函数时， <code>this</code>关键字是最容易曲解的。我们将在每一个例子中看一下在这些情景中的<code>this</code>代表适当的值的解决办法。</p>
 <blockquote>
 <p>重点注意：</p>
 </blockquote>
 <h3 id="在我们继续之前，了解一下上下文（context）"><a href="#在我们继续之前，了解一下上下文（context）" class="headerlink" title="在我们继续之前，了解一下上下文（context）"></a>在我们继续之前，了解一下<code>上下文（context）</code></h3><p>在 JavaScript 中，上下文类似于英语中句子的主体：“John is the winner who returned the money.”。 这个句子中的主体就是<code>John</code>，我们可以说句子的上下文(context)就是<code>John</code>，因为在此时此句中，焦点就是他。并且像我们可以使用分号来切换句子的主体，我们可以通过另一个对象来调用函数从当前上下文的对象来切换到另一个上下文的对象。</p>
 <p>类似地，在 JavaScript 代码中：</p>
-<pre><code class="bash">
-var person = {
-   firstName   :&quot;Penelope&quot;,
-   lastName    :&quot;Barrymore&quot;,
-   showFullName:function () {
-​// 这就是 上下文(context)
-console.log (this.firstName + &quot; &quot; + this.lastName);
- }
-}
-​
-​// 当我们正调用 person 对象的 showFullName() 方法时， 上下文就是 person 对象。
-​// 并且，`this`在 showFullName() 方法中的使用，它拥有 person 对象的值。
-person.showFullName (); // Penelope Barrymore​
-​
-​// 如果我们用另一个不同的对象来调用 showFullName 
-​var anotherPerson = {
-firstName   :&quot;Rohit&quot;,
-lastName    :&quot;Khan&quot;​
-};
-​
-​// 我们可以显式地使用`apply`方法来设置`this`的值 —— 后面会有更多关于 `apply()` 方法的介绍
-​// 这时，`this` 获得了无论是哪个对象调用了`this 函数`的值 ，因此：
-person.showFullName.apply (anotherPerson); // Rohit Khan​
-​
-​// 所以，现在的上下文(context)就是 anotherPerson 了，因为 anotherPerson 通过使用`apply()`方法来调用了 person.showFullName() 方法时，
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">var person = &#123;</div><div class="line">   firstName   :<span class="string">"Penelope"</span>,</div><div class="line">   lastName    :<span class="string">"Barrymore"</span>,</div><div class="line">   showFullName:<span class="function"><span class="title">function</span></span> () &#123;</div><div class="line">​// 这就是 上下文(context)</div><div class="line">console.log (this.firstName + <span class="string">" "</span> + this.lastName);</div><div class="line"> &#125;</div><div class="line">&#125;</div><div class="line">​</div><div class="line">​// 当我们正调用 person 对象的 showFullName() 方法时， 上下文就是 person 对象。</div><div class="line">​// 并且，`this`在 showFullName() 方法中的使用，它拥有 person 对象的值。</div><div class="line">person.showFullName (); // Penelope Barrymore​</div><div class="line">​</div><div class="line">​// 如果我们用另一个不同的对象来调用 showFullName </div><div class="line">​var anotherPerson = &#123;</div><div class="line">firstName   :<span class="string">"Rohit"</span>,</div><div class="line">lastName    :<span class="string">"Khan"</span>​</div><div class="line">&#125;;</div><div class="line">​</div><div class="line">​// 我们可以显式地使用`apply`方法来设置`this`的值 —— 后面会有更多关于 `apply()` 方法的介绍</div><div class="line">​// 这时，`this` 获得了无论是哪个对象调用了`this 函数`的值 ，因此：</div><div class="line">person.showFullName.apply (anotherPerson); // Rohit Khan​</div><div class="line">​</div><div class="line">​// 所以，现在的上下文(context)就是 anotherPerson 了，因为 anotherPerson 通过使用`apply()`方法来调用了 person.showFullName() 方法时，</div></pre></td></tr></table></figure>
 <p>外带的是，在上下文中对象调用<code>this 函数</code>，我们可以通过另一个对象来调用<code>this 函数</code>来改变上下文；然后，这新的对象就在上下文中了。</p>
 <p>以下是一些<code>this</code>关键字变得棘手的情景，他们包含了修正<code>this</code>的错误的例子。</p>
 <h3 id="1-当用在回调函数时，this-的困境"><a href="#1-当用在回调函数时，this-的困境" class="headerlink" title="1. 当用在回调函数时，this 的困境"></a>1. 当用在回调函数时，this 的困境</h3><p>当我们传递一个方法（使用<code>this</code>的方法）作为一个参数用作一个回调函数来使用时，这会变得比较棘手。例如：</p>
-<pre><code class="bash">
-// 假设我们有一个带有当在页面上的 button 被点击时就调用 clickHandler 方法的简单对象：
-var user = {
-    data: [
-        {
-            name: &quot;T. Woods&quot;,
-            age: 37
-        },
-        {
-            name: &quot;P. Mickelson&quot;,
-            age: 43
-        }
-    ],
-    clickHandler: function (event) {
-        var randomNum = ((Math.random() * 2 | 0) + 1) - 1; // random number between 0 and 1​
-        ​
-        // 这一行是随机从 data 数组中打印用户对象的名字和年龄
-        console.log(this.data[randomNum].name + &quot; &quot; + this.data[randomNum].age);
-    }
-}​
-// button 现在包装在 jQuery 的 $ 符号里，所以，它现在是一个 jQuery 对象
-// 并且输出将会是 `undefined`， 因为在 button 对象中，并没有 data 属性。
-$(&quot;button&quot;).click(user.clickHandler); // 并不能读取 `undefined` 的&#39;0&#39; 属性
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">// 假设我们有一个带有当在页面上的 button 被点击时就调用 clickHandler 方法的简单对象：</div><div class="line">var user = &#123;</div><div class="line">    data: [</div><div class="line">        &#123;</div><div class="line">            name: <span class="string">"T. Woods"</span>,</div><div class="line">            age: 37</div><div class="line">        &#125;,</div><div class="line">        &#123;</div><div class="line">            name: <span class="string">"P. Mickelson"</span>,</div><div class="line">            age: 43</div><div class="line">        &#125;</div><div class="line">    ],</div><div class="line">    clickHandler: <span class="keyword">function</span> (event) &#123;</div><div class="line">        var randomNum = ((Math.random() * 2 | 0) + 1) - 1; // random number between 0 and 1​</div><div class="line">        ​</div><div class="line">        // 这一行是随机从 data 数组中打印用户对象的名字和年龄</div><div class="line">        console.log(this.data[randomNum].name + <span class="string">" "</span> + this.data[randomNum].age);</div><div class="line">    &#125;</div><div class="line">&#125;​</div><div class="line">// button 现在包装在 jQuery 的 $ 符号里，所以，它现在是一个 jQuery 对象</div><div class="line">// 并且输出将会是 `undefined`， 因为在 button 对象中，并没有 data 属性。</div><div class="line">$(<span class="string">"button"</span>).click(user.clickHandler); // 并不能读取 `undefined` 的<span class="string">'0'</span> 属性</div></pre></td></tr></table></figure>
 <p>在以上代码中，由于 button <code>($(&quot;button&quot;))</code>自己是一个对象，并且我们传递<code>user.clickHandler</code> 方法作为它的<code>click()</code>方法的回调函数，我们知道<code>this</code>是在<code>user.clickHandler</code> 方法内部，它将不再引用<code>user</code>对象了。<code>this</code> 现在引用的对象是<code>user.clickHandler</code>方法被执行的对象了，因为<code>this</code>是定义在<code>user.clickHandler</code>方法的内部。既然正在调用<code>user.clickHandler</code>方法的对象是 button 对象 ———— <code>user.clickHandler</code> 将被执行在 button 对象的 click 方法内部。</p>
 <p>注意，尽管我们正在调用的<code>clickHandler()</code>方法是<code>user.clickHandler</code>（这是我们必须这样子做的，因为 <code>clickHandler</code> 是定义在 user 内部），<code>clickHandler</code>方法自身将被现在上下文中的<code>this</code>———— button 对象调用。</p>
 <p>在这一点上，很明显的是当上下文改变时 ———— 当我们执行一个不是在对象自身定义而是在其他对象上定义的方法时，<code>this</code>关键字就不再引用定义<code>this</code>的自身对象了，而是引用了调用这些定义<code>this</code>方法的对象。</p>
@@ -381,177 +263,28 @@ $(&quot;button&quot;).click(user.clickHandler); // 并不能读取 `undefined` �
 <p>我已经写了一篇详细的文章：<a href="http://javascriptissexy.com/javascript-apply-call-and-bind-methods-are-essential-for-javascript-professionals/" target="_blank" rel="external">JavaScript’s Apply, Call, and Bind Methods are Essential for JavaScript Professionals</a>，在这些方法里，包括如何在各种棘手的情景下使用它们来设置<code>this</code>的值的。为了不重复发布这些细节到这里，我建议你先完整阅读那篇文章先，这是一篇我认为对于一名 JavaScript 专业人士必读的文章。</p>
 <p>为了修正前面例子的问题，我们可以使用<code>bind</code>方法，因此：</p>
 <p>替代这一行：</p>
-<pre><code class="bash">
-$ (&quot;button&quot;).click (user.clickHandler);
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">$ (<span class="string">"button"</span>).click (user.clickHandler);</div></pre></td></tr></table></figure>
 <p>我们必须<code>bind</code>绑定<code>clickHandler</code>方法到 user 对象，就像这样：</p>
-<pre><code class="bash">
-$(&quot;button&quot;).click(user.clickHandler.bind(user)); // P. Mickelson 43
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">$(<span class="string">"button"</span>).click(user.clickHandler.bind(user)); // P. Mickelson 43</div></pre></td></tr></table></figure>
 <p>—— 在<a href="http://jsbin.com/exanul/1/edit" target="_blank" rel="external">JSBin</a>上看一下一个可行的例子</p>
 <h3 id="2-在闭包中时，-this-困境"><a href="#2-在闭包中时，-this-困境" class="headerlink" title="2. 在闭包中时， this 困境"></a>2. 在闭包中时， this 困境</h3><p>另一个比较棘手的例子是，我们把<code>this</code>用在一个内部函数（闭包）中。有一点是非常重要的是要注意：闭包并不能通过使用<code>this</code>关键字来访问外部函数的<code>this</code>变量，因为<code>this</code>仅仅只能被函数自身访问，而不是内部函数。例如：</p>
-<pre><code class="bash">
-var user = {
-    tournament: &quot;The Masters&quot;,
-    data: [
-        {
-            name: &quot;T. Woods&quot;,
-            age: 37
-        },
-        {
-            name: &quot;P. Mickelson&quot;,
-            age: 43
-        }
-    ],
-    ​
-    clickHandler: function () {
-        // 在这里使用 `this.data`是 OK 的，因为`this`是引用 user 对象，并且 data 是 user 对象的一个属性。
-        ​
-        this.data.forEach(function (person) {
-            // 但是，在这个匿名函数的内部（传递到 forEach 参数的方法），`this` 不再引用 user 对象了。
-            // 这个内部函数并不能访问外部函数的`this`
-
-            console.log(&quot;What is This referring to? &quot; + this); //[object Window]​
-
-            console.log(person.name + &quot; is playing at &quot; + this.tournament);
-            // T. Woods is playing at undefined​
-            // P. Mickelson is playing at undefined​
-        })
-    }​
-}​
-user.clickHandler(); // 这时`this`引用的对象是哪个？—— `window` 对象
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">var user = &#123;</div><div class="line">    tournament: <span class="string">"The Masters"</span>,</div><div class="line">    data: [</div><div class="line">        &#123;</div><div class="line">            name: <span class="string">"T. Woods"</span>,</div><div class="line">            age: 37</div><div class="line">        &#125;,</div><div class="line">        &#123;</div><div class="line">            name: <span class="string">"P. Mickelson"</span>,</div><div class="line">            age: 43</div><div class="line">        &#125;</div><div class="line">    ],</div><div class="line">    ​</div><div class="line">    clickHandler: <span class="function"><span class="title">function</span></span> () &#123;</div><div class="line">        // 在这里使用 `this.data`是 OK 的，因为`this`是引用 user 对象，并且 data 是 user 对象的一个属性。</div><div class="line">        ​</div><div class="line">        this.data.forEach(<span class="keyword">function</span> (person) &#123;</div><div class="line">            // 但是，在这个匿名函数的内部（传递到 forEach 参数的方法），`this` 不再引用 user 对象了。</div><div class="line">            // 这个内部函数并不能访问外部函数的`this`</div><div class="line"> </div><div class="line">            console.log(<span class="string">"What is This referring to? "</span> + this); //[object Window]​</div><div class="line"> </div><div class="line">            console.log(person.name + <span class="string">" is playing at "</span> + this.tournament);</div><div class="line">            // T. Woods is playing at undefined​</div><div class="line">            // P. Mickelson is playing at undefined​</div><div class="line">        &#125;)</div><div class="line">    &#125;​</div><div class="line">&#125;​</div><div class="line">user.clickHandler(); // 这时`this`引用的对象是哪个？—— `window` 对象</div></pre></td></tr></table></figure>
 <p><code>this</code>在匿名函数的内部并不能访问外部函数的<code>this</code>，所以，它（匿名函数的<code>this</code>）绑定到了全局作用域的<code>window</code>对象，当没有使用<code>strict</code>模式时。</p>
 <h4 id="this作为内部匿名函数里使用的解决方案"><a href="#this作为内部匿名函数里使用的解决方案" class="headerlink" title="this作为内部匿名函数里使用的解决方案"></a><code>this</code>作为内部匿名函数里使用的解决方案</h4><p>为了解决在传递给<code>forEach</code>方法参数的匿名函数中使用<code>this</code>的问题，我们使用一个在 JavaScript 里常用实践：在我们进入 <code>forEach</code>方法之前， 设置<code>this</code>的值到另一个变量里：</p>
-<pre><code class="bash">
-var user = {
-    tournament: &quot;The Masters&quot;,
-    data: [
-        {
-            name: &quot;T. Woods&quot;,
-            age: 37
-        },
-        {
-            name: &quot;P. Mickelson&quot;,
-            age: 43
-        }
-    ],
-    ​
-    clickHandler: function (event) {
-        // 为了获取`this`是指向 user 对象的值，我们必须将它赋值到另一个变量里
-        // 我们设置`this`的值到 theUserObj 变量里了，所以我们可以在后面使用它
-        var theUserObj = this;
-        this.data.forEach(function (person) {
-            // 替代 this.tournament， 我们现在使用 theUserObj.tournament 
-            console.log(person.name + &quot; is playing at &quot; + theUserObj.tournament);
-        })
-    }​
-}​
-user.clickHandler();
-// T. Woods is playing at The Masters​
-//  P. Mickelson is playing at The Masters
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">var user = &#123;</div><div class="line">    tournament: <span class="string">"The Masters"</span>,</div><div class="line">    data: [</div><div class="line">        &#123;</div><div class="line">            name: <span class="string">"T. Woods"</span>,</div><div class="line">            age: 37</div><div class="line">        &#125;,</div><div class="line">        &#123;</div><div class="line">            name: <span class="string">"P. Mickelson"</span>,</div><div class="line">            age: 43</div><div class="line">        &#125;</div><div class="line">    ],</div><div class="line">    ​</div><div class="line">    clickHandler: <span class="keyword">function</span> (event) &#123;</div><div class="line">        // 为了获取`this`是指向 user 对象的值，我们必须将它赋值到另一个变量里</div><div class="line">        // 我们设置`this`的值到 theUserObj 变量里了，所以我们可以在后面使用它</div><div class="line">        var theUserObj = this;</div><div class="line">        this.data.forEach(<span class="keyword">function</span> (person) &#123;</div><div class="line">            // 替代 this.tournament， 我们现在使用 theUserObj.tournament </div><div class="line">            console.log(person.name + <span class="string">" is playing at "</span> + theUserObj.tournament);</div><div class="line">        &#125;)</div><div class="line">    &#125;​</div><div class="line">&#125;​</div><div class="line">user.clickHandler();</div><div class="line">// T. Woods is playing at The Masters​</div><div class="line">//  P. Mickelson is playing at The Masters</div></pre></td></tr></table></figure>
 <p>值得注意的是，许多 JavaScript 开发者喜欢使用名为<code>that</code>的变量名，正如下面所见的一样，来保存<code>this</code>的值。使用<code>that</code>这个词对我来说是非常尴尬的，所以，我试图命名这个变量为一个描述<code>this</code>真正要引用的对象的名词，所以，在上面的代码里，我这里使用了 <code>var theUserObj = this</code>。</p>
-<pre><code class="bash">
-// 常见于在 JavaScript 开发者里使用下面的代码
-var that = this;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">// 常见于在 JavaScript 开发者里使用下面的代码</div><div class="line">var that = this;</div></pre></td></tr></table></figure>
 <p>—— <a href="http://jsbin.com/ibohiw/1/edit" target="_blank" rel="external">JSBin</a>上的例子</p>
 <h3 id="3-当一个方法被赋值到一个变量时，-this-的困境"><a href="#3-当一个方法被赋值到一个变量时，-this-的困境" class="headerlink" title="3. 当一个方法被赋值到一个变量时， this 的困境"></a>3. 当一个方法被赋值到一个变量时， this 的困境</h3><p>如果我们赋值一个使用<code>this</code>的方法时，<code>this</code>的值会逃逸我们的想像并且它被绑定到另一个对象。让我们看以下的代码：</p>
-<pre><code class="bash">
-// data 变量是一个全局变量
-var data = [
-    {
-        name: &quot;Samantha&quot;,
-        age: 12
-    },
-    {
-        name: &quot;Alexis&quot;,
-        age: 14
-    }
-];​
-var user = {
-    // 这个 data 变量是 user 对象的一个属性
-    data: [
-        {
-            name: &quot;T. Woods&quot;,
-            age: 37
-        },
-        {
-            name: &quot;P. Mickelson&quot;,
-            age: 43
-        }
-    ],
-    showData: function (event) {
-        var randomNum = ((Math.random() * 2 | 0) + 1) - 1; // random number between 0 and 1​
-        ​
-        // 这行是从 data 数组中添加一个 person 对象为文本字符串表示
-        console.log(this.data[randomNum].name + &quot; &quot; + this.data[randomNum].age);
-    }​
-}​
-// 将 user.showData 赋值到一个变量 showUserData
-var showUserData = user.showData;​
-// 当我们执行 showUserData 函数，打印出的值将会是全局变量的 data 中的值，而不是 user 对象中的 data 数组的值
-//​
-showUserData(); // Samantha 12 (from the global data array)​
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">// data 变量是一个全局变量</div><div class="line">var data = [</div><div class="line">    &#123;</div><div class="line">        name: <span class="string">"Samantha"</span>,</div><div class="line">        age: 12</div><div class="line">    &#125;,</div><div class="line">    &#123;</div><div class="line">        name: <span class="string">"Alexis"</span>,</div><div class="line">        age: 14</div><div class="line">    &#125;</div><div class="line">];​</div><div class="line">var user = &#123;</div><div class="line">    // 这个 data 变量是 user 对象的一个属性</div><div class="line">    data: [</div><div class="line">        &#123;</div><div class="line">            name: <span class="string">"T. Woods"</span>,</div><div class="line">            age: 37</div><div class="line">        &#125;,</div><div class="line">        &#123;</div><div class="line">            name: <span class="string">"P. Mickelson"</span>,</div><div class="line">            age: 43</div><div class="line">        &#125;</div><div class="line">    ],</div><div class="line">    showData: <span class="keyword">function</span> (event) &#123;</div><div class="line">        var randomNum = ((Math.random() * 2 | 0) + 1) - 1; // random number between 0 and 1​</div><div class="line">        ​</div><div class="line">        // 这行是从 data 数组中添加一个 person 对象为文本字符串表示</div><div class="line">        console.log(this.data[randomNum].name + <span class="string">" "</span> + this.data[randomNum].age);</div><div class="line">    &#125;​</div><div class="line">&#125;​</div><div class="line">// 将 user.showData 赋值到一个变量 showUserData</div><div class="line">var showUserData = user.showData;​</div><div class="line">// 当我们执行 showUserData 函数，打印出的值将会是全局变量的 data 中的值，而不是 user 对象中的 data 数组的值</div><div class="line">//​</div><div class="line">showUserData(); // Samantha 12 (from the global data array)​</div></pre></td></tr></table></figure>
 <h4 id="当一个方法被赋值到一个变量时的解决方案"><a href="#当一个方法被赋值到一个变量时的解决方案" class="headerlink" title="当一个方法被赋值到一个变量时的解决方案"></a>当一个方法被赋值到一个变量时的解决方案</h4><p>我们可以通过显式地通过<code>bind</code>方法来设置<code>this</code>的值来解决这个问题：</p>
-<pre><code class="bash">
-// 绑定 showData() 方法到 user 对象
-var showUserData = user.showData.bind (user);
-​
-// 现在，我们获取了 user 对象的值，因为`this`关键字绑定到了 user 对象上
-showUserData (); // P. Mickelson 43
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">// 绑定 showData() 方法到 user 对象</div><div class="line">var showUserData = user.showData.bind (user);</div><div class="line">​</div><div class="line">// 现在，我们获取了 user 对象的值，因为`this`关键字绑定到了 user 对象上</div><div class="line">showUserData (); // P. Mickelson 43</div></pre></td></tr></table></figure>
 <h3 id="4-当借用方法时，-this-的困境"><a href="#4-当借用方法时，-this-的困境" class="headerlink" title="4. 当借用方法时， this 的困境"></a>4. 当借用方法时， this 的困境</h3><p>在 JavaScript 开发中，借用方法是一个常见的用法，并且作为 JavaScript 开发者，我们无疑会一次又一次地遇到这种做法。并且时不时地，我们也将参与这种节省时间的实践中。关于更多的借用方法的细节，请阅读我的深入的文章 <a href="http://javascriptissexy.com/javascript-apply-call-and-bind-methods-are-essential-for-javascript-professionals/" target="_blank" rel="external">JavaScript’s Apply, Call, and Bind Methods are Essential for JavaScript Professionals</a>。</p>
 <p>让我们仔细检查一下在借用方法相关的上下文中的 <code>this</code>：</p>
-<pre><code class="bash">
-// 假设我们有两个对象。一个对象有名为 avg() 方法，而另一个对象则没有该方法。
-// 所以，我们将借用 (avg()) 方法
-var gameController = {
-    scores: [20, 34, 55, 46, 77],
-    avgScore: null,
-    players: [
-        {
-            name: &quot;Tommy&quot;,
-            playerID: 987,
-            age: 23
-        },
-        {
-            name: &quot;Pau&quot;,
-            playerID: 87,
-            age: 33
-        }
-    ]
-}​
-var appController = {
-    scores: [900, 845, 809, 950],
-    avgScore: null,
-    avg: function () {​
-        var sumOfScores = this.scores.reduce(function (prev, cur, index, array) {
-            return prev + cur;
-        });​
-        this.avgScore = sumOfScores / this.scores.length;
-    }
-}​
-// 如果我们执行下面的代码
-// gameController.avgScore 属性将会被设置为 appController 对象的 scores 数组的平均分数
-
-// 所以不要执行这段代码，它仅用于说明；我们希望 appController.avgScore 仍然为 null
-gameController.avgScore = appController.avg();
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">// 假设我们有两个对象。一个对象有名为 avg() 方法，而另一个对象则没有该方法。</div><div class="line">// 所以，我们将借用 (avg()) 方法</div><div class="line">var gameController = &#123;</div><div class="line">    scores: [20, 34, 55, 46, 77],</div><div class="line">    avgScore: null,</div><div class="line">    players: [</div><div class="line">        &#123;</div><div class="line">            name: <span class="string">"Tommy"</span>,</div><div class="line">            playerID: 987,</div><div class="line">            age: 23</div><div class="line">        &#125;,</div><div class="line">        &#123;</div><div class="line">            name: <span class="string">"Pau"</span>,</div><div class="line">            playerID: 87,</div><div class="line">            age: 33</div><div class="line">        &#125;</div><div class="line">    ]</div><div class="line">&#125;​</div><div class="line">var appController = &#123;</div><div class="line">    scores: [900, 845, 809, 950],</div><div class="line">    avgScore: null,</div><div class="line">    avg: <span class="function"><span class="title">function</span></span> () &#123;​</div><div class="line">        var sumOfScores = this.scores.reduce(<span class="keyword">function</span> (prev, cur, index, array) &#123;</div><div class="line">            <span class="built_in">return</span> prev + cur;</div><div class="line">        &#125;);​</div><div class="line">        this.avgScore = sumOfScores / this.scores.length;</div><div class="line">    &#125;</div><div class="line">&#125;​</div><div class="line">// 如果我们执行下面的代码</div><div class="line">// gameController.avgScore 属性将会被设置为 appController 对象的 scores 数组的平均分数</div><div class="line"> </div><div class="line">// 所以不要执行这段代码，它仅用于说明；我们希望 appController.avgScore 仍然为 null</div><div class="line">gameController.avgScore = appController.avg();</div></pre></td></tr></table></figure>
 <p><code>avg</code> 方法的<code>this</code>关键字将不再引用<code>gameController</code>对象了，它将引用<code>appController</code>对象，因为它正在被<code>appController</code>调用。</p>
 <h4 id="当借用方法时，this-的解决方案"><a href="#当借用方法时，this-的解决方案" class="headerlink" title="当借用方法时，this 的解决方案"></a>当借用方法时，this 的解决方案</h4><p>为了解决这个问题并且确定在 <code>appController.avg()</code> 方法内的<code>this</code>是引用<code>gameController</code>，我们可以使用<code>apply()</code>方法，因此：</p>
-<pre><code class="bash">
-// 注意，我们正使用 apply() 方法，所以第二个参数必须是一个数组 —— 这个参数是传递到 appController.avg() 方法的。
-appController.avg.apply (gameController, gameController.scores);
-​
-// avgScore 属性现在被正确地设置到了 gameController 对象了，尽管我们是从 appController 对象上借用了 avg() 方法
-console.log (gameController.avgScore); // 46.4​
-​
-// appController.avgScore 仍然是 null，它没有被更新，仅仅是 gameController.avgScore 被更新了
-console.log (appController.avgScore); // null
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">// 注意，我们正使用 apply() 方法，所以第二个参数必须是一个数组 —— 这个参数是传递到 appController.avg() 方法的。</div><div class="line">appController.avg.apply (gameController, gameController.scores);</div><div class="line">​</div><div class="line">// avgScore 属性现在被正确地设置到了 gameController 对象了，尽管我们是从 appController 对象上借用了 avg() 方法</div><div class="line">console.log (gameController.avgScore); // 46.4​</div><div class="line">​</div><div class="line">// appController.avgScore 仍然是 null，它没有被更新，仅仅是 gameController.avgScore 被更新了</div><div class="line">console.log (appController.avgScore); // null</div></pre></td></tr></table></figure>
 <p><code>gameController</code>对象借用了<code>appController</code>的<code>avg()</code>方法。在<code>appController</code>里的<code>this</code>的值将被设置为了<code>gameController</code>对象，因为我们将<code>gameController</code>对象作为第一个参数传递到了<code>apply()</code>方法。在<code>apply()</code>方法的第一个参数总是被显式地设置为<code>this</code>的值。</p>
 <p>—— <a href="http://jsbin.com/iwaver/1/edit" target="_blank" rel="external">JSBin</a>上的例子</p>
 <h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>我希望你已经学会了足够帮你理解 JavaScript 中的 <code>this</code> 关键字了。现在，你已经有工具（<code>bind</code>, <code>apply</code>和 <code>call</code> 来设置<code>this</code>到一个对象）在必要攻克 JavaScript 中这些 <code>this</code>的棘手情况。</p>

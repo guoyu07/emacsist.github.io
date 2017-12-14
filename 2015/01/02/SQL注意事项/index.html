@@ -231,15 +231,10 @@
 <p>7）GROUP BY子句必须出现在WHERE子句之后，ORDER BY 子句之前。</p>
 <p>##关于 WHERE 和 HAVING 的区别</p>
 <p>WHERE是分组之前过滤的，HAVING是分组之后过滤的。</p>
-<h2 id="关于SELECT语法顺序"><a href="#关于SELECT语法顺序" class="headerlink" title="关于SELECT语法顺序"></a>关于SELECT语法顺序</h2><pre><code>SELECT
-FROM
-WHERE
-GROUP BY
-HAVING
-ORDER BY
-</code></pre><h2 id="关于子查询"><a href="#关于子查询" class="headerlink" title="关于子查询"></a>关于子查询</h2><p>作为子查询的SELECT语句只能查询单个列。企图检索多个列将返回错误。</p>
-<h2 id="关于SELECT子查询"><a href="#关于SELECT子查询" class="headerlink" title="关于SELECT子查询"></a>关于SELECT子查询</h2><pre><code>select (select xxx from xx) , col from xx2
-</code></pre><p>这种子查询对检索出的每一行都会执行一次。</p>
+<h2 id="关于SELECT语法顺序"><a href="#关于SELECT语法顺序" class="headerlink" title="关于SELECT语法顺序"></a>关于SELECT语法顺序</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">SELECT</div><div class="line">FROM</div><div class="line">WHERE</div><div class="line">GROUP BY</div><div class="line">HAVING</div><div class="line">ORDER BY</div></pre></td></tr></table></figure>
+<h2 id="关于子查询"><a href="#关于子查询" class="headerlink" title="关于子查询"></a>关于子查询</h2><p>作为子查询的SELECT语句只能查询单个列。企图检索多个列将返回错误。</p>
+<h2 id="关于SELECT子查询"><a href="#关于SELECT子查询" class="headerlink" title="关于SELECT子查询"></a>关于SELECT子查询</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select (select xxx from xx) , col from xx2</div></pre></td></tr></table></figure>
+<p>这种子查询对检索出的每一行都会执行一次。</p>
 <h2 id="关于连接表"><a href="#关于连接表" class="headerlink" title="关于连接表"></a>关于连接表</h2><ul>
 <li><p>笛卡儿积：如果两个连接的表，没有连接条件的话，检索出的行数，将是第一个表中的行数 x 第二个表中的行数。</p>
 </li>
@@ -247,10 +242,8 @@ ORDER BY
 </li>
 </ul>
 <h2 id="交叉连接（cross-join）"><a href="#交叉连接（cross-join）" class="headerlink" title="交叉连接（cross join）"></a>交叉连接（cross join）</h2><p>笛卡儿积的联结，也叫交叉连接(cross join)</p>
-<h2 id="等值连接（也叫内连接）两种方式"><a href="#等值连接（也叫内连接）两种方式" class="headerlink" title="等值连接（也叫内连接）两种方式"></a>等值连接（也叫内连接）两种方式</h2><pre><code>select a.col, b.col from a, b where a.pid = b.pid;
-
-select a.col, b.col from a inner join b on a.pid = b.pid
-</code></pre><p>但是根据ANSI SQL规范，首选的是第二种。</p>
+<h2 id="等值连接（也叫内连接）两种方式"><a href="#等值连接（也叫内连接）两种方式" class="headerlink" title="等值连接（也叫内连接）两种方式"></a>等值连接（也叫内连接）两种方式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">select a.col, b.col from a, b where a.pid = b.pid;</div><div class="line"></div><div class="line">select a.col, b.col from a inner join b on a.pid = b.pid</div></pre></td></tr></table></figure>
+<p>但是根据ANSI SQL规范，首选的是第二种。</p>
 <h2 id="内连接（基于连接谓词将两张表-如-A-和-B-的列组合在一起，产生新的结果表。）"><a href="#内连接（基于连接谓词将两张表-如-A-和-B-的列组合在一起，产生新的结果表。）" class="headerlink" title="内连接（基于连接谓词将两张表(如 A 和 B)的列组合在一起，产生新的结果表。）"></a>内连接（基于连接谓词将两张表(如 A 和 B)的列组合在一起，产生新的结果表。）</h2><ul>
 <li>等值连接</li>
 </ul>
@@ -292,13 +285,11 @@ select a.col, b.col from a inner join b on a.pid = b.pid
 <p>2）列数据类型必须兼容：类型不必完全相同，但必须是DBMS可以隐含转换的类型</p>
 <h2 id="union中使用order-by"><a href="#union中使用order-by" class="headerlink" title="union中使用order by"></a>union中使用order by</h2><p>在union时，只能使用一条order by 子句，它必须位于最后一条select语句之后。因为，对于结果集来说，不存在用一种方式排序一部分，而又用另一种方式排序另一部分的情况，因此，不允许使用多条order by 。</p>
 <h2 id="关于insert没给出列名的情况"><a href="#关于insert没给出列名的情况" class="headerlink" title="关于insert没给出列名的情况"></a>关于insert没给出列名的情况</h2><p>如果没有显式给出列名，那么values后各列是对应它在表定义中出现的顺序的。</p>
-<h2 id="insert-select-语句"><a href="#insert-select-语句" class="headerlink" title="insert select 语句"></a>insert select 语句</h2><pre><code>insert into t (col1, col2) select col11, col2 from t2;
-</code></pre><p>注意，是没有values的哦。</p>
-<h2 id="select-into语句"><a href="#select-into语句" class="headerlink" title="select into语句"></a>select into语句</h2><p>SQLite：</p>
-<pre><code>select * into totable from fromtable;
-</code></pre><p>PostgreSQL，MySQL，Oracle等的方式：</p>
-<pre><code>create table totable as select * from fromtable;
-</code></pre><p>即，将fromtable表所有数据，复制到totable中。</p>
+<h2 id="insert-select-语句"><a href="#insert-select-语句" class="headerlink" title="insert select 语句"></a>insert select 语句</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">insert into t (col1, col2) select col11, col2 from t2;</div></pre></td></tr></table></figure>
+<p>注意，是没有values的哦。</p>
+<h2 id="select-into语句"><a href="#select-into语句" class="headerlink" title="select into语句"></a>select into语句</h2><p>SQLite：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select * into totable from fromtable;</div></pre></td></tr></table></figure></p>
+<p>PostgreSQL，MySQL，Oracle等的方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">create table totable as select * from fromtable;</div></pre></td></tr></table></figure></p>
+<p>即，将fromtable表所有数据，复制到totable中。</p>
 <h2 id="关于视图"><a href="#关于视图" class="headerlink" title="关于视图"></a>关于视图</h2><ul>
 <li><p>视图是不能索引的</p>
 </li>

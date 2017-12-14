@@ -15,17 +15,17 @@
     <meta name="keywords" content="database,mysql," />
   
 
-  <meta name="description" content="帮助相关的 ? 要查看帮助的命令. 如  mysql&amp;gt; ? create database; Name: &amp;#39;CREATE DATABASE&amp;#39; Description: Syntax: CREATE {DATABASE | SCHEMA} [IF NOT EXISTS] db_name     [create_specification] ...  create_specifi">
+  <meta name="description" content="帮助相关的 ? 要查看帮助的命令. 如  12345678910111213141516171819mysql&amp;gt; ? create database;Name: &apos;CREATE DATABASE&apos;Description:Syntax:CREATE &amp;#123;DATABASE | SCHEMA&amp;#125; [IF NOT EXISTS] db_name    [create_specific">
 <meta name="keywords" content="database,mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="&lt;深入浅出MySQL&gt;读书笔记之常用命令">
 <meta property="og:url" content="https://emacsist.github.io/2016/03/05/深入浅出MySQL-读书笔记之常用命令/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="帮助相关的 ? 要查看帮助的命令. 如  mysql&amp;gt; ? create database; Name: &amp;#39;CREATE DATABASE&amp;#39; Description: Syntax: CREATE {DATABASE | SCHEMA} [IF NOT EXISTS] db_name     [create_specification] ...  create_specifi">
+<meta property="og:description" content="帮助相关的 ? 要查看帮助的命令. 如  12345678910111213141516171819mysql&amp;gt; ? create database;Name: &apos;CREATE DATABASE&apos;Description:Syntax:CREATE &amp;#123;DATABASE | SCHEMA&amp;#125; [IF NOT EXISTS] db_name    [create_specific">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt;深入浅出MySQL&gt;读书笔记之常用命令">
-<meta name="twitter:description" content="帮助相关的 ? 要查看帮助的命令. 如  mysql&amp;gt; ? create database; Name: &amp;#39;CREATE DATABASE&amp;#39; Description: Syntax: CREATE {DATABASE | SCHEMA} [IF NOT EXISTS] db_name     [create_specification] ...  create_specifi">
+<meta name="twitter:description" content="帮助相关的 ? 要查看帮助的命令. 如  12345678910111213141516171819mysql&amp;gt; ? create database;Name: &apos;CREATE DATABASE&apos;Description:Syntax:CREATE &amp;#123;DATABASE | SCHEMA&amp;#125; [IF NOT EXISTS] db_name    [create_specific">
 
   
 
@@ -204,51 +204,21 @@
                             <h2 id="帮助相关的"><a href="#帮助相关的" class="headerlink" title="帮助相关的"></a>帮助相关的</h2><ul>
 <li><code>? 要查看帮助的命令</code>. 如</li>
 </ul>
-<pre><code class="bash">mysql&gt; ? create database;
-Name: &#39;CREATE DATABASE&#39;
-Description:
-Syntax:
-CREATE {DATABASE | SCHEMA} [IF NOT EXISTS] db_name
-    [create_specification] ...
-
-create_specification:
-    [DEFAULT] CHARACTER SET [=] charset_name
-  | [DEFAULT] COLLATE [=] collation_name
-
-CREATE DATABASE creates a database with the given name. To use this
-statement, you need the CREATE privilege for the database. CREATE
-SCHEMA is a synonym for CREATE DATABASE.
-
-URL: http://dev.mysql.com/doc/refman/5.7/en/create-database.html
-
-
-mysql&gt;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">mysql&gt; ? create database;</div><div class="line">Name: <span class="string">'CREATE DATABASE'</span></div><div class="line">Description:</div><div class="line">Syntax:</div><div class="line">CREATE &#123;DATABASE | SCHEMA&#125; [IF NOT EXISTS] db_name</div><div class="line">    [create_specification] ...</div><div class="line"></div><div class="line">create_specification:</div><div class="line">    [DEFAULT] CHARACTER SET [=] charset_name</div><div class="line">  | [DEFAULT] COLLATE [=] collation_name</div><div class="line"></div><div class="line">CREATE DATABASE creates a database with the given name. To use this</div><div class="line">statement, you need the CREATE privilege <span class="keyword">for</span> the database. CREATE</div><div class="line">SCHEMA is a synonym <span class="keyword">for</span> CREATE DATABASE.</div><div class="line"></div><div class="line">URL: http://dev.mysql.com/doc/refman/5.7/en/create-database.html</div><div class="line"></div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
 <ul>
 <li><p>查看支持的数据类型: <code>? data types</code></p>
 </li>
 <li><p>查看数据类型的信息及范围</p>
 </li>
 </ul>
-<pre><code class="bash">mysql&gt; ? int
-Name: &#39;INT&#39;
-Description:
-INT[(M)] [UNSIGNED] [ZEROFILL]
-
-A normal-size integer. The signed range is -2147483648 to 2147483647.
-The unsigned range is 0 to 4294967295.
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">mysql&gt; ? int</div><div class="line">Name: <span class="string">'INT'</span></div><div class="line">Description:</div><div class="line">INT[(M)] [UNSIGNED] [ZEROFILL]</div><div class="line"></div><div class="line">A normal-size <span class="built_in">integer</span>. The signed range is -2147483648 to 2147483647.</div><div class="line">The unsigned range is 0 to 4294967295.</div></pre></td></tr></table></figure>
 <ul>
 <li><p>查看与<code>show</code>命令相关的命令: <code>? show</code></p>
 </li>
 <li><p>查看与函数相关的帮助: <code>? functions</code></p>
 </li>
 </ul>
-<h2 id="与DB相关的"><a href="#与DB相关的" class="headerlink" title="与DB相关的"></a>与DB相关的</h2><pre><code class="bash">* 创建数据库: `create dbname`
-* 删除数据库: `drop database dbname`
-* 选择数据库: `use dbname`
-*
-</code></pre>
+<h2 id="与DB相关的"><a href="#与DB相关的" class="headerlink" title="与DB相关的"></a>与DB相关的</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">* 创建数据库: `create dbname`</div><div class="line">* 删除数据库: `drop database dbname`</div><div class="line">* 选择数据库: `use dbname`</div><div class="line">*</div></pre></td></tr></table></figure>
 <h2 id="与表相关"><a href="#与表相关" class="headerlink" title="与表相关"></a>与表相关</h2><h3 id="维护表元信息的操作"><a href="#维护表元信息的操作" class="headerlink" title="维护表元信息的操作"></a>维护表元信息的操作</h3><ul>
 <li><p>显示当前DB的所有表: <code>show tables;</code></p>
 </li>
@@ -315,43 +285,11 @@ The unsigned range is 0 to 4294967295.
 <li><p>with rollup: 用例子说明:</p>
 </li>
 </ul>
-<pre><code class="bash">mysql&gt; select hello, sum(id) from hello group by hello ;
-+--------+---------+
-| hello  | sum(id) |
-+--------+---------+
-| hello  |      18 |
-| hello1 |       8 |
-| hello2 |      10 |
-+--------+---------+
-3 rows in set (0.00 sec)
-
-mysql&gt; select hello, sum(id) from hello group by hello with rollup;
-+--------+---------+
-| hello  | sum(id) |
-+--------+---------+
-| hello  |      18 |
-| hello1 |       8 |
-| hello2 |      10 |
-| NULL   |      36 |
-+--------+---------+
-4 rows in set (0.00 sec)
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">mysql&gt; select hello, sum(id) from hello group by hello ;</div><div class="line">+--------+---------+</div><div class="line">| hello  | sum(id) |</div><div class="line">+--------+---------+</div><div class="line">| hello  |      18 |</div><div class="line">| hello1 |       8 |</div><div class="line">| hello2 |      10 |</div><div class="line">+--------+---------+</div><div class="line">3 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; select hello, sum(id) from hello group by hello with rollup;</div><div class="line">+--------+---------+</div><div class="line">| hello  | sum(id) |</div><div class="line">+--------+---------+</div><div class="line">| hello  |      18 |</div><div class="line">| hello1 |       8 |</div><div class="line">| hello2 |      10 |</div><div class="line">| NULL   |      36 |</div><div class="line">+--------+---------+</div><div class="line">4 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div></pre></td></tr></table></figure>
 <h2 id="DCL-语句"><a href="#DCL-语句" class="headerlink" title="DCL 语句"></a>DCL 语句</h2><p>MySQL里的用户, 是由<code>用户名@主机名</code>来唯一匹配的. 即相同用户名,但主机名不同, 是被认为是不同的用户.</p>
-<pre><code class="bash">mysql&gt; create user &#39;yang&#39;@&#39;localhost&#39; identified by &#39;123&#39;;
-Query OK, 0 rows affected (0.01 sec)
-
-mysql&gt; create user &#39;yang&#39;@&#39;192.168.1.2&#39; identified by &#39;123&#39;;
-Query OK, 0 rows affected (0.00 sec)
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">mysql&gt; create user <span class="string">'yang'</span>@<span class="string">'localhost'</span> identified by <span class="string">'123'</span>;</div><div class="line">Query OK, 0 rows affected (0.01 sec)</div><div class="line"></div><div class="line">mysql&gt; create user <span class="string">'yang'</span>@<span class="string">'192.168.1.2'</span> identified by <span class="string">'123'</span>;</div><div class="line">Query OK, 0 rows affected (0.00 sec)</div></pre></td></tr></table></figure>
 <p>用本地用户<code>yang@localhost</code>登录时, 可以看到:</p>
-<pre><code class="bash">mysql&gt; select current_user;
-+----------------+
-| current_user   |
-+----------------+
-| yang@localhost |
-+----------------+
-1 row in set (0.01 sec)
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">mysql&gt; select current_user;</div><div class="line">+----------------+</div><div class="line">| current_user   |</div><div class="line">+----------------+</div><div class="line">| yang@localhost |</div><div class="line">+----------------+</div><div class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.01 sec)</div></pre></td></tr></table></figure>
 <ul>
 <li><p>创建一个用户: <code>CREATE USER &#39;monty&#39;@&#39;localhost&#39; IDENTIFIED BY &#39;some_pass&#39;;</code></p>
 </li>
@@ -359,18 +297,7 @@ Query OK, 0 rows affected (0.00 sec)
 </li>
 </ul>
 <h2 id="查看元信息"><a href="#查看元信息" class="headerlink" title="查看元信息"></a>查看元信息</h2><p>以下的都是在<code>information_schema</code>数据库里的操作</p>
-<h3 id="查看拥有的数据库"><a href="#查看拥有的数据库" class="headerlink" title="查看拥有的数据库"></a>查看拥有的数据库</h3><h4 id="schemata"><a href="#schemata" class="headerlink" title="schemata"></a>schemata</h4><pre><code class="bash">mysql&gt; select * from schemata;
-+--------------+--------------------+----------------------------+------------------------+----------+
-| CATALOG_NAME | SCHEMA_NAME        | DEFAULT_CHARACTER_SET_NAME | DEFAULT_COLLATION_NAME | SQL_PATH |
-+--------------+--------------------+----------------------------+------------------------+----------+
-| def          | information_schema | utf8                       | utf8_general_ci        | NULL     |
-| def          | mysql              | utf8                       | utf8_general_ci        | NULL     |
-| def          | performance_schema | utf8                       | utf8_general_ci        | NULL     |
-| def          | sys                | utf8                       | utf8_general_ci        | NULL     |
-| def          | test               | utf8                       | utf8_general_ci        | NULL     |
-+--------------+--------------------+----------------------------+------------------------+----------+
-5 rows in set (0.00 sec)
-</code></pre>
+<h3 id="查看拥有的数据库"><a href="#查看拥有的数据库" class="headerlink" title="查看拥有的数据库"></a>查看拥有的数据库</h3><h4 id="schemata"><a href="#schemata" class="headerlink" title="schemata"></a>schemata</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">mysql&gt; select * from schemata;</div><div class="line">+--------------+--------------------+----------------------------+------------------------+----------+</div><div class="line">| CATALOG_NAME | SCHEMA_NAME        | DEFAULT_CHARACTER_SET_NAME | DEFAULT_COLLATION_NAME | SQL_PATH |</div><div class="line">+--------------+--------------------+----------------------------+------------------------+----------+</div><div class="line">| def          | information_schema | utf8                       | utf8_general_ci        | NULL     |</div><div class="line">| def          | mysql              | utf8                       | utf8_general_ci        | NULL     |</div><div class="line">| def          | performance_schema | utf8                       | utf8_general_ci        | NULL     |</div><div class="line">| def          | sys                | utf8                       | utf8_general_ci        | NULL     |</div><div class="line">| def          | <span class="built_in">test</span>               | utf8                       | utf8_general_ci        | NULL     |</div><div class="line">+--------------+--------------------+----------------------------+------------------------+----------+</div><div class="line">5 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div></pre></td></tr></table></figure>
 <p><code>show databases;</code> 命令,就是从这里取结果的.</p>
 <h3 id="查看所有的表"><a href="#查看所有的表" class="headerlink" title="查看所有的表"></a>查看所有的表</h3><p><code>select * from tables;</code></p>
 <p><code>show tables</code> 命令就是从这里取出信息的.</p>

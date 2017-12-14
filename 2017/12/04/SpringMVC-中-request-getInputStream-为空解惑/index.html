@@ -15,13 +15,13 @@
     <meta name="keywords" content="spring,springmvc," />
   
 
-  <meta name="description" content="起缘最近公司跟美图对接DSP系统, 我们公司使用的是Java语言的 Spring Boot 框架, 美图给的是一个 Google 的 proto 文件. 对接的时候, 我们在Spring的 Controller 里使用 public Object recBid(HttpServletRequest request) throws IOException {         InputStream">
+  <meta name="description" content="起缘最近公司跟美图对接DSP系统, 我们公司使用的是Java语言的 Spring Boot 框架, 美图给的是一个 Google 的 proto 文件. 对接的时候, 我们在Spring的 Controller 里使用 12345public Object recBid(HttpServletRequest request) throws IOException &amp;#123;        Inp">
 <meta name="keywords" content="spring,springmvc">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SpringMVC 中 request.getInputStream() 为空解惑">
 <meta property="og:url" content="https://emacsist.github.io/2017/12/04/SpringMVC-中-request-getInputStream-为空解惑/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="起缘最近公司跟美图对接DSP系统, 我们公司使用的是Java语言的 Spring Boot 框架, 美图给的是一个 Google 的 proto 文件. 对接的时候, 我们在Spring的 Controller 里使用 public Object recBid(HttpServletRequest request) throws IOException {         InputStream">
+<meta property="og:description" content="起缘最近公司跟美图对接DSP系统, 我们公司使用的是Java语言的 Spring Boot 框架, 美图给的是一个 Google 的 proto 文件. 对接的时候, 我们在Spring的 Controller 里使用 12345public Object recBid(HttpServletRequest request) throws IOException &amp;#123;        Inp">
 <meta property="og:image" content="https://emacsist.github.io/img/spring-protobuf-error-1.png">
 <meta property="og:image" content="https://emacsist.github.io/img/spring-protobuf-error-2.png">
 <meta property="og:image" content="https://emacsist.github.io/img/spring-protobuf-error-3.png">
@@ -29,7 +29,7 @@
 <meta property="og:updated_time" content="2017-12-05T08:44:04.158Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringMVC 中 request.getInputStream() 为空解惑">
-<meta name="twitter:description" content="起缘最近公司跟美图对接DSP系统, 我们公司使用的是Java语言的 Spring Boot 框架, 美图给的是一个 Google 的 proto 文件. 对接的时候, 我们在Spring的 Controller 里使用 public Object recBid(HttpServletRequest request) throws IOException {         InputStream">
+<meta name="twitter:description" content="起缘最近公司跟美图对接DSP系统, 我们公司使用的是Java语言的 Spring Boot 框架, 美图给的是一个 Google 的 proto 文件. 对接的时候, 我们在Spring的 Controller 里使用 12345public Object recBid(HttpServletRequest request) throws IOException &amp;#123;        Inp">
 <meta name="twitter:image" content="https://emacsist.github.io/img/spring-protobuf-error-1.png">
 
   
@@ -208,12 +208,7 @@
         
                             <h1 id="起缘"><a href="#起缘" class="headerlink" title="起缘"></a>起缘</h1><p>最近公司跟美图对接DSP系统, 我们公司使用的是Java语言的 Spring Boot 框架, 美图给的是一个 Google 的 proto 文件.</p>
 <p>对接的时候, 我们在Spring的 Controller 里使用</p>
-<pre><code class="java">public Object recBid(HttpServletRequest request) throws IOException {
-        InputStream is = request.getInputStream();
-        OpenRtb.BidRequest bidRequest = OpenRtb.BidRequest.parseFrom(is);
-        ...
-}
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">recBid</span><span class="params">(HttpServletRequest request)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">        InputStream is = request.getInputStream();</div><div class="line">        OpenRtb.BidRequest bidRequest = OpenRtb.BidRequest.parseFrom(is);</div><div class="line">        ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>不过, 问题来了. 美图那边的技术人员说他们发的HTTP请求, 是没有 <code>Content-Type: application/x-protobuf</code> 请求头(或类似).</p>
 <p>但是, 我们发现, 接收的 inputStream 一下没数据!!!</p>
 <h1 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h1><p>远程调试的时候发现, 美图那边发过来的请求的 <code>Content-Type</code> 为 <code>application/x-www-form-urlencoded</code> 并且报如下的异常</p>
@@ -239,32 +234,7 @@
 <p><code>HttpPutFormContentFilter</code> 和 <code>HiddenHttpMethodFilter</code> </p>
 <p>至于为什么 Spring Boot 会在使用外部Tomcat时自动添加这两个 filter, 这个原因还没有仔细研究.<br>但使用内置的Tomcat启动时, 却发现没自动注册这些 filters .</p>
 <h1 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h1><p>知道了原因, 那解决它就容易了. 如果实在不需要这些 filters 的话, 那就直接禁用这两个 filter 就可以了. 在Spring Boot 的配置里添加以下配置:</p>
-<pre><code class="java">    @Bean
-    public HttpPutFormContentFilter httpPutFormContentFilter() {
-        return new HttpPutFormContentFilter();
-    }
-
-    @Bean
-    public FilterRegistrationBean disableSpringBootHttpPutFormContentFilter(HttpPutFormContentFilter filter) {
-        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
-        filterRegistrationBean.setFilter(filter);
-        filterRegistrationBean.setEnabled(false);
-        return filterRegistrationBean;
-    }
-
-    @Bean
-    public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
-        return new HiddenHttpMethodFilter();
-    }
-
-    @Bean
-    public FilterRegistrationBean disableSpringBootHiddenHttpMethodFilter(HiddenHttpMethodFilter filter) {
-        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
-        filterRegistrationBean.setFilter(filter);
-        filterRegistrationBean.setEnabled(false);
-        return filterRegistrationBean;
-    }
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Bean</span></div><div class="line"><span class="function"><span class="keyword">public</span> HttpPutFormContentFilter <span class="title">httpPutFormContentFilter</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> HttpPutFormContentFilter();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="meta">@Bean</span></div><div class="line"><span class="function"><span class="keyword">public</span> FilterRegistrationBean <span class="title">disableSpringBootHttpPutFormContentFilter</span><span class="params">(HttpPutFormContentFilter filter)</span> </span>&#123;</div><div class="line">    FilterRegistrationBean filterRegistrationBean = <span class="keyword">new</span> FilterRegistrationBean();</div><div class="line">    filterRegistrationBean.setFilter(filter);</div><div class="line">    filterRegistrationBean.setEnabled(<span class="keyword">false</span>);</div><div class="line">    <span class="keyword">return</span> filterRegistrationBean;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="meta">@Bean</span></div><div class="line"><span class="function"><span class="keyword">public</span> HiddenHttpMethodFilter <span class="title">hiddenHttpMethodFilter</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> HiddenHttpMethodFilter();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="meta">@Bean</span></div><div class="line"><span class="function"><span class="keyword">public</span> FilterRegistrationBean <span class="title">disableSpringBootHiddenHttpMethodFilter</span><span class="params">(HiddenHttpMethodFilter filter)</span> </span>&#123;</div><div class="line">    FilterRegistrationBean filterRegistrationBean = <span class="keyword">new</span> FilterRegistrationBean();</div><div class="line">    filterRegistrationBean.setFilter(filter);</div><div class="line">    filterRegistrationBean.setEnabled(<span class="keyword">false</span>);</div><div class="line">    <span class="keyword">return</span> filterRegistrationBean;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>即可禁用这两个 filters.</p>
 <p>这时再测试, 发现可以正确接收 <code>inputStream</code> 对象了.</p>
 <h1 id="另类解决"><a href="#另类解决" class="headerlink" title="另类解决"></a>另类解决</h1><p>因为我们系统是使用 nginx 做代理的, 最简单的方式, 其实就是在 nginx 代理的时候, 直接让 nginx 设置一下相应的 <code>content-type</code> 请求头就可以了.</p>

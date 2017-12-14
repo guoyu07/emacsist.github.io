@@ -15,17 +15,17 @@
     <meta name="keywords" content="java,maven," />
   
 
-  <meta name="description" content="快速升级利用软链接方式来进行升级 软链接目录：~/maven/current 代表当前要使用的版本具体某个版本的maven: ~/maven/maven3.0具体某个版本的maven: ~/maven/maven3.1 当要切换时，将软链接指向某个具体的版本的maven即可。如： ln -s ~/maven3.0 ~/maven/current  将环境变量，只需要指向~/maven/curren">
+  <meta name="description" content="快速升级利用软链接方式来进行升级 软链接目录：~/maven/current 代表当前要使用的版本具体某个版本的maven: ~/maven/maven3.0具体某个版本的maven: ~/maven/maven3.1 当要切换时，将软链接指向某个具体的版本的maven即可。如： 1ln -s ~/maven3.0 ~/maven/current 将环境变量，只需要指向~/maven/curren">
 <meta name="keywords" content="java,maven">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Maven复习">
 <meta property="og:url" content="https://emacsist.github.io/2015/10/12/Maven复习/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="快速升级利用软链接方式来进行升级 软链接目录：~/maven/current 代表当前要使用的版本具体某个版本的maven: ~/maven/maven3.0具体某个版本的maven: ~/maven/maven3.1 当要切换时，将软链接指向某个具体的版本的maven即可。如： ln -s ~/maven3.0 ~/maven/current  将环境变量，只需要指向~/maven/curren">
+<meta property="og:description" content="快速升级利用软链接方式来进行升级 软链接目录：~/maven/current 代表当前要使用的版本具体某个版本的maven: ~/maven/maven3.0具体某个版本的maven: ~/maven/maven3.1 当要切换时，将软链接指向某个具体的版本的maven即可。如： 1ln -s ~/maven3.0 ~/maven/current 将环境变量，只需要指向~/maven/curren">
 <meta property="og:updated_time" content="2017-04-12T05:56:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Maven复习">
-<meta name="twitter:description" content="快速升级利用软链接方式来进行升级 软链接目录：~/maven/current 代表当前要使用的版本具体某个版本的maven: ~/maven/maven3.0具体某个版本的maven: ~/maven/maven3.1 当要切换时，将软链接指向某个具体的版本的maven即可。如： ln -s ~/maven3.0 ~/maven/current  将环境变量，只需要指向~/maven/curren">
+<meta name="twitter:description" content="快速升级利用软链接方式来进行升级 软链接目录：~/maven/current 代表当前要使用的版本具体某个版本的maven: ~/maven/maven3.0具体某个版本的maven: ~/maven/maven3.1 当要切换时，将软链接指向某个具体的版本的maven即可。如： 1ln -s ~/maven3.0 ~/maven/current 将环境变量，只需要指向~/maven/curren">
 
   
 
@@ -204,31 +204,12 @@
                             <h2 id="快速升级"><a href="#快速升级" class="headerlink" title="快速升级"></a>快速升级</h2><p>利用软链接方式来进行升级</p>
 <p>软链接目录：<code>~/maven/current</code> 代表当前要使用的版本<br>具体某个版本的maven: <code>~/maven/maven3.0</code><br>具体某个版本的maven: <code>~/maven/maven3.1</code></p>
 <p>当要切换时，将软链接指向某个具体的版本的maven即可。如：</p>
-<pre><code class="bash">ln -s ~/maven3.0 ~/maven/current
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ln -s ~/maven3.0 ~/maven/current</div></pre></td></tr></table></figure>
 <p>将环境变量，只需要指向<code>~/maven/current</code>即可，这样子，在切换版本时，就不用修改环境变量了.</p>
 <h2 id="配置maven"><a href="#配置maven" class="headerlink" title="配置maven"></a>配置maven</h2><p>将maven安装目录下的<code>conf</code>目录，复制一份<code>settings.xml</code>到<code>~/.m2/settings.xml</code>中。然后在这里配置maven的环境。在使用IDE时，记得修改maven的配置，指向系统中的maven，而不要使用IDE自带的maven（还有IDE里maven的配置的东西 ）</p>
-<h2 id="设置代理"><a href="#设置代理" class="headerlink" title="设置代理"></a>设置代理</h2><pre><code class="bash">
-&lt;proxies&gt;
-  &lt;proxy&gt;
-   &lt;id&gt;my-proxy&lt;/id&gt; &lt;!-- 代理的ID --&gt;
-   &lt;active&gt;true&lt;/active&gt;&lt;!-- 是否激活  --&gt;
-   &lt;protocol&gt;http&lt;/protocol&gt;&lt;!-- 代理所使用的协议 --&gt;
-   &lt;host&gt;ip&lt;/host&gt;&lt;!--这里填写代理服务器的IP地址--&gt;
-   &lt;port&gt;port&lt;/port&gt;&lt;!-- 这里填写代理服务器的端口 --&gt;
-   &lt;username&gt;usrename&lt;/username&gt;&lt;!-- 代理服务器认证的用户名 --&gt;
-   &lt;password&gt;******&lt;/password&gt;&lt;!-- 代理服务器认证的用户密码 --&gt;
-   &lt;nonProxyHosts&gt;localhost|127.0.0.1&lt;/nonProxyHosts&gt;&lt;!-- 不需要代理的地址，用|分隔，支持通配符* --&gt;
-  &lt;/proxy&gt;
-&lt;/proxies&gt;
-</code></pre>
+<h2 id="设置代理"><a href="#设置代理" class="headerlink" title="设置代理"></a>设置代理</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&lt;proxies&gt;</div><div class="line">  &lt;proxy&gt;</div><div class="line">   &lt;id&gt;my-proxy&lt;/id&gt; &lt;!-- 代理的ID --&gt;</div><div class="line">   &lt;active&gt;<span class="literal">true</span>&lt;/active&gt;&lt;!-- 是否激活  --&gt;</div><div class="line">   &lt;protocol&gt;http&lt;/protocol&gt;&lt;!-- 代理所使用的协议 --&gt;</div><div class="line">   &lt;host&gt;ip&lt;/host&gt;&lt;!--这里填写代理服务器的IP地址--&gt;</div><div class="line">   &lt;port&gt;port&lt;/port&gt;&lt;!-- 这里填写代理服务器的端口 --&gt;</div><div class="line">   &lt;username&gt;usrename&lt;/username&gt;&lt;!-- 代理服务器认证的用户名 --&gt;</div><div class="line">   &lt;password&gt;******&lt;/password&gt;&lt;!-- 代理服务器认证的用户密码 --&gt;</div><div class="line">   &lt;nonProxyHosts&gt;localhost|127.0.0.1&lt;/nonProxyHosts&gt;&lt;!-- 不需要代理的地址，用|分隔，支持通配符* --&gt;</div><div class="line">  &lt;/proxy&gt;</div><div class="line">&lt;/proxies&gt;</div></pre></td></tr></table></figure>
 <h2 id="将eclipse运行在JDK上，而不是默认的JRE上"><a href="#将eclipse运行在JDK上，而不是默认的JRE上" class="headerlink" title="将eclipse运行在JDK上，而不是默认的JRE上"></a>将eclipse运行在JDK上，而不是默认的JRE上</h2><p><code>eclipse.ini</code> 文件</p>
-<pre><code class="bash">在 -vmargs 之前添加以下内容
-
--vm
-/path/to/jdk/bin/javaw.exe(windows下)
-/path/to/jdk/bin/java(*nix下)
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">在 -vmargs 之前添加以下内容</div><div class="line"></div><div class="line">-vm</div><div class="line">/path/to/jdk/bin/javaw.exe(windows下)</div><div class="line">/path/to/jdk/bin/java(*nix下)</div></pre></td></tr></table></figure>
 <h2 id="Maven使用的环境变量"><a href="#Maven使用的环境变量" class="headerlink" title="Maven使用的环境变量"></a>Maven使用的环境变量</h2><h3 id="MAVEN-OPTS"><a href="#MAVEN-OPTS" class="headerlink" title="MAVEN_OPTS"></a>MAVEN_OPTS</h3><p>这个是将JVM参数，传递给maven，因为maven本质上是Java命令。比如，将这个环境变量的参数值设置为: <code>-Xms128m -Xmx512m</code></p>
 <h3 id="M2-HOME"><a href="#M2-HOME" class="headerlink" title="M2_HOME"></a>M2_HOME</h3><p>这个环境变量，是指向maven的安装目录的。如<code>~/maven/current</code></p>
 <h2 id="Maven的约定"><a href="#Maven的约定" class="headerlink" title="Maven的约定"></a>Maven的约定</h2><h3 id="代码位置"><a href="#代码位置" class="headerlink" title="代码位置"></a>代码位置</h3><p>主体代码放在 <code>src/main/java</code>中<br>测试代码放在 <code>src/test/java</code>中</p>
@@ -240,68 +221,9 @@
 <p><code>&lt;sourceDirectory&gt;src/java&lt;/sourceDirectory&gt;</code></p>
 <p>即可</p>
 <h3 id="超-pom-xml"><a href="#超-pom-xml" class="headerlink" title="超 pom.xml"></a>超 pom.xml</h3><p>它在maven安装目录下的<code>M2_HOME/lib/maven-x.x.x-uber.jar</code>中的<code>org/apache/maven/project/pom-4.0.0.xml</code>目录下.(Maven2)<br><code>M2_HOME/lib/maven-model-builder-x.x.x.jar</code>中的<code>org/apache/maven/model/pom-4.0.0.xml</code></p>
-<h2 id="源码编译级别"><a href="#源码编译级别" class="headerlink" title="源码编译级别"></a>源码编译级别</h2><pre><code class="bash">&lt;plugin&gt;
-    &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-    &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
-    &lt;version&gt;3.1&lt;/version&gt;
-    &lt;configuration&gt;
-        &lt;source&gt;1.7&lt;/source&gt;
-        &lt;target&gt;1.7&lt;/target&gt;
-    &lt;/configuration&gt;
-&lt;/plugin&gt;
-</code></pre>
-<h2 id="Maven常用命令"><a href="#Maven常用命令" class="headerlink" title="Maven常用命令"></a>Maven常用命令</h2><pre><code class="bash">mvn help:system
-
-mvn clean compile
-mvn clean test
-mvn clean package
-mvn clean install
-
-mvn dependency:list
-mvn dependency:tree
-mvn dependency:analyze
-
-查看插件的帮助
-mvn help:describe -Dplugin=org.apache.maven.plugins:maven-compiler-plugin:2.1
-
-用于多模块构建
-进入parent项目的根目录，执行以下命令
-构建指定模块
-mvn clean install -pl 模块1的路径(相对于parent的路径,注意是路径）,模块2的路径(相对于parent的路径,注意是路径）
-
-构建指定模块,以及这些模块所依赖的模块
-mvn clean install -pl 模块1的路径(相对于parent的路径,注意是路径）,模块2的路径(相对于parent的路径,注意是路径） -am
-
-构建依赖于指定模块以及该模块本身
-mvn clean install -pl 模块的路径(相对于parent的路径,注意是路径） -amd
-
-指定从哪个模块开始构建
-mvn clean install -rf 模块1的路径(相对于parent的路径,注意是路径）
-
-忽略测试步骤
--Dmaven.test.skip=true
-</code></pre>
-<h2 id="生成可执行的Jar包"><a href="#生成可执行的Jar包" class="headerlink" title="生成可执行的Jar包"></a>生成可执行的Jar包</h2><pre><code class="bash">&lt;plugin&gt;
-        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-        &lt;artifactId&gt;maven-shade-plugin&lt;/artifactId&gt;
-        &lt;version&gt;2.4.1&lt;/version&gt;
-        &lt;configuration&gt;
-        &lt;transformers&gt;
-              &lt;transformer implementation = &quot;org.apache.maven.plugins.shade.resource.ManifestResourceTransformer&quot;&gt;
-                  &lt;mainClass&gt;这里填写你的Main类&lt;/mainClass&gt;
-              &lt;/transformer&gt;
-        &lt;/transformers&gt;
-        &lt;/configuration&gt;
-        &lt;executions&gt;
-          &lt;execution&gt;
-            &lt;phase&gt;package&lt;/phase&gt;
-            &lt;goals&gt;
-              &lt;goal&gt;shade&lt;/goal&gt;
-            &lt;/goals&gt;
-          &lt;/execution&gt;
-        &lt;/executions&gt;
-&lt;/plugin&gt;
-</code></pre>
+<h2 id="源码编译级别"><a href="#源码编译级别" class="headerlink" title="源码编译级别"></a>源码编译级别</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;plugin&gt;</div><div class="line">    &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</div><div class="line">	&lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;</div><div class="line">	&lt;version&gt;3.1&lt;/version&gt;</div><div class="line">	&lt;configuration&gt;</div><div class="line">		&lt;<span class="built_in">source</span>&gt;1.7&lt;/<span class="built_in">source</span>&gt;</div><div class="line">		&lt;target&gt;1.7&lt;/target&gt;</div><div class="line">	&lt;/configuration&gt;</div><div class="line">&lt;/plugin&gt;</div></pre></td></tr></table></figure>
+<h2 id="Maven常用命令"><a href="#Maven常用命令" class="headerlink" title="Maven常用命令"></a>Maven常用命令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">mvn <span class="built_in">help</span>:system</div><div class="line"></div><div class="line">mvn clean compile</div><div class="line">mvn clean <span class="built_in">test</span></div><div class="line">mvn clean package</div><div class="line">mvn clean install</div><div class="line"></div><div class="line">mvn dependency:list</div><div class="line">mvn dependency:tree</div><div class="line">mvn dependency:analyze</div><div class="line"></div><div class="line">查看插件的帮助</div><div class="line">mvn <span class="built_in">help</span>:describe -Dplugin=org.apache.maven.plugins:maven-compiler-plugin:2.1</div><div class="line"></div><div class="line">用于多模块构建</div><div class="line">进入parent项目的根目录，执行以下命令</div><div class="line">构建指定模块</div><div class="line">mvn clean install -pl 模块1的路径(相对于parent的路径,注意是路径）,模块2的路径(相对于parent的路径,注意是路径）</div><div class="line"></div><div class="line">构建指定模块,以及这些模块所依赖的模块</div><div class="line">mvn clean install -pl 模块1的路径(相对于parent的路径,注意是路径）,模块2的路径(相对于parent的路径,注意是路径） -am</div><div class="line"></div><div class="line">构建依赖于指定模块以及该模块本身</div><div class="line">mvn clean install -pl 模块的路径(相对于parent的路径,注意是路径） -amd</div><div class="line"></div><div class="line">指定从哪个模块开始构建</div><div class="line">mvn clean install -rf 模块1的路径(相对于parent的路径,注意是路径）</div><div class="line"></div><div class="line">忽略测试步骤</div><div class="line">-Dmaven.test.skip=<span class="literal">true</span></div></pre></td></tr></table></figure>
+<h2 id="生成可执行的Jar包"><a href="#生成可执行的Jar包" class="headerlink" title="生成可执行的Jar包"></a>生成可执行的Jar包</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">&lt;plugin&gt;</div><div class="line">        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</div><div class="line">        &lt;artifactId&gt;maven-shade-plugin&lt;/artifactId&gt;</div><div class="line">        &lt;version&gt;2.4.1&lt;/version&gt;</div><div class="line">        &lt;configuration&gt;</div><div class="line">        &lt;transformers&gt;</div><div class="line">          	&lt;transformer implementation = <span class="string">"org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"</span>&gt;</div><div class="line">          		&lt;mainClass&gt;这里填写你的Main类&lt;/mainClass&gt;</div><div class="line">          	&lt;/transformer&gt;</div><div class="line">        &lt;/transformers&gt;</div><div class="line">        &lt;/configuration&gt;</div><div class="line">        &lt;executions&gt;</div><div class="line">          &lt;execution&gt;</div><div class="line">            &lt;phase&gt;package&lt;/phase&gt;</div><div class="line">            &lt;goals&gt;</div><div class="line">              &lt;goal&gt;shade&lt;/goal&gt;</div><div class="line">            &lt;/goals&gt;</div><div class="line">          &lt;/execution&gt;</div><div class="line">        &lt;/executions&gt;</div><div class="line">&lt;/plugin&gt;</div></pre></td></tr></table></figure>
 <p>使用这个插件打包完时，会生成两个jar，一个是<code>original</code>开头的，这个jar包是不可以执行的，另一个就是可执行的jar包。</p>
 <h2 id="Maven的坐标"><a href="#Maven的坐标" class="headerlink" title="Maven的坐标"></a>Maven的坐标</h2><h3 id="groupId"><a href="#groupId" class="headerlink" title="groupId"></a>groupId</h3><p>所属的实际项目</p>
 <h3 id="artifactId"><a href="#artifactId" class="headerlink" title="artifactId"></a>artifactId</h3><p>项目中的某个模块</p>
@@ -316,46 +238,11 @@ mvn clean install -rf 模块1的路径(相对于parent的路径,注意是路径�
 <h3 id="system"><a href="#system" class="headerlink" title="system"></a>system</h3><p>系统范围依赖。它和 provided 一样。但使用system依赖，必须通过 <code>systemPath</code>元素，显式指定依赖文件的路径。这类依赖不是通过maven仓库，而是与本机系统绑定的，极可能是不可移植，应尽管避免使用。</p>
 <h3 id="import"><a href="#import" class="headerlink" title="import"></a>import</h3><p>导入依赖范围。不会对三种（编译，测试，运行）classpath产生实际影响。</p>
 <h2 id="依赖传递调解"><a href="#依赖传递调解" class="headerlink" title="依赖传递调解"></a>依赖传递调解</h2><p>原则：路径最近者优先、第一声明者优先</p>
-<h2 id="部署到远程仓库"><a href="#部署到远程仓库" class="headerlink" title="部署到远程仓库"></a>部署到远程仓库</h2><pre><code class="bash">
-&lt;distributionManagement&gt;
-    &lt;repository&gt;
-        &lt;id&gt;nexus-releases&lt;/id&gt;
-        &lt;name&gt;Nexus Release Repository&lt;/name&gt;
-        &lt;url&gt;http://127.0.0.1:8080/nexus/content/repositories/releases/&lt;/url&gt;
-    &lt;/repository&gt;
-    &lt;snapshotRepository&gt;
-        &lt;id&gt;nexus-snapshots&lt;/id&gt;
-        &lt;name&gt;Nexus Snapshot Repository&lt;/name&gt;
-        &lt;url&gt;http://127.0.0.1:8080/nexus/content/repositories/snapshots/&lt;/url&gt;
-    &lt;/snapshotRepository&gt;
-&lt;/distributionManagement&gt;
-</code></pre>
+<h2 id="部署到远程仓库"><a href="#部署到远程仓库" class="headerlink" title="部署到远程仓库"></a>部署到远程仓库</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&lt;distributionManagement&gt;</div><div class="line">	&lt;repository&gt;</div><div class="line">		&lt;id&gt;nexus-releases&lt;/id&gt;</div><div class="line">		&lt;name&gt;Nexus Release Repository&lt;/name&gt;</div><div class="line">		&lt;url&gt;http://127.0.0.1:8080/nexus/content/repositories/releases/&lt;/url&gt;</div><div class="line">	&lt;/repository&gt;</div><div class="line">	&lt;snapshotRepository&gt;</div><div class="line">		&lt;id&gt;nexus-snapshots&lt;/id&gt;</div><div class="line">		&lt;name&gt;Nexus Snapshot Repository&lt;/name&gt;</div><div class="line">		&lt;url&gt;http://127.0.0.1:8080/nexus/content/repositories/snapshots/&lt;/url&gt;</div><div class="line">	&lt;/snapshotRepository&gt;</div><div class="line">&lt;/distributionManagement&gt;</div></pre></td></tr></table></figure>
 <p>如果远程仓库需要认证，则在<code>~/.m2/settings.xml</code>里配置</p>
-<pre><code class="bash">
-&lt;servers&gt;
-    &lt;server&gt;
-        &lt;id&gt;nexus-releases&lt;/id&gt;
-        &lt;username&gt;admin&lt;/username&gt;
-        &lt;password&gt;admin123&lt;/password&gt;
-    &lt;/server&gt;
-    &lt;server&gt;
-        &lt;id&gt;nexus-snapshots&lt;/id&gt;
-        &lt;username&gt;admin&lt;/username&gt;
-        &lt;password&gt;admin123&lt;/password&gt;
-    &lt;/server&gt;
-&lt;/servers&gt;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&lt;servers&gt;</div><div class="line">	&lt;server&gt;</div><div class="line">		&lt;id&gt;nexus-releases&lt;/id&gt;</div><div class="line">		&lt;username&gt;admin&lt;/username&gt;</div><div class="line">		&lt;password&gt;admin123&lt;/password&gt;</div><div class="line">	&lt;/server&gt;</div><div class="line">	&lt;server&gt;</div><div class="line">		&lt;id&gt;nexus-snapshots&lt;/id&gt;</div><div class="line">		&lt;username&gt;admin&lt;/username&gt;</div><div class="line">		&lt;password&gt;admin123&lt;/password&gt;</div><div class="line">	&lt;/server&gt;</div><div class="line">&lt;/servers&gt;</div></pre></td></tr></table></figure>
 <h2 id="镜像"><a href="#镜像" class="headerlink" title="镜像"></a>镜像</h2><p>在<code>~/.m2/settings.xml</code>里配置</p>
-<pre><code class="bash">
-&lt;mirrors&gt;
-    &lt;mirror&gt;
-        &lt;id&gt;nexus-osc&lt;/id&gt;
-        &lt;mirrorOf&gt;*&lt;/mirrorOf&gt;
-        &lt;name&gt;Nexus osc&lt;/name&gt;
-        &lt;url&gt;http://maven.oschina.net/content/groups/public/&lt;/url&gt;
-    &lt;/mirror&gt;
-&lt;/mirrors&gt;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&lt;mirrors&gt;</div><div class="line">	&lt;mirror&gt;</div><div class="line">		&lt;id&gt;nexus-osc&lt;/id&gt;</div><div class="line">		&lt;mirrorOf&gt;*&lt;/mirrorOf&gt;</div><div class="line">		&lt;name&gt;Nexus osc&lt;/name&gt;</div><div class="line">		&lt;url&gt;http://maven.oschina.net/content/groups/public/&lt;/url&gt;</div><div class="line">	&lt;/mirror&gt;</div><div class="line">&lt;/mirrors&gt;</div></pre></td></tr></table></figure>
 <p><mirrorof>*</mirrorof>表示镜像所有仓库。即对于远程仓库的请求，都会被该URL替代。</p>
 <h2 id="Maven-搜索"><a href="#Maven-搜索" class="headerlink" title="Maven 搜索"></a>Maven 搜索</h2><p><a href="http://mvnrepository.com/" target="_blank" rel="external">mvnrepository</a></p>
 <p><a href="http://maven.oschina.net/home.html" target="_blank" rel="external">OSChina</a></p>
@@ -399,45 +286,12 @@ mvn clean install -rf 模块1的路径(相对于parent的路径,注意是路径�
 <p>mvn test: default生命周期的形状到test的所有阶段。</p>
 <p>mvn clean install: pre-clean, clean以及到default生命周期的开头到install阶段</p>
 <p>mvn clean deploy site-deploy: pre-clean, clean以及default生命周期的所有阶段，site生命周期的所有阶段。</p>
-<h2 id="为源码打包"><a href="#为源码打包" class="headerlink" title="为源码打包"></a>为源码打包</h2><pre><code class="bash">
-          &lt;plugin&gt;
-            &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-            &lt;artifactId&gt;maven-source-plugin&lt;/artifactId&gt;
-            &lt;executions&gt;
-                &lt;execution&gt;
-                    &lt;phase&gt;package&lt;/phase&gt;
-                    &lt;goals&gt;
-                        &lt;goal&gt;jar&lt;/goal&gt;
-                    &lt;/goals&gt;
-                &lt;/execution&gt;
-            &lt;/executions&gt;
-        &lt;/plugin&gt;
-</code></pre>
+<h2 id="为源码打包"><a href="#为源码打包" class="headerlink" title="为源码打包"></a>为源码打包</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">		&lt;plugin&gt;</div><div class="line">	&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</div><div class="line">	&lt;artifactId&gt;maven-source-plugin&lt;/artifactId&gt;</div><div class="line">	&lt;executions&gt;</div><div class="line">		&lt;execution&gt;</div><div class="line">			&lt;phase&gt;package&lt;/phase&gt;</div><div class="line">			&lt;goals&gt;</div><div class="line">				&lt;goal&gt;jar&lt;/goal&gt;</div><div class="line">			&lt;/goals&gt;</div><div class="line">		&lt;/execution&gt;</div><div class="line">	&lt;/executions&gt;</div><div class="line">&lt;/plugin&gt;</div></pre></td></tr></table></figure>
 <h2 id="聚合项目"><a href="#聚合项目" class="headerlink" title="聚合项目"></a>聚合项目</h2><p>创建一个新的空白的maven项目.在该<code>pom.xml</code>文件上, 配置如下的内容即可:</p>
-<pre><code class="bash">
-&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;
-  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
-  &lt;groupId&gt;org.emacsist&lt;/groupId&gt;
-  &lt;artifactId&gt;Go&lt;/artifactId&gt;
-  &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
-  &lt;packaging&gt;pom&lt;/packaging&gt;
-
-  &lt;modules&gt;
-      &lt;module&gt;../mvn&lt;/module&gt;
-      &lt;module&gt;../mvn2&lt;/module&gt;
-  &lt;/modules&gt;
-&lt;/project&gt;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&lt;project xmlns=<span class="string">"http://maven.apache.org/POM/4.0.0"</span> xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span> xsi:schemaLocation=<span class="string">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span>&gt;</div><div class="line">  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</div><div class="line">  &lt;groupId&gt;org.emacsist&lt;/groupId&gt;</div><div class="line">  &lt;artifactId&gt;Go&lt;/artifactId&gt;</div><div class="line">  &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;</div><div class="line">  &lt;packaging&gt;pom&lt;/packaging&gt;</div><div class="line"></div><div class="line">  &lt;modules&gt;</div><div class="line">  	&lt;module&gt;../mvn&lt;/module&gt;</div><div class="line">  	&lt;module&gt;../mvn2&lt;/module&gt;</div><div class="line">  &lt;/modules&gt;</div><div class="line">&lt;/project&gt;</div></pre></td></tr></table></figure>
 <p>注意, <code>&lt;module&gt;../mvn&lt;/module&gt;</code> 这是相对当前项目的其他模块的目录的路径.</p>
 <h2 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h2><p>在子模块的pom.xml里配置:</p>
-<pre><code class="bash">
-&lt;parent&gt;
-    &lt;groupId&gt;com.mycompany.app&lt;/groupId&gt; &lt;!--父pom的groupId--&gt;
-    &lt;artifactId&gt;my-app&lt;/artifactId&gt; &lt;!--父pom的artifactId--&gt;
-    &lt;version&gt;1&lt;/version&gt;
-    &lt;relativePath&gt;../parent/pom.xml&lt;/relativePath&gt;&lt;!--父pom.xml的位置--&gt;
-&lt;/parent&gt;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&lt;parent&gt;</div><div class="line">    &lt;groupId&gt;com.mycompany.app&lt;/groupId&gt; &lt;!--父pom的groupId--&gt;</div><div class="line">    &lt;artifactId&gt;my-app&lt;/artifactId&gt; &lt;!--父pom的artifactId--&gt;</div><div class="line">    &lt;version&gt;1&lt;/version&gt;</div><div class="line">	&lt;relativePath&gt;../parent/pom.xml&lt;/relativePath&gt;&lt;!--父pom.xml的位置--&gt;</div><div class="line">&lt;/parent&gt;</div></pre></td></tr></table></figure>
 <p>在集成时, 别忘记了, 将父模块,也放到聚合模块中.</p>
 <h2 id="可继承的元素"><a href="#可继承的元素" class="headerlink" title="可继承的元素"></a>可继承的元素</h2><ol>
 <li>groupId:项目组ID</li>
@@ -469,31 +323,7 @@ mvn clean install -rf 模块1的路径(相对于parent的路径,注意是路径�
 <h4 id="指定connector名"><a href="#指定connector名" class="headerlink" title="指定connector名"></a>指定connector名</h4><p><code>name</code></p>
 <h4 id="最大空闲时间"><a href="#最大空闲时间" class="headerlink" title="最大空闲时间"></a>最大空闲时间</h4><p><code>idleTimeout</code></p>
 <h4 id="关闭socket时的延时设置"><a href="#关闭socket时的延时设置" class="headerlink" title="关闭socket时的延时设置"></a>关闭socket时的延时设置</h4><p>soLinger</p>
-<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><pre><code class="bash"> &lt;plugin&gt;
-                &lt;groupId&gt;org.eclipse.jetty&lt;/groupId&gt;
-                &lt;artifactId&gt;jetty-maven-plugin&lt;/artifactId&gt;
-                &lt;version&gt;9.0.6.v20130930&lt;/version&gt;
-                &lt;configuration&gt;
-                    &lt;!-- Jetty容器配置 --&gt;
-                    &lt;httpConnector&gt;
-                        &lt;!-- 监听的端口 --&gt;
-                        &lt;port&gt;8080&lt;/port&gt;
-                    &lt;/httpConnector&gt;
-                    &lt;!-- 热部署，间隔多少秒重新扫描文件，默认为0,即不进行热部署 --&gt;
-                    &lt;scanIntervalSeconds&gt;1&lt;/scanIntervalSeconds&gt;
-                    &lt;!-- web应用配置 --&gt;
-                    &lt;webApp&gt;
-                        &lt;contextPath&gt;/&lt;/contextPath&gt;
-                        &lt;!-- web.xml路径 --&gt;
-                        &lt;descriptor&gt;${project.basedir}/WebContent/WEB-INF/web.xml&lt;/descriptor&gt;
-            &lt;allowDuplicateFragmentNames&gt;true&lt;/allowDuplicateFragmentNames&gt;
-                    &lt;/webApp&gt;
-                    &lt;!-- 生成classes的目录 --&gt;
-                    &lt;classesDirectory&gt;${project.basedir}/target/classes&lt;/classesDirectory&gt;
-                    &lt;webAppSourceDirectory&gt;${project.basedir}/WebContent/&lt;/webAppSourceDirectory&gt;
-                &lt;/configuration&gt;
-&lt;/plugin&gt;
-</code></pre>
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"> &lt;plugin&gt;</div><div class="line">                &lt;groupId&gt;org.eclipse.jetty&lt;/groupId&gt;</div><div class="line">                &lt;artifactId&gt;jetty-maven-plugin&lt;/artifactId&gt;</div><div class="line">                &lt;version&gt;9.0.6.v20130930&lt;/version&gt;</div><div class="line">                &lt;configuration&gt;</div><div class="line">                    &lt;!-- Jetty容器配置 --&gt;</div><div class="line">                    &lt;httpConnector&gt;</div><div class="line">                        &lt;!-- 监听的端口 --&gt;</div><div class="line">                        &lt;port&gt;8080&lt;/port&gt;</div><div class="line">                    &lt;/httpConnector&gt;</div><div class="line">                    &lt;!-- 热部署，间隔多少秒重新扫描文件，默认为0,即不进行热部署 --&gt;</div><div class="line">                    &lt;scanIntervalSeconds&gt;1&lt;/scanIntervalSeconds&gt;</div><div class="line">                    &lt;!-- web应用配置 --&gt;</div><div class="line">                    &lt;webApp&gt;</div><div class="line">                        &lt;contextPath&gt;/&lt;/contextPath&gt;</div><div class="line">                        &lt;!-- web.xml路径 --&gt;</div><div class="line">                        &lt;descriptor&gt;<span class="variable">$&#123;project.basedir&#125;</span>/WebContent/WEB-INF/web.xml&lt;/descriptor&gt;</div><div class="line">			&lt;allowDuplicateFragmentNames&gt;<span class="literal">true</span>&lt;/allowDuplicateFragmentNames&gt;</div><div class="line">                    &lt;/webApp&gt;</div><div class="line">                    &lt;!-- 生成classes的目录 --&gt;</div><div class="line">                    &lt;classesDirectory&gt;<span class="variable">$&#123;project.basedir&#125;</span>/target/classes&lt;/classesDirectory&gt;</div><div class="line">                    &lt;webAppSourceDirectory&gt;<span class="variable">$&#123;project.basedir&#125;</span>/WebContent/&lt;/webAppSourceDirectory&gt;</div><div class="line">                &lt;/configuration&gt;</div><div class="line">&lt;/plugin&gt;</div></pre></td></tr></table></figure>
 <h2 id="Maven中的属性-property"><a href="#Maven中的属性-property" class="headerlink" title="Maven中的属性 property"></a>Maven中的属性 property</h2><h3 id="内置属性"><a href="#内置属性" class="headerlink" title="内置属性"></a>内置属性</h3><ol>
 <li><p>${basedir}，表示项目的根目录</p>
 </li>
@@ -520,402 +350,30 @@ mvn clean install -rf 模块1的路径(相对于parent的路径,注意是路径�
 <li><p>${project.build.finalName}: 项目打包输出文件名，默认为${project.artifactId}-${project.version}.</p>
 </li>
 </ol>
-<h3 id="自定义属性"><a href="#自定义属性" class="headerlink" title="自定义属性"></a>自定义属性</h3><pre><code class="bash">&lt;properties&gt;
-    &lt;property&gt;
-        &lt;my.prop&gt;hello world&lt;/my.prop&gt;
-    &lt;/property&gt;
-&lt;/properties&gt;
-</code></pre>
+<h3 id="自定义属性"><a href="#自定义属性" class="headerlink" title="自定义属性"></a>自定义属性</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;properties&gt;</div><div class="line">    &lt;property&gt;</div><div class="line">        &lt;my.prop&gt;hello world&lt;/my.prop&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">&lt;/properties&gt;</div></pre></td></tr></table></figure>
 <h3 id="settings-属性"><a href="#settings-属性" class="headerlink" title="settings 属性"></a>settings 属性</h3><p>这个可以引用<code>settings.xml</code>文件元素值。如：</p>
 <p><code>${settings.localRepository}</code></p>
 <h3 id="Java系统属性"><a href="#Java系统属性" class="headerlink" title="Java系统属性"></a>Java系统属性</h3><p>可以通过<code>mvn help:system</code>查看所有该属性值.如:</p>
 <p><code>${user.home}</code></p>
 <h3 id="环境变量属性"><a href="#环境变量属性" class="headerlink" title="环境变量属性"></a>环境变量属性</h3><p>都是以<code>env.</code>开头。如：<code>${env.JAVA_HOME}</code>.<br>可以通过<code>mvn help:system</code>查看。</p>
-<h2 id="为不同环境使用不同配置"><a href="#为不同环境使用不同配置" class="headerlink" title="为不同环境使用不同配置"></a>为不同环境使用不同配置</h2><pre><code class="bash">    &lt;profiles&gt;
-        &lt;profile&gt;
-            &lt;!-- 开发环境 --&gt;
-            &lt;id&gt;dev&lt;/id&gt;
-            &lt;activation&gt;
-                &lt;!-- 是否是默认 --&gt;
-                &lt;activeByDefault&gt;true&lt;/activeByDefault&gt;
-            &lt;/activation&gt;
-        &lt;/profile&gt;
-        &lt;profile&gt;
-            &lt;!-- 测试环境 --&gt;
-            &lt;id&gt;test&lt;/id&gt;
-        &lt;/profile&gt;
-        &lt;profile&gt;
-            &lt;!-- 生产环境 --&gt;
-            &lt;id&gt;production&lt;/id&gt;
-            &lt;properties&gt;
-                &lt;profile.active&gt;production&lt;/profile.active&gt;
-                &lt;profile.scope&gt;provided&lt;/profile.scope&gt;
-            &lt;/properties&gt;
-        &lt;/profile&gt;
-    &lt;/profiles&gt;
-</code></pre>
+<h2 id="为不同环境使用不同配置"><a href="#为不同环境使用不同配置" class="headerlink" title="为不同环境使用不同配置"></a>为不同环境使用不同配置</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">&lt;profiles&gt;</div><div class="line">	&lt;profile&gt;</div><div class="line">		&lt;!-- 开发环境 --&gt;</div><div class="line">		&lt;id&gt;dev&lt;/id&gt;</div><div class="line">		&lt;activation&gt;</div><div class="line">			&lt;!-- 是否是默认 --&gt;</div><div class="line">			&lt;activeByDefault&gt;<span class="literal">true</span>&lt;/activeByDefault&gt;</div><div class="line">		&lt;/activation&gt;</div><div class="line">	&lt;/profile&gt;</div><div class="line">	&lt;profile&gt;</div><div class="line">		&lt;!-- 测试环境 --&gt;</div><div class="line">		&lt;id&gt;<span class="built_in">test</span>&lt;/id&gt;</div><div class="line">	&lt;/profile&gt;</div><div class="line">	&lt;profile&gt;</div><div class="line">		&lt;!-- 生产环境 --&gt;</div><div class="line">		&lt;id&gt;production&lt;/id&gt;</div><div class="line">		&lt;properties&gt;</div><div class="line">			&lt;profile.active&gt;production&lt;/profile.active&gt;</div><div class="line">			&lt;profile.scope&gt;provided&lt;/profile.scope&gt;</div><div class="line">		&lt;/properties&gt;</div><div class="line">	&lt;/profile&gt;</div><div class="line">&lt;/profiles&gt;</div></pre></td></tr></table></figure>
 <h3 id="一般资源过滤"><a href="#一般资源过滤" class="headerlink" title="一般资源过滤"></a>一般资源过滤</h3><p>还要注意，默认情况下，只有<code>pom.xml</code>时使用这些属性时，才会被解析。如果是在其他文件里，也要使用该属性时，默认情况下，是不是解析其他配置文件的占位符的变量的。</p>
 <p>要开启maven解析其他资源文件来使用pom.xml里定义的属性，还需要配置如下：</p>
-<pre><code class="bash">&lt;build&gt;
-        &lt;resources&gt;
-            &lt;resource&gt;
-                &lt;!-- 资源目录 --&gt;
-                &lt;directory&gt;src/main/resources&lt;/directory&gt;
-                &lt;!-- 是否解析占位符${} --&gt;
-                &lt;filtering&gt;true&lt;/filtering&gt;
-                &lt;includes&gt;
-                    &lt;include&gt;**/*.properties&lt;/include&gt;
-                    &lt;include&gt;**/*.xml&lt;/include&gt;
-                &lt;/includes&gt;
-            &lt;/resource&gt;
-        &lt;/resources&gt;
-           &lt;testResources&gt;
-            &lt;resource&gt;
-                &lt;!-- 资源目录 --&gt;
-                &lt;directory&gt;src/test/resources&lt;/directory&gt;
-                &lt;!-- 是否解析占位符${} --&gt;
-                &lt;filtering&gt;true&lt;/filtering&gt;
-                &lt;includes&gt;
-                    &lt;include&gt;**/*.properties&lt;/include&gt;
-                    &lt;include&gt;**/*.xml&lt;/include&gt;
-                &lt;/includes&gt;
-            &lt;/resource&gt;
-        &lt;/testResources&gt;
-&lt;/build&gt;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">&lt;build&gt;</div><div class="line">		&lt;resources&gt;</div><div class="line">			&lt;resource&gt;</div><div class="line">				&lt;!-- 资源目录 --&gt;</div><div class="line">				&lt;directory&gt;src/main/resources&lt;/directory&gt;</div><div class="line">				&lt;!-- 是否解析占位符<span class="variable">$&#123;&#125;</span> --&gt;</div><div class="line">				&lt;filtering&gt;<span class="literal">true</span>&lt;/filtering&gt;</div><div class="line">				&lt;includes&gt;</div><div class="line">					&lt;include&gt;**/*.properties&lt;/include&gt;</div><div class="line">					&lt;include&gt;**/*.xml&lt;/include&gt;</div><div class="line">				&lt;/includes&gt;</div><div class="line">			&lt;/resource&gt;</div><div class="line">		&lt;/resources&gt;</div><div class="line">   		&lt;testResources&gt;</div><div class="line">			&lt;resource&gt;</div><div class="line">				&lt;!-- 资源目录 --&gt;</div><div class="line">				&lt;directory&gt;src/<span class="built_in">test</span>/resources&lt;/directory&gt;</div><div class="line">				&lt;!-- 是否解析占位符<span class="variable">$&#123;&#125;</span> --&gt;</div><div class="line">				&lt;filtering&gt;<span class="literal">true</span>&lt;/filtering&gt;</div><div class="line">				&lt;includes&gt;</div><div class="line">					&lt;include&gt;**/*.properties&lt;/include&gt;</div><div class="line">					&lt;include&gt;**/*.xml&lt;/include&gt;</div><div class="line">				&lt;/includes&gt;</div><div class="line">			&lt;/resource&gt;</div><div class="line">		&lt;/testResources&gt;</div><div class="line">&lt;/build&gt;</div></pre></td></tr></table></figure>
 <p>然后在使用时，通过参数<code>-P</code>来激某个profile，如：</p>
 <p>开发环境：<br><code>mvn clean install -Pdev</code></p>
 <p>生产环境：<br><code>mvn clean install -Pproductino</code></p>
 <h3 id="web-资源过滤"><a href="#web-资源过滤" class="headerlink" title="web 资源过滤"></a>web 资源过滤</h3><p>要配置 <code>maven-war-plugin</code> 插件才行</p>
-<pre><code class="bash">            &lt;plugin&gt;
-                &lt;artifactId&gt;maven-war-plugin&lt;/artifactId&gt;
-                &lt;version&gt;2.6&lt;/version&gt;
-                &lt;configuration&gt;
-                    &lt;warSourceDirectory&gt;WebContent&lt;/warSourceDirectory&gt;
-                    &lt;failOnMissingWebXml&gt;false&lt;/failOnMissingWebXml&gt;
-                    &lt;webResources&gt;
-                        &lt;webResource&gt;
-                            &lt;directory&gt;WebContent&lt;/directory&gt;
-                            &lt;!-- 解析web资源 --&gt;
-                            &lt;filtering&gt;true&lt;/filtering&gt;
-                            &lt;includes&gt;
-                                &lt;include&gt;**/*.css&lt;/include&gt;
-                                &lt;include&gt;**/*.js&lt;/include&gt;
-                            &lt;/includes&gt;
-                        &lt;/webResource&gt;
-                    &lt;/webResources&gt;
-                &lt;/configuration&gt;
-            &lt;/plugin&gt;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&lt;plugin&gt;</div><div class="line">	&lt;artifactId&gt;maven-war-plugin&lt;/artifactId&gt;</div><div class="line">	&lt;version&gt;2.6&lt;/version&gt;</div><div class="line">	&lt;configuration&gt;</div><div class="line">		&lt;warSourceDirectory&gt;WebContent&lt;/warSourceDirectory&gt;</div><div class="line">		&lt;failOnMissingWebXml&gt;<span class="literal">false</span>&lt;/failOnMissingWebXml&gt;</div><div class="line">		&lt;webResources&gt;</div><div class="line">			&lt;webResource&gt;</div><div class="line">				&lt;directory&gt;WebContent&lt;/directory&gt;</div><div class="line">				&lt;!-- 解析web资源 --&gt;</div><div class="line">				&lt;filtering&gt;<span class="literal">true</span>&lt;/filtering&gt;</div><div class="line">				&lt;includes&gt;</div><div class="line">					&lt;include&gt;**/*.css&lt;/include&gt;</div><div class="line">					&lt;include&gt;**/*.js&lt;/include&gt;</div><div class="line">				&lt;/includes&gt;</div><div class="line">			&lt;/webResource&gt;</div><div class="line">		&lt;/webResources&gt;</div><div class="line">	&lt;/configuration&gt;</div><div class="line">&lt;/plugin&gt;</div></pre></td></tr></table></figure>
 <h3 id="激活-profile"><a href="#激活-profile" class="headerlink" title="激活 profile"></a>激活 profile</h3><h4 id="命令行激活"><a href="#命令行激活" class="headerlink" title="命令行激活"></a>命令行激活</h4><p><code>mvn clean install -PprofileId1,profileId2</code></p>
-<h4 id="settings-xml-文件显式激活"><a href="#settings-xml-文件显式激活" class="headerlink" title="settings.xml 文件显式激活"></a>settings.xml 文件显式激活</h4><pre><code class="bash">&lt;activeProfiles&gt;
-    &lt;activeProfile&gt;dev&lt;/activeProfile&gt;
-&lt;/activeProfiles&gt;
-</code></pre>
-<h4 id="系统属性激活"><a href="#系统属性激活" class="headerlink" title="系统属性激活"></a>系统属性激活</h4><pre><code class="bash">&lt;profiles&gt;
-    &lt;profile&gt;
-        &lt;activation&gt;
-            &lt;property&gt;
-                &lt;name&gt;actProp&lt;/name&gt;
-                &lt;value&gt;x&lt;/value&gt;
-            &lt;/property&gt;
-        &lt;/activation&gt;
-    &lt;/profile&gt;
-&lt;/profiles&gt;
-</code></pre>
+<h4 id="settings-xml-文件显式激活"><a href="#settings-xml-文件显式激活" class="headerlink" title="settings.xml 文件显式激活"></a>settings.xml 文件显式激活</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;activeProfiles&gt;</div><div class="line">    &lt;activeProfile&gt;dev&lt;/activeProfile&gt;</div><div class="line">&lt;/activeProfiles&gt;</div></pre></td></tr></table></figure>
+<h4 id="系统属性激活"><a href="#系统属性激活" class="headerlink" title="系统属性激活"></a>系统属性激活</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;profiles&gt;</div><div class="line">	&lt;profile&gt;</div><div class="line">		&lt;activation&gt;</div><div class="line">			&lt;property&gt;</div><div class="line">				&lt;name&gt;actProp&lt;/name&gt;</div><div class="line">				&lt;value&gt;x&lt;/value&gt;</div><div class="line">			&lt;/property&gt;</div><div class="line">		&lt;/activation&gt;</div><div class="line">	&lt;/profile&gt;</div><div class="line">&lt;/profiles&gt;</div></pre></td></tr></table></figure>
 <p>这表示，如果存在系统属性<code>actProp</code>，并且其值为<code>x</code>，则激活该profile。如果没有value，则表示只要存在<code>actProp</code>属性，就激活。<br>系统属性，通过如下传递：</p>
 <p><code>mvn clean install -DactProp=x</code></p>
-<h4 id="操作系统激活"><a href="#操作系统激活" class="headerlink" title="操作系统激活"></a>操作系统激活</h4><pre><code class="bash">&lt;profiles&gt;
-    &lt;profile&gt;
-        &lt;activation&gt;
-            &lt;os&gt;
-                &lt;name&gt;Windows XP&lt;/name&gt;
-                &lt;family&gt;Windows&gt;&lt;/family&gt;
-                &lt;arch&gt;x86&lt;/arch&gt;
-                &lt;version&gt;5.1.2600&lt;/version&gt;
-            &lt;/os&gt;
-        &lt;/activation&gt;
-    &lt;/profile&gt;
-&lt;/profiles&gt;
-</code></pre>
-<h4 id="文件存在与否激活"><a href="#文件存在与否激活" class="headerlink" title="文件存在与否激活"></a>文件存在与否激活</h4><pre><code class="bash">&lt;profiles&gt;
-    &lt;profile&gt;
-        &lt;activation&gt;
-            &lt;file&gt;
-                &lt;missing&gt;x.properties&lt;/missing&gt;
-                &lt;exists&gt;y.properties&lt;/exists&gt;
-            &lt;/file&gt;
-        &lt;/activation&gt;
-    &lt;/profile&gt;
-&lt;/profiles&gt;
-</code></pre>
-<h4 id="默认激活"><a href="#默认激活" class="headerlink" title="默认激活"></a>默认激活</h4><pre><code class="bash">&lt;profiles&gt;
-    &lt;profile&gt;
-        &lt;id&gt;dev&lt;/id&gt;
-        &lt;activation&gt;
-            &lt;activeByDefault&gt;true&lt;/activeByDefault&gt;
-        &lt;/activation&gt;
-    &lt;/profile&gt;
-&lt;/profiles&gt;
-</code></pre>
-<h2 id="经典的-pom-xml-配置例子"><a href="#经典的-pom-xml-配置例子" class="headerlink" title="经典的 pom.xml 配置例子"></a>经典的 pom.xml 配置例子</h2><pre><code class="bash">&lt;project
-    xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;
-&gt;
-    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
-
-    &lt;!-- 所属项目名 --&gt;
-    &lt;groupId&gt;jetty-demo&lt;/groupId&gt;
-
-    &lt;!-- 模块名 --&gt;
-    &lt;artifactId&gt;jetty-demo&lt;/artifactId&gt;
-
-    &lt;!-- 版本 --&gt;
-    &lt;version&gt;1.0.0&lt;/version&gt;
-
-    &lt;!-- 打包方式 --&gt;
-    &lt;packaging&gt;war&lt;/packaging&gt;
-
-    &lt;!-- 项目的url --&gt;
-    &lt;url&gt;http://emacsist.github.io&lt;/url&gt;
-
-    &lt;!-- 开发者人员 --&gt;
-    &lt;developers&gt;
-        &lt;developer&gt;
-            &lt;id&gt;emacsist&lt;/id&gt;
-            &lt;name&gt;Zhiyong yang&lt;/name&gt;
-            &lt;email&gt;emacsist@qq.com&lt;/email&gt;
-            &lt;roles&gt;
-                &lt;role&gt;admin&lt;/role&gt;
-            &lt;/roles&gt;
-        &lt;/developer&gt;
-    &lt;/developers&gt;
-
-    &lt;!-- SpringMVC 版本 --&gt;
-    &lt;properties&gt;
-        &lt;spring.version&gt;4.0.1.RELEASE&lt;/spring.version&gt;
-        &lt;!— checkstyle配置文件 —&gt;
-        &lt;!—     config/sun_checks.xml - Sun Microsystems Definition (default).  
-            config/maven_checks.xml - Maven Development Definitions.  
-            config/turbine_checks.xml - Turbine Development Definitions.  
-            config/avalon_checks.xml - Avalon Development Definitions.
-        —&gt;
-               &lt;checkstyle.config.location&gt;config/maven_checks.xml&lt;/checkstyle.config.location&gt; 
-    &lt;/properties&gt;
-
-
-    &lt;!-- 这里填写项目的git地址 --&gt;
-    &lt;scm&gt;
-        &lt;connection&gt;scm:git:git.coding.net/emacsist/Jetty_Maven.git&lt;/connection&gt;
-        &lt;developerConnection&gt;scm:git:git.coding.net/emacsist/Jetty_Maven.git&lt;/developerConnection&gt;
-        &lt;url&gt;git://git.coding.net/emacsist/Jetty_Maven.git&lt;/url&gt;
-    &lt;/scm&gt;
-
-    &lt;!-- 使用 mvn site 命令生成站点报告，生成后的文件在 target/site/ 目录下 --&gt;
-    &lt;reporting&gt;
-        &lt;plugins&gt;
-            &lt;plugin&gt;
-                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-                &lt;artifactId&gt;maven-project-info-reports-plugin&lt;/artifactId&gt;
-                &lt;configuration&gt;
-                   &lt;dependencyLocationsEnabled&gt;false&lt;/dependencyLocationsEnabled&gt;
-                &lt;/configuration&gt;
-            &lt;/plugin&gt;
-            &lt;!-- 报告里生成java doc --&gt;
-            &lt;plugin&gt;
-                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-                &lt;artifactId&gt;maven-javadoc-plugin&lt;/artifactId&gt;
-                &lt;version&gt;2.10.3&lt;/version&gt;
-                &lt;configuration&gt;
-                    &lt;show&gt;public&lt;/show&gt;
-                &lt;/configuration&gt;
-            &lt;/plugin&gt;
-            &lt;!-- 报告里生成源码目录树 --&gt;
-            &lt;plugin&gt;
-                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-                &lt;artifactId&gt;maven-jxr-plugin&lt;/artifactId&gt;
-                &lt;version&gt;2.5&lt;/version&gt;
-            &lt;/plugin&gt;
-
-
-            &lt;!— mvn checkstyle:checkstyle checkstyle —&gt;
-            &lt;plugin&gt;  
-                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;  
-                &lt;artifactId&gt;maven-checkstyle-plugin&lt;/artifactId&gt;  
-                &lt;version&gt;2.9.1&lt;/version&gt;  
-            &lt;/plugin&gt;  
-
-            &lt;!-- 注意，要先执行一下 mvn package 之后再执行 mvn findbugs:gui 检查bugs —&gt;
-            &lt;plugin&gt;  
-                        &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;  
-                           &lt;artifactId&gt;findbugs-maven-plugin&lt;/artifactId&gt;  
-                        &lt;version&gt;3.0.2&lt;/version&gt;  
-                            &lt;configuration&gt;  
-                            &lt;xmlOutput&gt;true&lt;/xmlOutput&gt;  
-                               &lt;effort&gt;Max&lt;/effort&gt;  
-                        &lt;/configuration&gt;  
-               &lt;/plugin&gt;  
-
-            &lt;!-- 源码分析报告PMD --&gt;
-            &lt;plugin&gt;
-                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-                &lt;artifactId&gt;maven-pmd-plugin&lt;/artifactId&gt;
-                &lt;version&gt;3.5&lt;/version&gt;
-                &lt;configuration&gt;
-                    &lt;!-- 默认情况下，如果没有什么问题的话，它会忽略PMD的报告，这里是无论如何都显示报告 --&gt;
-                    &lt;skipEmptyReport&gt;false&lt;/skipEmptyReport&gt;
-                    &lt;!-- 将所有模块的分析，集成到一起 --&gt;
-                    &lt;aggregate&gt;true&lt;/aggregate&gt;
-                &lt;/configuration&gt;
-            &lt;/plugin&gt;
-
-            &lt;!-- 更改记录，这个要配置上面的 scm 配置 --&gt;
-            &lt;plugin&gt;
-                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-                &lt;artifactId&gt;maven-changelog-plugin&lt;/artifactId&gt;
-                &lt;version&gt;2.3&lt;/version&gt;
-            &lt;/plugin&gt;
-        &lt;/plugins&gt;
-    &lt;/reporting&gt;
-
-    &lt;build&gt;
-        &lt;!-- 源码目录 --&gt;
-        &lt;sourceDirectory&gt;src&lt;/sourceDirectory&gt;
-        &lt;plugins&gt;
-            &lt;!--mvn source:jar 打包源码的插件 --&gt;
-            &lt;plugin&gt;
-                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-                &lt;artifactId&gt;maven-source-plugin&lt;/artifactId&gt;
-                &lt;version&gt;2.4&lt;/version&gt;
-                &lt;executions&gt;
-                    &lt;execution&gt;
-                        &lt;id&gt;attach-sources&lt;/id&gt;
-                        &lt;phase&gt;verify&lt;/phase&gt;
-                        &lt;goals&gt;
-                            &lt;goal&gt;jar-no-fork&lt;/goal&gt;
-                        &lt;/goals&gt;
-                    &lt;/execution&gt;
-                &lt;/executions&gt;
-            &lt;/plugin&gt;
-
-            &lt;!-- mvn site 站点插件 --&gt;
-            &lt;plugin&gt;
-                &lt;artifactId&gt;maven-site-plugin&lt;/artifactId&gt;
-            &lt;/plugin&gt;
-
-            &lt;!-- mvn javadoc:javadoc 用于生成java doc --&gt;
-            &lt;plugin&gt;
-                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-                &lt;artifactId&gt;maven-javadoc-plugin&lt;/artifactId&gt;
-                &lt;version&gt;2.10.3&lt;/version&gt;
-                &lt;configuration&gt;
-                    &lt;show&gt;private&lt;/show&gt;
-                    &lt;nohelp&gt;true&lt;/nohelp&gt;
-                &lt;/configuration&gt;
-            &lt;/plugin&gt;
-
-            &lt;!-- mvn pmd:pmd 源码分析插件 --&gt;
-            &lt;plugin&gt;
-                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-                &lt;artifactId&gt;maven-pmd-plugin&lt;/artifactId&gt;
-                &lt;version&gt;3.5&lt;/version&gt;
-                &lt;configuration&gt;
-                    &lt;!-- 默认情况下，如果没有什么问题的话，它会忽略PMD的报告，这里是无论如何都显示报告 --&gt;
-                    &lt;skipEmptyReport&gt;false&lt;/skipEmptyReport&gt;
-
-                    &lt;!-- 将所有模块的分析，集成到一起 --&gt;
-                    &lt;aggregate&gt;true&lt;/aggregate&gt;
-                &lt;/configuration&gt;
-            &lt;/plugin&gt;
-
-            &lt;!-- mvn jetty:run Jetty 插件 --&gt;
-            &lt;plugin&gt;
-                &lt;groupId&gt;org.eclipse.jetty&lt;/groupId&gt;
-                &lt;artifactId&gt;jetty-maven-plugin&lt;/artifactId&gt;
-                &lt;version&gt;9.0.6.v20130930&lt;/version&gt;
-                &lt;configuration&gt;
-                    &lt;!-- Jetty容器配置 --&gt;
-                    &lt;httpConnector&gt;
-                        &lt;!-- 监听的端口 --&gt;
-                        &lt;port&gt;8080&lt;/port&gt;
-                    &lt;/httpConnector&gt;
-                    &lt;!-- 热部署，间隔多少秒重新扫描文件，默认为0,即不进行热部署 --&gt;
-                    &lt;scanIntervalSeconds&gt;1&lt;/scanIntervalSeconds&gt;
-
-                    &lt;!-- web应用配置 --&gt;
-                    &lt;webApp&gt;
-                        &lt;contextPath&gt;/&lt;/contextPath&gt;
-                        &lt;!-- web.xml路径 --&gt;
-                        &lt;descriptor&gt;${project.basedir}/WebContent/WEB-INF/web.xml&lt;/descriptor&gt;
-                    &lt;/webApp&gt;
-
-                    &lt;!-- 生成classes的目录 --&gt;
-                    &lt;classesDirectory&gt;${project.basedir}/target/classes&lt;/classesDirectory&gt;
-                    &lt;webAppSourceDirectory&gt;${project.basedir}/WebContent/&lt;/webAppSourceDirectory&gt;
-                &lt;/configuration&gt;
-            &lt;/plugin&gt;
-
-            &lt;!-- mvn clean package 打包 war 的插件 --&gt;
-            &lt;plugin&gt;
-                &lt;artifactId&gt;maven-war-plugin&lt;/artifactId&gt;
-                &lt;version&gt;2.6&lt;/version&gt;
-                &lt;configuration&gt;
-                    &lt;warSourceDirectory&gt;WebContent&lt;/warSourceDirectory&gt;
-                    &lt;failOnMissingWebXml&gt;false&lt;/failOnMissingWebXml&gt;
-                    &lt;webResources&gt;
-                        &lt;webResource&gt;
-                            &lt;directory&gt;WebContent&lt;/directory&gt;
-                            &lt;!-- 解析web资源 --&gt;
-                            &lt;filtering&gt;true&lt;/filtering&gt;
-                            &lt;includes&gt;
-                                &lt;include&gt;**/*.css&lt;/include&gt;
-                                &lt;include&gt;**/*.js&lt;/include&gt;
-                            &lt;/includes&gt;
-                        &lt;/webResource&gt;
-                    &lt;/webResources&gt;
-                &lt;/configuration&gt;
-            &lt;/plugin&gt;
-
-            &lt;!-- 编译器插件 --&gt;
-            &lt;plugin&gt;
-                &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
-                &lt;version&gt;3.3&lt;/version&gt;
-                &lt;configuration&gt;
-                    &lt;source&gt;1.8&lt;/source&gt;
-                    &lt;target&gt;1.8&lt;/target&gt;
-                &lt;/configuration&gt;
-            &lt;/plugin&gt;
-        &lt;/plugins&gt;
-    &lt;/build&gt;
-
-    &lt;dependencies&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;junit&lt;/groupId&gt;
-            &lt;artifactId&gt;junit&lt;/artifactId&gt;
-            &lt;version&gt;3.8.1&lt;/version&gt;
-            &lt;scope&gt;test&lt;/scope&gt;
-        &lt;/dependency&gt;
-        &lt;!-- Spring dependencies start --&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-core&lt;/artifactId&gt;
-            &lt;version&gt;${spring.version}&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-web&lt;/artifactId&gt;
-            &lt;version&gt;${spring.version}&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-webmvc&lt;/artifactId&gt;
-            &lt;version&gt;${spring.version}&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;!-- Spring dependencies end --&gt;
-    &lt;/dependencies&gt;
-&lt;/project&gt;
-</code></pre>
+<h4 id="操作系统激活"><a href="#操作系统激活" class="headerlink" title="操作系统激活"></a>操作系统激活</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;profiles&gt;</div><div class="line">	&lt;profile&gt;</div><div class="line">		&lt;activation&gt;</div><div class="line">			&lt;os&gt;</div><div class="line">				&lt;name&gt;Windows XP&lt;/name&gt;</div><div class="line">				&lt;family&gt;Windows&gt;&lt;/family&gt;</div><div class="line">				&lt;arch&gt;x86&lt;/arch&gt;</div><div class="line">				&lt;version&gt;5.1.2600&lt;/version&gt;</div><div class="line">			&lt;/os&gt;</div><div class="line">		&lt;/activation&gt;</div><div class="line">	&lt;/profile&gt;</div><div class="line">&lt;/profiles&gt;</div></pre></td></tr></table></figure>
+<h4 id="文件存在与否激活"><a href="#文件存在与否激活" class="headerlink" title="文件存在与否激活"></a>文件存在与否激活</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;profiles&gt;</div><div class="line">	&lt;profile&gt;</div><div class="line">		&lt;activation&gt;</div><div class="line">			&lt;file&gt;</div><div class="line">				&lt;missing&gt;x.properties&lt;/missing&gt;</div><div class="line">				&lt;exists&gt;y.properties&lt;/exists&gt;</div><div class="line">			&lt;/file&gt;</div><div class="line">		&lt;/activation&gt;</div><div class="line">	&lt;/profile&gt;</div><div class="line">&lt;/profiles&gt;</div></pre></td></tr></table></figure>
+<h4 id="默认激活"><a href="#默认激活" class="headerlink" title="默认激活"></a>默认激活</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;profiles&gt;</div><div class="line">    &lt;profile&gt;</div><div class="line">        &lt;id&gt;dev&lt;/id&gt;</div><div class="line">		&lt;activation&gt;</div><div class="line">			&lt;activeByDefault&gt;<span class="literal">true</span>&lt;/activeByDefault&gt;</div><div class="line">		&lt;/activation&gt;</div><div class="line">	&lt;/profile&gt;</div><div class="line">&lt;/profiles&gt;</div></pre></td></tr></table></figure>
+<h2 id="经典的-pom-xml-配置例子"><a href="#经典的-pom-xml-配置例子" class="headerlink" title="经典的 pom.xml 配置例子"></a>经典的 pom.xml 配置例子</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div><div class="line">228</div><div class="line">229</div><div class="line">230</div><div class="line">231</div><div class="line">232</div><div class="line">233</div><div class="line">234</div><div class="line">235</div><div class="line">236</div><div class="line">237</div><div class="line">238</div><div class="line">239</div><div class="line">240</div><div class="line">241</div><div class="line">242</div><div class="line">243</div><div class="line">244</div><div class="line">245</div><div class="line">246</div><div class="line">247</div><div class="line">248</div><div class="line">249</div><div class="line">250</div><div class="line">251</div><div class="line">252</div><div class="line">253</div><div class="line">254</div><div class="line">255</div><div class="line">256</div><div class="line">257</div></pre></td><td class="code"><pre><div class="line">&lt;project</div><div class="line">	xmlns=<span class="string">"http://maven.apache.org/POM/4.0.0"</span></div><div class="line">	xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></div><div class="line">	xsi:schemaLocation=<span class="string">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span></div><div class="line">&gt;</div><div class="line">	&lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</div><div class="line"></div><div class="line">	&lt;!-- 所属项目名 --&gt;</div><div class="line">	&lt;groupId&gt;jetty-demo&lt;/groupId&gt;</div><div class="line"></div><div class="line">	&lt;!-- 模块名 --&gt;</div><div class="line">	&lt;artifactId&gt;jetty-demo&lt;/artifactId&gt;</div><div class="line"></div><div class="line">	&lt;!-- 版本 --&gt;</div><div class="line">	&lt;version&gt;1.0.0&lt;/version&gt;</div><div class="line"></div><div class="line">	&lt;!-- 打包方式 --&gt;</div><div class="line">	&lt;packaging&gt;war&lt;/packaging&gt;</div><div class="line"></div><div class="line">	&lt;!-- 项目的url --&gt;</div><div class="line">	&lt;url&gt;http://emacsist.github.io&lt;/url&gt;</div><div class="line"></div><div class="line">	&lt;!-- 开发者人员 --&gt;</div><div class="line">	&lt;developers&gt;</div><div class="line">		&lt;developer&gt;</div><div class="line">			&lt;id&gt;emacsist&lt;/id&gt;</div><div class="line">			&lt;name&gt;Zhiyong yang&lt;/name&gt;</div><div class="line">			&lt;email&gt;emacsist@qq.com&lt;/email&gt;</div><div class="line">			&lt;roles&gt;</div><div class="line">				&lt;role&gt;admin&lt;/role&gt;</div><div class="line">			&lt;/roles&gt;</div><div class="line">		&lt;/developer&gt;</div><div class="line">	&lt;/developers&gt;</div><div class="line"></div><div class="line">	&lt;!-- SpringMVC 版本 --&gt;</div><div class="line">	&lt;properties&gt;</div><div class="line">		&lt;spring.version&gt;4.0.1.RELEASE&lt;/spring.version&gt;</div><div class="line">		&lt;!— checkstyle配置文件 —&gt;</div><div class="line">		&lt;!—     config/sun_checks.xml - Sun Microsystems Definition (default).  </div><div class="line">			config/maven_checks.xml - Maven Development Definitions.  </div><div class="line">			config/turbine_checks.xml - Turbine Development Definitions.  </div><div class="line">			config/avalon_checks.xml - Avalon Development Definitions.</div><div class="line">		—&gt;</div><div class="line">               &lt;checkstyle.config.location&gt;config/maven_checks.xml&lt;/checkstyle.config.location&gt; </div><div class="line">	&lt;/properties&gt;</div><div class="line"></div><div class="line"></div><div class="line">	&lt;!-- 这里填写项目的git地址 --&gt;</div><div class="line">	&lt;scm&gt;</div><div class="line">		&lt;connection&gt;scm:git:git.coding.net/emacsist/Jetty_Maven.git&lt;/connection&gt;</div><div class="line">		&lt;developerConnection&gt;scm:git:git.coding.net/emacsist/Jetty_Maven.git&lt;/developerConnection&gt;</div><div class="line">		&lt;url&gt;git://git.coding.net/emacsist/Jetty_Maven.git&lt;/url&gt;</div><div class="line">	&lt;/scm&gt;</div><div class="line"></div><div class="line">	&lt;!-- 使用 mvn site 命令生成站点报告，生成后的文件在 target/site/ 目录下 --&gt;</div><div class="line">	&lt;reporting&gt;</div><div class="line">		&lt;plugins&gt;</div><div class="line">			&lt;plugin&gt;</div><div class="line">				&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</div><div class="line">				&lt;artifactId&gt;maven-project-info-reports-plugin&lt;/artifactId&gt;</div><div class="line">				&lt;configuration&gt;</div><div class="line">				   &lt;dependencyLocationsEnabled&gt;<span class="literal">false</span>&lt;/dependencyLocationsEnabled&gt;</div><div class="line">				&lt;/configuration&gt;</div><div class="line">			&lt;/plugin&gt;</div><div class="line">			&lt;!-- 报告里生成java doc --&gt;</div><div class="line">			&lt;plugin&gt;</div><div class="line">				&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</div><div class="line">				&lt;artifactId&gt;maven-javadoc-plugin&lt;/artifactId&gt;</div><div class="line">				&lt;version&gt;2.10.3&lt;/version&gt;</div><div class="line">				&lt;configuration&gt;</div><div class="line">					&lt;show&gt;public&lt;/show&gt;</div><div class="line">				&lt;/configuration&gt;</div><div class="line">			&lt;/plugin&gt;</div><div class="line">			&lt;!-- 报告里生成源码目录树 --&gt;</div><div class="line">			&lt;plugin&gt;</div><div class="line">				&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</div><div class="line">				&lt;artifactId&gt;maven-jxr-plugin&lt;/artifactId&gt;</div><div class="line">				&lt;version&gt;2.5&lt;/version&gt;</div><div class="line">			&lt;/plugin&gt;</div><div class="line"></div><div class="line"></div><div class="line">			&lt;!— mvn checkstyle:checkstyle checkstyle —&gt;</div><div class="line">			&lt;plugin&gt;  </div><div class="line">				&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;  </div><div class="line">				&lt;artifactId&gt;maven-checkstyle-plugin&lt;/artifactId&gt;  </div><div class="line">				&lt;version&gt;2.9.1&lt;/version&gt;  </div><div class="line">			&lt;/plugin&gt;  </div><div class="line">  </div><div class="line">			&lt;!-- 注意，要先执行一下 mvn package 之后再执行 mvn findbugs:gui 检查bugs —&gt;</div><div class="line">			&lt;plugin&gt;  </div><div class="line">		                &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;  </div><div class="line">               			&lt;artifactId&gt;findbugs-maven-plugin&lt;/artifactId&gt;  </div><div class="line">		                &lt;version&gt;3.0.2&lt;/version&gt;  </div><div class="line">               			 &lt;configuration&gt;  </div><div class="line">		                    &lt;xmlOutput&gt;<span class="literal">true</span>&lt;/xmlOutput&gt;  </div><div class="line">               			    &lt;effort&gt;Max&lt;/effort&gt;  </div><div class="line">		                &lt;/configuration&gt;  </div><div class="line">		       &lt;/plugin&gt;  </div><div class="line"></div><div class="line">			&lt;!-- 源码分析报告PMD --&gt;</div><div class="line">			&lt;plugin&gt;</div><div class="line">				&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</div><div class="line">				&lt;artifactId&gt;maven-pmd-plugin&lt;/artifactId&gt;</div><div class="line">				&lt;version&gt;3.5&lt;/version&gt;</div><div class="line">				&lt;configuration&gt;</div><div class="line">					&lt;!-- 默认情况下，如果没有什么问题的话，它会忽略PMD的报告，这里是无论如何都显示报告 --&gt;</div><div class="line">					&lt;skipEmptyReport&gt;<span class="literal">false</span>&lt;/skipEmptyReport&gt;</div><div class="line">					&lt;!-- 将所有模块的分析，集成到一起 --&gt;</div><div class="line">					&lt;aggregate&gt;<span class="literal">true</span>&lt;/aggregate&gt;</div><div class="line">				&lt;/configuration&gt;</div><div class="line">			&lt;/plugin&gt;</div><div class="line"></div><div class="line">			&lt;!-- 更改记录，这个要配置上面的 scm 配置 --&gt;</div><div class="line">			&lt;plugin&gt;</div><div class="line">				&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</div><div class="line">				&lt;artifactId&gt;maven-changelog-plugin&lt;/artifactId&gt;</div><div class="line">				&lt;version&gt;2.3&lt;/version&gt;</div><div class="line">			&lt;/plugin&gt;</div><div class="line">		&lt;/plugins&gt;</div><div class="line">	&lt;/reporting&gt;</div><div class="line"></div><div class="line">	&lt;build&gt;</div><div class="line">		&lt;!-- 源码目录 --&gt;</div><div class="line">		&lt;sourceDirectory&gt;src&lt;/sourceDirectory&gt;</div><div class="line">		&lt;plugins&gt;</div><div class="line">			&lt;!--mvn <span class="built_in">source</span>:jar 打包源码的插件 --&gt;</div><div class="line">			&lt;plugin&gt;</div><div class="line">				&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</div><div class="line">				&lt;artifactId&gt;maven-source-plugin&lt;/artifactId&gt;</div><div class="line">				&lt;version&gt;2.4&lt;/version&gt;</div><div class="line">				&lt;executions&gt;</div><div class="line">					&lt;execution&gt;</div><div class="line">						&lt;id&gt;attach-sources&lt;/id&gt;</div><div class="line">						&lt;phase&gt;verify&lt;/phase&gt;</div><div class="line">						&lt;goals&gt;</div><div class="line">							&lt;goal&gt;jar-no-fork&lt;/goal&gt;</div><div class="line">						&lt;/goals&gt;</div><div class="line">					&lt;/execution&gt;</div><div class="line">				&lt;/executions&gt;</div><div class="line">			&lt;/plugin&gt;</div><div class="line"></div><div class="line">			&lt;!-- mvn site 站点插件 --&gt;</div><div class="line">			&lt;plugin&gt;</div><div class="line">				&lt;artifactId&gt;maven-site-plugin&lt;/artifactId&gt;</div><div class="line">			&lt;/plugin&gt;</div><div class="line"></div><div class="line">			&lt;!-- mvn javadoc:javadoc 用于生成java doc --&gt;</div><div class="line">			&lt;plugin&gt;</div><div class="line">				&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</div><div class="line">				&lt;artifactId&gt;maven-javadoc-plugin&lt;/artifactId&gt;</div><div class="line">				&lt;version&gt;2.10.3&lt;/version&gt;</div><div class="line">				&lt;configuration&gt;</div><div class="line">					&lt;show&gt;private&lt;/show&gt;</div><div class="line">					&lt;nohelp&gt;<span class="literal">true</span>&lt;/nohelp&gt;</div><div class="line">				&lt;/configuration&gt;</div><div class="line">			&lt;/plugin&gt;</div><div class="line"></div><div class="line">			&lt;!-- mvn pmd:pmd 源码分析插件 --&gt;</div><div class="line">			&lt;plugin&gt;</div><div class="line">				&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</div><div class="line">				&lt;artifactId&gt;maven-pmd-plugin&lt;/artifactId&gt;</div><div class="line">				&lt;version&gt;3.5&lt;/version&gt;</div><div class="line">				&lt;configuration&gt;</div><div class="line">					&lt;!-- 默认情况下，如果没有什么问题的话，它会忽略PMD的报告，这里是无论如何都显示报告 --&gt;</div><div class="line">					&lt;skipEmptyReport&gt;<span class="literal">false</span>&lt;/skipEmptyReport&gt;</div><div class="line"></div><div class="line">					&lt;!-- 将所有模块的分析，集成到一起 --&gt;</div><div class="line">					&lt;aggregate&gt;<span class="literal">true</span>&lt;/aggregate&gt;</div><div class="line">				&lt;/configuration&gt;</div><div class="line">			&lt;/plugin&gt;</div><div class="line"></div><div class="line">			&lt;!-- mvn jetty:run Jetty 插件 --&gt;</div><div class="line">			&lt;plugin&gt;</div><div class="line">				&lt;groupId&gt;org.eclipse.jetty&lt;/groupId&gt;</div><div class="line">				&lt;artifactId&gt;jetty-maven-plugin&lt;/artifactId&gt;</div><div class="line">				&lt;version&gt;9.0.6.v20130930&lt;/version&gt;</div><div class="line">				&lt;configuration&gt;</div><div class="line">					&lt;!-- Jetty容器配置 --&gt;</div><div class="line">					&lt;httpConnector&gt;</div><div class="line">						&lt;!-- 监听的端口 --&gt;</div><div class="line">						&lt;port&gt;8080&lt;/port&gt;</div><div class="line">					&lt;/httpConnector&gt;</div><div class="line">					&lt;!-- 热部署，间隔多少秒重新扫描文件，默认为0,即不进行热部署 --&gt;</div><div class="line">					&lt;scanIntervalSeconds&gt;1&lt;/scanIntervalSeconds&gt;</div><div class="line"></div><div class="line">					&lt;!-- web应用配置 --&gt;</div><div class="line">					&lt;webApp&gt;</div><div class="line">						&lt;contextPath&gt;/&lt;/contextPath&gt;</div><div class="line">						&lt;!-- web.xml路径 --&gt;</div><div class="line">						&lt;descriptor&gt;<span class="variable">$&#123;project.basedir&#125;</span>/WebContent/WEB-INF/web.xml&lt;/descriptor&gt;</div><div class="line">					&lt;/webApp&gt;</div><div class="line"></div><div class="line">					&lt;!-- 生成classes的目录 --&gt;</div><div class="line">					&lt;classesDirectory&gt;<span class="variable">$&#123;project.basedir&#125;</span>/target/classes&lt;/classesDirectory&gt;</div><div class="line">					&lt;webAppSourceDirectory&gt;<span class="variable">$&#123;project.basedir&#125;</span>/WebContent/&lt;/webAppSourceDirectory&gt;</div><div class="line">				&lt;/configuration&gt;</div><div class="line">			&lt;/plugin&gt;</div><div class="line"></div><div class="line">			&lt;!-- mvn clean package 打包 war 的插件 --&gt;</div><div class="line">			&lt;plugin&gt;</div><div class="line">				&lt;artifactId&gt;maven-war-plugin&lt;/artifactId&gt;</div><div class="line">				&lt;version&gt;2.6&lt;/version&gt;</div><div class="line">				&lt;configuration&gt;</div><div class="line">					&lt;warSourceDirectory&gt;WebContent&lt;/warSourceDirectory&gt;</div><div class="line">					&lt;failOnMissingWebXml&gt;<span class="literal">false</span>&lt;/failOnMissingWebXml&gt;</div><div class="line">					&lt;webResources&gt;</div><div class="line">						&lt;webResource&gt;</div><div class="line">							&lt;directory&gt;WebContent&lt;/directory&gt;</div><div class="line">							&lt;!-- 解析web资源 --&gt;</div><div class="line">							&lt;filtering&gt;<span class="literal">true</span>&lt;/filtering&gt;</div><div class="line">							&lt;includes&gt;</div><div class="line">								&lt;include&gt;**/*.css&lt;/include&gt;</div><div class="line">								&lt;include&gt;**/*.js&lt;/include&gt;</div><div class="line">							&lt;/includes&gt;</div><div class="line">						&lt;/webResource&gt;</div><div class="line">					&lt;/webResources&gt;</div><div class="line">				&lt;/configuration&gt;</div><div class="line">			&lt;/plugin&gt;</div><div class="line"></div><div class="line">			&lt;!-- 编译器插件 --&gt;</div><div class="line">			&lt;plugin&gt;</div><div class="line">				&lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;</div><div class="line">				&lt;version&gt;3.3&lt;/version&gt;</div><div class="line">				&lt;configuration&gt;</div><div class="line">					&lt;<span class="built_in">source</span>&gt;1.8&lt;/<span class="built_in">source</span>&gt;</div><div class="line">					&lt;target&gt;1.8&lt;/target&gt;</div><div class="line">				&lt;/configuration&gt;</div><div class="line">			&lt;/plugin&gt;</div><div class="line">		&lt;/plugins&gt;</div><div class="line">	&lt;/build&gt;</div><div class="line"></div><div class="line">	&lt;dependencies&gt;</div><div class="line">		&lt;dependency&gt;</div><div class="line">			&lt;groupId&gt;junit&lt;/groupId&gt;</div><div class="line">			&lt;artifactId&gt;junit&lt;/artifactId&gt;</div><div class="line">			&lt;version&gt;3.8.1&lt;/version&gt;</div><div class="line">			&lt;scope&gt;<span class="built_in">test</span>&lt;/scope&gt;</div><div class="line">		&lt;/dependency&gt;</div><div class="line">		&lt;!-- Spring dependencies start --&gt;</div><div class="line">		&lt;dependency&gt;</div><div class="line">			&lt;groupId&gt;org.springframework&lt;/groupId&gt;</div><div class="line">			&lt;artifactId&gt;spring-core&lt;/artifactId&gt;</div><div class="line">			&lt;version&gt;<span class="variable">$&#123;spring.version&#125;</span>&lt;/version&gt;</div><div class="line">		&lt;/dependency&gt;</div><div class="line">		&lt;dependency&gt;</div><div class="line">			&lt;groupId&gt;org.springframework&lt;/groupId&gt;</div><div class="line">			&lt;artifactId&gt;spring-web&lt;/artifactId&gt;</div><div class="line">			&lt;version&gt;<span class="variable">$&#123;spring.version&#125;</span>&lt;/version&gt;</div><div class="line">		&lt;/dependency&gt;</div><div class="line">		&lt;dependency&gt;</div><div class="line">			&lt;groupId&gt;org.springframework&lt;/groupId&gt;</div><div class="line">			&lt;artifactId&gt;spring-webmvc&lt;/artifactId&gt;</div><div class="line">			&lt;version&gt;<span class="variable">$&#123;spring.version&#125;</span>&lt;/version&gt;</div><div class="line">		&lt;/dependency&gt;</div><div class="line">		&lt;!-- Spring dependencies end --&gt;</div><div class="line">	&lt;/dependencies&gt;</div><div class="line">&lt;/project&gt;</div></pre></td></tr></table></figure>
 <h2 id="编写Maven插件"><a href="#编写Maven插件" class="headerlink" title="编写Maven插件"></a>编写Maven插件</h2><ol>
 <li><p>创建一个maven-plugin项目：它本身也是一个maven项目，不过，packaging 必须是<code>maven-plugin</code>.可以使用<code>maven-archetype-plugin</code>快速创建一个Maven插件项目</p>
 </li>

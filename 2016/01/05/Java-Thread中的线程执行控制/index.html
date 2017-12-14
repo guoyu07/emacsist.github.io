@@ -15,17 +15,17 @@
     <meta name="keywords" content="java,thread," />
   
 
-  <meta name="description" content="join是Thread对象里的方法.签名如下:      public final void join() throws InterruptedException {         join(0);     }  它的作用是: 当某个Thread调用join方法时，其他线程，必须要等待这个线程(即调用join的线程）运行完毕（正常执行完，或者抛出异常，但它不会影响其他线程正常执行），才能继续执">
+  <meta name="description" content="join是Thread对象里的方法.签名如下:  123public final void join() throws InterruptedException &amp;#123;    join(0);&amp;#125; 它的作用是: 当某个Thread调用join方法时，其他线程，必须要等待这个线程(即调用join的线程）运行完毕（正常执行完，或者抛出异常，但它不会影响其他线程正常执行），才能继续执行.">
 <meta name="keywords" content="java,thread">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java Thread中的线程执行控制">
 <meta property="og:url" content="https://emacsist.github.io/2016/01/05/Java-Thread中的线程执行控制/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="join是Thread对象里的方法.签名如下:      public final void join() throws InterruptedException {         join(0);     }  它的作用是: 当某个Thread调用join方法时，其他线程，必须要等待这个线程(即调用join的线程）运行完毕（正常执行完，或者抛出异常，但它不会影响其他线程正常执行），才能继续执">
+<meta property="og:description" content="join是Thread对象里的方法.签名如下:  123public final void join() throws InterruptedException &amp;#123;    join(0);&amp;#125; 它的作用是: 当某个Thread调用join方法时，其他线程，必须要等待这个线程(即调用join的线程）运行完毕（正常执行完，或者抛出异常，但它不会影响其他线程正常执行），才能继续执行.">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java Thread中的线程执行控制">
-<meta name="twitter:description" content="join是Thread对象里的方法.签名如下:      public final void join() throws InterruptedException {         join(0);     }  它的作用是: 当某个Thread调用join方法时，其他线程，必须要等待这个线程(即调用join的线程）运行完毕（正常执行完，或者抛出异常，但它不会影响其他线程正常执行），才能继续执">
+<meta name="twitter:description" content="join是Thread对象里的方法.签名如下:  123public final void join() throws InterruptedException &amp;#123;    join(0);&amp;#125; 它的作用是: 当某个Thread调用join方法时，其他线程，必须要等待这个线程(即调用join的线程）运行完毕（正常执行完，或者抛出异常，但它不会影响其他线程正常执行），才能继续执行.">
 
   
 
@@ -204,163 +204,19 @@
                             <blockquote>
 <p>join是Thread对象里的方法.签名如下:</p>
 </blockquote>
-<pre><code class="bash">    public final void join() throws InterruptedException {
-        join(0);
-    }
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public final void join() throws InterruptedException &#123;</div><div class="line">    join(0);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>它的作用是: 当某个Thread调用join方法时，其他线程，必须要等待这个线程(即调用join的线程）运行完毕（正常执行完，或者抛出异常，但它不会影响其他线程正常执行），才能继续执行.</p>
-<h2 id="Talk-is-cheap-show-me-the-code"><a href="#Talk-is-cheap-show-me-the-code" class="headerlink" title="Talk is cheap , show me the code."></a>Talk is cheap , show me the code.</h2><pre><code class="bash">    public static void main(String[] args) throws InterruptedException {
-        MyThread t1 = new MyThread();
-        t1.setName(&quot;t1--thread&quot;);
-        t1.start();
-        t1.join();
-
-        MyThread t2 = new MyThread();
-        t2.setName(&quot;t2--thread&quot;);
-        t2.start();
-        t2.join();
-
-        Thread.sleep(1 * 1000);
-
-        MyThread t3 = new MyThread();
-        t3.setName(&quot;t3--thread&quot;);
-        t3.start();
-        t3.join();
-    }
-
-    public static class MyThread extends Thread {
-        @Override
-        public void run() {
-            int i = 5;
-            while (i-- &gt; 0) {
-                System.out.println(&quot;in thread &quot; + Thread.currentThread().getName());
-                try {
-                    Thread.sleep(1*1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-//                if( i == 4 &amp;&amp; Thread.currentThread().getName().equalsIgnoreCase(&quot;t1--thread&quot;)){
-//                    throw new RuntimeException(&quot;error for t1--thread&quot;);
-//                }
-            }
-
-        }
-    }
-</code></pre>
+<h2 id="Talk-is-cheap-show-me-the-code"><a href="#Talk-is-cheap-show-me-the-code" class="headerlink" title="Talk is cheap , show me the code."></a>Talk is cheap , show me the code.</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">    public static void main(String[] args) throws InterruptedException &#123;</div><div class="line">        MyThread t1 = new MyThread();</div><div class="line">        t1.setName(<span class="string">"t1--thread"</span>);</div><div class="line">        t1.start();</div><div class="line">        t1.join();</div><div class="line"></div><div class="line">        MyThread t2 = new MyThread();</div><div class="line">        t2.setName(<span class="string">"t2--thread"</span>);</div><div class="line">        t2.start();</div><div class="line">        t2.join();</div><div class="line"></div><div class="line">        Thread.sleep(1 * 1000);</div><div class="line"></div><div class="line">        MyThread t3 = new MyThread();</div><div class="line">        t3.setName(<span class="string">"t3--thread"</span>);</div><div class="line">        t3.start();</div><div class="line">        t3.join();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static class MyThread extends Thread &#123;</div><div class="line">        @Override</div><div class="line">        public void <span class="function"><span class="title">run</span></span>() &#123;</div><div class="line">            int i = 5;</div><div class="line">            <span class="keyword">while</span> (i-- &gt; 0) &#123;</div><div class="line">                System.out.println(<span class="string">"in thread "</span> + Thread.currentThread().getName());</div><div class="line">                try &#123;</div><div class="line">                    Thread.sleep(1*1000);</div><div class="line">                &#125; catch (InterruptedException e) &#123;</div><div class="line">                    e.printStackTrace();</div><div class="line">                &#125;</div><div class="line">//                <span class="keyword">if</span>( i == 4 &amp;&amp; Thread.currentThread().getName().equalsIgnoreCase(<span class="string">"t1--thread"</span>))&#123;</div><div class="line">//                    throw new RuntimeException(<span class="string">"error for t1--thread"</span>);</div><div class="line">//                &#125;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
 <p>它的执行结果是:</p>
-<pre><code class="bash">in thread t1--thread
-in thread t1--thread
-in thread t1--thread
-in thread t1--thread
-in thread t1--thread
-in thread t2--thread
-in thread t2--thread
-in thread t2--thread
-in thread t2--thread
-in thread t2--thread
-in thread t3--thread
-in thread t3--thread
-in thread t3--thread
-in thread t3--thread
-in thread t3--thread
-
-Process finished with exit code 0
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">in</span> thread t1--thread</div><div class="line"><span class="keyword">in</span> thread t1--thread</div><div class="line"><span class="keyword">in</span> thread t1--thread</div><div class="line"><span class="keyword">in</span> thread t1--thread</div><div class="line"><span class="keyword">in</span> thread t1--thread</div><div class="line"><span class="keyword">in</span> thread t2--thread</div><div class="line"><span class="keyword">in</span> thread t2--thread</div><div class="line"><span class="keyword">in</span> thread t2--thread</div><div class="line"><span class="keyword">in</span> thread t2--thread</div><div class="line"><span class="keyword">in</span> thread t2--thread</div><div class="line"><span class="keyword">in</span> thread t3--thread</div><div class="line"><span class="keyword">in</span> thread t3--thread</div><div class="line"><span class="keyword">in</span> thread t3--thread</div><div class="line"><span class="keyword">in</span> thread t3--thread</div><div class="line"><span class="keyword">in</span> thread t3--thread</div><div class="line"></div><div class="line">Process finished with <span class="built_in">exit</span> code 0</div></pre></td></tr></table></figure>
 <p>如果中间线程出现异常时:</p>
-<pre><code class="bash">in thread t1--thread
-Exception in thread &quot;t1--thread&quot; java.lang.RuntimeException: error for t1--thread
-    at com.spring.pojo.BasePojo$MyThread.run(BasePojo.java:117)
-in thread t2--thread
-in thread t2--thread
-in thread t2--thread
-in thread t2--thread
-in thread t2--thread
-in thread t3--thread
-in thread t3--thread
-in thread t3--thread
-in thread t3--thread
-in thread t3--thread
-
-Process finished with exit code 0
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">in</span> thread t1--thread</div><div class="line">Exception <span class="keyword">in</span> thread <span class="string">"t1--thread"</span> java.lang.RuntimeException: error <span class="keyword">for</span> t1--thread</div><div class="line">	at com.spring.pojo.BasePojo<span class="variable">$MyThread</span>.run(BasePojo.java:117)</div><div class="line"><span class="keyword">in</span> thread t2--thread</div><div class="line"><span class="keyword">in</span> thread t2--thread</div><div class="line"><span class="keyword">in</span> thread t2--thread</div><div class="line"><span class="keyword">in</span> thread t2--thread</div><div class="line"><span class="keyword">in</span> thread t2--thread</div><div class="line"><span class="keyword">in</span> thread t3--thread</div><div class="line"><span class="keyword">in</span> thread t3--thread</div><div class="line"><span class="keyword">in</span> thread t3--thread</div><div class="line"><span class="keyword">in</span> thread t3--thread</div><div class="line"><span class="keyword">in</span> thread t3--thread</div><div class="line"></div><div class="line">Process finished with <span class="built_in">exit</span> code 0</div></pre></td></tr></table></figure>
 <p>可以看到，第一条线程的异常，并不会影响其他线程的执行.</p>
 <h2 id="延伸"><a href="#延伸" class="headerlink" title="延伸"></a>延伸</h2><h3 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h3><p>这个是某条线程，等待 <code>CountDownLatch</code> 计数完毕后才执行.注意，这个计数器是不能重用的.</p>
 <p>code:</p>
-<pre><code class="bash"> public static void main(String[] args) throws InterruptedException {
-        final int COUNT = 3;
-        CountDownLatch countDownLatch = new CountDownLatch(COUNT);
-
-        for(int i=0; i&lt;COUNT; i++){
-            new MyThread(countDownLatch).start();
-        }
-        MyCountDownLatch myCountDownLatch = new MyCountDownLatch(countDownLatch);
-        myCountDownLatch.start();
-    }
-
-    public static class MyCountDownLatch extends Thread{
-
-        CountDownLatch countDownLatch;
-        public MyCountDownLatch(CountDownLatch countDownLatch){
-            this.countDownLatch = countDownLatch;
-        }
-
-        @Override
-        public void run() {
-            try {
-                //等待计数器变成0,它会一直阻塞，直到计数器为0
-                countDownLatch.await();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.printf(&quot;wait for other thread finish.&quot;);
-        }
-    }
-
-
-    public static class MyThread extends Thread {
-
-        CountDownLatch countDownLatch;
-
-        public MyThread(CountDownLatch countDownLatch){
-            this.countDownLatch = countDownLatch;
-        }
-
-        @Override
-        public void run() {
-            int i = 5;
-            while (i-- &gt; 0) {
-                System.out.println(&quot;in thread &quot; + Thread.currentThread().getName());
-                try {
-                    Thread.sleep(1*1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-            }
-            //将计数器减1
-            countDownLatch.countDown();
-        }
-    }
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line">public static void main(String[] args) throws InterruptedException &#123;</div><div class="line">       final int COUNT = 3;</div><div class="line">       CountDownLatch countDownLatch = new CountDownLatch(COUNT);</div><div class="line"></div><div class="line">       <span class="keyword">for</span>(int i=0; i&lt;COUNT; i++)&#123;</div><div class="line">           new MyThread(countDownLatch).start();</div><div class="line">       &#125;</div><div class="line">       MyCountDownLatch myCountDownLatch = new MyCountDownLatch(countDownLatch);</div><div class="line">       myCountDownLatch.start();</div><div class="line">   &#125;</div><div class="line"></div><div class="line">   public static class MyCountDownLatch extends Thread&#123;</div><div class="line"></div><div class="line">       CountDownLatch countDownLatch;</div><div class="line">       public MyCountDownLatch(CountDownLatch countDownLatch)&#123;</div><div class="line">           this.countDownLatch = countDownLatch;</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       @Override</div><div class="line">       public void <span class="function"><span class="title">run</span></span>() &#123;</div><div class="line">           try &#123;</div><div class="line">               //等待计数器变成0,它会一直阻塞，直到计数器为0</div><div class="line">               countDownLatch.await();</div><div class="line">           &#125; catch (InterruptedException e) &#123;</div><div class="line">               e.printStackTrace();</div><div class="line">           &#125;</div><div class="line">           System.out.printf(<span class="string">"wait for other thread finish."</span>);</div><div class="line">       &#125;</div><div class="line">   &#125;</div><div class="line"></div><div class="line"></div><div class="line">   public static class MyThread extends Thread &#123;</div><div class="line"></div><div class="line">       CountDownLatch countDownLatch;</div><div class="line"></div><div class="line">       public MyThread(CountDownLatch countDownLatch)&#123;</div><div class="line">           this.countDownLatch = countDownLatch;</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       @Override</div><div class="line">       public void <span class="function"><span class="title">run</span></span>() &#123;</div><div class="line">           int i = 5;</div><div class="line">           <span class="keyword">while</span> (i-- &gt; 0) &#123;</div><div class="line">               System.out.println(<span class="string">"in thread "</span> + Thread.currentThread().getName());</div><div class="line">               try &#123;</div><div class="line">                   Thread.sleep(1*1000);</div><div class="line">               &#125; catch (InterruptedException e) &#123;</div><div class="line">                   e.printStackTrace();</div><div class="line">               &#125;</div><div class="line"></div><div class="line">           &#125;</div><div class="line">           //将计数器减1</div><div class="line">           countDownLatch.countDown();</div><div class="line">       &#125;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
 <p>执行结果如下:</p>
-<pre><code class="bash">in thread Thread-0
-in thread Thread-1
-in thread Thread-2
-in thread Thread-0
-in thread Thread-1
-in thread Thread-2
-in thread Thread-0
-in thread Thread-1
-in thread Thread-2
-in thread Thread-0
-in thread Thread-1
-in thread Thread-2
-in thread Thread-0
-in thread Thread-1
-in thread Thread-2
-wait for other thread finish.
-Process finished with exit code 0
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">in</span> thread Thread-0</div><div class="line"><span class="keyword">in</span> thread Thread-1</div><div class="line"><span class="keyword">in</span> thread Thread-2</div><div class="line"><span class="keyword">in</span> thread Thread-0</div><div class="line"><span class="keyword">in</span> thread Thread-1</div><div class="line"><span class="keyword">in</span> thread Thread-2</div><div class="line"><span class="keyword">in</span> thread Thread-0</div><div class="line"><span class="keyword">in</span> thread Thread-1</div><div class="line"><span class="keyword">in</span> thread Thread-2</div><div class="line"><span class="keyword">in</span> thread Thread-0</div><div class="line"><span class="keyword">in</span> thread Thread-1</div><div class="line"><span class="keyword">in</span> thread Thread-2</div><div class="line"><span class="keyword">in</span> thread Thread-0</div><div class="line"><span class="keyword">in</span> thread Thread-1</div><div class="line"><span class="keyword">in</span> thread Thread-2</div><div class="line"><span class="built_in">wait</span> <span class="keyword">for</span> other thread finish.</div><div class="line">Process finished with <span class="built_in">exit</span> code 0</div></pre></td></tr></table></figure>
 <h3 id="CyclicBarrier"><a href="#CyclicBarrier" class="headerlink" title="CyclicBarrier"></a>CyclicBarrier</h3><blockquote>
 <p>它是一个可重用的计数器屏障。</p>
 </blockquote>
@@ -368,231 +224,25 @@ Process finished with exit code 0
 <h4 id="构造函数一"><a href="#构造函数一" class="headerlink" title="构造函数一"></a>构造函数一</h4><blockquote>
 <p>它表示<code>parties</code>条线程都到达某个状态时，就执行<code>barrierAction</code>线程的内容.</p>
 </blockquote>
-<pre><code class="bash">    public CyclicBarrier(int parties, Runnable barrierAction) {
-        if (parties &lt;= 0) throw new IllegalArgumentException();
-        this.parties = parties;
-        this.count = parties;
-        this.barrierCommand = barrierAction;
-    }
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">public CyclicBarrier(int parties, Runnable barrierAction) &#123;</div><div class="line">    <span class="keyword">if</span> (parties &lt;= 0) throw new IllegalArgumentException();</div><div class="line">    this.parties = parties;</div><div class="line">    this.count = parties;</div><div class="line">    this.barrierCommand = barrierAction;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h4 id="构造函数二"><a href="#构造函数二" class="headerlink" title="构造函数二"></a>构造函数二</h4><blockquote>
 <p>它表示<code>parties</code>条线程都到达某个状态时，什么也不执行（可以看到，调用第一个构造函数，并且第二人Runnable的参数为null）</p>
 </blockquote>
-<pre><code class="bash">    public CyclicBarrier(int parties) {
-        this(parties, null);
-    }
-</code></pre>
-<h4 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h4><pre><code class="bash">    public static void main(String[] args) throws InterruptedException, BrokenBarrierException {
-        final int COUNT = 3;
-        CyclicBarrier cyclicBarrier = new CyclicBarrier(COUNT, new Runnable() {
-            @Override
-            public void run() {
-                System.out.println(&quot;all done.&quot;);
-            }
-        });
-
-        for (int i = 0; i &lt; COUNT; i++) {
-            new MyThread(cyclicBarrier).start();
-        }
-    }
-
-
-    public static class MyThread extends Thread {
-
-        CyclicBarrier cyclicBarrier;
-
-        public MyThread(CyclicBarrier cyclicBarrier) {
-            this.cyclicBarrier = cyclicBarrier;
-        }
-
-        @Override
-        public void run() {
-            System.out.println(&quot;in thread &quot; + Thread.currentThread().getName());
-            try {
-                int j = new Random().nextInt(10);
-                System.out.println(&quot;thread &quot; + Thread.currentThread().getName() + &quot; sleep &quot; + j + &quot; s&quot;);
-                Thread.sleep(j * 1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-
-            //通知 CyclicBarrier 该线程已经完成（或者说到了状态），等待其他线程到达了这个状态，再继续执行.
-            System.out.println(&quot;thread &quot; + Thread.currentThread().getName() + &quot; done.&quot;);
-            try {
-                //这个表示无限等待，等其他所有线程都完毕后，才能继续执行下面的.
-                cyclicBarrier.await();
-                //，还有个重载方法：它表示通知 CyclicBarrier，它已经到达了某状态，再等1分钟，然后就继续执行下面的方法体了.
-                //cyclicBarrier.await(1, TimeUnit.MINUTES);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (BrokenBarrierException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public CyclicBarrier(int parties) &#123;</div><div class="line">    this(parties, null);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line">public static void main(String[] args) throws InterruptedException, BrokenBarrierException &#123;</div><div class="line">    final int COUNT = 3;</div><div class="line">    CyclicBarrier cyclicBarrier = new CyclicBarrier(COUNT, new <span class="function"><span class="title">Runnable</span></span>() &#123;</div><div class="line">        @Override</div><div class="line">        public void <span class="function"><span class="title">run</span></span>() &#123;</div><div class="line">            System.out.println(<span class="string">"all done."</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (int i = 0; i &lt; COUNT; i++) &#123;</div><div class="line">        new MyThread(cyclicBarrier).start();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">public static class MyThread extends Thread &#123;</div><div class="line"></div><div class="line">    CyclicBarrier cyclicBarrier;</div><div class="line"></div><div class="line">    public MyThread(CyclicBarrier cyclicBarrier) &#123;</div><div class="line">        this.cyclicBarrier = cyclicBarrier;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void <span class="function"><span class="title">run</span></span>() &#123;</div><div class="line">        System.out.println(<span class="string">"in thread "</span> + Thread.currentThread().getName());</div><div class="line">        try &#123;</div><div class="line">            int j = new Random().nextInt(10);</div><div class="line">            System.out.println(<span class="string">"thread "</span> + Thread.currentThread().getName() + <span class="string">" sleep "</span> + j + <span class="string">" s"</span>);</div><div class="line">            Thread.sleep(j * 1000);</div><div class="line">        &#125; catch (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line"></div><div class="line"></div><div class="line">        //通知 CyclicBarrier 该线程已经完成（或者说到了状态），等待其他线程到达了这个状态，再继续执行.</div><div class="line">        System.out.println(<span class="string">"thread "</span> + Thread.currentThread().getName() + <span class="string">" done."</span>);</div><div class="line">        try &#123;</div><div class="line">            //这个表示无限等待，等其他所有线程都完毕后，才能继续执行下面的.</div><div class="line">            cyclicBarrier.await();</div><div class="line">            //，还有个重载方法：它表示通知 CyclicBarrier，它已经到达了某状态，再等1分钟，然后就继续执行下面的方法体了.</div><div class="line">            //cyclicBarrier.await(1, TimeUnit.MINUTES);</div><div class="line">        &#125; catch (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; catch (BrokenBarrierException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>执行的结果如下:</p>
-<pre><code class="bash">in thread Thread-0
-in thread Thread-1
-thread Thread-0 sleep 8 s
-thread Thread-1 sleep 4 s
-in thread Thread-2
-thread Thread-2 sleep 9 s
-thread Thread-1 done.
-thread Thread-0 done.
-thread Thread-2 done.
-all done.
-
-Process finished with exit code 0
-</code></pre>
-<h4 id="可用重例子"><a href="#可用重例子" class="headerlink" title="可用重例子"></a>可用重例子</h4><pre><code class="bash">    public static void main(String[] args) throws InterruptedException, BrokenBarrierException {
-        final int COUNT = 3;
-        CyclicBarrier cyclicBarrier = new CyclicBarrier(COUNT, new Runnable() {
-            @Override
-            public void run() {
-                System.out.println(&quot;all done.&quot;);
-            }
-        });
-
-        for (int i = 0; i &lt; COUNT; i++) {
-            new MyThread(cyclicBarrier).start();
-        }
-
-        //让上面的先执行，然后再重用 cyclicBarrier
-        Thread.sleep(1*1000);
-
-        for (int i = 0; i &lt; COUNT; i++) {
-            new MyThread(cyclicBarrier).start();
-        }
-    }
-
-
-    public static class MyThread extends Thread {
-
-        CyclicBarrier cyclicBarrier;
-
-        public MyThread(CyclicBarrier cyclicBarrier) {
-            this.cyclicBarrier = cyclicBarrier;
-        }
-
-        @Override
-        public void run() {
-            System.out.println(&quot;in thread &quot; + Thread.currentThread().getName());
-            try {
-                int j = new Random().nextInt(10);
-                System.out.println(&quot;thread &quot; + Thread.currentThread().getName() + &quot; sleep &quot; + j + &quot; s&quot;);
-                Thread.sleep(j * 1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-
-            //通知 CyclicBarrier 该线程已经完成（或者说到了状态），等待其他线程到达了这个状态，再继续执行.
-            System.out.println(&quot;thread &quot; + Thread.currentThread().getName() + &quot; done.&quot;);
-            try {
-                //这个表示无限等待，等其他所有线程都完毕后，才能继续执行下面的.
-                cyclicBarrier.await();
-                //，还有个重载方法：它表示通知 CyclicBarrier，它已经到达了某状态，再等1分钟，然后就继续执行下面的方法体了.
-                //cyclicBarrier.await(1, TimeUnit.MINUTES);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (BrokenBarrierException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">in</span> thread Thread-0</div><div class="line"><span class="keyword">in</span> thread Thread-1</div><div class="line">thread Thread-0 sleep 8 s</div><div class="line">thread Thread-1 sleep 4 s</div><div class="line"><span class="keyword">in</span> thread Thread-2</div><div class="line">thread Thread-2 sleep 9 s</div><div class="line">thread Thread-1 <span class="keyword">done</span>.</div><div class="line">thread Thread-0 <span class="keyword">done</span>.</div><div class="line">thread Thread-2 <span class="keyword">done</span>.</div><div class="line">all <span class="keyword">done</span>.</div><div class="line"></div><div class="line">Process finished with <span class="built_in">exit</span> code 0</div></pre></td></tr></table></figure>
+<h4 id="可用重例子"><a href="#可用重例子" class="headerlink" title="可用重例子"></a>可用重例子</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line">public static void main(String[] args) throws InterruptedException, BrokenBarrierException &#123;</div><div class="line">    final int COUNT = 3;</div><div class="line">    CyclicBarrier cyclicBarrier = new CyclicBarrier(COUNT, new <span class="function"><span class="title">Runnable</span></span>() &#123;</div><div class="line">        @Override</div><div class="line">        public void <span class="function"><span class="title">run</span></span>() &#123;</div><div class="line">            System.out.println(<span class="string">"all done."</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (int i = 0; i &lt; COUNT; i++) &#123;</div><div class="line">        new MyThread(cyclicBarrier).start();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //让上面的先执行，然后再重用 cyclicBarrier</div><div class="line">    Thread.sleep(1*1000);</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (int i = 0; i &lt; COUNT; i++) &#123;</div><div class="line">        new MyThread(cyclicBarrier).start();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">public static class MyThread extends Thread &#123;</div><div class="line"></div><div class="line">    CyclicBarrier cyclicBarrier;</div><div class="line"></div><div class="line">    public MyThread(CyclicBarrier cyclicBarrier) &#123;</div><div class="line">        this.cyclicBarrier = cyclicBarrier;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void <span class="function"><span class="title">run</span></span>() &#123;</div><div class="line">        System.out.println(<span class="string">"in thread "</span> + Thread.currentThread().getName());</div><div class="line">        try &#123;</div><div class="line">            int j = new Random().nextInt(10);</div><div class="line">            System.out.println(<span class="string">"thread "</span> + Thread.currentThread().getName() + <span class="string">" sleep "</span> + j + <span class="string">" s"</span>);</div><div class="line">            Thread.sleep(j * 1000);</div><div class="line">        &#125; catch (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line"></div><div class="line"></div><div class="line">        //通知 CyclicBarrier 该线程已经完成（或者说到了状态），等待其他线程到达了这个状态，再继续执行.</div><div class="line">        System.out.println(<span class="string">"thread "</span> + Thread.currentThread().getName() + <span class="string">" done."</span>);</div><div class="line">        try &#123;</div><div class="line">            //这个表示无限等待，等其他所有线程都完毕后，才能继续执行下面的.</div><div class="line">            cyclicBarrier.await();</div><div class="line">            //，还有个重载方法：它表示通知 CyclicBarrier，它已经到达了某状态，再等1分钟，然后就继续执行下面的方法体了.</div><div class="line">            //cyclicBarrier.await(1, TimeUnit.MINUTES);</div><div class="line">        &#125; catch (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; catch (BrokenBarrierException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>执行结果如下:</p>
-<pre><code class="bash">in thread Thread-0
-in thread Thread-1
-in thread Thread-2
-thread Thread-0 sleep 4 s
-thread Thread-1 sleep 0 s
-thread Thread-2 sleep 6 s
-thread Thread-1 done.
-in thread Thread-3
-thread Thread-3 sleep 3 s
-in thread Thread-4
-thread Thread-4 sleep 0 s
-thread Thread-4 done.
-in thread Thread-5
-thread Thread-5 sleep 6 s
-thread Thread-0 done.
-all done.
-thread Thread-3 done.
-thread Thread-2 done.
-thread Thread-5 done.
-all done.
-
-Process finished with exit code 0
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">in</span> thread Thread-0</div><div class="line"><span class="keyword">in</span> thread Thread-1</div><div class="line"><span class="keyword">in</span> thread Thread-2</div><div class="line">thread Thread-0 sleep 4 s</div><div class="line">thread Thread-1 sleep 0 s</div><div class="line">thread Thread-2 sleep 6 s</div><div class="line">thread Thread-1 <span class="keyword">done</span>.</div><div class="line"><span class="keyword">in</span> thread Thread-3</div><div class="line">thread Thread-3 sleep 3 s</div><div class="line"><span class="keyword">in</span> thread Thread-4</div><div class="line">thread Thread-4 sleep 0 s</div><div class="line">thread Thread-4 <span class="keyword">done</span>.</div><div class="line"><span class="keyword">in</span> thread Thread-5</div><div class="line">thread Thread-5 sleep 6 s</div><div class="line">thread Thread-0 <span class="keyword">done</span>.</div><div class="line">all <span class="keyword">done</span>.</div><div class="line">thread Thread-3 <span class="keyword">done</span>.</div><div class="line">thread Thread-2 <span class="keyword">done</span>.</div><div class="line">thread Thread-5 <span class="keyword">done</span>.</div><div class="line">all <span class="keyword">done</span>.</div><div class="line"></div><div class="line">Process finished with <span class="built_in">exit</span> code 0</div></pre></td></tr></table></figure>
 <p>可以看到，<code>CountDownLatch</code>只保证(执行构造函数里的Runnable线程之前，肯定是有3条线程执行完毕的)。如此循环.</p>
 <h3 id="Semaphore"><a href="#Semaphore" class="headerlink" title="Semaphore"></a>Semaphore</h3><blockquote>
 <p>即信号量，通过 acquire() 方法获得使用资源的权限，通过 release() 方法释放资源占用.</p>
 </blockquote>
 <p>例如，网吧只有5台电脑，但有10个人要上网。这样子，我们就可以用<code>Semaphore</code>来模拟这种情况，代码如下:</p>
-<pre><code class="bash">    public static void main(String[] args) throws InterruptedException, BrokenBarrierException {
-        //只有 5台电脑
-        final int COUNT = 5;
-        final int PERSON = 10;
-        final Semaphore semaphore = new Semaphore(COUNT, true);
-
-        for (int i = 0; i &lt; PERSON; i++) {
-            new MyThread(semaphore).start();
-        }
-
-    }
-
-
-    public static class MyThread extends Thread {
-
-        Semaphore semaphore;
-
-        public MyThread(final Semaphore semaphore) {
-            this.semaphore = semaphore;
-        }
-
-        @Override
-        public void run() {
-            try {
-                semaphore.acquire();
-                int time = new Random().nextInt(10);
-                System.out.println(&quot;小混混 &quot; + Thread.currentThread().getName() + &quot; 要使用电脑&quot; + time + &quot;小时 正在使用电脑&quot;);
-                Thread.sleep(time * 1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } finally {
-                semaphore.release();
-                System.out.println(&quot;小混混 &quot; + Thread.currentThread().getName() + &quot; 用完了电脑&quot;);
-            }
-        }
-    }
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">public static void main(String[] args) throws InterruptedException, BrokenBarrierException &#123;</div><div class="line">    //只有 5台电脑</div><div class="line">    final int COUNT = 5;</div><div class="line">    final int PERSON = 10;</div><div class="line">    final Semaphore semaphore = new Semaphore(COUNT, <span class="literal">true</span>);</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (int i = 0; i &lt; PERSON; i++) &#123;</div><div class="line">        new MyThread(semaphore).start();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">public static class MyThread extends Thread &#123;</div><div class="line"></div><div class="line">    Semaphore semaphore;</div><div class="line"></div><div class="line">    public MyThread(final Semaphore semaphore) &#123;</div><div class="line">        this.semaphore = semaphore;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void <span class="function"><span class="title">run</span></span>() &#123;</div><div class="line">        try &#123;</div><div class="line">            semaphore.acquire();</div><div class="line">            int time = new Random().nextInt(10);</div><div class="line">            System.out.println(<span class="string">"小混混 "</span> + Thread.currentThread().getName() + <span class="string">" 要使用电脑"</span> + time + <span class="string">"小时 正在使用电脑"</span>);</div><div class="line">            Thread.sleep(time * 1000);</div><div class="line">        &#125; catch (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; finally &#123;</div><div class="line">            semaphore.release();</div><div class="line">            System.out.println(<span class="string">"小混混 "</span> + Thread.currentThread().getName() + <span class="string">" 用完了电脑"</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>执行结果如下:</p>
-<pre><code class="bash">小混混 Thread-0 要使用电脑1小时 正在使用电脑
-小混混 Thread-1 要使用电脑9小时 正在使用电脑
-小混混 Thread-2 要使用电脑2小时 正在使用电脑
-小混混 Thread-3 要使用电脑6小时 正在使用电脑
-小混混 Thread-4 要使用电脑9小时 正在使用电脑
-小混混 Thread-0 用完了电脑
-小混混 Thread-5 要使用电脑2小时 正在使用电脑
-小混混 Thread-2 用完了电脑
-小混混 Thread-6 要使用电脑8小时 正在使用电脑
-小混混 Thread-5 用完了电脑
-小混混 Thread-7 要使用电脑8小时 正在使用电脑
-小混混 Thread-3 用完了电脑
-小混混 Thread-8 要使用电脑9小时 正在使用电脑
-小混混 Thread-1 用完了电脑
-小混混 Thread-9 要使用电脑5小时 正在使用电脑
-小混混 Thread-4 用完了电脑
-小混混 Thread-6 用完了电脑
-小混混 Thread-7 用完了电脑
-小混混 Thread-9 用完了电脑
-小混混 Thread-8 用完了电脑
-
-Process finished with exit code 0
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">小混混 Thread-0 要使用电脑1小时 正在使用电脑</div><div class="line">小混混 Thread-1 要使用电脑9小时 正在使用电脑</div><div class="line">小混混 Thread-2 要使用电脑2小时 正在使用电脑</div><div class="line">小混混 Thread-3 要使用电脑6小时 正在使用电脑</div><div class="line">小混混 Thread-4 要使用电脑9小时 正在使用电脑</div><div class="line">小混混 Thread-0 用完了电脑</div><div class="line">小混混 Thread-5 要使用电脑2小时 正在使用电脑</div><div class="line">小混混 Thread-2 用完了电脑</div><div class="line">小混混 Thread-6 要使用电脑8小时 正在使用电脑</div><div class="line">小混混 Thread-5 用完了电脑</div><div class="line">小混混 Thread-7 要使用电脑8小时 正在使用电脑</div><div class="line">小混混 Thread-3 用完了电脑</div><div class="line">小混混 Thread-8 要使用电脑9小时 正在使用电脑</div><div class="line">小混混 Thread-1 用完了电脑</div><div class="line">小混混 Thread-9 要使用电脑5小时 正在使用电脑</div><div class="line">小混混 Thread-4 用完了电脑</div><div class="line">小混混 Thread-6 用完了电脑</div><div class="line">小混混 Thread-7 用完了电脑</div><div class="line">小混混 Thread-9 用完了电脑</div><div class="line">小混混 Thread-8 用完了电脑</div><div class="line"></div><div class="line">Process finished with <span class="built_in">exit</span> code 0</div></pre></td></tr></table></figure>
 
                                 
     </div>

@@ -15,17 +15,17 @@
     <meta name="keywords" content="java," />
   
 
-  <meta name="description" content="问题有一次在测试时，发现程序报如下类似错误: Exception in thread &amp;quot;main&amp;quot; java.util.ConcurrentModificationException     at java.util.ArrayList$Itr.checkForComodification(ArrayList.java:901)     at java.util.ArrayLi">
+  <meta name="description" content="问题有一次在测试时，发现程序报如下类似错误: 123Exception in thread &quot;main&quot; java.util.ConcurrentModificationException	at java.util.ArrayList$Itr.checkForComodification(ArrayList.java:901)	at java.util.ArrayList$Itr.next(Arr">
 <meta name="keywords" content="java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java for-each 修改问题">
 <meta property="og:url" content="https://emacsist.github.io/2015/12/17/Java-for-each-修改问题/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="问题有一次在测试时，发现程序报如下类似错误: Exception in thread &amp;quot;main&amp;quot; java.util.ConcurrentModificationException     at java.util.ArrayList$Itr.checkForComodification(ArrayList.java:901)     at java.util.ArrayLi">
+<meta property="og:description" content="问题有一次在测试时，发现程序报如下类似错误: 123Exception in thread &quot;main&quot; java.util.ConcurrentModificationException	at java.util.ArrayList$Itr.checkForComodification(ArrayList.java:901)	at java.util.ArrayList$Itr.next(Arr">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java for-each 修改问题">
-<meta name="twitter:description" content="问题有一次在测试时，发现程序报如下类似错误: Exception in thread &amp;quot;main&amp;quot; java.util.ConcurrentModificationException     at java.util.ArrayList$Itr.checkForComodification(ArrayList.java:901)     at java.util.ArrayLi">
+<meta name="twitter:description" content="问题有一次在测试时，发现程序报如下类似错误: 123Exception in thread &quot;main&quot; java.util.ConcurrentModificationException	at java.util.ArrayList$Itr.checkForComodification(ArrayList.java:901)	at java.util.ArrayList$Itr.next(Arr">
 
   
 
@@ -197,54 +197,14 @@
     <div class="article-content">
         
                             <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>有一次在测试时，发现程序报如下类似错误:</p>
-<pre><code class="bash">Exception in thread &quot;main&quot; java.util.ConcurrentModificationException
-    at java.util.ArrayList$Itr.checkForComodification(ArrayList.java:901)
-    at java.util.ArrayList$Itr.next(ArrayList.java:851)
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Exception <span class="keyword">in</span> thread <span class="string">"main"</span> java.util.ConcurrentModificationException</div><div class="line">	at java.util.ArrayList<span class="variable">$Itr</span>.checkForComodification(ArrayList.java:901)</div><div class="line">	at java.util.ArrayList<span class="variable">$Itr</span>.next(ArrayList.java:851)</div></pre></td></tr></table></figure>
 <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>这是因为在使用<code>for-each</code>时，修改了<code>for-each</code>的对象(比如调用了remove())等。问题重现:</p>
-<pre><code class="bash">    public static void main(String[] args) {
-        List&lt;Integer&gt; list = new ArrayList&lt;&gt;(100);
-        for (int i = 0; i &lt; 100; i++) {
-            list.add(i);
-        }
-
-        for (Integer i : list) {
-            if (i % 2 == 0) {
-                list.remove(i);
-            }
-        }
-    }
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public static void main(String[] args) &#123;</div><div class="line">    List&lt;Integer&gt; list = new ArrayList&lt;&gt;(100);</div><div class="line">    <span class="keyword">for</span> (int i = 0; i &lt; 100; i++) &#123;</div><div class="line">        list.add(i);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (Integer i : list) &#123;</div><div class="line">        <span class="keyword">if</span> (i % 2 == 0) &#123;</div><div class="line">            list.remove(i);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>一时写代码，又忘记这些基础了，归根结底，还是基础不够扎实。～～<code>for-each</code>只适合于遍历，则不能删除.</p>
 <h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>如果确实想要修改，可以改为<code>for(int i=0; i&lt;list.size(); i++)</code>这种形式.如:</p>
-<pre><code class="bash">    public static void main(String[] args) {
-        List&lt;Integer&gt; list = new ArrayList&lt;&gt;(100);
-        for (int i = 0; i &lt; 100; i++) {
-            list.add(i);
-        }
-        for (int i = 0; i &lt; list.size(); i++) {
-            if (i % 2 == 0) {
-                list.remove(i);
-            }
-        }
-    }
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public static void main(String[] args) &#123;</div><div class="line">    List&lt;Integer&gt; list = new ArrayList&lt;&gt;(100);</div><div class="line">    <span class="keyword">for</span> (int i = 0; i &lt; 100; i++) &#123;</div><div class="line">        list.add(i);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">for</span> (int i = 0; i &lt; list.size(); i++) &#123;</div><div class="line">        <span class="keyword">if</span> (i % 2 == 0) &#123;</div><div class="line">            list.remove(i);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>或者使用iterator.如:</p>
-<pre><code class="bash">    public static void main(String[] args) {
-        List&lt;Integer&gt; list = new ArrayList&lt;&gt;(100);
-        for (int i = 0; i &lt; 100; i++) {
-            list.add(i);
-        }
-        Iterator&lt;Integer&gt; iterator = list.iterator();
-        while(iterator.hasNext()){
-            Integer i = iterator.next();
-            if(i%2==0){
-                iterator.remove();
-            }
-        }
-        System.out.println(list);
-    }
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public static void main(String[] args) &#123;</div><div class="line">    List&lt;Integer&gt; list = new ArrayList&lt;&gt;(100);</div><div class="line">    <span class="keyword">for</span> (int i = 0; i &lt; 100; i++) &#123;</div><div class="line">        list.add(i);</div><div class="line">    &#125;</div><div class="line">    Iterator&lt;Integer&gt; iterator = list.iterator();</div><div class="line">    <span class="keyword">while</span>(iterator.hasNext())&#123;</div><div class="line">        Integer i = iterator.next();</div><div class="line">        <span class="keyword">if</span>(i%2==0)&#123;</div><div class="line">            iterator.remove();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    System.out.println(list);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
                                 
     </div>

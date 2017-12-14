@@ -15,17 +15,17 @@
     <meta name="keywords" content="database,mysql," />
   
 
-  <meta name="description" content="问题经常在终端里连接MySQL，它经常报如下问题: ERROR 2006 (HY000): MySQL server has gone away No connection. Trying to reconnect...  原因MySQL服务器超时并且关闭了这次的连接.即相关的超时参数设置得太小.也有可能是你的packet太大，MySQL掉弃该包. 解决超时问题wait_timeout查看当前的w">
+  <meta name="description" content="问题经常在终端里连接MySQL，它经常报如下问题: 12ERROR 2006 (HY000): MySQL server has gone awayNo connection. Trying to reconnect... 原因MySQL服务器超时并且关闭了这次的连接.即相关的超时参数设置得太小.也有可能是你的packet太大，MySQL掉弃该包. 解决超时问题wait_timeout查看当前的w">
 <meta name="keywords" content="database,mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL 报 &#39;MySQL server has gone away&#39;">
 <meta property="og:url" content="https://emacsist.github.io/2015/12/28/MySQL-报-MySQL-server-has-gone-away/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="问题经常在终端里连接MySQL，它经常报如下问题: ERROR 2006 (HY000): MySQL server has gone away No connection. Trying to reconnect...  原因MySQL服务器超时并且关闭了这次的连接.即相关的超时参数设置得太小.也有可能是你的packet太大，MySQL掉弃该包. 解决超时问题wait_timeout查看当前的w">
+<meta property="og:description" content="问题经常在终端里连接MySQL，它经常报如下问题: 12ERROR 2006 (HY000): MySQL server has gone awayNo connection. Trying to reconnect... 原因MySQL服务器超时并且关闭了这次的连接.即相关的超时参数设置得太小.也有可能是你的packet太大，MySQL掉弃该包. 解决超时问题wait_timeout查看当前的w">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL 报 &#39;MySQL server has gone away&#39;">
-<meta name="twitter:description" content="问题经常在终端里连接MySQL，它经常报如下问题: ERROR 2006 (HY000): MySQL server has gone away No connection. Trying to reconnect...  原因MySQL服务器超时并且关闭了这次的连接.即相关的超时参数设置得太小.也有可能是你的packet太大，MySQL掉弃该包. 解决超时问题wait_timeout查看当前的w">
+<meta name="twitter:description" content="问题经常在终端里连接MySQL，它经常报如下问题: 12ERROR 2006 (HY000): MySQL server has gone awayNo connection. Trying to reconnect... 原因MySQL服务器超时并且关闭了这次的连接.即相关的超时参数设置得太小.也有可能是你的packet太大，MySQL掉弃该包. 解决超时问题wait_timeout查看当前的w">
 
   
 
@@ -202,93 +202,14 @@
     <div class="article-content">
         
                             <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>经常在终端里连接MySQL，它经常报如下问题:</p>
-<pre><code class="bash">ERROR 2006 (HY000): MySQL server has gone away
-No connection. Trying to reconnect...
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ERROR 2006 (HY000): MySQL server has gone away</div><div class="line">No connection. Trying to reconnect...</div></pre></td></tr></table></figure>
 <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>MySQL服务器超时并且关闭了这次的连接.即相关的超时参数设置得太小.也有可能是你的packet太大，MySQL掉弃该包.</p>
-<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><h3 id="超时问题"><a href="#超时问题" class="headerlink" title="超时问题"></a>超时问题</h3><h4 id="wait-timeout"><a href="#wait-timeout" class="headerlink" title="wait_timeout"></a>wait_timeout</h4><h5 id="查看当前的wait-timeout值"><a href="#查看当前的wait-timeout值" class="headerlink" title="查看当前的wait_timeout值"></a>查看当前的<code>wait_timeout</code>值</h5><pre><code class="bash">mysql&gt; show variables like &#39;%timeout%&#39;;
-+-----------------------------+----------+
-| Variable_name               | Value    |
-+-----------------------------+----------+
-| connect_timeout             | 10       |
-| delayed_insert_timeout      | 300      |
-| innodb_flush_log_at_timeout | 1        |
-| innodb_lock_wait_timeout    | 30       |
-| innodb_rollback_on_timeout  | OFF      |
-| interactive_timeout         | 120      |
-| lock_wait_timeout           | 600      |
-| net_read_timeout            | 3        |
-| net_write_timeout           | 6        |
-| rpl_stop_slave_timeout      | 31536000 |
-| slave_net_timeout           | 30       |
-| wait_timeout                | 120      |
-+-----------------------------+----------+
-12 rows in set (0.01 sec)
-</code></pre>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><h3 id="超时问题"><a href="#超时问题" class="headerlink" title="超时问题"></a>超时问题</h3><h4 id="wait-timeout"><a href="#wait-timeout" class="headerlink" title="wait_timeout"></a>wait_timeout</h4><h5 id="查看当前的wait-timeout值"><a href="#查看当前的wait-timeout值" class="headerlink" title="查看当前的wait_timeout值"></a>查看当前的<code>wait_timeout</code>值</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show variables like <span class="string">'%timeout%'</span>;</div><div class="line">+-----------------------------+----------+</div><div class="line">| Variable_name               | Value    |</div><div class="line">+-----------------------------+----------+</div><div class="line">| connect_timeout             | 10       |</div><div class="line">| delayed_insert_timeout      | 300      |</div><div class="line">| innodb_flush_log_at_timeout | 1        |</div><div class="line">| innodb_lock_wait_timeout    | 30       |</div><div class="line">| innodb_rollback_on_timeout  | OFF      |</div><div class="line">| interactive_timeout         | 120      |</div><div class="line">| lock_wait_timeout           | 600      |</div><div class="line">| net_read_timeout            | 3        |</div><div class="line">| net_write_timeout           | 6        |</div><div class="line">| rpl_stop_slave_timeout      | 31536000 |</div><div class="line">| slave_net_timeout           | 30       |</div><div class="line">| wait_timeout                | 120      |</div><div class="line">+-----------------------------+----------+</div><div class="line">12 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.01 sec)</div></pre></td></tr></table></figure>
 <p>从这，可以看到<code>wait_timeout</code>时间太小了（120秒，它表示服务器在关闭一条连接时，它的非活动时间，即在<code>wat_timeout</code>秒内没有活动过，MySQL就会将它关闭。默认是<code>28800</code>秒，即8小时）</p>
-<h5 id="设置session级别的wait-timeout"><a href="#设置session级别的wait-timeout" class="headerlink" title="设置session级别的wait_timeout"></a>设置session级别的<code>wait_timeout</code></h5><pre><code class="bash">mysql&gt; set wait_timeout = 280000;
-Query OK, 0 rows affected (0.00 sec)
-
-mysql&gt; show variables like &#39;%timeout%&#39;;
-+-----------------------------+----------+
-| Variable_name               | Value    |
-+-----------------------------+----------+
-| connect_timeout             | 10       |
-| delayed_insert_timeout      | 300      |
-| innodb_flush_log_at_timeout | 1        |
-| innodb_lock_wait_timeout    | 30       |
-| innodb_rollback_on_timeout  | OFF      |
-| interactive_timeout         | 120      |
-| lock_wait_timeout           | 600      |
-| net_read_timeout            | 3        |
-| net_write_timeout           | 6        |
-| rpl_stop_slave_timeout      | 31536000 |
-| slave_net_timeout           | 30       |
-| wait_timeout                | 280000   |
-+-----------------------------+----------+
-12 rows in set (0.00 sec)
-
-mysql&gt;
-</code></pre>
-<h5 id="设置全局级别的wait-timeout"><a href="#设置全局级别的wait-timeout" class="headerlink" title="设置全局级别的wait_timeout"></a>设置全局级别的<code>wait_timeout</code></h5><pre><code class="bash">mysql&gt; set global wait_timeout = 280000;
-Query OK, 0 rows affected (0.00 sec)
-
-mysql&gt; show global variables like &#39;%timeout%&#39;;
-+-----------------------------+----------+
-| Variable_name               | Value    |
-+-----------------------------+----------+
-| connect_timeout             | 10       |
-| delayed_insert_timeout      | 300      |
-| innodb_flush_log_at_timeout | 1        |
-| innodb_lock_wait_timeout    | 30       |
-| innodb_rollback_on_timeout  | OFF      |
-| interactive_timeout         | 120      |
-| lock_wait_timeout           | 600      |
-| net_read_timeout            | 3        |
-| net_write_timeout           | 6        |
-| rpl_stop_slave_timeout      | 31536000 |
-| slave_net_timeout           | 30       |
-| wait_timeout                | 280000   |
-+-----------------------------+----------+
-12 rows in set (0.00 sec)
-
-mysql&gt;
-</code></pre>
-<h5 id="设置永久性的wait-timeout"><a href="#设置永久性的wait-timeout" class="headerlink" title="设置永久性的wait_timeout"></a>设置永久性的<code>wait_timeout</code></h5><pre><code class="bash">配置文件`my.conf`里的[mysqld]中，添加或修改
-
-wait_timeout = 280000
-</code></pre>
-<h3 id="设置-packet"><a href="#设置-packet" class="headerlink" title="设置 packet"></a>设置 packet</h3><h4 id="max-allowed-packet"><a href="#max-allowed-packet" class="headerlink" title="max_allowed_packet"></a>max_allowed_packet</h4><h5 id="查看当前max-allowed-packet"><a href="#查看当前max-allowed-packet" class="headerlink" title="查看当前max_allowed_packet"></a>查看当前<code>max_allowed_packet</code></h5><pre><code class="bash">mysql&gt; show global variables like &#39;%max_allowed_packet%&#39;;
-+--------------------------+------------+
-| Variable_name            | Value      |
-+--------------------------+------------+
-| max_allowed_packet       | 1073741824 |
-| slave_max_allowed_packet | 1073741824 |
-+--------------------------+------------+
-2 rows in set (0.00 sec)
-
-mysql&gt;
-</code></pre>
+<h5 id="设置session级别的wait-timeout"><a href="#设置session级别的wait-timeout" class="headerlink" title="设置session级别的wait_timeout"></a>设置session级别的<code>wait_timeout</code></h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">mysql&gt; <span class="built_in">set</span> wait_timeout = 280000;</div><div class="line">Query OK, 0 rows affected (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; show variables like <span class="string">'%timeout%'</span>;</div><div class="line">+-----------------------------+----------+</div><div class="line">| Variable_name               | Value    |</div><div class="line">+-----------------------------+----------+</div><div class="line">| connect_timeout             | 10       |</div><div class="line">| delayed_insert_timeout      | 300      |</div><div class="line">| innodb_flush_log_at_timeout | 1        |</div><div class="line">| innodb_lock_wait_timeout    | 30       |</div><div class="line">| innodb_rollback_on_timeout  | OFF      |</div><div class="line">| interactive_timeout         | 120      |</div><div class="line">| lock_wait_timeout           | 600      |</div><div class="line">| net_read_timeout            | 3        |</div><div class="line">| net_write_timeout           | 6        |</div><div class="line">| rpl_stop_slave_timeout      | 31536000 |</div><div class="line">| slave_net_timeout           | 30       |</div><div class="line">| wait_timeout                | 280000   |</div><div class="line">+-----------------------------+----------+</div><div class="line">12 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
+<h5 id="设置全局级别的wait-timeout"><a href="#设置全局级别的wait-timeout" class="headerlink" title="设置全局级别的wait_timeout"></a>设置全局级别的<code>wait_timeout</code></h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">mysql&gt; <span class="built_in">set</span> global wait_timeout = 280000;</div><div class="line">Query OK, 0 rows affected (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; show global variables like <span class="string">'%timeout%'</span>;</div><div class="line">+-----------------------------+----------+</div><div class="line">| Variable_name               | Value    |</div><div class="line">+-----------------------------+----------+</div><div class="line">| connect_timeout             | 10       |</div><div class="line">| delayed_insert_timeout      | 300      |</div><div class="line">| innodb_flush_log_at_timeout | 1        |</div><div class="line">| innodb_lock_wait_timeout    | 30       |</div><div class="line">| innodb_rollback_on_timeout  | OFF      |</div><div class="line">| interactive_timeout         | 120      |</div><div class="line">| lock_wait_timeout           | 600      |</div><div class="line">| net_read_timeout            | 3        |</div><div class="line">| net_write_timeout           | 6        |</div><div class="line">| rpl_stop_slave_timeout      | 31536000 |</div><div class="line">| slave_net_timeout           | 30       |</div><div class="line">| wait_timeout                | 280000   |</div><div class="line">+-----------------------------+----------+</div><div class="line">12 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
+<h5 id="设置永久性的wait-timeout"><a href="#设置永久性的wait-timeout" class="headerlink" title="设置永久性的wait_timeout"></a>设置永久性的<code>wait_timeout</code></h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">配置文件`my.conf`里的[mysqld]中，添加或修改</div><div class="line"></div><div class="line">wait_timeout = 280000</div></pre></td></tr></table></figure>
+<h3 id="设置-packet"><a href="#设置-packet" class="headerlink" title="设置 packet"></a>设置 packet</h3><h4 id="max-allowed-packet"><a href="#max-allowed-packet" class="headerlink" title="max_allowed_packet"></a>max_allowed_packet</h4><h5 id="查看当前max-allowed-packet"><a href="#查看当前max-allowed-packet" class="headerlink" title="查看当前max_allowed_packet"></a>查看当前<code>max_allowed_packet</code></h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show global variables like <span class="string">'%max_allowed_packet%'</span>;</div><div class="line">+--------------------------+------------+</div><div class="line">| Variable_name            | Value      |</div><div class="line">+--------------------------+------------+</div><div class="line">| max_allowed_packet       | 1073741824 |</div><div class="line">| slave_max_allowed_packet | 1073741824 |</div><div class="line">+--------------------------+------------+</div><div class="line">2 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
 <p>它的作用是：包或任何生成的/中间字符串的最大大小。</p>
 <p>它的单位是<code>byte</code>，即字节。(1073741824 / 1024 / 1024 = 1GB)。</p>
 <p>最小允许值是<code>1024</code>,最大为<code>1073741824</code></p>

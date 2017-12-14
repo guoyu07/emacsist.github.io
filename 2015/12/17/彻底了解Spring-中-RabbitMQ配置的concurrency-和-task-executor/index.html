@@ -15,17 +15,17 @@
     <meta name="keywords" content="java,spring,concurrency,task-executor," />
   
 
-  <meta name="description" content="问题在生产环境中，突然发现有个Tomcat报如下类似错误: Caused by: org.springframework.amqp.UncategorizedAmqpException: java.util.concurrent.TimeoutException: Timed out waiting for startup     at org.springframework.amqp.rabbi">
+  <meta name="description" content="问题在生产环境中，突然发现有个Tomcat报如下类似错误: 1234567891011Caused by: org.springframework.amqp.UncategorizedAmqpException: java.util.concurrent.TimeoutException: Timed out waiting for startup	at org.springframework.a">
 <meta name="keywords" content="java,spring,concurrency,task-executor">
 <meta property="og:type" content="article">
 <meta property="og:title" content="彻底了解Spring 中 RabbitMQ配置的concurrency 和 task-executor">
 <meta property="og:url" content="https://emacsist.github.io/2015/12/17/彻底了解Spring-中-RabbitMQ配置的concurrency-和-task-executor/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="问题在生产环境中，突然发现有个Tomcat报如下类似错误: Caused by: org.springframework.amqp.UncategorizedAmqpException: java.util.concurrent.TimeoutException: Timed out waiting for startup     at org.springframework.amqp.rabbi">
+<meta property="og:description" content="问题在生产环境中，突然发现有个Tomcat报如下类似错误: 1234567891011Caused by: org.springframework.amqp.UncategorizedAmqpException: java.util.concurrent.TimeoutException: Timed out waiting for startup	at org.springframework.a">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="彻底了解Spring 中 RabbitMQ配置的concurrency 和 task-executor">
-<meta name="twitter:description" content="问题在生产环境中，突然发现有个Tomcat报如下类似错误: Caused by: org.springframework.amqp.UncategorizedAmqpException: java.util.concurrent.TimeoutException: Timed out waiting for startup     at org.springframework.amqp.rabbi">
+<meta name="twitter:description" content="问题在生产环境中，突然发现有个Tomcat报如下类似错误: 1234567891011Caused by: org.springframework.amqp.UncategorizedAmqpException: java.util.concurrent.TimeoutException: Timed out waiting for startup	at org.springframework.a">
 
   
 
@@ -212,28 +212,9 @@
     <div class="article-content">
         
                             <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>在生产环境中，突然发现有个Tomcat报如下类似错误:</p>
-<pre><code class="bash">Caused by: org.springframework.amqp.UncategorizedAmqpException: java.util.concurrent.TimeoutException: Timed out waiting for startup
-    at org.springframework.amqp.rabbit.connection.RabbitUtils.convertRabbitAccessException(RabbitUtils.java:118)
-    at org.springframework.amqp.rabbit.connection.RabbitAccessor.convertRabbitAccessException(RabbitAccessor.java:106)
-    at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.start(AbstractMessageListenerContainer.java:365)
-    at org.springframework.context.support.DefaultLifecycleProcessor.doStart(DefaultLifecycleProcessor.java:167)
-    ... 59 common frames omitted
-Caused by: java.util.concurrent.TimeoutException: Timed out waiting for startup
-    at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.getStartupException(SimpleMessageListenerContainer.java:512)
-    at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer.doStart(SimpleMessageListenerContainer.java:337)
-    at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.start(AbstractMessageListenerContainer.java:363)
-    ... 60 common frames omitted
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">Caused by: org.springframework.amqp.UncategorizedAmqpException: java.util.concurrent.TimeoutException: Timed out waiting <span class="keyword">for</span> startup</div><div class="line">	at org.springframework.amqp.rabbit.connection.RabbitUtils.convertRabbitAccessException(RabbitUtils.java:118)</div><div class="line">	at org.springframework.amqp.rabbit.connection.RabbitAccessor.convertRabbitAccessException(RabbitAccessor.java:106)</div><div class="line">	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.start(AbstractMessageListenerContainer.java:365)</div><div class="line">	at org.springframework.context.support.DefaultLifecycleProcessor.doStart(DefaultLifecycleProcessor.java:167)</div><div class="line">	... 59 common frames omitted</div><div class="line">Caused by: java.util.concurrent.TimeoutException: Timed out waiting <span class="keyword">for</span> startup</div><div class="line">	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer<span class="variable">$AsyncMessageProcessingConsumer</span>.getStartupException(SimpleMessageListenerContainer.java:512)</div><div class="line">	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer.doStart(SimpleMessageListenerContainer.java:337)</div><div class="line">	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.start(AbstractMessageListenerContainer.java:363)</div><div class="line">	... 60 common frames omitted</div></pre></td></tr></table></figure>
 <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>项目里的rabbitmq的配置大致如下:</p>
-<pre><code class="bash">
-&lt;task:annotation-driven  scheduler=&quot;myScheduler&quot;/&gt;
-&lt;task:executor id=&quot;myExecutor&quot; pool-size=&quot;8&quot; /&gt;
-&lt;task:scheduler id=&quot;myScheduler&quot; pool-size=&quot;5&quot; /&gt;
-
-&lt;rabbit:listener-container connection-factory=&quot;rabbitConnectionFactory&quot; error-handler=&quot;MessageErrorHandler&quot;  concurrency=&quot;10&quot; task-executor=&quot;myExecutor&quot;&gt;
-...
-&lt;/rabbit:listener&gt;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&lt;task:annotation-driven  scheduler=<span class="string">"myScheduler"</span>/&gt;</div><div class="line">&lt;task:executor id=<span class="string">"myExecutor"</span> pool-size=<span class="string">"8"</span> /&gt;</div><div class="line">&lt;task:scheduler id=<span class="string">"myScheduler"</span> pool-size=<span class="string">"5"</span> /&gt;</div><div class="line"></div><div class="line">&lt;rabbit:listener-container connection-factory=<span class="string">"rabbitConnectionFactory"</span> error-handler=<span class="string">"MessageErrorHandler"</span>  concurrency=<span class="string">"10"</span> task-executor=<span class="string">"myExecutor"</span>&gt;</div><div class="line">...</div><div class="line">&lt;/rabbit:listener&gt;</div></pre></td></tr></table></figure>
 <p>刚开始，我以为这个<code>task-executor</code>只是负责调用<code>listener</code>方法的（即，只有真正执行<code>listener</code>的时候，才会提交该task到<code>task-executor</code>线程池去执行的.</p>
 <p>但是，如果真的是按预期的来执行的话，是不应该报这个错误的。可知，真正执行的与理解的，还是有一定的差距。这时，只好看看JVM底层的线程情况才能真正知道它到底是如何执行的了。</p>
 <h3 id="情况1"><a href="#情况1" class="headerlink" title="情况1"></a>情况1</h3><p><code>pool-size</code>: <code>8</code><br><code>concurrency</code>: <code>8</code><br>并且使用<code>task-executor</code>，<code>listener-container</code>里只有一个<code>listener</code></p>

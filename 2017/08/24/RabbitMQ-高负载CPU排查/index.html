@@ -15,18 +15,18 @@
     <meta name="keywords" content="rabbitmq,cpu," />
   
 
-  <meta name="description" content="问题  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND 16285 user  20   0 6188812 1.465g   5992 S 197.7  9.3   4418:21 beam.smp  线上的 DSP 系统要用到 RabbitMQ 作为进程间消息通信的中间件，但是发现它的CPU使用">
+  <meta name="description" content="问题12  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND16285 user  20   0 6188812 1.465g   5992 S 197.7  9.3   4418:21 beam.smp 线上的 DSP 系统要用到 RabbitMQ 作为进程间消息通信的中间件，但是发现它的CPU使用">
 <meta name="keywords" content="rabbitmq,cpu">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RabbitMQ 高负载CPU排查">
 <meta property="og:url" content="https://emacsist.github.io/2017/08/24/RabbitMQ-高负载CPU排查/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="问题  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND 16285 user  20   0 6188812 1.465g   5992 S 197.7  9.3   4418:21 beam.smp  线上的 DSP 系统要用到 RabbitMQ 作为进程间消息通信的中间件，但是发现它的CPU使用">
+<meta property="og:description" content="问题12  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND16285 user  20   0 6188812 1.465g   5992 S 197.7  9.3   4418:21 beam.smp 线上的 DSP 系统要用到 RabbitMQ 作为进程间消息通信的中间件，但是发现它的CPU使用">
 <meta property="og:image" content="https://emacsist.github.io/img/rabbitmq-cpu-top.png">
 <meta property="og:updated_time" content="2017-08-24T04:25:57.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RabbitMQ 高负载CPU排查">
-<meta name="twitter:description" content="问题  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND 16285 user  20   0 6188812 1.465g   5992 S 197.7  9.3   4418:21 beam.smp  线上的 DSP 系统要用到 RabbitMQ 作为进程间消息通信的中间件，但是发现它的CPU使用">
+<meta name="twitter:description" content="问题12  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND16285 user  20   0 6188812 1.465g   5992 S 197.7  9.3   4418:21 beam.smp 线上的 DSP 系统要用到 RabbitMQ 作为进程间消息通信的中间件，但是发现它的CPU使用">
 <meta name="twitter:image" content="https://emacsist.github.io/img/rabbitmq-cpu-top.png">
 
   
@@ -203,55 +203,13 @@
 
     <div class="article-content">
         
-                            <h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><pre><code class="bash">  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
-16285 user  20   0 6188812 1.465g   5992 S 197.7  9.3   4418:21 beam.smp
-</code></pre>
+                            <h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND</div><div class="line">16285 user  20   0 6188812 1.465g   5992 S 197.7  9.3   4418:21 beam.smp</div></pre></td></tr></table></figure>
 <p>线上的 DSP 系统要用到 RabbitMQ 作为进程间消息通信的中间件，但是发现它的CPU使用率时很高，时而又比较低(60%~230%之间波动)</p>
 <h1 id="排查方法"><a href="#排查方法" class="headerlink" title="排查方法"></a>排查方法</h1><p>最直接的是使用 top 命令，这样子可以看到 beam.smp 进程总体的 CPU 使用率</p>
 <p>然后，要细分到 RabbitMQ 里的哪些进程要花费高CPU，则可以直接使用 RabbitMQ 自带的插件： <em>rabbitmq_top</em> </p>
-<pre><code class="bash">$./sbin/rabbitmq-plugins list
-
- Configured: E = explicitly enabled; e = implicitly enabled
- | Status:   * = running on rabbit@iZ2ze5o5txbjcf4ecbmhunZ
- |/
-[e*] amqp_client                       3.6.9
-[e*] cowboy                            1.0.4
-[e*] cowlib                            1.0.2
-[  ] rabbitmq_amqp1_0                  3.6.9
-[  ] rabbitmq_auth_backend_ldap        3.6.9
-[  ] rabbitmq_auth_mechanism_ssl       3.6.9
-[  ] rabbitmq_consistent_hash_exchange 3.6.9
-[  ] rabbitmq_event_exchange           3.6.9
-[  ] rabbitmq_federation               3.6.9
-[  ] rabbitmq_federation_management    3.6.9
-[  ] rabbitmq_jms_topic_exchange       3.6.9
-[E*] rabbitmq_management               3.6.9
-[e*] rabbitmq_management_agent         3.6.9
-[  ] rabbitmq_management_visualiser    3.6.9
-[  ] rabbitmq_mqtt                     3.6.9
-[  ] rabbitmq_recent_history_exchange  3.6.9
-[  ] rabbitmq_sharding                 3.6.9
-[  ] rabbitmq_shovel                   3.6.9
-[  ] rabbitmq_shovel_management        3.6.9
-[  ] rabbitmq_stomp                    3.6.9
-[E*] rabbitmq_top                      3.6.9
-[  ] rabbitmq_tracing                  3.6.9
-[  ] rabbitmq_trust_store              3.6.9
-[e*] rabbitmq_web_dispatch             3.6.9
-[  ] rabbitmq_web_mqtt                 3.6.9
-[  ] rabbitmq_web_mqtt_examples        3.6.9
-[  ] rabbitmq_web_stomp                3.6.9
-[  ] rabbitmq_web_stomp_examples       3.6.9
-[  ] sockjs                            0.3.4
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">$./sbin/rabbitmq-plugins list</div><div class="line"></div><div class="line"> Configured: E = explicitly enabled; e = implicitly enabled</div><div class="line"> | Status:   * = running on rabbit@iZ2ze5o5txbjcf4ecbmhunZ</div><div class="line"> |/</div><div class="line">[e*] amqp_client                       3.6.9</div><div class="line">[e*] cowboy                            1.0.4</div><div class="line">[e*] cowlib                            1.0.2</div><div class="line">[  ] rabbitmq_amqp1_0                  3.6.9</div><div class="line">[  ] rabbitmq_auth_backend_ldap        3.6.9</div><div class="line">[  ] rabbitmq_auth_mechanism_ssl       3.6.9</div><div class="line">[  ] rabbitmq_consistent_hash_exchange 3.6.9</div><div class="line">[  ] rabbitmq_event_exchange           3.6.9</div><div class="line">[  ] rabbitmq_federation               3.6.9</div><div class="line">[  ] rabbitmq_federation_management    3.6.9</div><div class="line">[  ] rabbitmq_jms_topic_exchange       3.6.9</div><div class="line">[E*] rabbitmq_management               3.6.9</div><div class="line">[e*] rabbitmq_management_agent         3.6.9</div><div class="line">[  ] rabbitmq_management_visualiser    3.6.9</div><div class="line">[  ] rabbitmq_mqtt                     3.6.9</div><div class="line">[  ] rabbitmq_recent_history_exchange  3.6.9</div><div class="line">[  ] rabbitmq_sharding                 3.6.9</div><div class="line">[  ] rabbitmq_shovel                   3.6.9</div><div class="line">[  ] rabbitmq_shovel_management        3.6.9</div><div class="line">[  ] rabbitmq_stomp                    3.6.9</div><div class="line">[E*] rabbitmq_top                      3.6.9</div><div class="line">[  ] rabbitmq_tracing                  3.6.9</div><div class="line">[  ] rabbitmq_trust_store              3.6.9</div><div class="line">[e*] rabbitmq_web_dispatch             3.6.9</div><div class="line">[  ] rabbitmq_web_mqtt                 3.6.9</div><div class="line">[  ] rabbitmq_web_mqtt_examples        3.6.9</div><div class="line">[  ] rabbitmq_web_stomp                3.6.9</div><div class="line">[  ] rabbitmq_web_stomp_examples       3.6.9</div><div class="line">[  ] sockjs                            0.3.4</div></pre></td></tr></table></figure>
 <p>启用 rabbitmq_top 插件:</p>
-<pre><code class="bash">$./sbin/rabbitmq-plugins enable rabbitmq_top
-
-The following plugins have been enabled:
-  rabbitmq_top
-
-Applying plugin configuration to rabbit@iZ2ze5o5txbjcf4ecbmhunZ... started 1 plugin.
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$./sbin/rabbitmq-plugins <span class="built_in">enable</span> rabbitmq_top</div><div class="line"></div><div class="line">The following plugins have been enabled:</div><div class="line">  rabbitmq_top</div><div class="line"></div><div class="line">Applying plugin configuration to rabbit@iZ2ze5o5txbjcf4ecbmhunZ... started 1 plugin.</div></pre></td></tr></table></figure>
 <p>查看:</p>
 <p><img src="/img/rabbitmq-cpu-top.png" alt="img"></p>
 <p>在上面的统计图表中，则可以直接看到 RabbitMQ 内部哪些进程消耗的CPU比较多，然后则可以进一步优化了。</p>

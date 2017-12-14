@@ -15,17 +15,17 @@
     <meta name="keywords" content="java,nginx,ssl,tomcat," />
   
 
-  <meta name="description" content="问题由于要配置服务器(Nginx + Tomcat）的SSL的问题（Nginx同时监听HTTP和HTTPS)，但是，如果用户访问的是HTTPS协议，然后Tomcat进行重定向的时候，却变成了HTTP. 解决办法Nginx 配置代理的配置，要添加以下内容  proxy_set_header Host $host; proxy_set_header X-Real-IP $remote_addr; pr">
+  <meta name="description" content="问题由于要配置服务器(Nginx + Tomcat）的SSL的问题（Nginx同时监听HTTP和HTTPS)，但是，如果用户访问的是HTTPS协议，然后Tomcat进行重定向的时候，却变成了HTTP. 解决办法Nginx 配置12345678代理的配置，要添加以下内容proxy_set_header Host $host;proxy_set_header X-Real-IP $remote_add">
 <meta name="keywords" content="java,nginx,ssl,tomcat">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Nginx SSL 结合Tomcat 重定向URL变成HTTP的问题">
 <meta property="og:url" content="https://emacsist.github.io/2016/01/19/Nginx-SSL-结合Tomcat-重定向URL变成HTTP的问题/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="问题由于要配置服务器(Nginx + Tomcat）的SSL的问题（Nginx同时监听HTTP和HTTPS)，但是，如果用户访问的是HTTPS协议，然后Tomcat进行重定向的时候，却变成了HTTP. 解决办法Nginx 配置代理的配置，要添加以下内容  proxy_set_header Host $host; proxy_set_header X-Real-IP $remote_addr; pr">
+<meta property="og:description" content="问题由于要配置服务器(Nginx + Tomcat）的SSL的问题（Nginx同时监听HTTP和HTTPS)，但是，如果用户访问的是HTTPS协议，然后Tomcat进行重定向的时候，却变成了HTTP. 解决办法Nginx 配置12345678代理的配置，要添加以下内容proxy_set_header Host $host;proxy_set_header X-Real-IP $remote_add">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Nginx SSL 结合Tomcat 重定向URL变成HTTP的问题">
-<meta name="twitter:description" content="问题由于要配置服务器(Nginx + Tomcat）的SSL的问题（Nginx同时监听HTTP和HTTPS)，但是，如果用户访问的是HTTPS协议，然后Tomcat进行重定向的时候，却变成了HTTP. 解决办法Nginx 配置代理的配置，要添加以下内容  proxy_set_header Host $host; proxy_set_header X-Real-IP $remote_addr; pr">
+<meta name="twitter:description" content="问题由于要配置服务器(Nginx + Tomcat）的SSL的问题（Nginx同时监听HTTP和HTTPS)，但是，如果用户访问的是HTTPS协议，然后Tomcat进行重定向的时候，却变成了HTTP. 解决办法Nginx 配置12345678代理的配置，要添加以下内容proxy_set_header Host $host;proxy_set_header X-Real-IP $remote_add">
 
   
 
@@ -212,19 +212,10 @@
     <div class="article-content">
         
                             <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>由于要配置服务器(Nginx + Tomcat）的SSL的问题（Nginx同时监听<code>HTTP</code>和<code>HTTPS</code>)，但是，如果用户访问的是<code>HTTPS</code>协议，然后Tomcat进行重定向的时候，却变成了<code>HTTP</code>.</p>
-<h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h2><h3 id="Nginx-配置"><a href="#Nginx-配置" class="headerlink" title="Nginx 配置"></a>Nginx 配置</h3><pre><code class="bash">代理的配置，要添加以下内容
-
-proxy_set_header Host $host;
-proxy_set_header X-Real-IP $remote_addr;
-proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-
-# must
-proxy_set_header X-Forwarded-Proto  $scheme;
-</code></pre>
+<h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h2><h3 id="Nginx-配置"><a href="#Nginx-配置" class="headerlink" title="Nginx 配置"></a>Nginx 配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">代理的配置，要添加以下内容</div><div class="line"></div><div class="line">proxy_set_header Host <span class="variable">$host</span>;</div><div class="line">proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</div><div class="line">proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</div><div class="line"></div><div class="line"><span class="comment"># must</span></div><div class="line">proxy_set_header X-Forwarded-Proto  <span class="variable">$scheme</span>;</div></pre></td></tr></table></figure>
 <p>然后重新加载一下配置文件即可<code>sudo nginx -s reload</code></p>
 <h4 id="Tomcat-配置"><a href="#Tomcat-配置" class="headerlink" title="Tomcat 配置"></a>Tomcat 配置</h4><p>在<code>server.xml</code>的<code>Engine</code>模块下面配置多一个以下的<code>Valve</code></p>
-<pre><code class="bash">&lt;Valve className=&quot;org.apache.catalina.valves.RemoteIpValve&quot; remoteIpHeader=&quot;X-Forwarded-For&quot; protocolHeader=&quot;X-Forwarded-Proto&quot; protocolHeaderHttpsValue=&quot;https&quot;/&gt;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;Valve className=<span class="string">"org.apache.catalina.valves.RemoteIpValve"</span> remoteIpHeader=<span class="string">"X-Forwarded-For"</span> protocolHeader=<span class="string">"X-Forwarded-Proto"</span> protocolHeaderHttpsValue=<span class="string">"https"</span>/&gt;</div></pre></td></tr></table></figure>
 <p>然后重启一下Tomcat即可.</p>
 <p>代码不用做任何修改.</p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>

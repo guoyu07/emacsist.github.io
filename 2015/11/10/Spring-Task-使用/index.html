@@ -15,17 +15,17 @@
     <meta name="keywords" content="java,spring,task," />
   
 
-  <meta name="description" content="使用    &amp;lt;bean id=&amp;quot;updateRsstask&amp;quot; class=&amp;quot;xxxx.xxx.xx&amp;quot; /&amp;gt;     &amp;lt;task:executor id=&amp;quot;myexecutor&amp;quot; pool-size=&amp;quot;10&amp;quot; /&amp;gt;     &amp;lt;task:scheduler id=&amp;quot;myschedul">
+  <meta name="description" content="使用12345678910   &amp;lt;bean id=&quot;updateRsstask&quot; class=&quot;xxxx.xxx.xx&quot; /&amp;gt;&amp;lt;task:executor id=&quot;myexecutor&quot; pool-size=&quot;10&quot; /&amp;gt;&amp;lt;task:scheduler id=&quot;myscheduler&quot; pool-size=&quot;10&quot; /&amp;gt;&amp;lt;task:scheduled-ta">
 <meta name="keywords" content="java,spring,task">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spring Task 使用">
 <meta property="og:url" content="https://emacsist.github.io/2015/11/10/Spring-Task-使用/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="使用    &amp;lt;bean id=&amp;quot;updateRsstask&amp;quot; class=&amp;quot;xxxx.xxx.xx&amp;quot; /&amp;gt;     &amp;lt;task:executor id=&amp;quot;myexecutor&amp;quot; pool-size=&amp;quot;10&amp;quot; /&amp;gt;     &amp;lt;task:scheduler id=&amp;quot;myschedul">
+<meta property="og:description" content="使用12345678910   &amp;lt;bean id=&quot;updateRsstask&quot; class=&quot;xxxx.xxx.xx&quot; /&amp;gt;&amp;lt;task:executor id=&quot;myexecutor&quot; pool-size=&quot;10&quot; /&amp;gt;&amp;lt;task:scheduler id=&quot;myscheduler&quot; pool-size=&quot;10&quot; /&amp;gt;&amp;lt;task:scheduled-ta">
 <meta property="og:updated_time" content="2017-07-10T07:05:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Task 使用">
-<meta name="twitter:description" content="使用    &amp;lt;bean id=&amp;quot;updateRsstask&amp;quot; class=&amp;quot;xxxx.xxx.xx&amp;quot; /&amp;gt;     &amp;lt;task:executor id=&amp;quot;myexecutor&amp;quot; pool-size=&amp;quot;10&amp;quot; /&amp;gt;     &amp;lt;task:scheduler id=&amp;quot;myschedul">
+<meta name="twitter:description" content="使用12345678910   &amp;lt;bean id=&quot;updateRsstask&quot; class=&quot;xxxx.xxx.xx&quot; /&amp;gt;&amp;lt;task:executor id=&quot;myexecutor&quot; pool-size=&quot;10&quot; /&amp;gt;&amp;lt;task:scheduler id=&quot;myscheduler&quot; pool-size=&quot;10&quot; /&amp;gt;&amp;lt;task:scheduled-ta">
 
   
 
@@ -206,72 +206,23 @@
 
     <div class="article-content">
         
-                            <h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><pre><code class="bash">    &lt;bean id=&quot;updateRsstask&quot; class=&quot;xxxx.xxx.xx&quot; /&gt;
-    &lt;task:executor id=&quot;myexecutor&quot; pool-size=&quot;10&quot; /&gt;
-    &lt;task:scheduler id=&quot;myscheduler&quot; pool-size=&quot;10&quot; /&gt;
-
-    &lt;task:scheduled-tasks scheduler=&quot;myscheduler&quot;&gt;
-
-        &lt;!-- 每隔一个小时更新rss --&gt;
-        &lt;task:scheduled ref=&quot;updateRssTask&quot; method=&quot;execute&quot; cron=&quot;0 0 * * * *&quot; /&gt;
-
-    &lt;/task:scheduled-tasks&gt;
-</code></pre>
+                            <h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">   &lt;bean id=<span class="string">"updateRsstask"</span> class=<span class="string">"xxxx.xxx.xx"</span> /&gt;</div><div class="line">&lt;task:executor id=<span class="string">"myexecutor"</span> pool-size=<span class="string">"10"</span> /&gt;</div><div class="line">&lt;task:scheduler id=<span class="string">"myscheduler"</span> pool-size=<span class="string">"10"</span> /&gt;</div><div class="line"></div><div class="line">&lt;task:scheduled-tasks scheduler=<span class="string">"myscheduler"</span>&gt;</div><div class="line"></div><div class="line">	&lt;!-- 每隔一个小时更新rss --&gt;</div><div class="line">	&lt;task:scheduled ref=<span class="string">"updateRssTask"</span> method=<span class="string">"execute"</span> cron=<span class="string">"0 0 * * * *"</span> /&gt;</div><div class="line"></div><div class="line">&lt;/task:scheduled-tasks&gt;</div></pre></td></tr></table></figure>
 <h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p><code>&lt;task:schedule-tasks scheduler=&quot;myscheduler&quot;&gt;</code> 这里的<code>scheduler</code>必须显式指定，否则它只会使用默认的值，默认为单线程的。</p>
 <h2 id="lt-task-scheduler-id-quot-scheduler-quot-pool-size-quot-10-quot-gt"><a href="#lt-task-scheduler-id-quot-scheduler-quot-pool-size-quot-10-quot-gt" class="headerlink" title="&lt;task:scheduler id=&quot;scheduler&quot; pool-size=&quot;10&quot;/&gt;"></a><code>&lt;task:scheduler id=&quot;scheduler&quot; pool-size=&quot;10&quot;/&gt;</code></h2><p>如果在xml里这样子配置<code>scheduler</code>，则使用的是<code>ThreadPoolTaskScheduler</code>.</p>
 <h2 id="lt-task-executor-id-quot-executor-quot-pool-size-quot-10-quot-gt"><a href="#lt-task-executor-id-quot-executor-quot-pool-size-quot-10-quot-gt" class="headerlink" title="&lt;task:executor id=&quot;executor&quot; pool-size=&quot;10&quot;/&gt;"></a><code>&lt;task:executor id=&quot;executor&quot; pool-size=&quot;10&quot;/&gt;</code></h2><p>如果在xml里这样子配置<code>executor</code>，则使用的是<code>ThreadPoolTaskExecutor</code></p>
-<h2 id="excutor属性说明"><a href="#excutor属性说明" class="headerlink" title="excutor属性说明"></a>excutor属性说明</h2><pre><code class="bash">&lt;task:executor
-        id=&quot;executorWithCallerRunsPolicy&quot;
-        pool-size=&quot;5-25&quot;
-        queue-capacity=&quot;100&quot;
-        rejection-policy=&quot;CALLER_RUNS&quot;/&gt;
-</code></pre>
+<h2 id="excutor属性说明"><a href="#excutor属性说明" class="headerlink" title="excutor属性说明"></a>excutor属性说明</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;task:executor</div><div class="line">        id=<span class="string">"executorWithCallerRunsPolicy"</span></div><div class="line">        pool-size=<span class="string">"5-25"</span></div><div class="line">        queue-capacity=<span class="string">"100"</span></div><div class="line">        rejection-policy=<span class="string">"CALLER_RUNS"</span>/&gt;</div></pre></td></tr></table></figure>
 <p><code>pool-size</code>：线程池大小，如果只是设置了一个值。则<code>corePoolsize和maxPoolSize</code>都是这个值。<br><code>queue-capacity</code>：队列大小<br><code>rejection-policy</code>: 队列满的时候，使用的拒绝策略。</p>
 <p>拒绝策略有:<br><code>ABORT（缺省）</code>：抛出TaskRejectedException异常，然后不执行<br><code>DISCARD</code>：不执行，也不抛出异常<br><code>DISCARD_OLDEST</code>：丢弃queue中最旧的那个任务<br><code>CALLER_RUNS</code>：不在新线程中执行任务，而是有调用者所在的线程来执行</p>
 <p>这些属性的默认值，可以到<code>org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor</code>类看.如下：</p>
-<pre><code class="bash">    private int corePoolSize = 1;
-
-    private int maxPoolSize = Integer.MAX_VALUE;
-
-    private int keepAliveSeconds = 60;
-
-    private boolean allowCoreThreadTimeOut = false;
-
-    private int queueCapacity = Integer.MAX_VALUE;
-</code></pre>
-<h2 id="task异常处理器使用"><a href="#task异常处理器使用" class="headerlink" title="task异常处理器使用"></a>task异常处理器使用</h2><pre><code class="bash">&lt;bean id=&quot;scheduler&quot; class=&quot;org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler&quot;&gt;
-    &lt;property name=&quot;poolSize&quot; value=&quot;5&quot; /&gt;
-    &lt;property name=&quot;errorHandler&quot; ref=&quot;scheduledTaskErrorHandler&quot; /&gt;
-&lt;/bean&gt;
-
-&lt;bean id=&quot;scheduledTaskErrorHandler&quot; class=&quot;boo.ScheduledTaskErrorHandler&quot; /&gt;
-
-public class ScheduledTaskErrorHandler implements ErrorHandler {
-
-@Override
-public void handleError(Throwable t) {
-        // do something, like shutdown the scheduler
-}
-}
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">private int corePoolSize = 1;</div><div class="line"></div><div class="line">private int maxPoolSize = Integer.MAX_VALUE;</div><div class="line"></div><div class="line">private int keepAliveSeconds = 60;</div><div class="line"></div><div class="line">private boolean allowCoreThreadTimeOut = <span class="literal">false</span>;</div><div class="line"></div><div class="line">private int queueCapacity = Integer.MAX_VALUE;</div></pre></td></tr></table></figure>
+<h2 id="task异常处理器使用"><a href="#task异常处理器使用" class="headerlink" title="task异常处理器使用"></a>task异常处理器使用</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=<span class="string">"scheduler"</span> class=<span class="string">"org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler"</span>&gt;</div><div class="line">    &lt;property name=<span class="string">"poolSize"</span> value=<span class="string">"5"</span> /&gt;</div><div class="line">    &lt;property name=<span class="string">"errorHandler"</span> ref=<span class="string">"scheduledTaskErrorHandler"</span> /&gt;</div><div class="line">&lt;/bean&gt;</div><div class="line"></div><div class="line">&lt;bean id=<span class="string">"scheduledTaskErrorHandler"</span> class=<span class="string">"boo.ScheduledTaskErrorHandler"</span> /&gt;</div><div class="line"></div><div class="line">public class ScheduledTaskErrorHandler implements ErrorHandler &#123;</div><div class="line"></div><div class="line">@Override</div><div class="line">public void handleError(Throwable t) &#123;</div><div class="line">        // <span class="keyword">do</span> something, like shutdown the scheduler</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="executor-vs-scheduler"><a href="#executor-vs-scheduler" class="headerlink" title="executor vs scheduler"></a>executor vs scheduler</h2><p>默认情况下，类似:</p>
-<pre><code class="bash">    &lt;task:scheduled-tasks scheduler=&quot;myScheduler&quot;&gt;
-        &lt;task:scheduled ref=&quot;taskDemo&quot; method=&quot;run&quot; cron=&quot;*/5 * * * * *&quot; /&gt;
-        &lt;task:scheduled ref=&quot;taskDemo2&quot; method=&quot;run&quot; cron=&quot;*/5 * * * * *&quot; /&gt;
-    &lt;/task:scheduled-tasks&gt;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;task:scheduled-tasks scheduler=<span class="string">"myScheduler"</span>&gt;</div><div class="line">    &lt;task:scheduled ref=<span class="string">"taskDemo"</span> method=<span class="string">"run"</span> cron=<span class="string">"*/5 * * * * *"</span> /&gt;</div><div class="line">    &lt;task:scheduled ref=<span class="string">"taskDemo2"</span> method=<span class="string">"run"</span> cron=<span class="string">"*/5 * * * * *"</span> /&gt;</div><div class="line">&lt;/task:scheduled-tasks&gt;</div></pre></td></tr></table></figure>
 <p>这些任务，既是 <em>myScheduler</em>  <em>调度并执行</em> 的。那么，我们的 <em>myexecutor</em> 定义了有什么用呢？如果我们只是想 <em>myScheduler</em> 只是调度，而让 <em>executor</em> 来执行我们的任务，则可以这样子配置:</p>
 <p>在方法上加上注解 <em>@Async</em></p>
-<pre><code class="bash">    @Async
-    public void run() throws InterruptedException {
-        log.info(&quot;this is a task&quot;);
-        Thread.sleep(8*1000);
-        log.info(&quot;this is a task end&quot;);
-    }
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@Async</div><div class="line">public void run() throws InterruptedException &#123;</div><div class="line">    log.info(<span class="string">"this is a task"</span>);</div><div class="line">    Thread.sleep(8*1000);</div><div class="line">    log.info(<span class="string">"this is a task end"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>然后要xml里配置时要加上:</p>
-<pre><code class="bash">&lt;task:annotation-driven executor=&quot;myExecutor&quot; scheduler=&quot;myScheduler&quot; /&gt;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;task:annotation-driven executor=<span class="string">"myExecutor"</span> scheduler=<span class="string">"myScheduler"</span> /&gt;</div></pre></td></tr></table></figure>
 <p>这样子，task 的方法，就会由 <em>myExecutor</em> 线程池来执行了。</p>
 <h2 id="如果-task-任务数比-myscheduler-多，并且没有-Async-和-executor"><a href="#如果-task-任务数比-myscheduler-多，并且没有-Async-和-executor" class="headerlink" title="如果 task 任务数比 myscheduler 多，并且没有 @Async 和 executor"></a>如果 task 任务数比 myscheduler 多，并且没有 @Async 和 executor</h2><p>因为这些 task 都是要由 myScheduler 调度并执行的，如果 myScheduler 线程池数量不足够，则可能会导致有些任务，并没有在我们预期的时间点中执行！这个要特别注意。</p>
 <p>比如，myScheduler 的线程池数是1，但有2个 task，要在同一时间点执行（模拟 myScheduler 数不足的情况），这时，虽然调度时，是调度了两个，但实际执行时，是一个一个地执行的。</p>

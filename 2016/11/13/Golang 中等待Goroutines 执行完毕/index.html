@@ -15,17 +15,17 @@
     <meta name="keywords" content="golang,go," />
   
 
-  <meta name="description" content="方式一使用 sync.WaitGroup package main  import (     &amp;quot;fmt&amp;quot;     &amp;quot;math/rand&amp;quot;     &amp;quot;strconv&amp;quot;     &amp;quot;sync&amp;quot;     &amp;quot;time&amp;quot; )  func main() {     workerNum := 10     var">
+  <meta name="description" content="方式一使用 sync.WaitGroup 12345678910111213141516171819202122232425package mainimport (	&quot;fmt&quot;	&quot;math/rand&quot;	&quot;strconv&quot;	&quot;sync&quot;	&quot;time&quot;)func main() &amp;#123;	workerNum := 10	var wg sync.WaitGroup	wg.Add(workerNum)">
 <meta name="keywords" content="golang,go">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Golang 中等待Goroutines 执行完毕">
 <meta property="og:url" content="https://emacsist.github.io/2016/11/13/Golang 中等待Goroutines 执行完毕/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="方式一使用 sync.WaitGroup package main  import (     &amp;quot;fmt&amp;quot;     &amp;quot;math/rand&amp;quot;     &amp;quot;strconv&amp;quot;     &amp;quot;sync&amp;quot;     &amp;quot;time&amp;quot; )  func main() {     workerNum := 10     var">
+<meta property="og:description" content="方式一使用 sync.WaitGroup 12345678910111213141516171819202122232425package mainimport (	&quot;fmt&quot;	&quot;math/rand&quot;	&quot;strconv&quot;	&quot;sync&quot;	&quot;time&quot;)func main() &amp;#123;	workerNum := 10	var wg sync.WaitGroup	wg.Add(workerNum)">
 <meta property="og:updated_time" content="2016-11-13T15:32:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Golang 中等待Goroutines 执行完毕">
-<meta name="twitter:description" content="方式一使用 sync.WaitGroup package main  import (     &amp;quot;fmt&amp;quot;     &amp;quot;math/rand&amp;quot;     &amp;quot;strconv&amp;quot;     &amp;quot;sync&amp;quot;     &amp;quot;time&amp;quot; )  func main() {     workerNum := 10     var">
+<meta name="twitter:description" content="方式一使用 sync.WaitGroup 12345678910111213141516171819202122232425package mainimport (	&quot;fmt&quot;	&quot;math/rand&quot;	&quot;strconv&quot;	&quot;sync&quot;	&quot;time&quot;)func main() &amp;#123;	workerNum := 10	var wg sync.WaitGroup	wg.Add(workerNum)">
 
   
 
@@ -202,98 +202,12 @@
     <div class="article-content">
         
                             <h2 id="方式一"><a href="#方式一" class="headerlink" title="方式一"></a>方式一</h2><p>使用 <code>sync.WaitGroup</code></p>
-<pre><code class="bash">package main
-
-import (
-    &quot;fmt&quot;
-    &quot;math/rand&quot;
-    &quot;strconv&quot;
-    &quot;sync&quot;
-    &quot;time&quot;
-)
-
-func main() {
-    workerNum := 10
-    var wg sync.WaitGroup
-    wg.Add(workerNum)
-    for i := 0; i &lt; workerNum; i++ {
-        go worker(i, &quot;Name&quot;+strconv.FormatInt(int64(i), 10), &amp;wg)
-    }
-    wg.Wait()
-}
-
-func worker(id int, hello string, wg *sync.WaitGroup) {
-    time.Sleep(time.Second * time.Duration(rand.Int31n(10)))
-    fmt.Printf(&quot;workerID = %v, Hello %v\n&quot;, id, hello)
-    wg.Done()
-}
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">package main</div><div class="line"></div><div class="line">import (</div><div class="line">	<span class="string">"fmt"</span></div><div class="line">	<span class="string">"math/rand"</span></div><div class="line">	<span class="string">"strconv"</span></div><div class="line">	<span class="string">"sync"</span></div><div class="line">	<span class="string">"time"</span></div><div class="line">)</div><div class="line"></div><div class="line">func <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">	workerNum := 10</div><div class="line">	var wg sync.WaitGroup</div><div class="line">	wg.Add(workerNum)</div><div class="line">	<span class="keyword">for</span> i := 0; i &lt; workerNum; i++ &#123;</div><div class="line">		go worker(i, <span class="string">"Name"</span>+strconv.FormatInt(int64(i), 10), &amp;wg)</div><div class="line">	&#125;</div><div class="line">	wg.Wait()</div><div class="line">&#125;</div><div class="line"></div><div class="line">func worker(id int, hello string, wg *sync.WaitGroup) &#123;</div><div class="line">	time.Sleep(time.Second * time.Duration(rand.Int31n(10)))</div><div class="line">	fmt.Printf(<span class="string">"workerID = %v, Hello %v\n"</span>, id, hello)</div><div class="line">	wg.Done()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>输出的结果:</p>
-<pre><code class="bash">[Running] go run &quot;/Users/emacsist/go-project/src/main.go&quot;
-workerID = 5, Hello Name5
-workerID = 8, Hello Name8
-workerID = 1, Hello Name1
-workerID = 2, Hello Name2
-workerID = 4, Hello Name4
-workerID = 7, Hello Name7
-workerID = 0, Hello Name0
-workerID = 3, Hello Name3
-workerID = 6, Hello Name6
-workerID = 9, Hello Name9
-
-[Done] exited with code=0 in 9.214 seconds
-</code></pre>
-<h2 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h2><pre><code class="bash">package main
-
-import (
-    &quot;fmt&quot;
-    &quot;math/rand&quot;
-    &quot;strconv&quot;
-    &quot;time&quot;
-)
-
-func main() {
-    workerNum := 10
-    result := make(chan int, workerNum)
-    for i := 0; i &lt; workerNum; i++ {
-        go worker(i, &quot;Name&quot;+strconv.FormatInt(int64(i), 10), result)
-    }
-    for i := 0; i &lt; workerNum; i++ {
-        fmt.Printf(&quot;workerID = %v is finished.\n&quot;, &lt;-result)
-    }
-}
-
-func worker(id int, hello string, result chan int) {
-    time.Sleep(time.Second * time.Duration(rand.Int31n(10)))
-    fmt.Printf(&quot;workerID = %v, Hello %v\n&quot;, id, hello)
-    result &lt;- id
-}
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">[Running] go run <span class="string">"/Users/emacsist/go-project/src/main.go"</span></div><div class="line">workerID = 5, Hello Name5</div><div class="line">workerID = 8, Hello Name8</div><div class="line">workerID = 1, Hello Name1</div><div class="line">workerID = 2, Hello Name2</div><div class="line">workerID = 4, Hello Name4</div><div class="line">workerID = 7, Hello Name7</div><div class="line">workerID = 0, Hello Name0</div><div class="line">workerID = 3, Hello Name3</div><div class="line">workerID = 6, Hello Name6</div><div class="line">workerID = 9, Hello Name9</div><div class="line"></div><div class="line">[Done] exited with code=0 <span class="keyword">in</span> 9.214 seconds</div></pre></td></tr></table></figure>
+<h2 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">package main</div><div class="line"></div><div class="line">import (</div><div class="line">	<span class="string">"fmt"</span></div><div class="line">	<span class="string">"math/rand"</span></div><div class="line">	<span class="string">"strconv"</span></div><div class="line">	<span class="string">"time"</span></div><div class="line">)</div><div class="line"></div><div class="line">func <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">	workerNum := 10</div><div class="line">	result := make(chan int, workerNum)</div><div class="line">	<span class="keyword">for</span> i := 0; i &lt; workerNum; i++ &#123;</div><div class="line">		go worker(i, <span class="string">"Name"</span>+strconv.FormatInt(int64(i), 10), result)</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">for</span> i := 0; i &lt; workerNum; i++ &#123;</div><div class="line">		fmt.Printf(<span class="string">"workerID = %v is finished.\n"</span>, &lt;-result)</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">func worker(id int, hello string, result chan int) &#123;</div><div class="line">	time.Sleep(time.Second * time.Duration(rand.Int31n(10)))</div><div class="line">	fmt.Printf(<span class="string">"workerID = %v, Hello %v\n"</span>, id, hello)</div><div class="line">	result &lt;- id</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>输出的结果类似如下:</p>
-<pre><code class="bash">[Running] go run &quot;/Users/emacsist/go-project/src/main.go&quot;
-workerID = 4, Hello Name4
-workerID = 4 is finished.
-workerID = 5, Hello Name5
-workerID = 5 is finished.
-workerID = 1, Hello Name1
-workerID = 0, Hello Name0
-workerID = 1 is finished.
-workerID = 0 is finished.
-workerID = 7, Hello Name7
-workerID = 7 is finished.
-workerID = 8, Hello Name8
-workerID = 8 is finished.
-workerID = 3, Hello Name3
-workerID = 9, Hello Name9
-workerID = 3 is finished.
-workerID = 9 is finished.
-workerID = 6, Hello Name6
-workerID = 6 is finished.
-workerID = 2, Hello Name2
-workerID = 2 is finished.
-
-[Done] exited with code=0 in 9.251 seconds
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">[Running] go run <span class="string">"/Users/emacsist/go-project/src/main.go"</span></div><div class="line">workerID = 4, Hello Name4</div><div class="line">workerID = 4 is finished.</div><div class="line">workerID = 5, Hello Name5</div><div class="line">workerID = 5 is finished.</div><div class="line">workerID = 1, Hello Name1</div><div class="line">workerID = 0, Hello Name0</div><div class="line">workerID = 1 is finished.</div><div class="line">workerID = 0 is finished.</div><div class="line">workerID = 7, Hello Name7</div><div class="line">workerID = 7 is finished.</div><div class="line">workerID = 8, Hello Name8</div><div class="line">workerID = 8 is finished.</div><div class="line">workerID = 3, Hello Name3</div><div class="line">workerID = 9, Hello Name9</div><div class="line">workerID = 3 is finished.</div><div class="line">workerID = 9 is finished.</div><div class="line">workerID = 6, Hello Name6</div><div class="line">workerID = 6 is finished.</div><div class="line">workerID = 2, Hello Name2</div><div class="line">workerID = 2 is finished.</div><div class="line"></div><div class="line">[Done] exited with code=0 <span class="keyword">in</span> 9.251 seconds</div></pre></td></tr></table></figure>
 
                                 
     </div>

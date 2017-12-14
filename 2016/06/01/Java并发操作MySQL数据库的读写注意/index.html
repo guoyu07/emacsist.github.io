@@ -208,8 +208,7 @@
 <p>不过，这容易造成死锁，以及降低性能。</p>
 <h2 id="方式2"><a href="#方式2" class="headerlink" title="方式2"></a>方式2</h2><p>这种方式，要根据业务具体情况。而不是通用。</p>
 <p>也可以在线程1 update的SQL语句中，加上严格的条件判断。<br>比如，线程1只会更新<code>status</code> &lt; 2的数据。如果线程2修改了status为2,那么这时这次更新就不会再次更新了。线程1的SQL类似：</p>
-<pre><code class="bash">update xxxx set ststus = (一个小于2的值) where id = xx and status != 2;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">update xxxx <span class="built_in">set</span> ststus = (一个小于2的值) <span class="built_in">where</span> id = xx and status != 2;</div></pre></td></tr></table></figure>
 
                                 
     </div>

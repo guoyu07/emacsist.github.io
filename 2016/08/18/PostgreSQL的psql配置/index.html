@@ -15,17 +15,17 @@
     <meta name="keywords" content="postgresql," />
   
 
-  <meta name="description" content="~/.psqlrc内容如下: -- Found this on thoughtbot here: -- https://robots.thoughtbot.com/improving-the-command-line-postgres-experience -- and it fixes problems with psql, some I didn&amp;#39;t even know I had.">
+  <meta name="description" content="~/.psqlrc内容如下: 12345678910111213141516171819202122232425-- Found this on thoughtbot here:-- https://robots.thoughtbot.com/improving-the-command-line-postgres-experience-- and it fixes problems with ps">
 <meta name="keywords" content="postgresql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PostgreSQL的psql配置">
 <meta property="og:url" content="https://emacsist.github.io/2016/08/18/PostgreSQL的psql配置/index.html">
 <meta property="og:site_name" content="emacsist">
-<meta property="og:description" content="~/.psqlrc内容如下: -- Found this on thoughtbot here: -- https://robots.thoughtbot.com/improving-the-command-line-postgres-experience -- and it fixes problems with psql, some I didn&amp;#39;t even know I had.">
+<meta property="og:description" content="~/.psqlrc内容如下: 12345678910111213141516171819202122232425-- Found this on thoughtbot here:-- https://robots.thoughtbot.com/improving-the-command-line-postgres-experience-- and it fixes problems with ps">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PostgreSQL的psql配置">
-<meta name="twitter:description" content="~/.psqlrc内容如下: -- Found this on thoughtbot here: -- https://robots.thoughtbot.com/improving-the-command-line-postgres-experience -- and it fixes problems with psql, some I didn&amp;#39;t even know I had.">
+<meta name="twitter:description" content="~/.psqlrc内容如下: 12345678910111213141516171819202122232425-- Found this on thoughtbot here:-- https://robots.thoughtbot.com/improving-the-command-line-postgres-experience-- and it fixes problems with ps">
 
   
 
@@ -197,87 +197,13 @@
     <div class="article-content">
         
                             <h2 id="psqlrc"><a href="#psqlrc" class="headerlink" title="~/.psqlrc"></a><code>~/.psqlrc</code></h2><p>内容如下:</p>
-<pre><code class="bash">-- Found this on thoughtbot here:
--- https://robots.thoughtbot.com/improving-the-command-line-postgres-experience
--- and it fixes problems with psql, some I didn&#39;t even know I had.
---
--- Set up a nice friendly prompt
-\set PROMPT1 &#39;%[%033[1m%]%M %n@%/%R%[%033[0m%]%# &#39;
-\set PROMPT2 &#39;[more] %R &gt; &#39;
--- By default, NULL displays as an empty space. Is it actually an empty
--- string, or is it null? This makes that distinction visible.
-\pset null &#39;[NULL]&#39;
--- Use table format (with headers across the top) by default, but switch to
--- expanded table format when there&#39;s a lot of data, which makes it much
--- easier to read.
-\x auto
--- Verbose error reports.
-\set VERBOSITY verbose
--- Use a separate history file per-database.
-\set HISTFILE ~/.psql_history- :DBNAME
--- If a command is run more than once in a row, only store it once in the
--- history.
-\set HISTCONTROL ignoredups
--- Autocomplete keywords (like SELECT) in upper-case, even if you started
--- typing them in lower case.
-\set COMP_KEYWORD_CASE upper
-\timing
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">-- Found this on thoughtbot here:</div><div class="line">-- https://robots.thoughtbot.com/improving-the-command-line-postgres-experience</div><div class="line">-- and it fixes problems with psql, some I didn<span class="string">'t even know I had.</span></div><div class="line">--</div><div class="line">-- Set up a nice friendly prompt</div><div class="line">\set PROMPT1 '%[%033[1m%]%M %n@%/%R%[%033[0m%]%<span class="comment"># '</span></div><div class="line">\<span class="built_in">set</span> PROMPT2 <span class="string">'[more] %R &gt; '</span></div><div class="line">-- By default, NULL displays as an empty space. Is it actually an empty</div><div class="line">-- string, or is it null? This makes that distinction visible.</div><div class="line">\pset null <span class="string">'[NULL]'</span></div><div class="line">-- Use table format (with headers across the top) by default, but switch to</div><div class="line">-- expanded table format when there<span class="string">'s a lot of data, which makes it much</span></div><div class="line">-- easier to read.</div><div class="line">\x auto</div><div class="line">-- Verbose error reports.</div><div class="line">\set VERBOSITY verbose</div><div class="line">-- Use a separate history file per-database.</div><div class="line">\set HISTFILE ~/.psql_history- :DBNAME</div><div class="line">-- If a command is run more than once in a row, only store it once in the</div><div class="line">-- history.</div><div class="line">\set HISTCONTROL ignoredups</div><div class="line">-- Autocomplete keywords (like SELECT) in upper-case, even if you started</div><div class="line">-- typing them in lower case.</div><div class="line">\set COMP_KEYWORD_CASE upper</div><div class="line">\timing</div></pre></td></tr></table></figure>
 <p>上面设置完的<code>psql</code>提示样式如下:</p>
-<pre><code class="bash">10.0.0.81 sky@sky=# SELECT * from hello limit 1;
-               name               
-----------------------------------
- c4ca4238a0b923820dcc509a6f75849b
-(1 row)
-
-Time: 0.226 ms
-10.0.0.81 sky@sky=#
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">10.0.0.81 sky@sky=<span class="comment"># SELECT * from hello limit 1;</span></div><div class="line">               name               </div><div class="line">----------------------------------</div><div class="line"> c4ca4238a0b923820dcc509a6f75849b</div><div class="line">(1 row)</div><div class="line"></div><div class="line">Time: 0.226 ms</div><div class="line">10.0.0.81 sky@sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
 <p>另一份:</p>
-<pre><code class="bash">\set QUIET 1
-
-\set PROMPT1 &#39;%M:%[%033[1;31m%]%&gt;%[%033[0m%] %n@%/%R%#%x &#39;
-
-\set PROMPT2 &#39;%M %n@%/%R %# &#39;
-
-\pset null &#39;[null]&#39;
-
-\set COMP_KEYWORD_CASE upper
-
-\timing
-
-\set HISTSIZE 2000
-
-\x auto
-
-\set VERBOSITY verbose
-
-\set QUIET 0
-
-\echo &#39;Welcome to PostgreSQL! \n&#39;
-\echo &#39;Type :version to see the PostgreSQL version. \n&#39; 
-\echo &#39;Type :extensions to see the available extensions. \n&#39;
-\echo &#39;Type \\q to exit. \n&#39;
-\set version &#39;SELECT version();&#39;
-\set extensions &#39;select * from pg_available_extensions;&#39;
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">\<span class="built_in">set</span> QUIET 1</div><div class="line"></div><div class="line">\<span class="built_in">set</span> PROMPT1 <span class="string">'%M:%[%033[1;31m%]%&gt;%[%033[0m%] %n@%/%R%#%x '</span></div><div class="line"></div><div class="line">\<span class="built_in">set</span> PROMPT2 <span class="string">'%M %n@%/%R %# '</span></div><div class="line"></div><div class="line">\pset null <span class="string">'[null]'</span></div><div class="line"></div><div class="line">\<span class="built_in">set</span> COMP_KEYWORD_CASE upper</div><div class="line"></div><div class="line">\timing</div><div class="line"></div><div class="line">\<span class="built_in">set</span> HISTSIZE 2000</div><div class="line"></div><div class="line">\x auto</div><div class="line"></div><div class="line">\<span class="built_in">set</span> VERBOSITY verbose</div><div class="line"></div><div class="line">\<span class="built_in">set</span> QUIET 0</div><div class="line"></div><div class="line">\<span class="built_in">echo</span> <span class="string">'Welcome to PostgreSQL! \n'</span></div><div class="line">\<span class="built_in">echo</span> <span class="string">'Type :version to see the PostgreSQL version. \n'</span> </div><div class="line">\<span class="built_in">echo</span> <span class="string">'Type :extensions to see the available extensions. \n'</span></div><div class="line">\<span class="built_in">echo</span> <span class="string">'Type \\q to exit. \n'</span></div><div class="line">\<span class="built_in">set</span> version <span class="string">'SELECT version();'</span></div><div class="line">\<span class="built_in">set</span> extensions <span class="string">'select * from pg_available_extensions;'</span></div></pre></td></tr></table></figure>
 <p><code>psql</code>提示样式如下:</p>
-<pre><code class="bash">╭─sky@sky-linux /ihome/nodejs/blog  
-╰─➤  psql -U sky -W -h 10.0.0.81
-Password for user sky: 
-Welcome to PostgreSQL! 
-
-Type :version to see the PostgreSQL version. 
-
-Type :extensions to see the available extensions. 
-
-Type \q to exit. 
-
-psql (9.5.0)
-Type &quot;help&quot; for help.
-
-10.0.0.81:5432 sky@sky=#
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">╭─sky@sky-linux /ihome/nodejs/blog  </div><div class="line">╰─➤  psql -U sky -W -h 10.0.0.81</div><div class="line">Password <span class="keyword">for</span> user sky: </div><div class="line">Welcome to PostgreSQL! </div><div class="line"></div><div class="line">Type :version to see the PostgreSQL version. </div><div class="line"></div><div class="line">Type :extensions to see the available extensions. </div><div class="line"></div><div class="line">Type \q to <span class="built_in">exit</span>. </div><div class="line"></div><div class="line">psql (9.5.0)</div><div class="line">Type <span class="string">"help"</span> <span class="keyword">for</span> <span class="built_in">help</span>.</div><div class="line"></div><div class="line">10.0.0.81:5432 sky@sky=<span class="comment">#</span></div></pre></td></tr></table></figure>
 
                                 
     </div>
