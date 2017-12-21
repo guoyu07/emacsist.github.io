@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>巧用位运算来实现状态处理逻辑 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="位运算," />
+  
+
+  <meta name="description" content="我们写程序的时候, 常常会遇到状态标志位的处理.  例如, 在一个系统中, 我们要发各种类型的通知, 而这种通知是用户可以设置是否接收的; 又或者是各种权限处理逻辑. 质数相乘最近在到公司一位同事写了一段代码, 它是用来处理用户是否设置接收某些类型的系统通知的. 他的方案是: 每一种通知类型, 都是一位质数(只能被1和它自身整除), 所有系统通知类型的组合就是这些通知类型的乘积. 示例代码: 12">
+<meta name="keywords" content="位运算">
+<meta property="og:type" content="article">
+<meta property="og:title" content="巧用位运算来实现状态处理逻辑">
+<meta property="og:url" content="https://emacsist.github.io/2017/12/16/巧用位运算来实现状态/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="我们写程序的时候, 常常会遇到状态标志位的处理.  例如, 在一个系统中, 我们要发各种类型的通知, 而这种通知是用户可以设置是否接收的; 又或者是各种权限处理逻辑. 质数相乘最近在到公司一位同事写了一段代码, 它是用来处理用户是否设置接收某些类型的系统通知的. 他的方案是: 每一种通知类型, 都是一位质数(只能被1和它自身整除), 所有系统通知类型的组合就是这些通知类型的乘积. 示例代码: 12">
+<meta property="og:updated_time" content="2017-12-17T05:34:40.579Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="巧用位运算来实现状态处理逻辑">
+<meta name="twitter:description" content="我们写程序的时候, 常常会遇到状态标志位的处理.  例如, 在一个系统中, 我们要发各种类型的通知, 而这种通知是用户可以设置是否接收的; 又或者是各种权限处理逻辑. 质数相乘最近在到公司一位同事写了一段代码, 它是用来处理用户是否设置接收某些类型的系统通知的. 他的方案是: 每一种通知类型, 都是一位质数(只能被1和它自身整除), 所有系统通知类型的组合就是这些通知类型的乘积. 示例代码: 12">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#质数相乘"><span class="toc-text">质数相乘</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#位处理"><span class="toc-text">位处理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#性能对比"><span class="toc-text">性能对比</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#bit"><span class="toc-text">bit</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#质数因子"><span class="toc-text">质数因子</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-巧用位运算来实现状态" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            巧用位运算来实现状态处理逻辑
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2017.12.16</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#位运算">
+        <span class="tag-name">位运算</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p>我们写程序的时候, 常常会遇到状态标志位的处理. </p>
+<p>例如, 在一个系统中, 我们要发各种类型的通知, 而这种通知是用户可以设置是否接收的; 又或者是各种权限处理逻辑.</p>
+<h1 id="质数相乘"><a href="#质数相乘" class="headerlink" title="质数相乘"></a>质数相乘</h1><p>最近在到公司一位同事写了一段代码, 它是用来处理用户是否设置接收某些类型的系统通知的. 他的方案是:</p>
+<p>每一种通知类型, 都是一位质数(只能被1和它自身整除), 所有系统通知类型的组合就是这些通知类型的乘积.</p>
+<p>示例代码:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testBitTest</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> noticeA = <span class="number">2</span>;</div><div class="line">    <span class="keyword">int</span> noticeB = <span class="number">3</span>;</div><div class="line">    <span class="keyword">int</span> noticeC = <span class="number">5</span>;</div><div class="line">    <span class="keyword">int</span> noticeD = <span class="number">7</span>;</div><div class="line">    <span class="keyword">int</span> noitceE = <span class="number">11</span>;</div><div class="line"></div><div class="line">    <span class="comment">//假设用户只设置了 A和D</span></div><div class="line">    <span class="keyword">int</span> userNotice = noticeA * noticeD;</div><div class="line"></div><div class="line">    System.out.println(hasNotice(userNotice, noticeA));<span class="comment">//true</span></div><div class="line">    System.out.println(hasNotice(userNotice, noticeB));<span class="comment">//false</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">hasNotice</span><span class="params">(<span class="keyword">int</span> userNotice, <span class="keyword">int</span> noticeType)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> userNotice !=<span class="number">0</span> &amp;&amp; userNotice % noticeType == <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>缺点:</p>
+<p>int 类型的话, 那最多只能有 9 种状态:</p>
+<p><code>2*3*5*7*11*13*17*19*23</code></p>
+<h1 id="位处理"><a href="#位处理" class="headerlink" title="位处理"></a>位处理</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">    <span class="keyword">int</span> notice_1 = <span class="number">1</span> &lt;&lt; <span class="number">0</span>;</div><div class="line">    <span class="keyword">int</span> notice_2 = <span class="number">1</span> &lt;&lt; <span class="number">1</span>;</div><div class="line">    <span class="keyword">int</span> notice_3 = <span class="number">1</span> &lt;&lt; <span class="number">2</span>;</div><div class="line">    <span class="keyword">int</span> notice_4 = <span class="number">1</span> &lt;&lt; <span class="number">3</span>;</div><div class="line">    <span class="keyword">int</span> notice_5 = <span class="number">1</span> &lt;&lt; <span class="number">4</span>;</div><div class="line"></div><div class="line">    <span class="comment">//假设用户有 1, 2,  3 三种通知类型</span></div><div class="line">    <span class="keyword">int</span> userNotice = notice_1 | notice_2 | notice_3;</div><div class="line">    System.out.println(hasNotice(userNotice, notice_1)); <span class="comment">// true</span></div><div class="line">    System.out.println(hasNotice(userNotice, notice_5)); <span class="comment">// false</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">hasNotice</span><span class="params">(<span class="keyword">int</span> userNotice, <span class="keyword">int</span> notice)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> (userNotice &amp; notice) != <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>缺点:<br>这也很明显, 最多只有31种状态.</p>
+<p>不过, 位操作的方式在开源项目中比较常见. 比如 Android SDK 中的权限处理, 类Unix系统中的文件权限(rwx)等.</p>
+<h1 id="性能对比"><a href="#性能对比" class="headerlink" title="性能对比"></a>性能对比</h1><h2 id="bit"><a href="#bit" class="headerlink" title="bit"></a>bit</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> hello;</div><div class="line"></div><div class="line"><span class="keyword">import</span> org.openjdk.jmh.annotations.*;</div><div class="line"><span class="keyword">import</span> org.openjdk.jmh.runner.Runner;</div><div class="line"><span class="keyword">import</span> org.openjdk.jmh.runner.RunnerException;</div><div class="line"><span class="keyword">import</span> org.openjdk.jmh.runner.options.Options;</div><div class="line"><span class="keyword">import</span> org.openjdk.jmh.runner.options.OptionsBuilder;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit;</div><div class="line"></div><div class="line"><span class="meta">@BenchmarkMode</span>(Mode.Throughput)</div><div class="line"><span class="meta">@OutputTimeUnit</span>(TimeUnit.MILLISECONDS)</div><div class="line"><span class="meta">@State</span>(Scope.Thread)</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BenchmarkTest</span> </span>&#123;</div><div class="line">    <span class="meta">@Benchmark</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testBit</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> notice_1 = <span class="number">1</span> &lt;&lt; <span class="number">0</span>;</div><div class="line">        <span class="keyword">int</span> notice_2 = <span class="number">1</span> &lt;&lt; <span class="number">1</span>;</div><div class="line">        <span class="keyword">int</span> notice_3 = <span class="number">1</span> &lt;&lt; <span class="number">2</span>;</div><div class="line">        <span class="keyword">int</span> notice_4 = <span class="number">1</span> &lt;&lt; <span class="number">3</span>;</div><div class="line">        <span class="keyword">int</span> notice_5 = <span class="number">1</span> &lt;&lt; <span class="number">4</span>;</div><div class="line"></div><div class="line">        <span class="comment">//假设用户有 1, 2,  3 三种通知类型</span></div><div class="line">        <span class="keyword">int</span> userNotice = notice_1 | notice_2 | notice_3;</div><div class="line">        hasNotice(userNotice, notice_1); <span class="comment">// true</span></div><div class="line">        hasNotice(userNotice, notice_5); <span class="comment">// false</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">hasNotice</span><span class="params">(<span class="keyword">int</span> userNotice, <span class="keyword">int</span> notice)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> (userNotice &amp; notice) != <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> RunnerException </span>&#123;</div><div class="line">        Options opt = <span class="keyword">new</span> OptionsBuilder()</div><div class="line">                .include(BenchmarkTest.class.getSimpleName())</div><div class="line">                .forks(<span class="number">1</span>)</div><div class="line">                .warmupIterations(<span class="number">5</span>)</div><div class="line">                .measurementIterations(<span class="number">5</span>)</div><div class="line">                .threads(<span class="number">10</span>)</div><div class="line">                .build();</div><div class="line">        <span class="keyword">new</span> Runner(opt).run();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>结果</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">Result <span class="string">"testBit"</span>:</div><div class="line">  5272936.364 ±(99.9%) 1224812.109 ops/ms [Average]</div><div class="line">  (min, avg, max) = (4848039.898, 5272936.364, 5673708.549), stdev = 318079.815</div><div class="line">  CI (99.9%): [4048124.256, 6497748.473] (assumes normal distribution)</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># Run complete. Total time: 00:00:12</span></div><div class="line"></div><div class="line">Benchmark               Mode  Cnt        Score         Error   Units</div><div class="line">BenchmarkTest.testBit  thrpt    5  5272936.364 ± 1224812.109  ops/ms</div></pre></td></tr></table></figure>
+<h2 id="质数因子"><a href="#质数因子" class="headerlink" title="质数因子"></a>质数因子</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> hello;</div><div class="line"></div><div class="line"><span class="keyword">import</span> org.openjdk.jmh.annotations.*;</div><div class="line"><span class="keyword">import</span> org.openjdk.jmh.runner.Runner;</div><div class="line"><span class="keyword">import</span> org.openjdk.jmh.runner.RunnerException;</div><div class="line"><span class="keyword">import</span> org.openjdk.jmh.runner.options.Options;</div><div class="line"><span class="keyword">import</span> org.openjdk.jmh.runner.options.OptionsBuilder;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit;</div><div class="line"></div><div class="line"><span class="meta">@BenchmarkMode</span>(Mode.Throughput)</div><div class="line"><span class="meta">@OutputTimeUnit</span>(TimeUnit.MILLISECONDS)</div><div class="line"><span class="meta">@State</span>(Scope.Thread)</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BenchmarkTest</span> </span>&#123;</div><div class="line">    <span class="comment">//@Benchmark</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testBit</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> notice_1 = <span class="number">1</span> &lt;&lt; <span class="number">0</span>;</div><div class="line">        <span class="keyword">int</span> notice_2 = <span class="number">1</span> &lt;&lt; <span class="number">1</span>;</div><div class="line">        <span class="keyword">int</span> notice_3 = <span class="number">1</span> &lt;&lt; <span class="number">2</span>;</div><div class="line">        <span class="keyword">int</span> notice_4 = <span class="number">1</span> &lt;&lt; <span class="number">3</span>;</div><div class="line">        <span class="keyword">int</span> notice_5 = <span class="number">1</span> &lt;&lt; <span class="number">4</span>;</div><div class="line"></div><div class="line">        <span class="comment">//假设用户有 1, 2,  3 三种通知类型</span></div><div class="line">        <span class="keyword">int</span> userNotice = notice_1 | notice_2 | notice_3;</div><div class="line">        hasNotice(userNotice, notice_1); <span class="comment">// true</span></div><div class="line">        hasNotice(userNotice, notice_5); <span class="comment">// false</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">hasNotice</span><span class="params">(<span class="keyword">int</span> userNotice, <span class="keyword">int</span> notice)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> (userNotice &amp; notice) != <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    <span class="meta">@Benchmark</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testPrimeNumber</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> noticeA = <span class="number">2</span>;</div><div class="line">        <span class="keyword">int</span> noticeB = <span class="number">3</span>;</div><div class="line">        <span class="keyword">int</span> noticeC = <span class="number">5</span>;</div><div class="line">        <span class="keyword">int</span> noticeD = <span class="number">7</span>;</div><div class="line">        <span class="keyword">int</span> noticeE = <span class="number">11</span>;</div><div class="line"></div><div class="line">        <span class="comment">//假设用户只设置了 A和D</span></div><div class="line">        <span class="keyword">int</span> userNotice = noticeA * noticeB * noticeC;</div><div class="line"></div><div class="line">        isNotice(userNotice, noticeA);</div><div class="line">        isNotice(userNotice, noticeE);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isNotice</span><span class="params">(<span class="keyword">int</span> userNotice, <span class="keyword">int</span> noticeType)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> userNotice % noticeType == <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> RunnerException </span>&#123;</div><div class="line">        Options opt = <span class="keyword">new</span> OptionsBuilder()</div><div class="line">                .include(BenchmarkTest.class.getSimpleName())</div><div class="line">                .forks(<span class="number">1</span>)</div><div class="line">                .warmupIterations(<span class="number">5</span>)</div><div class="line">                .measurementIterations(<span class="number">5</span>)</div><div class="line">                .threads(<span class="number">10</span>)</div><div class="line">                .build();</div><div class="line">        <span class="keyword">new</span> Runner(opt).run();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>结果</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">Result <span class="string">"testPrimeNumber"</span>:</div><div class="line">  4864086.350 ±(99.9%) 3239405.469 ops/ms [Average]</div><div class="line">  (min, avg, max) = (3623073.259, 4864086.350, 5503454.074), stdev = 841263.313</div><div class="line">  CI (99.9%): [1624680.880, 8103491.819] (assumes normal distribution)</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># Run complete. Total time: 00:00:12</span></div><div class="line"></div><div class="line">Benchmark                       Mode  Cnt        Score         Error   Units</div><div class="line">BenchmarkTest.testPrimeNumber  thrpt    5  4864086.350 ± 3239405.469  ops/ms</div></pre></td></tr></table></figure>
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

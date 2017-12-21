@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>&lt;Java 8 实战&gt; 学习笔记 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="java," />
+  
+
+  <meta name="description" content="流处理流, 是一系列数据项, 一次只生成一项. 程序可以从输入流中一个一个读取数据项, 然后以同样的方式将数据项写入输出流. 一个程序的输出流, 很可能是另一个程序的输入流.  Java 8 可以透明地把输入的不相关部分拿到几个 CPU 内核上分别去执行你的 Stream 操作流水线 – 这是几乎免费的并行, 用不着费劲去搞 Thread 了.  行为参数化Java 8 增加了把方法作为参数传递给">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="&lt;Java 8 实战&gt; 学习笔记">
+<meta property="og:url" content="https://emacsist.github.io/2017/12/21/Java-8-实战-学习笔记/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="流处理流, 是一系列数据项, 一次只生成一项. 程序可以从输入流中一个一个读取数据项, 然后以同样的方式将数据项写入输出流. 一个程序的输出流, 很可能是另一个程序的输入流.  Java 8 可以透明地把输入的不相关部分拿到几个 CPU 内核上分别去执行你的 Stream 操作流水线 – 这是几乎免费的并行, 用不着费劲去搞 Thread 了.  行为参数化Java 8 增加了把方法作为参数传递给">
+<meta property="og:image" content="https://emacsist.github.io/img/17EB7B0275ACEEA2C75B32082BCA15BC.jpg">
+<meta property="og:image" content="https://emacsist.github.io/img/5A86B9287685EFEC3AA1B1D7DE4628DD.jpg">
+<meta property="og:image" content="https://emacsist.github.io/img/818807F698B7052957EA6560221721DA.jpg">
+<meta property="og:image" content="https://emacsist.github.io/img/D052091F4E11696FFFAB563D8204B434.jpg">
+<meta property="og:image" content="https://emacsist.github.io/img/E6261C6705FA905093384E14E1C644E1.jpg">
+<meta property="og:image" content="https://emacsist.github.io/img/4DC8BFC0A9104768670B35F98C23C341.jpg">
+<meta property="og:image" content="https://emacsist.github.io/img/2B9508AE501965F086906BB45B04C5AD.jpg">
+<meta property="og:updated_time" content="2017-12-21T04:29:02.321Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="&lt;Java 8 实战&gt; 学习笔记">
+<meta name="twitter:description" content="流处理流, 是一系列数据项, 一次只生成一项. 程序可以从输入流中一个一个读取数据项, 然后以同样的方式将数据项写入输出流. 一个程序的输出流, 很可能是另一个程序的输入流.  Java 8 可以透明地把输入的不相关部分拿到几个 CPU 内核上分别去执行你的 Stream 操作流水线 – 这是几乎免费的并行, 用不着费劲去搞 Thread 了.  行为参数化Java 8 增加了把方法作为参数传递给">
+<meta name="twitter:image" content="https://emacsist.github.io/img/17EB7B0275ACEEA2C75B32082BCA15BC.jpg">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#流处理"><span class="toc-text">流处理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#行为参数化"><span class="toc-text">行为参数化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#并行与共享的可变数据"><span class="toc-text">并行与共享的可变数据</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#函数式编程范式的基石"><span class="toc-text">函数式编程范式的基石</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#命令式编程范式"><span class="toc-text">命令式编程范式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#方法引用"><span class="toc-text">方法引用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#谓词"><span class="toc-text">谓词</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#外部迭代-VS-内部迭代"><span class="toc-text">外部迭代 VS 内部迭代</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Collections-与-Stream"><span class="toc-text">Collections 与 Stream</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#lamdba"><span class="toc-text">lamdba</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#lamdba-用法"><span class="toc-text">lamdba 用法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数式接口"><span class="toc-text">函数式接口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数描述符"><span class="toc-text">函数描述符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lamdba-与-原始类型的装箱"><span class="toc-text">lamdba 与 原始类型的装箱</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用局部变量"><span class="toc-text">使用局部变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方法引用-1"><span class="toc-text">方法引用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-8-自带的函数式接口"><span class="toc-text">Java 8 自带的函数式接口</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#流-stream"><span class="toc-text">流 stream</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#流与集合的区别"><span class="toc-text">流与集合的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一个流只能遍历一次"><span class="toc-text">一个流只能遍历一次!</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#流的中间操作"><span class="toc-text">流的中间操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#流的终端操作"><span class="toc-text">流的终端操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#流式处理"><span class="toc-text">流式处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#映射-map"><span class="toc-text">映射 map</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#flatMap"><span class="toc-text">flatMap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查找元素"><span class="toc-text">查找元素</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#归约-reduce"><span class="toc-text">归约 reduce</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#构建流"><span class="toc-text">构建流</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#并行处理数据"><span class="toc-text">并行处理数据</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#内部原理"><span class="toc-text">内部原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#iterate-在本质上是顺序的"><span class="toc-text">iterate 在本质上是顺序的!</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#正确使用并行流"><span class="toc-text">正确使用并行流</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Fork-Join-框架"><span class="toc-text">Fork/Join 框架</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#RecursiveTask"><span class="toc-text">RecursiveTask</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fork-Join-最佳做法"><span class="toc-text">Fork/Join 最佳做法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spliterator"><span class="toc-text">Spliterator</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#匿名类-VS-Lamdba"><span class="toc-text">匿名类 VS Lamdba</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#默认方法"><span class="toc-text">默认方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#解决冲突规则"><span class="toc-text">解决冲突规则</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Optional-VS-null"><span class="toc-text">Optional VS null</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#创建-Optional-对象"><span class="toc-text">创建 Optional 对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用-map-从-optional-提取和转换值"><span class="toc-text">使用 map 从 optional 提取和转换值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-text">参考资料</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#异步处理-Future-与-CompletableFuture"><span class="toc-text">异步处理 Future 与 CompletableFuture</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#新的日期-api"><span class="toc-text">新的日期 api</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#DateFormat-并不是线程安全的"><span class="toc-text">DateFormat 并不是线程安全的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DateTimeFormatter"><span class="toc-text">DateTimeFormatter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LocalDate"><span class="toc-text">LocalDate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LocalTime"><span class="toc-text">LocalTime</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LocalDateTime"><span class="toc-text">LocalDateTime</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Period-与-Duration"><span class="toc-text">Period 与 Duration</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Java-8-实战-学习笔记" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            &lt;Java 8 实战&gt; 学习笔记
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2017.12.21</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 117 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h1 id="流处理"><a href="#流处理" class="headerlink" title="流处理"></a>流处理</h1><p>流, 是一系列数据项, 一次只生成一项. 程序可以从输入流中一个一个读取数据项, 然后以同样的方式将数据项写入输出流. 一个程序的输出流, 很可能是另一个程序的输入流.</p>
+<blockquote>
+<p>Java 8 可以透明地把输入的不相关部分拿到几个 CPU 内核上分别去执行你的 Stream 操作流水线 – 这是几乎免费的并行, 用不着费劲去搞 Thread 了.</p>
+</blockquote>
+<h1 id="行为参数化"><a href="#行为参数化" class="headerlink" title="行为参数化"></a>行为参数化</h1><p>Java 8 增加了把方法作为参数传递给另一个方法的能力.</p>
+<p><img src="/img/17EB7B0275ACEEA2C75B32082BCA15BC.jpg" alt="IMAGE"></p>
+<h1 id="并行与共享的可变数据"><a href="#并行与共享的可变数据" class="headerlink" title="并行与共享的可变数据"></a>并行与共享的可变数据</h1><p>上面说到的 “几乎免费并行” 的前提条件:</p>
+<blockquote>
+<p>你的行为必须能够同时对不同的输入安全地执行.</p>
+</blockquote>
+<p>这意味着你写代码时, 不能访问共享的可变数据. 这些函数有时称为 “纯函数” 或 “无副作用函数” 或 “无状态函数” .</p>
+<h1 id="函数式编程范式的基石"><a href="#函数式编程范式的基石" class="headerlink" title="函数式编程范式的基石"></a>函数式编程范式的基石</h1><ul>
+<li>没有共享的可变数据</li>
+<li>将方法和函数即代码, 传递给其他方法的能力</li>
+</ul>
+<p>不能有共享的可变数据, 这意味着:</p>
+<blockquote>
+<p>一个方法是可以通过它将参数值转换为结果的方式完全描述的; 换句话说, 它的行为就像一个数学函数, 没有可见的副作用.</p>
+</blockquote>
+<h1 id="命令式编程范式"><a href="#命令式编程范式" class="headerlink" title="命令式编程范式"></a>命令式编程范式</h1><p>写出的程序则是一系列状态的指令.</p>
+<h1 id="方法引用"><a href="#方法引用" class="headerlink" title="方法引用"></a>方法引用</h1><p><code>类名::方法名</code> 例如 :</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">new</span> File(<span class="string">"."</span>).listFiles(File::isHidden);</div></pre></td></tr></table></figure>
+<h1 id="谓词"><a href="#谓词" class="headerlink" title="谓词"></a>谓词</h1><p>在数学上常常用来代表一个类似函数的东西, 它接受一个参数值, 并返回 <code>true</code> 或 <code>false</code> .</p>
+<h1 id="外部迭代-VS-内部迭代"><a href="#外部迭代-VS-内部迭代" class="headerlink" title="外部迭代 VS 内部迭代"></a>外部迭代 VS 内部迭代</h1><p>外部迭代: 使用 for-each 循环一个一个去迭代元素, 然后再处理元素</p>
+<p>内部迭代: 数据处理完全是在库内部进行的.</p>
+<h1 id="Collections-与-Stream"><a href="#Collections-与-Stream" class="headerlink" title="Collections 与 Stream"></a>Collections 与 Stream</h1><p>Collections 主要是为了存储和访问数据, 而 Stream 则主要用于描述对数据的计算. </p>
+<p>Stream 允许并提倡并行处理一个 Stream 中的元素.</p>
+<p>首先库 Stream 会负责分块, 即把大的流分成几个小的流, 以便并行处理. </p>
+<p>其次, 流提供的这个几乎免费的并行, 只有在传递给 filter 之类的库方法的方法不会互动(比如说有可变的共享对象)时才能工作. 这一点要特别注意.</p>
+<h1 id="lamdba"><a href="#lamdba" class="headerlink" title="lamdba"></a>lamdba</h1><p>语法:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">(parameters) -&gt; exprssion</div><div class="line"></div><div class="line">或</div><div class="line"></div><div class="line">(parameters) -&gt; &#123;statements;&#125;</div></pre></td></tr></table></figure>
+<p><img src="/img/5A86B9287685EFEC3AA1B1D7DE4628DD.jpg" alt="IMAGE"></p>
+<h2 id="lamdba-用法"><a href="#lamdba-用法" class="headerlink" title="lamdba 用法"></a>lamdba 用法</h2><p>它可以用在函数式接口上. </p>
+<h2 id="函数式接口"><a href="#函数式接口" class="headerlink" title="函数式接口"></a>函数式接口</h2><p>就是<code>只定义一个</code>抽象方法的接口. 重点强调: 只能一个! (继承接口的多个抽象不算!), 并且这一个只能是抽象方法. (但可以有多个 default 默认实现的方法)</p>
+<p>强烈建议在所有函数式接口上加上标注: <code>@FunctionalInterface</code> 这样子, 就会让编译器来检查了.</p>
+<p>注意! 任何函数式接口都不允许抛出受检异常(checked exception).</p>
+<h2 id="函数描述符"><a href="#函数描述符" class="headerlink" title="函数描述符"></a>函数描述符</h2><p>函数式接口的抽象方法的签名基本上就是Lamdba表达式的签名. 这种抽象方法叫作函数描述符.</p>
+<p>表示法:</p>
+<p><code>() -&gt; void</code> 表示参数列表为空, 且返回void</p>
+<p><code>(Apple, Appl) -&gt; int</code> 表示接受两个 Apple 作为参数且返回 int 的函数.</p>
+<h2 id="lamdba-与-原始类型的装箱"><a href="#lamdba-与-原始类型的装箱" class="headerlink" title="lamdba 与 原始类型的装箱"></a>lamdba 与 原始类型的装箱</h2><p><code>xxPredicate</code> 的形式的函数式接口, 它避免了使用泛型(这种对原始类型的, 必须要进行装箱和解箱操作). 这就有非常大的不同了!</p>
+<p>例如:</p>
+<p>IntPredicate<br>LongPredicate<br>DoublePredicate</p>
+<h2 id="使用局部变量"><a href="#使用局部变量" class="headerlink" title="使用局部变量"></a>使用局部变量</h2><p>lamdba 表达式允许使用 <em>自由变量</em> (不是参数, 而是在外层作用域中定义的变量), 就像匿名类一样. 它们被称作捕获 Lamdba.</p>
+<blockquote>
+<p>Lamdba 可以没有限制地捕获(也就是在主体中引用)实例变量和静态变量. 但局部变量必须显式声明为 final , 或事实上是 final . 换句话说, Lamdba 表达式只能捕获指派给它们局部变量一次.</p>
+</blockquote>
+<p>例如这样子编译就没问题:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> hello = <span class="number">10</span>;</div><div class="line">    Runnable r = () -&gt; System.out.println(hello);</div><div class="line">    r.run();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>但下面这样子就不行:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> hello = <span class="number">10</span>;</div><div class="line">    Runnable r = () -&gt; System.out.println(hello);</div><div class="line">    hello = <span class="number">20</span>;</div><div class="line">    r.run();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>编译器会报:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">java: <span class="built_in">local</span> variables referenced from a lambda expression must be final or effectively final.</div></pre></td></tr></table></figure>
+<h2 id="方法引用-1"><a href="#方法引用-1" class="headerlink" title="方法引用"></a>方法引用</h2><p>可以被看作仅仅调用特定方法的 Lamdba 的一种快捷写法.例如</p>
+<p><code>Apple::getWeight</code> 就是引用了 Apple 类中定义的方法 getWeight . 它是Lamdba 表达式 <code>(Apple a) -&gt; a.getWeight()</code> 的快捷写法.</p>
+<h2 id="Java-8-自带的函数式接口"><a href="#Java-8-自带的函数式接口" class="headerlink" title="Java 8 自带的函数式接口"></a>Java 8 自带的函数式接口</h2><p><code>java.util.function</code> 包里</p>
+<h1 id="流-stream"><a href="#流-stream" class="headerlink" title="流 stream"></a>流 stream</h1><h2 id="流与集合的区别"><a href="#流与集合的区别" class="headerlink" title="流与集合的区别"></a>流与集合的区别</h2><p><img src="/img/818807F698B7052957EA6560221721DA.jpg" alt="IMAGE"></p>
+<h2 id="一个流只能遍历一次"><a href="#一个流只能遍历一次" class="headerlink" title="一个流只能遍历一次!"></a>一个流只能遍历一次!</h2><h2 id="流的中间操作"><a href="#流的中间操作" class="headerlink" title="流的中间操作"></a>流的中间操作</h2><ul>
+<li>filter</li>
+<li>map</li>
+<li>limit</li>
+<li>sorted</li>
+<li>distinct</li>
+</ul>
+<h2 id="流的终端操作"><a href="#流的终端操作" class="headerlink" title="流的终端操作"></a>流的终端操作</h2><ul>
+<li>forEach</li>
+<li>count</li>
+<li>collect</li>
+</ul>
+<h2 id="流式处理"><a href="#流式处理" class="headerlink" title="流式处理"></a>流式处理</h2><p>它是直接像流水线一样处理的, 而不是一步一步来处理的.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">    List&lt;Integer&gt; numbers = Arrays.asList(<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">10</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">10</span>, <span class="number">20</span>);</div><div class="line">    numbers.stream().filter(i -&gt; &#123;</div><div class="line">        System.out.println(<span class="string">"filtering "</span> + i);</div><div class="line">        <span class="keyword">return</span> i % <span class="number">2</span> == <span class="number">0</span>;</div><div class="line">    &#125;)</div><div class="line">            .distinct()</div><div class="line">            .forEach((e) -&gt; &#123;</div><div class="line">                System.out.println(<span class="string">"in foreach"</span> + e);</div><div class="line">            &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>打印的结果</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">filtering 1</div><div class="line">filtering 2</div><div class="line"><span class="keyword">in</span> foreach2</div><div class="line">filtering 1</div><div class="line">filtering 3</div><div class="line">filtering 3</div><div class="line">filtering 2</div><div class="line">filtering 4</div><div class="line"><span class="keyword">in</span> foreach4</div><div class="line">filtering 1</div><div class="line">filtering 3</div><div class="line">filtering 8</div><div class="line"><span class="keyword">in</span> foreach8</div><div class="line">filtering 9</div><div class="line">filtering 10</div><div class="line"><span class="keyword">in</span> foreach10</div><div class="line">filtering 3</div><div class="line">filtering 2</div><div class="line">filtering 10</div><div class="line">filtering 3</div><div class="line">filtering 2</div><div class="line">filtering 3</div><div class="line">filtering 4</div><div class="line">filtering 10</div><div class="line">filtering 20</div><div class="line"><span class="keyword">in</span> foreach20</div></pre></td></tr></table></figure>
+<h2 id="映射-map"><a href="#映射-map" class="headerlink" title="映射 map"></a>映射 map</h2><p>它会接受一个函数作为参数. 这个函数会被应用到每个元素上, 并将其映射成一个新的元素(使用映射一词, 是因为它和转换类似, 但其中的细微差别在于它是 “创建一个新版本” 而不是去 “修改”).</p>
+<h2 id="flatMap"><a href="#flatMap" class="headerlink" title="flatMap"></a>flatMap</h2><p>它的效果是, 各个数组并不是分别映射成一个流, 而是映射成流的内容. 所有使用 map(Arrays::stream) 时生成的单个流都被合并起来, 即扁平为一个流.<br>换句话说, flatMap 让你把一个流中的每个值都换成另一个流, 然后把所有的流连接起来成为一个流.</p>
+<p>示例图</p>
+<p><img src="/img/D052091F4E11696FFFAB563D8204B434.jpg" alt="IMAGE"></p>
+<h2 id="查找元素"><a href="#查找元素" class="headerlink" title="查找元素"></a>查找元素</h2><p><code>findFirst</code> VS <code>findAny</code> , 它们会影响并行. <code>findFirst</code> 在并行上限制更多. 如果不关心返回的元素是哪个, 请用 <code>findAny</code> , 因为它在并行中限制较少.</p>
+<h2 id="归约-reduce"><a href="#归约-reduce" class="headerlink" title="归约 reduce"></a>归约 reduce</h2><p>将流中所有元素反复结合起来得到一个值, 比如一个 Integer , 这样的查询可以被归类为归约操作(将流归约成一个值). 用函数式编程语言的术语来说, 这称为折叠(fold).</p>
+<p>它接受两个参数</p>
+<ul>
+<li>一个初始值(可选, 如果没初始值, 则返回一个 Optional 对象)</li>
+<li>一个 BinaryOperation<t> 来将两个元素结合起来产生一个新值.</t></li>
+</ul>
+<p>示意图</p>
+<p><img src="/img/E6261C6705FA905093384E14E1C644E1.jpg" alt="IMAGE"></p>
+<h2 id="构建流"><a href="#构建流" class="headerlink" title="构建流"></a>构建流</h2><p>由值创建流: <code>Stream.of</code></p>
+<p>由数组创建流: <code>Arrays.stream</code></p>
+<p>由文件生成流: <code>Files</code> 很多静态方法都会返回一个流, 如 <code>Files.lines</code></p>
+<p>同函数生成流: 创建无限流 =&gt; <code>Stream.iterate</code> 和 <code>Stream.generate</code> 一般来说, 应该使用 <code>limit(n)</code> 来对这种流加以限制.</p>
+<h1 id="并行处理数据"><a href="#并行处理数据" class="headerlink" title="并行处理数据"></a>并行处理数据</h1><p>最后一次 parallel 或 sequential 调用会影响整个流水线.(以最后一次的为准)</p>
+<h2 id="内部原理"><a href="#内部原理" class="headerlink" title="内部原理"></a>内部原理</h2><p>内部使用了默认的 ForkJoinPool (默认的线程数量就是你的处理器数量). <code>Runtime.getRuntime().availableProcessors()</code> . 可以通过系统属性来改变线程池大小:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">System.setProperty(<span class="string">"java.util.concurrent.ForkJoinPool.common.parallelism"</span>, <span class="string">"1.2"</span>);</div></pre></td></tr></table></figure>
+<blockquote>
+<p>除非有很好的理由, 否则强烈建议你不要修改它.</p>
+</blockquote>
+<h2 id="iterate-在本质上是顺序的"><a href="#iterate-在本质上是顺序的" class="headerlink" title="iterate 在本质上是顺序的!"></a>iterate 在本质上是顺序的!</h2><h2 id="正确使用并行流"><a href="#正确使用并行流" class="headerlink" title="正确使用并行流"></a>正确使用并行流</h2><p>错用并行流的首要原因: 算法改变了某些共享状态.</p>
+<ul>
+<li>如有疑问, 测量! 并行流并不总是比顺序流快.</li>
+<li>留意装箱. 自动装箱和拆箱会大大降低性能.</li>
+<li>有些操作在并行流上的性能就比顺序流差. 特别是 limit 和 findFirst 等依赖于元素顺序的操作, 它们在并行流上执行的代价非常大.</li>
+<li>考虑流的操作流水线的总计算成本. 设N是元素的总数, Q是一个元素通过流水线的处理成本, 则 <code>N * Q</code> 总是粗略的定性估计. Q 值较高, 意味着使用并行流时性能好的可能性比较大.</li>
+<li>对于较小的数据量, 选择并行流几乎从来不是一个好的决定.并行处理几个元素的好处抵不上并行化造成的额外开销.</li>
+<li>要考虑流背后的数据结构是否易于分解. 例如 ArrayList 的拆分效率比 LinkedList 高得多. 因为前者用不着遍历就可以平均拆分, 而后者则必须遍历.</li>
+</ul>
+<p><img src="/img/4DC8BFC0A9104768670B35F98C23C341.jpg" alt="IMAGE"></p>
+<ul>
+<li>流自身的特点, 以及流水线中的中间操作修改流的方式, 都可能会改变分解过程的性能. 例如一个 SIZED 流可以分成大小相等的两部分, 这样每个部分都可以比较高效地处理, 但筛选操作可能丢弃的元素个数却无法预测, 导致流本身大小未知.</li>
+<li>还要考虑终端操作中合并步骤的代价是大是小(如 Collector 中的 combiner 方法). 如果这一步代价很大, 那么组合每个子流产生的部分结果所付出的代价就可能会超出通过并行流得到的性能提升.</li>
+</ul>
+<h2 id="Fork-Join-框架"><a href="#Fork-Join-框架" class="headerlink" title="Fork/Join 框架"></a>Fork/Join 框架</h2><p>目的是以递归方式将可以并行的任务拆分为更小的任务, 然后将每个子任务的结果合并起来生成整体结果. 它是 ExecutorService 接口的一个实现, 它把子任务分配给线程池(称为 ForkJoinPool) 中的工作线程.</p>
+<h3 id="RecursiveTask"><a href="#RecursiveTask" class="headerlink" title="RecursiveTask"></a>RecursiveTask</h3><p>线程池的任务必须是 <code>RecursiveTask&lt;R&gt;</code> 的一个子类, 其中R是并行化任务产生的结果类型. 如果不返回结果, 则是 <code>RecursiveAction</code> 类型.</p>
+<h3 id="Fork-Join-最佳做法"><a href="#Fork-Join-最佳做法" class="headerlink" title="Fork/Join 最佳做法"></a>Fork/Join 最佳做法</h3><ul>
+<li>对一个任务调用 join 会阻塞调用方, 直到该任务做出结果. 因此, 有必要在两个子任务的计算都开始之后再调用它.</li>
+<li>不应该在 RecursiveTask 内部使用 ForJoinPool 的 invoke 方法. 相反, 你应该始终直接调用 compute 或 fork 方法, 只有顺序代码才应该用 invoke 来启动并行计算.</li>
+<li>对子任务调用 fork 方法可以把它排进 ForJoinPool. 同时对左边和右边的子任务调用它似乎很自然, 但这样做的效率要比直接对其中一个调用 compute 低. 这样做你可以为其中一个子任务重用同一线程, 从而避免在线程池中多分配一个任务造成开销.</li>
+<li>调试比较麻烦.</li>
+<li>和并行流一样, 你不应理所当然地认为在多核处理器上使用分支/合并框架就比顺序计算快.</li>
+</ul>
+<h2 id="Spliterator"><a href="#Spliterator" class="headerlink" title="Spliterator"></a>Spliterator</h2><p>它定义了并行流如何拆分它要遍历的数据. (比如并行统计字符, 我们要按单词来进行拆分?)</p>
+<h1 id="匿名类-VS-Lamdba"><a href="#匿名类-VS-Lamdba" class="headerlink" title="匿名类 VS Lamdba"></a>匿名类 VS Lamdba</h1><ul>
+<li>匿名类和Lamdba 表达式中的 this 和 super 的含义是不同的! 匿名类中, this 代表的是类自身, 而 Lamdba 中, 它代表的是包含类.</li>
+<li>匿名类可以屏蔽包含类的变量, 而 Lamdba 表达式不能(会导致编译错误)</li>
+</ul>
+<p><img src="/img/2B9508AE501965F086906BB45B04C5AD.jpg" alt="IMAGE"></p>
+<h1 id="默认方法"><a href="#默认方法" class="headerlink" title="默认方法"></a>默认方法</h1><p>接口中可以添加默认方法.</p>
+<p>用法:</p>
+<ul>
+<li>可选方法</li>
+<li>行为的多继承</li>
+</ul>
+<h2 id="解决冲突规则"><a href="#解决冲突规则" class="headerlink" title="解决冲突规则"></a>解决冲突规则</h2><ol>
+<li>类中的方法优先级最高. 类或父类中声明的方法的优先级高于任何声明为默认方法的优先级.</li>
+<li>如果1无法判断, 则子接口的优先级更高: 函数签名相同时, 优先选择拥有最具体实现的默认方法的接口. 即如果 B 继承了 A, 那么 B 就比 A 更加具体.</li>
+<li>最后, 如果还是无法判断, 继承了多个接口的类必须通过显式覆盖和调用期望的方法, 显式地选择使用哪一个默认方法的实现.</li>
+</ol>
+<h1 id="Optional-VS-null"><a href="#Optional-VS-null" class="headerlink" title="Optional VS null"></a>Optional VS null</h1><h2 id="创建-Optional-对象"><a href="#创建-Optional-对象" class="headerlink" title="创建 Optional 对象"></a>创建 Optional 对象</h2><ul>
+<li>Optional.empty();</li>
+<li>Optional.of(T); // 如果 T 为 null 则也会抛NPE</li>
+<li>Optional.ofNullable(T); // 允许 T 为 null, 但不会抛 NPE</li>
+</ul>
+<h2 id="使用-map-从-optional-提取和转换值"><a href="#使用-map-从-optional-提取和转换值" class="headerlink" title="使用 map 从 optional 提取和转换值"></a>使用 map 从 optional 提取和转换值</h2><p><code>optional.map(方法引用)</code></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>Optional 中的 flatMap</p>
+<blockquote>
+<p>flatMap方法与map方法类似，区别在于mapping函数的返回值不同。map方法的mapping函数返回值可以是任何类型T，而flatMap方法的mapping函数必须是Optional。</p>
+</blockquote>
+<p><a href="http://www.importnew.com/6675.html" target="_blank" rel="external">Java 8 Optional类深度解析</a></p>
+<h1 id="异步处理-Future-与-CompletableFuture"><a href="#异步处理-Future-与-CompletableFuture" class="headerlink" title="异步处理 Future 与 CompletableFuture"></a>异步处理 Future 与 CompletableFuture</h1><p>将同步API的调用封装到一个 CompletableFuture 中, 就能以异步的方式使用其结果.</p>
+<h1 id="新的日期-api"><a href="#新的日期-api" class="headerlink" title="新的日期 api"></a>新的日期 api</h1><h2 id="DateFormat-并不是线程安全的"><a href="#DateFormat-并不是线程安全的" class="headerlink" title="DateFormat 并不是线程安全的"></a>DateFormat 并不是线程安全的</h2><p>这意味着两个线程如果尝试使用同一个 formatter 解析日期, 可能会得到无法预期的结果.</p>
+<h2 id="DateTimeFormatter"><a href="#DateTimeFormatter" class="headerlink" title="DateTimeFormatter"></a>DateTimeFormatter</h2><p>它是为了替代 DateFormat 的. 并且它是线程安全的!</p>
+<h2 id="LocalDate"><a href="#LocalDate" class="headerlink" title="LocalDate"></a>LocalDate</h2><p>不可变对象, 简单的日期, 并不含当天的时间信息.</p>
+<p>要想修改, 则调用带有 withXXX 方法或 plusXXX, 它会返回对象的一个副本.</p>
+<h2 id="LocalTime"><a href="#LocalTime" class="headerlink" title="LocalTime"></a>LocalTime</h2><p>一天当中的时间信息.</p>
+<h2 id="LocalDateTime"><a href="#LocalDateTime" class="headerlink" title="LocalDateTime"></a>LocalDateTime</h2><p>LocalDate 与 LocalTime 的结合.</p>
+<h2 id="Period-与-Duration"><a href="#Period-与-Duration" class="headerlink" title="Period 与 Duration"></a>Period 与 Duration</h2>
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
