@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>GNU Parallel 学习笔记 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="bash,parallel," />
+  
+
+  <meta name="description" content="安装1brew install parallel 官方文档指南1man parallel_tutorial 输入源直接在命令行传递参数1::: 参数1 ::: 参数2 12345678910111213141516171819202122$ echo ::: a b c ebace$ parallel echo ::: a b c e ::: f g j ia ga ja ib fb jb ib">
+<meta name="keywords" content="bash,parallel">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GNU Parallel 学习笔记">
+<meta property="og:url" content="https://emacsist.github.io/2017/12/24/GNU-Parallel-学习笔记/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="安装1brew install parallel 官方文档指南1man parallel_tutorial 输入源直接在命令行传递参数1::: 参数1 ::: 参数2 12345678910111213141516171819202122$ echo ::: a b c ebace$ parallel echo ::: a b c e ::: f g j ia ga ja ib fb jb ib">
+<meta property="og:updated_time" content="2017-12-24T15:49:12.636Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="GNU Parallel 学习笔记">
+<meta name="twitter:description" content="安装1brew install parallel 官方文档指南1man parallel_tutorial 输入源直接在命令行传递参数1::: 参数1 ::: 参数2 12345678910111213141516171819202122$ echo ::: a b c ebace$ parallel echo ::: a b c e ::: f g j ia ga ja ib fb jb ib">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#安装"><span class="toc-text">安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#官方文档指南"><span class="toc-text">官方文档指南</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#输入源"><span class="toc-text">输入源</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#直接在命令行传递参数"><span class="toc-text">直接在命令行传递参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#以文件作为输入"><span class="toc-text">以文件作为输入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#以标准输输入作为输入-stdin"><span class="toc-text">以标准输输入作为输入 stdin</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#混合"><span class="toc-text">混合</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#跳过空行"><span class="toc-text">跳过空行</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#指定输入结束符"><span class="toc-text">指定输入结束符</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#修改参数界定符"><span class="toc-text">修改参数界定符</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#使用-NUL-作为办分割符"><span class="toc-text">使用 NUL 作为办分割符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#修改文件界定符"><span class="toc-text">修改文件界定符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#修改参数界定符-1"><span class="toc-text">修改参数界定符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#显示进度"><span class="toc-text">显示进度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用指定分割符"><span class="toc-text">使用指定分割符</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#替换符"><span class="toc-text">替换符</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#lt-￼40-gt"><span class="toc-text">{}</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lt-￼42-gt"><span class="toc-text">{.}</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lt-￼43-gt"><span class="toc-text">{/}</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lt-￼44-gt"><span class="toc-text">{/.}</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lt-￼45-gt"><span class="toc-text">{//}</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lt-￼46-gt"><span class="toc-text">{#}</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lt-￼47-gt"><span class="toc-text">{%}</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lt-￼48-gt"><span class="toc-text">{n}</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lt-￼49-gt"><span class="toc-text">{n.}</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lt-￼51-gt"><span class="toc-text">{n/}</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lt-￼53-gt"><span class="toc-text">{n//}</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lt-￼55-gt"><span class="toc-text">{n/.}</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#限制参数长度和大小"><span class="toc-text">限制参数长度和大小</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#xargs"><span class="toc-text">--xargs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#jobs-4"><span class="toc-text">--jobs 4</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#N3"><span class="toc-text">-N3</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#处理空格"><span class="toc-text">处理空格</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#输出打印处理"><span class="toc-text">输出打印处理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#前缀"><span class="toc-text">前缀</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#把输出结果保存到文件"><span class="toc-text">把输出结果保存到文件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#详细保存结果到文件"><span class="toc-text">详细保存结果到文件</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#控制并发数"><span class="toc-text">控制并发数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#只打印输出命令-则不执行"><span class="toc-text">只打印输出命令, 则不执行</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#交互式执行"><span class="toc-text">交互式执行</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#恢复任务"><span class="toc-text">恢复任务</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#只重新执行失败的任务"><span class="toc-text">只重新执行失败的任务</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#限制资源占用"><span class="toc-text">限制资源占用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#使用远程主机来执行"><span class="toc-text">使用远程主机来执行</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-GNU-Parallel-学习笔记" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            GNU Parallel 学习笔记
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2017.12.24</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#bash">
+        <span class="tag-name">bash</span>
+    <span class="tag-size">( 7 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#parallel">
+        <span class="tag-name">parallel</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">brew install parallel</div></pre></td></tr></table></figure>
+<h1 id="官方文档指南"><a href="#官方文档指南" class="headerlink" title="官方文档指南"></a>官方文档指南</h1><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">man parallel_tutorial</div></pre></td></tr></table></figure>
+<h1 id="输入源"><a href="#输入源" class="headerlink" title="输入源"></a>输入源</h1><h2 id="直接在命令行传递参数"><a href="#直接在命令行传递参数" class="headerlink" title="直接在命令行传递参数"></a>直接在命令行传递参数</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">::: 参数1 ::: 参数2</div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">$ echo ::: a b c e</div><div class="line">b</div><div class="line">a</div><div class="line">c</div><div class="line">e</div><div class="line">$ parallel echo ::: a b c e ::: f g j i</div><div class="line">a g</div><div class="line">a j</div><div class="line">a i</div><div class="line">b f</div><div class="line">b j</div><div class="line">b i</div><div class="line">b g</div><div class="line">c f</div><div class="line">c g</div><div class="line">c j</div><div class="line">c i</div><div class="line">e f</div><div class="line">e g</div><div class="line">a f</div><div class="line">e j</div><div class="line">e i</div></pre></td></tr></table></figure>
+<h2 id="以文件作为输入"><a href="#以文件作为输入" class="headerlink" title="以文件作为输入"></a>以文件作为输入</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">-a file1 -a file2</div><div class="line"></div><div class="line">或 </div><div class="line"></div><div class="line">:::: file1 :::: file2</div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">parallel -a abc-file echo</div><div class="line"></div><div class="line">parallel -a a.file -a b.file echo</div></pre></td></tr></table></figure>
+<p>这样子就可以并行输出文件 <code>abc-file</code> 的内容(默认情况下, 是无序的, 如果想有序, 则传参数 <code>-k</code> 即可)</p>
+<h2 id="以标准输输入作为输入-stdin"><a href="#以标准输输入作为输入-stdin" class="headerlink" title="以标准输输入作为输入 stdin"></a>以标准输输入作为输入 stdin</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-</div></pre></td></tr></table></figure>
+<p>直接 <code>-</code> 后不接其他东西即可.</p>
+<p>例如</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ seq 5 | parallel  echo -</div><div class="line">2</div><div class="line">4</div><div class="line">3</div><div class="line">1</div><div class="line">5</div></pre></td></tr></table></figure>
+<h1 id="混合"><a href="#混合" class="headerlink" title="混合"></a>混合</h1><p><code>:::</code> 可以和 <code>::::</code> 混合使用.</p>
+<h1 id="跳过空行"><a href="#跳过空行" class="headerlink" title="跳过空行"></a>跳过空行</h1><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">parallel --no-run-if-empty</div></pre></td></tr></table></figure>
+<h1 id="指定输入结束符"><a href="#指定输入结束符" class="headerlink" title="指定输入结束符"></a>指定输入结束符</h1><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ parallel -E stop echo ::: A B stop C D</div><div class="line">A</div><div class="line">B</div></pre></td></tr></table></figure>
+<h1 id="修改参数界定符"><a href="#修改参数界定符" class="headerlink" title="修改参数界定符"></a>修改参数界定符</h1><h2 id="使用-NUL-作为办分割符"><a href="#使用-NUL-作为办分割符" class="headerlink" title="使用 NUL 作为办分割符"></a>使用 NUL 作为办分割符</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">--null</div><div class="line">或</div><div class="line">-0</div></pre></td></tr></table></figure>
+<h2 id="修改文件界定符"><a href="#修改文件界定符" class="headerlink" title="修改文件界定符"></a>修改文件界定符</h2><p>默认情况下 <code>::::</code> 作为文件的分界符, 可以使用</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">--arg-file-sep sep-str</div></pre></td></tr></table></figure>
+<p>来修改</p>
+<h2 id="修改参数界定符-1"><a href="#修改参数界定符-1" class="headerlink" title="修改参数界定符"></a>修改参数界定符</h2><p>默认情况下, <code>:::</code> 作为参数分界符, 可以使用</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">--arg-sep sep-str</div></pre></td></tr></table></figure>
+<p>来修改</p>
+<h2 id="显示进度"><a href="#显示进度" class="headerlink" title="显示进度"></a>显示进度</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">--bar</div><div class="line"></div><div class="line">或</div><div class="line">--eta</div><div class="line"></div><div class="line">或</div><div class="line">--progress</div><div class="line"></div><div class="line">输出到文件</div><div class="line"></div><div class="line">--joblog</div><div class="line">parallel --joblog /tmp/log</div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">seq 1000 | parallel -j30 --bar '(echo &#123;&#125;;sleep 0.1)'</div></pre></td></tr></table></figure>
+<h2 id="使用指定分割符"><a href="#使用指定分割符" class="headerlink" title="使用指定分割符"></a>使用指定分割符</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-d delim</div></pre></td></tr></table></figure>
+<p>指定输入项是以 delim 来结束的.</p>
+<h1 id="替换符"><a href="#替换符" class="headerlink" title="替换符"></a>替换符</h1><h2 id="lt-￼40-gt"><a href="#lt-￼40-gt" class="headerlink" title="{}"></a><code>{}</code></h2><p>默认情况下, <code>{}</code> 代表输入项.</p>
+<p>可以通过 <code>-I</code> 来修改.</p>
+<h2 id="lt-￼42-gt"><a href="#lt-￼42-gt" class="headerlink" title="{.}"></a><code>{.}</code></h2><p>将输入项去掉扩展名后输出.</p>
+<p>例如</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">$ parallel --no-run-if-empty --bar -a test.file echo &#123;&#125; &#123;.&#125;</div><div class="line">0% 0:4=0s sub.dir/bar </div><div class="line"></div><div class="line">sub.dir/bar sub.dir/bar</div><div class="line">25% 1:3=0s sub.dir/bar</div><div class="line"></div><div class="line">sub.dir/foo.jpg sub.dir/foo</div><div class="line">50% 2:2=0s sub.dir/bar</div><div class="line"></div><div class="line">subdir/foo.jpg subdir/foo</div><div class="line">75% 3:1=0s sub.dir/bar</div><div class="line"></div><div class="line">foo.jpg foo</div><div class="line">100% 4:0=0s sub.dir/bar</div></pre></td></tr></table></figure>
+<h2 id="lt-￼43-gt"><a href="#lt-￼43-gt" class="headerlink" title="{/}"></a><code>{/}</code></h2><p>获取输入项的文件名</p>
+<h2 id="lt-￼44-gt"><a href="#lt-￼44-gt" class="headerlink" title="{/.}"></a><code>{/.}</code></h2><p>获取输入项的文件名, 但去掉扩展名</p>
+<h2 id="lt-￼45-gt"><a href="#lt-￼45-gt" class="headerlink" title="{//}"></a><code>{//}</code></h2><p>获取输入项的目录名</p>
+<h2 id="lt-￼46-gt"><a href="#lt-￼46-gt" class="headerlink" title="{#}"></a><code>{#}</code></h2><p>任务的ID</p>
+<h2 id="lt-￼47-gt"><a href="#lt-￼47-gt" class="headerlink" title="{%}"></a><code>{%}</code></h2><p>任务的 slot 数字</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ parallel --no-run-if-empty  -a test.file echo &#123;#&#125; &#123;%&#125; &#123;.&#125;</div><div class="line">2 2 subdir/foo</div><div class="line">1 1 foo</div><div class="line">3 3 sub.dir/foo</div><div class="line">4 4 sub.dir/bar</div></pre></td></tr></table></figure>
+<h2 id="lt-￼48-gt"><a href="#lt-￼48-gt" class="headerlink" title="{n}"></a><code>{n}</code></h2><p>输入源的第 <code>n</code> 个参数.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ parallel  echo  &#123;2&#125; ::: a b c ::: "这是第二个参数" ::: "这是第三个参数"</div><div class="line">这是第二个参数</div><div class="line">这是第二个参数</div><div class="line">这是第二个参数</div></pre></td></tr></table></figure>
+<h2 id="lt-￼49-gt"><a href="#lt-￼49-gt" class="headerlink" title="{n.}"></a><code>{n.}</code></h2><p>同 <code>{n}</code> , 只是去掉了文件扩展名</p>
+<h2 id="lt-￼51-gt"><a href="#lt-￼51-gt" class="headerlink" title="{n/}"></a><code>{n/}</code></h2><p>同 <code>{/}</code> , 只是处理第 <code>n</code> 个参数的情况</p>
+<h2 id="lt-￼53-gt"><a href="#lt-￼53-gt" class="headerlink" title="{n//}"></a><code>{n//}</code></h2><p>同 <code>{//}</code>, 只是处理第 <code>n</code> 个参数的情况</p>
+<h2 id="lt-￼55-gt"><a href="#lt-￼55-gt" class="headerlink" title="{n/.}"></a><code>{n/.}</code></h2><p>同 <code>{/}</code> , 只是处理第 <code>n</code> 个参数的情况, 并且去掉扩展名.</p>
+<h1 id="限制参数长度和大小"><a href="#限制参数长度和大小" class="headerlink" title="限制参数长度和大小"></a>限制参数长度和大小</h1><h2 id="xargs"><a href="#xargs" class="headerlink" title="--xargs"></a><code>--xargs</code></h2><p>可以让 parallel 支持多个参数</p>
+<p>有无 xargs 的区别</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ parallel --xargs echo  ::: a b c ::: "这是第二个参数" ::: "这是第三个参数"</div><div class="line">a 这是第二个参数 这是第三个参数 b 这是第二个参数 这是第三个参数 c 这是第二个参数 这是第三个参数</div><div class="line">$ parallel echo  ::: a b c ::: "这是第二个参数" ::: "这是第三个参数"</div><div class="line">a 这是第二个参数 这是第三个参数</div><div class="line">b 这是第二个参数 这是第三个参数</div><div class="line">c 这是第二个参数 这是第三个参数</div></pre></td></tr></table></figure>
+<h2 id="jobs-4"><a href="#jobs-4" class="headerlink" title="--jobs 4"></a><code>--jobs 4</code></h2><p>指定任务数</p>
+<h2 id="N3"><a href="#N3" class="headerlink" title="-N3"></a><code>-N3</code></h2><p>限制参数最大个数</p>
+<h1 id="处理空格"><a href="#处理空格" class="headerlink" title="处理空格"></a>处理空格</h1><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">--trim <span class="tag">&lt;<span class="name">n|l|r|lr|rl</span>&gt;</span>  Trim white space in input.</div></pre></td></tr></table></figure>
+<h1 id="输出打印处理"><a href="#输出打印处理" class="headerlink" title="输出打印处理"></a>输出打印处理</h1><h2 id="前缀"><a href="#前缀" class="headerlink" title="前缀"></a>前缀</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">--tag</div></pre></td></tr></table></figure>
+<p>以参数作为输出前缀</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">$ seq 10 | parallel --tagstring "hello &#123;&#125; ===&gt; " echo -</div><div class="line">hello 2 ===&gt;    2</div><div class="line">hello 4 ===&gt;    4</div><div class="line">hello 5 ===&gt;    5</div><div class="line">hello 6 ===&gt;    6</div><div class="line">hello 8 ===&gt;    8</div><div class="line">hello 9 ===&gt;    9</div><div class="line">hello 7 ===&gt;    7</div><div class="line">hello 3 ===&gt;    3</div><div class="line">hello 1 ===&gt;    1</div><div class="line">hello 10 ===&gt;   10</div></pre></td></tr></table></figure>
+<h1 id="把输出结果保存到文件"><a href="#把输出结果保存到文件" class="headerlink" title="把输出结果保存到文件"></a>把输出结果保存到文件</h1><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">parallel --files</div></pre></td></tr></table></figure>
+<p>默认保存在 <code>/tmp</code> 目录中.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">$ seq 10 | parallel --files --tagstring "hello &#123;&#125; ===&gt; " echo -</div><div class="line">hello 2 ===&gt;    /var/folders/lz/mpwxkp6s7rq62r08vt2h_j480000gn/T/parZQYda.par</div><div class="line">hello 4 ===&gt;    /var/folders/lz/mpwxkp6s7rq62r08vt2h_j480000gn/T/pariqW5T.par</div><div class="line">hello 3 ===&gt;    /var/folders/lz/mpwxkp6s7rq62r08vt2h_j480000gn/T/parhkbu1.par</div><div class="line">hello 5 ===&gt;    /var/folders/lz/mpwxkp6s7rq62r08vt2h_j480000gn/T/par4ts6Z.par</div><div class="line">hello 6 ===&gt;    /var/folders/lz/mpwxkp6s7rq62r08vt2h_j480000gn/T/parK3w5V.par</div><div class="line">hello 7 ===&gt;    /var/folders/lz/mpwxkp6s7rq62r08vt2h_j480000gn/T/par6UDLa.par</div><div class="line">hello 8 ===&gt;    /var/folders/lz/mpwxkp6s7rq62r08vt2h_j480000gn/T/par_twoW.par</div><div class="line">hello 9 ===&gt;    /var/folders/lz/mpwxkp6s7rq62r08vt2h_j480000gn/T/parPlgWZ.par</div><div class="line">hello 1 ===&gt;    /var/folders/lz/mpwxkp6s7rq62r08vt2h_j480000gn/T/parjwUR0.par</div><div class="line">hello 10 ===&gt;   /var/folders/lz/mpwxkp6s7rq62r08vt2h_j480000gn/T/parZoyUn.par</div><div class="line">$ cat /var/folders/lz/mpwxkp6s7rq62r08vt2h_j480000gn/T/parZQYda.par</div><div class="line">2</div></pre></td></tr></table></figure>
+<h2 id="详细保存结果到文件"><a href="#详细保存结果到文件" class="headerlink" title="详细保存结果到文件"></a>详细保存结果到文件</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line">$ seq 10 | parallel --results outdir --tagstring "hello &#123;&#125; ===&gt; " echo -</div><div class="line">hello 2 ===&gt;    2</div><div class="line">hello 3 ===&gt;    3</div><div class="line">hello 4 ===&gt;    4</div><div class="line">hello 5 ===&gt;    5</div><div class="line">hello 6 ===&gt;    6</div><div class="line">hello 7 ===&gt;    7</div><div class="line">hello 8 ===&gt;    8</div><div class="line">hello 9 ===&gt;    9</div><div class="line">hello 1 ===&gt;    1</div><div class="line">hello 10 ===&gt;   10</div><div class="line">$ tree outdir</div><div class="line">outdir</div><div class="line">└── 1</div><div class="line">    ├── 1</div><div class="line">    │   ├── seq</div><div class="line">    │   ├── stderr</div><div class="line">    │   └── stdout</div><div class="line">    ├── 10</div><div class="line">    │   ├── seq</div><div class="line">    │   ├── stderr</div><div class="line">    │   └── stdout</div><div class="line">    ├── 2</div><div class="line">    │   ├── seq</div><div class="line">    │   ├── stderr</div><div class="line">    │   └── stdout</div><div class="line">    ├── 3</div><div class="line">    │   ├── seq</div><div class="line">    │   ├── stderr</div><div class="line">    │   └── stdout</div><div class="line">    ├── 4</div><div class="line">    │   ├── seq</div><div class="line">    │   ├── stderr</div><div class="line">    │   └── stdout</div><div class="line">    ├── 5</div><div class="line">    │   ├── seq</div><div class="line">    │   ├── stderr</div><div class="line">    │   └── stdout</div><div class="line">    ├── 6</div><div class="line">    │   ├── seq</div><div class="line">    │   ├── stderr</div><div class="line">    │   └── stdout</div><div class="line">    ├── 7</div><div class="line">    │   ├── seq</div><div class="line">    │   ├── stderr</div><div class="line">    │   └── stdout</div><div class="line">    ├── 8</div><div class="line">    │   ├── seq</div><div class="line">    │   ├── stderr</div><div class="line">    │   └── stdout</div><div class="line">    └── 9</div><div class="line">        ├── seq</div><div class="line">        ├── stderr</div><div class="line">        └── stdout</div><div class="line"></div><div class="line">11 directories, 30 files</div></pre></td></tr></table></figure>
+<h1 id="控制并发数"><a href="#控制并发数" class="headerlink" title="控制并发数"></a>控制并发数</h1><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">--jobs N</div><div class="line"></div><div class="line">或</div><div class="line">-j N</div><div class="line"></div><div class="line">或</div><div class="line">--max-procs N</div><div class="line"></div><div class="line">或</div><div class="line">-P N</div></pre></td></tr></table></figure>
+<p>如果是0, 则意味着尽可能多的并发.(每个任务在每个CPU上尽可能 100% 占用CPU)</p>
+<h1 id="只打印输出命令-则不执行"><a href="#只打印输出命令-则不执行" class="headerlink" title="只打印输出命令, 则不执行"></a>只打印输出命令, 则不执行</h1><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">parallel --dryrun</div></pre></td></tr></table></figure>
+<h1 id="交互式执行"><a href="#交互式执行" class="headerlink" title="交互式执行"></a>交互式执行</h1><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">parallel --interactive</div></pre></td></tr></table></figure>
+<h1 id="恢复任务"><a href="#恢复任务" class="headerlink" title="恢复任务"></a>恢复任务</h1><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">$ parallel --joblog /tmp/log exit  ::: 1 2 3 0</div><div class="line">$ cat /tmp/log</div><div class="line">Seq Host    Starttime   JobRuntime  Send    Receive Exitval Signal  Command</div><div class="line">2   :   1514099245.436       0.013  0   0   2   0   exit 2</div><div class="line">1   :   1514099245.432       0.019  0   0   1   0   exit 1</div><div class="line">3   :   1514099245.442       0.012  0   0   3   0   exit 3</div><div class="line">4   :   1514099245.448       0.011  0   0   0   0   exit 0</div><div class="line">$ parallel --resume --joblog /tmp/log exit  ::: 1 2 3 0</div><div class="line">$ cat /tmp/log</div><div class="line">Seq Host   Starttime    JobRuntime  Send    Receive Exitval Signal  Command</div><div class="line">2   :   1514099245.436       0.013  0   0   2   0   exit 2</div><div class="line">1   :   1514099245.432       0.019  0   0   1   0   exit 1</div><div class="line">3   :   1514099245.442       0.012  0   0   3   0   exit 3</div><div class="line">4   :   1514099245.448       0.011  0   0   0   0   exit 0</div></pre></td></tr></table></figure>
+<p>可以看到, 如果有执行过的话, <code>--resum</code> 则不会重新执行了. 只会执行其他还没有完成的</p>
+<h1 id="只重新执行失败的任务"><a href="#只重新执行失败的任务" class="headerlink" title="只重新执行失败的任务"></a>只重新执行失败的任务</h1><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">parallel --resume-failed --joblog /tmp/log exit  ::: 1 2 3 0 0 0</div></pre></td></tr></table></figure>
+<h1 id="限制资源占用"><a href="#限制资源占用" class="headerlink" title="限制资源占用"></a>限制资源占用</h1><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">parallel --load 100%</div><div class="line"></div><div class="line">parallel --noswap</div><div class="line"></div><div class="line">parallel --memfree 1G</div><div class="line">这表示只有内存空闲大于1G时才执行任务</div><div class="line"></div><div class="line">parallel --nice 17</div></pre></td></tr></table></figure>
+<h1 id="使用远程主机来执行"><a href="#使用远程主机来执行" class="headerlink" title="使用远程主机来执行"></a>使用远程主机来执行</h1><p>如果远程主机使用的是非22端口, 则中以在 <code>~/.ssh/config</code> 中配置:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Host host1.v</div><div class="line">    Port 22001</div><div class="line">Host host2.v</div><div class="line">    Port 22002</div><div class="line">Host host3.v</div><div class="line">    Port 22003</div></pre></td></tr></table></figure>
+<blockquote>
+<p>注意, 也要在远程主机上安装 parallel 才行.</p>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">parallel -S userName@host1.v -S userName@host2.v echo ::: hello</div></pre></td></tr></table></figure>
+<p>例子: 将当前目录下的文件传输到远程host然后压缩(虽然无实际意义, 这只是演示用法..)</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ls | parallel -S userName@host1.v --transfer gzip &#123;&#125;</div></pre></td></tr></table></figure>
+<p>设置工作目录</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ls | parallel --sshlogin userName@host1.v --workdir /tmp/new_dir/ --transferfile &#123;&#125; --return &#123;&#125;.gz --cleanup  gzip &#123;&#125;</div></pre></td></tr></table></figure>
+<p>这将会在远程主机 <code>hot1.v</code> 的 <code>/tmp/new_dir/</code> 上进行文件传输.</p>
+<p><code>--cleanup</code> 表示清理远程上的相应数据或文件.<br><code>--return {}.gz</code> 表示返回相应的数据或文件.<br><code>--transferfile {}</code> 表示要传输的数据或文件.</p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
