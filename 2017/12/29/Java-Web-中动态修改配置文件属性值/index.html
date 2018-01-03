@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java Web 中动态修改配置文件属性值 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="java,properties," />
+  
+
+  <meta name="description" content="缘起由于项目复杂起来, 导致平时部署的时候常常会有多个Tomcat实例来运行支撑.  比如我们公司里有个 DSP 项目, 分为三个大类的 Tomcat(Web 处理用户请求, Task 定时任务及监听器之类的, Bid 负责竞价), 而每个Tomcat, 常常又有负载匀衡来处理, 所以导致配置文件的属性值要修改一下的话, 常常需要修改所有 Tomcat 然后重启. 这就给我们带来非常大的麻烦, 一">
+<meta name="keywords" content="java,properties">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java Web 中动态修改配置文件属性值">
+<meta property="og:url" content="https://emacsist.github.io/2017/12/29/Java-Web-中动态修改配置文件属性值/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="缘起由于项目复杂起来, 导致平时部署的时候常常会有多个Tomcat实例来运行支撑.  比如我们公司里有个 DSP 项目, 分为三个大类的 Tomcat(Web 处理用户请求, Task 定时任务及监听器之类的, Bid 负责竞价), 而每个Tomcat, 常常又有负载匀衡来处理, 所以导致配置文件的属性值要修改一下的话, 常常需要修改所有 Tomcat 然后重启. 这就给我们带来非常大的麻烦, 一">
+<meta property="og:updated_time" content="2017-12-29T03:06:06.485Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java Web 中动态修改配置文件属性值">
+<meta name="twitter:description" content="缘起由于项目复杂起来, 导致平时部署的时候常常会有多个Tomcat实例来运行支撑.  比如我们公司里有个 DSP 项目, 分为三个大类的 Tomcat(Web 处理用户请求, Task 定时任务及监听器之类的, Bid 负责竞价), 而每个Tomcat, 常常又有负载匀衡来处理, 所以导致配置文件的属性值要修改一下的话, 常常需要修改所有 Tomcat 然后重启. 这就给我们带来非常大的麻烦, 一">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#缘起"><span class="toc-text">缘起</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#处理办法"><span class="toc-text">处理办法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#示例代码"><span class="toc-text">示例代码</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#修改"><span class="toc-text">修改</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#注意事项"><span class="toc-text">注意事项</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Java-Web-中动态修改配置文件属性值" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Java Web 中动态修改配置文件属性值
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2017.12.29</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 118 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#properties">
+        <span class="tag-name">properties</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h1 id="缘起"><a href="#缘起" class="headerlink" title="缘起"></a>缘起</h1><p>由于项目复杂起来, 导致平时部署的时候常常会有多个Tomcat实例来运行支撑. </p>
+<p>比如我们公司里有个 DSP 项目, 分为三个大类的 Tomcat(Web 处理用户请求, Task 定时任务及监听器之类的, Bid 负责竞价), 而每个Tomcat, 常常又有负载匀衡来处理, 所以导致配置文件的属性值要修改一下的话, 常常需要修改所有 Tomcat 然后重启.</p>
+<p>这就给我们带来非常大的麻烦, 一来容易影响业务的正常运行时间, 二来这些繁琐冗余的操作, 操作多几次, 就有点烦了, 所以想着有没有一些偷懒的方法?</p>
+<h1 id="处理办法"><a href="#处理办法" class="headerlink" title="处理办法"></a>处理办法</h1><ol>
+<li><p>使用 Spring Cloud Config 配置中心服务来进行处理. 一来, 我们项目是比较早就开始的, 所以当时并没有用 Spring Boot . 所以, 这个方案, 可能看后面改造为 Spring boot 的时候, 或许可以考虑一下.</p>
+</li>
+<li><p>使用 DB , 然后每个服务定时刷新一次.</p>
+</li>
+<li><p>使用 RabbitMQ , 进行消息发布订阅</p>
+</li>
+<li><p>使用 Redis, 进行消息发布订阅</p>
+</li>
+</ol>
+<p>总的来看, 3, 4 的方案比较好, 一来不用定时轮询(pull), 而是订阅相应的消息即可(publish). 最终我使用了 Redis 的来处理. </p>
+<h1 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h1><p>使用 Redis 的 Pub/Sub 来进行消息发布/订阅. Java 中订阅者的配置及代码:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"messageListnerContainer"</span> <span class="attr">class</span>=<span class="string">"org.springframework.data.redis.listener.RedisMessageListenerContainer"</span> <span class="attr">destroy-method</span>=<span class="string">"destroy"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"connectionFactory"</span> <span class="attr">ref</span>=<span class="string">"jedisConnectionFactory"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"messageListeners"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">map</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">entry</span> <span class="attr">key-ref</span>=<span class="string">"redisPropertiesMessageListener"</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">"org.springframework.data.redis.listener.ChannelTopic"</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">value</span>=<span class="string">"$&#123;redis.channel.properties&#125;"</span>/&gt;</span></div><div class="line">                <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="name">entry</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">map</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>动态更新属性的逻辑代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 修改属性的 redis listener &lt;br /&gt;</div><div class="line"> * 例子</div><div class="line"> * &lt;p&gt;</div><div class="line"> *     redis</div><div class="line"> * PUBLISH 'channel.properties' '&#123;"k":"max.bidding.task", "v":"15"&#125;'</div><div class="line"> */</div><div class="line"><span class="meta">@Component</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedisPropertiesMessageListener</span> <span class="keyword">implements</span> <span class="title">MessageListener</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="meta">@Autowired</span></div><div class="line">    <span class="meta">@Qualifier</span>(<span class="string">"redisTemplate"</span>)</div><div class="line">    <span class="keyword">private</span> RedisTemplate redisTemplate;</div><div class="line"></div><div class="line">    <span class="meta">@Autowired</span></div><div class="line">    <span class="keyword">private</span> ReloadableProperties reloadableProperties;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 监听动态修改 properties</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span> message</div><div class="line">     * <span class="doctag">@param</span> bytes</div><div class="line">     */</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onMessage</span><span class="params">(Message message, <span class="keyword">byte</span>[] bytes)</span> </span>&#123;</div><div class="line">        <span class="keyword">byte</span>[] body = message.getBody();</div><div class="line">        String jsonStr = (String) redisTemplate.getValueSerializer().deserialize(body);</div><div class="line">        Loggers.RUNNING_LOG.info(<span class="string">"new message from properties channel. json:&#123;&#125;"</span>, jsonStr);</div><div class="line">        JsonNode msgJsonNode = JsonUtil.readTree(jsonStr);</div><div class="line">        <span class="keyword">final</span> String key = msgJsonNode.get(<span class="string">"k"</span>).asText();</div><div class="line">        <span class="keyword">final</span> String value = msgJsonNode.get(<span class="string">"v"</span>).asText();</div><div class="line">        reloadableProperties.modify(key, value);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>修改属性的反射处理代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">modify</span><span class="params">(<span class="keyword">final</span> String modifyKey, <span class="keyword">final</span> String value)</span> </span>&#123;</div><div class="line">    <span class="keyword">final</span> String key = <span class="string">"$&#123;"</span> + modifyKey.trim() + <span class="string">"&#125;"</span>;</div><div class="line">    Loggers.AUDIT_LOG.info(<span class="string">"modify k=&gt;&#123;&#125; value=&gt;&#123;&#125;"</span>, key, value);</div><div class="line">    Field[] fields = ReloadableProperties.class.getDeclaredFields();</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="keyword">for</span> (Field field : fields) &#123;</div><div class="line">            field.setAccessible(<span class="keyword">true</span>);</div><div class="line">            <span class="keyword">final</span> Value fieldKey = field.getAnnotation(Value.class);</div><div class="line">            <span class="keyword">final</span> String fieldAnnotationValue = fieldKey.value();</div><div class="line">            <span class="keyword">if</span> (key.equals(fieldAnnotationValue)) &#123;</div><div class="line">                <span class="comment">//如果找到匹配的.</span></div><div class="line">                Class fieldType = field.getType();</div><div class="line">                <span class="keyword">if</span> (fieldType == <span class="keyword">int</span>.class || field.getType() == Integer.class) &#123;</div><div class="line">                    field.setInt(<span class="keyword">this</span>, Integer.parseInt(value));</div><div class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (fieldType == String.class) &#123;</div><div class="line">                    field.set(<span class="keyword">this</span>, value);</div><div class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (fieldType == Double.class || fieldType == <span class="keyword">double</span>.class) &#123;</div><div class="line">                    field.setDouble(<span class="keyword">this</span>, Double.parseDouble(value));</div><div class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (fieldType == Long.class || fieldType == <span class="keyword">long</span>.class) &#123;</div><div class="line">                    field.setLong(<span class="keyword">this</span>, Long.parseLong(value));</div><div class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (fieldType == Float.class || fieldType == <span class="keyword">float</span>.class) &#123;</div><div class="line">                    field.setFloat(<span class="keyword">this</span>, Float.parseFloat(value));</div><div class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (fieldType == Short.class || fieldType == <span class="keyword">short</span>.class) &#123;</div><div class="line">                    field.setShort(<span class="keyword">this</span>, Short.parseShort(value));</div><div class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (fieldType == Float.class || fieldType == <span class="keyword">float</span>.class) &#123;</div><div class="line">                    field.setFloat(<span class="keyword">this</span>, Float.parseFloat(value));</div><div class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (fieldType == Byte.class || fieldType == <span class="keyword">byte</span>.class) &#123;</div><div class="line">                    field.setByte(<span class="keyword">this</span>, Byte.parseByte(value));</div><div class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (fieldType == Boolean.class || fieldType == <span class="keyword">boolean</span>.class) &#123;</div><div class="line">                    field.setBoolean(<span class="keyword">this</span>, Boolean.parseBoolean(value));</div><div class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (fieldType == Character.class || fieldType == <span class="keyword">char</span>.class) &#123;</div><div class="line">                    field.setChar(<span class="keyword">this</span>, value.charAt(<span class="number">0</span>));</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</div><div class="line">        Loggers.ERROR_LOG.error(e.getMessage(), e);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注意, 因为这里使用了 Spring 的 <code>@Value</code> 注解来注入属性的, 所以这里的处理逻辑是利用该注解的值(形式类似 <code>@Value(&quot;${xxx}&quot;)</code> 它的值就是 <code>${xxx}</code>) , 这样子就可以利用反射统一来修改同类型的属性值的.</p>
+<h1 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h1><p>在相应的配置的 redis 上, 输入以下命令即可:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">PUBLISH <span class="string">'channel.properties'</span> <span class="string">'&#123;"k":"max.bidding.task", "v":"15"&#125;'</span></div></pre></td></tr></table></figure>
+<p>这样子, 就会将属性的 key 为 <code>max.bidding.task</code> 的值, 动态设置为 15 了.</p>
+<h1 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h1><p>如果只是临时这样子处理, 然后中间又重启过服务的话要特别注意</p>
+<ol>
+<li>要么要重启前, 在文件中将相应的值设置为线上当前状态的一致(不然容易出 Bug, 也很难排查)</li>
+<li>要么将刷新的 redis 命令全部重新发布一次</li>
+</ol>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
