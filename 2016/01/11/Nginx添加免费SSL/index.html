@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2016/01/11/Nginx添加免费SSL/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="前提条件： 你的Nginx要有--with-http_ssl_module（即HTTPS模块） 申请免费HTTPS证书Go Instantssl 步骤提交你的CSR CSR: CSR是一个证书签名请求，是客户的服务器软件所生成的一串文本字符。客户在注册的过程中首先要在WEB服务器上生成CSR，并把这串字符提供给证书认证中心。CSR包括以下内容：a) 您的组织信息（组织名称、国家等等）, b) 您的">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Nginx添加免费SSL">
@@ -207,7 +208,7 @@
     <div class="article-content">
         
                             <p>前提条件： 你的Nginx要有<code>--with-http_ssl_module</code>（即HTTPS模块）</p>
-<h2 id="申请免费HTTPS证书"><a href="#申请免费HTTPS证书" class="headerlink" title="申请免费HTTPS证书"></a>申请免费HTTPS证书</h2><p><a href="https://secure.instantssl.com/products/SSLIdASignup1a" target="_blank" rel="external">Go Instantssl</a></p>
+<h2 id="申请免费HTTPS证书"><a href="#申请免费HTTPS证书" class="headerlink" title="申请免费HTTPS证书"></a>申请免费HTTPS证书</h2><p><a href="https://secure.instantssl.com/products/SSLIdASignup1a" target="_blank" rel="noopener">Go Instantssl</a></p>
 <h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="提交你的CSR"><a href="#提交你的CSR" class="headerlink" title="提交你的CSR"></a>提交你的CSR</h3><blockquote>
 <p>CSR: CSR是一个证书签名请求，是客户的服务器软件所生成的一串文本字符。客户在注册的过程中首先要在WEB服务器上生成CSR，并把这串字符提供给证书认证中心。CSR包括以下内容：a) 您的组织信息（组织名称、国家等等）, b) 您的Web服务器的域名等</p>
 </blockquote>
@@ -246,7 +247,7 @@
 <blockquote>
 <p>注意，因为我这申请的是个人免费的证书，其他类型的证书可能操作上会有所不同，请参考以下资料</p>
 </blockquote>
-<p><a href="https://support.comodo.com/index.php?/Default/Knowledgebase/Article/View/789/37/certificate-installation-nginx" target="_blank" rel="external">nginx 安装 证书步骤</a></p>
+<p><a href="https://support.comodo.com/index.php?/Default/Knowledgebase/Article/View/789/37/certificate-installation-nginx" target="_blank" rel="noopener">nginx 安装 证书步骤</a></p>
 <h2 id="配置-Nginx"><a href="#配置-Nginx" class="headerlink" title="配置 Nginx"></a>配置 Nginx</h2><p>将以下配置，复制到你的站点配置里即可：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">listen 443;</div><div class="line">server_name mysite.com;</div><div class="line"></div><div class="line">ssl on;</div><div class="line"><span class="comment"># 下面两个地址改为你的证书的正确位置</span></div><div class="line">ssl_certificate /etc/ssl/certs/ssl-bundle.crt;</div><div class="line">ssl_certificate_key /etc/ssl/private/mysite.key;</div><div class="line"></div><div class="line"><span class="comment">#enables all versions of TLS, but not SSLv2 or 3 which are weak and now deprecated.</span></div><div class="line">ssl_protocols TLSv1 TLSv1.1 TLSv1.2;</div><div class="line"></div><div class="line"><span class="comment">#Disables all weak ciphers</span></div><div class="line">ssl_ciphers <span class="string">"ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4"</span>;</div><div class="line">ssl_prefer_server_ciphers on;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>重启nginx，即可.</p>

@@ -12,16 +12,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="postgresql,翻译,database," />
+    <meta name="keywords" content="postgresql,database,翻译," />
   
 
   <meta name="description" content="源文地址 作者:Robin Schumacher 和 Gary Carter,EnterpriseDB 公司 原文:Replication is one of the most popular features used in RDBMS’s today. Replication is used for disaster recovery purposes (i.e. backup or warm">
-<meta name="keywords" content="postgresql,翻译,database">
+<meta name="keywords" content="postgresql,database,翻译">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[翻译]MySQL与PostgreSQL9.0的复制功能对比">
 <meta property="og:url" content="https://emacsist.github.io/2014/12/09/-翻译-MySQL与PostgreSQL9-0的复制功能对比/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="源文地址 作者:Robin Schumacher 和 Gary Carter,EnterpriseDB 公司 原文:Replication is one of the most popular features used in RDBMS’s today. Replication is used for disaster recovery purposes (i.e. backup or warm">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://emacsist.github.io/img/postgresql-mysql-replication-mysql.png">
 <meta property="og:image" content="https://emacsist.github.io/img/postgresql-mysql-replication-postgresql.png">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
@@ -204,7 +205,7 @@
 
     <div class="article-content">
         
-                            <p><a href="http://www.theserverside.com/feature/Comparing-MySQL-and-Postgres-90-Replication" target="_blank" rel="external">源文地址</a></p>
+                            <p><a href="http://www.theserverside.com/feature/Comparing-MySQL-and-Postgres-90-Replication" target="_blank" rel="noopener">源文地址</a></p>
 <p>作者:Robin Schumacher 和 Gary Carter,EnterpriseDB 公司</p>
 <p>原文:<br>Replication is one of the most popular features used in RDBMS’s today. Replication is used for disaster recovery purposes (i.e. backup or warm stand-by servers), reporting systems where query activity is offloaded onto another machine to conserve resources on the transactional server, and scale-out architectures that use sharding or other methods to increase overall query performance and data throughput.</p>
 <p>翻译:<br>今天，“复制”是关系数据库的最受欢迎的功能之一。复制的目的是用于灾难恢复（也就是备份或者叫“热”备用服务器），用于在事务服务器上报告系统，将查询活动转移到其他机器，以节约资源。并且这种分区或其他方法的横向扩展构架将会提升整体的查询性能以及数据的吞吐率。</p>
@@ -262,8 +263,8 @@
 <p>原文：<br>In terms of MySQL replication limitations and missing features, besides the already mentioned single threaded nature of the implementation and the inability to perform multi-source replication, other wish-list items include a full synchronous option, conflict detection and resolution, time-delayed replication, changing the binary log to a storage engine, better replication filtering on the master, global statement ID’s, and graphical tools to manage replication functions.</p>
 <p>翻译：<br>MySQL在复制功能方面有许多限制以及不足，除了之前已经提过的单线程性质，还有不能进行多源进制，其他的希望加入的特性包括：完全同步选项，冲突检测及解决办法，延时复制，更改二进制日志的存储引擎，在主库上更好的复制过滤功能，全局语句的ID标识以及管理复制函数的图形化工具。</p>
 <p>原文：<br>There are third-party providers of MySQL replication solutions that overcome some of the current shortcomings in what is provided out-of-the-box with MySQL. One example is Continuent’s Tungsten product.</p>
-<p>For more information about Oracle’s MySQL replication, see: <a href="http://dev.mysql.com/doc/refman/5.5/en/replication.html" target="_blank" rel="external">http://dev.mysql.com/doc/refman/5.5/en/replication.html</a>.</p>
-<p>翻译：<br>有许多第三方提供即开即用的MySQL复制解决方案来克服当前MySQL内建复制功能的缺点。一个例子是：Continuent’s Tungsten 的数据库产品。<br>更多关于MySQL复制功能，请看：<a href="http://dev.mysql.com/doc/refman/5.5/en/replication.html." target="_blank" rel="external">MySQL5.5复制</a></p>
+<p>For more information about Oracle’s MySQL replication, see: <a href="http://dev.mysql.com/doc/refman/5.5/en/replication.html" target="_blank" rel="noopener">http://dev.mysql.com/doc/refman/5.5/en/replication.html</a>.</p>
+<p>翻译：<br>有许多第三方提供即开即用的MySQL复制解决方案来克服当前MySQL内建复制功能的缺点。一个例子是：Continuent’s Tungsten 的数据库产品。<br>更多关于MySQL复制功能，请看：<a href="http://dev.mysql.com/doc/refman/5.5/en/replication.html." target="_blank" rel="noopener">MySQL5.5复制</a></p>
 <p>原文：<br>An Overview of PostgreSQL Replication</p>
 <p>PostgreSQL replication is based on a mature and long used technology called write ahead log (WAL) archiving.  WAL technology has been in use since version 7.1 and has been used in features such as backup and restore and warm standby servers (i.e. slave servers offline kept in synch with the master to step in during crash recovery) for high availability.</p>
 <p>PostgreSQL 9.0 introduced significant enhancements producing extremely fast WAL processing that results in near real-time replication and hot standby capabilities for slave servers.  The supported PostgreSQL replication topologies include:</p>
@@ -308,20 +309,20 @@
 <p>原文：<br>The secret sauce to PostgreSQL 9.0’s extremely reliable WAL based replication is a set of enhancements to efficiently stream very small WAL segments compared to earlier versions.  Like MySQL there are cases where data loss could occur – however, depending on how you configure the system, your hardware architecture, and load, its possible the data loss could be as small as a single transaction.</p>
 <p>PostgreSQL does not currently have native synchronous replication. However, there are multiple replication options available from other community and third-party software providers.  PostgreSQL offers multiple solutions for multi-master replication, including solutions based on two phase commit. Offerings include Bucardo, rubyrep, PgPool and PgPool-II and Tungsten Replicator as well as some proprietary solutions. Another promising approach, implementing eager (synchronous) replication is Postgres-R, however it is still in development. Yet another project implementing synchronous replication is Postgres-XC, which is a shared-nothing, transactional scale-out solution that is still under development.</p>
 <p>For more information on PostgreSQL replication see:</p>
-<p>PostgreSQL Documentation: <a href="http://www.enterprisedb.com/docs/en/9.0/pg/high-availability.html" target="_blank" rel="external">http://www.enterprisedb.com/docs/en/9.0/pg/high-availability.html</a></p>
-<p>Bucardo: <a href="http://bucardo.org/wiki/Bucardo" target="_blank" rel="external">http://bucardo.org/wiki/Bucardo</a></p>
-<p>PgPool-II: <a href="http://pgpool.projects.postgresql.org/" target="_blank" rel="external">http://pgpool.projects.postgresql.org/</a></p>
-<p>Tungsten Replication: <a href="http://www.continuent.com/community/tungsten-replicator" target="_blank" rel="external">http://www.continuent.com/community/tungsten-replicator</a></p>
+<p>PostgreSQL Documentation: <a href="http://www.enterprisedb.com/docs/en/9.0/pg/high-availability.html" target="_blank" rel="noopener">http://www.enterprisedb.com/docs/en/9.0/pg/high-availability.html</a></p>
+<p>Bucardo: <a href="http://bucardo.org/wiki/Bucardo" target="_blank" rel="noopener">http://bucardo.org/wiki/Bucardo</a></p>
+<p>PgPool-II: <a href="http://pgpool.projects.postgresql.org/" target="_blank" rel="noopener">http://pgpool.projects.postgresql.org/</a></p>
+<p>Tungsten Replication: <a href="http://www.continuent.com/community/tungsten-replicator" target="_blank" rel="noopener">http://www.continuent.com/community/tungsten-replicator</a></p>
 <p>翻译：<br>PostgreSQL9.0非常可靠的秘密武器在于基于WAL日志复制，它是一套增强的高效流，利用非常小的一段WAL来进行早期版本的比较。像MySQL在有些情况下可能会导致数据丢失，然而，这取决于你的系统、你的硬件构架以及负载如何，它丢失的数据可能非常小，如：一个事务的数据。</p>
 <p>PostgreSQL目前还没有本地同步复制。然而，有许多种通过社区和第三方软件提供商提供的可用复制方案。PostgreSQL 提供许多“多主复制”的解决方案，包括基于两阶段提交的解决方案。包括：Bucardo, rubyrep, PgPool and PgPool-II and Tungsten Replicator 以及其他一些专有的解决方案。另一种非常有前景的解决办法，实现 饥饿（同步）复制的Postgres-R产品，然而，它目前还在开发中。还有另一个项目实现同步复制的是Postgres-XC，它是一个无共享、事务横向扩展的解决方案，目前也是处于开发中。</p>
-<p>更多关于PostgreSQL复制，请看：<br>PostgreSQL 文档: <a href="http://www.enterprisedb.com/docs/en/9.0/pg/high-availability.html" target="_blank" rel="external">http://www.enterprisedb.com/docs/en/9.0/pg/high-availability.html</a></p>
-<p>Bucardo: <a href="http://bucardo.org/wiki/Bucardo" target="_blank" rel="external">http://bucardo.org/wiki/Bucardo</a></p>
-<p>PgPool-II: <a href="http://pgpool.projects.postgresql.org/" target="_blank" rel="external">http://pgpool.projects.postgresql.org/</a></p>
-<p>Tungsten Replication: <a href="http://www.continuent.com/community/tungsten-replicator" target="_blank" rel="external">http://www.continuent.com/community/tungsten-replicator</a></p>
+<p>更多关于PostgreSQL复制，请看：<br>PostgreSQL 文档: <a href="http://www.enterprisedb.com/docs/en/9.0/pg/high-availability.html" target="_blank" rel="noopener">http://www.enterprisedb.com/docs/en/9.0/pg/high-availability.html</a></p>
+<p>Bucardo: <a href="http://bucardo.org/wiki/Bucardo" target="_blank" rel="noopener">http://bucardo.org/wiki/Bucardo</a></p>
+<p>PgPool-II: <a href="http://pgpool.projects.postgresql.org/" target="_blank" rel="noopener">http://pgpool.projects.postgresql.org/</a></p>
+<p>Tungsten Replication: <a href="http://www.continuent.com/community/tungsten-replicator" target="_blank" rel="noopener">http://www.continuent.com/community/tungsten-replicator</a></p>
 <p>原文：<br>A Brief Compare and Contrast of MySQL and PostgreSQL Replication</p>
 <p>Those wanting to use an open source database for a particular application project that requires replication have two good choices in MySQL and PostgreSQL. But, the question naturally arises, which should be used? Is one just as good as the other?</p>
 <p>As demonstrated above, there are both feature and functional differences between how MySQL and PostgreSQL implement replication. However, for many general application use cases, either MySQL or PostgreSQL replication will serve just fine; technically speaking, from a functional and performance perspective, it won’t matter which solution is chosen. That said, there still are some considerations to keep in mind in deciding between the different offerings. Some of these include the following:</p>
-<p>•      Oracle’s MySQL offers both statement and row-based replication, whereas PostgreSQL only uses the latter based on write ahead log information. There are pro’s and con’s to using statement-based replication, which MySQL has documented here: <a href="http://dev.mysql.com/doc/refman/5.5/en/replication-sbr-rbr.html" target="_blank" rel="external">http://dev.mysql.com/doc/refman/5.5/en/replication-sbr-rbr.html</a>. It is generally acknowledged that row or WAL-based replication is the safest and most reliable form of replication. It does, however, result in larger log files for MySQL than the statement-based option does.</p>
+<p>•      Oracle’s MySQL offers both statement and row-based replication, whereas PostgreSQL only uses the latter based on write ahead log information. There are pro’s and con’s to using statement-based replication, which MySQL has documented here: <a href="http://dev.mysql.com/doc/refman/5.5/en/replication-sbr-rbr.html" target="_blank" rel="noopener">http://dev.mysql.com/doc/refman/5.5/en/replication-sbr-rbr.html</a>. It is generally acknowledged that row or WAL-based replication is the safest and most reliable form of replication. It does, however, result in larger log files for MySQL than the statement-based option does.</p>
 <p>•      MySQL currently supports more replication topologies than PostgreSQL (e.g. ring, etc.). However PostgreSQL does have a number of community supported replication offerings that help close this gap (e.g. Bucardo’s master-to-master solution).</p>
 <p>•      In regard to data loss, MySQL 5.5 offers the semi-synchronous option, which helps minimize the risk of master-slave synchronization problems due to a master server going down. For PostgreSQL, a full synchronous replication option is in development and scheduled for release sometime in 2011.</p>
 <p>•      As to replication filtering, MySQL provides filtering on the slave server, whereas with PostgreSQL, no filtering is available; in other worlds, the entire database from the master is replicated to the slave. With MySQL, all the information is sent, but then options exist to selectively apply the replicated events on the slave. However, as the MySQL binary log is not used for crash recovery purposes in the same way as PostgreSQL’s WAL is, a user can configure a MySQL master so only certain databases are logged and, in that sense, a filter for the master server is available.</p>
@@ -331,7 +332,7 @@
 <p>翻译：<br>简单对比一下MySQL和PostgreSQL复制</p>
 <p>那些想为一个需要复制功能的特定应用的项目使用开源数据库的人，MySQL和PostgreSQL是两个很好的选择。但是，问题自然而然产生了，我们应该使用哪个？还是说这两个一样好？</p>
 <p>综上所述，MySQL和PostgreSQL都有复制功能，但是有不同的实现。然而，对于一般的应用来说，无论是MySQL还是PostgreSQL复制功能会工作得挺好；从技术上说，以及从功能和性能来看，它不会不管要选哪个数据库。这意味着，在不同产品之间还有一些值得注意的事项，其中包括以下内容：</p>
-<p>•  MySQL提供基于语句和基于行的复制，而PostgreSQL只有基于WAL日志信息。有赞成也有反对使用基于语句复制的，MySQL有文档介绍：<a href="http://dev.mysql.com/doc/refman/5.5/en/replication-sbr-rbr.html" target="_blank" rel="external">http://dev.mysql.com/doc/refman/5.5/en/replication-sbr-rbr.html</a> 。一般认为，基于行或基于WAL 复制是最安全和最可靠的复制形式。的确如此，然而，这会导致比基于语句复制的形式产生更大的日志文件。</p>
+<p>•  MySQL提供基于语句和基于行的复制，而PostgreSQL只有基于WAL日志信息。有赞成也有反对使用基于语句复制的，MySQL有文档介绍：<a href="http://dev.mysql.com/doc/refman/5.5/en/replication-sbr-rbr.html" target="_blank" rel="noopener">http://dev.mysql.com/doc/refman/5.5/en/replication-sbr-rbr.html</a> 。一般认为，基于行或基于WAL 复制是最安全和最可靠的复制形式。的确如此，然而，这会导致比基于语句复制的形式产生更大的日志文件。</p>
 <p>•  MySQL目前比PostgreSQL支持更加多的复制拓扑结构（比如：环形等）。然而，PostgreSQL有许多种社区支持的复制选项，这就缩小了这个因拓扑结构种类而导致的距离（比如 Bucardo 的 主-主解决方案）</p>
 <p>•  考虑到数据丢失，MySQL 5.5 提供了半同步选项，这有助于减小因主库崩溃而导致主从同步问题的风险。对于PostgreSQL，完全同步复制特性正在开发，并且计划于2011年正式可用。</p>
 <p>•  对于过滤复制，MySQL 提供了在从库过滤，而在PostgreSQL，并不能使用过滤，换句话说，就是完整地将数据库从主库复制到从库。对于MySQL，所有信息都会被发送到从库，但如果开启过滤复制，从库会有选择地将事件应用到从库。然而，对于MySQL二进制日志并不是用于灾难恢复的，但PostgreSQL的WAL是可以用于灾难恢复的，用户可以配置MySQL主库指定哪些数据库会被记录到日志，在这种意义上，过滤器对于主库是可用的。</p>
@@ -340,12 +341,12 @@
 <p>• 对于故障切换和负载均衡，PostgreSQL社区提供pgPool的中间件，pgPool提供连接池，负载均衡，故障切换和更多种复制形式。MySQL 5.5 在企业版里提供连接池，但是对于故障切换和负载均衡必须通过第三方产品或定制开发。</p>
 <p>原文：<br>Conclusions</p>
 <p>As was previously stated, for many application use cases, both Oracle’s MySQL and PostgreSQL replication will be an equally good choice. The best way to determine which is right for you is to download both and put each through a comprehensive evaluation.</p>
-<p>You can download Oracle’s MySQL at <a href="http://www.mysql.com/downloads/" target="_blank" rel="external">http://www.mysql.com/downloads/</a>, while both community and EnterpriseDB’s offerings of PostgreSQL can be found at: <a href="http://www.enterprisedb.com/products/download.do" target="_blank" rel="external">http://www.enterprisedb.com/products/download.do</a>.</p>
+<p>You can download Oracle’s MySQL at <a href="http://www.mysql.com/downloads/" target="_blank" rel="noopener">http://www.mysql.com/downloads/</a>, while both community and EnterpriseDB’s offerings of PostgreSQL can be found at: <a href="http://www.enterprisedb.com/products/download.do" target="_blank" rel="noopener">http://www.enterprisedb.com/products/download.do</a>.</p>
 <p>By Robin Schumacher and Gary Carter, www.enterprisedb.com</p>
 <p>18 Nov 2010</p>
 <p>翻译：<br>结论</p>
 <p>正如前面所指出一样，对于许多应用程序的用例，MySQL和PostgreSQL都是非常好的选择。要决定哪一个最适合你，最好的办法就是同时下载它们两个，然后使用进行综合评估。</p>
-<p>你可以在 <a href="http://www.mysql.com/downloads/" target="_blank" rel="external">http://www.mysql.com/downloads/</a> 下载MySQL，PostgreSQL的社区版和EnterpriseDB提供的PostgreSQL版本都可以在这个地址里找到：<a href="http://www.enterprisedb.com/products/download.do" target="_blank" rel="external">http://www.enterprisedb.com/products/download.do</a> </p>
+<p>你可以在 <a href="http://www.mysql.com/downloads/" target="_blank" rel="noopener">http://www.mysql.com/downloads/</a> 下载MySQL，PostgreSQL的社区版和EnterpriseDB提供的PostgreSQL版本都可以在这个地址里找到：<a href="http://www.enterprisedb.com/products/download.do" target="_blank" rel="noopener">http://www.enterprisedb.com/products/download.do</a> </p>
 <p>作者：Robin Schumacher and Gary Carter, www.enterprisedb.com<br>18 Nov 2010</p>
 <hr>
 <p>注：版权是原作者所有，我只是出于业余爱好进行翻译。</p>

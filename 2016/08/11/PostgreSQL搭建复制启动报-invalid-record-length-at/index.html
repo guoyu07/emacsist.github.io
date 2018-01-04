@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2016/08/11/PostgreSQL搭建复制启动报-invalid-record-length-at/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="信息123456789101112╭─sky@sky-linux /ihome/db/postgresql  ╰─➤  ./current/bin/pg_ctl -D slave-data start">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PostgreSQL搭建复制启动报 invalid record length at">
@@ -204,7 +205,7 @@
                             <h2 id="信息"><a href="#信息" class="headerlink" title="信息"></a>信息</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">╭─sky@sky-linux /ihome/db/postgresql  </div><div class="line">╰─➤  ./current/bin/pg_ctl -D slave-data start                                                                                                                                             1 ↵</div><div class="line">server starting</div><div class="line">╭─sky@sky-linux /ihome/db/postgresql  </div><div class="line">╰─➤  LOG:  database system was shut down <span class="keyword">in</span> recovery at 2016-08-11 10:57:31 CST</div><div class="line">LOG:  entering standby mode</div><div class="line">LOG:  consistent recovery state reached at 0/15000300</div><div class="line">LOG:  redo starts at 0/15000300</div><div class="line">LOG:  invalid record length at 0/150003E0</div><div class="line">LOG:  database system is ready to accept <span class="built_in">read</span> only connections</div><div class="line">LOG:  started streaming WAL from primary at 0/15000000 on timeline 1</div><div class="line">...</div></pre></td></tr></table></figure>
 <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>本想搭建复制环境的, 按 <a href="/2015/01/24/翻译-手把手教你配置流复制/">/2015/01/24/翻译-手把手教你配置流复制/</a> ,slave启动时,报这个信息.</p>
 <p>后来看到PostgreSQL官方有个官方回复.</p>
-<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p><a href="https://www.postgresql.org/message-id/CAHGQGwFvv0pxaf_iZ1FU1H%3Dd%3DexhPUoM0ss-9GkDWRP%3DFureMg%40mail.gmail.com" target="_blank" rel="external">postgresql.org</a></p>
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p><a href="https://www.postgresql.org/message-id/CAHGQGwFvv0pxaf_iZ1FU1H%3Dd%3DexhPUoM0ss-9GkDWRP%3DFureMg%40mail.gmail.com" target="_blank" rel="noopener">postgresql.org</a></p>
 <blockquote>
 <p>刚启动后， standby尝试读取并重放存放在standby的WAL文件， 然后它发现了无效的WAL记录，换句话说， 它不再能够坐本地读取WAL记录了， 它开始复制然后尝试从master里读取WAL文件。所以， 以上的日志信息<code>invalid record...</code>意味着在standby有无效的WAL记录，这会触发复制。从master复制流中获取有效的WAL记录后，你就不再需要担心这个日志信息了.</p>
 </blockquote>

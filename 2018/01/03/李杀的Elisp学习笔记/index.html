@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>李杀的Elisp学习笔记 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="emacs,elisp," />
+  
+
+  <meta name="description" content="http://ergoemacs.org/emacs/elisp_basics.html Emacs Lisp 基础eval 代码1(+ 3 4) 方法有:  将光标移到闭括号外, 然后调用 eval-last-sexp (C-x C-e) , 然后 emacs 就会计算与该右括号匹配的左括号及之间的表达式了.  你也可以选择某一段代码, 然后 eval-region (按 Alt+x 然后输入该">
+<meta name="keywords" content="emacs,elisp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="李杀的Elisp学习笔记">
+<meta property="og:url" content="https://emacsist.github.io/2018/01/03/李杀的Elisp学习笔记/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="http://ergoemacs.org/emacs/elisp_basics.html Emacs Lisp 基础eval 代码1(+ 3 4) 方法有:  将光标移到闭括号外, 然后调用 eval-last-sexp (C-x C-e) , 然后 emacs 就会计算与该右括号匹配的左括号及之间的表达式了.  你也可以选择某一段代码, 然后 eval-region (按 Alt+x 然后输入该">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-01-04T09:30:03.270Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="李杀的Elisp学习笔记">
+<meta name="twitter:description" content="http://ergoemacs.org/emacs/elisp_basics.html Emacs Lisp 基础eval 代码1(+ 3 4) 方法有:  将光标移到闭括号外, 然后调用 eval-last-sexp (C-x C-e) , 然后 emacs 就会计算与该右括号匹配的左括号及之间的表达式了.  你也可以选择某一段代码, 然后 eval-region (按 Alt+x 然后输入该">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Emacs-Lisp-基础"><span class="toc-text">Emacs Lisp 基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#eval-代码"><span class="toc-text">eval 代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#打印"><span class="toc-text">打印</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#算术运算"><span class="toc-text">算术运算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#string-与-number-的转换"><span class="toc-text">string 与 number 的转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#true-false"><span class="toc-text">true, false</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#布尔函数"><span class="toc-text">布尔函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#and-和-or"><span class="toc-text">and 和 or</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#比较数字"><span class="toc-text">比较数字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符串比较"><span class="toc-text">字符串比较</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#变量"><span class="toc-text">变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#全局变量"><span class="toc-text">全局变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#局部变量"><span class="toc-text">局部变量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#if-then-else"><span class="toc-text">if then else</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#表达式块"><span class="toc-text">表达式块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#循环"><span class="toc-text">循环</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#定义一个函数-function"><span class="toc-text">定义一个函数(function)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#定义一个命令-command"><span class="toc-text">定义一个命令(command)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Emacs-Lisp-的文本处理"><span class="toc-text">Emacs Lisp 的文本处理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#光标位置"><span class="toc-text">光标位置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#移动光标以及搜索"><span class="toc-text">移动光标以及搜索</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除-插入-修改"><span class="toc-text">删除/插入/修改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Strings"><span class="toc-text">Strings</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Buffers"><span class="toc-text">Buffers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件-files"><span class="toc-text">文件 files</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#基本函数"><span class="toc-text">基本函数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#shell-中执行-script"><span class="toc-text">shell 中执行 script</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#获取命令行的参数"><span class="toc-text">获取命令行的参数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Elisp-数据结构"><span class="toc-text">Elisp 数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#vector"><span class="toc-text">vector</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建-vector"><span class="toc-text">创建 vector</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#访问"><span class="toc-text">访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改"><span class="toc-text">修改</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#嵌套-vector"><span class="toc-text">嵌套 vector</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#join-vector-转换-list-为-vector"><span class="toc-text">join vector, 转换 list 为 vector</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#转换-vector-为-list"><span class="toc-text">转换 vector 为 list</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#list"><span class="toc-text">list</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建-list"><span class="toc-text">创建 list</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数字的-list"><span class="toc-text">数字的 list</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#长度"><span class="toc-text">长度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#获取-list-的元素"><span class="toc-text">获取 list 的元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#向前追加-list"><span class="toc-text">向前追加 list</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#向后追加-list"><span class="toc-text">向后追加 list</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改-list-变量"><span class="toc-text">修改 list 变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#list-转换为-string"><span class="toc-text">list 转换为 string</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Associate-List"><span class="toc-text">Associate List</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#创建"><span class="toc-text">创建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#通过-key-获取键值对"><span class="toc-text">通过 key 获取键值对</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#通过-value-来获取键值对"><span class="toc-text">通过 value 来获取键值对</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Property-List"><span class="toc-text">Property List</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#访问-1"><span class="toc-text">访问</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置"><span class="toc-text">设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#检测是否存在"><span class="toc-text">检测是否存在</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Symbol-Property-List"><span class="toc-text">Symbol Property List</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#设置-1"><span class="toc-text">设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#访问-2"><span class="toc-text">访问</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Map"><span class="toc-text">Map</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#mapcar"><span class="toc-text">mapcar</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mapc"><span class="toc-text">mapc</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#loop-list"><span class="toc-text">loop list</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#dolist"><span class="toc-text">dolist</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dotimes"><span class="toc-text">dotimes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#while"><span class="toc-text">while</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#过滤-list"><span class="toc-text">过滤 list</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Hash-Table"><span class="toc-text">Hash Table</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#创建-1"><span class="toc-text">创建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#添加"><span class="toc-text">添加</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除"><span class="toc-text">删除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取-key-的值"><span class="toc-text">获取 key 的值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#计算长度"><span class="toc-text">计算长度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除所有元素"><span class="toc-text">删除所有元素</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#检测元素是否存在"><span class="toc-text">检测元素是否存在</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Lisp-Symbol"><span class="toc-text">Lisp Symbol</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#symbol-的-cell"><span class="toc-text">symbol 的 cell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#quoting-symbol"><span class="toc-text">quoting symbol</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么时候需要-quote-symbol"><span class="toc-text">什么时候需要 quote symbol</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#检测个值是否是-symbol"><span class="toc-text">检测个值是否是 symbol</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取-symbol-的四个-cell-值"><span class="toc-text">获取 symbol 的四个 cell 值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置-symbol-的四个-cell-值"><span class="toc-text">设置 symbol 的四个 cell 值</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#设置-value-cell"><span class="toc-text">设置 value cell</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设置-function-cell"><span class="toc-text">设置 function cell</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设置-property-cell"><span class="toc-text">设置 property cell</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#综合例子"><span class="toc-text">综合例子</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-李杀的Elisp学习笔记" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            李杀的Elisp学习笔记
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2018.01.03</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#elisp">
+        <span class="tag-name">elisp</span>
+    <span class="tag-size">( 2 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#emacs">
+        <span class="tag-name">emacs</span>
+    <span class="tag-size">( 15 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <p><a href="http://ergoemacs.org/emacs/elisp_basics.html" target="_blank" rel="noopener">http://ergoemacs.org/emacs/elisp_basics.html</a></p>
+<h1 id="Emacs-Lisp-基础"><a href="#Emacs-Lisp-基础" class="headerlink" title="Emacs Lisp 基础"></a>Emacs Lisp 基础</h1><h2 id="eval-代码"><a href="#eval-代码" class="headerlink" title="eval 代码"></a>eval 代码</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(<span class="name">+</span> <span class="number">3</span> <span class="number">4</span>)</div></pre></td></tr></table></figure>
+<p>方法有:</p>
+<ol>
+<li><p>将光标移到闭括号外, 然后调用 <code>eval-last-sexp</code> (C-x C-e) , 然后 emacs 就会计算与该右括号匹配的左括号及之间的表达式了.</p>
+</li>
+<li><p>你也可以选择某一段代码, 然后 <code>eval-region</code> (按 Alt+x 然后输入该命令.)</p>
+</li>
+<li><p><code>Alt+x ielm</code> , 它会开启一个交互式的 elisp 命令行窗口.</p>
+</li>
+</ol>
+<p>查看函数的文档: <code>Alt+x describe-function</code> (C-h f) </p>
+<h2 id="打印"><a href="#打印" class="headerlink" title="打印"></a>打印</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(<span class="name">message</span> <span class="string">"hi"</span>)</div><div class="line"></div><div class="line">(<span class="name">message</span> <span class="string">"hi, %s"</span> <span class="string">"emacs"</span>)</div></pre></td></tr></table></figure>
+<p>它将输出到一个名为 <code>*Messages*</code> 的 buffer 中. 你可以通过 <code>Alt+x view-echo-area-messages</code> (C-h e) 来切换到该 buffer.</p>
+<h2 id="算术运算"><a href="#算术运算" class="headerlink" title="算术运算"></a>算术运算</h2><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(+ 4 5 1)</div><div class="line">(% 7 4)</div><div class="line">...</div></pre></td></tr></table></figure>
+<p>注意, <code>2.</code> 表示的是整数, <code>2.0</code> 才是浮点数.</p>
+<p>断言函数. 有些函数名是以 <code>p</code> 结尾的, 常常表示它会返回 <code>true</code> 或者 <code>false</code> . <code>t</code> 表示是 <code>true</code>, <code>nil</code> 表示是 <code>false</code></p>
+<p>如</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">(<span class="name">integerp</span> <span class="number">3</span>.) <span class="comment">; t</span></div><div class="line">(<span class="name">floatp</span> <span class="number">3.0</span>) <span class="comment">; t</span></div></pre></td></tr></table></figure>
+<h2 id="string-与-number-的转换"><a href="#string-与-number-的转换" class="headerlink" title="string 与 number 的转换"></a>string 与 number 的转换</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">(<span class="name">string-to-number</span> <span class="string">"3"</span>)</div><div class="line">(<span class="name">number-to-string</span> <span class="number">3</span>)</div></pre></td></tr></table></figure>
+<h2 id="true-false"><a href="#true-false" class="headerlink" title="true, false"></a>true, false</h2><p>在 elisp 中, <code>nil</code> 表示是 <code>false</code> , 其他所有的都会被视为 <code>true</code> . 注意, <code>nil</code> 是等同于空表 <code>()</code> ,所以 <code>()</code> 也表示 <code>false</code></p>
+<p>为了方便, <code>t</code> 是用作 <code>true</code> .</p>
+<h2 id="布尔函数"><a href="#布尔函数" class="headerlink" title="布尔函数"></a>布尔函数</h2><h3 id="and-和-or"><a href="#and-和-or" class="headerlink" title="and 和 or"></a>and 和 or</h3><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(<span class="name">and</span> <span class="literal">t</span> <span class="literal">nil</span>)</div><div class="line"></div><div class="line">(<span class="name">or</span> <span class="literal">t</span> <span class="literal">nil</span>)</div></pre></td></tr></table></figure>
+<h3 id="比较数字"><a href="#比较数字" class="headerlink" title="比较数字"></a>比较数字</h3><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">(<span class="name">&lt;</span> <span class="number">3</span> <span class="number">4</span>)</div><div class="line"></div><div class="line">(<span class="name">&gt;</span> <span class="number">3</span> <span class="number">4</span>)</div><div class="line"></div><div class="line">(<span class="name">/=</span> <span class="number">3</span> <span class="number">4</span>) <span class="comment">; t  /= 是不等于符号.</span></div></pre></td></tr></table></figure>
+<p>(= 3 3)</p>
+<h3 id="字符串比较"><a href="#字符串比较" class="headerlink" title="字符串比较"></a>字符串比较</h3><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">(<span class="name">equal</span> <span class="string">"abc"</span> <span class="string">"abc"</span>) <span class="comment">;t</span></div><div class="line"></div><div class="line">(<span class="name">string-equal</span> <span class="string">"abc"</span> <span class="string">"abc"</span>) <span class="comment">;t</span></div><div class="line"></div><div class="line">(<span class="name">string-equal</span> <span class="string">"abc"</span> 'abc) <span class="comment">;t</span></div></pre></td></tr></table></figure>
+<p><code>equal</code> 是通用的检测, 如果两个操作数是相同的类型并且是相同的值, 才为 <code>true</code> , 否则为 <code>false</code> .</p>
+<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><h3 id="全局变量"><a href="#全局变量" class="headerlink" title="全局变量"></a>全局变量</h3><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(<span class="name">setq</span> x <span class="number">1</span>)</div><div class="line"></div><div class="line">(<span class="name">setq</span> a <span class="number">3</span> b <span class="number">3</span> c <span class="number">7</span>)<span class="comment">; a=3, b=3, c=7</span></div></pre></td></tr></table></figure>
+<h3 id="局部变量"><a href="#局部变量" class="headerlink" title="局部变量"></a>局部变量</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">(let (var1 var2 ..) body)</div><div class="line">(let (a b)</div><div class="line">	(setq a 3)</div><div class="line">    (setq b 4)</div><div class="line">    (+ a b)</div><div class="line">); returns 7</div><div class="line"></div><div class="line">或</div><div class="line"></div><div class="line">(let ((var varValue) (var2 var2Value)...) body)</div><div class="line"></div><div class="line">(let ((a 3) (b 4))</div><div class="line">	(+ a b)</div><div class="line">); returns 7</div></pre></td></tr></table></figure>
+<h2 id="if-then-else"><a href="#if-then-else" class="headerlink" title="if then else"></a>if then else</h2><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">(if test body)</div><div class="line"></div><div class="line">(if test true_body false_body)</div><div class="line"></div><div class="line">例如</div><div class="line"></div><div class="line">(if  (&lt; 3 2) 7 8)</div></pre></td></tr></table></figure>
+<h2 id="表达式块"><a href="#表达式块" class="headerlink" title="表达式块"></a>表达式块</h2><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">(progn (message "a") (message "b"))</div><div class="line">//等同于</div><div class="line"></div><div class="line">(message "a") (message "b")</div></pre></td></tr></table></figure>
+<p>即 <code>(progn ...)</code> 是类似于 C 风格的 <code>{...}</code></p>
+<p><code>progn</code> 的返回值是最后一个表达式的值.</p>
+<h2 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h2><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">(while test body)</div><div class="line"></div><div class="line">例如</div><div class="line"></div><div class="line">(setq x 0)</div><div class="line">(while (&lt; x 4)</div><div class="line">	(print (format "number is %d" x))</div><div class="line">    (setq x (1+ x))</div><div class="line">)</div></pre></td></tr></table></figure>
+<h2 id="定义一个函数-function"><a href="#定义一个函数-function" class="headerlink" title="定义一个函数(function)"></a>定义一个函数(function)</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(<span class="name">defun</span> function_name (<span class="name">p1</span> p2 ...) <span class="string">"doc_string"</span> body)</div></pre></td></tr></table></figure>
+<h2 id="定义一个命令-command"><a href="#定义一个命令-command" class="headerlink" title="定义一个命令(command)"></a>定义一个命令(command)</h2><blockquote>
+<p>command 表示的是用户可以通过 <code>execute-extended-command</code> 即 (Alt+x) 来调用的.</p>
+</blockquote>
+<p>当一个函数也是一条命令时, 我们称该函数是一个可交互式使用的.</p>
+<p>为了使函数可以交互式使用, 可以添加 <code>(interactive)</code> 到 <code>doc_string</code> 之后的右边即可. 例如:</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">(<span class="name">defun</span> yay ()</div><div class="line">  <span class="string">"Insert “Yay!” at cursor position."</span></div><div class="line">  (<span class="name">interactive</span>)</div><div class="line">  (<span class="name">insert</span> <span class="string">"Yay!"</span>))</div></pre></td></tr></table></figure>
+<p>以下是一个定义的模板</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">(defun myCommand ()</div><div class="line">  "One sentence summary of what this command do.</div><div class="line"></div><div class="line">More detailed documentation here."</div><div class="line">  (interactive)</div><div class="line">  (let (localVar1 localVar2 …)</div><div class="line">    ; do something here …</div><div class="line">    ; …</div><div class="line">    ; last expression is returned</div><div class="line">  )</div><div class="line">)</div></pre></td></tr></table></figure>
+<h1 id="Emacs-Lisp-的文本处理"><a href="#Emacs-Lisp-的文本处理" class="headerlink" title="Emacs Lisp 的文本处理"></a>Emacs Lisp 的文本处理</h1><h2 id="光标位置"><a href="#光标位置" class="headerlink" title="光标位置"></a>光标位置</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">(<span class="name">point</span>) <span class="comment">; 返回当前光标的位置</span></div><div class="line"></div><div class="line">(<span class="name">region-beginning</span>) <span class="comment">;</span></div><div class="line">(<span class="name">region-end</span>) <span class="comment">;</span></div><div class="line"></div><div class="line">(<span class="name">line-beginning-position</span>)</div><div class="line">(<span class="name">line-end-position</span>)</div><div class="line"></div><div class="line"></div><div class="line">(<span class="name">point-min</span>)</div><div class="line">(<span class="name">point-max</span>)</div></pre></td></tr></table></figure>
+<h2 id="移动光标以及搜索"><a href="#移动光标以及搜索" class="headerlink" title="移动光标以及搜索"></a>移动光标以及搜索</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">(<span class="name">goto-char</span> <span class="number">39</span>)</div><div class="line"></div><div class="line">(<span class="name">forward-char</span> <span class="number">4</span>)</div><div class="line">(<span class="name">backward-char</span> <span class="number">4</span>)</div><div class="line"></div><div class="line"><span class="comment">; 文本搜索</span></div><div class="line">(<span class="name">search-forward</span> <span class="string">"some"</span>)</div><div class="line">(<span class="name">search-backward</span> <span class="string">"some"</span>)</div><div class="line"></div><div class="line"><span class="comment">; 正则搜索</span></div><div class="line">(<span class="name">re-search-forward</span> <span class="string">"[0-9]"</span>)</div><div class="line">(<span class="name">re-search-backward</span> <span class="string">"[0-9]"</span>)</div><div class="line"></div><div class="line">(<span class="name">skip-chars-forward</span> <span class="string">"a-z"</span>)</div><div class="line">(<span class="name">skip-chars-backward</span> <span class="string">"a-z"</span>)</div></pre></td></tr></table></figure>
+<h2 id="删除-插入-修改"><a href="#删除-插入-修改" class="headerlink" title="删除/插入/修改"></a>删除/插入/修改</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">(<span class="name">delete-char</span> <span class="number">9</span>)</div><div class="line">(<span class="name">delete-region</span> <span class="number">3</span> <span class="number">10</span>)</div><div class="line"></div><div class="line">(<span class="name">insert</span> <span class="string">"hello"</span>)</div><div class="line"></div><div class="line"><span class="comment">;获取从光标位置 71~300 之间的字符串</span></div><div class="line">(<span class="name">setq</span> x (<span class="name">buffer-substring</span> <span class="number">71</span> <span class="number">300</span>))</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">; 将位置  71~3000 之间的字符串转换为大写</span></div><div class="line">(<span class="name">capitalize-region</span> <span class="number">71</span> <span class="number">300</span>)</div></pre></td></tr></table></figure>
+<h2 id="Strings"><a href="#Strings" class="headerlink" title="Strings"></a>Strings</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">(<span class="name">length</span> <span class="string">"abc"</span>)</div><div class="line"></div><div class="line">(<span class="name">substring</span> <span class="string">"abcdefg"</span> <span class="number">3</span> <span class="number">4</span>)</div><div class="line"></div><div class="line">(<span class="name">replace-regexp-in-string</span> <span class="string">"[0-9]"</span> <span class="string">"X"</span> <span class="string">"abc123"</span>)<span class="comment">;; returns abcXXX</span></div></pre></td></tr></table></figure>
+<h2 id="Buffers"><a href="#Buffers" class="headerlink" title="Buffers"></a>Buffers</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">(<span class="name">buffer-name</span>)</div><div class="line"></div><div class="line">(<span class="name">buffer-file-name</span>)</div><div class="line"></div><div class="line"><span class="comment">;切换到名为 xyz 的 buffer</span></div><div class="line">(<span class="name">set-buffer</span> <span class="string">"xyz"</span>)</div><div class="line"></div><div class="line">(<span class="name">save-buffer</span>)</div><div class="line"></div><div class="line">(<span class="name">kill-buffer</span> <span class="string">"xyz"</span>)</div><div class="line"></div><div class="line"><span class="comment">; 临时设置一个 buffer 为当前 buffer 来工作.</span></div><div class="line">(<span class="name">with-current-buffer</span> <span class="string">"xyz"</span></div><div class="line">	<span class="comment">;; do something</span></div><div class="line">)</div></pre></td></tr></table></figure>
+<h2 id="文件-files"><a href="#文件-files" class="headerlink" title="文件 files"></a>文件 files</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="comment">; 打开一个文件</span></div><div class="line">(<span class="name">find-file</span> <span class="string">"~/"</span>)</div><div class="line"></div><div class="line"><span class="comment">; 等同 save as</span></div><div class="line">(<span class="name">write-file</span> path)</div><div class="line"></div><div class="line"><span class="comment">; 将文件的内容插入到当前位置</span></div><div class="line">(<span class="name">insert-file-contents</span> path)</div><div class="line"></div><div class="line"><span class="comment">; 追加一个文本块到文件</span></div><div class="line">(<span class="name">append-to-file</span> start-pos end-pos path)</div><div class="line"></div><div class="line">(<span class="name">rename-file</span> file-name new-name)</div><div class="line"></div><div class="line">(<span class="name">copy-file</span> old-name new-name)</div><div class="line"></div><div class="line">(<span class="name">delete-file</span> file-name)</div><div class="line"></div><div class="line"><span class="comment">; dir path</span></div><div class="line">(<span class="name">file-name-directory</span> full-path)</div><div class="line"></div><div class="line"><span class="comment">; filename part</span></div><div class="line">(<span class="name">file-name-nondirectory</span> full-path)</div><div class="line"></div><div class="line">(<span class="name">file-name-extension</span> file-name)</div><div class="line"></div><div class="line">(<span class="name">file-name-sans-extension</span> file-name)</div></pre></td></tr></table></figure>
+<p>以下是一个插入<code>p</code> 标签的例子</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">(<span class="name">defun</span> insert-p-tag ()</div><div class="line">  <span class="string">"Insert &lt;p&gt;&lt;/p&gt; at cursor point."</span></div><div class="line">  (<span class="name">interactive</span>)</div><div class="line">  (<span class="name">insert</span> <span class="string">"&lt;p&gt;&lt;/p&gt;"</span>)</div><div class="line">  (<span class="name">backward-char</span> <span class="number">4</span>))</div></pre></td></tr></table></figure>
+<h1 id="基本函数"><a href="#基本函数" class="headerlink" title="基本函数"></a>基本函数</h1><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">; 返回当前光标所在的单词内容</span></div><div class="line">(<span class="name">thing-at-point</span> 'word)</div><div class="line"></div><div class="line"><span class="comment">; 返回当前光标所在的单词带有连字符或下划线的内容</span></div><div class="line">(<span class="name">thing-at-point</span> 'symbol)</div><div class="line"></div><div class="line"><span class="comment">; 返回当前光标所在的行内容</span></div><div class="line">(<span class="name">thing-at-point</span> 'line)</div><div class="line"></div><div class="line"><span class="comment">; 返回当前光标所在单词的开始和结束位置</span></div><div class="line">(<span class="name">bounds-of-thing-at-point</span> 'word)</div></pre></td></tr></table></figure>
+<h1 id="shell-中执行-script"><a href="#shell-中执行-script" class="headerlink" title="shell 中执行 script"></a>shell 中执行 script</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">emacs --script process_log.el</div></pre></td></tr></table></figure>
+<h2 id="获取命令行的参数"><a href="#获取命令行的参数" class="headerlink" title="获取命令行的参数"></a>获取命令行的参数</h2><p>命令行参数会保存在一个内部 elisp 变量 <code>argv</code> 中.它是一个 list, 每一项都是命令行中的item.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">(message <span class="string">"argv 0: %s"</span> (elt argv 0)) ; %s is <span class="keyword">for</span> string</div><div class="line">(message <span class="string">"argv 1: %s"</span> (elt argv 1))</div><div class="line">(message <span class="string">"argv 2: %s"</span> (elt argv 2))</div><div class="line">(message <span class="string">"argv 3: %s"</span> (elt argv 3))</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">emacs --script test.el uni 2 -tri</div><div class="line"></div><div class="line">argv 0: <span class="string">"uni"</span></div><div class="line">argv 1: <span class="string">"2"</span></div><div class="line">argv 2: <span class="string">"-tri"</span></div><div class="line">argv 3: nil</div></pre></td></tr></table></figure>
+<h1 id="Elisp-数据结构"><a href="#Elisp-数据结构" class="headerlink" title="Elisp 数据结构"></a>Elisp 数据结构</h1><p>elips 中最重要的类似 list 的数据类型:</p>
+<p>sequence (并不是一个实际的数据类型) ,又为为 List 和 Array (并不是实际的数据类型)</p>
+<p>List 又分为 (Associate List 和 Property List)</p>
+<p>Array 又分为(Vector 和 String)</p>
+<h2 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h2><blockquote>
+<p>类似 Java 的数组</p>
+</blockquote>
+<ol>
+<li>读写元素是常量时间</li>
+<li>元素可以是任意类型</li>
+<li>元素不能被添加或删除. 即 vector 的长度是固定的.</li>
+<li>元素的值可以被修改</li>
+</ol>
+<h3 id="创建-vector"><a href="#创建-vector" class="headerlink" title="创建 vector"></a>创建 vector</h3><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">(<span class="name">setq</span> v (<span class="name">vector</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span>))</div><div class="line"></div><div class="line">(<span class="name">setq</span> x <span class="number">7</span>)</div><div class="line">(<span class="name">setq</span> v (<span class="name">vector</span> <span class="number">3</span> x <span class="number">5</span>))</div><div class="line"></div><div class="line">v <span class="comment">; [3 7 5]</span></div></pre></td></tr></table></figure>
+<p>如果你不想这些元素被 eval , 则可以写成:</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">(<span class="name">setq</span> x <span class="number">7</span>)</div><div class="line"></div><div class="line"><span class="comment">;; create a vector of elements 3 x 5</span></div><div class="line"><span class="comment">;; each element is NOT be evaluated</span></div><div class="line">(<span class="name">setq</span> v [<span class="number">3</span> x <span class="number">5</span>])</div><div class="line"></div><div class="line">v <span class="comment">; [3 x 5] . the x remains a symbol, not 7</span></div></pre></td></tr></table></figure>
+<h3 id="访问"><a href="#访问" class="headerlink" title="访问"></a>访问</h3><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(<span class="name">aref</span> array n) <span class="comment">;返回 array 数组在索引为 n 的元素</span></div><div class="line"></div><div class="line">(<span class="name">elt</span> sequence n) <span class="comment">;返回 sequence 在索引为 n 的元素.</span></div></pre></td></tr></table></figure>
+<p>emacs 文档中的 <code>sequence</code> , 你可以认为是 <code>list</code> 或 <code>vector</code></p>
+<p>例如</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(<span class="name">aref</span> [<span class="string">"a"</span> <span class="string">"b"</span> <span class="string">"c"</span>] <span class="number">0</span>) <span class="comment">; ⇒ "a"</span></div><div class="line"></div><div class="line">(<span class="name">elt</span> [<span class="string">"a"</span> <span class="string">"b"</span> <span class="string">"c"</span>] <span class="number">0</span>) <span class="comment">; ⇒ "a"</span></div></pre></td></tr></table></figure>
+<p><code>elt</code> 是更通用的用法, 它可以同时用于 vector 和 list.</p>
+<h3 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h3><p><code>(aset ARRAY IDX NEWELT)</code> , 返回值是 <code>NEWELT</code></p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(<span class="name">setq</span> v [<span class="number">3</span> <span class="number">4</span> <span class="number">5</span>])</div><div class="line">(<span class="name">aset</span> v <span class="number">0</span> <span class="string">"b"</span>)</div><div class="line">v  <span class="comment">; ⇒ ["b" 4 5]</span></div></pre></td></tr></table></figure>
+<h3 id="嵌套-vector"><a href="#嵌套-vector" class="headerlink" title="嵌套 vector"></a>嵌套 vector</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[[1 2] [3 4]]</div></pre></td></tr></table></figure>
+<h3 id="join-vector-转换-list-为-vector"><a href="#join-vector-转换-list-为-vector" class="headerlink" title="join vector, 转换 list 为 vector"></a>join vector, 转换 list 为 vector</h3><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">(<span class="name">vconcat</span> [<span class="number">3</span> <span class="number">4</span>] [<span class="string">"a"</span> <span class="string">"b"</span>]) <span class="comment">; ⇒ [3 4 "a" "b"]</span></div><div class="line"></div><div class="line">(<span class="name">vconcat</span> [<span class="number">3</span> <span class="number">4</span>] '(<span class="string">"a"</span> <span class="string">"b"</span>)) <span class="comment">; ⇒ [3 4 "a" "b"]</span></div><div class="line"></div><div class="line">(<span class="name">vconcat</span> [<span class="number">3</span> <span class="number">4</span>] <span class="string">"ab"</span>) <span class="comment">; ⇒ [3 4 97 98]</span></div></pre></td></tr></table></figure>
+<h3 id="转换-vector-为-list"><a href="#转换-vector-为-list" class="headerlink" title="转换 vector 为 list"></a>转换 vector 为 list</h3><p><code>(append sequence1 sequence2 …)</code></p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(<span class="name">append</span> [<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>] [<span class="number">4</span> <span class="number">5</span>] <span class="literal">nil</span>)</div><div class="line"><span class="comment">;; (1 2 3 4 5)</span></div><div class="line"><span class="comment">;; proper list</span></div></pre></td></tr></table></figure>
+<h2 id="list"><a href="#list" class="headerlink" title="list"></a>list</h2><h3 id="创建-list"><a href="#创建-list" class="headerlink" title="创建 list"></a>创建 list</h3><p><code>(list a b …)</code></p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(<span class="name">setq</span> mylist (<span class="name">list</span> <span class="number">1</span> <span class="string">"b"</span> <span class="number">3</span>))</div><div class="line"></div><div class="line">(<span class="name">message</span> <span class="string">"%S"</span> mylist)</div></pre></td></tr></table></figure>
+<p>如果你不想元素被进行 eval , 可以这样子写</p>
+<p><code>&#39;(a b …)</code> 它等同于 <code>(quote (list a b …))</code></p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">; assign a list to a var</span></div><div class="line">(<span class="name">setq</span> mylist '(a b c))</div><div class="line"></div><div class="line"><span class="comment">; prints a list</span></div><div class="line">(<span class="name">message</span> <span class="string">"%S"</span> mylist)</div></pre></td></tr></table></figure>
+<h3 id="数字的-list"><a href="#数字的-list" class="headerlink" title="数字的 list"></a>数字的 list</h3><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">(<span class="name">number-sequence</span> n m step)</div><div class="line"></div><div class="line">(<span class="name">number-sequence</span> n m) </div><div class="line"></div><div class="line">(<span class="name">number-sequence</span> n)</div></pre></td></tr></table></figure>
+<h3 id="长度"><a href="#长度" class="headerlink" title="长度"></a>长度</h3><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(<span class="name">length</span> list)</div></pre></td></tr></table></figure>
+<h3 id="获取-list-的元素"><a href="#获取-list-的元素" class="headerlink" title="获取 list 的元素"></a>获取 list 的元素</h3><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">(<span class="name">car</span> list)	<span class="comment">;first element</span></div><div class="line"></div><div class="line">(<span class="name">nth</span> n list)	<span class="comment">;nth element</span></div><div class="line"></div><div class="line">(<span class="name">car</span> (<span class="name">last</span> list))	<span class="comment">;last element</span></div><div class="line"></div><div class="line">(<span class="name">cdr</span> list)	<span class="comment">;2nd to last elements.</span></div><div class="line"></div><div class="line">(<span class="name">nthcdr</span> n list)	<span class="comment">;nth to last elements.</span></div><div class="line"></div><div class="line">(<span class="name">butlast</span> list n)	<span class="comment">;without the last n elements.</span></div></pre></td></tr></table></figure>
+<h3 id="向前追加-list"><a href="#向前追加-list" class="headerlink" title="向前追加 list"></a>向前追加 list</h3><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(<span class="name">cons</span> x list)	<span class="comment">;Return a new list, with x added to front. (prepend)</span></div></pre></td></tr></table></figure>
+<h3 id="向后追加-list"><a href="#向后追加-list" class="headerlink" title="向后追加 list"></a>向后追加 list</h3><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(<span class="name">append</span> list1 list2)	<span class="comment">;Return a new list, join two lists</span></div></pre></td></tr></table></figure>
+<h3 id="修改-list-变量"><a href="#修改-list-变量" class="headerlink" title="修改 list 变量"></a>修改 list 变量</h3><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">(<span class="name">push</span> list) <span class="comment">;Add a element to the front variable. Returns the new list.</span></div><div class="line">(<span class="name">pop</span> list)	<span class="comment">;Remove first element from the variable. Returns the removed element.</span></div><div class="line">(<span class="name">nbutlast</span> list n)	<span class="comment">;Remove last n elements from the variable. Returns the new value of the variable.</span></div><div class="line">(<span class="name">setcar</span> list x)	<span class="comment">;replaces the first element in list with x. Returns x.</span></div><div class="line">(<span class="name">setcdr</span> list x)	<span class="comment">;replaces the rest of elements in list with x. Returns x.</span></div></pre></td></tr></table></figure>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(<span class="name">setq</span> mylist '(<span class="string">"a"</span> <span class="string">"b"</span> <span class="string">"c"</span>))</div><div class="line">(<span class="name">pop</span> mylist)   <span class="comment">; "a"</span></div><div class="line">(<span class="name">print</span> mylist) <span class="comment">; ("b" "c")</span></div></pre></td></tr></table></figure>
+<h3 id="list-转换为-string"><a href="#list-转换为-string" class="headerlink" title="list 转换为 string"></a>list 转换为 string</h3><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">(<span class="name">mapconcat</span> 'identity '(<span class="string">"ab"</span> <span class="string">"cd"</span> <span class="string">"ef"</span>) <span class="string">","</span>)</div><div class="line"><span class="comment">;; "ab,cd,ef"</span></div><div class="line"></div><div class="line">(<span class="name">format</span> <span class="string">"%s"</span> '(<span class="number">1</span> <span class="string">"two"</span> <span class="number">3</span>))</div><div class="line"><span class="comment">;; "(1 two 3)"</span></div><div class="line"></div><div class="line">(<span class="name">substring</span> (<span class="name">format</span> <span class="string">"%s"</span> '(<span class="number">1</span> <span class="string">"two"</span> <span class="number">3</span>)) <span class="number">1</span> <span class="number">-1</span>)</div><div class="line"><span class="comment">;; "1 two 3"</span></div></pre></td></tr></table></figure>
+<h1 id="Associate-List"><a href="#Associate-List" class="headerlink" title="Associate List"></a>Associate List</h1><blockquote>
+<p>这是一个 cons 对, 类似 (cons key value) . alist</p>
+</blockquote>
+<p><code>(cons a b)</code> 也可以写为 <code>(a . b)</code></p>
+<p>key, value 都可以是任意类型.</p>
+<p>可以有重复的 key , 因为它是按顺序来维护的.</p>
+<h2 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">(<span class="name">setq</span> x</div><div class="line">      '((<span class="string">"mary"</span> . <span class="number">23</span>)</div><div class="line">        (<span class="string">"john"</span> . <span class="number">24</span>)</div><div class="line">        (<span class="string">"smith"</span> . <span class="number">33</span>)))</div></pre></td></tr></table></figure>
+<h2 id="通过-key-获取键值对"><a href="#通过-key-获取键值对" class="headerlink" title="通过 key 获取键值对"></a>通过 key 获取键值对</h2><p><code>(assoc key alist)</code></p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">(<span class="name">setq</span> x</div><div class="line">      '((<span class="string">"mary"</span> . <span class="number">23</span>)</div><div class="line">        (<span class="string">"john"</span> . <span class="number">24</span>)</div><div class="line">        (<span class="string">"smith"</span> . <span class="number">33</span>)))</div><div class="line"></div><div class="line"><span class="comment">;; get the pair with key "john"</span></div><div class="line">(<span class="name">assoc</span> <span class="string">"john"</span> x)</div><div class="line"><span class="comment">; returns ("john" . 24)</span></div></pre></td></tr></table></figure>
+<p>获取了 cons pair 后, 就可以使用 <code>car</code> 来获取第一个元素 (key) , <code>cdr</code> 来获取最后一个元素 (value) 了.</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">(<span class="name">setq</span> x</div><div class="line">      '((<span class="string">"mary"</span> . <span class="number">23</span>)</div><div class="line">        (<span class="string">"john"</span> . <span class="number">24</span>)</div><div class="line">        (<span class="string">"smith"</span> . <span class="number">33</span>)))</div><div class="line"></div><div class="line"><span class="comment">;; get the value with key "john"</span></div><div class="line">(<span class="name">cdr</span> (<span class="name">assoc</span> <span class="string">"john"</span> x))</div><div class="line"><span class="comment">; returns 24</span></div></pre></td></tr></table></figure>
+<h2 id="通过-value-来获取键值对"><a href="#通过-value-来获取键值对" class="headerlink" title="通过 value 来获取键值对"></a>通过 value 来获取键值对</h2><p><code>(rassq value alist)</code> </p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">(<span class="name">setq</span> x</div><div class="line">      '((<span class="string">"mary"</span> . <span class="number">23</span>)</div><div class="line">        (<span class="string">"john"</span> . <span class="number">24</span>)</div><div class="line">        (<span class="string">"smith"</span> . <span class="number">33</span>)))</div><div class="line"></div><div class="line"><span class="comment">;; get the pair with value 24</span></div><div class="line">(<span class="name">rassoc</span> <span class="number">24</span> x)</div><div class="line"><span class="comment">; returns ("john" . 24)</span></div></pre></td></tr></table></figure>
+<h1 id="Property-List"><a href="#Property-List" class="headerlink" title="Property List"></a>Property List</h1><p><code>&#39;(key1 val1 key2 val2 …)</code> </p>
+<p>它通常用于小于50个元素的键值对.它与 alist 的函数一样. 如果超过100个元素, 则建议使用 alist.</p>
+<h2 id="访问-1"><a href="#访问-1" class="headerlink" title="访问"></a>访问</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">(<span class="name">plist-get</span> '(x <span class="number">1</span> y <span class="number">2</span>) 'y) <span class="comment">; 2</span></div><div class="line"></div><div class="line"><span class="comment">;; non existent key returns nil</span></div><div class="line">(<span class="name">plist-get</span> '(x <span class="number">1</span> y <span class="number">2</span>) 'b) <span class="comment">; nil</span></div></pre></td></tr></table></figure>
+<h2 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">(<span class="name">setq</span> xx '(a <span class="number">1</span> b <span class="number">2</span>))</div><div class="line"></div><div class="line"><span class="comment">;; set value to a existing key</span></div><div class="line">(<span class="name">setq</span> xx</div><div class="line">      (<span class="name">plist-put</span> xx 'b <span class="number">3</span>))</div><div class="line"><span class="comment">;; must use setq, because plist-put works by return value</span></div><div class="line"></div><div class="line">(<span class="name">plist-get</span> xx 'b) <span class="comment">; 3</span></div><div class="line"></div><div class="line"><span class="comment">;; set value to new key</span></div><div class="line">(<span class="name">setq</span> xx</div><div class="line">      (<span class="name">plist-put</span> xx 'd <span class="number">3</span>))</div><div class="line"></div><div class="line">(<span class="name">plist-get</span> xx 'd) <span class="comment">; 3</span></div></pre></td></tr></table></figure>
+<h2 id="检测是否存在"><a href="#检测是否存在" class="headerlink" title="检测是否存在"></a>检测是否存在</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">(<span class="name">setq</span> xx '(a <span class="number">1</span> b <span class="number">2</span>))</div><div class="line"></div><div class="line"><span class="comment">;; check if a key exist</span></div><div class="line">(<span class="name">plist-member</span> xx 'b)</div></pre></td></tr></table></figure>
+<h1 id="Symbol-Property-List"><a href="#Symbol-Property-List" class="headerlink" title="Symbol Property List"></a>Symbol Property List</h1><h2 id="设置-1"><a href="#设置-1" class="headerlink" title="设置"></a>设置</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(<span class="name">put</span> 'ff 'xx <span class="number">5</span>)</div><div class="line"></div><div class="line">(<span class="name">setplist</span> 'ff '(a <span class="number">1</span> b <span class="number">2</span>))</div></pre></td></tr></table></figure>
+<h2 id="访问-2"><a href="#访问-2" class="headerlink" title="访问"></a>访问</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(<span class="name">get</span> 'ff 'xx) <span class="comment">; nil</span></div><div class="line"></div><div class="line">(<span class="name">symbol-plist</span> 'ff )</div></pre></td></tr></table></figure>
+<h1 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h1><h2 id="mapcar"><a href="#mapcar" class="headerlink" title="mapcar"></a>mapcar</h2><p><code>(mapcar FUNCTION SEQUENCE)</code>  </p>
+<p>它会将函数 <code>FUNCTION</code> 应用到 <code>SEQUENCE</code> 中的每一个元素, 然后返回一个 list 的结果.</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(<span class="name">mapcar</span> '<span class="number">1</span>+ [<span class="number">3</span> <span class="number">4</span> <span class="number">5</span>] ) <span class="comment">; (4 5 6)</span></div><div class="line"></div><div class="line">(<span class="name">mapcar</span> '<span class="number">1</span>+ '(<span class="number">3</span> <span class="number">4</span> <span class="number">5</span>)) <span class="comment">; (4 5 6)</span></div></pre></td></tr></table></figure>
+<p>函数为 lambda</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(<span class="name">mapcar</span></div><div class="line"> (<span class="name">lambda</span> (<span class="name">x</span>) (<span class="name">elt</span> x <span class="number">0</span>))</div><div class="line"> [[<span class="number">1</span> <span class="number">2</span>] [<span class="number">3</span> <span class="number">4</span>]] ) <span class="comment">; ⇒ (1 3)</span></div></pre></td></tr></table></figure>
+<h2 id="mapc"><a href="#mapc" class="headerlink" title="mapc"></a>mapc</h2><p>类似 mapcar ,但返回值是 nil</p>
+<h1 id="loop-list"><a href="#loop-list" class="headerlink" title="loop list"></a>loop list</h1><h2 id="dolist"><a href="#dolist" class="headerlink" title="dolist"></a>dolist</h2><p><code>(dolist (VAR LIST) BODY)</code> </p>
+<p>循环处理 LISP , VAR 表示 LISP 的元素, 在 BODY 里应用处理. 返回值是 nil</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">(<span class="name">let</span> (</div><div class="line">      (<span class="name">xlist</span> (<span class="name">number-sequence</span> <span class="number">97</span> <span class="number">122</span>)) <span class="comment">;; list 97 to 122</span></div><div class="line">      )</div><div class="line">  (<span class="name">dolist</span> (<span class="name">n</span> xlist) (<span class="name">insert</span> n)))</div></pre></td></tr></table></figure>
+<h2 id="dotimes"><a href="#dotimes" class="headerlink" title="dotimes"></a>dotimes</h2><p><code>(dotimes (VAR COUNT) BODY …)</code></p>
+<p>返回值是 nil . VAR 表示的是从 0 到 count 之间的步进数.(包括0, 但&lt;count)</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(<span class="name">dotimes</span> (<span class="name">i</span> <span class="number">4</span>)</div><div class="line">  (<span class="name">insert</span> (<span class="name">number-to-string</span> i)))</div><div class="line"><span class="comment">;; inserts "0123", returns nil</span></div></pre></td></tr></table></figure>
+<p><code>(dotimes (VAR COUNT RESULT) BODY …)</code></p>
+<p>通过计算  RESULT 来获得获取值</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">(<span class="name">let</span> ((<span class="name">v</span> [<span class="number">3</span> <span class="number">4</span> <span class="number">5</span>]))</div><div class="line">  (<span class="name">dotimes</span> (<span class="name">i</span> (<span class="name">length</span> v))</div><div class="line">    (<span class="name">insert</span></div><div class="line">     (<span class="name">number-to-string</span></div><div class="line">      (<span class="name">elt</span> v i))))) <span class="comment">; inserts 345</span></div></pre></td></tr></table></figure>
+<h2 id="while"><a href="#while" class="headerlink" title="while"></a>while</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">(<span class="name">let</span> ((<span class="name">mylist</span> '(a b c)))</div><div class="line">  (<span class="name">while</span> mylist</div><div class="line">    (<span class="name">message</span> <span class="string">"%s"</span> (<span class="name">pop</span> mylist))</div><div class="line">    (<span class="name">sleep-for</span> <span class="number">1</span>)))</div></pre></td></tr></table></figure>
+<h1 id="过滤-list"><a href="#过滤-list" class="headerlink" title="过滤 list"></a>过滤 list</h1><p><a href="http://ergoemacs.org/emacs_manual/elisp/Sequence-Functions.html" target="_blank" rel="noopener">更多过滤函数</a></p>
+<blockquote>
+<p>在 25.1 及之后版本</p>
+</blockquote>
+<p>依赖: <code>(require &#39;seq)</code></p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">(<span class="name">require</span> 'seq)</div><div class="line"></div><div class="line">(<span class="name">setq</span> xx '(<span class="number">1</span> <span class="string">"a"</span> <span class="number">2</span>))</div><div class="line"></div><div class="line"><span class="comment">;; remove items that's not a number</span></div><div class="line">(<span class="name">seq-filter</span> 'numberp xx)</div><div class="line"><span class="comment">;; (1 2)</span></div><div class="line"></div><div class="line"><span class="comment">;; old remain unchanged</span></div><div class="line">xx</div><div class="line"><span class="comment">;; '(1 "a" 2)</span></div></pre></td></tr></table></figure>
+<h1 id="Hash-Table"><a href="#Hash-Table" class="headerlink" title="Hash Table"></a>Hash Table</h1><h2 id="创建-1"><a href="#创建-1" class="headerlink" title="创建"></a>创建</h2><p><code>(make-hash-table :test &#39;equal)</code> 它会返回一个新的 hashtable</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(<span class="name">setq</span> myHash (<span class="name">make-hash-table</span> <span class="symbol">:test</span> 'equal))</div></pre></td></tr></table></figure>
+<h2 id="添加"><a href="#添加" class="headerlink" title="添加"></a>添加</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(<span class="name">puthash</span> <span class="string">"joe"</span> <span class="string">"19"</span> myHash)</div></pre></td></tr></table></figure>
+<h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(<span class="name">remhash</span> <span class="string">"liz"</span> myHash)</div></pre></td></tr></table></figure>
+<h2 id="获取-key-的值"><a href="#获取-key-的值" class="headerlink" title="获取 key 的值"></a>获取 key 的值</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(<span class="name">gethash</span> <span class="string">"jane"</span> myHash)</div></pre></td></tr></table></figure>
+<h2 id="计算长度"><a href="#计算长度" class="headerlink" title="计算长度"></a>计算长度</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(<span class="name">hash-table-count</span> myHash)</div></pre></td></tr></table></figure>
+<h2 id="删除所有元素"><a href="#删除所有元素" class="headerlink" title="删除所有元素"></a>删除所有元素</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(<span class="name">clrhash</span> myHash)</div></pre></td></tr></table></figure>
+<h2 id="检测元素是否存在"><a href="#检测元素是否存在" class="headerlink" title="检测元素是否存在"></a>检测元素是否存在</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(<span class="name">gethash</span> myKey myHash)</div></pre></td></tr></table></figure>
+<p>如果存在, 则返回值, 否则返回 nil.</p>
+<h1 id="Lisp-Symbol"><a href="#Lisp-Symbol" class="headerlink" title="Lisp Symbol"></a>Lisp Symbol</h1><p>Symbol 的概念类似于其他编程语言的标识符, 除了:</p>
+<ul>
+<li>lisp symbol 可以持有未eval过的, 只是表示自身的, 一个内部名字. 在这种意义下, 它类似于 string.</li>
+<li>lisp symbol 可以存储超过一个的值.</li>
+</ul>
+<h2 id="symbol-的-cell"><a href="#symbol-的-cell" class="headerlink" title="symbol 的 cell"></a>symbol 的 cell</h2><p>每一个 lisp symbol 都拥有以下的 cell 来存储东西</p>
+<ul>
+<li>“print name” cell :  一个字符串, 与 symbol 字面值一样. 它是自动设置的, 不能被更改.</li>
+<li>“value” cell: 存储 symbol 的值, 当该 cell 不为空时, 该 symbol 被视为一个变量.</li>
+<li>“function” cell: 存储函数定义的对象, Lisp 宏 macros, 或其他可以像 function 那样执行的对象.</li>
+<li>“property list” cell: 持有一个 name/value 对的list. 用于存储 symbol 的元数据, 例如: 函数的状态, 字体规则(用于语法高亮), 是否废弃等.</li>
+</ul>
+<p><code>function cell</code> 或 <code>value cell</code> 可能为空, 这时就被称为 <code>void</code> . 当你获取一个 <code>cell</code> 的 <code>value</code> 是 <code>void</code> 时, 会产生一个 lisp 错误. (一个空emtpy cell, 不同于有一个 value 为 nil 的 cell).</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">;; get symbol's name cell value</span></div><div class="line">(<span class="name">symbol-name</span> 'sin) <span class="comment">; "sin"</span></div><div class="line"></div><div class="line"><span class="comment">;; get symbol's value cell value</span></div><div class="line">(<span class="name">symbol-value</span> 'sin) <span class="comment">; void-variable error</span></div><div class="line"><span class="comment">;; because the value cell of the symbol sin is void</span></div><div class="line"><span class="comment">;; or, we just say that sin isn't a variable</span></div><div class="line"></div><div class="line"><span class="comment">;; get symbol's function cell value</span></div><div class="line">(<span class="name">symbol-function</span> 'sin) <span class="comment">;#&lt;subr sin&gt;</span></div><div class="line"><span class="comment">;; the value is a primitive function (written in C), and has print form of #&lt;subr sin&gt;</span></div><div class="line"></div><div class="line"><span class="comment">;; get symbol's property list cell value</span></div><div class="line">(<span class="name">symbol-plist</span> 'sin) <span class="comment">; (side-effect-free t)</span></div></pre></td></tr></table></figure>
+<h2 id="quoting-symbol"><a href="#quoting-symbol" class="headerlink" title="quoting symbol"></a>quoting symbol</h2><p>一个 symbol , 典型情况下是用于计算来获取它的 value 的. 但你可以通过 quoting symbol 来停止这样子. 例如 <code>(quote x)</code> . 你可以想象 <code>quote</code> 是<code>拥有 evaluation</code> (仅仅持有它, 而不要去计算它).</p>
+<h2 id="什么时候需要-quote-symbol"><a href="#什么时候需要-quote-symbol" class="headerlink" title="什么时候需要 quote symbol"></a>什么时候需要 quote symbol</h2><p>一些函数, 它会自动为你进行 quote 参数. 但这并没有语法上的方式来告诉你, 一个函数是否需要它的参数是 quote 的. 最好就是查看函数的文档 (Alt+x describe-function) 来查看一个参数是否需要 quote .</p>
+<p>函数 <code>set</code> 与 <code>setq</code> 几乎是一样的, 最主要的不同是 <code>set</code> 并不会自动将第一个参数进行 quote, 而 <code>setq</code> 会.</p>
+<p>例如</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(<span class="name">setq</span> f '<span class="number">1</span>+)</div><div class="line">(<span class="name">setq</span> f 'cos)</div><div class="line">(<span class="name">setq</span> f 'sqrt)</div></pre></td></tr></table></figure>
+<p>我们用 <code>f</code> 来包装, 因为我们不确定到底使用哪个函数, 直到运行时才能知道.</p>
+<p>然后</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">;; here's our data</span></div><div class="line">(<span class="name">setq</span> mylist '(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>))</div><div class="line"></div><div class="line"><span class="comment">;; normally, when using mapcar, we want first arg quoted</span></div><div class="line">(<span class="name">mapcar</span> '<span class="number">1</span>+ mylist) <span class="comment">; (2 3 4)</span></div><div class="line"></div><div class="line"><span class="comment">;; here, we don't want first arg quoted</span></div><div class="line">(<span class="name">mapcar</span> f mylist) <span class="comment">; (1.0 1.4142135623730951 1.7320508075688772)</span></div></pre></td></tr></table></figure>
+<h2 id="检测个值是否是-symbol"><a href="#检测个值是否是-symbol" class="headerlink" title="检测个值是否是 symbol"></a>检测个值是否是 symbol</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">(<span class="name">setq</span> x1 <span class="number">123</span> )</div><div class="line"></div><div class="line">(<span class="name">symbolp</span> x1) <span class="comment">; nil</span></div><div class="line"><span class="comment">;; nil, because x1 is evaluated, and that value is 123, not a symbol</span></div><div class="line"></div><div class="line">(<span class="name">symbolp</span> 'x1) <span class="comment">; t</span></div></pre></td></tr></table></figure>
+<h2 id="获取-symbol-的四个-cell-值"><a href="#获取-symbol-的四个-cell-值" class="headerlink" title="获取 symbol 的四个 cell 值"></a>获取 symbol 的四个 cell 值</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">;; get symbol's name cell value</span></div><div class="line">(<span class="name">symbol-name</span> 'sin) <span class="comment">; "sin"</span></div><div class="line"></div><div class="line"><span class="comment">;; get symbol's value cell value</span></div><div class="line">(<span class="name">symbol-value</span> 'sin) <span class="comment">; void-variable error</span></div><div class="line"><span class="comment">;; because the value cell of the symbol sin is void</span></div><div class="line"><span class="comment">;; or, we just say that sin isn't a variable</span></div><div class="line"></div><div class="line"><span class="comment">;; get symbol's function cell value</span></div><div class="line">(<span class="name">symbol-function</span> 'sin) <span class="comment">;#&lt;subr sin&gt;</span></div><div class="line"><span class="comment">;; the value is a primitive function (written in C), and has print form of #&lt;subr sin&gt;</span></div><div class="line"></div><div class="line"><span class="comment">;; get symbol's property list cell value</span></div><div class="line">(<span class="name">symbol-plist</span> 'sin) <span class="comment">; (side-effect-free t)</span></div></pre></td></tr></table></figure>
+<h2 id="设置-symbol-的四个-cell-值"><a href="#设置-symbol-的四个-cell-值" class="headerlink" title="设置 symbol 的四个 cell 值"></a>设置 symbol 的四个 cell 值</h2><blockquote>
+<p>名字是不能修改的.</p>
+</blockquote>
+<h3 id="设置-value-cell"><a href="#设置-value-cell" class="headerlink" title="设置 value cell"></a>设置 value cell</h3><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">;; set a symbol's value cell</span></div><div class="line">(<span class="name">setq</span> y <span class="string">"yes yes"</span>)</div><div class="line"></div><div class="line"><span class="comment">;; get it</span></div><div class="line">(<span class="name">symbol-value</span> 'y) <span class="comment">; "yes yes"</span></div></pre></td></tr></table></figure>
+<p>检测 value cell 是否为空</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">(<span class="name">boundp</span> 'h) <span class="comment">; nil</span></div><div class="line"></div><div class="line">(<span class="name">setq</span> h <span class="number">4</span>)</div><div class="line"></div><div class="line">(<span class="name">boundp</span> 'h) <span class="comment">; t</span></div></pre></td></tr></table></figure>
+<h3 id="设置-function-cell"><a href="#设置-function-cell" class="headerlink" title="设置 function cell"></a>设置 function cell</h3><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">;; a function that returns 4</span></div><div class="line">(<span class="name">defun</span> z () <span class="number">4</span>)</div><div class="line"><span class="comment">;; Note: return value of defun is not defined</span></div><div class="line"></div><div class="line"><span class="comment">;; get a symbol's function cell value</span></div><div class="line">(<span class="name">symbol-function</span> 'z) <span class="comment">; (lambda nil 4)(boundp 'h) ; nil</span></div></pre></td></tr></table></figure>
+<p>检测是否是 function</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">(<span class="name">fboundp</span> 'f) <span class="comment">; nil</span></div><div class="line"></div><div class="line"><span class="comment">;; define a function that return 3</span></div><div class="line">(<span class="name">defun</span> f () <span class="number">3</span>)</div><div class="line"></div><div class="line"><span class="comment">;; now the fuction cell is filled</span></div><div class="line">(<span class="name">fboundp</span> 'f) <span class="comment">; t</span></div></pre></td></tr></table></figure>
+<h3 id="设置-property-cell"><a href="#设置-property-cell" class="headerlink" title="设置 property cell"></a>设置 property cell</h3><p>参见上面的 Property List</p>
+<h3 id="综合例子"><a href="#综合例子" class="headerlink" title="综合例子"></a>综合例子</h3><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">(<span class="name">setq</span> x <span class="string">"hello world"</span>)</div><div class="line"></div><div class="line">(<span class="name">defun</span> x (<span class="name">a</span> b)</div><div class="line">  <span class="string">"a + b"</span></div><div class="line">  (<span class="name">+</span> a b)</div><div class="line">  )</div><div class="line"></div><div class="line">(<span class="name">x</span> <span class="number">3</span> <span class="number">4</span>)<span class="comment">;7</span></div><div class="line">(<span class="name">message</span> x)<span class="comment">;"hello world"</span></div><div class="line"></div><div class="line">(<span class="name">symbol-name</span> 'x)<span class="comment">;"x"</span></div><div class="line">(<span class="name">symbol-value</span> 'x)<span class="comment">;"hello world"</span></div><div class="line">(<span class="name">symbol-function</span> 'x)<span class="comment">; (lambda (a b) "a + b" (+ a b))</span></div><div class="line">(<span class="name">symbol-plist</span> 'x)<span class="comment">; (group-documentation "The X Window system.")</span></div></pre></td></tr></table></figure>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

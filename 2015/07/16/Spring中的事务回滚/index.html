@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2015/07/16/Spring中的事务回滚/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="开启声明式事务spring.xml里配置 12345678910111213141516171819202122232425262728293031323334&amp;lt;bean id=&quot;dataSource&quot; class=&quot;org.apache.commons.dbcp.BasicDataSource&quot;&amp;gt;		&amp;lt;property name=&quot;driverClassName&quot; value=">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring中的事务回滚">
@@ -206,7 +207,7 @@
 <h2 id="默认情况下Spring对事务回滚策略的处理"><a href="#默认情况下Spring对事务回滚策略的处理" class="headerlink" title="默认情况下Spring对事务回滚策略的处理"></a>默认情况下Spring对事务回滚策略的处理</h2><blockquote>
 <p>在 Spring 的文档里, 可以看到这一句话: <code>Any RuntimeException triggers rollback, and any checked Exception does not.</code></p>
 </blockquote>
-<p><a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/transaction.html" target="_blank" rel="external">spring-framework-reference/html/transaction.html</a></p>
+<p><a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/transaction.html" target="_blank" rel="noopener">spring-framework-reference/html/transaction.html</a></p>
 <p>可以看到, 对于检查型异常, 默认情况下是不会对事务进行回滚的</p>
 <h2 id="让事务进行按自己的策略进行回滚"><a href="#让事务进行按自己的策略进行回滚" class="headerlink" title="让事务进行按自己的策略进行回滚"></a>让事务进行按自己的策略进行回滚</h2><h3 id="检查型异常"><a href="#检查型异常" class="headerlink" title="检查型异常"></a>检查型异常</h3><p>如果有检查型异常, 而又要进行事务回滚, 这时可以在检查型异常里的 <code>catch</code> 块里, 再次抛出 <code>RuntimeException</code> 即可.</p>
 <h3 id="RuntimeException"><a href="#RuntimeException" class="headerlink" title="RuntimeException"></a>RuntimeException</h3><p>如果有运行时异常, Spring会自动进行事务回滚.</p>
@@ -215,8 +216,8 @@
 <p>这时, Spring就会按指定的异常及其子类异常类型来进行事务回滚了. 如果配置了<code>Exception.class</code>, 那么任何<code>Exception</code>及其子类抛出的异常, 都会进行事务回滚.</p>
 <p>注意, 是要抛出异常. 如果你捕获了异常的而且又没有抛出新的异常的话, 就不会进行事务回滚了.</p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
-<li><a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/transaction.html" target="_blank" rel="external">Spring Doc</a></li>
-<li><a href="http://cn-done.iteye.com/blog/775519" target="_blank" rel="external">ITEye</a></li>
+<li><a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/transaction.html" target="_blank" rel="noopener">Spring Doc</a></li>
+<li><a href="http://cn-done.iteye.com/blog/775519" target="_blank" rel="noopener">ITEye</a></li>
 </ul>
 
                                 

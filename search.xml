@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Elisp 中读取交互式调用的参数]]></title>
+    <url>%2F2018%2F01%2F04%2FElisp-%E4%B8%AD%E8%AF%BB%E5%8F%96%E4%BA%A4%E4%BA%92%E5%BC%8F%E8%B0%83%E7%94%A8%E7%9A%84%E5%8F%82%E6%95%B0%2F</url>
+    <content type="text"><![CDATA[interactive当使用 interactive 时, 可以使一个 lisp 函数变成一个可交互式调用的命令. 它的形式为 1interactive arg-descriptor arg-descriptor 参数标识及意义为空 或 nil表示该命令是通过无参数来调用的. 这会导致快速错误, 如果命令要求一个或多个参数的话. 为字符串该字符串的内容是通过换行符来分割的元素序列(sequence), 每一行一个参数. 每一个元素都是由一个代码字符 以及可选的提示字符组成的. 例如 1(interactive "P\nbFrobnicate buffer: ") 代码字符 P 设置为原始命令前缀的第一个参数. bFrobnicate buffer: 提示用户语为 Frobnicate buffer: 来输入一个存在的 buffer , 它会传递到命令的第二个参数, 也就是最后一个参数. 提示符字符串, 可以使用 % 来包含前一个参数的值. 例如: 1(interactive "bBuffer to rename: \nsRename buffer %s to: ") 这里的 % 就表示前端输入的参数值. 为一个 Lisp 表达式它可以执行该表达式然后再将结果传递给命令.]]></content>
+      <tags>
+        <tag>emacs</tag>
+        <tag>elisp</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[李杀的Elisp学习笔记]]></title>
+    <url>%2F2018%2F01%2F03%2F%E6%9D%8E%E6%9D%80%E7%9A%84Elisp%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%2F</url>
+    <content type="text"><![CDATA[http://ergoemacs.org/emacs/elisp_basics.html Emacs Lisp 基础eval 代码1(+ 3 4) 方法有: 将光标移到闭括号外, 然后调用 eval-last-sexp (C-x C-e) , 然后 emacs 就会计算与该右括号匹配的左括号及之间的表达式了. 你也可以选择某一段代码, 然后 eval-region (按 Alt+x 然后输入该命令.) Alt+x ielm , 它会开启一个交互式的 elisp 命令行窗口. 查看函数的文档: Alt+x describe-function (C-h f) 打印123(message "hi")(message "hi, %s" "emacs") 它将输出到一个名为 *Messages* 的 buffer 中. 你可以通过 Alt+x view-echo-area-messages (C-h e) 来切换到该 buffer. 算术运算123(+ 4 5 1)(% 7 4)... 注意, 2. 表示的是整数, 2.0 才是浮点数. 断言函数. 有些函数名是以 p 结尾的, 常常表示它会返回 true 或者 false . t 表示是 true, nil 表示是 false 如 12(integerp 3.) ; t(floatp 3.0) ; t string 与 number 的转换12(string-to-number "3")(number-to-string 3) true, false在 elisp 中, nil 表示是 false , 其他所有的都会被视为 true . 注意, nil 是等同于空表 () ,所以 () 也表示 false 为了方便, t 是用作 true . 布尔函数and 和 or123(and t nil)(or t nil) 比较数字12345(&lt; 3 4)(&gt; 3 4)(/= 3 4) ; t /= 是不等于符号. (= 3 3) 字符串比较12345(equal "abc" "abc") ;t(string-equal "abc" "abc") ;t(string-equal "abc" 'abc) ;t equal 是通用的检测, 如果两个操作数是相同的类型并且是相同的值, 才为 true , 否则为 false . 变量全局变量123(setq x 1)(setq a 3 b 3 c 7); a=3, b=3, c=7 局部变量1234567891011121314(let (var1 var2 ..) body)(let (a b) (setq a 3) (setq b 4) (+ a b)); returns 7或(let ((var varValue) (var2 var2Value)...) body)(let ((a 3) (b 4)) (+ a b)); returns 7 if then else1234567(if test body)(if test true_body false_body)例如(if (&lt; 3 2) 7 8) 表达式块1234(progn (message "a") (message "b"))//等同于(message "a") (message "b") 即 (progn ...) 是类似于 C 风格的 {...} progn 的返回值是最后一个表达式的值. 循环123456789(while test body)例如(setq x 0)(while (&lt; x 4) (print (format "number is %d" x)) (setq x (1+ x))) 定义一个函数(function)1(defun function_name (p1 p2 ...) "doc_string" body) 定义一个命令(command) command 表示的是用户可以通过 execute-extended-command 即 (Alt+x) 来调用的. 当一个函数也是一条命令时, 我们称该函数是一个可交互式使用的. 为了使函数可以交互式使用, 可以添加 (interactive) 到 doc_string 之后的右边即可. 例如: 1234(defun yay () "Insert “Yay!” at cursor position." (interactive) (insert "Yay!")) 以下是一个定义的模板 1234567891011(defun myCommand () "One sentence summary of what this command do.More detailed documentation here." (interactive) (let (localVar1 localVar2 …) ; do something here … ; … ; last expression is returned )) Emacs Lisp 的文本处理光标位置1234567891011(point) ; 返回当前光标的位置(region-beginning) ;(region-end) ;(line-beginning-position)(line-end-position)(point-min)(point-max) 移动光标以及搜索123456789101112131415(goto-char 39)(forward-char 4)(backward-char 4); 文本搜索(search-forward "some")(search-backward "some"); 正则搜索(re-search-forward "[0-9]")(re-search-backward "[0-9]")(skip-chars-forward "a-z")(skip-chars-backward "a-z") 删除/插入/修改1234567891011(delete-char 9)(delete-region 3 10)(insert "hello");获取从光标位置 71~300 之间的字符串(setq x (buffer-substring 71 300)); 将位置 71~3000 之间的字符串转换为大写(capitalize-region 71 300) Strings12345(length "abc")(substring "abcdefg" 3 4)(replace-regexp-in-string "[0-9]" "X" "abc123");; returns abcXXX Buffers123456789101112131415(buffer-name)(buffer-file-name);切换到名为 xyz 的 buffer(set-buffer "xyz")(save-buffer)(kill-buffer "xyz"); 临时设置一个 buffer 为当前 buffer 来工作.(with-current-buffer "xyz" ;; do something) 文件 files123456789101112131415161718192021222324252627; 打开一个文件(find-file "~/"); 等同 save as(write-file path); 将文件的内容插入到当前位置(insert-file-contents path); 追加一个文本块到文件(append-to-file start-pos end-pos path)(rename-file file-name new-name)(copy-file old-name new-name)(delete-file file-name); dir path(file-name-directory full-path); filename part(file-name-nondirectory full-path)(file-name-extension file-name)(file-name-sans-extension file-name) 以下是一个插入p 标签的例子 12345(defun insert-p-tag () "Insert &lt;p&gt;&lt;/p&gt; at cursor point." (interactive) (insert "&lt;p&gt;&lt;/p&gt;") (backward-char 4)) 基本函数1234567891011; 返回当前光标所在的单词内容(thing-at-point 'word); 返回当前光标所在的单词带有连字符或下划线的内容(thing-at-point 'symbol); 返回当前光标所在的行内容(thing-at-point 'line); 返回当前光标所在单词的开始和结束位置(bounds-of-thing-at-point 'word) shell 中执行 script1emacs --script process_log.el 获取命令行的参数命令行参数会保存在一个内部 elisp 变量 argv 中.它是一个 list, 每一项都是命令行中的item. 1234(message "argv 0: %s" (elt argv 0)) ; %s is for string(message "argv 1: %s" (elt argv 1))(message "argv 2: %s" (elt argv 2))(message "argv 3: %s" (elt argv 3)) 123456emacs --script test.el uni 2 -triargv 0: "uni"argv 1: "2"argv 2: "-tri"argv 3: nil Elisp 数据结构elips 中最重要的类似 list 的数据类型: sequence (并不是一个实际的数据类型) ,又为为 List 和 Array (并不是实际的数据类型) List 又分为 (Associate List 和 Property List) Array 又分为(Vector 和 String) vector 类似 Java 的数组 读写元素是常量时间 元素可以是任意类型 元素不能被添加或删除. 即 vector 的长度是固定的. 元素的值可以被修改 创建 vector123456(setq v (vector 3 4 5))(setq x 7)(setq v (vector 3 x 5))v ; [3 7 5] 如果你不想这些元素被 eval , 则可以写成: 1234567(setq x 7);; create a vector of elements 3 x 5;; each element is NOT be evaluated(setq v [3 x 5])v ; [3 x 5] . the x remains a symbol, not 7 访问123(aref array n) ;返回 array 数组在索引为 n 的元素(elt sequence n) ;返回 sequence 在索引为 n 的元素. emacs 文档中的 sequence , 你可以认为是 list 或 vector 例如 123(aref ["a" "b" "c"] 0) ; ⇒ "a"(elt ["a" "b" "c"] 0) ; ⇒ "a" elt 是更通用的用法, 它可以同时用于 vector 和 list. 修改(aset ARRAY IDX NEWELT) , 返回值是 NEWELT 123(setq v [3 4 5])(aset v 0 "b")v ; ⇒ ["b" 4 5] 嵌套 vector1[[1 2] [3 4]] join vector, 转换 list 为 vector12345(vconcat [3 4] ["a" "b"]) ; ⇒ [3 4 "a" "b"](vconcat [3 4] '("a" "b")) ; ⇒ [3 4 "a" "b"](vconcat [3 4] "ab") ; ⇒ [3 4 97 98] 转换 vector 为 list(append sequence1 sequence2 …) 123(append [1 2 3] [4 5] nil);; (1 2 3 4 5);; proper list list创建 list(list a b …) 123(setq mylist (list 1 "b" 3))(message "%S" mylist) 如果你不想元素被进行 eval , 可以这样子写 &#39;(a b …) 它等同于 (quote (list a b …)) 12345; assign a list to a var(setq mylist '(a b c)); prints a list(message "%S" mylist) 数字的 list12345(number-sequence n m step)(number-sequence n m) (number-sequence n) 长度1(length list) 获取 list 的元素1234567891011(car list) ;first element(nth n list) ;nth element(car (last list)) ;last element(cdr list) ;2nd to last elements.(nthcdr n list) ;nth to last elements.(butlast list n) ;without the last n elements. 向前追加 list1(cons x list) ;Return a new list, with x added to front. (prepend) 向后追加 list1(append list1 list2) ;Return a new list, join two lists 修改 list 变量12345(push list) ;Add a element to the front variable. Returns the new list.(pop list) ;Remove first element from the variable. Returns the removed element.(nbutlast list n) ;Remove last n elements from the variable. Returns the new value of the variable.(setcar list x) ;replaces the first element in list with x. Returns x.(setcdr list x) ;replaces the rest of elements in list with x. Returns x. 123(setq mylist '("a" "b" "c"))(pop mylist) ; "a"(print mylist) ; ("b" "c") list 转换为 string12345678(mapconcat 'identity '("ab" "cd" "ef") ",");; "ab,cd,ef"(format "%s" '(1 "two" 3));; "(1 two 3)"(substring (format "%s" '(1 "two" 3)) 1 -1);; "1 two 3" Associate List 这是一个 cons 对, 类似 (cons key value) . alist (cons a b) 也可以写为 (a . b) key, value 都可以是任意类型. 可以有重复的 key , 因为它是按顺序来维护的. 创建1234(setq x '(("mary" . 23) ("john" . 24) ("smith" . 33))) 通过 key 获取键值对(assoc key alist) 12345678(setq x '(("mary" . 23) ("john" . 24) ("smith" . 33)));; get the pair with key "john"(assoc "john" x); returns ("john" . 24) 获取了 cons pair 后, 就可以使用 car 来获取第一个元素 (key) , cdr 来获取最后一个元素 (value) 了. 12345678(setq x '(("mary" . 23) ("john" . 24) ("smith" . 33)));; get the value with key "john"(cdr (assoc "john" x)); returns 24 通过 value 来获取键值对(rassq value alist) 12345678(setq x '(("mary" . 23) ("john" . 24) ("smith" . 33)));; get the pair with value 24(rassoc 24 x); returns ("john" . 24) Property List&#39;(key1 val1 key2 val2 …) 它通常用于小于50个元素的键值对.它与 alist 的函数一样. 如果超过100个元素, 则建议使用 alist. 访问1234(plist-get '(x 1 y 2) 'y) ; 2;; non existent key returns nil(plist-get '(x 1 y 2) 'b) ; nil 设置1234567891011121314(setq xx '(a 1 b 2));; set value to a existing key(setq xx (plist-put xx 'b 3));; must use setq, because plist-put works by return value(plist-get xx 'b) ; 3;; set value to new key(setq xx (plist-put xx 'd 3))(plist-get xx 'd) ; 3 检测是否存在1234(setq xx '(a 1 b 2));; check if a key exist(plist-member xx 'b) Symbol Property List设置123(put 'ff 'xx 5)(setplist 'ff '(a 1 b 2)) 访问123(get 'ff 'xx) ; nil(symbol-plist 'ff ) Mapmapcar(mapcar FUNCTION SEQUENCE) 它会将函数 FUNCTION 应用到 SEQUENCE 中的每一个元素, 然后返回一个 list 的结果. 123(mapcar '1+ [3 4 5] ) ; (4 5 6)(mapcar '1+ '(3 4 5)) ; (4 5 6) 函数为 lambda 123(mapcar (lambda (x) (elt x 0)) [[1 2] [3 4]] ) ; ⇒ (1 3) mapc类似 mapcar ,但返回值是 nil loop listdolist(dolist (VAR LIST) BODY) 循环处理 LISP , VAR 表示 LISP 的元素, 在 BODY 里应用处理. 返回值是 nil 1234(let ( (xlist (number-sequence 97 122)) ;; list 97 to 122 ) (dolist (n xlist) (insert n))) dotimes(dotimes (VAR COUNT) BODY …) 返回值是 nil . VAR 表示的是从 0 到 count 之间的步进数.(包括0, 但&lt;count) 123(dotimes (i 4) (insert (number-to-string i)));; inserts "0123", returns nil (dotimes (VAR COUNT RESULT) BODY …) 通过计算 RESULT 来获得获取值 12345(let ((v [3 4 5])) (dotimes (i (length v)) (insert (number-to-string (elt v i))))) ; inserts 345 while1234(let ((mylist '(a b c))) (while mylist (message "%s" (pop mylist)) (sleep-for 1))) 过滤 list更多过滤函数 在 25.1 及之后版本 依赖: (require &#39;seq) 1234567891011(require 'seq)(setq xx '(1 "a" 2));; remove items that's not a number(seq-filter 'numberp xx);; (1 2);; old remain unchangedxx;; '(1 "a" 2) Hash Table创建(make-hash-table :test &#39;equal) 它会返回一个新的 hashtable 1(setq myHash (make-hash-table :test 'equal)) 添加1(puthash "joe" "19" myHash) 删除1(remhash "liz" myHash) 获取 key 的值1(gethash "jane" myHash) 计算长度1(hash-table-count myHash) 删除所有元素1(clrhash myHash) 检测元素是否存在1(gethash myKey myHash) 如果存在, 则返回值, 否则返回 nil. Lisp SymbolSymbol 的概念类似于其他编程语言的标识符, 除了: lisp symbol 可以持有未eval过的, 只是表示自身的, 一个内部名字. 在这种意义下, 它类似于 string. lisp symbol 可以存储超过一个的值. symbol 的 cell每一个 lisp symbol 都拥有以下的 cell 来存储东西 “print name” cell : 一个字符串, 与 symbol 字面值一样. 它是自动设置的, 不能被更改. “value” cell: 存储 symbol 的值, 当该 cell 不为空时, 该 symbol 被视为一个变量. “function” cell: 存储函数定义的对象, Lisp 宏 macros, 或其他可以像 function 那样执行的对象. “property list” cell: 持有一个 name/value 对的list. 用于存储 symbol 的元数据, 例如: 函数的状态, 字体规则(用于语法高亮), 是否废弃等. function cell 或 value cell 可能为空, 这时就被称为 void . 当你获取一个 cell 的 value 是 void 时, 会产生一个 lisp 错误. (一个空emtpy cell, 不同于有一个 value 为 nil 的 cell). 1234567891011121314;; get symbol's name cell value(symbol-name 'sin) ; "sin";; get symbol's value cell value(symbol-value 'sin) ; void-variable error;; because the value cell of the symbol sin is void;; or, we just say that sin isn't a variable;; get symbol's function cell value(symbol-function 'sin) ;#&lt;subr sin&gt;;; the value is a primitive function (written in C), and has print form of #&lt;subr sin&gt;;; get symbol's property list cell value(symbol-plist 'sin) ; (side-effect-free t) quoting symbol一个 symbol , 典型情况下是用于计算来获取它的 value 的. 但你可以通过 quoting symbol 来停止这样子. 例如 (quote x) . 你可以想象 quote 是拥有 evaluation (仅仅持有它, 而不要去计算它). 什么时候需要 quote symbol一些函数, 它会自动为你进行 quote 参数. 但这并没有语法上的方式来告诉你, 一个函数是否需要它的参数是 quote 的. 最好就是查看函数的文档 (Alt+x describe-function) 来查看一个参数是否需要 quote . 函数 set 与 setq 几乎是一样的, 最主要的不同是 set 并不会自动将第一个参数进行 quote, 而 setq 会. 例如 123(setq f '1+)(setq f 'cos)(setq f 'sqrt) 我们用 f 来包装, 因为我们不确定到底使用哪个函数, 直到运行时才能知道. 然后 12345678;; here's our data(setq mylist '(1 2 3));; normally, when using mapcar, we want first arg quoted(mapcar '1+ mylist) ; (2 3 4);; here, we don't want first arg quoted(mapcar f mylist) ; (1.0 1.4142135623730951 1.7320508075688772) 检测个值是否是 symbol123456(setq x1 123 )(symbolp x1) ; nil;; nil, because x1 is evaluated, and that value is 123, not a symbol(symbolp 'x1) ; t 获取 symbol 的四个 cell 值1234567891011121314;; get symbol's name cell value(symbol-name 'sin) ; "sin";; get symbol's value cell value(symbol-value 'sin) ; void-variable error;; because the value cell of the symbol sin is void;; or, we just say that sin isn't a variable;; get symbol's function cell value(symbol-function 'sin) ;#&lt;subr sin&gt;;; the value is a primitive function (written in C), and has print form of #&lt;subr sin&gt;;; get symbol's property list cell value(symbol-plist 'sin) ; (side-effect-free t) 设置 symbol 的四个 cell 值 名字是不能修改的. 设置 value cell12345;; set a symbol's value cell(setq y "yes yes");; get it(symbol-value 'y) ; "yes yes" 检测 value cell 是否为空 12345(boundp 'h) ; nil(setq h 4)(boundp 'h) ; t 设置 function cell123456;; a function that returns 4(defun z () 4);; Note: return value of defun is not defined;; get a symbol's function cell value(symbol-function 'z) ; (lambda nil 4)(boundp 'h) ; nil 检测是否是 function 1234567(fboundp 'f) ; nil;; define a function that return 3(defun f () 3);; now the fuction cell is filled(fboundp 'f) ; t 设置 property cell参见上面的 Property List 综合例子1234567891011121314(setq x "hello world")(defun x (a b) "a + b" (+ a b) )(x 3 4);7(message x);"hello world"(symbol-name 'x);"x"(symbol-value 'x);"hello world"(symbol-function 'x); (lambda (a b) "a + b" (+ a b))(symbol-plist 'x); (group-documentation "The X Window system.")]]></content>
+      <tags>
+        <tag>emacs</tag>
+        <tag>elisp</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[学习笔记]]></title>
     <url>%2F2017%2F12%2F31%2FLinux-Shell-%E8%84%9A%E6%9C%AC%E6%94%BB%E7%95%A5-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%2F</url>
     <content type="text"><![CDATA[shebangwiki 在计算机科学中，Shebang（也称为 Hashbang ）是一个由井号和叹号构成的字符序列 #! ，其出现在文本文件的第一行的前两个字符 bash 的配置文件执行顺序这里自己额外想到的, 所以整理了下网上的资料 Zsh/Bash startup files loading order (.bashrc, .zshrc etc.) 123456789101112131415161718192021222324+----------------|-----------|-----------|------+| |Interactive|Interactive|Script|| |login |non-login | |+----------------|-----------|-----------|------+|/etc/profile | A | | |+----------------|-----------|-----------|------+|/etc/bash.bashrc| | A | |+----------------|-----------|-----------|------+|~/.bashrc | | B | |+----------------|-----------|-----------|------+|~/.bash_profile | B1 | | |+----------------|-----------|-----------|------+|~/.bash_login | B2 | | |+----------------|-----------|-----------|------+|~/.profile | B3 | | |+----------------|-----------|-----------|------+|BASH_ENV | | | A |+----------------|-----------|-----------|------+| | | | |+----------------|-----------|-----------|------+| | | | |+----------------|-----------|-----------|------+|~/.bash_logout | C | | |+----------------|-----------|-----------|------+ 对于 zsh 12345678910111213141516171819202122232425262728+----------------|-----------|-----------|------+| |Interactive|Interactive|Script|| |login |non-login | |+----------------|-----------|-----------|------+|/etc/zshenv | A | A | A |+----------------|-----------|-----------|------+|~/.zshenv | B | B | B |+----------------|-----------|-----------|------+|/etc/zprofile | C | | |+----------------|-----------|-----------|------+|~/.zprofile | D | | |+----------------|-----------|-----------|------+|/etc/zshrc | E | C | |+----------------|-----------|-----------|------+|~/.zshrc | F | D | |+----------------|-----------|-----------|------+|/etc/zlogin | G | | |+----------------|-----------|-----------|------+|~/.zlogin | H | | |+----------------|-----------|-----------|------+| | | | |+----------------|-----------|-----------|------+| | | | |+----------------|-----------|-----------|------+|~/.zlogout | I | | |+----------------|-----------|-----------|------+|/etc/zlogout | J | | |+----------------|-----------|-----------|------+ 命令分隔用分号或换行符. 即: 1cmd1; cmd2 等同于 12cmd1cmd2 注释 # 以 # 符号及之后的行内容都是注释 终端打印echo 双引号的字符串则会进行变量替换 单引号的字符串则不会进行变量替换 默认情况下, 会自动添加换行 -n 参数: 忽略结尾的换行-e 参数: 表示包含转义序列 彩色转出文本颜色码: 0 重置 30 黑色 31 红色 37 白色等等 例如 1echo "\e[1;31m Hello World\e[0m" 背景颜色码: 0 重置 40 黑色 41 红色 47 白色等等 1echo "\e[1;42m Hello World\e[0m" printf与 C 语言中的 printf 函数参数一样. 默认情况下, 不会自动添加换行 变量在 Bash 中, 每一个变量的值都是字符串, 无论你给变量赋值时有没有使用引号, 值都会以字符串的形式存储. 环境变量有一些特殊的变量会被Shell环境和操作系统用来存储一些特别的值, 这类变量就称为 环境变量 终端环境变量使用 env 命令查看. 进行的环境变量1cat /proc/$PID/environ 上面返回的是变量的列表, 以 name=value 的形式来描述. 之间由 \0 分隔. 可将 \0 替换为 \n 就可使每一行显示了. 1cat /proc/$PID/environ | tr '\0' '\n' 变量赋值1var=value 注意, 它不同于 1var = value 前者才是赋值, 后者是相等操作. 引用变量的值$var 或 ${var} 注意, 如果包含在单引号里, 变量不会被扩展. 将依照原样显示. 获取变量的长度1length=$&#123;#var&#125; 获取当前的SHELL12345echo $0或echo $SHELL 检查是否 root 用户12345if [ $UID -ne 0 ]; then echo "Non root user"else echo "root user"if 修改提示符字符串在文件 ~/.bashrc 中的某一行的 PS1 变量中设置的. Bash 中进行数学运算let使用let时, 变量名之前不需要添加 $ , 例如: 123456no1=4no2=5let result=no1+no2echo $result 自加和自减,缩写 12345let no1++let no1--let no1+=6let no1-=6 使用 []12345result=$[ no1 + no2 ]或result=$[ $no1 + 5 ] 使用 (())这种变量名之前要加上 $ 1result=$(( no1 + 50 )) 使用 expr123result=`expr 3 + 4`result=$(expr $no1 + 5) 浮点运算 bc1echo "4 * 0.45" | bc 设置精度1echo "scale=2; 3/8" | bc 进制转换1echo "obase=2; 1000" | bc obase : 输出进制ibase : 输入进制 文件描述符 文件描述符是一种用于访问文件的抽象指示器. 存取文件离不开被称为 文件描述符 的特殊数字. 1230 : 标准输入 stdin /dev/stdin1 : 标准输出 stdout /dev/stdout2 : 标准错误 stderr /dev/stderr 自定义文件描述符文件打开模式通常有3种 只读 截断写入 追加写入 123&lt; : 从文件中读取内容到 stdin&gt; : 用于截断模式写入&gt;&gt; : 用于追加模式写入 读取创建一个文件描述符进行读取: 1exec 3&lt;input.txt 这表示使用文件描述符3打开并读取文件. 使用文件描述符 1cat &lt;&amp;3 注意, 只能读取一次, 若要再次读取, 则要重新使用 exec 来分配文件描述符进行二次读取. 写入12345# 创建exec 4&gt;output.txt# 使用echo "ehllo" &gt;&amp;4 追加123exec 5&gt;&gt;output.txtecho "hello" &gt;&amp;5 注意, 是使用 &gt;&amp;5 重定向123456&gt; : 旧内容会被清空, 然后设置为新的内容. 这等同于 1&gt;&gt;&gt; : 追加到旧内容尾部. 这等同于 1&gt;&gt;&lt; : 用于从文件中读取内容到 stdin 将 stderr 和 stdout 分别重定向到一个文件: 1cmd 2&gt;stderr.txt 1&gt;stdout.txt stderr 和 stdout 一起重定向: 1cmd 2&gt;&amp;1 output.txt 忽略错误输出: 1cmd 2&gt;/dev/null 1&gt;output.txt 同时重定向到文件和 stdout 1command | tee FILE2 FILE2 注意, tee 只能读取 stdout 而不包括 stderr 使用 stdin 作为命令行参数: 1cmd 1 | cmd2 | cmd3 - 即 - 作为命令的文件名参数即可. 多行文件重定向123cat &lt;&lt; EOF &gt; log.txt这里是内容EOF 理解: stackoverflow.com 这表示, 指示 shell 直接从当前源中读取输入, 直到有一行的内容仅包含 EOF 这个单词. 命令的成功与否1echo $? 如果返回0, 表示上一个命令执行成功, 否则是失败. 数组起始索引为0. 定义 1array_var=(1 2 3 4 5 6) 使用 1echo $&#123;array_var[0]&#125; 打印数组所有值 12345echo $&#123;array_var[*]&#125;或echo $&#123;array_var[@]&#125; 长度 1echo $&#123;#array_var[*]&#125; 关联数组定义 1234567declare -A ass_arrayass_array=([key1]=value [key2]=value2)或ass_array[key1]=value1ass_array[key2]=value2 使用 1echo $&#123;ass_array[key]&#125; 列出数组索引 12345echo $&#123;! ass_array[*]&#125;或echo $&#123;! ass_array[@]&#125; 别名1alias new_command='command sequence' 永久保存: 将内容写到 ~/.bashrc 删除别名 12alias new_command=unalias new_command 日期和时间纪元时或 Unix 时间: UTC 1970年1月1日 0时0分0秒起所流逝的秒数. 1date 打印纪元时1date +%s 从指定时间转换为纪元1date --date "Thu Nov 18 08:07:21 IST 2010" +%s --date 用于提供日期字符串作为输入. 获取星期几1date --date "Jan 20 2001" +%A 格式化日期格式化占位符列表 1date "+%d %B %Y" 设置日期和时间1date -s "格式化的日期字符串" 调试脚本1bash -x script.sh 在脚本内部, 进行部分调试 123set -x要调试的代码段set +x -x : 执行时显示命令和参数+x : 禁止调试-v : 当命令进行读取时显示输入+v : 禁止打印输入 函数定义123456789function fname() &#123; statements;&#125;或fname() &#123; statements;&#125; 执行12345fname;传递参数fname arg1 arg2; 访问参数123456function fname()&#123; echo $1, $2 # 访问参数1, 参数2 echo "$@" # 以列表的方式一次性打印所有参数 echo "$*"; # 类似 $@, 但是参数被作为单个实体 return 0; # 返回值&#125; 即 $1 是第一个参数 $2 是第二个参数 $n 是第n个参数 $@ 被扩展为”$1” “$2” “$3” 等 $* 被扩展成 “$1c$2c$3”, 其中c是IFS的第一个字符 $@ 用的比 $* 多, 因为 $* 将所有参数当作单个字符串, 因此它很少被使用 递归bash 支持递归调用 导出函数函数也可以像环境变量一样用 export 导出, 如此一来, 函数的作用域就可以扩展到子进程中. 例如 1export -f fname 读取命令返回值(状态)12cmd;echo $? $? 会给出命令 cmd 的返回值. 这个返回值被称为退出状态. 命令输出读入到变量123456# 这种方法称为子shellcmd_output=$(COMMANDS)或# 这种方法称为 反引用cmd_output=`COMMANDS` 子shell123pwd;(cd /bin ; ls);pwd; 第二行中的语句即为子shell, 它不会对当前shell有任何影响.所有改变仅限于子shell内. 保留空格和换行利用子shell或反引用的方法将命令的输出读入到一个变量中, 可以将它放在双引号中, 即可保留空格和换行符. 如 123out=$(cat file.txt)out1="$(cat file.txt)" 注, 像好这个没有效果. 我在 Ubuntu 16.04.2 LTS , GNU bash, version 4.3.46(1)-release (x86_64-pc-linux-gnu) 版本中测试没有效果. 有待处理. read 命令读取 N 个字符到变量1read -n N var_name 用无回显的方式读取密码1read -s var 显示提示信息1read -p "enter input:" var 在特定时限内读取1read -t timeout var 单位秒 用特定的定界符作为输入行的结束1read -d delim_char var true 的命令1: 它是内建命令, 总是会返回为0的退出码. 字段分隔符 IFSIFS 是存储定界符的环境变量, 它是当前 shell 环境使用的默认定界字符串. 它的值, 默认为 空白字符 1234567891011121314#!/bin/bashdata="1,2,3,4,5"oldIFS=$IFSIFS=,for item in $data;do echo Item: $itemdoneIFS=$oldIFS 输出 123456./hello.shItem: 1Item: 2Item: 3Item: 4Item: 5 for 循环12345for var in list;do commands;done list 可以是字符串, 也可以是一个序列. 序列1&#123;1..50&#125; 表示从1到50的数字列表. 1&#123;a..z&#125; for 的 c 风格123for ((i=0;i&lt;10;i+)) &#123; commands;&#125; while 循环12345while conditiondo commands;done until 循环1234until condition;do commands;done if12345if condition;then commands;fi if .. else if .. else12345678if condition;then commands;else if condition; then commands;else commands;fi 算术比较1[ $var -eq 0 ] 注意, 中括号与操作数之间要有空白. -gt : 大于 -lt : 小于 -ge : 大于等于 -le : 小于等于 组合 123[ $var -ne 0 -a $var2 -gt 2 ] # 表示逻辑与, -a[ $var -ne 0 -o $var2 -gt 2 ] # 表示逻辑或, -o 文件系统测试1234567891011121314151617[ -f $file_var ] # 如果是正常的文件路或文件名[ -x $var ] # 如果给定的变量包含的文件可执行, 则返回真[ -d $var ] # 如果是目录[ -e $var ] # 如果文件存在[ -c $var ] # 如果是字符设备[ -b $var ] # 如果是块设备[ -w $var ] # 如果文件可写[ -r $var ] # 如果文件可读[ -L $var ] # 如果是符号链接 字符串比较 最好使用双中括号 12345678910111213[[ $str1 = $str2 ]] # 如果相等[[ $str1 == $str2 ]] # 如果相等[[ $str1 != $str2 ]] # 如果不相等[[ $str &gt; $str2 ]] # 大于[[ $str &lt; $str2 ]] # 小于[[ -z $str1 ]] # 如果是空字符串[[ -n $str1 ]] # 如果是非空字符串 组合 1[[ -n $str1 ]] &amp;&amp; [[ -z $str2 ]] test 命令123if [ $var -eq 0 ]; then echo "True";fi 与可以写为 123if test $var -eq 0; then echo "True";fi cat -s : 压缩多行空行为一行空行 -T : 显示制表符 -n : 显示行号 -b : 显示行号, 但不为空白行设置行号 find 命令1find base_path -print0 -print0 表示以 ‘\0’ 作为文件名的界定符. 默认为换行符, 但当文件名包含换行符时, 这就有用了. 注意, 是连起来的 -print0 -name “*.txt” 正则匹配. -iname “*.txt” 忽略大小写 OR1find . \( -name "*.txt" -o -name "*.pdf" \) -print 否定1find . ! -name "*.txt" -print 表示匹配所有不以 *.txt 结尾的文件名. 基于目录深度默认情况下, find 会遍历所有子目录.可以添加选项来限定深度. -maxdepth -mindepth 这两个参数应该是 find 的第三个参数, 否则可能会影响效率. 根据文件类型搜索 -type d 目录类型 -type f 文件类型 -type l 符号链接类型 -type c 字符设备 -type b 块设备 -type s 套接字 文件时间 -atime : 用户最近一次访问时间 -mtime : 文件内容最后一次修改时间 -ctime : 文件元数据最后一次改变的时间 后接 +N 或 -N 单位是天. 负号表示是小于, 正号表示大于 -amin : 访问时间 -mmin : 修改时间 -cmin : 变化时间 这些同上, 只是时间单位为分. 文件大小 -size +2K : 表示大于 2KB 的文件 -size -2K : 表示小于 2KB 的文件 单位 b : 512 字节 c : 字节 w : 2字 k : 1024 字节 M : 1024 K 字节 G : 1024 M 字节 删除匹配 -delete 基于权限 -perm 664 动作 -exec 1find . -type f -exec cat &#123;&#125; \;&gt; outout.txt 多命令 exec 不支持执行多命令, 但可以变换一个, 将命令写入脚本, 然后调用 1-exec ./commands.sh &#123;&#125; \; tr 命令转换源. 映射1tr [options] set1 set2 删除字符1tr -d '[set1]' 压缩字符1tr -s ' ' 将多个空白压缩为一个. 校验和123md5sum filenamesh1sum filename 加解密crypt它是一个简单的加密工具, 从 stdin 接受一个文件以及口令作为输入, 然后将加密数据输出到 stdout 1crypt &lt; input_file &gt; output_file 解密 1crypt -d &lt; encrypted_file &gt; output_file gpg加密 1gpg -c filename 解密 1gpg filename.gpg base641base64 filename &gt; outputfile 解码 1base64 -d file &gt; outputfile 临时文件123filename=`mktemp`dirname=`mktemp -d` 仅生成文件名, 而不是实际的文件 1tempfile=`mktemp -u` 根据模板创建 1mktemp test.XXX 它会生成 test.XXX 形式的临时文件. 提取文件名和扩展名1234file_jpg="sample.jpg"fileName=$&#123;file_jpg%.*&#125;suffixName=$&#123;file_jpg#*.&#125; 注意, 单个 % 是非贪婪操作, 想要贪婪式的, 则使用 %%类似的, 还有 # 是非贪婪的, 而 ## 是贪婪的. 并行操作在循环里的命令, 使用 &amp; 时, 它就会直接向下再执行了, 而不会等待命令执行完成.这样子就可以利用多核 1234567891011#!/bin/bashPIDARRAY=()for file in File1.iso File2.isodo md5sum $file &amp; PIDARRAY+=("$!")donewait $&#123;PIDARRAY[@]&#125; 注意, 还要用 wait 来等待多进程的退出. dd 命令1dd if=/dev/zero of=data.file bs=1M count1 不可删除的文件12345chattr +i file删除的时候, 它会提示rm: remove write-protected regular empty file 'file'? 恢复为可删除 1chattr -i file diff 与文件补丁 patch1diff -u version1.txt version2.txt &gt; version.patch patch 命令可将修改应用于任意文件. 当应用于 version1.txt 时, 就可以得到 version2.txt , 当应用于 version2.txt 时, 就可以得到 version1.txt 12345patch -p1 version1.txt &lt; version.patch取消修改patch -p1 version1.txt &lt; version.patch 递归的形式来处理目录及文件 1diff -Naur dir2 dir2 快速定位目录1234567pushd 压入popd 弹出dirs 查看栈的内容cd - 返回上一次的目录 它是一个处理LIFO的数据结构. 目录被存储在栈中, 然后 push 和 pop 进行切换. wc 命令12345wc -l file # 统计文件 file 的行数wc -w file # 单词数wc -c file # 字符数wc file # 行数, 单词数, 字符数wc file -L # 最长一行的长度 正则可视化正则 1234567891011121314151617| 正则 | 描述 ||--------|---------------------------------|| ^ | 行起始标记 || $ | 行结尾标记 || . | 任意一个字符 || [] | 在 [] 中的任意一个字符 || [^] | 在 [^] 之外的任意一个字符 || [-] | 在 [-] 指定范围内的任意一个字符 || ? | 匹配之前的项1次或0次 || + | 匹配之前的项1次或多次 || * | 匹配之前的项0次或多次 || () | 创建一个用于匹配的子串 || &#123;n&#125; | 匹配之前的项n次 || &#123;n, &#125; | 匹配之前项至少n次 || &#123;n, m&#125; | 匹配之前项n到m次 || \ | 转义 || 一竖 | 匹配两边任意一项 | cut 命令 按列切分 提取指定列1cut -f 2,3 filename 这列表只显示第2,3列 排除指定列1cut -f3 --complement filename 这表示除第3列之外的所有列. 指定界定符1cut -d ";" filename 指定字段的字符或字节范围1cut -c1-5 filename 表示只打印前1~5个字符. sed 命令 stream editor 替换字符串1sed 's/pattern/replace_string/' file 应用到文件1sed -i 's/pattern/replace_string/' file 全局应用默认情况下, sed 将在每一行的第一处符合的内容替换. 要全部则: 1sed 's/pattern/replace_string/g' file 只在第N处开始替换 1sed 's/pattern/replace_string/2g' file 界定符除了 / 还可以: 123sed 's:text:replace:g'sed 's|text|replace|g' 移除空白行1sed '/^$/d' file awk1awk '&#123;BEGIN &#123;print "start"&#125; pattern &#123;commands&#125; END &#123;print "end"&#125;&#125;' file 处理流程: 执行 BEGIN {commands} 语句块中的语句 从文件或stdin 中读取一行, 然后执行 pattern {commands} , 重复这个过程, 直接文件全部被读取完. 当读至输入流末尾时, 执行 END {commands} 语句块. 特殊变量 NR : 当前行号 NF : 当前行的字段数 $0 : 当前行的内容 $1 : 第一个字段的内容 $2 : 第二个字段的内容 将外部变量传递给 awk1awk -v VAR=$OUT_VAR '&#123;print VAR&#125;' 设置字段界定符1awk -F: '&#123;print $1&#125;' 这样子, 就将字符界定符设置为 : 了. 内建函数gnu awk 1length(string) : 返回字符串的长度 paste 命令:列拼接cat 是按行拼接的. paste 则是按列来拼接的. tac逆序显示. cat 的逆单词. wget 命令行下载工具 指定多个下载1wget URL1 URL2 指定输出文件1wget URL1 -O outputfile -o logfile 重试次数1wget -t 5 URL1 为0时, 表示无限重试. 限速1wget --limit-rate 20k URL 最大下载配额1wget -Q 100m URL 表示最大下载 100m 大小, 超过时就会停止. 断点续传1wget -c URL 复制整个网站1wget --mirror --covert-links URL curl 命令避免显示进度1curl --silent URL 下载1curl URL --silent -O # 型进度条1curl URL --progress 断点续传1curl -C - URL -C - 表示让 curl 自动计算. 设置 referer1curl --referer referer_url URL 设置 cookie1curl --cookie "k=v;k1=v1" 将 cookie 另存为文件1curl URL --cookie-jar cookie_file 限制带宽1curl URL --limit-rate 20k 只打印头部1curl -I URL tar 命令1234567打包并压缩tar -cvjf file.tar.bz2 file1 fiel2tar -cvzf file.tar.gz file1 file2解压tar -xvjf file.tar.bz2tar -xvzf file.tar.gz rsync 命令123rsync -avzh source_path dest_pathrsync -avzh -e "ssh -p 22" remote_path dest_path 排除1rsync --exclude "*.txt" 同步时在dest_path中删除源端不存在的文件1rsync --delete fsarchiver 命令 制作全盘镜像 创建1234fsarchiver savefs backup.fsa /dev/sda1多个分区同时备份fsarchiver savefs backup.fsa /dev/sda1 /dev/sda2 恢复1fsarchiver restfs backup.fsa id=0,dest=/dev/sda1 id=1,dest=/dev/sdb2]]></content>
@@ -3641,8 +3659,8 @@
       </categories>
       <tags>
         <tag>postgresql</tag>
-        <tag>翻译</tag>
         <tag>database</tag>
+        <tag>翻译</tag>
       </tags>
   </entry>
   <entry>
@@ -3654,8 +3672,8 @@
       </categories>
       <tags>
         <tag>postgresql</tag>
-        <tag>翻译</tag>
         <tag>database</tag>
+        <tag>翻译</tag>
       </tags>
   </entry>
   <entry>
@@ -3667,8 +3685,8 @@
       </categories>
       <tags>
         <tag>postgresql</tag>
-        <tag>翻译</tag>
         <tag>database</tag>
+        <tag>翻译</tag>
       </tags>
   </entry>
   <entry>
@@ -3781,8 +3799,8 @@
       </categories>
       <tags>
         <tag>postgresql</tag>
-        <tag>翻译</tag>
         <tag>database</tag>
+        <tag>翻译</tag>
       </tags>
   </entry>
   <entry>
@@ -3818,8 +3836,8 @@
       </categories>
       <tags>
         <tag>postgresql</tag>
-        <tag>翻译</tag>
         <tag>database</tag>
+        <tag>翻译</tag>
       </tags>
   </entry>
   <entry>
@@ -3956,8 +3974,8 @@
       </categories>
       <tags>
         <tag>postgresql</tag>
-        <tag>翻译</tag>
         <tag>database</tag>
+        <tag>翻译</tag>
       </tags>
   </entry>
   <entry>
@@ -3981,8 +3999,8 @@
       </categories>
       <tags>
         <tag>postgresql</tag>
-        <tag>翻译</tag>
         <tag>database</tag>
+        <tag>翻译</tag>
       </tags>
   </entry>
   <entry>
@@ -4005,10 +4023,10 @@
         <category>postgresql</category>
       </categories>
       <tags>
-        <tag>CTE表达式</tag>
-        <tag>临时表</tag>
         <tag>postgresql</tag>
         <tag>翻译</tag>
+        <tag>CTE表达式</tag>
+        <tag>临时表</tag>
       </tags>
   </entry>
   <entry>
@@ -4032,8 +4050,8 @@
       </categories>
       <tags>
         <tag>postgresql</tag>
-        <tag>翻译</tag>
         <tag>database</tag>
+        <tag>翻译</tag>
       </tags>
   </entry>
   <entry>
@@ -4069,8 +4087,8 @@
       </categories>
       <tags>
         <tag>postgresql</tag>
-        <tag>翻译</tag>
         <tag>database</tag>
+        <tag>翻译</tag>
       </tags>
   </entry>
   <entry>
@@ -4142,8 +4160,8 @@
       </categories>
       <tags>
         <tag>postgresql</tag>
-        <tag>翻译</tag>
         <tag>database</tag>
+        <tag>翻译</tag>
       </tags>
   </entry>
   <entry>
@@ -4155,8 +4173,8 @@
       </categories>
       <tags>
         <tag>postgresql</tag>
-        <tag>翻译</tag>
         <tag>database</tag>
+        <tag>翻译</tag>
       </tags>
   </entry>
   <entry>
@@ -4168,8 +4186,8 @@
       </categories>
       <tags>
         <tag>postgresql</tag>
-        <tag>翻译</tag>
         <tag>database</tag>
+        <tag>翻译</tag>
       </tags>
   </entry>
   <entry>

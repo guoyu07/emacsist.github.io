@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2015/07/09/翻译-Emacs的prelude-READMD文档/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="原文 Emacs PreludePrelude 是一个Emacs发行版, 旨在加强默认Emacs的体验.Prelude更改了许多默认的配置, 组合捆绑了大量的额外的插件,并添加了它自己的核心库.最终的产品提供了一个对于新手易于使用, 对于高级用户提供了许多额外的能力的Emacs配置. Prelude 只对 GNU Emacs 24.x 版本兼容.一般地, 我们总是建议你以最新版本的Emacs来运行">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[翻译]Emacs的prelude READMD文档">
@@ -178,7 +179,7 @@
     
       <a class="tag-item" href="/tags/#emacs">
         <span class="tag-name">emacs</span>
-    <span class="tag-size">( 13 )</span>
+    <span class="tag-size">( 15 )</span>
     </a>
     
       <a class="tag-item" href="/tags/#prelude">
@@ -201,7 +202,7 @@
 
     <div class="article-content">
         
-                            <p><a href="https://github.com/bbatsov/prelude" target="_blank" rel="external">原文</a></p>
+                            <p><a href="https://github.com/bbatsov/prelude" target="_blank" rel="noopener">原文</a></p>
 <h2 id="Emacs-Prelude"><a href="#Emacs-Prelude" class="headerlink" title="Emacs Prelude"></a>Emacs Prelude</h2><p><code>Prelude</code> 是一个Emacs发行版, 旨在加强默认Emacs的体验.<code>Prelude</code>更改了许多默认的配置, 组合捆绑了大量的额外的插件,并添加了它自己的核心库.最终的产品提供了一个对于新手易于使用, 对于高级用户提供了许多额外的能力的Emacs配置.</p>
 <p><code>Prelude</code> 只对 <code>GNU Emacs 24.x</code> 版本兼容.一般地, 我们总是建议你以最新版本的Emacs来运行<code>Prelude</code> - 当前最新版本为 <code>24.4</code>.</p>
 <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><h3 id="快速使用"><a href="#快速使用" class="headerlink" title="快速使用"></a>快速使用</h3><p>我们假设你正运行 <code>Unix-like</code> 系统(*BSD, GNU/Linux, OS X, Solaris, 等等), 并且你已经安装了<code>Emacs 24</code>, 也安装好了<code>git</code>以及<code>curl</code>,你可以忽略整个手册, 只需要在你喜欢的shell里输入以下命令:</p>
@@ -213,7 +214,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">export</span> PRELUDE_URL=<span class="string">"https://github.com/yourname/prelude.git"</span> &amp;&amp; curl -L https://github.com/bbatsov/prelude/raw/master/utils/installer.sh | sh</div></pre></td></tr></table></figure>
 <p>注意,安装包会备份任何在 <code>.emacs</code> 文件或 <code>.emacs.d</code> 目录,然后它会解压<code>Prelude</code>的代码到<code>.emacs.d</code> 目录里.如果你打算手动安装, 请确保你没有<code>.emacs</code>文件或者手动备份你已经存在的<code>.emacs.d</code> 目录.</p>
 <p>一旦你安装完成后,不要忘记去调整你的<code>prelude-modules.el</code>文件.默认情况下, 许多<code>prelude</code>自带的模块并没有加载.</p>
-<h3 id="安装-Emacs-24"><a href="#安装-Emacs-24" class="headerlink" title="安装 Emacs 24"></a>安装 Emacs 24</h3><p>好明显, 你使用 <code>Emacs Prelude</code> 之前, 你首先得安装 <code>Emacs 24</code> . 请看 <a href="http://wikemacs.org/index.php/Installing_Emacs" target="_blank" rel="external">WikEmacs articles on installing Emacs</a></p>
+<h3 id="安装-Emacs-24"><a href="#安装-Emacs-24" class="headerlink" title="安装 Emacs 24"></a>安装 Emacs 24</h3><p>好明显, 你使用 <code>Emacs Prelude</code> 之前, 你首先得安装 <code>Emacs 24</code> . 请看 <a href="http://wikemacs.org/index.php/Installing_Emacs" target="_blank" rel="noopener">WikEmacs articles on installing Emacs</a></p>
 <h3 id="安装-Prelude"><a href="#安装-Prelude" class="headerlink" title="安装(Prelude)"></a>安装(Prelude)</h3><h4 id="自动化安装"><a href="#自动化安装" class="headerlink" title="自动化安装"></a>自动化安装</h4><p>你可以通过命令行使用<code>curl</code> 或者<code>wget</code>来安装<code>Emacs Prelude</code>.自然地,<code>git</code>也是要安装好的.</p>
 <h4 id="通过-curl-安装"><a href="#通过-curl-安装" class="headerlink" title="通过 curl 安装"></a>通过 curl 安装</h4><p>如果你打算用<code>curl</code>, 请在shell里输入以下命令:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -L https://github.com/bbatsov/prelude/raw/master/utils/installer.sh | sh</div></pre></td></tr></table></figure>
@@ -226,7 +227,7 @@
 <p>路径<code>path/to/prelude/installation</code>通常是 <code>~/.emacs.d</code> (在最新的Unix系统下)</p>
 <h5 id="重启-Prelude"><a href="#重启-Prelude" class="headerlink" title="重启 Prelude"></a>重启 Prelude</h5><p>在你更新完之后,重启一下Emacs通常是一个好的主意.在下次<code>Prelude</code>启动时, 它会安装好新的依赖(如果需要的话).</p>
 <h4 id="自动更新"><a href="#自动更新" class="headerlink" title="自动更新"></a>自动更新</h4><p>简单地执行<code>M-x prelude</code>,然后重启下Emacs就可以了.</p>
-<h3 id="开启额外的模块"><a href="#开启额外的模块" class="headerlink" title="开启额外的模块."></a>开启额外的模块.</h3><p>默认情况下,大多数<code>Prelude</code>自带的模块并没有加载.更多关于这些模块提供的功能, 请查这个文档 <a href="https://github.com/bbatsov/prelude/blob/master/modules/doc/README.md" target="_blank" rel="external">docs</a></p>
+<h3 id="开启额外的模块"><a href="#开启额外的模块" class="headerlink" title="开启额外的模块."></a>开启额外的模块.</h3><p>默认情况下,大多数<code>Prelude</code>自带的模块并没有加载.更多关于这些模块提供的功能, 请查这个文档 <a href="https://github.com/bbatsov/prelude/blob/master/modules/doc/README.md" target="_blank" rel="noopener">docs</a></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">;;; Uncomment the modules you<span class="string">'d like to use and restart Prelude afterwards</span></div><div class="line"></div><div class="line">(require 'prelude-c)</div><div class="line">;; (require <span class="string">'prelude-clojure)</span></div><div class="line">;; (require 'prelude-coffee)</div><div class="line">;; (require <span class="string">'prelude-common-lisp)</span></div><div class="line">;; (require 'prelude-css)</div><div class="line">(require <span class="string">'prelude-emacs-lisp)</span></div><div class="line">(require 'prelude-erc)</div><div class="line">;; (require <span class="string">'prelude-erlang)</span></div><div class="line">;; (require 'prelude-elixir)</div><div class="line">;; (require <span class="string">'prelude-haskell)</span></div><div class="line">(require 'prelude-js)</div><div class="line">;; (require <span class="string">'prelude-latex)</span></div><div class="line">(require 'prelude-lisp)</div><div class="line">;; (require <span class="string">'prelude-mediawiki)</span></div><div class="line">(require 'prelude-org)</div><div class="line">(require <span class="string">'prelude-perl)</span></div><div class="line">;; (require 'prelude-python)</div><div class="line">;; (require <span class="string">'prelude-ruby)</span></div><div class="line">;; (require 'prelude-scala)</div><div class="line">(require <span class="string">'prelude-scheme)</span></div><div class="line">;; (require 'prelude-scss)</div><div class="line">;; (require <span class="string">'prelude-web)</span></div><div class="line">(require 'prelude-xml)</div></pre></td></tr></table></figure>
 <p>一旦你安装完成后,你可修改你的<code>prelude-modules.el</code>文件.如果你打算手动安装,这时你需要复制 <code>prelude-modules.el</code> 文件(译注: 放到<code>~/.emacs.d/</code>目录下),这个文件在根目录 <code>path/to/prelude/installation</code> 下的 <code>sample</code> 目录里.</p>
 <p>你在注释掉一些模块后, 你也应该重启Emacs或者通过<code>C-x C-e</code>来<code>evaluate</code>模块<code>require</code>表达式.(这个不好翻译…)</p>
@@ -331,7 +332,7 @@
 </tr>
 <tr>
 <td style="text-align:right">C-a</td>
-<td style="text-align:right">执行 <code>prelude-move-beginning-of-line</code>. 详情请<a href="http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/" target="_blank" rel="external">这里</a></td>
+<td style="text-align:right">执行 <code>prelude-move-beginning-of-line</code>. 详情请<a href="http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/" target="_blank" rel="noopener">这里</a></td>
 </tr>
 </tbody>
 </table>
@@ -525,7 +526,7 @@
 <h4 id="OS-X-修改键位"><a href="#OS-X-修改键位" class="headerlink" title="OS X 修改键位"></a>OS X 修改键位</h4><p><code>Prelude</code> 默认情况下不弄乱标准的键位映射 <code>Command</code> (就是 <code>Super</code>), <code>Option</code> 就是<code>Meta</code>.</p>
 <p>如果你想互换它们, 请添加以下配置到你的个人配置文件里:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">(setq mac-command-modifier <span class="string">'meta)</span></div><div class="line">(setq mac-option-modifier 'super)</div></pre></td></tr></table></figure>
-<h4 id="Projectile"><a href="#Projectile" class="headerlink" title="Projectile"></a>Projectile</h4><p>这些是 <a href="https://github.com/bbatsov/projectile" target="_blank" rel="external">Projectile</a> 提供的功能</p>
+<h4 id="Projectile"><a href="#Projectile" class="headerlink" title="Projectile"></a>Projectile</h4><p>这些是 <a href="https://github.com/bbatsov/projectile" target="_blank" rel="noopener">Projectile</a> 提供的功能</p>
 <table>
 <thead>
 <tr>
@@ -619,7 +620,7 @@
 <p><code>Prelude</code> 提供了一个额外的键位前缀 <code>S-p</code> (<code>S</code> 代表 <code>Super</code>), 所以, 你也可以使用 <code>S-p</code> 来代替 <code>C-c p</code></p>
 <p>如果你有时忘记了任何项目的键位绑定情况, 只需要输入:</p>
 <p><code>C-c p C-h</code></p>
-<h4 id="Helm"><a href="#Helm" class="headerlink" title="Helm"></a>Helm</h4><p><code>Helm</code> 的设置是根据这个指引的 <a href="http://tuhdo.github.io/helm-intro.html" target="_blank" rel="external">A Package in a league of its own: Helm.</a>.</p>
+<h4 id="Helm"><a href="#Helm" class="headerlink" title="Helm"></a>Helm</h4><p><code>Helm</code> 的设置是根据这个指引的 <a href="http://tuhdo.github.io/helm-intro.html" target="_blank" rel="noopener">A Package in a league of its own: Helm.</a>.</p>
 <p>你可以根据以下的指导来学习<code>Helm</code>的用法和按键绑定情况. <code>C-c h</code> 是 <code>Prelude</code> 对 <code>Helm</code> 默认的按键前缀. 如果你不记得任何的按键, 在 <code>C-c h</code> 之后再加上 <code>C-h</code> 就可以列所所有关于 <code>Helm</code> 的所有绑定的按键的情况.</p>
 <p>如果你喜欢 <code>Helm</code> 并且想全局上使用 <code>Helm</code> 通过 <code>helm-find-files</code>, <code>helm-buffer-lists</code>… 来加强, 这时你加上<code>(require &#39;prelude-helm-everywhere)</code>. 当 <code>prelude-helm-everywhere</code>激活了, <code>Helm</code> 就会开启以下这些全局按键:</p>
 <table>
@@ -727,7 +728,7 @@
 <h3 id="自动化包安装"><a href="#自动化包安装" class="headerlink" title="自动化包安装"></a>自动化包安装</h3><p>默认情况下, <code>Prelude</code> 安装好后只带最小限度的功能.它也可以在后台自动安装各种编程语言及框架的附加插件.例如: 你试图打开一个<code>.clj</code>文件 <code>clojure-mode</code>, <code>cider</code>以及<code>Prelude</code>的加强版Lisp配置将会自动为你安装.</p>
 <p>当然, 你也可以手动安装任何东西.</p>
 <h4 id="颜色主题"><a href="#颜色主题" class="headerlink" title="颜色主题"></a>颜色主题</h4><p>Emacs 24 自带了一个新的主题服务, 这显式有效地渲染一些老的颜色主题包. Emacs 24 提供了一打内建的主题, 你可以开箱即用, 通过调用 <code>M-x load-theme</code> 命令.</p>
-<p><a href="https://github.com/bbatsov/zenburn-emacs" target="_blank" rel="external">Zenburn</a>是Prelude的默认颜色主题, 但你可以自行修改. 为什么用<code>Zenburn</code>?我(并且世界上许多黑客)发现它相当简洁.个人发现默认的主题容易对眼睛产生厌倦, 这是为什么我决定把有争议的地方替换它. 当然, 你也可以返回默认(或者选择其他颜色主题).</p>
+<p><a href="https://github.com/bbatsov/zenburn-emacs" target="_blank" rel="noopener">Zenburn</a>是Prelude的默认颜色主题, 但你可以自行修改. 为什么用<code>Zenburn</code>?我(并且世界上许多黑客)发现它相当简洁.个人发现默认的主题容易对眼睛产生厌倦, 这是为什么我决定把有争议的地方替换它. 当然, 你也可以返回默认(或者选择其他颜色主题).</p>
 <p>为了禁用 <code>Zenburn</code> 主题, 你可以将以下行放到你个人的配置文件里:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(<span class="built_in">disable</span>-theme <span class="string">'zenburn)</span></div></pre></td></tr></table></figure>
 <p>或者你可以使用其他主题颜色, 通过添加以下内容到 <code>personal/preload</code>, 像这样:</p>
@@ -763,7 +764,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(setq guru-warn-only nil)</div></pre></td></tr></table></figure>
 <p>完全禁用, 可以在你的配置文件里添加以下片段:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(setq prelude-guru nil)</div></pre></td></tr></table></figure>
-<h3 id="自定义-C-a-的行为"><a href="#自定义-C-a-的行为" class="headerlink" title="自定义 C-a 的行为"></a>自定义 <code>C-a</code> 的行为</h3><p>Prelude 覆盖了 <code>C-a</code> 的行为, 描述在<a href="http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/" target="_blank" rel="external">这里</a>. 如果你不喜欢, 你可以简单地添加以下代码到你的配置文件里:</p>
+<h3 id="自定义-C-a-的行为"><a href="#自定义-C-a-的行为" class="headerlink" title="自定义 C-a 的行为"></a>自定义 <code>C-a</code> 的行为</h3><p>Prelude 覆盖了 <code>C-a</code> 的行为, 描述在<a href="http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/" target="_blank" rel="noopener">这里</a>. 如果你不喜欢, 你可以简单地添加以下代码到你的配置文件里:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">(global-set-key [remap move-beginning-of-line]</div><div class="line">                <span class="string">'move-beginning-of-line)</span></div></pre></td></tr></table></figure>
 <h3 id="ido-在大的数据处理里遇到性能问题"><a href="#ido-在大的数据处理里遇到性能问题" class="headerlink" title="ido 在大的数据处理里遇到性能问题"></a>ido 在大的数据处理里遇到性能问题</h3><p>Prelude 将<code>ido-fix</code> 与默认的 <code>ido</code> 互换了. <code>flx</code>的排序算法更复杂, 但有着更好的结果. 在一些比较慢的机器下, 它可能需要降低 <code>flx-ido-threshold</code> 的值来确保有比较好的体验.</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(setq flx-ido-threshold 1000)</div></pre></td></tr></table></figure>
@@ -772,9 +773,9 @@
 <h3 id="Windows-兼容性"><a href="#Windows-兼容性" class="headerlink" title="Windows 兼容性"></a>Windows 兼容性</h3><p>理论上 Prelude 应该在 Windows 也可以很好地工作, 我只在 Linux 与 OS X上测试过, 所以Windows时而会有相关的问题. 这种情况可能随着时间的推移而解决 .</p>
 <h3 id="已知的问题"><a href="#已知的问题" class="headerlink" title="已知的问题"></a>已知的问题</h3><p>checkout 项目的未解决的问题列表. 顺便说下, 随意修复好它,然后发给我一个 pull  请求就好. :-)</p>
 <h3 id="技术支持"><a href="#技术支持" class="headerlink" title="技术支持"></a>技术支持</h3><p>通过 Prelude的 Google Group 可以得到些技术支持 <a href="emacs-prelude@googlegroups.com">emacs-prelude@googlegroups.com.</a>.</p>
-<h3 id="贡献"><a href="#贡献" class="headerlink" title="贡献"></a>贡献</h3><p>这有份<a href="https://github.com/bbatsov/prelude/contributors" target="_blank" rel="external">清单</a>, 列出了所有为 Emacs Prelude 做出过贡献的人</p>
+<h3 id="贡献"><a href="#贡献" class="headerlink" title="贡献"></a>贡献</h3><p>这有份<a href="https://github.com/bbatsov/prelude/contributors" target="_blank" rel="noopener">清单</a>, 列出了所有为 Emacs Prelude 做出过贡献的人</p>
 <h3 id="bugs-以及-修正"><a href="#bugs-以及-修正" class="headerlink" title="bugs 以及 修正"></a>bugs 以及 修正</h3><p>我们总是欢迎任何提交bugs以及改进的建议. 如果能有 Github 的pull request 就更好了. :-)</p>
-<p>我也接受一些赞助, 可以通过 <a href="https://www.gittip.com/bbatsov" target="_blank" rel="external">gittip</a>来捐赠.</p>
+<p>我也接受一些赞助, 可以通过 <a href="https://www.gittip.com/bbatsov" target="_blank" rel="noopener">gittip</a>来捐赠.</p>
 
                                 
     </div>

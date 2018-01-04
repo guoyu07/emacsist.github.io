@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2017/12/21/Java-8-实战-学习笔记/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="流处理流, 是一系列数据项, 一次只生成一项. 程序可以从输入流中一个一个读取数据项, 然后以同样的方式将数据项写入输出流. 一个程序的输出流, 很可能是另一个程序的输入流.  Java 8 可以透明地把输入的不相关部分拿到几个 CPU 内核上分别去执行你的 Stream 操作流水线 – 这是几乎免费的并行, 用不着费劲去搞 Thread 了.  行为参数化Java 8 增加了把方法作为参数传递给">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://emacsist.github.io/img/17EB7B0275ACEEA2C75B32082BCA15BC.jpg">
 <meta property="og:image" content="https://emacsist.github.io/img/5A86B9287685EFEC3AA1B1D7DE4628DD.jpg">
 <meta property="og:image" content="https://emacsist.github.io/img/818807F698B7052957EA6560221721DA.jpg">
@@ -350,7 +351,7 @@
 <blockquote>
 <p>flatMap方法与map方法类似，区别在于mapping函数的返回值不同。map方法的mapping函数返回值可以是任何类型T，而flatMap方法的mapping函数必须是Optional。</p>
 </blockquote>
-<p><a href="http://www.importnew.com/6675.html" target="_blank" rel="external">Java 8 Optional类深度解析</a></p>
+<p><a href="http://www.importnew.com/6675.html" target="_blank" rel="noopener">Java 8 Optional类深度解析</a></p>
 <h1 id="异步处理-Future-与-CompletableFuture"><a href="#异步处理-Future-与-CompletableFuture" class="headerlink" title="异步处理 Future 与 CompletableFuture"></a>异步处理 Future 与 CompletableFuture</h1><p>将同步API的调用封装到一个 CompletableFuture 中, 就能以异步的方式使用其结果.</p>
 <h1 id="新的日期-api"><a href="#新的日期-api" class="headerlink" title="新的日期 api"></a>新的日期 api</h1><h2 id="DateFormat-并不是线程安全的"><a href="#DateFormat-并不是线程安全的" class="headerlink" title="DateFormat 并不是线程安全的"></a>DateFormat 并不是线程安全的</h2><p>这意味着两个线程如果尝试使用同一个 formatter 解析日期, 可能会得到无法预期的结果.</p>
 <h2 id="DateTimeFormatter"><a href="#DateTimeFormatter" class="headerlink" title="DateTimeFormatter"></a>DateTimeFormatter</h2><p>它是为了替代 DateFormat 的. 并且它是线程安全的!</p>

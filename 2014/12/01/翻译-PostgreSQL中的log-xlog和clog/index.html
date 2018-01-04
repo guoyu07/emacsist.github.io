@@ -12,16 +12,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="postgresql,翻译,database," />
+    <meta name="keywords" content="postgresql,database,翻译," />
   
 
   <meta name="description" content="[翻译]PostgreSQL中的log, xlog和clog原文 译记：该文章开头还有一段内容就不翻译了。主要翻译这些log的主要内容。 pg_log$PGDATA/pg_log是数据库运行活动日志的默认保存目录，它包括错误信息，查询日志以及启动/关闭数据库的信息。当PostgreSQL启动失败时，这里应该是你第一个应该查看的信息。一些Linux发行版以及其他的软件包管理系统会将这个日志目录移到某">
-<meta name="keywords" content="postgresql,翻译,database">
+<meta name="keywords" content="postgresql,database,翻译">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[翻译]PostgreSQL中的log, xlog和clog">
 <meta property="og:url" content="https://emacsist.github.io/2014/12/01/翻译-PostgreSQL中的log-xlog和clog/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="[翻译]PostgreSQL中的log, xlog和clog原文 译记：该文章开头还有一段内容就不翻译了。主要翻译这些log的主要内容。 pg_log$PGDATA/pg_log是数据库运行活动日志的默认保存目录，它包括错误信息，查询日志以及启动/关闭数据库的信息。当PostgreSQL启动失败时，这里应该是你第一个应该查看的信息。一些Linux发行版以及其他的软件包管理系统会将这个日志目录移到某">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[翻译]PostgreSQL中的log, xlog和clog">
@@ -206,7 +207,7 @@
 
     <div class="article-content">
         
-                            <h2 id="翻译-PostgreSQL中的log-xlog和clog"><a href="#翻译-PostgreSQL中的log-xlog和clog" class="headerlink" title="[翻译]PostgreSQL中的log, xlog和clog"></a>[翻译]PostgreSQL中的log, xlog和clog</h2><p><a href="http://it.toolbox.com/blogs/database-soup/pg_log-pg_xlog-and-pg_clog-45611" target="_blank" rel="external">原文</a></p>
+                            <h2 id="翻译-PostgreSQL中的log-xlog和clog"><a href="#翻译-PostgreSQL中的log-xlog和clog" class="headerlink" title="[翻译]PostgreSQL中的log, xlog和clog"></a>[翻译]PostgreSQL中的log, xlog和clog</h2><p><a href="http://it.toolbox.com/blogs/database-soup/pg_log-pg_xlog-and-pg_clog-45611" target="_blank" rel="noopener">原文</a></p>
 <p>译记：该文章开头还有一段内容就不翻译了。主要翻译这些log的主要内容。</p>
 <h2 id="pg-log"><a href="#pg-log" class="headerlink" title="pg_log"></a>pg_log</h2><p><code>$PGDATA/pg_log</code>是数据库运行活动日志的默认保存目录，它包括错误信息，查询日志以及启动/关闭数据库的信息。当PostgreSQL启动失败时，这里应该是你第一个应该查看的信息。一些Linux发行版以及其他的软件包管理系统会将这个日志目录移到某些地方，比如：<code>/var/log/postgresql</code></p>
 <p>你可以在<code>pg_log</code>目录里自由地删除、重命名、压缩或者移动文件而不会有什么不好的结果，只要Postgres用户仍然有权限写该目录。如果<code>pg_log</code>随着许多大文件而膨胀，你可能需要在<code>postgresql.conf</code>里减小你想记录日志的事件。</p>

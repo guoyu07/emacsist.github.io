@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2016/01/11/翻译-Java-XX-PrintFlagsFinal命令行参数详解/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="原文出处  可能要翻墙…你懂的…   昨天在Google了一些与GC调优相关的资料后, 我无意中发现一些JVM标识是我从来没有见到过的. -XX:+PrintFlagsFinal 所以,我尝试了一下我能想到的最简单的Java命令: java -XX:+PrintFlagsFinal -version 我不打算贴出这条命令的输出结果, 因为它几乎有700多行. 除了打印标准版本的信息之外,它还可以打">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[翻译]Java -XX:+PrintFlagsFinal命令行参数详解">
@@ -201,7 +202,7 @@
 
     <div class="article-content">
         
-                            <p><a href="http://javabraindump.blogspot.sg/2012/12/xxprintflagsfinal.html" target="_blank" rel="external">原文出处</a></p>
+                            <p><a href="http://javabraindump.blogspot.sg/2012/12/xxprintflagsfinal.html" target="_blank" rel="noopener">原文出处</a></p>
 <blockquote>
 <p>可能要翻墙…你懂的…</p>
 </blockquote>
@@ -223,7 +224,7 @@
 <p><code>:=</code>意味着值是被修改的, <code>=</code>表示默认值.</p>
 <p>只获取唯一值的列表是没什么用的, 所以我会继续用一个特定的适用的参数. 由于空格是不规则的, 我们需要一个稍微不同的方式:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">java -XX:+PrintFlagsFinal -version | awk -F <span class="string">'\\&#123;'</span> <span class="string">'&#123;if(NR!=1) &#123;print "\&#123;"$2&#125;&#125;'</span> | sort | uniq</div><div class="line"></div><div class="line">&#123;C1 pd product&#125;</div><div class="line">&#123;C1 product&#125;</div><div class="line">&#123;C2 diagnostic&#125;</div><div class="line">&#123;C2 pd product&#125;</div><div class="line">&#123;C2 product&#125;</div><div class="line">&#123;lp64_product&#125;</div><div class="line">&#123;manageable&#125;</div><div class="line">&#123;pd product&#125;</div><div class="line">&#123;product rw&#125;</div><div class="line">&#123;product&#125;</div></pre></td></tr></table></figure>
-<p>这些目录是由 <code>复合标识符</code> 来描述一个给定的标识符的适用情况.在进行一些深入挖掘后, <a href="http://hg.openjdk.java.net/jdk6/jdk6/hotspot/file/tip/src/share/vm/runtime/globals.hpp" target="_blank" rel="external">我在源码里发现它们的意思</a></p>
+<p>这些目录是由 <code>复合标识符</code> 来描述一个给定的标识符的适用情况.在进行一些深入挖掘后, <a href="http://hg.openjdk.java.net/jdk6/jdk6/hotspot/file/tip/src/share/vm/runtime/globals.hpp" target="_blank" rel="noopener">我在源码里发现它们的意思</a></p>
 <ul>
 <li><p>product – 官方支持, JVM内部选项</p>
 </li>

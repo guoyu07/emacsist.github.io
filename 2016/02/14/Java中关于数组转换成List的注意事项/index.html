@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2016/02/14/Java中关于数组转换成List的注意事项/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="问题代码123456789101112131415package org.emacsist;import java.util.Arrays;import java.util.List;/** * Created by sky on 16-2-14. */public class TestHello &amp;#123;    public static void main(String[] args) &amp;">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java中关于数组转换成List的注意事项">
@@ -205,7 +206,7 @@
 <p>一运行，就报如下错误</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">Exception <span class="keyword">in</span> thread <span class="string">"main"</span> java.lang.UnsupportedOperationException</div><div class="line">	at java.util.AbstractList.add(AbstractList.java:148)</div><div class="line">	at java.util.AbstractList.add(AbstractList.java:108)</div><div class="line">	at org.emacsist.TestHello.main(TestHello.java:12)</div><div class="line">	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)</div><div class="line">	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)</div><div class="line">	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)</div><div class="line">	at java.lang.reflect.Method.invoke(Method.java:497)</div><div class="line">	at com.intellij.rt.execution.application.AppMain.main(AppMain.java:144)</div><div class="line"></div><div class="line">Process finished with <span class="built_in">exit</span> code 1</div></pre></td></tr></table></figure>
 <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Arrays.asList(args);</div></pre></td></tr></table></figure>
-<p>这个方法，根据<a href="http://docs.oracle.com/javase/6/docs/api/java/util/Arrays.html#asList%28T...%29" target="_blank" rel="external">JavaDoc</a></p>
+<p>这个方法，根据<a href="http://docs.oracle.com/javase/6/docs/api/java/util/Arrays.html#asList%28T...%29" target="_blank" rel="noopener">JavaDoc</a></p>
 <blockquote>
 <p>它返回的是一个固定大小的List，这意味着不支持任何修改的操作。比如add, remove等.</p>
 </blockquote>

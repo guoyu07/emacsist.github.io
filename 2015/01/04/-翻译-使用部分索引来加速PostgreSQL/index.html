@@ -12,16 +12,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="postgresql,翻译,database," />
+    <meta name="keywords" content="postgresql,database,翻译," />
   
 
   <meta name="description" content="原文 本文经过原作者Dan Robinson同意翻译。（我在twitter发送推文和他互动）  你知道PostgreSQL支持表的部分索引吗？这使得读取部分索引是非常快速的，几乎没有什么索引开销。如果你想重复地分析那些匹配给定的 WHERE 子句的行数据，那部分索引是最好的索引数据的方式。这使得PostgreSQL非常适合于那种涉及预聚集额外的特别分析的工作流。在这一点上，我将通过一个非常适合使用">
-<meta name="keywords" content="postgresql,翻译,database">
+<meta name="keywords" content="postgresql,database,翻译">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[翻译]使用部分索引来加速PostgreSQL">
 <meta property="og:url" content="https://emacsist.github.io/2015/01/04/-翻译-使用部分索引来加速PostgreSQL/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="原文 本文经过原作者Dan Robinson同意翻译。（我在twitter发送推文和他互动）  你知道PostgreSQL支持表的部分索引吗？这使得读取部分索引是非常快速的，几乎没有什么索引开销。如果你想重复地分析那些匹配给定的 WHERE 子句的行数据，那部分索引是最好的索引数据的方式。这使得PostgreSQL非常适合于那种涉及预聚集额外的特别分析的工作流。在这一点上，我将通过一个非常适合使用">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[翻译]使用部分索引来加速PostgreSQL">
@@ -206,7 +207,7 @@
 
     <div class="article-content">
         
-                            <p><a href="http://blog.heapanalytics.com/speeding-up-postgresql-queries-with-partial-indexes/" target="_blank" rel="external">原文</a></p>
+                            <p><a href="http://blog.heapanalytics.com/speeding-up-postgresql-queries-with-partial-indexes/" target="_blank" rel="noopener">原文</a></p>
 <p>本文经过原作者<code>Dan Robinson</code>同意翻译。（我在twitter发送推文和他互动）</p>
 <hr>
 <p>你知道PostgreSQL支持表的部分索引吗？这使得读取部分索引是非常快速的，几乎没有什么索引开销。如果你想重复地分析那些匹配给定的 WHERE 子句的行数据，那部分索引是最好的索引数据的方式。这使得PostgreSQL非常适合于那种涉及预聚集额外的特别分析的工作流。在这一点上，我将通过一个非常适合使用部分索引的查询优化示例来实践下。</p>
@@ -248,7 +249,7 @@
 <p>因此， 在我们的扫描里，使用该索引来限制事件的时间范围，但是它无论这个正则表达式是true还是false都会读取所有事件(译者注：这里指的是通过时间范围查出来的所有事件)，加载完毕后才对每一行进行检查条件。[4]</p>
 <p>因此，我们就会从磁盘里读取比实际需要的更加多的行，并且还要对每一个结果行执行重要的检查条件。在我们的数据集里，该查询开始执行时耗时25秒，之后再连续执行8秒。事实的真相是，这比仅索引<code>time</code>字段差一点，在执行上是等同的。</p>
 <p>部分索引对于预先计算那些通过谓词来匹配表的子集来说是一个非常强大的方式。通过流量判断 #postgresql IRC 并没有被充分利用。相比完全索引，它们允许一个更好的谓词范围。它们明显地更加轻量级，需要更少地写操作以及更少的磁盘空间，特别是那些高选择性的过滤。如果你重复地查询一个表的一小部分行，那么部分索引应该是你的默认策略。</p>
-<p>爱上PostgreSQL了吗？还有人可能知道更多关于部分索引的知识？发推给我 <a href="https://www.twitter.com/danlovesproofs" target="_blank" rel="external">@danlovesproofs</a></p>
+<p>爱上PostgreSQL了吗？还有人可能知道更多关于部分索引的知识？发推给我 <a href="https://www.twitter.com/danlovesproofs" target="_blank" rel="noopener">@danlovesproofs</a></p>
 <p>对构建使强大的技术变得易用的系统感兴趣？向我们投递留言到 jobs@heapanalytics.com.</p>
 <ul>
 <li><p>[1] 我们可能使用分表来解决这种情况，将高值事件和低值事件分到不同的子表，但是如果有许多不同的高值事件时这种方式就比较笨拙了，并且我们想要添加一个新类型的高值事件时，每次都需要重新分表。</p>

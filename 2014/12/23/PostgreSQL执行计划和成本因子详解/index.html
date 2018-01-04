@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2014/12/23/PostgreSQL执行计划和成本因子详解/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="PG对各表的统计信息：pg_stats资源来源：PostgreSQL 9.3.1 中文文档 —— Chapter 47. 系统表 —— 47.68. pg_stats    名字 类型 引用 描述     schemaname name pg_namespace.nspname 包含此表的模式名字   tablename name pg_class.relname 表的名字   attname n">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://emacsist.github.io/img/postgresql-explain-des.jpg">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
@@ -304,8 +305,8 @@
 <p>在PG9.4默认情况下的成本因子如下：（这些值可以在 postgresql.conf 文件里修改的）</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment"># - Planner Cost Constants -</span></div><div class="line"><span class="comment">#seq_page_cost = 1.0                    # measured on an arbitrary scale。扫描一个数据块（一页）的成本（IO成本）</span></div><div class="line"><span class="comment">#random_page_cost = 4.0                 # same scale as above。随机获取一个数据块（一页）的成本（IO成本）</span></div><div class="line"><span class="comment">#cpu_tuple_cost = 0.01                  # same scale as above。获取一行数据的CPU成本</span></div><div class="line"><span class="comment">#cpu_index_tuple_cost = 0.005           # same scale as above。获取一个索引项的CPU成本</span></div><div class="line"><span class="comment">#cpu_operator_cost = 0.0025             # same scale as above。每个操作符的CPU成本</span></div><div class="line"><span class="comment">#effective_cache_size = 4GB             #评估操作系统缓存可能使用的内存大小。用于评估索引扫描的开销，大的值倾向使用索引，小的值倾向使用全表扫描。一般设置为“物理内存 - shared buffers - 内核和其他软件占用的内存”。</span></div></pre></td></tr></table></figure>
 <p>注意：SSD的随机读和顺序读差别不是太大，这时可以缩小 <code>seq_page_cost</code> 和 <code>random_page_cost</code> 之间的大小。使<code>random_page_cost</code>趋向于<code>seq_page_cost</code>。</p>
-<h4 id="关于-effective-cache-size-特别说明一下"><a href="#关于-effective-cache-size-特别说明一下" class="headerlink" title="关于 effective_cache_size 特别说明一下"></a>关于 effective_cache_size 特别说明一下</h4><p><a href="http://blogs.enterprisedb.com/2012/05/04/the-effectiveness-of-effective_cache_size/" target="_blank" rel="external">资料来源</a></p>
-<p><code>effective_cache_size</code>用于在Linux操作系统上报告内核缓存的大小，我想强调一下它在<code>postgresql.conf</code>配置里的重要性。<br><a href="http://www.postgresql.org/docs/9.1/static/runtime-config-query.html#RUNTIME-CONFIG-QUERY-CONSTANTS" target="_blank" rel="external">effective_cache_size</a></p>
+<h4 id="关于-effective-cache-size-特别说明一下"><a href="#关于-effective-cache-size-特别说明一下" class="headerlink" title="关于 effective_cache_size 特别说明一下"></a>关于 effective_cache_size 特别说明一下</h4><p><a href="http://blogs.enterprisedb.com/2012/05/04/the-effectiveness-of-effective_cache_size/" target="_blank" rel="noopener">资料来源</a></p>
+<p><code>effective_cache_size</code>用于在Linux操作系统上报告内核缓存的大小，我想强调一下它在<code>postgresql.conf</code>配置里的重要性。<br><a href="http://www.postgresql.org/docs/9.1/static/runtime-config-query.html#RUNTIME-CONFIG-QUERY-CONSTANTS" target="_blank" rel="noopener">effective_cache_size</a></p>
 <p>不像其他内存那样是设置已经分配好的控制内存，<code>effective_cache_size</code>用于告诉优化器在内核里有多少cache（读缓存）。这对于决定代价高的索引扫描方式是非常重要的。优化器知道 <code>shared_buffers</code> 大小，但是不知道内核缓存大小，从而影响到代价非常高的磁盘访问。</p>
 <p>内核缓存大小改变比较频繁，所以，正常地运行一段时间的系统负载，然后使用该内存值去设置 <code>effective_cache_size</code>。这个值不必是非常完美的，仅仅只是粗略地估计还有多少内核内存，相当于是<code>shared buffers</code>的二级缓存。</p>
 <h2 id="explain-输出及详解"><a href="#explain-输出及详解" class="headerlink" title="explain 输出及详解"></a>explain 输出及详解</h2><p>explain 语法：</p>
@@ -325,7 +326,7 @@
 <p>虽然我们不能强制指定PostgreSQL按我们写的SQL来执行（无视优化器），但是可以通过改变某些的查询方式代价从而影响PostgreSQL的查询优化器的选择。<br>这时，我们可以从上面的扫描方式中将其修改为 <code>off</code>（其实不是强制不能以某种方式扫描，将其设置为 off时，只是将该项的扫描代价提高到非常大的值，从而让PostgreSQL尽可能避免使用该方式来进行扫描，但不是绝对的，如果其他的方式比off的代价更大，那PostgreSQL还是会选择代价最小的来执行的），这就为我们提供了非常好的控制我们SQL的扫描方式。</p>
 <h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><p>如果explain，执行计划在同一层级，则是由上到下执行的的.</p>
 <p>参考资料:</p>
-<p><a href="http://www.dalibo.org/_media/understanding_explain.pdf" target="_blank" rel="external">understanding_explain.pdf</a></p>
+<p><a href="http://www.dalibo.org/_media/understanding_explain.pdf" target="_blank" rel="noopener">understanding_explain.pdf</a></p>
 
                                 
     </div>

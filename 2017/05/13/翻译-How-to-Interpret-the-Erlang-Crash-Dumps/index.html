@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2017/05/13/翻译-How-to-Interpret-the-Erlang-Crash-Dumps/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="原文 如何解释 Erlang Crash Dumps本节介绍 Erlang 运行时系统在异常退出时生成的 erl_crash.dump 文件  注意：在 Erlang/OTP R9C 中， Erlang crash dump 有大幅的改变。在本节中的信息不能直接应用到旧的 dumps 文件中。但是，如果你使用了 crashdump_viewer(3) 查看旧的 dumps 文件，则 crash d">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-05-13T16:39:07.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[翻译]How to Interpret the Erlang Crash Dumps">
@@ -206,10 +207,10 @@
 
     <div class="article-content">
         
-                            <p><a href="http://erlang.org/doc/apps/erts/crash_dump.html" target="_blank" rel="external">原文</a></p>
+                            <p><a href="http://erlang.org/doc/apps/erts/crash_dump.html" target="_blank" rel="noopener">原文</a></p>
 <h1 id="如何解释-Erlang-Crash-Dumps"><a href="#如何解释-Erlang-Crash-Dumps" class="headerlink" title="如何解释 Erlang Crash Dumps"></a>如何解释 Erlang Crash Dumps</h1><p>本节介绍 Erlang 运行时系统在异常退出时生成的 <em>erl_crash.dump</em> 文件</p>
 <blockquote>
-<p>注意：<br>在 Erlang/OTP R9C 中， Erlang crash dump 有大幅的改变。在本节中的信息不能直接应用到旧的 dumps 文件中。但是，如果你使用了 <a href="http://erlang.org/doc/man/crashdump_viewer.html" target="_blank" rel="external">crashdump_viewer(3)</a> 查看旧的 dumps 文件，则 crash dumps 文件会被转换为与此相类似的格式。</p>
+<p>注意：<br>在 Erlang/OTP R9C 中， Erlang crash dump 有大幅的改变。在本节中的信息不能直接应用到旧的 dumps 文件中。但是，如果你使用了 <a href="http://erlang.org/doc/man/crashdump_viewer.html" target="_blank" rel="noopener">crashdump_viewer(3)</a> 查看旧的 dumps 文件，则 crash dumps 文件会被转换为与此相类似的格式。</p>
 </blockquote>
 <p>系统将 <em>crash dump</em> 文件写入模拟器（译注：即 Erlang虚拟机，类似JVM）的当前目录（译注：即你在哪个目录中启动 Erlang 虚拟机）或由环境变量 <em>ERL_CRASH_DUMP</em> 指定的文件中（无论是哪种系统都如此）。对于要写入的 crash dump 文件，必须是在一个已经挂载的可写入的文件系统。</p>
 <p>主要由于两种原因之一会导致写 <em>crash dump</em> 文件：内置函数 <em>erlang:halt/1</em> 从正在执行的 Erlang 代码中被显式地带有一个 <em>string</em> 参数来调用，或者运行时系统检测到无法处理的错误。最常见的系统无法处理错误的原因是由外部的限制导致的，例如内存不足。由于内部错误引起的 crash dump 可能会由于系统在模拟器自身达到了极限（例如系统中的原子数，或者太多同步ETS表）引起的。通常重新配置模拟器或操作系统可以避免崩溃，因此正确地解释 crash dump 是很重要的。</p>
@@ -227,7 +228,7 @@
 <h2 id="Crash-Dump-的原因-Slogan"><a href="#Crash-Dump-的原因-Slogan" class="headerlink" title="Crash Dump 的原因(Slogan)"></a>Crash Dump 的原因(Slogan)</h2><p>Dump 的原因显示在文件的开头:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Slogan: &lt;reason&gt;</div></pre></td></tr></table></figure>
 <p>如果系统是由 <em>BIF</em>  <em>erlang:halt/1</em> 停止的话，则 Slogan 是传递给 BIF 的 <em>string</em> 参数，否则它是模拟器或(Erlang)内核生成的描述。通常，该消息足以知道问题所在，但有时只是一些描述一些消息。请注意，认为的 crash 的原因，<em>仅仅只是认为</em> 。具体的错误原因会因本地应用以及所在的操作系统而异。</p>
-<h2 id="Cannot-allocate-bytes-of-memory-of-type-““"><a href="#Cannot-allocate-bytes-of-memory-of-type-““" class="headerlink" title=": Cannot allocate  bytes of memory (of type ““)"></a><a>: Cannot allocate <n> bytes of memory (of type “<t>“)</t></n></a></h2><p>系统内存不足。 <em><a></a></em> 是失败分配内存的分配器。<em><n></n></em> 是 <em><a></a></em> 试图分配的 <em>字节数</em> 。<em><t></t></em> 是内存需要分配的内存块类型。最常见的情况是进程存储大量的数据。在这种情况下，最常见的导致crash的 <em><t></t></em> 是 <em>heap</em> ， <em>old heap</em> , <em>heap_fraq</em> 或 <em>binary</em> 。更多关于分配器的信息，请看 <a href="http://erlang.org/doc/man/erts_alloc.html" target="_blank" rel="external">erts_alloc(3)</a></p>
+<h2 id="Cannot-allocate-bytes-of-memory-of-type-““"><a href="#Cannot-allocate-bytes-of-memory-of-type-““" class="headerlink" title=": Cannot allocate  bytes of memory (of type ““)"></a><a>: Cannot allocate <n> bytes of memory (of type “<t>“)</t></n></a></h2><p>系统内存不足。 <em><a></a></em> 是失败分配内存的分配器。<em><n></n></em> 是 <em><a></a></em> 试图分配的 <em>字节数</em> 。<em><t></t></em> 是内存需要分配的内存块类型。最常见的情况是进程存储大量的数据。在这种情况下，最常见的导致crash的 <em><t></t></em> 是 <em>heap</em> ， <em>old heap</em> , <em>heap_fraq</em> 或 <em>binary</em> 。更多关于分配器的信息，请看 <a href="http://erlang.org/doc/man/erts_alloc.html" target="_blank" rel="noopener">erts_alloc(3)</a></p>
 <h2 id="Cannot-reallocate-bytes-of-memory-of-type-““"><a href="#Cannot-reallocate-bytes-of-memory-of-type-““" class="headerlink" title=": Cannot reallocate  bytes of memory (of type ““)"></a><a>: Cannot reallocate <n> bytes of memory (of type “<t>“)</t></n></a></h2><p>与上述相同，除了内存是重新分配，而不是在系统内存不足时被分配外。</p>
 <h2 id="Unexpected-op-code"><a href="#Unexpected-op-code" class="headerlink" title="Unexpected op code "></a>Unexpected op code <n></n></h2><p>编译代码错误， <em>beam</em> 文件损坏或编译器出错。</p>
 <h2 id="Module-undefined-Function-undefined-No-function-1-No-function-start-2"><a href="#Module-undefined-Function-undefined-No-function-1-No-function-start-2" class="headerlink" title="Module  undefined | Function  undefined | No function :/1 | No function :start/2"></a>Module <name> undefined | Function <name> undefined | No function <name>:<name>/1 | No function <name>:start/2</name></name></name></name></name></h2><p>内核/STDLIB 应用程序已经损坏或启动脚本已经损坏</p>
@@ -253,8 +254,8 @@
 <h2 id="crashed"><a href="#crashed" class="headerlink" title="** crashed **"></a>** crashed **</h2><p>该条目通常是不会显示的。这意味着获取有关此调度器的其余信息由于某些原因而导致失败。</p>
 <h1 id="内存信息（Memory-Information）"><a href="#内存信息（Memory-Information）" class="headerlink" title="内存信息（Memory Information）"></a>内存信息（Memory Information）</h1><p>在标签 <em>=memory</em> 下面显示的信息类似于在一个存活的节点通过 <em>erlang:memory()</em> 获取的信息。</p>
 <h1 id="内部表信息（Internal-Table-Information）"><a href="#内部表信息（Internal-Table-Information）" class="headerlink" title="内部表信息（Internal Table Information）"></a>内部表信息（Internal Table Information）</h1><p>在标签 <em>=hash_table:<table_name></table_name></em> 和 <em>=index_table:<table_name></table_name></em> 下面显示了内部表的信息。这是运行时系统开发者最感兴趣的。</p>
-<h1 id="分配区域（Allocated-Areas）"><a href="#分配区域（Allocated-Areas）" class="headerlink" title="分配区域（Allocated Areas）"></a>分配区域（Allocated Areas）</h1><p>在标签 <em>=allocated_areas</em> 下面显示了在一个存活节点中通过 <a href="http://erlang.org/doc/man/erlang.html#system_info_allocated_areas" target="_blank" rel="external">erlang:system_info(allocated_areas).</a> 获取的信息类似。</p>
-<h1 id="分配器（Allocator）"><a href="#分配器（Allocator）" class="headerlink" title="分配器（Allocator）"></a>分配器（Allocator）</h1><p>在标签 <em>=allocator:<a></a></em> 下显示了各种关于分配器 <em><a></a></em> 的信息。这些信息类似于在一个存活的节点上通过 <a href="http://erlang.org/doc/man/erlang.html#system_info_allocator_tuple" target="_blank" rel="external">erlang:system_info({allocator, <a>}).</a> 获取的信息。更多信息，请参阅 <a href="http://erlang.org/doc/man/erts_alloc.html" target="_blank" rel="external">erts_alloc(3)</a></a></p>
+<h1 id="分配区域（Allocated-Areas）"><a href="#分配区域（Allocated-Areas）" class="headerlink" title="分配区域（Allocated Areas）"></a>分配区域（Allocated Areas）</h1><p>在标签 <em>=allocated_areas</em> 下面显示了在一个存活节点中通过 <a href="http://erlang.org/doc/man/erlang.html#system_info_allocated_areas" target="_blank" rel="noopener">erlang:system_info(allocated_areas).</a> 获取的信息类似。</p>
+<h1 id="分配器（Allocator）"><a href="#分配器（Allocator）" class="headerlink" title="分配器（Allocator）"></a>分配器（Allocator）</h1><p>在标签 <em>=allocator:<a></a></em> 下显示了各种关于分配器 <em><a></a></em> 的信息。这些信息类似于在一个存活的节点上通过 <a href="http://erlang.org/doc/man/erlang.html#system_info_allocator_tuple" target="_blank" rel="noopener">erlang:system_info({allocator, <a>}).</a> 获取的信息。更多信息，请参阅 <a href="http://erlang.org/doc/man/erts_alloc.html" target="_blank" rel="noopener">erts_alloc(3)</a></a></p>
 <h1 id="进程信息（Process-Information）"><a href="#进程信息（Process-Information）" class="headerlink" title="进程信息（Process Information）"></a>进程信息（Process Information）</h1><p>Erlang crashdump 包含了每个存活在 Erlang 系统的进程列表。以下字段可以存在于一个进程中：</p>
 <h2 id="proc"><a href="#proc" class="headerlink" title="=proc:"></a>=proc:<pid></pid></h2><p>标题。指示进程的 ID</p>
 <h2 id="State"><a href="#State" class="headerlink" title="State"></a>State</h2><p>进程的状态。可以是以下中的一个:</p>
@@ -280,12 +281,12 @@
 <h2 id="Stack-heap"><a href="#Stack-heap" class="headerlink" title="Stack+heap"></a>Stack+heap</h2><p>栈和堆的大小（它们共享内存段）</p>
 <h2 id="OldHeap"><a href="#OldHeap" class="headerlink" title="OldHeap"></a>OldHeap</h2><p><em>old heap</em> 的大小。Erlang虚拟机使用2代的分代垃圾收集器。有一个用于新数据项的堆，另一个用于两个垃圾收集后还存活的数据。这个假设（这几乎总是正确的）是，两个垃圾收集还存活的数据可以 <em>升级</em> 到一个更少垃圾收集的堆中，因为它们将存活比较长的一段时间。这是虚拟机中常见的技术。堆和栈一起的总和构成了进程的绝大部分分配的内存。</p>
 <h2 id="Heap-unused-OldHeap-unused"><a href="#Heap-unused-OldHeap-unused" class="headerlink" title="Heap unused, OldHeap unused"></a>Heap unused, OldHeap unused</h2><p>每个堆上未使用的内存量。它通常是无用的。</p>
-<h2 id="Memory"><a href="#Memory" class="headerlink" title="Memory"></a>Memory</h2><p>该进程总使用内存量。它包括了调用栈、堆和内部结构。与 <a href="http://erlang.org/doc/man/erlang.html#process_info-2" target="_blank" rel="external">erlang:process_info(Pid,memory)</a> 相同。</p>
+<h2 id="Memory"><a href="#Memory" class="headerlink" title="Memory"></a>Memory</h2><p>该进程总使用内存量。它包括了调用栈、堆和内部结构。与 <a href="http://erlang.org/doc/man/erlang.html#process_info-2" target="_blank" rel="noopener">erlang:process_info(Pid,memory)</a> 相同。</p>
 <h2 id="Program-counter"><a href="#Program-counter" class="headerlink" title="Program counter"></a>Program counter</h2><p>当前指令指针。仅运行时系统开发者感兴趣。它指向的函数是当前进程的函数。</p>
 <h2 id="CP"><a href="#CP" class="headerlink" title="CP"></a>CP</h2><p>Continuation Pointer，即当前调用的返回地址。对于非运行时系统开发者来说是无用的。可以跟踪 CP 指向的函数，即调用当前函数的函数。</p>
 <h2 id="Arity"><a href="#Arity" class="headerlink" title="Arity"></a>Arity</h2><p>实数参数的寄存器数量。如果有实参的话则紧接着参数寄存器。它可包含函数参数，如果它们还没有迁移到栈的话。</p>
 <h2 id="Internal-State"><a href="#Internal-State" class="headerlink" title="Internal State"></a>Internal State</h2><p>关于该进程的更多内部状态</p>
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>参看 <a href="http://erlang.org/doc/apps/erts/crash_dump.html#proc_data" target="_blank" rel="external">process data</a></p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>参看 <a href="http://erlang.org/doc/apps/erts/crash_dump.html#proc_data" target="_blank" rel="noopener">process data</a></p>
 <h1 id="Port-信息"><a href="#Port-信息" class="headerlink" title="Port 信息"></a>Port 信息</h1><p>这部分列出了打开的 ports ，它们的拥有者，任何连接的进程，它们 driver 或外部进程的名字。</p>
 <h1 id="ETS-表"><a href="#ETS-表" class="headerlink" title="ETS 表"></a>ETS 表</h1><p>这部分包含了系统中的所有关于 ETS 表的信息。以下是每一张表的字段</p>
 <h2 id="ets"><a href="#ets" class="headerlink" title="=ets:"></a>=ets:<owner></owner></h2><p>标题。指明表的拥有者（一个进程ID）</p>
@@ -294,7 +295,7 @@
 <h2 id="Hash-table-Buckets"><a href="#Hash-table-Buckets" class="headerlink" title="Hash table, Buckets"></a>Hash table, Buckets</h2><p>是否是一张 hash 表，即，它并不是一张 <em>ordered_set</em> 表</p>
 <h2 id="Hash-table-Chain-Length"><a href="#Hash-table-Chain-Length" class="headerlink" title="Hash table, Chain Length"></a>Hash table, Chain Length</h2><p>表是否是一张 hash 表。包含了关于表的统计信息，比如：最大、最小和平均链长度。具有比平均值大得多和远大于预期标准偏差的标准偏差，这表示由于某些原因，<em>terms</em> 的 hash 表现不好。</p>
 <h2 id="Ordered-set-AVL-tree-Elements"><a href="#Ordered-set-AVL-tree-Elements" class="headerlink" title="Ordered set (AVL tree), Elements"></a>Ordered set (AVL tree), Elements</h2><p>表是否是 <em>ordered_set</em> 。（元素的数量与表中的对象数相同）</p>
-<h2 id="Fixed"><a href="#Fixed" class="headerlink" title="Fixed"></a>Fixed</h2><p>表是否使用 <a href="http://erlang.org/doc/man/ets.html#safe_fixtable-2" target="_blank" rel="external">ets:safe_fixtable/2</a> 或一些内部机制修复了。</p>
+<h2 id="Fixed"><a href="#Fixed" class="headerlink" title="Fixed"></a>Fixed</h2><p>表是否使用 <a href="http://erlang.org/doc/man/ets.html#safe_fixtable-2" target="_blank" rel="noopener">ets:safe_fixtable/2</a> 或一些内部机制修复了。</p>
 <h2 id="Objects"><a href="#Objects" class="headerlink" title="Objects"></a>Objects</h2><p>表中的对象数</p>
 <h2 id="Words"><a href="#Words" class="headerlink" title="Words"></a>Words</h2><p>表中数据被分配的字数（通常4字节为一字）</p>
 <h2 id="Type"><a href="#Type" class="headerlink" title="Type"></a>Type</h2><p>表的类型， <em>set</em> , <em>bag</em> , <em>dublicate_bag</em> 或 <em>ordered_set</em> </p>

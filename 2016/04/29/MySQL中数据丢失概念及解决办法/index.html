@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2016/04/29/MySQL中数据丢失概念及解决办法/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="概念即数据库告诉我这次事务成功了，但当我下次读取数据时，却发现数据不正确。这就是数据丢失. 原因看个场景, redo log丢失造成的主从不一致：  bin-log写入所以从库能够执行事务。但主库中trx_prepare的日志没有被写入到ib_logifle中，导致主库不执行事务。这样就会出现主从不一致的情况—主库没执行事务，而从库执行。成的主从不一致  redo log 刷盘策略由 innodb">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL中数据丢失概念及解决办法">
@@ -228,10 +229,10 @@
 <ol>
 <li>强同步</li>
 </ol>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://dba.stackexchange.com/questions/72904/what-is-the-differnent-between-transaction-log-and-redo-log-in-mysql" target="_blank" rel="external">stackexchange</a></p>
-<p><a href="http://science.dataguru.cn/thread-586099-1-1.html" target="_blank" rel="external">Mysql 重做日志及与二进制日志的区别</a></p>
-<p><a href="http://csrd.aliapp.com/?p=870" target="_blank" rel="external">aliapp</a></p>
-<p><a href="https://yq.aliyun.com/articles/2239" target="_blank" rel="external">aliyun</a></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://dba.stackexchange.com/questions/72904/what-is-the-differnent-between-transaction-log-and-redo-log-in-mysql" target="_blank" rel="noopener">stackexchange</a></p>
+<p><a href="http://science.dataguru.cn/thread-586099-1-1.html" target="_blank" rel="noopener">Mysql 重做日志及与二进制日志的区别</a></p>
+<p><a href="http://csrd.aliapp.com/?p=870" target="_blank" rel="noopener">aliapp</a></p>
+<p><a href="https://yq.aliyun.com/articles/2239" target="_blank" rel="noopener">aliyun</a></p>
 
                                 
     </div>

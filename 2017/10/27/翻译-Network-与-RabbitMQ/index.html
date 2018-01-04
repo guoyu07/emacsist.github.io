@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2017/10/27/翻译-Network-与-RabbitMQ/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="原文 Networking and RabbitMQ 简介Clients 是通过 network 与 RabbitMQ 通信的。所有 Broker （译注：即RabbitMQ服务器）支持的协议，都是基于 TCP 的。RabbitMQ与操作系统都提供了许多可以调整的参数。它们中有一些是直接与 TCP/IP 操作相关的，另外有一些是与应用层级别协议如 TLS 相关的。这份指南，覆盖了许多与Rabbit">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-10-30T07:34:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[翻译] Network 与 RabbitMQ">
@@ -201,7 +202,7 @@
 
     <div class="article-content">
         
-                            <p><a href="https://www.rabbitmq.com/networking.html" target="_blank" rel="external">原文 Networking and RabbitMQ</a></p>
+                            <p><a href="https://www.rabbitmq.com/networking.html" target="_blank" rel="noopener">原文 Networking and RabbitMQ</a></p>
 <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>Clients 是通过 network 与 RabbitMQ 通信的。所有 Broker （译注：即RabbitMQ服务器）支持的协议，都是基于 TCP 的。RabbitMQ与操作系统都提供了许多可以调整的参数。它们中有一些是直接与 TCP/IP 操作相关的，另外有一些是与应用层级别协议如 TLS 相关的。这份指南，覆盖了许多与RabbitMQ上下文中 network 相关的主题。本指抽不是广泛的参考，而是概述。讨论的一些可以调参数是OS特定的。当覆盖特定OS时，这份指南重点介绍 Linux 平台的主题，因为它是 RabbitMQ 最常见的部署平台。</p>
 <p>可以配置或调整的地方：</p>
 <ul>
@@ -212,7 +213,7 @@
 <li>(AMQP 0-9-1, STOMP) heartbeats，在MQTT中称为 keepalives</li>
 <li>hostname 和 DNS</li>
 </ul>
-<p>除了 OS 内核参数和 DNS，所有 RabbitMQ 设置都是 <a href="https://www.rabbitmq.com/configure.html" target="_blank" rel="external">通过 RabbitMQ 配置文件来配置的</a></p>
+<p>除了 OS 内核参数和 DNS，所有 RabbitMQ 设置都是 <a href="https://www.rabbitmq.com/configure.html" target="_blank" rel="noopener">通过 RabbitMQ 配置文件来配置的</a></p>
 <p>Networking 是一个比较广泛的话题。有许多配置选项对某些 workloads （译注：工作负载）会产生积极或消极的影响。因此，本指南不能作为完整的参考，而是提供关键可以调参数的索引的起点。</p>
 <h1 id="network-interface-（网络接口）"><a href="#network-interface-（网络接口）" class="headerlink" title="network interface （网络接口）"></a>network interface （网络接口）</h1><p>对于 RabbitMQ 要接受 client 的连接，它需要绑定到一个或多个 interfaces 并监听（特定协议）端口。 interfaces 可以使用 <em>rabbit.tcp_listeners</em> 配置选项来配置。默认情况下，RabbitMQ 将在所有可用的 interfaces 上监听 <em>5672</em> 端口。</p>
 <p>TCP listeners 配置 interface 和 端口。以下示例演示了如何在特定IP和标准端口上配置 RabbitMQ</p>
@@ -224,23 +225,23 @@
 <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">  &#123;rabbit, [</div><div class="line">    &#123;tcp_listeners, [&#123;"0.0.0.0", 5672&#125;,</div><div class="line">                     &#123;"::",      5672&#125;]&#125;</div><div class="line">  ]&#125;</div><div class="line">].</div></pre></td></tr></table></figure>
 <h2 id="仅监听-IPv4-interfaces"><a href="#仅监听-IPv4-interfaces" class="headerlink" title="仅监听 IPv4 interfaces"></a>仅监听 IPv4 interfaces</h2><p>在这个例子中，RabbitMQ 将仅监听 IPv4 interfaces </p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">  &#123;rabbit, [</div><div class="line">    &#123;tcp_listeners, [&#123;"192.168.1.99", 5672&#125;]&#125;</div><div class="line">  ]&#125;</div><div class="line">].</div></pre></td></tr></table></figure>
-<p>或者，如果需要单栈设置，则可以使用 <em>RABBITMQ_NODE_IP</em> 环境变量来配置 interfaces。 请参考我们的 <a href="https://www.rabbitmq.com/configure.html" target="_blank" rel="external">配置指南</a></p>
+<p>或者，如果需要单栈设置，则可以使用 <em>RABBITMQ_NODE_IP</em> 环境变量来配置 interfaces。 请参考我们的 <a href="https://www.rabbitmq.com/configure.html" target="_blank" rel="noopener">配置指南</a></p>
 <h2 id="仅监听-IPv6-interfaces"><a href="#仅监听-IPv6-interfaces" class="headerlink" title="仅监听 IPv6 interfaces"></a>仅监听 IPv6 interfaces</h2><p>在这个例子中，RabbitMQ 将仅监听 IPv6 interfaces</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">  &#123;rabbit, [</div><div class="line">    &#123;tcp_listeners, [&#123;"fe80::2acf:e9ff:fe17:f97b", 5672&#125;]&#125;</div><div class="line">  ]&#125;</div><div class="line">].</div></pre></td></tr></table></figure>
-<p>或者，如果需要单栈设置，则可以使用 <em>RABBITMQ_NODE_IP</em> 环境变量来配置 interfaces。 请参考我们的 <a href="https://www.rabbitmq.com/configure.html" target="_blank" rel="external">配置指南</a></p>
+<p>或者，如果需要单栈设置，则可以使用 <em>RABBITMQ_NODE_IP</em> 环境变量来配置 interfaces。 请参考我们的 <a href="https://www.rabbitmq.com/configure.html" target="_blank" rel="noopener">配置指南</a></p>
 <h1 id="端口访问"><a href="#端口访问" class="headerlink" title="端口访问"></a>端口访问</h1><p>SELinux 以及其他相似机制可能会防止 RabbitMQ 去绑定一个端口。当发生这种情况时，RabbitMQ 将无法启动。防火墙可以防止节点和CLI工具相互通信。请确保可以打开以下端口：</p>
 <ul>
-<li>4369 : <a href="http://erlang.org/doc/man/epmd.html" target="_blank" rel="external">epmd</a> RabbitMQ 节点和CLI工具使用的对等发现服务</li>
+<li>4369 : <a href="http://erlang.org/doc/man/epmd.html" target="_blank" rel="noopener">epmd</a> RabbitMQ 节点和CLI工具使用的对等发现服务</li>
 <li>5672,5671 : 由 AMQP 0-9-1 和 1.0 客户端使用，不带TLS和TLS</li>
-<li>25672 : 由 Erlang 分发用于节点间和CLI工具通信，并从动态范围分配（默认情况下限制为单个端口，计算为 AMQP端口+20000）。详情请参阅 <a href="https://www.rabbitmq.com/networking.html" target="_blank" rel="external">网络指南</a></li>
-<li>15672 : <a href="https://www.rabbitmq.com/management.html" target="_blank" rel="external">HTTP API</a> 客户端和 rabbitmqadmin （只有启用了 <a href="https://www.rabbitmq.com/management.html" target="_blank" rel="external">management plugin</a> )</li>
-<li>61613, 61614 : <a href="https://stomp.github.io/stomp-specification-1.2.html" target="_blank" rel="external">STOMP 客户端</a> 不带和带TLS(只有启用了 <a href="https://www.rabbitmq.com/stomp.html" target="_blank" rel="external">STOMP plugin</a>)</li>
-<li>1883, 8883 : <a href="http://mqtt.org/" target="_blank" rel="external">MQTT 客户端</a> 不带和带 TLS （只有启用了 <a href="https://www.rabbitmq.com/mqtt.html" target="_blank" rel="external">MQTT plugin</a> )</li>
-<li>15674 : STOMP 之于 WebSockets 的客户端 (只有启用了 <a href="https://www.rabbitmq.com/web-stomp.html" target="_blank" rel="external">Web STOMP plugin</a>)</li>
-<li>15675 : MQTT 之于 WebSockets 的客户端 (只有启用了 <a href="https://www.rabbitmq.com/web-stomp.html" target="_blank" rel="external">Web MQTT plugin</a>)</li>
+<li>25672 : 由 Erlang 分发用于节点间和CLI工具通信，并从动态范围分配（默认情况下限制为单个端口，计算为 AMQP端口+20000）。详情请参阅 <a href="https://www.rabbitmq.com/networking.html" target="_blank" rel="noopener">网络指南</a></li>
+<li>15672 : <a href="https://www.rabbitmq.com/management.html" target="_blank" rel="noopener">HTTP API</a> 客户端和 rabbitmqadmin （只有启用了 <a href="https://www.rabbitmq.com/management.html" target="_blank" rel="noopener">management plugin</a> )</li>
+<li>61613, 61614 : <a href="https://stomp.github.io/stomp-specification-1.2.html" target="_blank" rel="noopener">STOMP 客户端</a> 不带和带TLS(只有启用了 <a href="https://www.rabbitmq.com/stomp.html" target="_blank" rel="noopener">STOMP plugin</a>)</li>
+<li>1883, 8883 : <a href="http://mqtt.org/" target="_blank" rel="noopener">MQTT 客户端</a> 不带和带 TLS （只有启用了 <a href="https://www.rabbitmq.com/mqtt.html" target="_blank" rel="noopener">MQTT plugin</a> )</li>
+<li>15674 : STOMP 之于 WebSockets 的客户端 (只有启用了 <a href="https://www.rabbitmq.com/web-stomp.html" target="_blank" rel="noopener">Web STOMP plugin</a>)</li>
+<li>15675 : MQTT 之于 WebSockets 的客户端 (只有启用了 <a href="https://www.rabbitmq.com/web-stomp.html" target="_blank" rel="noopener">Web MQTT plugin</a>)</li>
 </ul>
-<p>可以将 RabbitMQ <a href="https://www.rabbitmq.com/configure.html" target="_blank" rel="external">配置</a> 为使用 <a href="https://www.rabbitmq.com/networking.html" target="_blank" rel="external">不同的端口和特定的 network interfaces</a></p>
-<h1 id="EPMD-和-内部节点通信端口"><a href="#EPMD-和-内部节点通信端口" class="headerlink" title="EPMD 和 内部节点通信端口"></a>EPMD 和 内部节点通信端口</h1><p>Erlang 使用端口映射程序守护进程(epmd) 来解决集群中的节点名称。 默认的 epmd 端口是 4369 ，但可以使用 <em>ERL_EPMD_PORT</em> 环境变量来更改。所有节点必须使用相同的端口。有关详细信息，请参阅 <a href="http://www.erlang.org/doc/man/epmd.html" target="_blank" rel="external">Erlang epmd manpage</a></p>
+<p>可以将 RabbitMQ <a href="https://www.rabbitmq.com/configure.html" target="_blank" rel="noopener">配置</a> 为使用 <a href="https://www.rabbitmq.com/networking.html" target="_blank" rel="noopener">不同的端口和特定的 network interfaces</a></p>
+<h1 id="EPMD-和-内部节点通信端口"><a href="#EPMD-和-内部节点通信端口" class="headerlink" title="EPMD 和 内部节点通信端口"></a>EPMD 和 内部节点通信端口</h1><p>Erlang 使用端口映射程序守护进程(epmd) 来解决集群中的节点名称。 默认的 epmd 端口是 4369 ，但可以使用 <em>ERL_EPMD_PORT</em> 环境变量来更改。所有节点必须使用相同的端口。有关详细信息，请参阅 <a href="http://www.erlang.org/doc/man/epmd.html" target="_blank" rel="noopener">Erlang epmd manpage</a></p>
 <p>一旦分布式的 Erlang 节点地址已通过 epmd 解析，其他节点将尝试使用 Erlang 分发协议与该地址直接通信。有关详细信息，请参阅下一节。</p>
 <p>RabbitMQ 节点使用称为分发端口的端口与CLI工具和其他节点通信。它是从一系列值动态分配的。默认情况下，该范围仅限于以配置的 <em>RABBITMQ_NODE_PORT</em> (AMQP 端口) + 20000 或 25672 。此单个端口范围可以使用 <em>RABBITMQ_DIST_PORT</em> 环境变量进行配置。</p>
 <p>范围也可以通过两个配置键进行控制:</p>
@@ -255,7 +256,7 @@
 <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">epmd -names</div></pre></td></tr></table></figure>
 <p>它将输出如下所示:</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">epmd: up and running on port 4369 with data:</div><div class="line">name rabbit at port 25672</div></pre></td></tr></table></figure>
-<h1 id="TLS-SSL-支持"><a href="#TLS-SSL-支持" class="headerlink" title="TLS (SSL) 支持"></a>TLS (SSL) 支持</h1><p>可以使用 RabbitMQ 的TLS 加密连接。使用对等证书的身份验证也是可行的。有关详细信息，请参阅 <a href="https://www.rabbitmq.com/ssl.html" target="_blank" rel="external">TLS/SSL 指南</a></p>
+<h1 id="TLS-SSL-支持"><a href="#TLS-SSL-支持" class="headerlink" title="TLS (SSL) 支持"></a>TLS (SSL) 支持</h1><p>可以使用 RabbitMQ 的TLS 加密连接。使用对等证书的身份验证也是可行的。有关详细信息，请参阅 <a href="https://www.rabbitmq.com/ssl.html" target="_blank" rel="noopener">TLS/SSL 指南</a></p>
 <h1 id="调整吞吐量"><a href="#调整吞吐量" class="headerlink" title="调整吞吐量"></a>调整吞吐量</h1><p>调整吞吐量是一个常见的目标。可以通过优化以下:</p>
 <ul>
 <li>增加 TCP buffer 的大小</li>
@@ -287,7 +288,7 @@
 <li>VM 配置允许的最大 Erlang 进程数</li>
 </ul>
 <h2 id="打开文件句柄限制"><a href="#打开文件句柄限制" class="headerlink" title="打开文件句柄限制"></a>打开文件句柄限制</h2><p>大多数操作系统限制可以同时打开的文件句柄的数量。当操作系统进行 (如 RabbitMQ 的 Erlang VM) 达到极限时，它将无法打开任何新文件或接受任何更多的 TCP 连接</p>
-<p>如何配置限制从操作系统到操作系统和分发到分发，例如：取决于是否使用 systemd 。对于 Linux，在Debian 和 RPM 安装指南中提供了 linux 上的控制系统限制。 Linux 内核限制管理被 web 上许多资源所涵盖，<a href="https://ro-che.info/articles/2017-03-26-increase-open-files-limit" target="_blank" rel="external">包括打开的文件句柄限制</a>。 <a href="https://superuser.com/questions/433746/is-there-a-fix-for-the-too-many-open-files-in-system-error-on-os-x-10-7-1" target="_blank" rel="external">MacOS 使用类似的系统</a></p>
+<p>如何配置限制从操作系统到操作系统和分发到分发，例如：取决于是否使用 systemd 。对于 Linux，在Debian 和 RPM 安装指南中提供了 linux 上的控制系统限制。 Linux 内核限制管理被 web 上许多资源所涵盖，<a href="https://ro-che.info/articles/2017-03-26-increase-open-files-limit" target="_blank" rel="noopener">包括打开的文件句柄限制</a>。 <a href="https://superuser.com/questions/433746/is-there-a-fix-for-the-too-many-open-files-in-system-error-on-os-x-10-7-1" target="_blank" rel="noopener">MacOS 使用类似的系统</a></p>
 <p>在优化并发连接数时，确保你的系统具有足够的文件描述符，不仅可以支持客户端连接，还可以支持节点可能使用的文件。要计算一个 ballpark 限制，将每个节点的连接数乘以 1.5 。例如，要支持 100,000 个连接，请将限制设置为 15 万。增加限制稍微增加 RAM 空闲机使用量，但这是一个合理的权衡。</p>
 <h2 id="TCP-buffer-大小"><a href="#TCP-buffer-大小" class="headerlink" title="TCP buffer 大小"></a>TCP buffer 大小</h2><p>有关概述，请参阅上面的部分。可以使用 </p>
 <ul>
@@ -312,7 +313,7 @@
 <ul>
 <li><code>fs.file-max</code> : 内核将分配的最大文件数。可以使用 <code>/proc/sys/fs/file-nr</code> 检查限制和当前值</li>
 <li><code>net.ipv4.ip_local_port_range</code> : 本地IP端口范围，定义为一对值。该范围必须为并发连接的峰值数量提供足够的条目。</li>
-<li><code>net.ipv4.tcp_tw_reuse</code> : 启用时，允许内核在TIME_WAIT状态下重新使用套接字。有关详细信息，请参阅 <a href="http://vincent.bernat.im/en/blog/2014-tcp-time-wait-state-linux.html" target="_blank" rel="external">应答忙碌服务器上的TCP <code>TIME_WAIT</code> 连接</a>。 NAT使用后，此选项很危险</li>
+<li><code>net.ipv4.tcp_tw_reuse</code> : 启用时，允许内核在TIME_WAIT状态下重新使用套接字。有关详细信息，请参阅 <a href="http://vincent.bernat.im/en/blog/2014-tcp-time-wait-state-linux.html" target="_blank" rel="noopener">应答忙碌服务器上的TCP <code>TIME_WAIT</code> 连接</a>。 NAT使用后，此选项很危险</li>
 <li><code>net.ipv4.tcp_fin_timeout</code> : 将此值降至5-10，会减少关闭连接将保持在 <code>TIME_WAIT</code> 状态的时间。推荐用于大量并发连接的情况。</li>
 <li><code>net.core.somaxconn</code> : 监听队列的大小（正在同时建立多少个连接）。默认为 128.增加到4096或更高以支持入站连接的突发情况，例如：大量客户端重新连接时。</li>
 <li><code>net.ipv4.tcp_max_syn_backlog</code> : 连接客户端未收到确认的最大连接请求数，默认为128，最大值为 65535 。对于吞吐量进行优化时，建议使用 4096 和 8192 启动值。</li>
@@ -322,11 +323,11 @@
 <p>请注意，Linux 内核版本和发行版之间的默认值会有所不同。建议使用最近的内核（3.9或更高版本）。</p>
 <p>内核参数调优与操作系统不同。本指南重点介绍 Linux 。要以交互方式配置内核参数，请使用 <code>sysctl -w</code> （需要 root 权限），例如:</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sysctl -w fs.file-max 200000</div></pre></td></tr></table></figure>
-<p>要使更改永久（重新启动之间）生效，它们需要添加到 <code>/etc/sysctl.conf</code> 有关详细信息，请参见 <a href="http://man7.org/linux/man-pages/man8/sysctl.8.html" target="_blank" rel="external">sysctl(8)</a> 和 <a href="http://man7.org/linux/man-pages/man5/sysctl.conf.5.html" target="_blank" rel="external">sysctl.conf(5)</a></p>
+<p>要使更改永久（重新启动之间）生效，它们需要添加到 <code>/etc/sysctl.conf</code> 有关详细信息，请参见 <a href="http://man7.org/linux/man-pages/man8/sysctl.8.html" target="_blank" rel="noopener">sysctl(8)</a> 和 <a href="http://man7.org/linux/man-pages/man5/sysctl.conf.5.html" target="_blank" rel="noopener">sysctl.conf(5)</a></p>
 <p>TCP 栈调优是一个广泛的话题，其他地方有很多细节:</p>
 <ul>
-<li><a href="https://psc.edu/index.php/services/networking/68-research/networking/641-tcp-tune" target="_blank" rel="external">开启高性能数据传输</a></li>
-<li><a href="https://fasterdata.es.net/network-tuning/" target="_blank" rel="external">网络调优指南</a></li>
+<li><a href="https://psc.edu/index.php/services/networking/68-research/networking/641-tcp-tune" target="_blank" rel="noopener">开启高性能数据传输</a></li>
+<li><a href="https://fasterdata.es.net/network-tuning/" target="_blank" rel="noopener">网络调优指南</a></li>
 </ul>
 <h1 id="TCP-套接字选项"><a href="#TCP-套接字选项" class="headerlink" title="TCP 套接字选项"></a>TCP 套接字选项</h1><h2 id="常见选项"><a href="#常见选项" class="headerlink" title="常见选项"></a>常见选项</h2><ul>
 <li><code>rabbit.tcp_listen_options.nodelay</code> : 当设为 <code>true</code> ，禁用 Nagle 算法。默认为 <code>true</code> 。对绝大多数用户来说是强烈推荐的。</li>
@@ -338,7 +339,7 @@
 </ul>
 <h2 id="默认"><a href="#默认" class="headerlink" title="默认"></a>默认</h2><p>以下是 RabbitMQ　默认的　TCP　套接字选项配置</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">  &#123;rabbit, [</div><div class="line">    &#123;tcp_listen_options, [&#123;backlog,       128&#125;,</div><div class="line">                          &#123;nodelay,       true&#125;,</div><div class="line">                          &#123;linger,        &#123;true, 0&#125;&#125;,</div><div class="line">                          &#123;exit_on_close,  false&#125;]</div><div class="line">  ]&#125;</div><div class="line">].</div></pre></td></tr></table></figure>
-<h2 id="心跳"><a href="#心跳" class="headerlink" title="心跳"></a>心跳</h2><p>RabbitMQ　支持的一些协议（包括 AMQP 0-9-1)　支持心跳，更快地检测死 TCP　对等体。有关详细信息，请参阅 <a href="https://www.rabbitmq.com/heartbeats.html" target="_blank" rel="external">心跳指南</a></p>
+<h2 id="心跳"><a href="#心跳" class="headerlink" title="心跳"></a>心跳</h2><p>RabbitMQ　支持的一些协议（包括 AMQP 0-9-1)　支持心跳，更快地检测死 TCP　对等体。有关详细信息，请参阅 <a href="https://www.rabbitmq.com/heartbeats.html" target="_blank" rel="noopener">心跳指南</a></p>
 <h2 id="Net-Tick-时间"><a href="#Net-Tick-时间" class="headerlink" title="Net Tick　时间"></a>Net Tick　时间</h2><p>心跳用于检测客户端和 RabbitMQ　节点之间的对等体或连接故障。 <code>net_ticktime</code>　用于同一目的，但用于集群节点通信。小于5（秒）的值，可能会导致假阳性，不推荐使用。</p>
 <h2 id="TCP-keepalives"><a href="#TCP-keepalives" class="headerlink" title="TCP keepalives"></a>TCP keepalives</h2><p>TCP包含一个类似于心跳（a.k.a. keepalive）的机制，一个在消息协议和上面覆盖的 <code>net tick</code> 超时：TCP keepalives。 由于缺省设置不正确，TCP Keepalives通常不能按照它们的方式工作：需要很长时间（比如说一个小时或更长时间）来检测死亡对等体。 然而，通过调整，它们可以起到与心跳相同的目的，并清除陈旧的TCP连接，例如 客户选择不使用心跳，有意或无意。 以下是TCP Keepalive的一个示例，表示TCP连接在TCP连接死亡或120秒后无法访问（连接空闲60秒后每15秒尝试一次）：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">net.ipv4.tcp_keepalive_time=60</div><div class="line">net.ipv4.tcp_keepalive_intvl=15</div><div class="line">net.ipv4.tcp_keepalive_probes=4</div></pre></td></tr></table></figure>

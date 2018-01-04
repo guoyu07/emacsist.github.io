@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2016/06/01/Java并发操作MySQL数据库的读写注意/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="情景模拟：  线程1是一个task,然后分批select数据，然后可能会对这些select的结果进行更新线程2是一个业务, 它也可能会对这些数据进行update. 问题：如果线程1首先拿到一个数据的快照（MySQL的MVCC），然后开始遍历每行数据来根据业务更新。这时，线程2修改了数据原来的状态。这时线程已经拿到的数据，就会是脏数据了。然后就会导致数据的不一致！ 解决办法方式1使用 select">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java并发操作MySQL数据库的读写注意">

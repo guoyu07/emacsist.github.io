@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2017/05/16/翻译-RabbitMQ-心跳/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="用心跳检测死TCP连接介绍网络可能会以许多方式失败，有时会很细微（例如高比率的数据包丢失）。中断的TCP连接需要比较长时间（例如，在Linux上默认是大约11分钟）才能被操作系统检测到。AMQP 0-9-1 提供心跳功能，以确保应用层及时发现连接中断（以及完全无响应的对等体）。心跳也可以防御某些网络设备，当一段时间内没有任何活动时，可能会终止空闲的TCP连接。 心跳超时间隔心跳超时值的定义为：在R">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-05-16T04:45:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[翻译]RabbitMQ 心跳">
@@ -213,13 +214,13 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var cf = new ConnectionFactory();</div><div class="line">// <span class="built_in">set</span> the heartbeat timeout to 60 seconds</div><div class="line">cf.RequestedHeartbeat = 60;</div></pre></td></tr></table></figure>
 <h1 id="低超时值与错误判断"><a href="#低超时值与错误判断" class="headerlink" title="低超时值与错误判断"></a>低超时值与错误判断</h1><p>由于瞬时网络拥塞、短时间服务器流量控制等原因，将心跳超时值设置得太低可能导致错误的判断（对等体被认为不可用，但实际上它是可用的）。在选择超时值时，应该考虑这一点。</p>
 <p>来自用户和客户端库维护者的这几年有价值的反馈表明，低于5秒的值很可能导致误报，1秒或更低的值则非常可能会这样子做。5到20秒范围内的值对大多数环境是最佳的选择。</p>
-<h1 id="在-STOMP-中的心跳"><a href="#在-STOMP-中的心跳" class="headerlink" title="在 STOMP 中的心跳"></a>在 STOMP 中的心跳</h1><p><a href="https://stomp.github.io/stomp-specification-1.2.html#Heart-beating" target="_blank" rel="external">STOMP1.2 包含心跳</a> 。在STOMP中，心跳超时可以是不对称的：也就是说，客户端和服务器可以使用不同的值。 RabbitMQ STOMP插件完全支持此功能。</p>
-<p>STOMP中的心跳可以选择性加入。要开启它们，请在连接时，使用 <em>heart-beat</em> 头部。参见 <a href="https://stomp.github.io/stomp-specification-1.2.html#Heart-beating" target="_blank" rel="external">STOMP 规范</a> 的一个例子。</p>
-<h1 id="在-MQTT-中的心跳"><a href="#在-MQTT-中的心跳" class="headerlink" title="在 MQTT 中的心跳"></a>在 MQTT 中的心跳</h1><p><a href="http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/csprd02/mqtt-v3.1.1-csprd02.html#_Toc385349238" target="_blank" rel="external">MQTT 3.1.1 包含心跳</a> ，用不同的名称（keepalives)来表示。RabbitMQ MQTT插件完全支持此功能。</p>
+<h1 id="在-STOMP-中的心跳"><a href="#在-STOMP-中的心跳" class="headerlink" title="在 STOMP 中的心跳"></a>在 STOMP 中的心跳</h1><p><a href="https://stomp.github.io/stomp-specification-1.2.html#Heart-beating" target="_blank" rel="noopener">STOMP1.2 包含心跳</a> 。在STOMP中，心跳超时可以是不对称的：也就是说，客户端和服务器可以使用不同的值。 RabbitMQ STOMP插件完全支持此功能。</p>
+<p>STOMP中的心跳可以选择性加入。要开启它们，请在连接时，使用 <em>heart-beat</em> 头部。参见 <a href="https://stomp.github.io/stomp-specification-1.2.html#Heart-beating" target="_blank" rel="noopener">STOMP 规范</a> 的一个例子。</p>
+<h1 id="在-MQTT-中的心跳"><a href="#在-MQTT-中的心跳" class="headerlink" title="在 MQTT 中的心跳"></a>在 MQTT 中的心跳</h1><p><a href="http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/csprd02/mqtt-v3.1.1-csprd02.html#_Toc385349238" target="_blank" rel="noopener">MQTT 3.1.1 包含心跳</a> ，用不同的名称（keepalives)来表示。RabbitMQ MQTT插件完全支持此功能。</p>
 <p>MQTT在 Keepalives 可以选择性加入。要开启它们，请在连接时设置 <em>keepalive</em> 间隔。请查看你的 MQTT 客户端文档来获取例子。</p>
-<h1 id="Shovel-和-Federation-插件中的心跳"><a href="#Shovel-和-Federation-插件中的心跳" class="headerlink" title="Shovel 和 Federation 插件中的心跳"></a>Shovel 和 Federation 插件中的心跳</h1><p><a href="https://www.rabbitmq.com/shovel.html" target="_blank" rel="external">Shovel</a> 和 <a href="https://www.rabbitmq.com/federation.html" target="_blank" rel="external">Federation</a> 插件：用来进行 Erlang 客户端连接到 RabbitMQ 节点。因此，它们可以被配置为使用期望的心跳值。</p>
-<p>详细请看 <a href="https://www.rabbitmq.com/uri-query-parameters.html" target="_blank" rel="external">AMQP 0-9-1 URI查询参数指引</a></p>
-<h1 id="心跳与TCP-keepalives"><a href="#心跳与TCP-keepalives" class="headerlink" title="心跳与TCP keepalives"></a>心跳与TCP keepalives</h1><p>TCP包含一个类似于心跳的（也称为 keepalive) 的机制，它覆盖上面的消息协议和 net tick 超时之上：TCP keepalives . 由于默认值不足，对于消息传输协议，TCP keepalive 并不适用，甚至是适得其反。然而，通过适当的调整，在不能期望应用程序开启心跳或使用合理值的环境下，它们可以作为额外的防御机制。详情请看 <a href="https://www.rabbitmq.com/networking.html" target="_blank" rel="external">网络指南</a> </p>
+<h1 id="Shovel-和-Federation-插件中的心跳"><a href="#Shovel-和-Federation-插件中的心跳" class="headerlink" title="Shovel 和 Federation 插件中的心跳"></a>Shovel 和 Federation 插件中的心跳</h1><p><a href="https://www.rabbitmq.com/shovel.html" target="_blank" rel="noopener">Shovel</a> 和 <a href="https://www.rabbitmq.com/federation.html" target="_blank" rel="noopener">Federation</a> 插件：用来进行 Erlang 客户端连接到 RabbitMQ 节点。因此，它们可以被配置为使用期望的心跳值。</p>
+<p>详细请看 <a href="https://www.rabbitmq.com/uri-query-parameters.html" target="_blank" rel="noopener">AMQP 0-9-1 URI查询参数指引</a></p>
+<h1 id="心跳与TCP-keepalives"><a href="#心跳与TCP-keepalives" class="headerlink" title="心跳与TCP keepalives"></a>心跳与TCP keepalives</h1><p>TCP包含一个类似于心跳的（也称为 keepalive) 的机制，它覆盖上面的消息协议和 net tick 超时之上：TCP keepalives . 由于默认值不足，对于消息传输协议，TCP keepalive 并不适用，甚至是适得其反。然而，通过适当的调整，在不能期望应用程序开启心跳或使用合理值的环境下，它们可以作为额外的防御机制。详情请看 <a href="https://www.rabbitmq.com/networking.html" target="_blank" rel="noopener">网络指南</a> </p>
 
                                 
     </div>

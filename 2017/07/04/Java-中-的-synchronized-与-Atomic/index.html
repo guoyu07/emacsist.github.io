@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2017/07/04/Java-中-的-synchronized-与-Atomic/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="123456789101112131415// 代码1public class Sample &amp;#123;  private static int count = 0;  synchronized public static void increment() &amp;#123;    count++;  &amp;#125;&amp;#125;// 代码2public class Sample &amp;#123;  priv">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-07-04T09:25:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 中 的 synchronized 与 Atomic">
@@ -217,7 +218,7 @@
 <p>由于 <em>atomic</em> 的特特性，它只会允许一条线程设置成功，然后另一线设置失败，设置失败的线程，它会继续循环下一轮，直到成功为止。</p>
 <p>假设这一轮是线程A设置成功了，线程B设置失败，所以线程B会继续 get() -&gt; 比较 -&gt; 设置为新的值 ，直到成功为止。所以，这种一般会有个死循环在这里一直尝试直至成功。</p>
 <p>这种 <em>CAS</em> 是由CPU硬件提供的（如果所在平台的CPU并没有提供这种指令的话，那么Java会自行使用自旋来实现它，以达到平台独立的特性）</p>
-<p><a href="https://en.wikipedia.org/wiki/Compare-and-swap" target="_blank" rel="external">wikipedia</a></p>
+<p><a href="https://en.wikipedia.org/wiki/Compare-and-swap" target="_blank" rel="noopener">wikipedia</a></p>
 
                                 
     </div>

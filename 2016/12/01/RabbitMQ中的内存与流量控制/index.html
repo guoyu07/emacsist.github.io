@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2016/12/01/RabbitMQ中的内存与流量控制/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="相关内存参数vm_memory_high_watermark这个是与流量控制相关的内存参数.  RabbitMQ会在启动和执行命令rabbitmqctl set_vm_memory_high_watermark 百分比的时候检测系统所安装的内存总量。默认情况沔，当RabbitMQ服务器使用超过40%的内存时，它会引起一个内存报警并且阻塞所有连接。一旦内存报警清除后（例如，由于RabbitMQ服务器">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-12-01T15:25:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RabbitMQ中的内存与流量控制">
@@ -208,7 +209,7 @@
 <p>所以，如果你在引起内存报警的时候尝试发送消息，在进行发送期间就会被阻塞了。</p>
 <p>如果你想阻塞所有的发送者，你可以将该参数 <code>vm_memory_high_watermark</code> 设置为0.</p>
 <p>如果你想<code>禁止</code>基于内存的流量控制，你可以将该参数<code>vm_memory_high_watermark</code> 设置为100。</p>
-<p><a href="http://www.rabbitmq.com/memory.html" target="_blank" rel="external">rabbitmq memory</a></p>
+<p><a href="http://www.rabbitmq.com/memory.html" target="_blank" rel="noopener">rabbitmq memory</a></p>
 <h3 id="vm-memory-limit"><a href="#vm-memory-limit" class="headerlink" title="vm_memory_limit"></a>vm_memory_limit</h3><p>这个值，默认就是 <code>vm_memory_high_watermark * installed memory</code>（如果设置的是百分比参数的话）</p>
 <p>可使用内存上限。注意，如果 <code>vm_memory_high_watermark</code> 生效的话，那MQ是有可能超过这个值的（上下波动）</p>
 <p>如果 <code>vm_memory_high_watermark</code> 设置的是绝对值的话，那<code>vm_memory_limit = vm_memory_high_watermark</code>。</p>

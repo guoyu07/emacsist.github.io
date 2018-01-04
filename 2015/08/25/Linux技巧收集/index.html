@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2015/08/25/Linux技巧收集/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="获取外网IP12345PUBLIC_IP=`wget http://ipecho.net/plain -O - -q ; echo`echo $PUBLIC_IP直接显示:wget http://ipecho.net/plain -O - -q ; echo 查找历史命令1Ctrl+R 搜索从当前目录，递归搜索”10.0.0.40”这个词 1grep -rnw . -e &quot;10.0.0.40&quot; 毫">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-11-10T18:17:41.815Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux技巧收集">
@@ -255,8 +256,8 @@
 <h2 id="检查磁盘是否是SSD"><a href="#检查磁盘是否是SSD" class="headerlink" title="检查磁盘是否是SSD"></a>检查磁盘是否是SSD</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">cat /sys/block/sda/queue/rotational</div><div class="line"></div><div class="line">0：是SSD，1是HDD</div><div class="line">或</div><div class="line"></div><div class="line">sudo smartctl -a /dev/sdb</div><div class="line">如果看到</div><div class="line">Rotation Rate:    Solid State Device</div><div class="line">就表明是SSD</div></pre></td></tr></table></figure>
 <h2 id="查看网速"><a href="#查看网速" class="headerlink" title="查看网速"></a>查看网速</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sar -n DEV 1 100</div></pre></td></tr></table></figure>
 <p>1：间隔1秒<br>100：共100次</p>
-<h2 id="logrotate-使用"><a href="#logrotate-使用" class="headerlink" title="logrotate 使用"></a>logrotate 使用</h2><p><a href="http://linuxcommand.org/man_pages/logrotate8.html" target="_blank" rel="external">logrotate</a></p>
-<p><a href="https://linux.die.net/man/8/logrotate" target="_blank" rel="external">logrotate linux.die.net</a></p>
+<h2 id="logrotate-使用"><a href="#logrotate-使用" class="headerlink" title="logrotate 使用"></a>logrotate 使用</h2><p><a href="http://linuxcommand.org/man_pages/logrotate8.html" target="_blank" rel="noopener">logrotate</a></p>
+<p><a href="https://linux.die.net/man/8/logrotate" target="_blank" rel="noopener">logrotate linux.die.net</a></p>
 <p>一个小例子:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">/home/emacsist/nginx/nginx-1.9.3/logs/*.<span class="built_in">log</span> &#123;</div><div class="line">  daily</div><div class="line">  compress</div><div class="line">  nodelaycompress</div><div class="line">  rotate 100</div><div class="line">  size 1M</div><div class="line">  notifempty</div><div class="line">  missingok</div><div class="line">  nocreate</div><div class="line">  sharedscripts</div><div class="line">  postrotate</div><div class="line">    <span class="built_in">test</span> ! -f /home/emacsist/nginx/nginx-1.9.3/logs/nginx.pid || <span class="built_in">kill</span> -USR1 `cat /home/emacsist/nginx/nginx-1.9.3/logs/nginx.pid`</div><div class="line">  endscript</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>多个文件和目录的话:</p>

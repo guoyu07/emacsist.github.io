@@ -12,16 +12,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="postgresql,翻译,database," />
+    <meta name="keywords" content="postgresql,database,翻译," />
   
 
   <meta name="description" content="原文 在讨论死锁之前，让我们看一下锁的类型以及它们在PostgreSQL中的获取方法。 锁的类型：  表级锁 以及 行级锁   表级锁： AcessShareLock（访问共享锁）：通过在一张表或多张表一条 SELECT 语句检索数据时就会自动获取。这个模式会阻塞在同一张表下的 ALTER TABLE，DROP TABLE 以及 VACUUM (AccessExclusiveLock，访问排他锁)">
-<meta name="keywords" content="postgresql,翻译,database">
+<meta name="keywords" content="postgresql,database,翻译">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[翻译]PostgreSQL中的死锁">
 <meta property="og:url" content="https://emacsist.github.io/2014/12/01/翻译-PostgreSQL中的死锁/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="原文 在讨论死锁之前，让我们看一下锁的类型以及它们在PostgreSQL中的获取方法。 锁的类型：  表级锁 以及 行级锁   表级锁： AcessShareLock（访问共享锁）：通过在一张表或多张表一条 SELECT 语句检索数据时就会自动获取。这个模式会阻塞在同一张表下的 ALTER TABLE，DROP TABLE 以及 VACUUM (AccessExclusiveLock，访问排他锁)">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://emacsist.github.io/img/postgresql-dead-lock-1.png">
 <meta property="og:image" content="https://emacsist.github.io/img/postgresql-dead-lock-2.png">
 <meta property="og:image" content="https://emacsist.github.io/img/postgresql-dead-lock-3.png">
@@ -210,7 +211,7 @@
 
     <div class="article-content">
         
-                            <p><a href="http://raghavt.blogspot.com/2011/11/deadlocks-in-postgresql.html" target="_blank" rel="external">原文</a></p>
+                            <p><a href="http://raghavt.blogspot.com/2011/11/deadlocks-in-postgresql.html" target="_blank" rel="noopener">原文</a></p>
 <p>在讨论死锁之前，让我们看一下锁的类型以及它们在PostgreSQL中的获取方法。</p>
 <p>锁的类型：</p>
 <ul>
@@ -251,7 +252,7 @@
 <p>你可通过这个办法来解决上面的图的情况，你会看到死锁检测器永远不会抛出错误。  </p>
 <h2 id="锁查询语句"><a href="#锁查询语句" class="headerlink" title="锁查询语句"></a>锁查询语句</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">\set locks &apos;SELECT w.locktype AS waiting_locktype,w.relation::regclass AS waiting_table,w.transactionid, substr(w_stm.current_query,1,20) AS waiting_query,w.mode AS waiting_mode,w.pid AS waiting_pid,other.locktype AS other_locktype,other.relation::regclass AS other_table,other_stm.current_query AS other_query,other.mode AS other_mode,other.pid AS other_pid,other.granted AS other_granted FROM pg_catalog.pg_locks AS w JOIN pg_catalog.pg_stat_activity AS w_stm ON (w_stm.procpid = w.pid) JOIN pg_catalog.pg_locks AS other ON ((w.\&quot;database\&quot; = other.\&quot;database\&quot; AND w.relation  = other.relation) OR w.transactionid = other.transactionid) JOIN pg_catalog.pg_stat_activity AS other_stm ON (other_stm.procpid = other.pid) WHERE NOT w.granted AND w.pid &lt;&gt; other.pid;;&apos;</div></pre></td></tr></table></figure>
 <p>关于锁的信息链接 </p>
-<p><a href="http://www.postgresql.org/docs/9.0/static/sql-lock.html" target="_blank" rel="external">http://www.postgresql.org/docs/9.0/static/sql-lock.html</a><br><a href="http://developer.postgresql.org/pgdocs/postgres/explicit-locking.html" target="_blank" rel="external">http://developer.postgresql.org/pgdocs/postgres/explicit-locking.html</a></p>
+<p><a href="http://www.postgresql.org/docs/9.0/static/sql-lock.html" target="_blank" rel="noopener">http://www.postgresql.org/docs/9.0/static/sql-lock.html</a><br><a href="http://developer.postgresql.org/pgdocs/postgres/explicit-locking.html" target="_blank" rel="noopener">http://developer.postgresql.org/pgdocs/postgres/explicit-locking.html</a></p>
 <p>希望你有一个关于PostgreSQL锁的概念了。 希望在之后的博文中可以再次见到你。:)</p>
 <p>–Raghav</p>
 <p>By Raghavendra </p>
@@ -263,7 +264,7 @@
 <p>与”Share update exclusive,Share,Share row ,exclusive,exclusive,Access exclusive”模式冲突，这种模式保护一张表不被并发的模式更改和VACUUM;</p>
 <p>“Vacuum(without full), Analyze ”和 “Create index concurrently”命令会获得这种类型锁。 </p>
 <p>资料：</p>
-<p><a href="http://www.postgresql.org/docs/9.0/static/explicit-locking.html" target="_blank" rel="external">http://www.postgresql.org/docs/9.0/static/explicit-locking.html</a></p>
+<p><a href="http://www.postgresql.org/docs/9.0/static/explicit-locking.html" target="_blank" rel="noopener">http://www.postgresql.org/docs/9.0/static/explicit-locking.html</a></p>
 
                                 
     </div>

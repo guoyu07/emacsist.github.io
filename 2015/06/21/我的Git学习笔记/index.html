@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2015/06/21/我的Git学习笔记/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="常用配置123456789#配置用户名git config --global user.name &quot;Zhiyong yang&quot;#配置邮箱git config --global user.email &quot;dreamers.yzy@gmail.com&quot;#配置编辑器, 这个要先启动emacs: `emacs --daemon`git config --global core.editor &quot;emacscl">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-03-07T08:13:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="我的Git学习笔记">
@@ -295,11 +296,11 @@
 <h2 id="冲突时，以本地或远程分支的为准"><a href="#冲突时，以本地或远程分支的为准" class="headerlink" title="冲突时，以本地或远程分支的为准"></a>冲突时，以本地或远程分支的为准</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">以远程的为准</div><div class="line">git checkout --theirs path_to_file</div><div class="line"></div><div class="line">以本地的为准</div><div class="line">git checkout --ours path_to_file</div></pre></td></tr></table></figure>
 <h2 id="Git迁移到另一个远程服务器"><a href="#Git迁移到另一个远程服务器" class="headerlink" title="Git迁移到另一个远程服务器"></a>Git迁移到另一个远程服务器</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/env bash</span></div><div class="line"></div><div class="line">remote=origin </div><div class="line"><span class="keyword">for</span> brname <span class="keyword">in</span> `git branch -r | grep <span class="variable">$remote</span> | grep -v master | grep -v HEAD | awk <span class="string">'&#123;gsub(/^[^\/]+\//,"",$1); print $1&#125;'</span>`; <span class="keyword">do</span> </div><div class="line">    <span class="comment">#git branch --set-upstream-to $remote/$brname $brname;</span></div><div class="line">    git checkout <span class="variable">$brname</span></div><div class="line">    git pull <span class="variable">$remote</span> <span class="variable">$brname</span></div><div class="line"><span class="keyword">done</span></div><div class="line"></div><div class="line">git remote remove <span class="variable">$remote</span></div><div class="line">git remote add <span class="variable">$remote</span> https://github.com/emacist/xxx/xx.git</div><div class="line">git push --all</div></pre></td></tr></table></figure>
 <h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
-<li><p><a href="http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000" target="_blank" rel="external">廖雪峰 git教程</a></p>
+<li><p><a href="http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000" target="_blank" rel="noopener">廖雪峰 git教程</a></p>
 </li>
-<li><p><a href="http://www.douban.com/note/317428490/" target="_blank" rel="external">豆瓣 寻找git最佳实践之#Gitignore详解</a></p>
+<li><p><a href="http://www.douban.com/note/317428490/" target="_blank" rel="noopener">豆瓣 寻找git最佳实践之#Gitignore详解</a></p>
 </li>
-<li><p><a href="http://www.ruanyifeng.com/blog/2012/07/git.html" target="_blank" rel="external">阮一锋 Git分支</a></p>
+<li><p><a href="http://www.ruanyifeng.com/blog/2012/07/git.html" target="_blank" rel="noopener">阮一锋 Git分支</a></p>
 </li>
 </ul>
 

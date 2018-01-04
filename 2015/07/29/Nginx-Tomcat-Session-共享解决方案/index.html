@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2015/07/29/Nginx-Tomcat-Session-共享解决方案/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="注意， 这里使用的是 Linux + Tomcat 7.x + JDK 7 + Nginx + Spring Session 的方式  安装RedisRedis.io 配置Tomcat这里为了简单，直接复制两份Tomcat，分别将目录命名为spring_session_master, spring_session_slave。然后还要修改各个Tomcat下的conf/server.xml配置文件">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Nginx + Tomcat + Session 共享解决方案">
@@ -214,7 +215,7 @@
                             <blockquote>
 <p>注意， 这里使用的是 <code>Linux</code> + <code>Tomcat 7.x</code> + <code>JDK 7</code> + <code>Nginx</code> + <code>Spring Session</code> 的方式</p>
 </blockquote>
-<h2 id="安装Redis"><a href="#安装Redis" class="headerlink" title="安装Redis"></a>安装Redis</h2><p><a href="http://redis.io" target="_blank" rel="external">Redis.io</a></p>
+<h2 id="安装Redis"><a href="#安装Redis" class="headerlink" title="安装Redis"></a>安装Redis</h2><p><a href="http://redis.io" target="_blank" rel="noopener">Redis.io</a></p>
 <h2 id="配置Tomcat"><a href="#配置Tomcat" class="headerlink" title="配置Tomcat"></a>配置Tomcat</h2><p>这里为了简单，直接复制两份Tomcat，分别将目录命名为<code>spring_session_master</code>, <code>spring_session_slave</code>。<br>然后还要修改各个Tomcat下的<code>conf/server.xml</code>配置文件，修改下其中的相关端口。</p>
 <p>我这里，将<code>master</code>的改为了<code>9090</code>端口，将<code>slave</code>的改为了<code>9096</code>端口.并且一起启动它.</p>
 <h2 id="配置Nginx"><a href="#配置Nginx" class="headerlink" title="配置Nginx"></a>配置Nginx</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">upstream springsession &#123;</div><div class="line">    server localhost:9090;</div><div class="line">    server localhost:9096;</div><div class="line">&#125;</div></pre></td></tr></table></figure>

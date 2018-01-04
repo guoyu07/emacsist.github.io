@@ -12,16 +12,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="postgresql,翻译,database," />
+    <meta name="keywords" content="postgresql,database,翻译," />
   
 
   <meta name="description" content="原文作者：Raghav 在PostgreSQL构架基础上进一步了解，在这里，通过信息链接我将会讨论关于实用进程和内存。许多提交者已经好好地记录了关于进程和内存，在这里有提供链接。在我这里有适当关于PostgreSQL实用进程的描述。 每个PostgreSQL实例启动，会有一组实用进程（包括强制性和可选性进程）和内存。两个强制性进程（bgwriter后台写进程和walwriter预写式日志写进程）。">
-<meta name="keywords" content="postgresql,翻译,database">
+<meta name="keywords" content="postgresql,database,翻译">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[翻译]PostgreSQL 9.0 内存 &amp; 进程">
 <meta property="og:url" content="https://emacsist.github.io/2015/01/09/-翻译-PostgreSQL-9-0-内存-进程/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="原文作者：Raghav 在PostgreSQL构架基础上进一步了解，在这里，通过信息链接我将会讨论关于实用进程和内存。许多提交者已经好好地记录了关于进程和内存，在这里有提供链接。在我这里有适当关于PostgreSQL实用进程的描述。 每个PostgreSQL实例启动，会有一组实用进程（包括强制性和可选性进程）和内存。两个强制性进程（bgwriter后台写进程和walwriter预写式日志写进程）。">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://emacsist.github.io/img/postgresql-process-memory-10-1.png">
 <meta property="og:image" content="https://emacsist.github.io/img/postgresql-process-memory-10-2.png">
 <meta property="og:image" content="https://emacsist.github.io/img/postgresql-process-memory-10-3.png">
@@ -211,7 +212,7 @@
 
     <div class="article-content">
         
-                            <p><a href="http://raghavt.blogspot.com/2011/04/postgresql-90-memory-processes.html" target="_blank" rel="external">原文</a><br>作者：Raghav</p>
+                            <p><a href="http://raghavt.blogspot.com/2011/04/postgresql-90-memory-processes.html" target="_blank" rel="noopener">原文</a><br>作者：Raghav</p>
 <p>在PostgreSQL构架基础上进一步了解，在这里，通过信息链接我将会讨论关于实用进程和内存。许多提交者已经好好地记录了关于进程和内存，在这里有提供链接。在我这里有适当关于PostgreSQL实用进程的描述。</p>
 <p>每个PostgreSQL实例启动，会有一组实用进程（包括强制性和可选性进程）和内存。两个强制性进程（<code>bgwriter</code>后台写进程和<code>walwriter</code>预写式日志写进程）。你可以通过命令<code>ps -ef | grep postgres</code>检测一下，结果如图10.1.</p>
 <p>图10.1</p>
@@ -221,22 +222,22 @@
 <p>关于图10.2，它表明了进程附加到PostgreSQL共享内存。</p>
 <h4 id="BGWriter-Writer-Process后台写进程或者叫写进程"><a href="#BGWriter-Writer-Process后台写进程或者叫写进程" class="headerlink" title="BGWriter/Writer Process后台写进程或者叫写进程:"></a><code>BGWriter/Writer Process</code>后台写进程或者叫写进程:</h4><p>后台写进程或者叫写进程是一种强制性进程:</p>
 <p>所有PostgreSQL服务器进程从磁盘读取数据然后将它们移到共享缓冲池（<code>Shared Buffer Pool</code>）里。 共享缓冲池使用<code>ARC</code>算法或者<code>LRU</code>（最近最少使用）机制来淘汰页数据。<code>BGWRITER</code>后台写进程很多时候都是在休眠，但每次唤醒，它通过搜索共享缓冲池（<code>Shared Buffer Pool</code>）来寻找被修改的页。每次搜索完之后，<code>BGWRITER</code>后台写进程就会选择那些被修改的页，将它们写到磁盘，然后将它们从共享缓冲池里淘汰出来。后台写进程通过三个参数<code>BGWRITER_DELAY</code>、<code>BGWRITER_LRU_PERCENT</code>以及<code>BGWRITER_LRU_MAXPAGES</code>来控制。</p>
-<p><a href="http://www.enterprisedb.com/docs/en/9.0/pg/kernel-resources.html" target="_blank" rel="external">http://www.enterprisedb.com/docs/en/9.0/pg/kernel-resources.html</a><br><a href="http://www.enterprisedb.com/docs/en/8.4/pg/runtime-config-resource.html" target="_blank" rel="external">http://www.enterprisedb.com/docs/en/8.4/pg/runtime-config-resource.html</a></p>
+<p><a href="http://www.enterprisedb.com/docs/en/9.0/pg/kernel-resources.html" target="_blank" rel="noopener">http://www.enterprisedb.com/docs/en/9.0/pg/kernel-resources.html</a><br><a href="http://www.enterprisedb.com/docs/en/8.4/pg/runtime-config-resource.html" target="_blank" rel="noopener">http://www.enterprisedb.com/docs/en/8.4/pg/runtime-config-resource.html</a></p>
 <h4 id="WAL-Writer-Process预写式日志写进程"><a href="#WAL-Writer-Process预写式日志写进程" class="headerlink" title="WAL Writer Process预写式日志写进程:"></a><code>WAL Writer Process</code>预写式日志写进程:</h4><p>预写式日志写进程是一个强制性进程。</p>
 <p>预写式日志写进程在适当间隔时会写入并进行文件同步。为了保证事务安全，预写式日志缓冲区在事务日志里持有数据库的更改操作。预写式日志缓冲区在每次事务提交时写到磁盘，预写式日志写进程负责写到磁盘。<code>WAL_WRITER_DELAY</code>参数是用于调用预写式日志写进程的，然而，还有其他参数同样会使预写式日志写进程比较繁忙。下面有一些链接。</p>
-<p><a href="http://www.enterprisedb.com/docs/en/8.4/pg/wal-configuration.html" target="_blank" rel="external">http://www.enterprisedb.com/docs/en/8.4/pg/wal-configuration.html</a></p>
+<p><a href="http://www.enterprisedb.com/docs/en/8.4/pg/wal-configuration.html" target="_blank" rel="noopener">http://www.enterprisedb.com/docs/en/8.4/pg/wal-configuration.html</a></p>
 <h4 id="Stats-Collector-Process状态收集进程"><a href="#Stats-Collector-Process状态收集进程" class="headerlink" title="Stats Collector Process状态收集进程:"></a><code>Stats Collector Process</code>状态收集进程:</h4><p>状态收集进程是可选进程，默认是开启的。 </p>
 <p>状态收集进程会收集一些关于服务器运作的信息。它会计算访问表和索引二者磁盘块的数量和个别的行项数（我注：一个block有可能多个row item，可以通过 select ctid from tbname来查看，第一个数字就是block数，第二个就是row item数)。它同样会跟踪每一个表的总行数，每一个表关于<code>VACUUM</code>（清理）和<code>ANALYZE</code>（分析）动作的信息。收集这些统计数据会对查询执行有额外的开销，自己决定收不收集这些信息。以下的链接有更多关于状态收集进程以及相关参数的说明。</p>
-<p><a href="http://www.enterprisedb.com/docs/en/9.0/pg/monitoring-stats.html" target="_blank" rel="external">http://www.enterprisedb.com/docs/en/9.0/pg/monitoring-stats.html</a></p>
+<p><a href="http://www.enterprisedb.com/docs/en/9.0/pg/monitoring-stats.html" target="_blank" rel="noopener">http://www.enterprisedb.com/docs/en/9.0/pg/monitoring-stats.html</a></p>
 <h4 id="Autovacuum-Launcher-Process自动清理启动器进程"><a href="#Autovacuum-Launcher-Process自动清理启动器进程" class="headerlink" title="Autovacuum Launcher Process自动清理启动器进程:"></a><code>Autovacuum Launcher Process</code>自动清理启动器进程:</h4><p>自动清理进程是一个可选进程，默认是开启的。</p>
 <p>为了自动执行<code>VACUUM</code>和<code>ANALYZE</code>命令，自动清理启动器进程是由许多被称为<code>autovacuum workers(自动清理工作者)</code>组成的后台进程。自动清理启动器进程负责启动<code>autovacuum workers(自动清理工作者)</code>进程来处理所有数据库。启动器会按交叉时间地分发工作，在每个时间间隔里会试图在每一个数据库里启动一个工作者（我注：指<code>autovacuum workers</code>），通过参数<code>autovacuum_naptime</code>来设置间隔时间。每个数据库都会启动一个工作者，通过参数<code>autovacuum_max_workers</code>来设置最大数。每一个工作者进程都会在它所在的数据库里检查每一张表，然后在有需要的时候执行<code>VACUUM</code>或者<code>ANALYZE</code>命令。以下的链接有更多关于<code>AUTOVACUUM</code>自动清理启动器进程的相关参数的说明。</p>
-<p><a href="http://www.enterprisedb.com/docs/en/8.4/pg/runtime-config-autovacuum.html" target="_blank" rel="external">http://www.enterprisedb.com/docs/en/8.4/pg/runtime-config-autovacuum.html</a></p>
+<p><a href="http://www.enterprisedb.com/docs/en/8.4/pg/runtime-config-autovacuum.html" target="_blank" rel="noopener">http://www.enterprisedb.com/docs/en/8.4/pg/runtime-config-autovacuum.html</a></p>
 <h4 id="Syslogger-Process-Logger-Process系统日志进程或者叫日志进程"><a href="#Syslogger-Process-Logger-Process系统日志进程或者叫日志进程" class="headerlink" title="Syslogger Process / Logger Process系统日志进程或者叫日志进程 :"></a><code>Syslogger Process / Logger Process</code>系统日志进程或者叫日志进程 :</h4><p>图10.3</p>
 <p><img src="/img/postgresql-process-memory-10-3.png" alt=""></p>
 <p>日志是一个可选进程，默认是关闭的。</p>
 <p>依据图10.3， 可以清楚地理解所有 实用进程+用户后台进程 + Postmaster守护进程都附加到系统日志进程来记录这它们的活动信息。每一个进程信息都会被记录在<code>PGDATA/pg_log</code> 目录下的<code>.log</code>文件里。<br>注意：如果数据目录是通过<code>INITDB</code>命令创建的，<code>pg_log</code>目录不会在数据目录里自动创建。需要显式地创建该目录。</p>
 <p>调试更多的进程信息会导致服务器的一些额外开销。总是建议日志是最低级别的，如果有要求的话再提高调试级别。以下的链接有更多关于日志参数的说明。</p>
-<p><a href="http://www.enterprisedb.com/docs/en/8.4/pg/runtime-config-logging.html" target="_blank" rel="external">http://www.enterprisedb.com/docs/en/8.4/pg/runtime-config-logging.html</a></p>
+<p><a href="http://www.enterprisedb.com/docs/en/8.4/pg/runtime-config-logging.html" target="_blank" rel="noopener">http://www.enterprisedb.com/docs/en/8.4/pg/runtime-config-logging.html</a></p>
 <h4 id="Archiver-Process归档进程"><a href="#Archiver-Process归档进程" class="headerlink" title="Archiver Process归档进程:"></a><code>Archiver Process</code>归档进程:</h4><p>图10.4</p>
 <p><img src="/img/postgresql-process-memory-10-4.png" alt=""></p>
 <p>归档进程是可选进程，默认是关闭的。</p>
@@ -247,7 +248,7 @@
 <p>3.成功地从源目录复制到目的目录，归档进程会重命名”段-文件名.ready”为<code>段-文件名.done</code>。这就完成了归档的过程。</p>
 <p>不用说，如果在<code>$PGDATA/pg_xlog/archive_status</code>目录里有任何名为”段-文件名.ready”的文件都是正等待着被复制到归档目的地里（我注：通过参数<code>archive_command</code>来指定）。</p>
 <p>更多关于参数和归档的信息，请看以下链接。 </p>
-<p><a href="http://www.enterprisedb.com/docs/en/9.0/pg/continuous-archiving.html" target="_blank" rel="external">http://www.enterprisedb.com/docs/en/9.0/pg/continuous-archiving.html</a></p>
+<p><a href="http://www.enterprisedb.com/docs/en/9.0/pg/continuous-archiving.html" target="_blank" rel="noopener">http://www.enterprisedb.com/docs/en/9.0/pg/continuous-archiving.html</a></p>
 <p>请把你的意见/建议提交在这篇文章中,将不胜感激。 </p>
 <p>献上我真诚的问候<br>Raghav</p>
 

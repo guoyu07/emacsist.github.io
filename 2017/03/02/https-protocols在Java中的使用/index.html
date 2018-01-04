@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2017/03/02/https-protocols在Java中的使用/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="Caused by: java.io.EOFException: SSL peer shut down incorrectly在服务器上，发现一个微博爬虫系统偶尔会报这种异常。Google 了下，在 Stackoverflow 上看到相关的回答。所以决定详细了解下这原理。 上面说，明确指定HTTPS的协议版本即可。即：System.setProperty(&amp;quot;https.protocols">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-04-28T05:47:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="https.protocols在Java中的使用">
@@ -211,7 +212,7 @@
 
     <div class="article-content">
         
-                            <h1 id="Caused-by-java-io-EOFException-SSL-peer-shut-down-incorrectly"><a href="#Caused-by-java-io-EOFException-SSL-peer-shut-down-incorrectly" class="headerlink" title="Caused by: java.io.EOFException: SSL peer shut down incorrectly"></a>Caused by: java.io.EOFException: SSL peer shut down incorrectly</h1><p>在服务器上，发现一个微博爬虫系统偶尔会报这种异常。Google 了下，在 <a href="http://stackoverflow.com/questions/28908835/ssl-peer-shut-down-incorrectly-in-java" target="_blank" rel="external">Stackoverflow</a> 上看到相关的回答。所以决定详细了解下这原理。</p>
+                            <h1 id="Caused-by-java-io-EOFException-SSL-peer-shut-down-incorrectly"><a href="#Caused-by-java-io-EOFException-SSL-peer-shut-down-incorrectly" class="headerlink" title="Caused by: java.io.EOFException: SSL peer shut down incorrectly"></a>Caused by: java.io.EOFException: SSL peer shut down incorrectly</h1><p>在服务器上，发现一个微博爬虫系统偶尔会报这种异常。Google 了下，在 <a href="http://stackoverflow.com/questions/28908835/ssl-peer-shut-down-incorrectly-in-java" target="_blank" rel="noopener">Stackoverflow</a> 上看到相关的回答。所以决定详细了解下这原理。</p>
 <p>上面说，明确指定HTTPS的协议版本即可。即：<code>System.setProperty(&quot;https.protocols&quot;, &quot;TLSv1.1&quot;)</code></p>
 <h1 id="HTTPS-的-protocols"><a href="#HTTPS-的-protocols" class="headerlink" title="HTTPS 的 protocols"></a>HTTPS 的 protocols</h1><p>查看维基百科，关于 HTTPS 的介绍可知：</p>
 <blockquote>
@@ -273,9 +274,9 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">System.setProperty(<span class="string">"https.protocols"</span>, <span class="string">"TLSv1.2"</span>);</div></pre></td></tr></table></figure>
 <p>在爬虫爬取数据时，就没有报这类似的异常了。</p>
 <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
-<li><p><a href="https://blogs.oracle.com/java-platform-group/entry/diagnosing_tls_ssl_and_https" target="_blank" rel="external">Oracle 上关于 https.protocols 的文档</a></p>
+<li><p><a href="https://blogs.oracle.com/java-platform-group/entry/diagnosing_tls_ssl_and_https" target="_blank" rel="noopener">Oracle 上关于 https.protocols 的文档</a></p>
 </li>
-<li><p><a href="https://zh.wikipedia.org/wiki/%E5%82%B3%E8%BC%B8%E5%B1%A4%E5%AE%89%E5%85%A8%E5%8D%94%E8%AD%B0" target="_blank" rel="external">wiki</a></p>
+<li><p><a href="https://zh.wikipedia.org/wiki/%E5%82%B3%E8%BC%B8%E5%B1%A4%E5%AE%89%E5%85%A8%E5%8D%94%E8%AD%B0" target="_blank" rel="noopener">wiki</a></p>
 </li>
 </ul>
 

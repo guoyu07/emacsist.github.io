@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2016/03/06/深入浅出MySQL-读书笔记之优化/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="查看服务器SQL及连接状态 查看当前执行的各种SQL执行频率:  全局性:  show global status like &amp;#39;%Com_%&amp;#39;; 当前会话: show status like &amp;#39;%Com_%&amp;#39;;    重点查看:  Com_insert: insert次数 Com_select: select次数 Com_update: update次数 Com_d">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt;深入浅出MySQL&gt;读书笔记之优化">
@@ -493,7 +494,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">SELECT CONCAT(CEILING(RIBPS/POWER(1024,pw)),SUBSTR(<span class="string">' KMGT'</span>,pw+1,1))</div><div class="line">Recommended_InnoDB_Buffer_Pool_Size FROM</div><div class="line">(</div><div class="line">    SELECT RIBPS,FLOOR(LOG(RIBPS)/LOG(1024)) pw</div><div class="line">    FROM</div><div class="line">    (</div><div class="line">        SELECT SUM(data_length+index_length)*1.1*growth RIBPS</div><div class="line">        FROM information_schema.tables AAA,</div><div class="line">        (SELECT 1 growth) BBB</div><div class="line">        WHERE ENGINE=<span class="string">'InnoDB'</span></div><div class="line">    ) AA</div><div class="line">) A;</div></pre></td></tr></table></figure>
 <p>参考资料</p>
 <ol>
-<li><a href="http://dba.stackexchange.com/questions/27471/how-much-memory-do-i-need-for-innodb-buffer-pool" target="_blank" rel="external">dba.stackexchange.com</a></li>
+<li><a href="http://dba.stackexchange.com/questions/27471/how-much-memory-do-i-need-for-innodb-buffer-pool" target="_blank" rel="noopener">dba.stackexchange.com</a></li>
 </ol>
 <p>如果命中率太低，则应考虑扩充内存、增加innodb_buffer_pool_size的值</p>
 <ul>

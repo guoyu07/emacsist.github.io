@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2016/10/09/PostgreSQL9-6中使用mysql-fdw/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="安装mysql_fdw 123456789SELECT * from pg_available_extensions where name like &apos;%fdw%&apos;;     name     | default_version | installed_version |                      comment                       ------------">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PostgreSQL9.6中使用mysql_fdw">
@@ -206,7 +207,7 @@
 
     <div class="article-content">
         
-                            <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p><a href="https://github.com/EnterpriseDB/mysql_fdw" target="_blank" rel="external">mysql_fdw</a></p>
+                            <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p><a href="https://github.com/EnterpriseDB/mysql_fdw" target="_blank" rel="noopener">mysql_fdw</a></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">SELECT * from pg_available_extensions <span class="built_in">where</span> name like <span class="string">'%fdw%'</span>;</div><div class="line">     name     | default_version | installed_version |                      comment                       </div><div class="line">--------------+-----------------+-------------------+----------------------------------------------------</div><div class="line"> file_fdw     | 1.0             | [null]            | foreign-data wrapper <span class="keyword">for</span> flat file access</div><div class="line"> mysql_fdw    | 1.0             | [null]            | Foreign data wrapper <span class="keyword">for</span> querying a MySQL server</div><div class="line"> postgres_fdw | 1.0             | [null]            | foreign-data wrapper <span class="keyword">for</span> remote PostgreSQL servers</div><div class="line">(3 rows)</div><div class="line"></div><div class="line">Time: 1.742 ms</div></pre></td></tr></table></figure>
 <h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CREATE EXTENSION mysql_fdw;</div></pre></td></tr></table></figure>
 <p>如果是源码编译安装的MySQL，如果没有设置<code>LD_LIBRARY_PATH</code>，会报如下的错误:</p>

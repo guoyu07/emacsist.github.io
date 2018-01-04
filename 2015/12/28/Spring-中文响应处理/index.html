@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2015/12/28/Spring-中文响应处理/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="为什么 CharacterEncodingFilter 没有生效1234567891011121314151617&amp;lt;filter&amp;gt;    &amp;lt;filter-name&amp;gt;CharacterEncodingFilter&amp;lt;/filter-name&amp;gt;    &amp;lt;filter-class&amp;gt;org.springframework.web.filter.Characte">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring 中文响应处理">
@@ -228,13 +229,13 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">protected void writeInternal(String s, HttpOutputMessage outputMessage) throws IOException &#123;</div><div class="line">	<span class="keyword">if</span> (this.writeAcceptCharset) &#123;</div><div class="line">		outputMessage.getHeaders().setAcceptCharset(getAcceptedCharsets());</div><div class="line">	&#125;</div><div class="line">	Charset charset = getContentTypeCharset(outputMessage.getHeaders().getContentType());</div><div class="line">	StreamUtils.copy(s, charset, outputMessage.getBody());</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>其他对象的转换器同理.</p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
-<li><p><a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/http/converter/HttpMessageConverter.html" target="_blank" rel="external">Spring HttpMessageConverter</a></p>
+<li><p><a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/http/converter/HttpMessageConverter.html" target="_blank" rel="noopener">Spring HttpMessageConverter</a></p>
 </li>
-<li><p><a href="http://www.cnblogs.com/fangjian0423/p/springMVC-xml-json-convert.html" target="_blank" rel="external">cnblogs fangjian0423</a></p>
+<li><p><a href="http://www.cnblogs.com/fangjian0423/p/springMVC-xml-json-convert.html" target="_blank" rel="noopener">cnblogs fangjian0423</a></p>
 </li>
-<li><p><a href="http://cihatkeser.com/setting-default-encoding-for-content-returned-with-responsebody-annotation/" target="_blank" rel="external">Cihatkeser</a></p>
+<li><p><a href="http://cihatkeser.com/setting-default-encoding-for-content-returned-with-responsebody-annotation/" target="_blank" rel="noopener">Cihatkeser</a></p>
 </li>
-<li><p><a href="http://www.pigg.co/spring-mvc-cross-domain-garbled.html" target="_blank" rel="external">pigg</a></p>
+<li><p><a href="http://www.pigg.co/spring-mvc-cross-domain-garbled.html" target="_blank" rel="noopener">pigg</a></p>
 </li>
 </ol>
 

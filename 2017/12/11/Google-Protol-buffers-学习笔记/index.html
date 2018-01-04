@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2017/12/11/Google-Protol-buffers-学习笔记/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="什么是 protocol buffers?Google 官方文档是这样子介绍的  Protocol buffers 是 Google 的语言中立的, 平台中立的, 可扩展的序列化结构的数据机制, 类似  XML, 但是更小, 更快, 更简单. 你可以一次性定义数据的结构, 然后你可以使用生成的特殊代码来轻松写入和读取你的各种结构化数据, 并且可以使用多种语言来实现.  语言指南 (proto3)s">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-12-18T09:37:39.945Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Google Protol buffers  学习笔记">
@@ -226,7 +227,7 @@
 <h2 id="保留字段"><a href="#保留字段" class="headerlink" title="保留字段"></a>保留字段</h2><p>如果你通过移除一个字段或注释掉一个字段来更新一条消息, 将来的用户可以重用这个标签数字. 如果它们延迟加载旧版本的 <code>.proto</code> 的话, 这可能导致一些问题. 一种防止这不会出现的方式是, 为这些字段标识为 <code>reserved</code> . 编译器会报错, 如果将来任意有人试图使用这些标识.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">message Foo &#123;</div><div class="line">  reserved 2, 15, 9 to 11;</div><div class="line">  reserved &quot;foo&quot;, &quot;bar&quot;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>注意, 在 <code>reserved</code> 语句中, 不能混合数字和名字.</p>
-<h2 id="数据类型对应"><a href="#数据类型对应" class="headerlink" title="数据类型对应"></a>数据类型对应</h2><p><a href="https://developers.google.com/protocol-buffers/docs/proto3" target="_blank" rel="external">doc</a></p>
+<h2 id="数据类型对应"><a href="#数据类型对应" class="headerlink" title="数据类型对应"></a>数据类型对应</h2><p><a href="https://developers.google.com/protocol-buffers/docs/proto3" target="_blank" rel="noopener">doc</a></p>
 <h2 id="默认值"><a href="#默认值" class="headerlink" title="默认值"></a>默认值</h2><ul>
 <li>string : 空字符串 “”</li>
 <li>bytes : 空字节</li>
@@ -304,7 +305,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">service SearchService &#123;</div><div class="line">  rpc Search (SearchRequest) returns (SearchResponse);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>最直接使用 protocol buffers 的RPC系统就是 Google 开发的 gRPC了. 它是一个语言以及平台中立的开源RPC系统.</p>
 <h2 id="json-映射"><a href="#json-映射" class="headerlink" title="json 映射"></a>json 映射</h2><p>映射的情况, 参见文档</p>
-<p><a href="https://developers.google.com/protocol-buffers/docs/proto3" target="_blank" rel="external">doc</a></p>
+<p><a href="https://developers.google.com/protocol-buffers/docs/proto3" target="_blank" rel="noopener">doc</a></p>
 <h2 id="选项-options"><a href="#选项-options" class="headerlink" title="选项 options"></a>选项 options</h2><p>选项并不会影响声明, 但它会在特定的上下文中影响它的处理.<br>选项级别</p>
 <ul>
 <li>文件 级别</li>
@@ -329,7 +330,7 @@
 </ul>
 <h2 id="生成你的类"><a href="#生成你的类" class="headerlink" title="生成你的类"></a>生成你的类</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">protoc --proto_path=IMPORT_PATH --cpp_out=DST_DIR --java_out=DST_DIR --python_out=DST_DIR --go_out=DST_DIR --ruby_out=DST_DIR --javanano_out=DST_DIR --objc_out=DST_DIR --csharp_out=DST_DIR path/to/file.proto</div></pre></td></tr></table></figure>
 <h1 id="与JSON的映射"><a href="#与JSON的映射" class="headerlink" title="与JSON的映射"></a>与JSON的映射</h1><p>所有选项的说明</p>
-<p><a href="https://github.com/google/protobuf/blob/master/src/google/protobuf/descriptor.proto" target="_blank" rel="external">https://github.com/google/protobuf/blob/master/src/google/protobuf/descriptor.proto</a></p>
+<p><a href="https://github.com/google/protobuf/blob/master/src/google/protobuf/descriptor.proto" target="_blank" rel="noopener">https://github.com/google/protobuf/blob/master/src/google/protobuf/descriptor.proto</a></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">message accessTokenResponse &#123;</div><div class="line">    int32 errcode = 1 [json_name=&quot;errcode&quot;];</div><div class="line">    string errmsg = 2 [json_name=&quot;errmsg&quot;];</div><div class="line">    string accessToken = 3 [json_name=&quot;access_token&quot;];</div><div class="line">    int32 expiresIn = 4 [json_name=&quot;expires_in&quot;];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
                                 
     </div>

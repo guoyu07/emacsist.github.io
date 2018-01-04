@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2015/11/27/Spring-Task-中集群带来的问题/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="问题当多台Tomcat同时进行调度时，如果没有处理好并发的问题，就会出现本应只是执行一次的Task，执行了两次（比如修改DB）。 DB解决办法在执行DB修改操作的方法上，添加上@Transactional（即添加事务处理）。如果想提高并发的话，减小事务锁的行数（这里是基于支持事务和行级锁的DB来说的，只支持全表锁的DB，可以忽略这行为），然后进行分批处理. 利用Redis的单线程处理机制利用red">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Task 中集群带来的问题">

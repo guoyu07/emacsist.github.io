@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2017/05/10/翻译-RabbitMQ中的消费者确认和发布者确认/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="原文 介绍使用消息 Broker 的系统，例如 RabbitMQ 是被定义为分布式的。由于协议的方法（消息）的发送并不能保证到达对应目的地或者被成功地处理掉这些消息，因此，发布者和消费者都需要一个进行分发和处理的确认机制。RabbitMQ 支持的几种消息协议都支持这种特性。本指南介绍了AMQP 0-9-1的功能，但其他协议（STOMP，MQTT等）的思想基本相同。 消费者对RabbitMQ的分发处">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-05-10T08:58:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[翻译]RabbitMQ中的消费者确认和发布者确认">
@@ -201,16 +202,16 @@
 
     <div class="article-content">
         
-                            <p><a href="https://www.rabbitmq.com/confirms.html" target="_blank" rel="external">原文</a></p>
+                            <p><a href="https://www.rabbitmq.com/confirms.html" target="_blank" rel="noopener">原文</a></p>
 <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>使用消息 Broker 的系统，例如 RabbitMQ 是被定义为分布式的。由于协议的方法（消息）的发送并不能保证到达对应目的地或者被成功地处理掉这些消息，因此，发布者和消费者都需要一个进行分发和处理的确认机制。RabbitMQ 支持的几种消息协议都支持这种特性。本指南介绍了AMQP 0-9-1的功能，但其他协议（STOMP，MQTT等）的思想基本相同。</p>
 <p>消费者对RabbitMQ的分发处理确认称为 AMQP 0-9-1 说明中的确认；<br>Broker 对发布者的确认是一种协议扩展，称为发布者确认。</p>
 <h2 id="消费者分发确认"><a href="#消费者分发确认" class="headerlink" title="消费者分发确认"></a>消费者分发确认</h2><p>当 RabbitMQ 分发一条消息给消费者时，它需要知道什么时候认为消息已经被成功发送了。至于是什么样的逻辑优化，取决于系统。因此主要由应用层来决定。在 AMQP 0-9-1 中，它是通过当消费者使用 <em>basic.consume</em> 方法来注册或者通过 <em>basic.get</em> 方法按需获取消息时实现的。</p>
-<p>如果你更喜欢采用面向例子并且循序渐进的资料，消费者确认在 <a href="https://www.rabbitmq.com/getstarted.html" target="_blank" rel="external">RabbitMQ 教程#2</a> 有介绍。</p>
+<p>如果你更喜欢采用面向例子并且循序渐进的资料，消费者确认在 <a href="https://www.rabbitmq.com/getstarted.html" target="_blank" rel="noopener">RabbitMQ 教程#2</a> 有介绍。</p>
 <h1 id="分发标识符-Delivery-Identifiers-：分发标签-Delivery-Tags"><a href="#分发标识符-Delivery-Identifiers-：分发标签-Delivery-Tags" class="headerlink" title="分发标识符(Delivery Identifiers)：分发标签(Delivery Tags)"></a>分发标识符(Delivery Identifiers)：分发标签(Delivery Tags)</h1><p>在我们继续讨论其他主题之前，重要的是要解释分发是如何被标识的（并且确认指明他们各自的分发）。当消费者（订阅）注册时，消费将被 RabbitMQ 通过使用 <em>basic.deliver</em> 方法来分发（推送）。该方法携带一个分发标签（devlivery tag)，它唯一地标识了在 Channel 上的分发。分发标签(devlivery tag) 因此是每个 channel 范围私有的。</p>
 <p>分发标签(devlivery tag) 是单调递增的正整数，并由客户端库来表示。客户端库中的确认分发的方法，将带上一个分发标签(devlivery tag)作为参数。</p>
 <h1 id="确认方法"><a href="#确认方法" class="headerlink" title="确认方法"></a>确认方法</h1><p>根据所使用的确认模式，RabbitMQ可以在发送（写入TCP套接字）后立即认为消息已经被成功地分发或者当接收到客户端显式（“手动”）确认时才认为它已经被成功地分发。手动发送的确认消息可以为主动或被动，并且使用以下协议方法之一:</p>
 <p><em>basic.ack</em> ：用于主动确认</p>
-<p><em>basic.nack</em> ： 用于被动确认（注意，这是一个 <a href="https://www.rabbitmq.com/extensions.html" target="_blank" rel="external">RabbitMQ 对 AMQP 0-9-1 的扩展</a> ）</p>
+<p><em>basic.nack</em> ： 用于被动确认（注意，这是一个 <a href="https://www.rabbitmq.com/extensions.html" target="_blank" rel="noopener">RabbitMQ 对 AMQP 0-9-1 的扩展</a> ）</p>
 <p><em>basic.reject</em> : 用于被动确认，但与 <em>basic.nack</em> 比较而言，它有一些限制。</p>
 <p>主动确认就简单地指示 RabbitMQ 记录一条消息已经被成功地分发了。</p>
 <p>使用 <em>basic.reject</em> 的被动确认也有同样的效果。差异主要在于主义方面：主动确认假设消息已经被成功地处理了，而被动确认对应的是分发的消息并没有被成功处理，但消息仍然应该被删除。</p>
@@ -219,12 +220,12 @@
 <h1 id="Channel-的-prefetch-设置（QoS"><a href="#Channel-的-prefetch-设置（QoS" class="headerlink" title="Channel 的 prefetch 设置（QoS)"></a>Channel 的 prefetch 设置（QoS)</h1><p>由于消息发送（推送）到客户端是异步的，因此Channel中，在给定的一瞬间，通常有超过一条消息是 <em>in flight</em> 状态的。此外，从客户端手动确认本质上也是异步的。因此，会有一个没有被确认的分发标签的滑动窗口。开发者通会倾向于限制此窗口的大小，以避免消费者端无限缓冲的问题。这是通过使用 <em>basic.qos</em> 方法设置 <em>预取计数</em>  值来完成的。该值定义了Channel上允许的未确认的分发的最大数值。一旦数量达到配置的计数，RabbitMQ 将停止在该Channel 上分发更多消息，除非至少有一个未确认的消息被确认了。</p>
 <p>例如，在给定的Channel ch 上有分发标签为 5,6,7,8 的未确认消息，并且 Channel ch 的 <em>prefetch</em> 计数设置为4，则 RabbitMQ 将不会推送更多的分发给 Channel ch，除非至少有一个未完成的分发被确认了。当该Channel上有一个带有 <em>delivery_tag</em> 为 8的确认帧到达时，RabbitMQ 将通知和分发多一条消息给该Channel。</p>
 <p>值得重申的是，分发流程和客户端手动确认完全是异步的。因此，如果 <em>prefetch</em> 的值在分发已经在 <em>in flight</em> 状态时被改变了，则会出现自然竞态条件，并且可能会暂时超过 Channel 上 <em>prefetch</em> 计数的未确认消息。</p>
-<p>可以为Channel或消费者设置 QoS 。详情参看 <a href="https://www.rabbitmq.com/consumer-prefetch.html" target="_blank" rel="external">Consumer Prefetch</a></p>
+<p>可以为Channel或消费者设置 QoS 。详情参看 <a href="https://www.rabbitmq.com/consumer-prefetch.html" target="_blank" rel="noopener">Consumer Prefetch</a></p>
 <h1 id="客户端错误：双重确认以及未知标签-double-acking-and-unknow-tags"><a href="#客户端错误：双重确认以及未知标签-double-acking-and-unknow-tags" class="headerlink" title="客户端错误：双重确认以及未知标签(double acking and unknow tags)"></a>客户端错误：双重确认以及未知标签(double acking and unknow tags)</h1><p>如果客户端多次对同一个分发标签进行确认，RabbitMQ 将导致一个 Channel 错误，例如 <em>PRECONDITION_FAILED - unknown delivery tag 100</em> 。如果使用了一个未知的分发标签，也会抛出同样的 Channel 异常。</p>
 <h2 id="发布者确认"><a href="#发布者确认" class="headerlink" title="发布者确认"></a>发布者确认</h2><p>使用标准的 AMQP 0-9-1 ，保证消息不丢失的唯一方法是使用事务——用 Channel 事务，发布消息，提交。在这种情况下，事务是不必须的，而且它是重置级的，并且会降低 250 倍左右的吞吐量。为了弥补这一点，引入了确认机制。它模仿了协议中已经存在的消费者确认机制。</p>
 <p>为了开启确认机制，客户端发送 <em>confirm.select</em> 方法。根据是否设置 <em>no-wait</em> , Broker 可以使用 <em>confirm.select-ok</em> 来响应。一旦 <em>confirm.select</em> 在Channel上使用了，就被认为处于确认模式。事务Channel 不能进入确认模式，并且一旦Channel处于确认模式，则不能进行事务处理。</p>
 <p>一旦Channel处理确认模式， Broker 和 客户端都会计数消息（在第一个 <em>confirm.select</em> 时，从1开始计数）. Broker 通过在同一个Channel上发送一个 <em>basic.ack</em> 来确认消息。 <em>delivery-tag</em> 字段包含已经确认消息的序列号。Broker 也可以在 <em>basic.ack</em> 设置 <em>multiple</em> 以指示所有到达并包含具有序列号的消息已经被处理。</p>
-<p>Java中的一个发布大量的消息到一个确认模式的Channel并等待确认的例子，可以在 <a href="https://raw.githubusercontent.com/rabbitmq/rabbitmq-perf-test/master/src/main/java/com/rabbitmq/examples/ConfirmDontLoseMessages.java" target="_blank" rel="external">这里</a> 找到.</p>
+<p>Java中的一个发布大量的消息到一个确认模式的Channel并等待确认的例子，可以在 <a href="https://raw.githubusercontent.com/rabbitmq/rabbitmq-perf-test/master/src/main/java/com/rabbitmq/examples/ConfirmDontLoseMessages.java" target="_blank" rel="noopener">这里</a> 找到.</p>
 <h1 id="被动确认"><a href="#被动确认" class="headerlink" title="被动确认"></a>被动确认</h1><p>在特殊情况下，当 Broker 无法成功处理消息时，Broker 会发送一个 <em>basic.nack</em> 而不是 <em>basic.ack</em> 。在这种情况下，<em>basic.nack</em> 的字段具有与 <em>basic.ack</em> 相应字段的相同含义，并且 <em>requeue</em> 字段应该被忽略。nack 一条或多条消息时，Broker 指示它无法处理消息，并拒绝为它们承担责任；在这点上，客户端可以选择重新发布消息。</p>
 <p>Channel处理确认模式后，所有后续发布的消息将会被确认或 nack 一次。并不保证消息被确认要多久。不会存在消息既是确认又是 nack情况。</p>
 <p>如果在负责该队列的Erlang进程中，发生内部错误时，则仅会分发 <em>basic.nack</em> 。</p>

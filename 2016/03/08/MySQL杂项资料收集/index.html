@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2016/03/08/MySQL杂项资料收集/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="关于 MySQL 5.6 ICP ICP（index condition pushdown）  参考资料:  csdn-melody_mr  关于 字符串 与 整型对比 的查询与索引 查询中 number compare string： 如果有索引，那么就可以利用到索引。 查询中 string compare number： 就算有索引，也利用不到.  官方文档里这样子描述的:  对于用 numb">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL杂项资料收集">
@@ -206,7 +207,7 @@
 </blockquote>
 <p>参考资料:</p>
 <ol>
-<li><a href="http://blog.csdn.net/melody_mr/article/details/48947293" target="_blank" rel="external">csdn-melody_mr</a></li>
+<li><a href="http://blog.csdn.net/melody_mr/article/details/48947293" target="_blank" rel="noopener">csdn-melody_mr</a></li>
 </ol>
 <h2 id="关于-字符串-与-整型对比-的查询与索引"><a href="#关于-字符串-与-整型对比-的查询与索引" class="headerlink" title="关于 字符串 与 整型对比 的查询与索引"></a>关于 字符串 与 整型对比 的查询与索引</h2><ol>
 <li>查询中 <code>number compare string</code>： 如果有索引，那么就可以利用到索引。</li>
@@ -218,7 +219,7 @@
 <p><code>SELECT * FROM tbl_name WHERE str_col=1;</code></p>
 <p>原因是： 有许多种string可以转换值为1,比如: <code>&#39;1&#39;</code>, <code>&#39; 1&#39;</code>, <code>&#39;1a&#39;</code>.</p>
 </blockquote>
-<p><a href="http://stackoverflow.com/questions/16786063/mysql-comparison-of-integer-value-and-string-field-with-index" target="_blank" rel="external">stackoverflow</a><br>以下是中文大概意思:</p>
+<p><a href="http://stackoverflow.com/questions/16786063/mysql-comparison-of-integer-value-and-string-field-with-index" target="_blank" rel="noopener">stackoverflow</a><br>以下是中文大概意思:</p>
 <blockquote>
 <p>要点就是：如果数据库必须在table列进行转换，那么就不能利用到索引.</p>
 <p>除此之外，数据库总是从<code>string</code>转换为<code>number</code>，因为这是确定性的。（不然，数字1可以被转换为字符串<code>&#39;01&#39;</code>, <code>&#39;001&#39;</code>）.<br>所以，我们可以看以以下同两条SQL:</p>

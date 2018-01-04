@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2015/08/04/ubuntu-开发环境配置/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="安装必要的编译环境sudo apt-get update &amp;amp;&amp;amp; sudo apt-get install libcurl4-gnutls-dev libexpat1-dev gettext libz-dev libssl-dev build-essential 安装从这里打开终端sudo apt-get install nautilus-open-terminal 安装Chrome">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ubuntu 开发环境配置">
@@ -178,7 +179,7 @@
     
       <a class="tag-item" href="/tags/#emacs">
         <span class="tag-name">emacs</span>
-    <span class="tag-size">( 13 )</span>
+    <span class="tag-size">( 15 )</span>
     </a>
     
       <a class="tag-item" href="/tags/#ubuntu">
@@ -216,7 +217,7 @@
 <p>配置</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">git config --global user.name <span class="string">"Zhiyong Yang"</span></div><div class="line">git config --global user.email dreamers.yzy@gmail.com</div><div class="line"></div><div class="line"></div><div class="line"><span class="built_in">echo</span> <span class="string">"export LESSCHARSET=utf-8"</span> &gt; <span class="variable">$HOME</span>/.profile</div><div class="line">git config --global gui.encoding utf-8</div><div class="line">git config --global i18n.commitencoding utf-8</div><div class="line">git config --global i18n.logoutputencoding utf-8</div><div class="line"></div><div class="line"><span class="comment"># 全局编辑器，提交时将COMMIT_EDITMSG编码转换成UTF-8可避免乱码</span></div><div class="line">git config --global core.editor e</div></pre></td></tr></table></figure>
 <h2 id="apt安装最新git"><a href="#apt安装最新git" class="headerlink" title="apt安装最新git"></a>apt安装最新git</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo add-apt-repository ppa:git-core/ppa</div><div class="line">sudo apt-get update</div><div class="line">sudo apt-get install git</div></pre></td></tr></table></figure>
-<h2 id="安装Java及Eclipse及Maven"><a href="#安装Java及Eclipse及Maven" class="headerlink" title="安装Java及Eclipse及Maven"></a>安装Java及Eclipse及Maven</h2><p><a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_blank" rel="external">JDK</a><br><a href="https://www.eclipse.org/downloads/" target="_blank" rel="external">Eclipse</a><br><a href="https://maven.apache.org/download.cgi" target="_blank" rel="external">Maven</a></p>
+<h2 id="安装Java及Eclipse及Maven"><a href="#安装Java及Eclipse及Maven" class="headerlink" title="安装Java及Eclipse及Maven"></a>安装Java及Eclipse及Maven</h2><p><a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_blank" rel="noopener">JDK</a><br><a href="https://www.eclipse.org/downloads/" target="_blank" rel="noopener">Eclipse</a><br><a href="https://maven.apache.org/download.cgi" target="_blank" rel="noopener">Maven</a></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#这里也使用了软链接，将current指向某个具体版本的JDK目录即可</span></div><div class="line"><span class="built_in">export</span> JAVA_HOME=/home/yang/Java/current</div><div class="line"><span class="built_in">export</span> PATH=<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$PATH</span></div><div class="line"><span class="built_in">export</span> PATH=/home/yang/Java/apache-maven-3.3.3/bin:<span class="variable">$PAT</span></div></pre></td></tr></table></figure>
 <h2 id="安装五笔输入法"><a href="#安装五笔输入法" class="headerlink" title="安装五笔输入法"></a>安装五笔输入法</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install fcitx-table-wubi</div></pre></td></tr></table></figure>
 <p>安装完成后，进入<code>System Settings</code> –&gt; <code>Language Support</code> –&gt; <code>Keyboard input method system</code> 中选择 <code>fcitx</code></p>

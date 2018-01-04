@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2017/05/10/Erlang杂项/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="erlang 启动参数说明+ : 它是 emulator flag 它控制模拟器的行为(即虚拟机)。(emulator flag).可以通过 erlang:system_info(…) 来获取。所有选项名有: system_info - : 这种参数是传递给 runtime system ，特别是 init system 来处理的。可以通过 init:get_argument/1 函数来获取这些参">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-08-29T06:55:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Erlang杂项">
@@ -196,7 +197,7 @@
 
     <div class="article-content">
         
-                            <h1 id="erlang-启动参数说明"><a href="#erlang-启动参数说明" class="headerlink" title="erlang 启动参数说明"></a>erlang 启动参数说明</h1><p><em>+</em> : 它是 <em>emulator flag</em> 它控制模拟器的行为(即虚拟机)。(emulator flag).可以通过 <em>erlang:system_info(…)</em> 来获取。所有选项名有: <a href="http://erlang.org/doc/man/erlang.html#system_info_allocator_tags" target="_blank" rel="external">system_info</a></p>
+                            <h1 id="erlang-启动参数说明"><a href="#erlang-启动参数说明" class="headerlink" title="erlang 启动参数说明"></a>erlang 启动参数说明</h1><p><em>+</em> : 它是 <em>emulator flag</em> 它控制模拟器的行为(即虚拟机)。(emulator flag).可以通过 <em>erlang:system_info(…)</em> 来获取。所有选项名有: <a href="http://erlang.org/doc/man/erlang.html#system_info_allocator_tags" target="_blank" rel="noopener">system_info</a></p>
 <p><em>-</em> : 这种参数是传递给 <em>runtime system</em> ，特别是 <em>init system</em> 来处理的。可以通过 <em>init:get_argument/1</em> 函数来获取这些参数，<em>init:get_arguments().</em> 会列出所有。 (flag)</p>
 <p><em>plain argument</em> : 它可以出现在第一个 (flag) 之前，或者在 <em>–</em> flag 后面。又或者是 <em>-extra</em> flag 后面。可以通过 <em>init:get_plain_arguments().</em> 来获取</p>
 <h1 id="让-Erlang-接受的信号说明"><a href="#让-Erlang-接受的信号说明" class="headerlink" title="让 Erlang 接受的信号说明"></a>让 Erlang 接受的信号说明</h1><p><em>SIGUSR1</em> ： 它会导致Erlang强制产生一个 crash dump 文件。<br><em>SIGTERM</em> ： 它会产生一个 <em>stop</em> 的消息给 <em>init</em> 进程。即等同于调用 <em>init:stop/0</em><br><em>SIGUSR2</em> ： 它保留Erlang内部使用。</p>

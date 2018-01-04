@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2016/06/29/Tomcat-8-源码学习五之Tomcat日志系统/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="juli默认情况下，Tomcat使用自身的juli作为Tomcat内部的日志处理系统.它的源码，在Tomcat源码结构下的org.apache.juli包下. juli与JDK logger的关系juli是继承自JDK的logger的.通过源码可以确认这一点: 12public class ClassLoaderLogManager extends LogManager &amp;#123;&amp;#125;">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tomcat 8 源码学习五之Tomcat日志系统">
@@ -273,8 +274,8 @@
 <h2 id="Tomcat启动时报错"><a href="#Tomcat启动时报错" class="headerlink" title="Tomcat启动时报错"></a>Tomcat启动时报错</h2><h3 id="SEVERE-Error-listenerStart-或者-SEVERE-Error-filterStart-等"><a href="#SEVERE-Error-listenerStart-或者-SEVERE-Error-filterStart-等" class="headerlink" title="SEVERE: Error listenerStart 或者 SEVERE: Error filterStart 等"></a>SEVERE: Error listenerStart 或者 SEVERE: Error filterStart 等</h3><p>可以利用上面的说明, 在出现问题的应用上,假设你的应用叫<code>demo</code>, 那么,就可以在目录:<code>webapps/demo/WEB-INF/classes</code>下添加一个名为<code>logging.properties</code>的文件, 文件的内容为:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">handlers = org.apache.juli.FileHandler, java.util.logging.ConsoleHandler</div><div class="line"></div><div class="line"><span class="comment">############################################################</span></div><div class="line"><span class="comment"># Handler specific properties.</span></div><div class="line"><span class="comment"># Describes specific configuration info for Handlers.</span></div><div class="line"><span class="comment">############################################################</span></div><div class="line"></div><div class="line">org.apache.juli.FileHandler.level = FINE</div><div class="line">org.apache.juli.FileHandler.directory = <span class="variable">$&#123;catalina.base&#125;</span>/logs</div><div class="line">org.apache.juli.FileHandler.prefix = error-debug.</div><div class="line"></div><div class="line">java.util.logging.ConsoleHandler.level = FINE</div><div class="line">java.util.logging.ConsoleHandler.formatter = java.util.logging.SimpleFormatter</div></pre></td></tr></table></figure>
 <p>这时,Tomcat就会在控制台里打印详细的报错信息了.</p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://blog.csdn.net/qingkangxu/article/details/7514770" target="_blank" rel="external">CSDN qingkangxu</a></p>
-<p><a href="http://xpenxpen.iteye.com/blog/1545648" target="_blank" rel="external">iteye xpenxpen</a></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://blog.csdn.net/qingkangxu/article/details/7514770" target="_blank" rel="noopener">CSDN qingkangxu</a></p>
+<p><a href="http://xpenxpen.iteye.com/blog/1545648" target="_blank" rel="noopener">iteye xpenxpen</a></p>
 
                                 
     </div>

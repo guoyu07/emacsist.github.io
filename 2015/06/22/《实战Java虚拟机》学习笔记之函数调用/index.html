@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2015/06/22/《实战Java虚拟机》学习笔记之函数调用/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="出入Java栈Java栈是一块线程私有的内存空间。它是一块先进后出的数据结构。Java栈中保存的主要内容为栈帧。每一次函数调用，都会有一个对应的栈帧被压入栈，每一个函数调用结束，都会有一个栈帧被弹出Java栈。当前正在执行的函数所对应的帧就是当前的帧（位于栈顶），它保存着当前函数的局部变量、中间运算结果等数据。 Java方法有两种返回函数的方式，一种是正常的函数返回，使用return指令；另一种是">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《实战Java虚拟机》学习笔记之函数调用">
@@ -209,7 +210,7 @@
 <h3 id="局部变量表"><a href="#局部变量表" class="headerlink" title="局部变量表"></a>局部变量表</h3><p>它用于保存函数的参数及局部变量。局部变量表中的变量只在当前函数调用中有效，当函数调用结束后，随着函数栈帧的销毁，局部变量表也会随之销毁。</p>
 <p>由于局部变量表在栈帧之中，因此，如果函数的参数和局部变量较多，会使得局部变量表膨胀，从而每一次函数调用就会占用更多的栈空间，最终导致函数的嵌套调用次数减少。</p>
 <blockquote>
-<p>查看局部变量表的工具： <a href="https://github.com/ingokegel/jclasslib" target="_blank" rel="external">jclasslib</a></p>
+<p>查看局部变量表的工具： <a href="https://github.com/ingokegel/jclasslib" target="_blank" rel="noopener">jclasslib</a></p>
 </blockquote>
 <h3 id="操作数栈"><a href="#操作数栈" class="headerlink" title="操作数栈"></a>操作数栈</h3><p>操作数栈也是栈帧中重要内容之一，它主要用于保存计算过程的中间结果，同时作为计算过程中变量临时的存储空间。</p>
 <h3 id="帧数据区"><a href="#帧数据区" class="headerlink" title="帧数据区"></a>帧数据区</h3><p>它保存着访问常量池的指针，方便程序访问常量池。</p>

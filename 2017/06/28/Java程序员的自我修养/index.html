@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2017/06/28/Java程序员的自我修养/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="Java 内存模型及规范ifeve-Java内存模型FAQ-中译版 The Java Memory Model The JSR-133 Cookbook for Compiler Writers JVM 架构https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-2.html 根据规范可知, 运行时的数据区域有  PC 寄存器(program">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://emacsist.github.io/img/Java-Memory-Model.png">
 <meta property="og:updated_time" content="2017-07-01T06:23:18.000Z">
 <meta name="twitter:card" content="summary">
@@ -203,10 +204,10 @@
 
     <div class="article-content">
         
-                            <h1 id="Java-内存模型及规范"><a href="#Java-内存模型及规范" class="headerlink" title="Java 内存模型及规范"></a>Java 内存模型及规范</h1><p><a href="http://ifeve.com/jmm-faq/" target="_blank" rel="external">ifeve-Java内存模型FAQ-中译版</a></p>
-<p><a href="http://www.cs.umd.edu/~pugh/java/memoryModel/" target="_blank" rel="external">The Java Memory Model</a></p>
-<p><a href="https://link.zhihu.com/?target=http%3A//gee.cs.oswego.edu/dl/jmm/cookbook.html" target="_blank" rel="external">The JSR-133 Cookbook for Compiler Writers</a></p>
-<h1 id="JVM-架构"><a href="#JVM-架构" class="headerlink" title="JVM 架构"></a>JVM 架构</h1><p><a href="https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-2.html" target="_blank" rel="external">https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-2.html</a></p>
+                            <h1 id="Java-内存模型及规范"><a href="#Java-内存模型及规范" class="headerlink" title="Java 内存模型及规范"></a>Java 内存模型及规范</h1><p><a href="http://ifeve.com/jmm-faq/" target="_blank" rel="noopener">ifeve-Java内存模型FAQ-中译版</a></p>
+<p><a href="http://www.cs.umd.edu/~pugh/java/memoryModel/" target="_blank" rel="noopener">The Java Memory Model</a></p>
+<p><a href="https://link.zhihu.com/?target=http%3A//gee.cs.oswego.edu/dl/jmm/cookbook.html" target="_blank" rel="noopener">The JSR-133 Cookbook for Compiler Writers</a></p>
+<h1 id="JVM-架构"><a href="#JVM-架构" class="headerlink" title="JVM 架构"></a>JVM 架构</h1><p><a href="https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-2.html" target="_blank" rel="noopener">https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-2.html</a></p>
 <p>根据规范可知, 运行时的数据区域有</p>
 <ul>
 <li>PC 寄存器(program counter register)（线程私有）</li>
@@ -236,7 +237,7 @@
 <h2 id="动态链接"><a href="#动态链接" class="headerlink" title="动态链接"></a>动态链接</h2><p>它的作用就是将指向常量池的符号转换为实际方法的直接引用。</p>
 <h2 id="方法正常结束"><a href="#方法正常结束" class="headerlink" title="方法正常结束"></a>方法正常结束</h2><p>即没有抛出任何异常。这时当前方法返回一个值给它的调用者，然后还要进行恢复调用者状态（即JVM里，它是由被调用者进行上下文恢复的，即要恢复调用者的局部变量表、操作数栈、PC等）</p>
 <h2 id="方法异常结束"><a href="#方法异常结束" class="headerlink" title="方法异常结束"></a>方法异常结束</h2><p>这种情况下，一定不会有方法返回值给调用者的</p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://book.douban.com/subject/24722612/" target="_blank" rel="external">深入理解JVM-周志明</a><br><a href="https://book.douban.com/subject/25792515/" target="_blank" rel="external">Java虚拟机规范-周志明等译</a><br><a href="http://docs.oracle.com/javase/specs/" target="_blank" rel="external">http://docs.oracle.com/javase/specs/</a></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://book.douban.com/subject/24722612/" target="_blank" rel="noopener">深入理解JVM-周志明</a><br><a href="https://book.douban.com/subject/25792515/" target="_blank" rel="noopener">Java虚拟机规范-周志明等译</a><br><a href="http://docs.oracle.com/javase/specs/" target="_blank" rel="noopener">http://docs.oracle.com/javase/specs/</a></p>
 <h1 id="JVM-各种参数"><a href="#JVM-各种参数" class="headerlink" title="JVM 各种参数"></a>JVM 各种参数</h1><p>参考本博客的 <a href="http://emacsist.github.io/2016/01/11/%E7%BF%BB%E8%AF%91-Java-XX-PrintFlagsFinal%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/">[翻译]Java -XX:+PrintFlagsFinal命令行参数详解</a></p>
 <p>一般的调优都是从</p>
 <p>内存、GC类型</p>
@@ -247,14 +248,14 @@
 </blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[18:37:34] emacsist:~ $ /usr/libexec/java_home</div><div class="line">/Library/Java/JavaVirtualMachines/jdk1.8.0_74.jdk/Contents/Home</div><div class="line">[18:37:37] emacsist:~ $</div></pre></td></tr></table></figure>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">appletviewer =&gt; applet 查看器，开发 applet 才会用到</div><div class="line">extcheck =&gt; 用于检测 Jar 包与当前JDK是否有冲突，这个极少用到，一般是JDK更新扩展 ext 包时使用</div><div class="line">idlj =&gt; 为Java语言来使用 CORBA 功能的 .java 文件进行生成代码用到的。</div><div class="line">jar =&gt; jar 文件处理工具。类似 zip ，虽然 jar 本质上也是一个 zip 文件</div><div class="line">jarsigner =&gt; jar 文件签名工具</div><div class="line">java =&gt; Java 程序启动器</div><div class="line">javac =&gt; Java源码编译器</div><div class="line">javadoc =&gt; JavaDoc 处理工具</div><div class="line">javafxpackager =&gt; 开发 JavaFX </div><div class="line">javah =&gt; 开发本地代码，如 C 时用来处理头文件的</div><div class="line">javap =&gt; Java 类文件反编译器</div><div class="line">javapackager =&gt; 执行与Java和 JavaFX程序打包和签名相关的任务。比如可以将你的应用捆绑JRE，然后打包发布～</div><div class="line">jcmd =&gt; JVM诊断命令工具，发送诊断命令请求到一个正在运行的JVM(比如导出内存信息，栈信息等，jmap)</div><div class="line">jconsole =&gt; 基于 JMX 的图形化监控JVM的工具</div><div class="line">jdb =&gt; Java调试器</div><div class="line">jdeps =&gt; Java 类依赖分析器</div><div class="line">jhat =&gt; 查看 Java 堆 dump 文件的</div><div class="line">jinfo =&gt; 查看Java进程的配置信息</div><div class="line">jjs =&gt; 运行 Nashorn （JVM上的JavaScript解释器） 命令行脚本 Shell</div><div class="line">jmap =&gt; 获取Java进程的内存映像</div><div class="line">jmc =&gt; The Java Mission Control (JMC) ，Java 程序的性能监控和分析工具</div><div class="line">jps =&gt; 列出Java进程</div><div class="line">jrunscript =&gt; Java的脚本 shell</div><div class="line">jsadebugd =&gt; Javar 调试守护服务代理者，类似一个远程的 debug 服务器</div><div class="line">jstack =&gt; 获取Java进程当前所有线程栈</div><div class="line">jstat =&gt; 获取 Java 进程的状态信息</div><div class="line">jstatd =&gt; jstat 的守护进程</div><div class="line">jvisualvm =&gt; 可视化的VM工具</div><div class="line">keytool =&gt; 密钥工具</div><div class="line">native2ascii =&gt; 将文本文件转换为 Unicode Latin-1 编码</div><div class="line">orbd =&gt; CORBA 相关的工具。</div><div class="line">pack200 =&gt; 将 jar 文件转换为 pack200 类型的文件（高度压缩版的 jar 文件，可减少带宽和下载时间等）</div><div class="line">policytool =&gt; 策略工具</div><div class="line">rmic =&gt; RMI 编译器</div><div class="line">rmid =&gt; RMI 守护进程</div><div class="line">rmiregistry =&gt; RMI注册器</div><div class="line">schemagen =&gt; XML schema 生成器</div><div class="line">serialver =&gt; 序列化版本查看器。即查看 serialVersionUID 的值</div><div class="line">servertool =&gt; 不太明了。。</div><div class="line">tnameserv =&gt; 不太明了。。</div><div class="line">unpack200 =&gt; 解压缩 pack200 文件的工具</div><div class="line">wsgen =&gt; 生成 JAX-WS 相关的工具</div><div class="line">wsimport =&gt; 导入 JAX-WS 相关的工具</div><div class="line">xjc =&gt; 根据 XML schema 生成 Java 类</div></pre></td></tr></table></figure>
-<p><a href="https://docs.oracle.com/javase/8/docs/technotes/tools/" target="_blank" rel="external">JDK Tools and Utilities</a></p>
+<p><a href="https://docs.oracle.com/javase/8/docs/technotes/tools/" target="_blank" rel="noopener">JDK Tools and Utilities</a></p>
 <h1 id="各种性能工具"><a href="#各种性能工具" class="headerlink" title="各种性能工具"></a>各种性能工具</h1><ul>
-<li><a href="https://github.com/alibaba/TProfiler" target="_blank" rel="external">TProfiler-alibaba</a></li>
-<li><a href="http://www.crashub.org/" target="_blank" rel="external">crashub</a></li>
-<li><a href="https://github.com/oldmanpushcart/greys-anatomy" target="_blank" rel="external">greys</a> 个人强烈推荐使用这个</li>
+<li><a href="https://github.com/alibaba/TProfiler" target="_blank" rel="noopener">TProfiler-alibaba</a></li>
+<li><a href="http://www.crashub.org/" target="_blank" rel="noopener">crashub</a></li>
+<li><a href="https://github.com/oldmanpushcart/greys-anatomy" target="_blank" rel="noopener">greys</a> 个人强烈推荐使用这个</li>
 </ul>
 <h2 id="分析-core-dump-文件"><a href="#分析-core-dump-文件" class="headerlink" title="分析 core dump 文件"></a>分析 core dump 文件</h2><ul>
-<li><a href="http://www.eclipse.org/mat/" target="_blank" rel="external">MAT</a></li>
+<li><a href="http://www.eclipse.org/mat/" target="_blank" rel="noopener">MAT</a></li>
 <li>JDK自带的 jvisualvm</li>
 </ul>
 <h1 id="各种-OutOfMemory-Stackoverflow"><a href="#各种-OutOfMemory-Stackoverflow" class="headerlink" title="各种 OutOfMemory, Stackoverflow"></a>各种 OutOfMemory, Stackoverflow</h1><h2 id="Stackoverflow-的代码"><a href="#Stackoverflow-的代码" class="headerlink" title="Stackoverflow 的代码"></a>Stackoverflow 的代码</h2><p>JVM 参数:（将栈调小点，让它快点出现问题）</p>
@@ -273,7 +274,7 @@
 <p>输出</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Exception <span class="keyword">in</span> thread <span class="string">"main"</span> java.lang.OutOfMemoryError: Java heap space</div><div class="line">	at com.github.emacsist.memory.YoungOutOfMemory.main(YoungOutOfMemory.java:8)</div></pre></td></tr></table></figure>
 <h2 id="关于常量池异常代码的问题"><a href="#关于常量池异常代码的问题" class="headerlink" title="关于常量池异常代码的问题"></a>关于常量池异常代码的问题</h2><p>因为它在不同版本的JDK的实现不同。可以参考:</p>
-<p><a href="http://java-performance.info/string-intern-in-java-6-7-8/" target="_blank" rel="external">String.intern in Java 6, 7 and 8 – string pooling</a></p>
+<p><a href="http://java-performance.info/string-intern-in-java-6-7-8/" target="_blank" rel="noopener">String.intern in Java 6, 7 and 8 – string pooling</a></p>
 <h2 id="DirectMemory-的代码"><a href="#DirectMemory-的代码" class="headerlink" title="DirectMemory 的代码"></a>DirectMemory 的代码</h2><p>JVM参数:（默认为0，即无限）</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-XX:MaxDirectMemorySize=8m</div></pre></td></tr></table></figure>
 <p>查看:</p>

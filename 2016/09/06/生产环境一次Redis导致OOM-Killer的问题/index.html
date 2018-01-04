@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2016/09/06/生产环境一次Redis导致OOM-Killer的问题/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="Redis 引发系统OOM Killer昨晚（2016-9-5），生产环境的Redis发生警报，一段时间后，内存被降到50%多（之前一直在90%左右），然后发现Redis的进程挂了。第一时间看Redis的log文件，发现有如下信息: 12345678910866:M 05 Sep 20:15:19.711 # Background saving terminated by signal 91086">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="生产环境一次Redis导致OOM Killer的问题">
@@ -216,7 +217,7 @@
 <p>把overcommit_memory设置为1来告诉Linux以更加乐观的方式来执行fork操作，并且这确实是你想要的。</p>
 </blockquote>
 <p>参考资料:</p>
-<p><a href="http://redis.io/topics/faq" target="_blank" rel="external">Redis FAQ</a><br><a href="http://ifeve.com/redis-faq/" target="_blank" rel="external">ifeve redis faq中文翻译</a></p>
+<p><a href="http://redis.io/topics/faq" target="_blank" rel="noopener">Redis FAQ</a><br><a href="http://ifeve.com/redis-faq/" target="_blank" rel="noopener">ifeve redis faq中文翻译</a></p>
 <h2 id="overcommit-memory-对fork的影响"><a href="#overcommit-memory-对fork的影响" class="headerlink" title="overcommit_memory 对fork的影响"></a>overcommit_memory 对fork的影响</h2><p>我们可以来做一个实验，来一步一步理解这个参数到fork的影响.<br>测试的环境是:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">┌─[sky@sky-linux] - [~] - [2016-09-06 02:43:37]</div><div class="line">└─[0] &lt;&gt; uname -a</div><div class="line">Linux sky-linux 3.19.0-32-generic <span class="comment">#37~14.04.1-Ubuntu SMP Thu Oct 22 09:41:40 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux</span></div><div class="line">┌─[sky@sky-linux] - [~] - [2016-09-06 02:46:14]</div><div class="line">└─[0] &lt;&gt; free -h </div><div class="line">             total       used       free     shared    buffers     cached</div><div class="line">Mem:           15G        10G       4.6G       750M       209M       3.8G</div><div class="line">-/+ buffers/cache:       7.0G       8.6G</div><div class="line">Swap:           0B         0B         0B</div></pre></td></tr></table></figure>
 <p>可以看到，还有<code>8.6GB</code>空闲内存。默认的情况下，<code>overcommit_memory</code>的值是：</p>
@@ -241,8 +242,8 @@
 <p>可以看到它直接报错了，即申请<code>5GB</code>内存不成功。因为<code>CommitLimit=15GB * 50 /100 = 7.5GB</code>，即最多可以分配7.5GB空间，但已经用了<code>7GB</code>，这时再申请5GB的话，已经超过了<code>7.5GB</code>的限制，所以OS直接拒绝了该次内存申请。</p>
 <p>参考资料:</p>
 <ul>
-<li><a href="http://linuxperf.com/?p=102" target="_blank" rel="external">linuxperf</a></li>
-<li><a href="http://coolshell.cn/articles/11175.html" target="_blank" rel="external">coolshell</a></li>
+<li><a href="http://linuxperf.com/?p=102" target="_blank" rel="noopener">linuxperf</a></li>
+<li><a href="http://coolshell.cn/articles/11175.html" target="_blank" rel="noopener">coolshell</a></li>
 </ul>
 <h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><ul>
 <li><p>加内存咯（如果已经充分利用了Redis的存储结构来保存了最适合的数据，即Redis层已经最优了，不然的话，可以先优化Redis层先）</p>
@@ -260,7 +261,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dmesg -T</div></pre></td></tr></table></figure>
 <h2 id="查找出系统中首先会被Kill的进程"><a href="#查找出系统中首先会被Kill的进程" class="headerlink" title="查找出系统中首先会被Kill的进程"></a>查找出系统中首先会被Kill的进程</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dstat --top-oom</div></pre></td></tr></table></figure>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> /proc/*/oom_score; <span class="keyword">do</span> pid=$(<span class="built_in">echo</span> <span class="string">"<span class="variable">$&#123;i&#125;</span>"</span> | cut -d/ -f3); <span class="built_in">echo</span> <span class="string">"oom_score=<span class="variable">$(cat "$&#123;i&#125;")</span>, PID=<span class="variable">$&#123;pid&#125;</span>, exe=<span class="variable">$(readlink -e /proc/$&#123;pid&#125;/exe)</span>"</span>; <span class="keyword">done</span> 2&gt; /dev/null | sort -rn -t, -k 1.11 | head -n 50</div></pre></td></tr></table></figure>
-<p><a href="http://laoxu.blog.51cto.com/4120547/1267097" target="_blank" rel="external">参考资料</a></p>
+<p><a href="http://laoxu.blog.51cto.com/4120547/1267097" target="_blank" rel="noopener">参考资料</a></p>
 <h2 id="查看历史命令的执行时间"><a href="#查看历史命令的执行时间" class="headerlink" title="查看历史命令的执行时间"></a>查看历史命令的执行时间</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">export</span> HISTTIMEFORMAT=<span class="string">"%d/%m/%y %T "</span></div></pre></td></tr></table></figure>
 <p>这有个问题，就是之前的历史命令，会统一为执行这个export的命令，然后之后的命令才会记录下时间.</p>
 

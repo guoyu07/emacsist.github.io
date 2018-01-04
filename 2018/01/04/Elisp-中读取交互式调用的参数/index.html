@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Elisp 中读取交互式调用的参数 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="emacs,elisp," />
+  
+
+  <meta name="description" content="interactive当使用 interactive 时, 可以使一个 lisp 函数变成一个可交互式调用的命令.  它的形式为 1interactive arg-descriptor arg-descriptor 参数标识及意义为空 或 nil表示该命令是通过无参数来调用的. 这会导致快速错误, 如果命令要求一个或多个参数的话. 为字符串该字符串的内容是通过换行符来分割的元素序列(sequenc">
+<meta name="keywords" content="emacs,elisp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Elisp 中读取交互式调用的参数">
+<meta property="og:url" content="https://emacsist.github.io/2018/01/04/Elisp-中读取交互式调用的参数/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="interactive当使用 interactive 时, 可以使一个 lisp 函数变成一个可交互式调用的命令.  它的形式为 1interactive arg-descriptor arg-descriptor 参数标识及意义为空 或 nil表示该命令是通过无参数来调用的. 这会导致快速错误, 如果命令要求一个或多个参数的话. 为字符串该字符串的内容是通过换行符来分割的元素序列(sequenc">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-01-04T11:01:33.973Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Elisp 中读取交互式调用的参数">
+<meta name="twitter:description" content="interactive当使用 interactive 时, 可以使一个 lisp 函数变成一个可交互式调用的命令.  它的形式为 1interactive arg-descriptor arg-descriptor 参数标识及意义为空 或 nil表示该命令是通过无参数来调用的. 这会导致快速错误, 如果命令要求一个或多个参数的话. 为字符串该字符串的内容是通过换行符来分割的元素序列(sequenc">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#interactive"><span class="toc-text">interactive</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#arg-descriptor-参数标识及意义"><span class="toc-text">arg-descriptor 参数标识及意义</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#为空-或-nil"><span class="toc-text">为空 或 nil</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为字符串"><span class="toc-text">为字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为一个-Lisp-表达式"><span class="toc-text">为一个 Lisp 表达式</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Elisp-中读取交互式调用的参数" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Elisp 中读取交互式调用的参数
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2018.01.04</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#elisp">
+        <span class="tag-name">elisp</span>
+    <span class="tag-size">( 2 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#emacs">
+        <span class="tag-name">emacs</span>
+    <span class="tag-size">( 15 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h1 id="interactive"><a href="#interactive" class="headerlink" title="interactive"></a>interactive</h1><p>当使用 <code>interactive</code> 时, 可以使一个 lisp 函数变成一个可交互式调用的命令.  它的形式为</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">interactive arg-descriptor</div></pre></td></tr></table></figure>
+<h1 id="arg-descriptor-参数标识及意义"><a href="#arg-descriptor-参数标识及意义" class="headerlink" title="arg-descriptor 参数标识及意义"></a><code>arg-descriptor</code> 参数标识及意义</h1><h2 id="为空-或-nil"><a href="#为空-或-nil" class="headerlink" title="为空 或 nil"></a>为空 或 nil</h2><p>表示该命令是通过无参数来调用的. 这会导致快速错误, 如果命令要求一个或多个参数的话.</p>
+<h2 id="为字符串"><a href="#为字符串" class="headerlink" title="为字符串"></a>为字符串</h2><p>该字符串的内容是通过换行符来分割的元素序列(sequence), 每一行一个参数. </p>
+<p>每一个元素都是由一个<a href="https://www.gnu.org/software/emacs/manual/html_node/elisp/Interactive-Codes.html#Interactive-Codes" target="_blank" rel="noopener">代码字符</a> 以及可选的提示字符组成的.</p>
+<p>例如</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(<span class="name">interactive</span> <span class="string">"P\nbFrobnicate buffer: "</span>)</div></pre></td></tr></table></figure>
+<p>代码字符 <code>P</code> 设置为原始命令前缀的第一个参数.</p>
+<p><code>bFrobnicate buffer:</code> 提示用户语为 <code>Frobnicate buffer:</code> 来输入一个存在的 buffer , 它会传递到命令的第二个参数, 也就是最后一个参数.</p>
+<p>提示符字符串, 可以使用 <code>%</code> 来包含前一个参数的值. 例如:</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(<span class="name">interactive</span> <span class="string">"bBuffer to rename: \nsRename buffer %s to: "</span>)</div></pre></td></tr></table></figure>
+<p>这里的 <code>%</code> 就表示前端输入的参数值.</p>
+<h2 id="为一个-Lisp-表达式"><a href="#为一个-Lisp-表达式" class="headerlink" title="为一个 Lisp 表达式"></a>为一个 Lisp 表达式</h2><p>它可以执行该表达式然后再将结果传递给命令.</p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

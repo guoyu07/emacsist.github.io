@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2015/01/05/-转载-你知道数据库索引的工作原理吗？/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="转载自：http://www.ituring.com.cn/article/986作者：李松峰 发表于 2012-02-04 11:43 译者按：今天在翻译时无意中搜索到StackOverflow中的这篇文章（问答），觉得有必要翻译出来。不仅因为文章本身写得精彩，更重要的是它昭示了一个写文章（特别是技术文章）的重要法则——5W1H。 原文在此 How does database indexing">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[转载]你知道数据库索引的工作原理吗？">
@@ -201,7 +202,7 @@
 
     <div class="article-content">
         
-                            <p>转载自：<a href="http://www.ituring.com.cn/article/986" target="_blank" rel="external">http://www.ituring.com.cn/article/986</a><br>作者：李松峰</p>
+                            <p>转载自：<a href="http://www.ituring.com.cn/article/986" target="_blank" rel="noopener">http://www.ituring.com.cn/article/986</a><br>作者：李松峰</p>
 <h2 id="发表于-2012-02-04-11-43"><a href="#发表于-2012-02-04-11-43" class="headerlink" title="发表于 2012-02-04 11:43"></a>发表于 2012-02-04 11:43</h2><blockquote>
 <p>译者按：今天在翻译时无意中搜索到StackOverflow中的这篇文章（问答），觉得有必要翻译出来。不仅因为文章本身写得精彩，更重要的是它昭示了一个写文章（特别是技术文章）的重要法则——5W1H。 原文在此 How does database indexing work?（作者：Xenph Yan）</p>
 </blockquote>
@@ -224,7 +225,7 @@
 <p>现在，再搜索firstName字段就可以使用索引来提高性能了。对索引使用二分查找，需要访问 log2 277778 = 18.09 = 19个数据块。再加上为找到实际记录的地址还要访问一个数据块，总共要访问 19 + 1 = 20个数据块，这与搜索未索引的表需要访问277 778个数据块相比，不啻于天壤之别。</p>
 <h2 id="什么时候用索引"><a href="#什么时候用索引" class="headerlink" title="什么时候用索引"></a>什么时候用索引</h2><p>创建索引要额外占用磁盘空间（比如，上面例子中要额外占用277 778个数据块），建立的索引太多可能导致磁盘空间不足。因此，在建立索引时，一定要慎重选择正确的字段。</p>
 <p>由于索引只能提高搜索记录中某个匹配字段的速度，因此在执行插入和删除操作的情况下，仅为输出结果而为字段建立索引，就纯粹是浪费磁盘空间和处理时间了；这种情况下不用建立索引。另外，由于二分查找的原因，数据的基数性（cardinality）或唯一性也非常重要。对基数性为2的字段建立索引，会将数据一分为二，而对基数性为1000的字段，则同样会返回大约1000条记录。在这么低的基数性下，索引的效率将减低至线性查找的水平，而查询优化器会在基数性小于记录数的30%时放弃索引，实际上等于索引纯粹只会浪费空间。</p>
-<h2 id="查询优化器的原理"><a href="#查询优化器的原理" class="headerlink" title="查询优化器的原理"></a>查询优化器的原理</h2><p>查询优化中最核心的问题就是精确估算不同查询计划的成本。优化器在估算查询计划的成本时，会使用一个数学模型，该模型又依赖于对每个查询计划中涉及的最大数据量的基数性（或者叫重数）的估算。而对基数性的估算又依赖于对查询中谓词选择因数<code>（selection factor of predicates）</code>的估算。过去，数据库系统在估算选择性时，要使用每个字段中值的分布情况的详尽统计信息，比如直方图。这种技术对于估算孤立谓词的选择符效果很好。然而，很多查询的谓词是相互关联的，例如 <code>select count(*) from R where R.make=&#39;Honda&#39; and R.model=&#39;Accord&#39;</code>。查询谓词经常会高度关联（比如，<code>model=&#39;Accord&#39;</code>的前提条件是<code>make=&#39;Honda&#39;</code>），而估计这种关联的选择性非常困难。查询优化器之所以会选择低劣的查询计划，一方面是因为对基数性估算不准，另一方面就是因为遗漏了很多关联性。而这也是为什么数据库管理员应该经常更新数据库统计信息（特别是在重要的数据加载和卸载之后）的原因。（译自维基百科：<a href="http://en.wikipedia.org/wiki/Query_optimizer。）" target="_blank" rel="external">http://en.wikipedia.org/wiki/Query_optimizer。）</a></p>
+<h2 id="查询优化器的原理"><a href="#查询优化器的原理" class="headerlink" title="查询优化器的原理"></a>查询优化器的原理</h2><p>查询优化中最核心的问题就是精确估算不同查询计划的成本。优化器在估算查询计划的成本时，会使用一个数学模型，该模型又依赖于对每个查询计划中涉及的最大数据量的基数性（或者叫重数）的估算。而对基数性的估算又依赖于对查询中谓词选择因数<code>（selection factor of predicates）</code>的估算。过去，数据库系统在估算选择性时，要使用每个字段中值的分布情况的详尽统计信息，比如直方图。这种技术对于估算孤立谓词的选择符效果很好。然而，很多查询的谓词是相互关联的，例如 <code>select count(*) from R where R.make=&#39;Honda&#39; and R.model=&#39;Accord&#39;</code>。查询谓词经常会高度关联（比如，<code>model=&#39;Accord&#39;</code>的前提条件是<code>make=&#39;Honda&#39;</code>），而估计这种关联的选择性非常困难。查询优化器之所以会选择低劣的查询计划，一方面是因为对基数性估算不准，另一方面就是因为遗漏了很多关联性。而这也是为什么数据库管理员应该经常更新数据库统计信息（特别是在重要的数据加载和卸载之后）的原因。（译自维基百科：<a href="http://en.wikipedia.org/wiki/Query_optimizer。）" target="_blank" rel="noopener">http://en.wikipedia.org/wiki/Query_optimizer。）</a></p>
 
                                 
     </div>

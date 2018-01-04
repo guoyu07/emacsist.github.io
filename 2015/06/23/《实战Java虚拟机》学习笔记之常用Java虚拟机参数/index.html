@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2015/06/23/《实战Java虚拟机》学习笔记之常用Java虚拟机参数/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="跟踪垃圾回收-XX:+PrintGC例子日志样本： 1[GC 4793K-&amp;gt;377K(15872K), 0.0006926 secs] 表示当前使用了4793K,GC后，使用量变为377K，最大可用为15872K -XX:+PrintGCDetails 格式： [名称:当前某区大小-&amp;gt;GC后某区大小（一共可用某区大小）  GC时间跟踪 -XX:+PrintGCTimeStamps  例">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-11-17T06:41:23.425Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《实战Java虚拟机》学习笔记之常用Java虚拟机参数">
@@ -338,7 +339,7 @@
 <p>“-XX:OnOutOfMemoryError=/path/to/commnd.sh %p”</p>
 </blockquote>
 <p>注意：写法是双引号包括整个参数。%p 表示进程号</p>
-<h2 id="非堆区"><a href="#非堆区" class="headerlink" title="非堆区"></a>非堆区</h2><h3 id="codeCache-区"><a href="#codeCache-区" class="headerlink" title="codeCache 区"></a>codeCache 区</h3><p><a href="http://m.blog.csdn.net/yandaonan/article/details/50844806?from=groupmessage" target="_blank" rel="external">参考 blog</a></p>
+<h2 id="非堆区"><a href="#非堆区" class="headerlink" title="非堆区"></a>非堆区</h2><h3 id="codeCache-区"><a href="#codeCache-区" class="headerlink" title="codeCache 区"></a>codeCache 区</h3><p><a href="http://m.blog.csdn.net/yandaonan/article/details/50844806?from=groupmessage" target="_blank" rel="noopener">参考 blog</a></p>
 <p>设置 codeCache 区的内存大小</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-XX:ReservedCodeCacheSize=256M</div></pre></td></tr></table></figure>
 <h3 id="方法区（永久代）-JDK-1-8前"><a href="#方法区（永久代）-JDK-1-8前" class="headerlink" title="方法区（永久代）[JDK 1.8前]"></a>方法区（永久代）[JDK 1.8前]</h3><ul>
@@ -370,7 +371,7 @@
 <li><code>-XX:MaxDirectMemorySize</code>: 最大可用直接内存。如果不设置，默认值为最大堆空间，即<code>-Xmx</code>的值。</li>
 </ul>
 <h1 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h1><p>在网上看到一个图非常好, 这里引用一下:</p>
-<p><a href="http://javahonk.com/how-many-types-memory-areas-allocated-by-jvm/" target="_blank" rel="external">原文 http://javahonk.com/how-many-types-memory-areas-allocated-by-jvm/</a><br><a href="/img/JVM_Structure.png">img</a></p>
+<p><a href="http://javahonk.com/how-many-types-memory-areas-allocated-by-jvm/" target="_blank" rel="noopener">原文 http://javahonk.com/how-many-types-memory-areas-allocated-by-jvm/</a><br><a href="/img/JVM_Structure.png">img</a></p>
 
                                 
     </div>

@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2016/11/02/Golang的检查性能工具/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="Go 自带的 pprofWeb程序只要添加如下代码即可： 12345678910package mainimport (	_ &quot;net/http/pprof&quot;)func main() &amp;#123;	&amp;#125; 这样子添加后，就可以在 http://127.0.0.1:8080/debug/pprof (假设是监听在8080端口)查看性能数据了. 生成数据这个是启动30秒内收集数据的：输入命令后，">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-04-11T09:29:19.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Golang的检查性能工具">
@@ -203,7 +204,7 @@
         
                             <h2 id="Go-自带的-pprof"><a href="#Go-自带的-pprof" class="headerlink" title="Go 自带的 pprof"></a>Go 自带的 pprof</h2><h3 id="Web程序"><a href="#Web程序" class="headerlink" title="Web程序"></a>Web程序</h3><p>只要添加如下代码即可：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">package main</div><div class="line"></div><div class="line">import (</div><div class="line">	_ <span class="string">"net/http/pprof"</span></div><div class="line">)</div><div class="line"></div><div class="line"></div><div class="line">func <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这样子添加后，就可以在 <a href="http://127.0.0.1:8080/debug/pprof" target="_blank" rel="external">http://127.0.0.1:8080/debug/pprof</a> (假设是监听在8080端口)查看性能数据了.</p>
+<p>这样子添加后，就可以在 <a href="http://127.0.0.1:8080/debug/pprof" target="_blank" rel="noopener">http://127.0.0.1:8080/debug/pprof</a> (假设是监听在8080端口)查看性能数据了.</p>
 <h4 id="生成数据"><a href="#生成数据" class="headerlink" title="生成数据"></a>生成数据</h4><p>这个是启动30秒内收集数据的：输入命令后，要停留在收集状态，（这时，可以启动你的压测工具压它），30秒后，就会自动进入交互状态. </p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">go tool pprof 你的二进制文件名 http://127.0.0.1:8080/debug/pprof/profile</div></pre></td></tr></table></figure>
 <p>注意，那个参数 <em>你的二进制文件名</em> 是用来查看相应的源码的。否则的话，它会以下这些类似的错误。</p>
@@ -225,7 +226,7 @@
 <h4 id="profile"><a href="#profile" class="headerlink" title="profile"></a>profile</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">go tool pprof http://127.0.0.1:8080/debug/pprof/profile</div></pre></td></tr></table></figure>
 <h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">http://127.0.0.1:9090/debug/pprof/threadcreate</div><div class="line"></div><div class="line">http://127.0.0.1:9090/debug/pprof/block</div><div class="line">`</div></pre></td></tr></table></figure>
 <h2 id="GC-日志"><a href="#GC-日志" class="headerlink" title="GC 日志"></a>GC 日志</h2><h3 id="收集日志"><a href="#收集日志" class="headerlink" title="收集日志"></a>收集日志</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">GODEBUG=<span class="string">"gctrace=1"</span> ./main 2&gt;/tmp/go-gc.log</div></pre></td></tr></table></figure>
-<h3 id="日志格式"><a href="#日志格式" class="headerlink" title="日志格式"></a>日志格式</h3><p>更多信息，参考官方文档 <a href="https://golang.org/pkg/runtime/" target="_blank" rel="external">golang runtime</a></p>
+<h3 id="日志格式"><a href="#日志格式" class="headerlink" title="日志格式"></a>日志格式</h3><p>更多信息，参考官方文档 <a href="https://golang.org/pkg/runtime/" target="_blank" rel="noopener">golang runtime</a></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gc 99 @5065.785s 0%: 0.006+1.1+0.23 ms clock, 0.026+0/1.0/3.2+0.93 ms cpu, 6-&gt;6-&gt;6 MB, 13 MB goal, 4 P</div></pre></td></tr></table></figure>
 <p><code>gc 99</code>：表示第99次GC</p>
 <p><code>@5065.785s</code> ： 从程序开始启动到现在的时间，单位为秒</p>
@@ -237,7 +238,7 @@
 <p><code>4 P</code>：该次GC使用的CPU核心数</p>
 <h2 id="GODEBUG"><a href="#GODEBUG" class="headerlink" title="GODEBUG"></a>GODEBUG</h2><h3 id="查看调度器"><a href="#查看调度器" class="headerlink" title="查看调度器"></a>查看调度器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">GOMAXPROCS=设置你的核数 GODEBUG=schedtrace=N(单位是毫秒，即每N毫秒输出一次) ./main</div></pre></td></tr></table></figure>
 <h3 id="查看更详细"><a href="#查看更详细" class="headerlink" title="查看更详细"></a>查看更详细</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">GOMAXPROCS=设置你的核数 GODEBUG=schedtrace=1000,scheddetail=1 ./main</div></pre></td></tr></table></figure>
-<p><a href="http://colobu.com/2016/04/19/Scheduler-Tracing-In-Go/" target="_blank" rel="external">参考来源</a></p>
+<p><a href="http://colobu.com/2016/04/19/Scheduler-Tracing-In-Go/" target="_blank" rel="noopener">参考来源</a></p>
 
                                 
     </div>

@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2017/04/27/翻译-RabbitMQ-持久化配置/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="原文 RabbitMQ 持久层旨在在没有配置的情况下在大多数主要场景中给出一个好的结果。然而，一些配置有时比较有用。这篇文章会解释你可以怎样配置它。建议你在开始任何行动之前阅读完它。 持久层是如何工作的首先，一些背景：所有 persistent 和 transient 的消息都可以被刷盘。 Persistent 消息到达消息后会尽可能快地刷盘，而 transient 的消息仅会在内存有压力的情况下">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-04-29T02:49:57.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[翻译]RabbitMQ 持久化配置">
@@ -206,7 +207,7 @@
 
     <div class="article-content">
         
-                            <p><a href="https://www.rabbitmq.com/persistence-conf.html" target="_blank" rel="external">原文</a></p>
+                            <p><a href="https://www.rabbitmq.com/persistence-conf.html" target="_blank" rel="noopener">原文</a></p>
 <p>RabbitMQ 持久层旨在在没有配置的情况下在大多数主要场景中给出一个好的结果。然而，一些配置有时比较有用。这篇文章会解释你可以怎样配置它。建议你在开始任何行动之前阅读完它。</p>
 <h1 id="持久层是如何工作的"><a href="#持久层是如何工作的" class="headerlink" title="持久层是如何工作的"></a>持久层是如何工作的</h1><p>首先，一些背景：所有 <em>persistent</em> 和 <em>transient</em> 的消息都可以被刷盘。 <em>Persistent</em> 消息到达消息后会尽可能快地刷盘，而 <em>transient</em> 的消息仅会在内存有压力的情况下被刷盘以便释放内存。当可能时， <em>Persistent</em> 消息也会保持在内存中，并仅会在内存有压力时才会被淘汰。持久层是指将这两种类型的消息( <em>persistent</em> 与 <em>transient</em> )持久化到磁盘的机制。</p>
 <p>在这篇文章中，我们说 <em>队列</em> 是指一个非镜像队列( unmirrored queue )或者是一个主队列( a queue master)又或者是一个从队列(a queue slave)。队列镜像(Queue mirroring) 发生在持久化之上(happen “above”)。</p>
@@ -243,7 +244,7 @@
 <p>注意，异步线程的情况并不完全类似于文件句柄的情况。如果一个队列顺序地执行许多 I/O 操作，最好的执行情况是它持有一个文件句柄，然后所有的操作都在该句柄上执行；否则我们可能要刷盘，然后进行大量的 seek 并且要使用额外的 CPU 时间来精确它。然而，队列并不能从拥有一个异步线程地通过顺序地执行操作来得益（事实上，它们并不能这样子做）。</p>
 <p>因此，理想的情况下所有正在执行 I/O 流操作的队列都应该有足够的文件句柄，并且有足够的异步线程为存储层可以合理地执行同时需要一定数量的 I/O 操作。</p>
 <p>然而缺少异步线程而导致性能的问题并不太明显（一般情况下这也不太可能；所以首先检查其他的东西）。拥有太少异步线程的症状包括当服务器也许忙于持久化时，短期内每秒的 I/O 操作数下降为 0（正如 <em>management</em> 插件报告的那样），同时，报告的每次 I/O 操作的时间在增加。</p>
-<p>异步线程的数量可以如文档<a href="http://www.erlang.org/doc/man/erl.html#async_thread_pool_size" target="_blank" rel="external">这里</a>描述的一样，通过传递 <em>+A</em> 参数给 <em>Erlang</em> 虚拟机来配置，并且典型的情况下是通过环境变量 <em>RABBITMQ_SERVER_ERL_ARGS</em> 来配置。默认值为 <em>+A 64</em> 。改变这个值之前，尝试几个不同的值来验证下比较好。</p>
+<p>异步线程的数量可以如文档<a href="http://www.erlang.org/doc/man/erl.html#async_thread_pool_size" target="_blank" rel="noopener">这里</a>描述的一样，通过传递 <em>+A</em> 参数给 <em>Erlang</em> 虚拟机来配置，并且典型的情况下是通过环境变量 <em>RABBITMQ_SERVER_ERL_ARGS</em> 来配置。默认值为 <em>+A 64</em> 。改变这个值之前，尝试几个不同的值来验证下比较好。</p>
 <h1 id="替换消息存储索引实现"><a href="#替换消息存储索引实现" class="headerlink" title="替换消息存储索引实现"></a>替换消息存储索引实现</h1><p>正如上面提到，每一条写到消息存储里的消息会为它的索引条目使用小量的内存。在 RabbitMQ 中，消息存储索引是一种可拔插的，其他的实现可以作为插件来使用，这可以移除这个限制。(我们的服务器不带有任何实现的原因是，它们都是使用本地代码的)。注意，这种插件典型情况下会使消息存储运行得更慢。</p>
 
                                 

@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2016/06/28/Tomcat-8-源码学习四之Catalina类/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="StringManager每个包一个StringManager。这样子，对同一个包(以及同一个locale)来说，它只有一个实例的。实现原理: 1private static final Map&amp;lt;String, Map&amp;lt;Locale,StringManager&amp;gt;&amp;gt; managers = new Hashtable&amp;lt;&amp;gt;(); key：就是包名.value：就是它的">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tomcat 8 源码学习四之Catalina类">
@@ -228,8 +229,8 @@
 <h3 id="SecurityConfig"><a href="#SecurityConfig" class="headerlink" title="SecurityConfig"></a>SecurityConfig</h3><p>它的作用是，再次保护Tomcat的包访问权限.</p>
 <p>默认情况下它是获取<code>catalina.properties</code>文件中的<code>package.definition</code>和<code>package.access</code>两个属性的值.如果这两个值为空，则设置为该类中默认的<code>PACKAGE_DEFINITION</code>和<code>PACKAGE_ACCESS</code>值.</p>
 <p>最后，将这两个值，设置到<code>java.security.Security</code>类中的属性时，<code>Security</code>类主要用于管理提供者.</p>
-<p><a href="http://docs.oracle.com/javase/7/docs/technotes/guides/security/smPortGuide.html" target="_blank" rel="external">Oracle JavaSE Security文档</a></p>
-<p><a href="http://www.tutorialspoint.com/java/lang/securitymanager_checkpackageaccess.htm" target="_blank" rel="external">tutorialspoint</a></p>
+<p><a href="http://docs.oracle.com/javase/7/docs/technotes/guides/security/smPortGuide.html" target="_blank" rel="noopener">Oracle JavaSE Security文档</a></p>
+<p><a href="http://www.tutorialspoint.com/java/lang/securitymanager_checkpackageaccess.htm" target="_blank" rel="noopener">tutorialspoint</a></p>
 <h3 id="启动Tomcat"><a href="#启动Tomcat" class="headerlink" title="启动Tomcat"></a>启动Tomcat</h3><p>Catalina表示一个Tomcat服务器实例.现在我们来看看它的各种逻辑处理.</p>
 <h4 id="start"><a href="#start" class="headerlink" title="start()"></a>start()</h4><p>启动前，会先判断有没有Server实例，即:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (getServer() == null) &#123;</div><div class="line">    load();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">if</span> (getServer() == null) &#123;</div><div class="line">    log.fatal(<span class="string">"Cannot start server. Server instance is not configured."</span>);</div><div class="line">    <span class="built_in">return</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>

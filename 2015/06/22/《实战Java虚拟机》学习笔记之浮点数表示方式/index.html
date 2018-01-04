@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2015/06/22/《实战Java虚拟机》学习笔记之浮点数表示方式/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="IEEE 754 标准 Java虚拟机处理浮点数的标准是参考 IEEE 754 规范的。   参考文档 : IEEE 754  标示格式1234567符号位 | 阶码 | 尾数##32位1 位 | 8 位 | 23位##64位1 位 | 11 位 | 52位 阶码（指数位） 指数部分即使用所谓的偏正值形式表示，实际值为表示值与一个固定值(32位的情况是127)的和 单精度的指数部分是-126～+1">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《实战Java虚拟机》学习笔记之浮点数表示方式">
@@ -205,7 +206,7 @@
 <p>Java虚拟机处理浮点数的标准是参考 <code>IEEE 754</code> 规范的。</p>
 </blockquote>
 <ul>
-<li>参考文档 : <a href="http://baike.baidu.com/link?url=76CjVvHhQlZ-ZRIEIYn0kjtizjvCwzdIj3ApUwGcJqO8g0t3MIUG3CdsUsF_XjSUW3FkhYNno8dGrUsgaViZGaC_VU9Jc0nNEowBrvZav2nsQZAKmE_Ctm8CXPTysVQKnzImh4JT8kTxce9AC-aEmZ1LqatbvZYbL7clUAHP_g7" target="_blank" rel="external">IEEE 754</a></li>
+<li>参考文档 : <a href="http://baike.baidu.com/link?url=76CjVvHhQlZ-ZRIEIYn0kjtizjvCwzdIj3ApUwGcJqO8g0t3MIUG3CdsUsF_XjSUW3FkhYNno8dGrUsgaViZGaC_VU9Jc0nNEowBrvZav2nsQZAKmE_Ctm8CXPTysVQKnzImh4JT8kTxce9AC-aEmZ1LqatbvZYbL7clUAHP_g7" target="_blank" rel="noopener">IEEE 754</a></li>
 </ul>
 <h2 id="标示格式"><a href="#标示格式" class="headerlink" title="标示格式"></a>标示格式</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">符号位 | 阶码 | 尾数</div><div class="line"></div><div class="line"><span class="comment">##32位</span></div><div class="line">1 位 | 8 位 | 23位</div><div class="line"></div><div class="line"><span class="comment">##64位</span></div><div class="line">1 位 | 11 位 | 52位</div></pre></td></tr></table></figure>
 <h3 id="阶码（指数位）"><a href="#阶码（指数位）" class="headerlink" title="阶码（指数位）"></a>阶码（指数位）</h3><blockquote>

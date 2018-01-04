@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2015/10/12/Maven复习/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="快速升级利用软链接方式来进行升级 软链接目录：~/maven/current 代表当前要使用的版本具体某个版本的maven: ~/maven/maven3.0具体某个版本的maven: ~/maven/maven3.1 当要切换时，将软链接指向某个具体的版本的maven即可。如： 1ln -s ~/maven3.0 ~/maven/current 将环境变量，只需要指向~/maven/curren">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-04-12T05:56:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Maven复习">
@@ -244,8 +245,8 @@
 <h2 id="镜像"><a href="#镜像" class="headerlink" title="镜像"></a>镜像</h2><p>在<code>~/.m2/settings.xml</code>里配置</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&lt;mirrors&gt;</div><div class="line">	&lt;mirror&gt;</div><div class="line">		&lt;id&gt;nexus-osc&lt;/id&gt;</div><div class="line">		&lt;mirrorOf&gt;*&lt;/mirrorOf&gt;</div><div class="line">		&lt;name&gt;Nexus osc&lt;/name&gt;</div><div class="line">		&lt;url&gt;http://maven.oschina.net/content/groups/public/&lt;/url&gt;</div><div class="line">	&lt;/mirror&gt;</div><div class="line">&lt;/mirrors&gt;</div></pre></td></tr></table></figure>
 <p><mirrorof>*</mirrorof>表示镜像所有仓库。即对于远程仓库的请求，都会被该URL替代。</p>
-<h2 id="Maven-搜索"><a href="#Maven-搜索" class="headerlink" title="Maven 搜索"></a>Maven 搜索</h2><p><a href="http://mvnrepository.com/" target="_blank" rel="external">mvnrepository</a></p>
-<p><a href="http://maven.oschina.net/home.html" target="_blank" rel="external">OSChina</a></p>
+<h2 id="Maven-搜索"><a href="#Maven-搜索" class="headerlink" title="Maven 搜索"></a>Maven 搜索</h2><p><a href="http://mvnrepository.com/" target="_blank" rel="noopener">mvnrepository</a></p>
+<p><a href="http://maven.oschina.net/home.html" target="_blank" rel="noopener">OSChina</a></p>
 <h2 id="clean生命周期"><a href="#clean生命周期" class="headerlink" title="clean生命周期"></a>clean生命周期</h2><ol>
 <li>pre-clean</li>
 <li>clean</li>
@@ -315,7 +316,7 @@
 <li>reporting:包括项目的报告输出目录配置，报告插件配置竺。</li>
 </ol>
 <h2 id="dependencyManagement结合继承的作用"><a href="#dependencyManagement结合继承的作用" class="headerlink" title="dependencyManagement结合继承的作用"></a>dependencyManagement结合继承的作用</h2><p>dependencyManagement 结合继承, 主要是为了统一依赖的版本号.这时,在父pom.xml里使用<code>dependencyManagement</code>,而在子模块里,使用<code>dependencies</code>,但子模块里,并不指定版本号.这样子,它就会使用父的dependencyManagement中指定的依赖的版本了.</p>
-<h2 id="Maven的Jetty插件使用"><a href="#Maven的Jetty插件使用" class="headerlink" title="Maven的Jetty插件使用"></a>Maven的Jetty插件使用</h2><p><a href="http://www.eclipse.org/jetty/documentation/current/jetty-maven-plugin.html" target="_blank" rel="external">官方文档</a></p>
+<h2 id="Maven的Jetty插件使用"><a href="#Maven的Jetty插件使用" class="headerlink" title="Maven的Jetty插件使用"></a>Maven的Jetty插件使用</h2><p><a href="http://www.eclipse.org/jetty/documentation/current/jetty-maven-plugin.html" target="_blank" rel="noopener">官方文档</a></p>
 <h3 id="httpConnector-参数"><a href="#httpConnector-参数" class="headerlink" title="httpConnector 参数"></a>httpConnector 参数</h3><p>前缀都是：<code>-Djetty.http.xxx=value</code></p>
 <h4 id="端口"><a href="#端口" class="headerlink" title="端口"></a>端口</h4><p>默认为 8080 端口<br><code>port</code></p>
 <p><code>mvn -Djetty.http.port=9999 jetty:run</code></p>
@@ -388,7 +389,7 @@
 <li><p>测试插件</p>
 </li>
 </ol>
-<h2 id="一个简单的项目"><a href="#一个简单的项目" class="headerlink" title="一个简单的项目"></a>一个简单的项目</h2><p><a href="https://coding.net/u/emacsist/p/Jetty_Maven/git" target="_blank" rel="external">Jetty-demo</a></p>
+<h2 id="一个简单的项目"><a href="#一个简单的项目" class="headerlink" title="一个简单的项目"></a>一个简单的项目</h2><p><a href="https://coding.net/u/emacsist/p/Jetty_Maven/git" target="_blank" rel="noopener">Jetty-demo</a></p>
 
                                 
     </div>

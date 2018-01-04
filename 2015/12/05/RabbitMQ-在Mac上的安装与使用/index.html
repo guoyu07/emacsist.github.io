@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2015/12/05/RabbitMQ-在Mac上的安装与使用/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="安装12brew updatebrew install rabbitmq 这样子安装的话, RabbitMQ的脚本是安装到/usr/local/sbin这个目录里的.并且不会自动添加到你的PATH里,所以,要添加下先: 123456#根据你的shell类型选择open -e ~/.zshrc 或者 open -e ~/.bash_profile 或者 open -e ~/.profile然后添加以">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-11-11T13:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RabbitMQ 在Mac上的安装与使用">
@@ -224,7 +225,7 @@
 <h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><p>修改这些限制,对于正在运行的进程来说,是无效的, 必须是启动之前设置.</p>
 <h2 id="查看rabbitmq当前限制"><a href="#查看rabbitmq当前限制" class="headerlink" title="查看rabbitmq当前限制"></a>查看rabbitmq当前限制</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rabbitmqctl status</div></pre></td></tr></table></figure>
 <h2 id="查看当前用户的限制"><a href="#查看当前用户的限制" class="headerlink" title="查看当前用户的限制"></a>查看当前用户的限制</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">launchctl <span class="built_in">limit</span></div></pre></td></tr></table></figure>
-<h2 id="配置文件的位置"><a href="#配置文件的位置" class="headerlink" title="配置文件的位置"></a>配置文件的位置</h2><p><a href="https://www.rabbitmq.com/relocate.html" target="_blank" rel="external">RabbitMQ 配置文件的位置</a></p>
+<h2 id="配置文件的位置"><a href="#配置文件的位置" class="headerlink" title="配置文件的位置"></a>配置文件的位置</h2><p><a href="https://www.rabbitmq.com/relocate.html" target="_blank" rel="noopener">RabbitMQ 配置文件的位置</a></p>
 <h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><h3 id="列出所有用户"><a href="#列出所有用户" class="headerlink" title="列出所有用户"></a>列出所有用户</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rabbitmqctl  list_users</div></pre></td></tr></table></figure>
 <h3 id="添加一个用户"><a href="#添加一个用户" class="headerlink" title="添加一个用户"></a>添加一个用户</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rabbitmqctl  add_user  Username  Password</div></pre></td></tr></table></figure>
 <h3 id="删除一个用户"><a href="#删除一个用户" class="headerlink" title="删除一个用户"></a>删除一个用户</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rabbitmqctl  delete_user  Username</div></pre></td></tr></table></figure>
@@ -247,9 +248,9 @@
 <h2 id="用户角色设置"><a href="#用户角色设置" class="headerlink" title="用户角色设置"></a>用户角色设置</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rabbitmqctl  set_user_tags  User  Tag [Tag2, Tag3 ...]</div></pre></td></tr></table></figure>
 <p><code>User</code>为用户名， <code>Tag</code>为角色名(对应于上面的<code>administrator</code>，<code>monitoring</code>，<code>policymaker</code>，<code>management</code>，或其他自定义名称)</p>
 <h2 id="使用-web-控制台"><a href="#使用-web-控制台" class="headerlink" title="使用 web 控制台"></a>使用 web 控制台</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rabbitmq-plugins <span class="built_in">enable</span> rabbitmq_management</div></pre></td></tr></table></figure>
-<p>访问:<a href="http://localhost:15672/#/" target="_blank" rel="external">localhost:15672</a> 就可以使用默认的<code>guest</code>用户来登录了.</p>
+<p>访问:<a href="http://localhost:15672/#/" target="_blank" rel="noopener">localhost:15672</a> 就可以使用默认的<code>guest</code>用户来登录了.</p>
 <p>要想使用远程登录,可以创建一个其他用户即可.</p>
-<p><a href="https://www.rabbitmq.com/management.html" target="_blank" rel="external">RabbitMQ management</a></p>
+<p><a href="https://www.rabbitmq.com/management.html" target="_blank" rel="noopener">RabbitMQ management</a></p>
 <h2 id="设置权限"><a href="#设置权限" class="headerlink" title="设置权限"></a>设置权限</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">rabbitmqctl set_permissions -p vhostName yourName <span class="string">".*"</span> <span class="string">".*"</span> <span class="string">".*"</span></div><div class="line"></div><div class="line">例如:</div><div class="line"></div><div class="line">➜  rabbitmq git:(master) rabbitmqctl set_permissions -p / yang <span class="string">".*"</span> <span class="string">".*"</span> <span class="string">".*"</span></div><div class="line">Setting permissions <span class="keyword">for</span> user <span class="string">"yang"</span> <span class="keyword">in</span> vhost <span class="string">"/"</span> ...</div></pre></td></tr></table></figure>
 
                                 

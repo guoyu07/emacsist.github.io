@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2017/04/27/翻译-理解-RabbitMQ-3-4-中内存的使用/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="原文  我的队列使用了多少内存？这是一个容易问的问题，并且回答起来比较困难。RabbitMQ 3.4 给你一个清晰的视图来显示你的队列使用了多少内存。这篇博客就是来谈一下这些的，并且也会解释在一般情况下队列内存的使用情况。  一点背景首先，我们需要知道 Erlang 是如何管理内存的。Erlang 与绝大部分的垃圾收集(GC)语言的一个不同点就是，它并没有一个全局的堆(global heap)。相">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://emacsist.github.io/img/rabbitmq-node-memory.png">
 <meta property="og:image" content="https://emacsist.github.io/img/rabbit-node-memory-2.png">
 <meta property="og:image" content="https://emacsist.github.io/img/rabbitmq-queue-memory-3.png">
@@ -211,7 +212,7 @@
 
     <div class="article-content">
         
-                            <p><a href="https://www.rabbitmq.com/blog/2014/10/30/understanding-memory-use-with-rabbitmq-3-4/" target="_blank" rel="external">原文</a></p>
+                            <p><a href="https://www.rabbitmq.com/blog/2014/10/30/understanding-memory-use-with-rabbitmq-3-4/" target="_blank" rel="noopener">原文</a></p>
 <blockquote>
 <p>我的队列使用了多少内存？这是一个容易问的问题，并且回答起来比较困难。RabbitMQ 3.4 给你一个清晰的视图来显示你的队列使用了多少内存。这篇博客就是来谈一下这些的，并且也会解释在一般情况下队列内存的使用情况。</p>
 </blockquote>
@@ -230,7 +231,7 @@
 <p><img src="/img/rabbitmq-queue-memory-3.png" alt=""></p>
 <p>这里我们可以看到 RabbitMQ 3.4 的一个新特性：队列维护一个它包含的消息内容字节总数。因此，我们看到该队列包含了 1.2GB 的消息内容， 420 MB 在内存里。我们可以假设这 420MB 是该队列中所有 <em>binary</em> 使用的内存。该队列也使用了 421MB 的 <em>进程</em> 内存（这里纯粹是巧合的非常相似的量）——这包括了每一条消息的消息属性(message properties)、头(header)和元数据(metadata)。</p>
 <p>所以合理地说 “该队列正使用 841MB 内存” —— 除了消息内容可能也会与其他队列共享。</p>
-<p>除此之外，注意到 <em>In memory</em> 和 <em>Persistent</em> 消息在这里并不是反义词：一条 non-persistent 消息可以在内存有压力的情况下被 paged out ，并且一条 persistent 的消息也可以是在内存中的。可以参考 <a href="http://www.rabbitmq.com/memory.html#memsup-paging" target="_blank" rel="external">the document</a> 来获取更多关于 paging 的信息。</p>
+<p>除此之外，注意到 <em>In memory</em> 和 <em>Persistent</em> 消息在这里并不是反义词：一条 non-persistent 消息可以在内存有压力的情况下被 paged out ，并且一条 persistent 的消息也可以是在内存中的。可以参考 <a href="http://www.rabbitmq.com/memory.html#memsup-paging" target="_blank" rel="noopener">the document</a> 来获取更多关于 paging 的信息。</p>
 <p>我们也可以在队列列表视图中查看这些信息：</p>
 <p><img src="/img/rabbitmq-queue-memory-4.png" alt=""></p>
 <p>(这里我已经点击了 “+/-“ 的链接为了添加一些列来显示内存使用并且为了更清晰点移除了一些其他的列)</p>

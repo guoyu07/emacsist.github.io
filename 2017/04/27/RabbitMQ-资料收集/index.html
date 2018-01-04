@@ -22,6 +22,7 @@
 <meta property="og:url" content="https://emacsist.github.io/2017/04/27/RabbitMQ-资料收集/index.html">
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="关于性能及优化 http://stackoverflow.com/questions/10030227/maximize-throughput-with-rabbitmq https://www.cloudamqp.com/blog/index.html 负载测试: https://www.cloudamqp.com/blog/2016-11-18-load-testing-and-perform">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-05-10T10:16:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RabbitMQ 资料收集">
@@ -202,15 +203,15 @@
     <div class="article-content">
         
                             <h1 id="关于性能及优化"><a href="#关于性能及优化" class="headerlink" title="关于性能及优化"></a>关于性能及优化</h1><ul>
-<li><a href="http://stackoverflow.com/questions/10030227/maximize-throughput-with-rabbitmq" target="_blank" rel="external">http://stackoverflow.com/questions/10030227/maximize-throughput-with-rabbitmq</a></li>
-<li><a href="https://www.cloudamqp.com/blog/index.html" target="_blank" rel="external">https://www.cloudamqp.com/blog/index.html</a></li>
-<li>负载测试: <a href="https://www.cloudamqp.com/blog/2016-11-18-load-testing-and-performance-measurements-rabbitmq.html" target="_blank" rel="external">https://www.cloudamqp.com/blog/2016-11-18-load-testing-and-performance-measurements-rabbitmq.html</a></li>
-<li>Java 工具: <a href="https://www.rabbitmq.com/java-tools.html" target="_blank" rel="external">https://www.rabbitmq.com/java-tools.html</a></li>
+<li><a href="http://stackoverflow.com/questions/10030227/maximize-throughput-with-rabbitmq" target="_blank" rel="noopener">http://stackoverflow.com/questions/10030227/maximize-throughput-with-rabbitmq</a></li>
+<li><a href="https://www.cloudamqp.com/blog/index.html" target="_blank" rel="noopener">https://www.cloudamqp.com/blog/index.html</a></li>
+<li>负载测试: <a href="https://www.cloudamqp.com/blog/2016-11-18-load-testing-and-performance-measurements-rabbitmq.html" target="_blank" rel="noopener">https://www.cloudamqp.com/blog/2016-11-18-load-testing-and-performance-measurements-rabbitmq.html</a></li>
+<li>Java 工具: <a href="https://www.rabbitmq.com/java-tools.html" target="_blank" rel="noopener">https://www.rabbitmq.com/java-tools.html</a></li>
 </ul>
 <h1 id="RabbitMQ-持久化"><a href="#RabbitMQ-持久化" class="headerlink" title="RabbitMQ 持久化"></a>RabbitMQ 持久化</h1><p>默认情况下，重启 <em>Broker</em> 时，那些非持久化(not durable and persistent)的 <em>Messages</em> 、 <em>Exchanges</em> 和 <em>Queues</em> 会丢失。</p>
 <p>如果你不想丢失任何信息，请确保你的 <em>Queues</em> 是声明为 <em>durable</em> 的，并且你的 <em>Messages</em> 的分发模式(delivery mode) 为 <em>persistent</em> 的( <em>transient</em> 为短暂模式，也即内存模式)</p>
 <p>注意，声明 <em>Queues</em> 为 <em>durable</em> 并不表示 <em>Messages</em> 也是 <em>persistent</em> 的，你必须显式地声明 <em>Messages</em> 为 <em>persistent</em> 才行。</p>
-<h1 id="占用高-CPU-内存-常见原因"><a href="#占用高-CPU-内存-常见原因" class="headerlink" title="占用高 CPU/内存 常见原因"></a>占用高 CPU/内存 常见原因</h1><p>这一段是看了 <a href="https://www.cloudamqp.com/blog/2016-01-25-identify-and-protect-against-high-cpu-and-memory-usage.html" target="_blank" rel="external">英文原文</a> 时做下的简要翻译和笔记的。</p>
+<h1 id="占用高-CPU-内存-常见原因"><a href="#占用高-CPU-内存-常见原因" class="headerlink" title="占用高 CPU/内存 常见原因"></a>占用高 CPU/内存 常见原因</h1><p>这一段是看了 <a href="https://www.cloudamqp.com/blog/2016-01-25-identify-and-protect-against-high-cpu-and-memory-usage.html" target="_blank" rel="noopener">英文原文</a> 时做下的简要翻译和笔记的。</p>
 <ol>
 <li>排队的消息太多</li>
 <li>长时间的高速率消息</li>
@@ -226,7 +227,7 @@
 <h2 id="连接或-Channel-泄漏"><a href="#连接或-Channel-泄漏" class="headerlink" title="连接或 Channel 泄漏"></a>连接或 Channel 泄漏</h2><p>如果大量的 Channel 或 连接失去控制的话，它可能是由于你客户端代码的 Channel 或 Connection 泄漏了。请尝试去发现导致泄漏的原因并确保你不再使用 Channel 时记得及时关闭它们。</p>
 <h2 id="RabbitMQ-3-6-0-版本"><a href="#RabbitMQ-3-6-0-版本" class="headerlink" title="RabbitMQ 3.6.0 版本"></a>RabbitMQ 3.6.0 版本</h2><p>这不是一个好的 RabbitMQ 版本——它有大量的问题，并且在新的版本中被修复了。</p>
 <h1 id="RabbitMQ-默认启动参数"><a href="#RabbitMQ-默认启动参数" class="headerlink" title="RabbitMQ 默认启动参数"></a>RabbitMQ 默认启动参数</h1><p>版本为 3.6.9 ，Erlang版本为 Erlang/OTP 18</p>
-<p><a href="http://erlang.org/doc/man/erl.html" target="_blank" rel="external">erlang erl man</a></p>
+<p><a href="http://erlang.org/doc/man/erl.html" target="_blank" rel="noopener">erlang erl man</a></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">-W w :</div><div class="line">-A 128 </div><div class="line">-P 1048576 </div><div class="line">-t 5000000 </div><div class="line">-stbt db </div><div class="line">-zdbbl 32000 </div><div class="line">-K <span class="literal">true</span></div></pre></td></tr></table></figure>
 <h1 id="RabbitMQ-添加交换机的性能"><a href="#RabbitMQ-添加交换机的性能" class="headerlink" title="RabbitMQ 添加交换机的性能"></a>RabbitMQ 添加交换机的性能</h1><p>今天测试了下，将不同的队列，绑定到不同的交换机，有没有能提高性能。结果是：No</p>
 <p>测试的情况是，使用2个交换机(hello-exchange, hello-exchange2)和两个队列(hello-queue-name, hello-queue-name2)分别一一对应，然后再使用一个队列 hello-queue 绑定到默认的交换机(default)。它们入队的消息数分别为 2000,2000,4000。测试结果是它们的总耗时是差不多的。</p>
