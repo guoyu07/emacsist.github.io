@@ -23,7 +23,7 @@
 <meta property="og:site_name" content="emacsist">
 <meta property="og:description" content="今天由于某些原因，DSP系统的测试环境不能用了，所以想复制一些正式环境的流量到测试服务器上。查找资料，发现了个 tcpcopy 项目，发现不错。 Github上虽然也有安装和使用手册，但对于第一次环境的人来说，还是有点模糊。经过自己动手设置，终于理解了它的使用方式： 安装就不多介绍了，这里只是描述使用 假设你的测试环境的应用监听的是 9001 ，而且是在 10.0.0.40  启动 interce">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-06-02T16:41:50.000Z">
+<meta property="og:updated_time" content="2018-01-12T09:49:31.549Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TCPCopy的使用">
 <meta name="twitter:description" content="今天由于某些原因，DSP系统的测试环境不能用了，所以想复制一些正式环境的流量到测试服务器上。查找资料，发现了个 tcpcopy 项目，发现不错。 Github上虽然也有安装和使用手册，但对于第一次环境的人来说，还是有点模糊。经过自己动手设置，终于理解了它的使用方式： 安装就不多介绍了，这里只是描述使用 假设你的测试环境的应用监听的是 9001 ，而且是在 10.0.0.40  启动 interce">
@@ -206,7 +206,10 @@
 <p>注意，这里的 <em>9001</em> 就是要处理的当前服务器地址的源端口</p>
 <h1 id="启动-tcpcopy"><a href="#启动-tcpcopy" class="headerlink" title="启动 tcpcopy"></a>启动 tcpcopy</h1><p>假设 tcpcopy 的地址为 10.0.0.40</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./tcpcopy -x 80-10.0.0.40:9001 -s 10.0.0.40 -c 10.0.0.40</div></pre></td></tr></table></figure>
-<p><em>-x</em> ：表示将本机的 <em>80</em> 端口的流量，copy一份到 <em>10.0.0.40</em> 的 <em>9001</em> 端口。<br><em>-s</em> ：这个就是 intercept 的地址。<br><em>-c</em> ：tcpcopy 修改tcp的源IP地址，以免响应给最初的 client。</p>
+<p><em>-x</em> ：表示将本机的 <em>80</em> 端口的流量，copy一份到 <em>10.0.0.40</em> 的 <em>9001</em> 端口。最好加上 <code>-H</code> 来指定本机绑定的IP地址.<br><em>-s</em> ：这个就是 intercept 的地址。完整的格式为 “ip:port,ip2:port”<br><em>-c</em> ：tcpcopy 修改tcp的源IP地址，以免响应给最初的 client。</p>
+<p>提醒: 习惯用 <code>-H 你本机的的IP</code> 参数比较好, 不然可能会出现没回放的情况.</p>
+<p>完整的示例格式</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ./tcpcopy -H 10.26.83.156  -x 888-10.26.83.156:8000 -s 10.26.83.156 -c 10.26.83.x -r 1 -l tcpcopy.log</div></pre></td></tr></table></figure>
 <h1 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h1><p>下面是要注意的事项</p>
 <h2 id="丢包"><a href="#丢包" class="headerlink" title="丢包"></a>丢包</h2><p>在测试过程中，发现它会丢包，测试的情况如下:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">9477 - 10000</div><div class="line">18959 - 20000</div><div class="line">28351 - 30000</div></pre></td></tr></table></figure>

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>&lt;Python从入门到实践&gt;读书笔记 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="python," />
+  
+
+  <meta name="description" content="退出123Ctrl-D或exit() 基础字符串有引号括起来的都是字符串, 引号既可以是单绰号, 也可以是双引号.  字符串拼接: 使用 + 将数字转换为字符串, 使用函数: str()  乘方12&amp;gt;&amp;gt;&amp;gt; 3 ** 29 Python 之禅1import this 列表12hello=[&apos;hello&apos;, &apos;world&apos;]print(hello)  索引从0开始 最后一个的索引是">
+<meta name="keywords" content="python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="&lt;Python从入门到实践&gt;读书笔记">
+<meta property="og:url" content="https://emacsist.github.io/2018/01/14/Python从入门到实践-读书笔记/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="退出123Ctrl-D或exit() 基础字符串有引号括起来的都是字符串, 引号既可以是单绰号, 也可以是双引号.  字符串拼接: 使用 + 将数字转换为字符串, 使用函数: str()  乘方12&amp;gt;&amp;gt;&amp;gt; 3 ** 29 Python 之禅1import this 列表12hello=[&apos;hello&apos;, &apos;world&apos;]print(hello)  索引从0开始 最后一个的索引是">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-01-19T04:51:28.857Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="&lt;Python从入门到实践&gt;读书笔记">
+<meta name="twitter:description" content="退出123Ctrl-D或exit() 基础字符串有引号括起来的都是字符串, 引号既可以是单绰号, 也可以是双引号.  字符串拼接: 使用 + 将数字转换为字符串, 使用函数: str()  乘方12&amp;gt;&amp;gt;&amp;gt; 3 ** 29 Python 之禅1import this 列表12hello=[&apos;hello&apos;, &apos;world&apos;]print(hello)  索引从0开始 最后一个的索引是">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#退出"><span class="toc-text">退出</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#基础"><span class="toc-text">基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#字符串"><span class="toc-text">字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#乘方"><span class="toc-text">乘方</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Python-之禅"><span class="toc-text">Python 之禅</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#列表"><span class="toc-text">列表</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#遍历列表"><span class="toc-text">遍历列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#缩进"><span class="toc-text">缩进</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数值列表"><span class="toc-text">数值列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对数值列表统计"><span class="toc-text">对数值列表统计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#切片"><span class="toc-text">切片</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#列表推导式"><span class="toc-text">列表推导式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#元组"><span class="toc-text">元组</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#定义元组"><span class="toc-text">定义元组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取元素"><span class="toc-text">获取元素</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#修改元素"><span class="toc-text">修改元素</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#遍历"><span class="toc-text">遍历</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#修改元组变量"><span class="toc-text">修改元组变量</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#if"><span class="toc-text">if</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#and-与-or"><span class="toc-text">and 与 or</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#in-与-not-in"><span class="toc-text">in 与 not in</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#布尔值-True-与-False"><span class="toc-text">布尔值 True 与 False</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#字典"><span class="toc-text">字典</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#定义"><span class="toc-text">定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#添加"><span class="toc-text">添加</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#修改"><span class="toc-text">修改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除"><span class="toc-text">删除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#遍历-1"><span class="toc-text">遍历</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#遍历所有键"><span class="toc-text">遍历所有键</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#按字典顺序遍历键"><span class="toc-text">按字典顺序遍历键</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#遍历所有值"><span class="toc-text">遍历所有值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#去掉重复"><span class="toc-text">去掉重复</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#用户输入"><span class="toc-text">用户输入</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#input"><span class="toc-text">input()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#字符串转换为-int"><span class="toc-text">字符串转换为 int</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#while-循环"><span class="toc-text">while 循环</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#函数"><span class="toc-text">函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#任意实参"><span class="toc-text">任意实参</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#导入"><span class="toc-text">导入</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#导入模块"><span class="toc-text">导入模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#导入特定函数"><span class="toc-text">导入特定函数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#类"><span class="toc-text">类</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#创建实例"><span class="toc-text">创建实例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#访问属于"><span class="toc-text">访问属于</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#访问方法"><span class="toc-text">访问方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#继承"><span class="toc-text">继承</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#重写父类方法"><span class="toc-text">重写父类方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#文件"><span class="toc-text">文件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#写入空白文件"><span class="toc-text">写入空白文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#追加文件"><span class="toc-text">追加文件</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#捕获异常"><span class="toc-text">捕获异常</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#存储数据"><span class="toc-text">存储数据</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#单元测试"><span class="toc-text">单元测试</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Python从入门到实践-读书笔记" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            &lt;Python从入门到实践&gt;读书笔记
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2018.01.14</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#python">
+        <span class="tag-name">python</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h1 id="退出"><a href="#退出" class="headerlink" title="退出"></a>退出</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Ctrl-D</div><div class="line">或</div><div class="line"><span class="built_in">exit</span>()</div></pre></td></tr></table></figure>
+<h1 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h1><h2 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h2><p>有引号括起来的都是字符串, 引号既可以是<code>单绰号</code>, 也可以是<code>双引号</code>.</p>
+<ul>
+<li>字符串拼接: 使用 <code>+</code></li>
+<li>将数字转换为字符串, 使用函数: <code>str()</code></li>
+</ul>
+<h2 id="乘方"><a href="#乘方" class="headerlink" title="乘方"></a>乘方</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; 3 ** 2</div><div class="line">9</div></pre></td></tr></table></figure>
+<h2 id="Python-之禅"><a href="#Python-之禅" class="headerlink" title="Python 之禅"></a>Python 之禅</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">import this</div></pre></td></tr></table></figure>
+<h1 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">hello=[<span class="string">'hello'</span>, <span class="string">'world'</span>]</div><div class="line">print(hello)</div></pre></td></tr></table></figure>
+<ul>
+<li>索引从0开始</li>
+<li>最后一个的索引是 -1</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 追加元素</span></div><div class="line">hello.append(<span class="string">'hello2'</span>)</div><div class="line"></div><div class="line"><span class="comment"># 插入元素</span></div><div class="line">hello.insert(<span class="number">0</span>, <span class="string">'hello2'</span>)</div><div class="line"></div><div class="line"><span class="comment"># 删除</span></div><div class="line"><span class="keyword">del</span> hello[<span class="number">0</span>]</div><div class="line"></div><div class="line"><span class="comment"># 根据值删除元素, 这种只是删除第一次出现的元素.</span></div><div class="line"></div><div class="line">hello.remove(<span class="string">'hello'</span>)</div><div class="line"></div><div class="line"><span class="comment"># 弹出元素(从索引-1开始弹出, 即最后一个元素), 这时 hello 是弹出后的列表, 返回值是弹出的元素</span></div><div class="line">hello.pop()</div><div class="line"></div><div class="line">也可以指定索引</div><div class="line">popedElement = hello.pop(<span class="number">0</span>)</div></pre></td></tr></table></figure>
+<p>排序</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 默认是从小到大, 这会影响原来的hello顺序的</span></div><div class="line">hello.sort() </div><div class="line"></div><div class="line"><span class="comment"># 从大到小</span></div><div class="line">hello.sort(reverse=<span class="keyword">True</span>)</div><div class="line">hello.reverse()</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 返回排序的列表, 但不影响原来的顺序</span></div><div class="line">sorted(hello)</div></pre></td></tr></table></figure>
+<p>长度</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">len(hello)</div></pre></td></tr></table></figure>
+<h2 id="遍历列表"><a href="#遍历列表" class="headerlink" title="遍历列表"></a>遍历列表</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> e <span class="keyword">in</span> hello:</div><div class="line">	print(e)</div></pre></td></tr></table></figure>
+<p>注意, 后面的冒号.</p>
+<h2 id="缩进"><a href="#缩进" class="headerlink" title="缩进"></a>缩进</h2><p>python 是根据缩进来判断代码行与前一个代码行的关系的.</p>
+<h2 id="数值列表"><a href="#数值列表" class="headerlink" title="数值列表"></a>数值列表</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> value <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">5</span>):</div><div class="line">	print(value)</div></pre></td></tr></table></figure>
+<p>注意, 区间是 <code>[1,5)</code></p>
+<p>将 range 的结果转换为列表: <code>numbers=list(range(1, 5))</code></p>
+<p>range 的第三个参数是步长.(step)</p>
+<h2 id="对数值列表统计"><a href="#对数值列表统计" class="headerlink" title="对数值列表统计"></a>对数值列表统计</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sum(numbers)</div><div class="line">min(numbers)</div><div class="line">max(numbers)</div></pre></td></tr></table></figure>
+<h2 id="切片"><a href="#切片" class="headerlink" title="切片"></a>切片</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">numbers[<span class="number">0</span>:<span class="number">3</span>]</div></pre></td></tr></table></figure>
+<p>索引为负时, 表示倒数开始.</p>
+<p>这时, 是直接复制元素的. 它并不会影响原有的列表.下面的代码反映了这点:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span>num=list(range(<span class="number">1</span>,<span class="number">11</span>))</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>print(num)</div><div class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>]</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>slice1=num[<span class="number">1</span>:<span class="number">3</span>]</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>print(slice1)</div><div class="line">[<span class="number">2</span>, <span class="number">3</span>]</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>slice1[<span class="number">0</span>]=<span class="number">100</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>print(slice1)</div><div class="line">[<span class="number">100</span>, <span class="number">3</span>]</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>print(num)</div><div class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>]</div><div class="line">&gt;&gt;&gt;</div></pre></td></tr></table></figure>
+<p>所以, 想复制整个列表, 则可以同时省略开始和终止索引即可: <code>[:]</code></p>
+<h2 id="列表推导式"><a href="#列表推导式" class="headerlink" title="列表推导式"></a>列表推导式</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">listdata = [<span class="number">1</span>, <span class="number">5</span>, <span class="number">2</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">22</span>, <span class="number">3</span>, <span class="number">99</span>, <span class="number">1000</span>, <span class="number">999</span>, <span class="number">500</span>]</div><div class="line"></div><div class="line">获取上面偶数组成的列表</div><div class="line">[i <span class="keyword">for</span> i <span class="keyword">in</span> listdata[<span class="number">1</span>:] <span class="keyword">if</span> i % <span class="number">2</span> == <span class="number">0</span>]</div></pre></td></tr></table></figure>
+<p>运行示例</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span>listdata = [<span class="number">1</span>, <span class="number">5</span>, <span class="number">2</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">22</span>, <span class="number">3</span>, <span class="number">99</span>, <span class="number">1000</span>, <span class="number">999</span>, <span class="number">500</span>]</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>[i <span class="keyword">for</span> i <span class="keyword">in</span> listdata <span class="keyword">if</span> i % <span class="number">2</span> == <span class="number">0</span>]</div><div class="line">[<span class="number">2</span>, <span class="number">10</span>, <span class="number">22</span>, <span class="number">1000</span>, <span class="number">500</span>]</div><div class="line">&gt;&gt;&gt;</div></pre></td></tr></table></figure>
+<h1 id="元组"><a href="#元组" class="headerlink" title="元组"></a>元组</h1><blockquote>
+<p>元组的元素是不可修改的. 即不变的列表, 就称为元组.</p>
+</blockquote>
+<h2 id="定义元组"><a href="#定义元组" class="headerlink" title="定义元组"></a>定义元组</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">numbers=(<span class="number">200</span>, <span class="number">50</span>)</div></pre></td></tr></table></figure>
+<h2 id="获取元素"><a href="#获取元素" class="headerlink" title="获取元素"></a>获取元素</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">numbers[<span class="number">0</span>]</div></pre></td></tr></table></figure>
+<h2 id="修改元素"><a href="#修改元素" class="headerlink" title="修改元素"></a>修改元素</h2><p>哈哈, 这是禁止的操作</p>
+<h2 id="遍历"><a href="#遍历" class="headerlink" title="遍历"></a>遍历</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> m <span class="keyword">in</span> numbers:</div><div class="line">	print(m)</div></pre></td></tr></table></figure>
+<h2 id="修改元组变量"><a href="#修改元组变量" class="headerlink" title="修改元组变量"></a>修改元组变量</h2><p>虽然元组的元素是不能修改的, 但可以修改元组变量自身.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">numbers=(<span class="number">100</span>, <span class="number">25</span>)</div></pre></td></tr></table></figure>
+<p>这时, numbers 元组就是新的 <code>(100, 25)</code> 而不是原来的 <code>(200, 50)</code> 了.</p>
+<h1 id="if"><a href="#if" class="headerlink" title="if"></a>if</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> condition:</div><div class="line">	do something</div><div class="line"><span class="keyword">elif</span> condition1:</div><div class="line">	do something</div><div class="line"><span class="keyword">else</span>:</div><div class="line">	do something</div></pre></td></tr></table></figure>
+<p>注意冒号.</p>
+<h1 id="and-与-or"><a href="#and-与-or" class="headerlink" title="and 与 or"></a>and 与 or</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">condition1 <span class="keyword">and</span> condition2</div><div class="line"></div><div class="line">condition1 <span class="keyword">or</span> condition2</div></pre></td></tr></table></figure>
+<h1 id="in-与-not-in"><a href="#in-与-not-in" class="headerlink" title="in 与 not in"></a>in 与 not in</h1><p>判断元素是否包含在列表中</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">elementX <span class="keyword">in</span> aList</div><div class="line"></div><div class="line">elementX <span class="keyword">not</span> <span class="keyword">in</span> aList</div></pre></td></tr></table></figure>
+<h1 id="布尔值-True-与-False"><a href="#布尔值-True-与-False" class="headerlink" title="布尔值 True 与 False"></a>布尔值 True 与 False</h1><p>注意是 <code>True</code> 与 <code>False</code> 首字母大写的.</p>
+<p>空列表也可以当作条件. 如果列表为空, 则返回 <code>False</code> 否则返回 <code>True</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span>hello=[]</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>hello <span class="keyword">and</span> <span class="keyword">True</span></div><div class="line">[]</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>hello <span class="keyword">or</span> <span class="keyword">True</span></div><div class="line"><span class="keyword">True</span></div><div class="line">&gt;&gt;&gt;</div></pre></td></tr></table></figure>
+<h1 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">a = &#123;<span class="string">'color'</span>:<span class="string">'green'</span>, <span class="string">'point'</span>: <span class="number">5</span>&#125;</div></pre></td></tr></table></figure>
+<h2 id="添加"><a href="#添加" class="headerlink" title="添加"></a>添加</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">a[<span class="string">'hello'</span>] = <span class="string">'b'</span></div></pre></td></tr></table></figure>
+<h2 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">a[<span class="string">'hello'</span>] = <span class="string">'newb'</span></div></pre></td></tr></table></figure>
+<h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">del</span> a[<span class="string">'hello'</span>]</div></pre></td></tr></table></figure>
+<h2 id="遍历-1"><a href="#遍历-1" class="headerlink" title="遍历"></a>遍历</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> k, v <span class="keyword">in</span> a:</div><div class="line">	print(k)</div><div class="line">    print(v)</div></pre></td></tr></table></figure>
+<h3 id="遍历所有键"><a href="#遍历所有键" class="headerlink" title="遍历所有键"></a>遍历所有键</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> k <span class="keyword">in</span> a.keys():</div><div class="line">	print(k)</div></pre></td></tr></table></figure>
+<h3 id="按字典顺序遍历键"><a href="#按字典顺序遍历键" class="headerlink" title="按字典顺序遍历键"></a>按字典顺序遍历键</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> k <span class="keyword">in</span> sorted(a.keys()):</div><div class="line">	print(k)</div></pre></td></tr></table></figure>
+<h3 id="遍历所有值"><a href="#遍历所有值" class="headerlink" title="遍历所有值"></a>遍历所有值</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> v <span class="keyword">in</span> a.avalues():</div><div class="line">	print(v)</div></pre></td></tr></table></figure>
+<h3 id="去掉重复"><a href="#去掉重复" class="headerlink" title="去掉重复"></a>去掉重复</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> k <span class="keyword">in</span> set(a.keys()):</div><div class="line">	print(k)</div></pre></td></tr></table></figure>
+<h1 id="用户输入"><a href="#用户输入" class="headerlink" title="用户输入"></a>用户输入</h1><h2 id="input"><a href="#input" class="headerlink" title="input()"></a>input()</h2><p>等待用户输入, 回车后继续执行. (在 2.7 版本中, 对应的是 raw_input())</p>
+<h2 id="字符串转换为-int"><a href="#字符串转换为-int" class="headerlink" title="字符串转换为 int"></a>字符串转换为 int</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">i = int(inputString)</div></pre></td></tr></table></figure>
+<h1 id="while-循环"><a href="#while-循环" class="headerlink" title="while 循环"></a>while 循环</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span> condition:</div><div class="line">	do something</div></pre></td></tr></table></figure>
+<h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">定义</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">greet_user</span><span class="params">(username=<span class="string">'默认值'</span>)</span>:</span></div><div class="line">	<span class="string">"""hello doc"""</span></div><div class="line">    print(<span class="string">"hello "</span> + username.title())</div><div class="line"></div><div class="line">调用</div><div class="line">greet_user(<span class="string">'hello'</span>)</div><div class="line">或</div><div class="line">greet_user(username=<span class="string">'hello'</span>)</div></pre></td></tr></table></figure>
+<h2 id="任意实参"><a href="#任意实参" class="headerlink" title="任意实参"></a>任意实参</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_pizza</span><span class="params">(*toppings)</span>:</span></div><div class="line">	print(toppings)</div></pre></td></tr></table></figure>
+<p>即 <code>*变量名</code></p>
+<p>调用时: <code>make_pizza(&#39;hello&#39;, &#39;world&#39;)</code></p>
+<p>这种是把 <code>toppings</code> 当作列表来看待了.</p>
+<p>还有一种是当作<code>k-v</code> 字典来对待</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_pizza</span><span class="params">(**user_info)</span>:</span></div><div class="line">	<span class="keyword">for</span> k, v <span class="keyword">in</span> user_info:</div><div class="line">    	print(k)</div><div class="line">        print(v)</div></pre></td></tr></table></figure>
+<h1 id="导入"><a href="#导入" class="headerlink" title="导入"></a>导入</h1><h2 id="导入模块"><a href="#导入模块" class="headerlink" title="导入模块"></a>导入模块</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> module_name</div></pre></td></tr></table></figure>
+<p>调用</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">module_name.function_name(parameters)</div></pre></td></tr></table></figure>
+<p>给模块起别名</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> module_name <span class="keyword">as</span> mn</div></pre></td></tr></table></figure>
+<p>调用</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mn.function_name(parameters)</div></pre></td></tr></table></figure>
+<h2 id="导入特定函数"><a href="#导入特定函数" class="headerlink" title="导入特定函数"></a>导入特定函数</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> module_name <span class="keyword">import</span> function_name</div><div class="line"></div><div class="line">导入所有函数</div><div class="line"><span class="keyword">from</span> module_name <span class="keyword">import</span> *</div></pre></td></tr></table></figure>
+<p>调用</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">function_name(paramters)</div></pre></td></tr></table></figure>
+<p>给函数起别名:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> module_name <span class="keyword">import</span> function_name <span class="keyword">as</span> fn</div></pre></td></tr></table></figure>
+<p>调用:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fn(paramters)</div></pre></td></tr></table></figure>
+<h1 id="类"><a href="#类" class="headerlink" title="类"></a>类</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span><span class="params">()</span>:</span></div><div class="line">	<span class="string">"""class doc"""</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name, age)</span>:</span></div><div class="line">    	self.name = name</div><div class="line">        self.age = age</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">sit</span><span class="params">(self)</span>:</span></div><div class="line">    	<span class="string">"""dog sit"""</span></div><div class="line">        print(self.name + <span class="string">" is now sitting"</span>)</div></pre></td></tr></table></figure>
+<h2 id="创建实例"><a href="#创建实例" class="headerlink" title="创建实例"></a>创建实例</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">my_dog=Dog(<span class="string">'name'</span>, <span class="number">6</span>)</div></pre></td></tr></table></figure>
+<h2 id="访问属于"><a href="#访问属于" class="headerlink" title="访问属于"></a>访问属于</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">my_dog.name</div></pre></td></tr></table></figure>
+<h2 id="访问方法"><a href="#访问方法" class="headerlink" title="访问方法"></a>访问方法</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">my_dog.sit()</div></pre></td></tr></table></figure>
+<h2 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ADog</span><span class="params">(Dog)</span>:</span></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name, age)</span>:</span></div><div class="line">    	super().__init__(name, age)</div></pre></td></tr></table></figure>
+<h3 id="重写父类方法"><a href="#重写父类方法" class="headerlink" title="重写父类方法"></a>重写父类方法</h3><p>定义一个与类类方法同名即可.这样, python 就不会考虑父类方法了.</p>
+<h1 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h1><p>读取整个内容</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">with</span> open(<span class="string">'pi_digits.txt'</span>) <span class="keyword">as</span> file_object:</div><div class="line">	contents = fil_object.read()</div><div class="line">    print(contents)</div></pre></td></tr></table></figure>
+<p>按行读</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">with</span> open(<span class="string">'pi_digits.txt'</span>) <span class="keyword">as</span> file_object:</div><div class="line">	<span class="keyword">for</span> line <span class="keyword">in</span>  fil_object:</div><div class="line">    	print(contents.rstrip())</div><div class="line">        </div><div class="line">或</div><div class="line"></div><div class="line"><span class="keyword">with</span> open(<span class="string">'pi_digits.txt'</span>) <span class="keyword">as</span> file_object:</div><div class="line">	<span class="keyword">for</span> line <span class="keyword">in</span>  fil_object.readlines():</div><div class="line">    	print(contents.rstrip())</div></pre></td></tr></table></figure>
+<h2 id="写入空白文件"><a href="#写入空白文件" class="headerlink" title="写入空白文件"></a>写入空白文件</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">with</span> open(filename, <span class="string">'w'</span>) <span class="keyword">as</span> file_object:</div><div class="line">	file_object.write(<span class="string">'hello'</span>)</div></pre></td></tr></table></figure>
+<h2 id="追加文件"><a href="#追加文件" class="headerlink" title="追加文件"></a>追加文件</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">with</span> open(filename, <span class="string">'a'</span>) <span class="keyword">as</span> file_object:</div><div class="line">	file_object.write(<span class="string">'hello'</span>)</div></pre></td></tr></table></figure>
+<h1 id="捕获异常"><a href="#捕获异常" class="headerlink" title="捕获异常"></a>捕获异常</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span>:</div><div class="line">	print(<span class="number">5</span>/<span class="number">0</span>)</div><div class="line"><span class="keyword">except</span> ZeroDivisionError:</div><div class="line">	print(<span class="string">"can not divide by zero"</span>)</div></pre></td></tr></table></figure>
+<h1 id="存储数据"><a href="#存储数据" class="headerlink" title="存储数据"></a>存储数据</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">json.dump()</div><div class="line"></div><div class="line">json.load()</div></pre></td></tr></table></figure>
+<h1 id="单元测试"><a href="#单元测试" class="headerlink" title="单元测试"></a>单元测试</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> unittest</div><div class="line"><span class="keyword">from</span> name_function <span class="keyword">import</span> get_formatted_name</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">NamesTestCase</span><span class="params">(unittest.TestCase)</span>:</span></div><div class="line">    <span class="string">"""测试name_function.py"""</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_first_last_name</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="string">"""能够正确地处理像Janis Joplin这样的姓名吗？"""</span></div><div class="line">        formatted_name = get_formatted_name(<span class="string">'janis'</span>, <span class="string">'joplin'</span>)</div><div class="line">        self.assertEqual(formatted_name, <span class="string">'Janis Joplin'</span>)</div><div class="line"></div><div class="line">unittest.main()</div></pre></td></tr></table></figure>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

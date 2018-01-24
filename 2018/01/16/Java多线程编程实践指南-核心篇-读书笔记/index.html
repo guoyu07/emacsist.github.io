@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>&lt;Java多线程编程实践指南-核心篇&gt;读书笔记 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="java,thread," />
+  
+
+  <meta name="description" content="用户线程VS守护线程用户线程它会阻止 Java 虚拟机的正常停止, 即一个 Java 虚拟机只有在其所有用户线程都运行结束的情况下才能正常停止 正常停止指不是通过 System.exit 调用, 也不是通过强制终止进程(如Linux中使用 kill 命令停止Java进程)实现的Java虚拟机停止.  本人在Mac上测试, 即使是普通的 kill 也不是正常的停止.(无论是否是 kill PID ,">
+<meta name="keywords" content="java,thread">
+<meta property="og:type" content="article">
+<meta property="og:title" content="&lt;Java多线程编程实践指南-核心篇&gt;读书笔记">
+<meta property="og:url" content="https://emacsist.github.io/2018/01/16/Java多线程编程实践指南-核心篇-读书笔记/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="用户线程VS守护线程用户线程它会阻止 Java 虚拟机的正常停止, 即一个 Java 虚拟机只有在其所有用户线程都运行结束的情况下才能正常停止 正常停止指不是通过 System.exit 调用, 也不是通过强制终止进程(如Linux中使用 kill 命令停止Java进程)实现的Java虚拟机停止.  本人在Mac上测试, 即使是普通的 kill 也不是正常的停止.(无论是否是 kill PID ,">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-01-23T14:15:35.560Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="&lt;Java多线程编程实践指南-核心篇&gt;读书笔记">
+<meta name="twitter:description" content="用户线程VS守护线程用户线程它会阻止 Java 虚拟机的正常停止, 即一个 Java 虚拟机只有在其所有用户线程都运行结束的情况下才能正常停止 正常停止指不是通过 System.exit 调用, 也不是通过强制终止进程(如Linux中使用 kill 命令停止Java进程)实现的Java虚拟机停止.  本人在Mac上测试, 即使是普通的 kill 也不是正常的停止.(无论是否是 kill PID ,">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#用户线程VS守护线程"><span class="toc-text">用户线程VS守护线程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#用户线程"><span class="toc-text">用户线程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#正常停止"><span class="toc-text">正常停止</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#守护线程"><span class="toc-text">守护线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#默认情况"><span class="toc-text">默认情况</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#父子线程的生命周期"><span class="toc-text">父子线程的生命周期</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#竞态"><span class="toc-text">竞态</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#竞态的模式"><span class="toc-text">竞态的模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#read-modify-write-读-改-写"><span class="toc-text">read-modify-write 读-改-写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#check-then-act-检测后行动"><span class="toc-text">check-then-act 检测后行动</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程安全"><span class="toc-text">线程安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程安全的三个方面"><span class="toc-text">线程安全的三个方面</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#原子性"><span class="toc-text">原子性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#实现原子性"><span class="toc-text">实现原子性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可见性"><span class="toc-text">可见性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#实现可见性"><span class="toc-text">实现可见性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#线程的启动与可见性"><span class="toc-text">线程的启动与可见性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#原子性与可见性"><span class="toc-text">原子性与可见性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#有序性"><span class="toc-text">有序性</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#上下文切换"><span class="toc-text">上下文切换</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#自发性上下文切换"><span class="toc-text">自发性上下文切换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#非自发性上下文切换"><span class="toc-text">非自发性上下文切换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开销"><span class="toc-text">开销</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查看"><span class="toc-text">查看</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#锁"><span class="toc-text">锁</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#说明"><span class="toc-text">说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#可重入锁"><span class="toc-text">可重入锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内部锁"><span class="toc-text">内部锁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#内部锁的调度"><span class="toc-text">内部锁的调度</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#显式锁"><span class="toc-text">显式锁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#显式锁的调度"><span class="toc-text">显式锁的调度</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#锁的适用场景"><span class="toc-text">锁的适用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程同步底层助手-内存屏障"><span class="toc-text">线程同步底层助手: 内存屏障</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#按可见性"><span class="toc-text">按可见性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#按有序性"><span class="toc-text">按有序性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#重排序规则"><span class="toc-text">重排序规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#volatile"><span class="toc-text">volatile</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#volatile-与-数组和引用型变量"><span class="toc-text">volatile 与 数组和引用型变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#volatile-使用场景"><span class="toc-text">volatile 使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#正确实现单例模式"><span class="toc-text">正确实现单例模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#版本1"><span class="toc-text">版本1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#版本2"><span class="toc-text">版本2</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#版本3"><span class="toc-text">版本3</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#版本4"><span class="toc-text">版本4</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#版本5"><span class="toc-text">版本5</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CAS"><span class="toc-text">CAS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对象的发布与逸出"><span class="toc-text">对象的发布与逸出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#static"><span class="toc-text">static</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#final"><span class="toc-text">final</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#注意"><span class="toc-text">注意</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安全发布与逸出"><span class="toc-text">安全发布与逸出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#处理线程"><span class="toc-text">处理线程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#分而治之"><span class="toc-text">分而治之</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#合理设置线程数"><span class="toc-text">合理设置线程数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CPU-密集型任务"><span class="toc-text">CPU 密集型任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IO-密集型任务"><span class="toc-text">IO 密集型任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#混合型"><span class="toc-text">混合型</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Java多线程编程实践指南-核心篇-读书笔记" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            &lt;Java多线程编程实践指南-核心篇&gt;读书笔记
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2018.01.16</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 120 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#thread">
+        <span class="tag-name">thread</span>
+    <span class="tag-size">( 3 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h1 id="用户线程VS守护线程"><a href="#用户线程VS守护线程" class="headerlink" title="用户线程VS守护线程"></a>用户线程VS守护线程</h1><h2 id="用户线程"><a href="#用户线程" class="headerlink" title="用户线程"></a>用户线程</h2><p>它会阻止 Java 虚拟机的正常停止, 即一个 Java 虚拟机只有在其所有用户线程都运行结束的情况下才能正常停止</p>
+<h3 id="正常停止"><a href="#正常停止" class="headerlink" title="正常停止"></a>正常停止</h3><p>指不是通过 <code>System.exit</code> 调用, 也不是通过强制终止进程(如Linux中使用 kill 命令停止Java进程)实现的Java虚拟机停止.</p>
+<blockquote>
+<p>本人在Mac上测试, 即使是普通的 kill 也不是正常的停止.(无论是否是 kill PID , 更不用说是 kill -9 PID 了).</p>
+</blockquote>
+<p>测试代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestKill</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        System.out.println(ManagementFactory.getRuntimeMXBean().getName());</div><div class="line">        <span class="keyword">int</span> times = <span class="number">40</span>;</div><div class="line">        <span class="keyword">while</span> (times-- &gt; <span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                Thread.currentThread().sleep(<span class="number">3</span> * <span class="number">1000</span>);</div><div class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        System.out.println(<span class="string">"exit"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>第一行打印出的是PID@hostname, 这时直接 <code>kill PID</code> , 可以看到整个JVM都退出了.</p>
+<h2 id="守护线程"><a href="#守护线程" class="headerlink" title="守护线程"></a>守护线程</h2><p>即应用程序中有守护线程在运行, 也不影响 Java 虚拟机的正常停止. 因此, 守护线程通常用于执行一些重要性不是很高的任务, 例如监视其他线程的运行情况</p>
+<h2 id="默认情况"><a href="#默认情况" class="headerlink" title="默认情况"></a>默认情况</h2><p>一个线程是否是一个守护线程默认取决于父线程: 默认情况下, 父线程是守护线程, 则子线程也是守护线程; 父线程是用户线程, 则子线程也是用户线程. 默认情况下的优先级, 也与父线程的优先级相同.</p>
+<h2 id="父子线程的生命周期"><a href="#父子线程的生命周期" class="headerlink" title="父子线程的生命周期"></a>父子线程的生命周期</h2><p>Java 平台中并没有API获取一个线程的父线程, 或获取一个线程的所有子线程. 并且, 父线程与子线程的生命周期, 也没有必然的联系. (即是相互独立的).</p>
+<h1 id="竞态"><a href="#竞态" class="headerlink" title="竞态"></a>竞态</h1><p>是指计算的正确性依赖于相对相间顺序或线程的交错. </p>
+<blockquote>
+<p>即竞态的结果可能是时而正确, 时而错误.</p>
+</blockquote>
+<h2 id="竞态的模式"><a href="#竞态的模式" class="headerlink" title="竞态的模式"></a>竞态的模式</h2><h3 id="read-modify-write-读-改-写"><a href="#read-modify-write-读-改-写" class="headerlink" title="read-modify-write 读-改-写"></a>read-modify-write 读-改-写</h3><p>例如</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">i++</div></pre></td></tr></table></figure>
+<h3 id="check-then-act-检测后行动"><a href="#check-then-act-检测后行动" class="headerlink" title="check-then-act 检测后行动"></a>check-then-act 检测后行动</h3><ol>
+<li>读取某个共享变量的值</li>
+<li>根据该变量的值决定下一步的动作是什么</li>
+</ol>
+<h2 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h2><p>一般而言, 如果一个类在单线程环境下能够动作正常, 并且在多线程环境下, 在其使用方不必为其做任何改变的情况下也能运作正常, 那么我们就称其是线程安全的. 反之就是线程不安全的.</p>
+<p>在多线程环境中, 使用一个类时, 必须先弄清楚这个类是否是线程安全的.</p>
+<h2 id="线程安全的三个方面"><a href="#线程安全的三个方面" class="headerlink" title="线程安全的三个方面"></a>线程安全的三个方面</h2><h3 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h3><p>即该操作是不可分割的. </p>
+<p>所为的不可分割, 是指: 访问(读, 写) 某个共享变量的操作从其执行线程以外的任何线程来看, 该操作要么已经执行完, 要么尚未发生, 即其他线程不会”看到”该操作执行了部分的中间结果.</p>
+<ol>
+<li>原子操作是针对访问共享变量的操作而言的. 仅是局部变量的话, 无所谓的原子操作.</li>
+<li>这是从该操作的执行线程以外的任何线程来看的, 即其他线程不会看到该操作执行了部分的中间结果.</li>
+</ol>
+<h4 id="实现原子性"><a href="#实现原子性" class="headerlink" title="实现原子性"></a>实现原子性</h4><ul>
+<li>使用锁.(这通常是在软件层)</li>
+<li>使用 CAS.(这通常是在硬件层)</li>
+</ul>
+<p>Java 语言中, long 和 double 以外的任何类型变量的 <code>写</code> 操作都是原子操作. 即除了 long 和 double 外的基础类型变量和引用型变量的写操作, 都是原子的.</p>
+<p>但可以通过添加 <code>volatile</code> 关键字来保障 long 和 double 类型的变量的 <code>写</code> 操作是原子的.</p>
+<h3 id="可见性"><a href="#可见性" class="headerlink" title="可见性"></a>可见性</h3><p>如果一个线程对某个共享变量进行更新之后, 后续访问该变量的线程可以读取到该更新的结果, 那么我们就称这个线程对该共享变量的更新对其他线程可见, 否则就是对其他线程不可见.</p>
+<p>原理:</p>
+<p>它是通过使更新共享变量的处理器执行冲刷处理器缓存的动作, 并使读取共享变量的处理器执行刷新缓存的动作来实现的.</p>
+<h4 id="实现可见性"><a href="#实现可见性" class="headerlink" title="实现可见性"></a>实现可见性</h4><p>使用关键字 <code>volatile</code> </p>
+<p>读取一个 <code>volatile</code> 关键字修饰的变量会使相应的处理器执行刷新处理器缓存的动作, 写一个 <code>volatile</code> 关键字修饰的变量会使相应的处理器执行冲刷处理器缓存的动作, 从而保障了可见性.</p>
+<p>可见性是多线程的问题, 与目标环境是单核还是多核处理器无关.</p>
+<h4 id="线程的启动与可见性"><a href="#线程的启动与可见性" class="headerlink" title="线程的启动与可见性"></a>线程的启动与可见性</h4><p>JLS规定</p>
+<ul>
+<li><p>父线程在启动之线程(即调用子线程的 <code>start()</code> 方法 <code>之前</code>, 对共享变量的更新对子线程来说是可见的.)</p>
+</li>
+<li><p>一个线程终止后该线程对共享变量的更新对于调用线程的 <code>join</code> 方法的线程是可见的.</p>
+</li>
+</ul>
+<h4 id="原子性与可见性"><a href="#原子性与可见性" class="headerlink" title="原子性与可见性"></a>原子性与可见性</h4><p>从保障线程安全的角度来看, 光保障原子性是不够的, 有时还要同时保障可见性. 它们同时才能保障一个线程能够 “正确” 地看到其他线程对共享变量所做的更新.</p>
+<h3 id="有序性"><a href="#有序性" class="headerlink" title="有序性"></a>有序性</h3><p><code>volatile</code> 和 <code>synchronized</code> 关键字都可以实现有序性(逻辑上有序, 物理上不一定)</p>
+<h1 id="上下文切换"><a href="#上下文切换" class="headerlink" title="上下文切换"></a>上下文切换</h1><p>一个线程被暂停, 即被剥夺处理器的使用权, 另一个线程被选中开始或者继续运行的过程, 就叫作线程上下文切换.</p>
+<p>被剥夺的线程, 被称为切出. (switch out)<br>被选中的线程, 被称为切入. (switch in)</p>
+<h2 id="自发性上下文切换"><a href="#自发性上下文切换" class="headerlink" title="自发性上下文切换"></a>自发性上下文切换</h2><ul>
+<li>Thread.sleep(long mills)</li>
+<li>Object.wait()</li>
+<li>Thread.yield()</li>
+<li>Thread.join()</li>
+<li>LockSupport.park()</li>
+<li>IO 操作</li>
+<li>等待其他线程持有的<code>锁</code></li>
+</ul>
+<h2 id="非自发性上下文切换"><a href="#非自发性上下文切换" class="headerlink" title="非自发性上下文切换"></a>非自发性上下文切换</h2><p>由线程调度器的原因被迫调出. </p>
+<p>例如, 线程的时间片用完, 或一个比被切出线程优先级更高的线程需要被运行. 再如GC</p>
+<h2 id="开销"><a href="#开销" class="headerlink" title="开销"></a>开销</h2><ul>
+<li>OS保存和恢复上下文的开销(主要是CPU时间)</li>
+<li><p>线程调度器调度的开销</p>
+</li>
+<li><p>处理器高速缓存加载的开销</p>
+</li>
+<li>可能导致整个一级高速缓存中的内容被冲刷</li>
+</ul>
+<h2 id="查看"><a href="#查看" class="headerlink" title="查看"></a>查看</h2><p>linux 中可以使用 <code>perf</code> 命令来监视Java程序运行过程中的上下文切换的次数和频率.</p>
+<p>书中给出的示例</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">perf <span class="built_in">stat</span> -e cpu-clock, task-clock,cs,cache-references,cache-misses java your-main-class parameter</div></pre></td></tr></table></figure>
+<h1 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h1><ul>
+<li>内部锁: synchronized 关键字(非公平锁)(由JVM自动获取和释放锁)</li>
+<li>显式锁: java.concurrent.locks.Lock 接口的实现类(支持公平锁, 也支持非公平锁)(人工显式获取和释放器)</li>
+</ul>
+<h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>锁的作用包括保障 <code>保障原子性</code>(通过互斥) , <code>保障可见性</code>(隐含着刷新处理器缓存的动作), <code>保障有序性</code>(同一时间, 只能一条线程能执行临界区的代码)</p>
+<p>前提: 访问同一组共享数据的多个线程必须同步在同一锁实例上.</p>
+<h2 id="可重入锁"><a href="#可重入锁" class="headerlink" title="可重入锁"></a>可重入锁</h2><p>如果一个线程持有一个锁的时候还能够继续成功申请该锁, 那么我们就称该锁是可重入的.(Reentrant), 否则就是非可重入的.</p>
+<h2 id="内部锁"><a href="#内部锁" class="headerlink" title="内部锁"></a>内部锁</h2><p>Java平台中的任何一个对象, 都有唯一一个与之关联的锁. 这种锁被称为监视器(monitor) 或 内部锁(Intrinsic Lock)</p>
+<h3 id="内部锁的调度"><a href="#内部锁的调度" class="headerlink" title="内部锁的调度"></a>内部锁的调度</h3><p>Java 虚拟机会为每个内部锁分配一个入口集(Entry Set), 用于记录等待获得相应内部锁的线程. 多个线程申请同一个锁的时候, 只有一个申请者能够成为该锁的持有线程, 其他申请者则会申请失败. 这些申请失败的线程并不会抛出异常, 而是会被暂停(BLOCKED)并被存入相应锁的入口集中等待再次申请锁的机会.</p>
+<p>注意, 内部锁是非公平调度的.</p>
+<h2 id="显式锁"><a href="#显式锁" class="headerlink" title="显式锁"></a>显式锁</h2><p><code>java.concurrent.locks.Lock</code> 接口的实现类.</p>
+<p>一般的使用范式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">final</span> Lock loc = ....;</div><div class="line"></div><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">	lock.lock()</div><div class="line">    ...</div><div class="line">&#125; <span class="keyword">finally</span> &#123;</div><div class="line">	lock.unlock()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="显式锁的调度"><a href="#显式锁的调度" class="headerlink" title="显式锁的调度"></a>显式锁的调度</h3><p><code>ReentrantLock</code> 既支持公平锁, 也支持非公平锁.(构造函数有个参数 boolean fair)</p>
+<p>公平锁保障锁的公平性往往是增加了线程的暂停与唤醒的可能性, 即增加了上下文切换为代价的.</p>
+<p>一般来说, 公平锁适合于锁被持有的时候相对较长或者线程申请锁的平均间隔相对较长的情况.</p>
+<p>通常, 公平锁的开销比非公平锁的开销要大, 因此显式锁默认使用的是非公平调试策略.</p>
+<h2 id="锁的适用场景"><a href="#锁的适用场景" class="headerlink" title="锁的适用场景"></a>锁的适用场景</h2><ul>
+<li>check-then-act 操作: 一个线程读取共享数据并在此基础上决定下一个操作是什么</li>
+<li>read-modify-write 操作: 一个线程读取共享数据并在此基础上更新该数据.</li>
+<li>多个线程对多个共享数据进行更新: 如果这些共享数据之间存在关联关系, 那么为了保障操作的原子性我们可以考虑使用锁.</li>
+</ul>
+<h2 id="线程同步底层助手-内存屏障"><a href="#线程同步底层助手-内存屏障" class="headerlink" title="线程同步底层助手: 内存屏障"></a>线程同步底层助手: 内存屏障</h2><h3 id="按可见性"><a href="#按可见性" class="headerlink" title="按可见性"></a>按可见性</h3><ul>
+<li>加载屏障(Load Barrier) : 刷新处理器缓存; Java 虚拟机会在 MonitorEnter(申请锁)对应的机器码指令之后临界区开始之前, 插入一个加载屏障, 这使得读线程的执行处理器能够将写线程对相应共享变量所做的更新从其他处理器同步到该处理器的高速缓存中.</li>
+<li>存储屏障(Store Barrier): 冲刷处理器缓存; Java 虚拟机在 MonitorExit(释放锁)对应的机器码指令之后, 插入一个存储屏障, 这就保障了写线程在释放锁之前在临界区中对共享变量所做的更新对读线程的执行处理器来说是可同步的.</li>
+</ul>
+<p>因此, 可见性的保障是通过写线程和读线程成对地使用存储屏障和加载屏障实现的.</p>
+<h3 id="按有序性"><a href="#按有序性" class="headerlink" title="按有序性"></a>按有序性</h3><ul>
+<li>获取屏障(Acquire Barrier) : 在一个读操作之后, 插入该内存屏障, 作用是禁止该读操作与其后的任何读写操作之间进行重排序.(MonitorEnter)</li>
+<li>释放屏障(Release Barrier) : 在一个写操作之前, 插入该内存屏障, 其作用是禁止该写操作与其前面的任何读写操作之间进行重排序.(MonitorExit)</li>
+</ul>
+<h2 id="重排序规则"><a href="#重排序规则" class="headerlink" title="重排序规则"></a>重排序规则</h2><ul>
+<li>临界区内的操作不允许被重排序到临界区之外(前或后)</li>
+<li>临界区内的操作之间允许被重排序</li>
+<li>临界区外(前或后)的操作之间, 可以被重排序</li>
+<li>锁申请与锁释放操作不能被重排序</li>
+<li>两个锁申请操作不能被重排序</li>
+<li>两个锁释放操作不能被重排序</li>
+<li>临界区外(前或后)的操作可以重排序到临界区内</li>
+</ul>
+<h2 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h2><p>它保证可见性和有序性, 原子性方面只保障读写本身的原子性, 但没有锁的排他性. 它的使用不会引起上下文切换(所以称为轻量级锁)</p>
+<p>但不保障对 volatile 变量操作一定具有原子性. 例如 volatile 修饰的变量 counter:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">counter = counter + <span class="number">1</span></div></pre></td></tr></table></figure>
+<p>用 volatile 修饰并不能保障这是原子性的.</p>
+<h3 id="volatile-与-数组和引用型变量"><a href="#volatile-与-数组和引用型变量" class="headerlink" title="volatile 与 数组和引用型变量"></a>volatile 与 数组和引用型变量</h3><p>注意, volatile 关键字只能够对数组引用本身的操作起作用, 而无法对数组元素的操作起操作.</p>
+<p>如果要对数据元素的读写也能够触发 volatile 关键字的作用, 则可以使用 <code>AtomicIntegerArray</code> 之类的类.</p>
+<p>对引用型变量也是, 只对该引用自身起作用, 而不会对它的实例/静态变量起作用.</p>
+<h3 id="volatile-使用场景"><a href="#volatile-使用场景" class="headerlink" title="volatile 使用场景"></a>volatile 使用场景</h3><ul>
+<li>volatile 变量作为状态标志</li>
+<li>使用 volatile 保障可见性</li>
+<li>使用 volatile 变量替代锁(但 volatile 关键字并非锁的替代品)</li>
+<li>使用 volatile 实现简易版读写锁</li>
+</ul>
+<h3 id="正确实现单例模式"><a href="#正确实现单例模式" class="headerlink" title="正确实现单例模式"></a>正确实现单例模式</h3><h4 id="版本1"><a href="#版本1" class="headerlink" title="版本1"></a>版本1</h4><p>check-then-act</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> hello;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123; <span class="comment">// 操作1</span></div><div class="line">            instance = <span class="keyword">new</span> Singleton(); <span class="comment">// 操作2</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> instance;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>它的问题: </p>
+<p>当 instance 的值还是 null 时, 线程T1 和T2 同时执行到操作1, 接着在T1执行操作2之前T2已经完成操作2, 下一时刻, 当T1执行到操作2时, 尽管 instance 实际上不为 null, 但是T1依然会再创建一个实例. 这就导致了多个实例的创建.</p>
+<h4 id="版本2"><a href="#版本2" class="headerlink" title="版本2"></a>版本2</h4><p>synchronized</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> hello;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">synchronized</span> (Singleton.class) &#123;</div><div class="line">            <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</div><div class="line">                instance = <span class="keyword">new</span> Singleton();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> instance;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>它的问题: 这固然是线程安全的, 但这意味着 getInstance 方法的任何一个执行线程都要申请锁这种开销.</p>
+<h4 id="版本3"><a href="#版本3" class="headerlink" title="版本3"></a>版本3</h4><p>double check</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> hello;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123; <span class="comment">// 操作1</span></div><div class="line">            <span class="keyword">synchronized</span> (Singleton.class) &#123;</div><div class="line">                <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123; <span class="comment">// 操作2</span></div><div class="line">                    instance = <span class="keyword">new</span> Singleton(); <span class="comment">// 操作3</span></div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> instance;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这看起来好像是没问题了. 但这种写法, 没考虑到重排序的因素. 操作3 可以分解为以下伪代码:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">objRef = allocate() // 子操作1</div><div class="line">invokeConstructor(objRef) //子操作2</div><div class="line">instance = objRef // 子操作3</div></pre></td></tr></table></figure>
+<p>根据重排序规则, 临界区内的操作之间允许被重排序. 因此 JIT 可能将上述的子操作重排序为: <code>1 -&gt; 3 -&gt; 2</code></p>
+<p>即在初始化对象之前将对象的引用写入实例变量 instance . 而操作1读取变量 instance 是没加锁的, 因此上述重排序对操作1的执行线程是有影响的: 该线程可能看到一人未初始化或未初始化完毕的实例, 即变量 instance 的值不为 null, 但该变量所引用的对象中的某些实例变量的变量值可能仍然是默认值, 而不是构造函数中设置的初始值. </p>
+<p>解决: 利用 volatile 来修饰 instance 即可.</p>
+<h4 id="版本4"><a href="#版本4" class="headerlink" title="版本4"></a>版本4</h4><p>基于静态内部类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> hello;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Holder</span> </span>&#123;</div><div class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Singleton instance = <span class="keyword">new</span> Singleton();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> Holder.instance;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>完美~</p>
+<h4 id="版本5"><a href="#版本5" class="headerlink" title="版本5"></a>版本5</h4><p>基于枚举</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> hello;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Singleton &#123;</div><div class="line">    INSTANCE;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">someService</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="comment">// do something</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>也很完美~</p>
+<h2 id="CAS"><a href="#CAS" class="headerlink" title="CAS"></a>CAS</h2><p>Compare and Swap</p>
+<p>它是一种对处理器指令的称呼. 例如下面的情景</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> hello;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Counter</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> counter;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">incre</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</div><div class="line">            counter++;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>使用 synchronized 固然可以保证线程安全, 但有点杀鸡用牛刀. 因为在所有同步机制中, 锁的开销是最大的.</li>
+<li>volatile 虽然可以保障读或写的原子性, 但不能保障(counter++) (read-modify-write) 这种操作是原子性的.</li>
+<li>最佳方式: CAS</li>
+</ul>
+<p>它可以由 CAS 转换为一种 <code>if-then-act</code> 的操作, 并且由处理器保障该操作的原子性.</p>
+<p>注意, 修改为 CAS 后, 仍然要使用 volatile 来修饰 counter . 因为 CAS 只是保障了共享变量更新这个操作的原子性, 它并不保障可见性. 例如, JDK 源码里的 <code>AtomicInteger</code> 里维护的一个 int 字段, 它的声明如下:</p>
+<p><code>private volatile int value;</code></p>
+<p>JDK 里提供的原子变量类有:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">基础类型</div><div class="line">AtomicBoolean</div><div class="line">AtomicInteger</div><div class="line">AtomicLong</div><div class="line"></div><div class="line"></div><div class="line">字段更新器</div><div class="line">AtomicIntegerFieldUpdater</div><div class="line">AtomicLongFieldUpdater</div><div class="line">AtomicReferenceFieldUpdater</div><div class="line"></div><div class="line">引用型</div><div class="line">AtomicMarkableReference</div><div class="line">AtomicReference</div><div class="line">AtomicStampedReference</div><div class="line"></div><div class="line">数组型</div><div class="line">AtomicIntegerArray</div><div class="line">AtomicLongArray</div><div class="line">AtomicReferenceArray</div></pre></td></tr></table></figure>
+<h2 id="对象的发布与逸出"><a href="#对象的发布与逸出" class="headerlink" title="对象的发布与逸出"></a>对象的发布与逸出</h2><p>多个线程共享变量还有其他途径, 它们被统称为对象发布(Publish) </p>
+<ol>
+<li>将对象引用存储到 public 变量中</li>
+<li>在非 private 方法中返回一个对象</li>
+<li>创建内部类</li>
+<li>通过方法调用将对象传递给外部方法</li>
+</ol>
+<h2 id="static"><a href="#static" class="headerlink" title="static"></a>static</h2><ul>
+<li>它能保证一个线程即使在未使用其他同步机制的情况下, 也总是可以读取到一个类的静态变量初始值(而不是默认值)</li>
+<li>对引用型静态变量, 还能保障一个线程读取到该变量的初始值时, 这个值所指向(引用)的对象已经初始化完毕</li>
+</ul>
+<h2 id="final"><a href="#final" class="headerlink" title="final"></a>final</h2><p>通过上面可以知道, 由于重排序, 一个线程读取到一个对象引用时, 该对象可能尚未初始化完毕, 即这些线程可能读取到该对象字段的默认值而不是初始值.</p>
+<p>在多线程环境下 final 关键字的特殊作用:</p>
+<ul>
+<li>当一个对象被发布到其他线程的时候, 该对象的所有 final 字段(实例变量) 都是初始化完毕的. 即其他线程读取这些字段的时候, 所读取到的值都是相应字段的初始值(而不是默认值). 而非 final 字段没有这种保障.</li>
+<li>对于引用型 final 字段, final 关键字还进一步确保该字段所引用的对象已经初始化完毕, 即这些线程读取该字段所引用的对象的各个字段时所读取到的值都是相应字段的初始值.</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> hello;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Counter</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> x;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> y;</div><div class="line"></div><div class="line">    <span class="keyword">static</span> Counter instance;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Counter</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.x = <span class="number">1</span>;</div><div class="line">        <span class="keyword">this</span>.y = <span class="number">2</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">writer</span><span class="params">()</span> </span>&#123;</div><div class="line">        instance = <span class="keyword">new</span> Counter();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">reader</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">final</span> Counter counter = instance;</div><div class="line">        <span class="keyword">if</span> (counter != <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="keyword">int</span> diff = counter.y - counter.x;</div><div class="line">            <span class="comment">// diff 可能为 1(2-1), 也可能为-1(0-1)</span></div><div class="line">            System.out.println(diff);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在JVM内联的优化下, 可能会将 Counter 的构造函数代码挪入 writer 方法:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">objRef = allocate() <span class="comment">//1 </span></div><div class="line">objRef.x = <span class="number">1</span>; <span class="comment">//2</span></div><div class="line">objRef.y = <span class="number">2</span> <span class="comment">//3</span></div><div class="line">instance = objRef <span class="comment">//4</span></div></pre></td></tr></table></figure>
+<p>操作 3 可能被JIT编译器, 处理器重排序到子操作4(对象发布)之后, 因此当其他线程通过共享变量 instance 看到对象引用 objRef 的时候, 该对象的实例变量 y 可能还没有被初始化, 即这些线程看到的 y 是默认值0, 而不是初始值2.</p>
+<p>而 JIT 编译器不会将构造器中对 final 字段的赋值操作重排序到操作4之后, 并且还要禁止处理器做这种重排序(通过在编译后的机器码中插入特殊的内存屏障来实现). 通过这种限定, Java 虚拟机, 处理器一起保障了对象 instance 被发布前, 其 final 字段 x 必然是被化完毕的.</p>
+<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><p>final 关键字只保障有序性, 即保障一个对象对外可见的时候, 该对象的 final 字段必然是初始化完毕的. final 关键字并不保障对象引用本身对外的可见性.</p>
+<h2 id="安全发布与逸出"><a href="#安全发布与逸出" class="headerlink" title="安全发布与逸出"></a>安全发布与逸出</h2><p>即对象以一种线程安全的方式被发布.</p>
+<p>安全发布的方式</p>
+<ul>
+<li>使用 static 关键字修饰引用该对象的变量</li>
+<li>使用 final 关键字修饰引用该对象的变量</li>
+<li>使用 volatile 关键字修饰引用该对象的变量</li>
+<li>使用 AtomicReference 来引用该对象</li>
+<li>对访问该对象的代码进行加锁</li>
+</ul>
+<p>逸出: 当一个对象的发布出现我们不期望的结果或者对象发布本身不是我们所期望的时候, 我们就称该对象逸出(Escape)</p>
+<p>逸出形式:</p>
+<ul>
+<li>在构造器中, 将 this 赋值给一个共享变量</li>
+<li>在构造器中, 将 this 作为方法参数传递给其他方法</li>
+<li>在构造器中, 启动基于匿名类的线程</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><table>
+<thead>
+<tr>
+<th>描述</th>
+<th>锁</th>
+<th>volatile</th>
+<th>CAS</th>
+<th>final</th>
+<th>static</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>原子性保障</td>
+<td>具备</td>
+<td>具备(2)</td>
+<td>具备</td>
+<td>不涉及</td>
+<td>不涉及</td>
+</tr>
+<tr>
+<td>可见性保障</td>
+<td>具备</td>
+<td>具备</td>
+<td>不具备</td>
+<td>不具备</td>
+<td>具备(3)</td>
+</tr>
+<tr>
+<td>有序性保障</td>
+<td>具备</td>
+<td>具备</td>
+<td>不涉及</td>
+<td>具备</td>
+<td>具备(4)</td>
+</tr>
+<tr>
+<td>上下文切换?</td>
+<td>可能(1)</td>
+<td>不会</td>
+<td>不会</td>
+<td>不会</td>
+<td>可能(5)</td>
+</tr>
+</tbody>
+</table>
+<p>备注 </p>
+<p>(1) 被争用的锁可能导致上下文切换<br>(2) 仅保障对 volatile 变量读/写操作本身的原子性<br>(3)(4) 仅在一个线程初次读取一个类的静态变量时起作用<br>(5) 静态变量所属类的初始化可能导致上下文切换</p>
+<h1 id="处理线程"><a href="#处理线程" class="headerlink" title="处理线程"></a>处理线程</h1><h2 id="分而治之"><a href="#分而治之" class="headerlink" title="分而治之"></a>分而治之</h2><ul>
+<li>基于数据的分割</li>
+<li>基于任务的分割</li>
+</ul>
+<h2 id="合理设置线程数"><a href="#合理设置线程数" class="headerlink" title="合理设置线程数"></a>合理设置线程数</h2><p><code>Amdahl&#39;s</code> 定律</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Smax = 1 / (P + (1-P)/N)</div></pre></td></tr></table></figure>
+<p>1: 为该程序的单线程运行时间<br>N: 为多线程版本总耗时<br>P: 串行部分的耗时比率</p>
+<p>N-&gt;无穷大的时候, Smax 趋向于 1/P , 最终决定多线程程序提速的因素, 是整个计算中串行部分的耗时比率P, 而不是线程数N! P越大, 即程序中不可并行化的部分所占越大, 那么提速就越小.</p>
+<h3 id="CPU-密集型任务"><a href="#CPU-密集型任务" class="headerlink" title="CPU 密集型任务"></a>CPU 密集型任务</h3><p>通常可以设置为 N(CPU数) + 1</p>
+<h3 id="IO-密集型任务"><a href="#IO-密集型任务" class="headerlink" title="IO 密集型任务"></a>IO 密集型任务</h3><p>优先设置为1, 然后向 2 * N(CPU数) 靠近.</p>
+<h3 id="混合型"><a href="#混合型" class="headerlink" title="混合型"></a>混合型</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">N(threads) = N(CPU) * U(CPU) * (1+ WT/ST)</div></pre></td></tr></table></figure>
+<p>U(CPU) 为目标CPU使用率[ 0&lt;U(CPU)&lt;=1 ]<br>WT: 等待时间<br>ST: 实际时间</p>
+<p>可以通过 jvisualvm 来计算.(WT = Total-Total(CPU), ST=Total(CPU))</p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

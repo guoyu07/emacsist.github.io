@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>MyBatis中使用 like 及注意事项 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="spring,mybatis," />
+  
+
+  <meta name="description" content="常见错误用法1select * from tbl where title like &apos;%#&amp;#123;title&amp;#125;%&apos; 这种写法, 会报以下类似错: 1Error setting non null for parameter #5 with JdbcType null . Try setting a different JdbcType for this parameter or a d">
+<meta name="keywords" content="spring,mybatis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MyBatis中使用 like 及注意事项">
+<meta property="og:url" content="https://emacsist.github.io/2018/01/19/MyBatis中使用-like-及注意事项/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="常见错误用法1select * from tbl where title like &apos;%#&amp;#123;title&amp;#125;%&apos; 这种写法, 会报以下类似错: 1Error setting non null for parameter #5 with JdbcType null . Try setting a different JdbcType for this parameter or a d">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://emacsist.github.io/img/mybatis-debug-1.png">
+<meta property="og:image" content="https://emacsist.github.io/img/mybatis-debug-2.png">
+<meta property="og:image" content="https://emacsist.github.io/img/mybatis-debug-3.png">
+<meta property="og:image" content="https://emacsist.github.io/img/mybatis-debug-4.png">
+<meta property="og:image" content="https://emacsist.github.io/img/mybatis-debug-5.png">
+<meta property="og:image" content="https://emacsist.github.io/img/mybatis-debug-6.png">
+<meta property="og:updated_time" content="2018-01-19T11:39:38.214Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MyBatis中使用 like 及注意事项">
+<meta name="twitter:description" content="常见错误用法1select * from tbl where title like &apos;%#&amp;#123;title&amp;#125;%&apos; 这种写法, 会报以下类似错: 1Error setting non null for parameter #5 with JdbcType null . Try setting a different JdbcType for this parameter or a d">
+<meta name="twitter:image" content="https://emacsist.github.io/img/mybatis-debug-1.png">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#常见错误用法"><span class="toc-text">常见错误用法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#正确用法"><span class="toc-text">正确用法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Why"><span class="toc-text">Why ?</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#最终问题"><span class="toc-text">最终问题</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-MyBatis中使用-like-及注意事项" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            MyBatis中使用 like 及注意事项
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2018.01.19</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#mybatis">
+        <span class="tag-name">mybatis</span>
+    <span class="tag-size">( 5 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#spring">
+        <span class="tag-name">spring</span>
+    <span class="tag-size">( 34 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h1 id="常见错误用法"><a href="#常见错误用法" class="headerlink" title="常见错误用法"></a>常见错误用法</h1><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select * from tbl where title like '%#&#123;title&#125;%'</div></pre></td></tr></table></figure>
+<p>这种写法, 会报以下类似错:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Error setting non null for parameter #5 with JdbcType null . Try setting a different JdbcType for this parameter or a different configuration property. Cause: java.sql.SQLException: Parameter index out of range (5 &gt; number of parameters, which is 4).</div></pre></td></tr></table></figure>
+<h1 id="正确用法"><a href="#正确用法" class="headerlink" title="正确用法"></a>正确用法</h1><p><a href="http://www.mybatis.org/mybatis-3/dynamic-sql.html" target="_blank" rel="noopener">mybatis</a></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"selectBlogsLike"</span> <span class="attr">resultType</span>=<span class="string">"Blog"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">bind</span> <span class="attr">name</span>=<span class="string">"pattern"</span> <span class="attr">value</span>=<span class="string">"'%' + _parameter.getTitle() + '%'"</span> /&gt;</span></div><div class="line">  SELECT * FROM BLOG</div><div class="line">  WHERE title LIKE #&#123;pattern&#125;</div><div class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></div></pre></td></tr></table></figure>
+<h1 id="Why"><a href="#Why" class="headerlink" title="Why ?"></a>Why ?</h1><p>知其然, 更要知其所以然. 这让我们来从源码调试发现原因</p>
+<p>这样子的写法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Mapper</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DemoMapper</span> </span>&#123;</div><div class="line">    <span class="function">String <span class="title">getById</span><span class="params">(@Param(<span class="string">"title"</span>)</span> String title)</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"getById"</span> <span class="attr">resultType</span>=<span class="string">"string"</span>&gt;</span></div><div class="line">  SELECT title from test_like WHERE title '%#&#123;title&#125;%';</div><div class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>运行时, 发现它报了以下错误</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">Caused by: org.apache.ibatis.type.TypeException: Error setting non null <span class="keyword">for</span> parameter <span class="comment">#1 with JdbcType null . Try setting a different JdbcType for this parameter or a different configuration property. Cause: org.apache.ibatis.type.TypeException: Error setting non null for parameter #1 with JdbcType null . Try setting a different JdbcType for this parameter or a different configuration property. Cause: java.sql.SQLException: Parameter index out of range (1 &gt; number of parameters, which is 0).</span></div><div class="line">	at org.apache.ibatis.type.BaseTypeHandler.setParameter(BaseTypeHandler.java:55) ~[mybatis-3.4.5.jar:3.4.5]</div><div class="line">	at org.apache.ibatis.scripting.defaults.DefaultParameterHandler.setParameters(DefaultParameterHandler.java:87) ~[mybatis-3.4.5.jar:3.4.5]</div><div class="line">	... 45 common frames omitted</div><div class="line">Caused by: org.apache.ibatis.type.TypeException: Error setting non null <span class="keyword">for</span> parameter <span class="comment">#1 with JdbcType null . Try setting a different JdbcType for this parameter or a different configuration property. Cause: java.sql.SQLException: Parameter index out of range (1 &gt; number of parameters, which is 0).</span></div><div class="line">	at org.apache.ibatis.type.BaseTypeHandler.setParameter(BaseTypeHandler.java:55) ~[mybatis-3.4.5.jar:3.4.5]</div><div class="line">	at org.apache.ibatis.type.UnknownTypeHandler.setNonNullParameter(UnknownTypeHandler.java:45) ~[mybatis-3.4.5.jar:3.4.5]</div><div class="line">	at org.apache.ibatis.type.BaseTypeHandler.setParameter(BaseTypeHandler.java:53) ~[mybatis-3.4.5.jar:3.4.5]</div><div class="line">	... 46 common frames omitted</div><div class="line">Caused by: java.sql.SQLException: Parameter index out of range (1 &gt; number of parameters, <span class="built_in">which</span> is 0).</div></pre></td></tr></table></figure>
+<p><img src="/img/mybatis-debug-1.png" alt="img"></p>
+<p>可以看到, 预先的处理后, mybatis 将 <code>&#39;%#{title}%&#39;</code> 替换为了 <code>&#39;%?%&#39;</code> , 并且将我们的命名的参数保存在了一个 <code>ParamMap</code> 对象中.</p>
+<p><img src="/img/mybatis-debug-2.png" alt="img"></p>
+<p>到这里时, 可以看到 mybatis 准备将我们的 <code>sql</code> 字段, 用 <code>parameterObject</code> 对象来进行参数替换.</p>
+<p><img src="/img/mybatis-debug-3.png" alt="img"></p>
+<p>到这里时, 就准备正式将相应的参数的值设置到SQL语句中.</p>
+<p><img src="/img/mybatis-debug-4.png" alt="img"><br><img src="/img/mybatis-debug-5.png" alt="img"></p>
+<h2 id="最终问题"><a href="#最终问题" class="headerlink" title="最终问题"></a>最终问题</h2><p>原来这并不关 MyBatis 的事, 这里到 jdbc 才开始报错的. 因为占位符 <code>&#39;%?%&#39;</code> 与 <code>%?%</code> 是不同的, 前面的是有引号括住 <code>?</code> , 后面一个是没引号括住的.</p>
+<p>可以看到, 正确的占位符时, 它的SQL是这样子的</p>
+<p><img src="/img/mybatis-debug-6.png" alt="img"></p>
+<p>这………_</p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

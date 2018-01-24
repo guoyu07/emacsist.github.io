@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Spring中是如何为 @Value 注入的 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="spring,IoC," />
+  
+
+  <meta name="description" content="本文讨论的 Spring 版本为 4.3.13-RELEASE  加载PropertySourcesPlaceholderConfigurer这个是当前Spring环境的所有 properties 的抽象. 可以看到它在 postProcessBeanFactory 时开始初始化整个 properties 输入源  每个输入源, 都保存在 org.springframework.core.env">
+<meta name="keywords" content="spring,IoC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring中是如何为 @Value 注入的">
+<meta property="og:url" content="https://emacsist.github.io/2018/01/22/Spring中是如何为-Value-注入的/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="本文讨论的 Spring 版本为 4.3.13-RELEASE  加载PropertySourcesPlaceholderConfigurer这个是当前Spring环境的所有 properties 的抽象. 可以看到它在 postProcessBeanFactory 时开始初始化整个 properties 输入源  每个输入源, 都保存在 org.springframework.core.env">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://emacsist.github.io/img/spring-properties-1.png">
+<meta property="og:image" content="https://emacsist.github.io/img/spring-properties-2.png">
+<meta property="og:image" content="https://emacsist.github.io/img/spring-properties-3.png">
+<meta property="og:image" content="https://emacsist.github.io/img/spring-properties-4.png">
+<meta property="og:updated_time" content="2018-01-22T08:18:47.494Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring中是如何为 @Value 注入的">
+<meta name="twitter:description" content="本文讨论的 Spring 版本为 4.3.13-RELEASE  加载PropertySourcesPlaceholderConfigurer这个是当前Spring环境的所有 properties 的抽象. 可以看到它在 postProcessBeanFactory 时开始初始化整个 properties 输入源  每个输入源, 都保存在 org.springframework.core.env">
+<meta name="twitter:image" content="https://emacsist.github.io/img/spring-properties-1.png">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#加载"><span class="toc-text">加载</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#PropertySourcesPlaceholderConfigurer"><span class="toc-text">PropertySourcesPlaceholderConfigurer</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#environmentProperties"><span class="toc-text">environmentProperties</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#localPropertySource"><span class="toc-text">localPropertySource</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#触发-localPropertySource-的例子"><span class="toc-text">触发 localPropertySource 的例子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#优先级的例子"><span class="toc-text">优先级的例子</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#构建-PropertySourcesPropertyResolver"><span class="toc-text">构建 PropertySourcesPropertyResolver</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是-local-properties"><span class="toc-text">什么是 local properties</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#进行实际的注入"><span class="toc-text">进行实际的注入</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Spring中是如何为-Value-注入的" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Spring中是如何为 @Value 注入的
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2018.01.22</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#IoC">
+        <span class="tag-name">IoC</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#spring">
+        <span class="tag-name">spring</span>
+    <span class="tag-size">( 34 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <blockquote>
+<p>本文讨论的 Spring 版本为 4.3.13-RELEASE</p>
+</blockquote>
+<h1 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h1><h2 id="PropertySourcesPlaceholderConfigurer"><a href="#PropertySourcesPlaceholderConfigurer" class="headerlink" title="PropertySourcesPlaceholderConfigurer"></a>PropertySourcesPlaceholderConfigurer</h2><p>这个是当前Spring环境的所有 <code>properties</code> 的抽象.</p>
+<p>可以看到它在 <code>postProcessBeanFactory</code> 时开始初始化整个 <code>properties</code> 输入源</p>
+<p><img src="/img/spring-properties-1.png" alt="img"></p>
+<p>每个输入源, 都保存在 <code>org.springframework.core.env.MutablePropertySources</code>对象中, 该对象内部使用 <code>private final List&lt;PropertySource&lt;?&gt;&gt; propertySourceList = new CopyOnWriteArrayList&lt;PropertySource&lt;?&gt;&gt;();</code> 来维护.</p>
+<p>它的源码如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postProcessBeanFactory</span><span class="params">(ConfigurableListableBeanFactory beanFactory)</span> <span class="keyword">throws</span> BeansException </span>&#123;</div><div class="line">	<span class="keyword">if</span> (<span class="keyword">this</span>.propertySources == <span class="keyword">null</span>) &#123;</div><div class="line">		<span class="keyword">this</span>.propertySources = <span class="keyword">new</span> MutablePropertySources();</div><div class="line">		<span class="keyword">if</span> (<span class="keyword">this</span>.environment != <span class="keyword">null</span>) &#123;</div><div class="line">			<span class="keyword">this</span>.propertySources.addLast(</div><div class="line">				<span class="keyword">new</span> PropertySource&lt;Environment&gt;(ENVIRONMENT_PROPERTIES_PROPERTY_SOURCE_NAME, <span class="keyword">this</span>.environment) &#123;</div><div class="line">					<span class="meta">@Override</span></div><div class="line">					<span class="function"><span class="keyword">public</span> String <span class="title">getProperty</span><span class="params">(String key)</span> </span>&#123;</div><div class="line">						<span class="keyword">return</span> <span class="keyword">this</span>.source.getProperty(key);</div><div class="line">					&#125;</div><div class="line">				&#125;</div><div class="line">			);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			PropertySource&lt;?&gt; localPropertySource =</div><div class="line">					<span class="keyword">new</span> PropertiesPropertySource(LOCAL_PROPERTIES_PROPERTY_SOURCE_NAME, mergeProperties());</div><div class="line">			<span class="keyword">if</span> (<span class="keyword">this</span>.localOverride) &#123;</div><div class="line">				<span class="keyword">this</span>.propertySources.addFirst(localPropertySource);</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">else</span> &#123;</div><div class="line">				<span class="keyword">this</span>.propertySources.addLast(localPropertySource);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">catch</span> (IOException ex) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> BeanInitializationException(<span class="string">"Could not load properties"</span>, ex);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	processProperties(beanFactory, <span class="keyword">new</span> PropertySourcesPropertyResolver(<span class="keyword">this</span>.propertySources));</div><div class="line">	<span class="keyword">this</span>.appliedPropertySources = <span class="keyword">this</span>.propertySources;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="environmentProperties"><a href="#environmentProperties" class="headerlink" title="environmentProperties"></a>environmentProperties</h3><ul>
+<li>application.properties </li>
+<li>在 application.properties 中通过 <code>spring.profiles.include, spring.profiles.active</code> 等方式的</li>
+<li>或在代码中使用 <code>@PropertySource(value = {&quot;classpath:hello.properties&quot;}), @Configuration</code> 注解的, 都属于 <code>environmentProperties</code></li>
+</ul>
+<p><code>environment</code> 对象, 是由Spring框架基础设置进来的.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">this</span>.propertySources.addLast(</div><div class="line">	<span class="keyword">new</span> PropertySource&lt;Environment&gt;(ENVIRONMENT_PROPERTIES_PROPERTY_SOURCE_NAME, <span class="keyword">this</span>.environment) &#123;</div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> String <span class="title">getProperty</span><span class="params">(String key)</span> </span>&#123;</div><div class="line">			<span class="keyword">return</span> <span class="keyword">this</span>.source.getProperty(key);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">);</div></pre></td></tr></table></figure>
+<p>通过源码可以看到, 刚开始时, <code>propertySources</code> 是空的, 所以创建了一个 <code>MutablePropertySources</code> 对象. 然后将当前环境相关的 <code>properties</code> 添加到该对象中, 即:</p>
+<p><img src="/img/spring-properties-2.png" alt="img"></p>
+<h3 id="localPropertySource"><a href="#localPropertySource" class="headerlink" title="localPropertySource"></a>localPropertySource</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">PropertySource&lt;?&gt; localPropertySource = <span class="keyword">new</span> PropertiesPropertySource(LOCAL_PROPERTIES_PROPERTY_SOURCE_NAME, mergeProperties());</div></pre></td></tr></table></figure>
+<p>它会根据 <code>localPropertySource</code> 优先级(通过 <code>localOverride</code> 来判断, 默认是 <code>false</code>) 来决定是添加到列表的开头还是结尾.</p>
+<p>加载完成后, 就可以看到有如下的输入源了</p>
+<p><img src="/img/spring-properties-3.png" alt="img"></p>
+<h4 id="触发-localPropertySource-的例子"><a href="#触发-localPropertySource-的例子" class="headerlink" title="触发 localPropertySource 的例子"></a>触发 localPropertySource 的例子</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.example.value.demo;</div><div class="line"></div><div class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</div><div class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</div><div class="line"><span class="keyword">import</span> org.springframework.context.support.PropertySourcesPlaceholderConfigurer;</div><div class="line"><span class="keyword">import</span> org.springframework.core.io.ClassPathResource;</div><div class="line"></div><div class="line"><span class="meta">@Configuration</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LocalPropertiesDemo</span> </span>&#123;</div><div class="line">    <span class="meta">@Bean</span></div><div class="line">    <span class="function"><span class="keyword">public</span> PropertySourcesPlaceholderConfigurer <span class="title">propertyPlaceholderConfigurer</span><span class="params">()</span> </span>&#123;</div><div class="line">        PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer = <span class="keyword">new</span> PropertySourcesPlaceholderConfigurer();</div><div class="line">        propertyPlaceholderConfigurer.setLocation(<span class="keyword">new</span> ClassPathResource(<span class="string">"mylocal.properties"</span>));</div><div class="line">        <span class="keyword">return</span> propertyPlaceholderConfigurer;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="/img/spring-properties-4.png" alt="img"></p>
+<h4 id="优先级的例子"><a href="#优先级的例子" class="headerlink" title="优先级的例子"></a>优先级的例子</h4><p><code>application.properties</code> </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">local.value=from <span class="built_in">local</span> application.properties</div></pre></td></tr></table></figure>
+<p><code>mylocal.properties</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">local.value=from <span class="built_in">local</span> mylocal.properties</div></pre></td></tr></table></figure>
+<p>不设置 <code>PropertySourcesPlaceholderConfigurer</code> 的 <code>setLocalOverride(true)</code> , 则结果:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">curl http://localhost:8080/hello</div><div class="line">from <span class="built_in">local</span> application.properties</div></pre></td></tr></table></figure>
+<p>设置 <code>setLocalOverride(true)</code> 时</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.example.value.demo;</div><div class="line"></div><div class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</div><div class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</div><div class="line"><span class="keyword">import</span> org.springframework.context.support.PropertySourcesPlaceholderConfigurer;</div><div class="line"><span class="keyword">import</span> org.springframework.core.io.ClassPathResource;</div><div class="line"></div><div class="line"><span class="meta">@Configuration</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LocalPropertiesDemo</span> </span>&#123;</div><div class="line">    <span class="meta">@Bean</span></div><div class="line">    <span class="function"><span class="keyword">public</span> PropertySourcesPlaceholderConfigurer <span class="title">propertyPlaceholderConfigurer</span><span class="params">()</span> </span>&#123;</div><div class="line">        PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer = <span class="keyword">new</span> PropertySourcesPlaceholderConfigurer();</div><div class="line">        propertyPlaceholderConfigurer.setLocation(<span class="keyword">new</span> ClassPathResource(<span class="string">"mylocal.properties"</span>));</div><div class="line">        propertyPlaceholderConfigurer.setLocalOverride(<span class="keyword">true</span>);</div><div class="line">        <span class="keyword">return</span> propertyPlaceholderConfigurer;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>则结果:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">curl http://localhost:8080/hello</div><div class="line">from <span class="built_in">local</span> mylocal.properties</div></pre></td></tr></table></figure>
+<p>总结</p>
+<ul>
+<li>默认情况下, environmentProperties 优先级大于 localPropertySource</li>
+<li>当设置了 setLocalOverride 为 true 时, 则 localPropertySource 优先级大于 environmentProperties</li>
+</ul>
+<h2 id="构建-PropertySourcesPropertyResolver"><a href="#构建-PropertySourcesPropertyResolver" class="headerlink" title="构建 PropertySourcesPropertyResolver"></a>构建 PropertySourcesPropertyResolver</h2><p>根据上面的加载完 <code>propertySources</code> 后, 就构建解析器, 最后进行相应的 Bean 处理了.</p>
+<p><code>processProperties(beanFactory, new PropertySourcesPropertyResolver(this.propertySources));</code></p>
+<h2 id="什么是-local-properties"><a href="#什么是-local-properties" class="headerlink" title="什么是 local properties"></a>什么是 local properties</h2><p>local properties 就是那些通过基于 <code>PropertiesLoaderSupport</code> 的API来手动或编程的方式配置的 properties . 例如 (setProperties, setLocations 等).</p>
+<h1 id="进行实际的注入"><a href="#进行实际的注入" class="headerlink" title="进行实际的注入"></a>进行实际的注入</h1><p>这就要回到 Spring 框架中 IoC 容器的处理了, 这里只是描述了一个简单的 <code>@Value</code> 是如何进行注入的, 其他的 <code>@Autowired</code> 等依赖注入是同理的.</p>
+<p>Spring 框架中, 通过注解来进行注入的处理器, 是 <code>org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor</code></p>
+<p>通过名字, 也可以大概猜测它的意思了, 就是 <code>Autowired</code> 相关的注解处理器(默认情况下, 它也会处理 <code>@Value</code>).</p>
+<p>实际处理的代码源码(源文件的 599 行开始)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">AutowiredFieldElement</span> <span class="keyword">extends</span> <span class="title">InjectionMetadata</span>.<span class="title">InjectedElement</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">boolean</span> required;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> cached = <span class="keyword">false</span>;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">volatile</span> Object cachedFieldValue;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">AutowiredFieldElement</span><span class="params">(Field field, <span class="keyword">boolean</span> required)</span> </span>&#123;</div><div class="line">		<span class="keyword">super</span>(field, <span class="keyword">null</span>);</div><div class="line">		<span class="keyword">this</span>.required = required;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">inject</span><span class="params">(Object bean, String beanName, PropertyValues pvs)</span> <span class="keyword">throws</span> Throwable </span>&#123;</div><div class="line">		Field field = (Field) <span class="keyword">this</span>.member;</div><div class="line">       &#125;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>可以大概看到 <code>inject</code> 方法的处理, 参数分别为(当前的 bean 对象, bean 的名字, 属性值)</p>
+<p>然后通过 <code>beanFactory</code> 来将依赖的值解析出来 <code>value = beanFactory.resolveDependency(desc, beanName, autowiredBeanNames, typeConverter);</code> 最后, 通过反射将该值”注”进去</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (value != <span class="keyword">null</span>) &#123;</div><div class="line">	ReflectionUtils.makeAccessible(field);</div><div class="line">	field.set(bean, value);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
