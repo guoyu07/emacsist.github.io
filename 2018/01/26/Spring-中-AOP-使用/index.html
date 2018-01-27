@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Spring 中 AOP 使用 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="java,spring,aop," />
+  
+
+  <meta name="description" content="开启12345@Configuration@EnableAspectJAutoProxypublic class AppConfig &amp;#123;&amp;#125; 或xml中配置 1&amp;lt;aop:aspectj-autoproxy/&amp;gt; 声明一个 Aspect1234@Aspect@Componentpublic class NotVeryUsefulAspect &amp;#123;&amp;#125; 声明">
+<meta name="keywords" content="java,spring,aop">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring 中 AOP 使用">
+<meta property="og:url" content="https://emacsist.github.io/2018/01/26/Spring-中-AOP-使用/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="开启12345@Configuration@EnableAspectJAutoProxypublic class AppConfig &amp;#123;&amp;#125; 或xml中配置 1&amp;lt;aop:aspectj-autoproxy/&amp;gt; 声明一个 Aspect1234@Aspect@Componentpublic class NotVeryUsefulAspect &amp;#123;&amp;#125; 声明">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-01-26T10:32:54.185Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring 中 AOP 使用">
+<meta name="twitter:description" content="开启12345@Configuration@EnableAspectJAutoProxypublic class AppConfig &amp;#123;&amp;#125; 或xml中配置 1&amp;lt;aop:aspectj-autoproxy/&amp;gt; 声明一个 Aspect1234@Aspect@Componentpublic class NotVeryUsefulAspect &amp;#123;&amp;#125; 声明">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#开启"><span class="toc-text">开启</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#声明一个-Aspect"><span class="toc-text">声明一个 Aspect</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#声明一个切点"><span class="toc-text">声明一个切点</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#组合切点"><span class="toc-text">组合切点</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#增强"><span class="toc-text">增强</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Before"><span class="toc-text">Before</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AfterReturning"><span class="toc-text">AfterReturning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AfterThrowing"><span class="toc-text">AfterThrowing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#After"><span class="toc-text">After</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Around"><span class="toc-text">Around</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#例子"><span class="toc-text">例子</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Spring-中-AOP-使用" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Spring 中 AOP 使用
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2018.01.26</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#aop">
+        <span class="tag-name">aop</span>
+    <span class="tag-size">( 2 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 122 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#spring">
+        <span class="tag-name">spring</span>
+    <span class="tag-size">( 38 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h1 id="开启"><a href="#开启" class="headerlink" title="开启"></a>开启</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Configuration</span></div><div class="line"><span class="meta">@EnableAspectJAutoProxy</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppConfig</span> </span>&#123;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>或xml中配置</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">aop:aspectj-autoproxy</span>/&gt;</span></div></pre></td></tr></table></figure>
+<h1 id="声明一个-Aspect"><a href="#声明一个-Aspect" class="headerlink" title="声明一个 Aspect"></a>声明一个 Aspect</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Aspect</span></div><div class="line"><span class="meta">@Component</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NotVeryUsefulAspect</span> </span>&#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="声明一个切点"><a href="#声明一个切点" class="headerlink" title="声明一个切点"></a>声明一个切点</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Pointcut</span>(<span class="string">"execution(* transfer(..))"</span>)<span class="comment">// the pointcut expression</span></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">anyOldTransfer</span><span class="params">()</span> </span>&#123;&#125;<span class="comment">// the pointcut signature</span></div></pre></td></tr></table></figure>
+<p>支持的切点类型</p>
+<ul>
+<li>execution</li>
+<li>within</li>
+<li>this</li>
+<li>target</li>
+<li>args</li>
+<li>@target</li>
+<li>@args</li>
+<li>@within</li>
+<li>@annotation</li>
+</ul>
+<h2 id="组合切点"><a href="#组合切点" class="headerlink" title="组合切点"></a>组合切点</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Pointcut</span>(<span class="string">"execution(public * *(..))"</span>)</div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">anyPublicOperation</span><span class="params">()</span> </span>&#123;&#125;</div><div class="line"></div><div class="line"><span class="meta">@Pointcut</span>(<span class="string">"within(com.xyz.someapp.trading..*)"</span>)</div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">inTrading</span><span class="params">()</span> </span>&#123;&#125;</div><div class="line"></div><div class="line"><span class="meta">@Pointcut</span>(<span class="string">"anyPublicOperation() &amp;&amp; inTrading()"</span>)</div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">tradingOperation</span><span class="params">()</span> </span>&#123;&#125;</div></pre></td></tr></table></figure>
+<p><a href="https://docs.spring.io/spring/docs/4.3.12.RELEASE/spring-framework-reference/html/aop.html" target="_blank" rel="noopener">spring doc</a></p>
+<h1 id="增强"><a href="#增强" class="headerlink" title="增强"></a>增强</h1><h2 id="Before"><a href="#Before" class="headerlink" title="Before"></a>Before</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Aspect</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BeforeExample</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="meta">@Before</span>(<span class="string">"com.xyz.myapp.SystemArchitecture.dataAccessOperation()"</span>)</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doAccessCheck</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="comment">// ...</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="AfterReturning"><a href="#AfterReturning" class="headerlink" title="AfterReturning"></a>AfterReturning</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@AfterReturning</span>(<span class="string">"com.xyz.myapp.SystemArchitecture.dataAccessOperation()"</span>)</div><div class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doAccessCheck</span><span class="params">()</span> </span>&#123;</div><div class="line">       <span class="comment">// ...</span></div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>获取返回的对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@AfterReturning</span>(</div><div class="line">    pointcut=<span class="string">"com.xyz.myapp.SystemArchitecture.dataAccessOperation()"</span>,</div><div class="line">    returning=<span class="string">"retVal"</span>)</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doAccessCheck</span><span class="params">(Object retVal)</span> </span>&#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="AfterThrowing"><a href="#AfterThrowing" class="headerlink" title="AfterThrowing"></a>AfterThrowing</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@AfterThrowing</span>(<span class="string">"com.xyz.myapp.SystemArchitecture.dataAccessOperation()"</span>)</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doRecoveryActions</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">&#125;</div><div class="line"><span class="meta">@AfterThrowing</span>(</div><div class="line">    pointcut=<span class="string">"com.xyz.myapp.SystemArchitecture.dataAccessOperation()"</span>,</div><div class="line">    throwing=<span class="string">"ex"</span>)</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doRecoveryActions</span><span class="params">(DataAccessException ex)</span> </span>&#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="After"><a href="#After" class="headerlink" title="After"></a>After</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@After</span>(<span class="string">"com.xyz.myapp.SystemArchitecture.dataAccessOperation()"</span>)</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doReleaseLock</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="Around"><a href="#Around" class="headerlink" title="Around"></a>Around</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Around</span>(<span class="string">"com.xyz.myapp.SystemArchitecture.businessService()"</span>)</div><div class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">doBasicProfiling</span><span class="params">(ProceedingJoinPoint pjp)</span> <span class="keyword">throws</span> Throwable </span>&#123;</div><div class="line">    <span class="comment">// start stopwatch</span></div><div class="line">    Object retVal = pjp.proceed();</div><div class="line">    <span class="comment">// stop stopwatch</span></div><div class="line">    <span class="keyword">return</span> retVal;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.example.value.demo;</div><div class="line"></div><div class="line"><span class="keyword">import</span> org.aspectj.lang.ProceedingJoinPoint;</div><div class="line"><span class="keyword">import</span> org.aspectj.lang.annotation.Around;</div><div class="line"><span class="keyword">import</span> org.aspectj.lang.annotation.Aspect;</div><div class="line"><span class="keyword">import</span> org.aspectj.lang.annotation.Pointcut;</div><div class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.util.Arrays;</div><div class="line"></div><div class="line"><span class="meta">@Aspect</span></div><div class="line"><span class="meta">@Component</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LogAspectJ</span> </span>&#123;</div><div class="line">    <span class="meta">@Pointcut</span>(<span class="string">"execution(* com.example.value.demo.HelloService*.*(..))"</span>)</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">publicPoint</span><span class="params">()</span> </span>&#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Around</span>(<span class="string">"publicPoint()"</span>)</div><div class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">doBasicProfiling</span><span class="params">(ProceedingJoinPoint pjp)</span> <span class="keyword">throws</span> Throwable </span>&#123;</div><div class="line">        <span class="comment">// start stopwatch</span></div><div class="line">        System.out.println(<span class="string">"调用方法 : "</span> + pjp.getSignature().toLongString());</div><div class="line">        System.out.println(<span class="string">"方法参数 : "</span> + Arrays.toString(pjp.getArgs()));</div><div class="line">        Object retVal = pjp.proceed();</div><div class="line">        <span class="comment">// stop stopwatch</span></div><div class="line">        System.out.println(<span class="string">"方法返回 : "</span> + retVal);</div><div class="line">        <span class="keyword">return</span> retVal;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>也可以加上人方法调用前和调用后的时间, 然后就可以统计该方法的执行时间了~</p>
+</blockquote>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

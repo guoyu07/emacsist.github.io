@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Swagger2 + SpringMVC 配置及使用 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="spring,swagger," />
+  
+
+  <meta name="description" content="配置12345678910&amp;lt;dependency&amp;gt;	&amp;lt;groupId&amp;gt;io.springfox&amp;lt;/groupId&amp;gt;	&amp;lt;artifactId&amp;gt;springfox-swagger2&amp;lt;/artifactId&amp;gt;	&amp;lt;version&amp;gt;2.6.1&amp;lt;/version&amp;gt;&amp;lt;/dependency&amp;gt;&amp;lt;dependenc">
+<meta name="keywords" content="spring,swagger">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Swagger2 + SpringMVC 配置及使用">
+<meta property="og:url" content="https://emacsist.github.io/2018/01/25/Swagger2-SpringMVC-配置及使用/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="配置12345678910&amp;lt;dependency&amp;gt;	&amp;lt;groupId&amp;gt;io.springfox&amp;lt;/groupId&amp;gt;	&amp;lt;artifactId&amp;gt;springfox-swagger2&amp;lt;/artifactId&amp;gt;	&amp;lt;version&amp;gt;2.6.1&amp;lt;/version&amp;gt;&amp;lt;/dependency&amp;gt;&amp;lt;dependenc">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-01-25T09:36:37.348Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Swagger2 + SpringMVC 配置及使用">
+<meta name="twitter:description" content="配置12345678910&amp;lt;dependency&amp;gt;	&amp;lt;groupId&amp;gt;io.springfox&amp;lt;/groupId&amp;gt;	&amp;lt;artifactId&amp;gt;springfox-swagger2&amp;lt;/artifactId&amp;gt;	&amp;lt;version&amp;gt;2.6.1&amp;lt;/version&amp;gt;&amp;lt;/dependency&amp;gt;&amp;lt;dependenc">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#配置"><span class="toc-text">配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#在非-spring-boot-环境下配置"><span class="toc-text">在非 spring boot 环境下配置</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#使用"><span class="toc-text">使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#类级别"><span class="toc-text">类级别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方法级别"><span class="toc-text">方法级别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ApiOperation"><span class="toc-text">@ApiOperation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ApiImplicitParams-或-ApiImplicitParam"><span class="toc-text">@ApiImplicitParams 或 @ApiImplicitParam</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#注意"><span class="toc-text">注意</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Swagger2-SpringMVC-配置及使用" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Swagger2 + SpringMVC 配置及使用
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2018.01.25</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#spring">
+        <span class="tag-name">spring</span>
+    <span class="tag-size">( 38 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#swagger">
+        <span class="tag-name">swagger</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.springfox<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>springfox-swagger2<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">version</span>&gt;</span>2.6.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.springfox<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>springfox-swagger-ui<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">version</span>&gt;</span>2.6.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>注意, 是没有 <code>@Configuration</code> . 加了的话可能会报以下错误</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">NoSuchBeanDefinitionException: No qualifying bean of <span class="built_in">type</span> [java.util.List] found <span class="keyword">for</span> dependency [java.util.List&lt;org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@EnableSwagger</span>2</div><div class="line"><span class="meta">@Configuration</span></div><div class="line"><span class="meta">@EnableWebMvc</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SwaggerConfig</span> </span>&#123;</div><div class="line">    <span class="meta">@Bean</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Docket <span class="title">api</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2)</div><div class="line">                .select()</div><div class="line">                .apis(RequestHandlerSelectors.any())</div><div class="line">                .paths(PathSelectors.any())</div><div class="line">                .build();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">mvc:annotation-driven</span>/&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">mvc:resources</span> <span class="attr">mapping</span>=<span class="string">"swagger-ui.html"</span> <span class="attr">location</span>=<span class="string">"classpath:/META-INF/resources/"</span>/&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">mvc:resources</span> <span class="attr">mapping</span>=<span class="string">"/webjars/**"</span> <span class="attr">location</span>=<span class="string">"classpath:/META-INF/resources/webjars/"</span>/&gt;</span></div></pre></td></tr></table></figure>
+<p>访问 <code>http://host:port/web-app-name/swagger-ui.html</code></p>
+<h2 id="在非-spring-boot-环境下配置"><a href="#在非-spring-boot-环境下配置" class="headerlink" title="在非 spring boot 环境下配置"></a>在非 spring boot 环境下配置</h2><p><a href="http://springfox.github.io/springfox/docs/current/#q13" target="_blank" rel="noopener">doc</a></p>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="类级别"><a href="#类级别" class="headerlink" title="类级别"></a>类级别</h2><p><code>@Api</code> 一般用来描述某一类 api. 例子:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 广告组相关接口</div><div class="line"> */</div><div class="line"><span class="meta">@Controller</span></div><div class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/adgroup"</span>)</div><div class="line"><span class="meta">@Api</span>(value = <span class="string">"广告组相关的 api"</span>, tags = &#123;<span class="string">"adGroup"</span>, <span class="string">"广告组"</span>&#125;)</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AdGroupController</span> </span>&#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="方法级别"><a href="#方法级别" class="headerlink" title="方法级别"></a>方法级别</h2><p>某个具体的 URL 的完整描述</p>
+<h3 id="ApiOperation"><a href="#ApiOperation" class="headerlink" title="@ApiOperation"></a>@ApiOperation</h3><p>描述该方法是干什么的.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@ApiOperation</span>(value = <span class="string">"添加广告组"</span>)</div></pre></td></tr></table></figure>
+<h3 id="ApiImplicitParams-或-ApiImplicitParam"><a href="#ApiImplicitParams-或-ApiImplicitParam" class="headerlink" title="@ApiImplicitParams 或 @ApiImplicitParam"></a>@ApiImplicitParams 或 @ApiImplicitParam</h3><p>描述该方法中, 各个参数(多个参数时, 使用 <code>@ApiImplicitParams</code>, 单个参数时, 可以简化为 <code>@ApiImplicitParam</code>)</p>
+<p>例如</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@ApiImplicitParams</span>(&#123;</div><div class="line">        <span class="meta">@ApiImplicitParam</span>(name = <span class="string">"groupName"</span>, value = <span class="string">"广告组名"</span>, required = <span class="keyword">true</span>, paramType = ParameterTools.FORM, dataTypeClass = String.class),</div><div class="line">        <span class="meta">@ApiImplicitParam</span>(name = <span class="string">"memo"</span>, value = <span class="string">"备注"</span>, paramType = ParameterTools.FORM, dataTypeClass = String.class),</div><div class="line">        <span class="meta">@ApiImplicitParam</span>(name = <span class="string">"platform"</span>, value = <span class="string">"所属平台."</span> + AllowableValuesTools.PLATFORMS_DES, paramType = ParameterTools.FORM, dataType = <span class="string">"int"</span>, defaultValue = <span class="string">"1"</span>, allowableValues = AllowableValuesTools.PLATFORMS),</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p><code>paraType</code> : 为参数类型, 看文档可知它允许的值为: (我写了个常量类, 方便使用)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String FORM = <span class="string">"form"</span>;</div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String QUERY = <span class="string">"query"</span>;</div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String PATH = <span class="string">"path"</span>;</div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String BODY = <span class="string">"body"</span>;</div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String HEADER = <span class="string">"header"</span>;</div></pre></td></tr></table></figure>
+<p>默认情况下, 它会自动与Spring中的注解对应:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">header 对应注解：@RequestHeader</div><div class="line">query 对应注解：@RequestParam</div><div class="line">path 对应注解: @PathVariable</div><div class="line">body 对应注解: @RequestBody</div></pre></td></tr></table></figure>
+<p><code>dataType</code> 或 <code>dataTypeClass</code> : 表示参数的数据类型</p>
+<p><code>defaultValue</code> 表示参数的默认值</p>
+<p><code>allowableValues</code> 表示参数的允许值(用逗号分隔)</p>
+<h1 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h1><p>最好在 Controller 中, 指定接收或返回的对象, 而不要笼统Object 或 <code>Map&lt;&gt;</code> 之类的 <code>抽象</code> 类. 不然没法使用 <code>@ApiModel</code> 之类的注解.</p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
