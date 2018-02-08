@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>EK + filebeat 平台搭建及使用 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="elk,filebeat," />
+  
+
+  <meta name="description" content="ES依赖: &amp;gt;=JDK8  下载完直接解压即可. 开启外网IP访问1234vim config/elasticsearch.yml修改 network.host 为 network.host: 0.0.0.0  一般不直接使用外网配置, 可以使用 nginx 代理, 然后在Nginx 加个简单的认证配置即可. 建议直接写明局域网的IP地址, 然后通过 nginx 代理即可.  访问地址: I">
+<meta name="keywords" content="elk,filebeat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EK + filebeat 平台搭建及使用">
+<meta property="og:url" content="https://emacsist.github.io/2018/02/05/EK-filebeat-平台搭建及使用/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="ES依赖: &amp;gt;=JDK8  下载完直接解压即可. 开启外网IP访问1234vim config/elasticsearch.yml修改 network.host 为 network.host: 0.0.0.0  一般不直接使用外网配置, 可以使用 nginx 代理, 然后在Nginx 加个简单的认证配置即可. 建议直接写明局域网的IP地址, 然后通过 nginx 代理即可.  访问地址: I">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-02-05T04:45:06.906Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="EK + filebeat 平台搭建及使用">
+<meta name="twitter:description" content="ES依赖: &amp;gt;=JDK8  下载完直接解压即可. 开启外网IP访问1234vim config/elasticsearch.yml修改 network.host 为 network.host: 0.0.0.0  一般不直接使用外网配置, 可以使用 nginx 代理, 然后在Nginx 加个简单的认证配置即可. 建议直接写明局域网的IP地址, 然后通过 nginx 代理即可.  访问地址: I">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">Posts List</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ES"><span class="toc-text">ES</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#开启外网IP访问"><span class="toc-text">开启外网IP访问</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nginx-代理-认证"><span class="toc-text">nginx 代理 + 认证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#启动报错"><span class="toc-text">启动报错</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Kibana"><span class="toc-text">Kibana</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#配置"><span class="toc-text">配置</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#配置-1"><span class="toc-text">配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Filebeat"><span class="toc-text">Filebeat</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#下载"><span class="toc-text">下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#修改配置文件"><span class="toc-text">修改配置文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#为不同的类型日志-加上不同的标识"><span class="toc-text">为不同的类型日志, 加上不同的标识</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置不同的索引名"><span class="toc-text">配置不同的索引名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#启动"><span class="toc-text">启动</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#整合"><span class="toc-text">整合</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#创建仪表盘"><span class="toc-text">创建仪表盘</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#报警"><span class="toc-text">报警</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#微信发送消息代码"><span class="toc-text">微信发送消息代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实际监控代码"><span class="toc-text">实际监控代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#setup-py-依赖配置"><span class="toc-text">setup.py 依赖配置</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-EK-filebeat-平台搭建及使用" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            EK + filebeat 平台搭建及使用
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2018.02.05</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#elk">
+        <span class="tag-name">elk</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#filebeat">
+        <span class="tag-name">filebeat</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h1 id="ES"><a href="#ES" class="headerlink" title="ES"></a>ES</h1><p>依赖: <code>&gt;=JDK8</code> </p>
+<p><a href="https://www.elastic.co/downloads/elasticsearch" target="_blank" rel="noopener">下载</a>完直接解压即可.</p>
+<h2 id="开启外网IP访问"><a href="#开启外网IP访问" class="headerlink" title="开启外网IP访问"></a>开启外网IP访问</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">vim config/elasticsearch.yml</div><div class="line"></div><div class="line">修改 network.host 为 </div><div class="line">network.host: 0.0.0.0</div></pre></td></tr></table></figure>
+<blockquote>
+<p>一般不直接使用外网配置, 可以使用 nginx 代理, 然后在Nginx 加个简单的认证配置即可. 建议直接写明局域网的IP地址, 然后通过 nginx 代理即可.</p>
+</blockquote>
+<p>访问地址: IP:9200</p>
+<h2 id="nginx-代理-认证"><a href="#nginx-代理-认证" class="headerlink" title="nginx 代理 + 认证"></a>nginx 代理 + 认证</h2><p>nginx 配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">       location / &#123;</div><div class="line">	auth_basic <span class="string">"欢迎来到监控中心 ^_^"</span>;</div><div class="line">               auth_basic_user_file /home/company/nginx/nginx-1.12.2/conf/htpasswd;</div><div class="line">	proxy_pass http://10.161.29.39:5601;</div><div class="line">               proxy_redirect off;</div><div class="line">               proxy_set_header Host <span class="variable">$host</span>;</div><div class="line">               proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</div><div class="line">               proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</div><div class="line">               client_max_body_size 200m;</div><div class="line">               client_body_buffer_size 512k;</div><div class="line">               proxy_connect_timeout 90;</div><div class="line">               proxy_send_timeout 90;</div><div class="line">               proxy_read_timeout 90;</div><div class="line">               proxy_buffer_size 256k;</div><div class="line">               proxy_buffers 4 256k;</div><div class="line">               proxy_busy_buffers_size 512k;</div><div class="line">               proxy_temp_file_write_size 512k;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">生成密码:</div><div class="line">openssl passwd -crypt helloworld</div><div class="line">Warning: truncating password to 8 characters</div><div class="line"></div><div class="line">sOX8YFAkZbi7M</div><div class="line"></div><div class="line"></div><div class="line">yourusername:sOX8YFAkZbi7M</div></pre></td></tr></table></figure>
+<p>reload 完 nginx 后, 就可以用 用户名 <code>yourusername</code>, 密码为 <code>helloworld</code> 来登录了</p>
+<h2 id="启动报错"><a href="#启动报错" class="headerlink" title="启动报错"></a>启动报错</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ERROR: [2] bootstrap checks failed</div><div class="line">[1]: max file descriptors [65535] <span class="keyword">for</span> elasticsearch process is too low, increase to at least [65536]</div><div class="line">[2]: max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]</div></pre></td></tr></table></figure>
+<p>解决:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo vim /etc/security/limits.conf</div><div class="line">修改 65535 -&gt; 65536 (或更大)</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">sudo vim /etc/sysctl.conf</div><div class="line">添加或修改</div><div class="line">vm.max_map_count=262144</div><div class="line"></div><div class="line">然后查看是否生效:</div><div class="line">sudo sysctl -p</div></pre></td></tr></table></figure>
+<p>然后退出 ssh 再重新登录</p>
+<h1 id="Kibana"><a href="#Kibana" class="headerlink" title="Kibana"></a>Kibana</h1><p><a href="https://www.elastic.co/downloads/kibana" target="_blank" rel="noopener">下载</a> 直接解压即可使用.</p>
+<p>主要是配置好 ES 的地址就好. (建议与ES一样, 绑定本机局域网地址, 然后通过 nginx 代理访问)</p>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><h1 id="配置-1"><a href="#配置-1" class="headerlink" title="配置"></a>配置</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">要监听的地址</div><div class="line">server.host: <span class="string">"10.161.29.39"</span></div><div class="line"></div><div class="line">要修改为指向ES的主机</div><div class="line">elasticsearch.url: <span class="string">"http://10.161.29.39:9200"</span></div></pre></td></tr></table></figure>
+<h1 id="Filebeat"><a href="#Filebeat" class="headerlink" title="Filebeat"></a>Filebeat</h1><h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><p><a href="https://www.elastic.co/downloads/beats/filebeat" target="_blank" rel="noopener">download</a></p>
+<p><a href="https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-installation.html" target="_blank" rel="noopener">https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-installation.html</a></p>
+<h2 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h2><h3 id="为不同的类型日志-加上不同的标识"><a href="#为不同的类型日志-加上不同的标识" class="headerlink" title="为不同的类型日志, 加上不同的标识"></a>为不同的类型日志, 加上不同的标识</h3><p>添加个自定义的字段:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">- <span class="built_in">type</span>: <span class="built_in">log</span></div><div class="line">  enabled: <span class="literal">true</span></div><div class="line">  paths:</div><div class="line">    - /home/company/nginx/nginx-1.9.3-dsp/logs/*.<span class="built_in">log</span></div><div class="line">  exclude_lines: [<span class="string">' 200 '</span>]</div><div class="line">  <span class="comment">#include_lines: ['^ERR', '^WARN']</span></div><div class="line">  <span class="comment">#exclude_files: ['.gz$']</span></div><div class="line">  fields:</div><div class="line">    modules: ad-monitor</div></pre></td></tr></table></figure>
+<p>其中 <code>fields</code> 下面的是根据自己需求, 来为该 log 的数据添加额外的字段(比如, 用来标识这某类日志, 方便在 es 里根据该字段来进行搜索)</p>
+<p><code>include</code> 表示日志行(按行为单位)包含该字符串的数据.<br><code>exclude</code> 表示日志行不能包含该字符串的数据.</p>
+<p>它们都支持正则.比如要查询 <code>[ERROR]</code> 这种 java logback 日志的数据. 可以这样子:</p>
+<p><code>include: [&#39;\[ERROR\]&#39;]</code> </p>
+<p>注意, 是用单引号来括住正则表达式的.</p>
+<h2 id="配置不同的索引名"><a href="#配置不同的索引名" class="headerlink" title="配置不同的索引名"></a>配置不同的索引名</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">output.elasticsearch:</div><div class="line">  hosts: [<span class="string">"http://localhost:9200"</span>]</div><div class="line">  index: <span class="string">"filebeat-%&#123;[beat.version]&#125;-%&#123;+yyyy.MM.dd&#125;"</span></div></pre></td></tr></table></figure>
+<h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ./filebeat -e -c filebeat.yml</div></pre></td></tr></table></figure>
+<h1 id="整合"><a href="#整合" class="headerlink" title="整合"></a>整合</h1><p>启动完以上三个系统, 就应该可以从  Kibana 里(直接访问Kibana的服务器地址URL) 看到日志被不断地收集进来了.</p>
+<h2 id="创建仪表盘"><a href="#创建仪表盘" class="headerlink" title="创建仪表盘"></a>创建仪表盘</h2><p>步骤如下</p>
+<ol>
+<li>先在 Discover 里创建一个搜索语句, 然后保存该搜索语句(类似 DB 的创建视图)</li>
+<li>然后在 Visualize 里, 创建一个视图, 然后视图里选择 步骤1 所保存的搜索语句</li>
+<li>再次在 Visualize 里, 保存好该视图的配置(X, Y轴等的设置信息)</li>
+<li>最后, 在 Dashboard 里, 创建一个仪表盘, 然后编辑 -&gt; 添加视图, 选择 步骤2,3 所保存好的视图名即可.</li>
+</ol>
+<h1 id="报警"><a href="#报警" class="headerlink" title="报警"></a>报警</h1><p>由于官方的插件 x pack 需要购买许可证. 所以…你懂的.</p>
+<p>现在的开源项目的方案, 又没跟上最新版本的 ELK , 所以想到的一个解决办法就是, 使用 python + ES 查询 + 条数 来进行预警(使用企业微信). 代码如下, 这个可根据自己的实际需求来修改.</p>
+<h2 id="微信发送消息代码"><a href="#微信发送消息代码" class="headerlink" title="微信发送消息代码"></a>微信发送消息代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"><span class="keyword">import</span> requests</div><div class="line"></div><div class="line"></div><div class="line">corpid = <span class="string">"你的corpid"</span></div><div class="line">corpsecret = <span class="string">"你的企业应用的corpsecret"</span></div><div class="line">agentid = 你的部门ID</div><div class="line"></div><div class="line">token_url = <span class="string">"https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=&#123;&#125;&amp;corpsecret=&#123;&#125;"</span></div><div class="line">send_msg_url = <span class="string">"https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=&#123;&#125;"</span></div><div class="line"></div><div class="line">formated_token_url = token_url.format(corpid, corpsecret)</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_token</span><span class="params">()</span>:</span></div><div class="line">    r = requests.get(formated_token_url)</div><div class="line">    <span class="keyword">return</span> r.json()[<span class="string">'access_token'</span>]</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">send_msg</span><span class="params">(msg, token)</span>:</span></div><div class="line">    formated_send_msg_url = send_msg_url.format(token)</div><div class="line">    resp = requests.post(formated_send_msg_url, json=&#123;</div><div class="line">        <span class="string">"touser"</span>: <span class="string">"@all"</span>,</div><div class="line">        <span class="string">"toparty"</span>: <span class="string">""</span>,</div><div class="line">        <span class="string">"totag"</span>: <span class="string">""</span>,</div><div class="line">        <span class="string">"msgtype"</span>: <span class="string">"text"</span>,</div><div class="line">        <span class="string">"agentid"</span>: agentid,</div><div class="line">        <span class="string">"text"</span>: &#123;</div><div class="line">            <span class="string">"content"</span>: msg</div><div class="line">        &#125;,</div><div class="line">        <span class="string">"safe"</span>: <span class="number">0</span></div><div class="line">    &#125;)</div><div class="line">    print(<span class="string">"resp"</span>)</div><div class="line">    print(resp.json())</div></pre></td></tr></table></figure>
+<h2 id="实际监控代码"><a href="#实际监控代码" class="headerlink" title="实际监控代码"></a>实际监控代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"></div><div class="line"><span class="keyword">from</span> elasticsearch <span class="keyword">import</span> Elasticsearch</div><div class="line"></div><div class="line"><span class="keyword">import</span> wx</div><div class="line"><span class="keyword">import</span> schedule</div><div class="line"><span class="keyword">import</span> time</div><div class="line"><span class="keyword">import</span> functools</div><div class="line"></div><div class="line">es = Elasticsearch([<span class="string">'http://你的ES地址:9200'</span>])</div><div class="line"></div><div class="line"><span class="comment"># 阀值</span></div><div class="line">ProblemThreshold = <span class="number">3</span></div><div class="line"></div><div class="line">web_nginx_prefix = <span class="string">"/home/company/nginx/nginx-1.9.3-dsp/logs/"</span></div><div class="line">ad_nginx_log_paths = (<span class="string">'ad-monitor.log'</span>, <span class="string">'ad-click.log'</span>, <span class="string">'ad-win-request.log'</span>)</div><div class="line">dsp_nginx_log_paths = (<span class="string">'biz-monitor.log'</span>, <span class="string">'biz-click.log'</span>, <span class="string">'dsp-win-request.log'</span>)</div><div class="line"></div><div class="line">nginx_log_paths = ad_nginx_log_paths + dsp_nginx_log_paths</div><div class="line"></div><div class="line"><span class="comment"># schedules 或 web tomcat 这里是 filebeat 的自定义字段 "fields.level = ad-sch 或 fields.level = dsp-sch"</span></div><div class="line">ad_sch_id = <span class="string">"ad-sch"</span></div><div class="line">dsp_sch_id = <span class="string">"dsp-sch"</span></div><div class="line">ad_web_id = <span class="string">"ad-web"</span></div><div class="line">dsp_web_id = <span class="string">"dsp-web"</span></div><div class="line"></div><div class="line">tomcat_ids = [ad_sch_id, ad_web_id, dsp_sch_id, dsp_web_id]</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">catch_exceptions</span><span class="params">(cancel_on_failure=False)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">actual_decorator</span><span class="params">(job_func)</span>:</span></div><div class="line"><span class="meta">        @functools.wraps(job_func)</span></div><div class="line">        <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kwargs)</span>:</span></div><div class="line">            <span class="keyword">try</span>:</div><div class="line">                print(<span class="string">'LOG: Running job "%s"'</span> % job_func.__name__)</div><div class="line">                result = job_func(*args, **kwargs)</div><div class="line">                print(<span class="string">'LOG: Job "%s" completed'</span> % job_func.__name__)</div><div class="line">                <span class="keyword">return</span> result</div><div class="line">            <span class="keyword">except</span>:</div><div class="line">                <span class="keyword">import</span> traceback</div><div class="line">                print(traceback.format_exc())</div><div class="line">                <span class="keyword">if</span> cancel_on_failure:</div><div class="line">                    <span class="keyword">return</span> schedule.CancelJob</div><div class="line"></div><div class="line">        <span class="keyword">return</span> wrapper</div><div class="line"></div><div class="line">    <span class="keyword">return</span> actual_decorator</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># unit 参考 ES 的语法, 单位为分钟. 表示最近 unit 分钟内, probleam_threshold 表示有问题的数量</span></div><div class="line"><span class="comment"># https://www.elastic.co/guide/en/elasticsearch/reference/current/common-options.html#date-math</span></div><div class="line"><span class="meta">@catch_exceptions(cancel_on_failure=True)</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">check</span><span class="params">(unit=<span class="string">"1m"</span>, problem_threshold=<span class="number">50</span>)</span>:</span></div><div class="line">    wx_token = wx.get_token()</div><div class="line">    <span class="keyword">for</span> path <span class="keyword">in</span> nginx_log_paths:</div><div class="line">        resp = es.search(index=<span class="string">"filebeat-*"</span>, body=&#123;</div><div class="line">            <span class="string">"from"</span>: <span class="number">0</span>,</div><div class="line">            <span class="string">"size"</span>: <span class="number">0</span>,</div><div class="line">            <span class="string">"query"</span>: &#123;</div><div class="line">                <span class="string">"bool"</span>: &#123;</div><div class="line">                    <span class="string">"must"</span>: [</div><div class="line">                        &#123;</div><div class="line">                            <span class="string">"query_string"</span>: &#123;</div><div class="line">                                <span class="string">"query"</span>: <span class="string">"message:(-200) AND source:(\""</span> + web_nginx_prefix + path + <span class="string">"\")"</span>,</div><div class="line">                                <span class="string">"analyze_wildcard"</span>: <span class="keyword">True</span>,</div><div class="line">                                <span class="string">"default_field"</span>: <span class="string">"*"</span></div><div class="line">                            &#125;</div><div class="line">                        &#125;,</div><div class="line">                        &#123;</div><div class="line">                            <span class="string">"range"</span>: &#123;</div><div class="line">                                <span class="string">"@timestamp"</span>: &#123;</div><div class="line">                                    <span class="string">"gte"</span>: <span class="string">"now-"</span> + unit</div><div class="line">                                &#125;</div><div class="line">                            &#125;</div><div class="line">                        &#125;</div><div class="line">                    ]</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;)</div><div class="line"></div><div class="line">        <span class="comment"># 有问题的数量</span></div><div class="line">        problem_count = resp[<span class="string">'hits'</span>][<span class="string">'total'</span>]</div><div class="line">        <span class="keyword">if</span> problem_count &gt; problem_threshold:</div><div class="line">            msg = <span class="string">"[ERROR] &#123;&#125; =&gt; &#123;&#125; 内有超过 &#123;&#125; 个异常(非200)数据.阀值为 &#123;&#125;"</span>.format(path, unit, problem_count, problem_threshold)</div><div class="line">            wx.send_msg(msg, wx_token)</div><div class="line">        <span class="comment"># else:</span></div><div class="line">        <span class="comment">#     msg = "&#123;&#125; =&gt; &#123;&#125; 分钟内数据正常. 阀值为 &#123;&#125;".format(path, unit, probleam_threshold)</span></div><div class="line">        <span class="comment">#     wx.send_msg(msg, wx_token)</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">@catch_exceptions(cancel_on_failure=True)</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">report</span><span class="params">(unit)</span>:</span></div><div class="line">    wx_token = wx.get_token()</div><div class="line">    <span class="keyword">for</span> path <span class="keyword">in</span> nginx_log_paths:</div><div class="line">        resp = es.search(index=<span class="string">"filebeat-*"</span>, body=&#123;</div><div class="line">            <span class="string">"from"</span>: <span class="number">0</span>,</div><div class="line">            <span class="string">"size"</span>: <span class="number">0</span>,</div><div class="line">            <span class="string">"query"</span>: &#123;</div><div class="line">                <span class="string">"bool"</span>: &#123;</div><div class="line">                    <span class="string">"must"</span>: [</div><div class="line">                        &#123;</div><div class="line">                            <span class="string">"query_string"</span>: &#123;</div><div class="line">                                <span class="string">"query"</span>: <span class="string">"message:(-200) AND source:(\""</span> + web_nginx_prefix + path + <span class="string">"\")"</span>,</div><div class="line">                                <span class="string">"analyze_wildcard"</span>: <span class="keyword">True</span>,</div><div class="line">                                <span class="string">"default_field"</span>: <span class="string">"*"</span></div><div class="line">                            &#125;</div><div class="line">                        &#125;,</div><div class="line">                        &#123;</div><div class="line">                            <span class="string">"range"</span>: &#123;</div><div class="line">                                <span class="string">"@timestamp"</span>: &#123;</div><div class="line">                                    <span class="string">"gte"</span>: <span class="string">"now-"</span> + unit</div><div class="line">                                &#125;</div><div class="line">                            &#125;</div><div class="line">                        &#125;</div><div class="line">                    ]</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;)</div><div class="line"></div><div class="line">        <span class="comment"># 有问题的数量</span></div><div class="line">        problem_count = resp[<span class="string">'hits'</span>][<span class="string">'total'</span>]</div><div class="line">        wx.send_msg(<span class="string">"[INFO] &#123;&#125; 最近 &#123;&#125; 内, 一共有 &#123;&#125; 个异常数据"</span>.format(path, unit, problem_count), wx_token)</div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">@catch_exceptions(cancel_on_failure=True)</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">tomcat_check</span><span class="params">(unit=<span class="string">"1m"</span>, problem_threshold=<span class="number">50</span>)</span>:</span></div><div class="line">    wx_token = wx.get_token()</div><div class="line">    <span class="keyword">for</span> tomcatid <span class="keyword">in</span> tomcat_ids:</div><div class="line">        resp = es.search(index=<span class="string">"filebeat-*"</span>, body=&#123;</div><div class="line">            <span class="string">"from"</span>: <span class="number">0</span>,</div><div class="line">            <span class="string">"size"</span>: <span class="number">0</span>,</div><div class="line">            <span class="string">"query"</span>: &#123;</div><div class="line">                <span class="string">"bool"</span>: &#123;</div><div class="line">                    <span class="string">"must"</span>: [</div><div class="line">                        &#123;</div><div class="line">                            <span class="string">"query_string"</span>: &#123;</div><div class="line">                                <span class="string">"query"</span>: <span class="string">"fields.level:(\""</span> + tomcatid + <span class="string">"\")"</span>,</div><div class="line">                                <span class="string">"analyze_wildcard"</span>: <span class="keyword">True</span>,</div><div class="line">                                <span class="string">"default_field"</span>: <span class="string">"*"</span></div><div class="line">                            &#125;</div><div class="line">                        &#125;,</div><div class="line">                        &#123;</div><div class="line">                            <span class="string">"range"</span>: &#123;</div><div class="line">                                <span class="string">"@timestamp"</span>: &#123;</div><div class="line">                                    <span class="string">"gte"</span>: <span class="string">"now-"</span> + unit</div><div class="line">                                &#125;</div><div class="line">                            &#125;</div><div class="line">                        &#125;</div><div class="line">                    ]</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;)</div><div class="line"></div><div class="line">        <span class="comment"># 有问题的数量</span></div><div class="line">        problem_count = resp[<span class="string">'hits'</span>][<span class="string">'total'</span>]</div><div class="line">        <span class="keyword">if</span> problem_count &gt; problem_threshold:</div><div class="line">            msg = <span class="string">"[ERROR] &#123;&#125; =&gt; &#123;&#125; 内有超过 &#123;&#125; 个异常(ERROR 日志)数据.阀值为 &#123;&#125;"</span>.format(tomcatid, unit, problem_count, problem_threshold)</div><div class="line">            wx.send_msg(msg, wx_token)</div><div class="line">        <span class="comment"># else:</span></div><div class="line">        <span class="comment">#     msg = "&#123;&#125; =&gt; &#123;&#125; 分钟内数据正常. 阀值为 &#123;&#125;".format(path, unit, probleam_threshold)</span></div><div class="line">        <span class="comment">#     wx.send_msg(msg, wx_token)</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">@catch_exceptions(cancel_on_failure=True)</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">tomcat_report</span><span class="params">(unit)</span>:</span></div><div class="line">    wx_token = wx.get_token()</div><div class="line">    <span class="keyword">for</span> tomcatid <span class="keyword">in</span> tomcat_ids:</div><div class="line">        resp = es.search(index=<span class="string">"filebeat-*"</span>, body=&#123;</div><div class="line">            <span class="string">"from"</span>: <span class="number">0</span>,</div><div class="line">            <span class="string">"size"</span>: <span class="number">0</span>,</div><div class="line">            <span class="string">"query"</span>: &#123;</div><div class="line">                <span class="string">"bool"</span>: &#123;</div><div class="line">                    <span class="string">"must"</span>: [</div><div class="line">                        &#123;</div><div class="line">                            <span class="string">"query_string"</span>: &#123;</div><div class="line">                                <span class="string">"query"</span>: <span class="string">"fields.level:(\""</span> + tomcatid + <span class="string">"\")"</span>,</div><div class="line">                                <span class="string">"analyze_wildcard"</span>: <span class="keyword">True</span>,</div><div class="line">                                <span class="string">"default_field"</span>: <span class="string">"*"</span></div><div class="line">                            &#125;</div><div class="line">                        &#125;,</div><div class="line">                        &#123;</div><div class="line">                            <span class="string">"range"</span>: &#123;</div><div class="line">                                <span class="string">"@timestamp"</span>: &#123;</div><div class="line">                                    <span class="string">"gte"</span>: <span class="string">"now-"</span> + unit</div><div class="line">                                &#125;</div><div class="line">                            &#125;</div><div class="line">                        &#125;</div><div class="line">                    ]</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;)</div><div class="line"></div><div class="line">        <span class="comment"># 有问题的数量</span></div><div class="line">        problem_count = resp[<span class="string">'hits'</span>][<span class="string">'total'</span>]</div><div class="line">        wx.send_msg(<span class="string">"[INFO] &#123;&#125; 最近 &#123;&#125; 内, 一共有 &#123;&#125; 个异常数据"</span>.format(tomcatid, unit, problem_count), wx_token)</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 每分钟检测一次, 最近一分钟内 如果 &gt; 50 个异常, 则报警</span></div><div class="line">schedule.every(<span class="number">1</span>).minutes.do(check, unit=<span class="string">"1m"</span>, problem_threshold=<span class="number">50</span>)</div><div class="line">schedule.every(<span class="number">1</span>).hours.do(check, unit=<span class="string">"1h"</span>, problem_threshold=<span class="number">500</span>)</div><div class="line">schedule.every(<span class="number">6</span>).hours.do(check, unit=<span class="string">"6h"</span>, problem_threshold=<span class="number">1000</span>)</div><div class="line"></div><div class="line">schedule.every().day.at(<span class="string">"00:00"</span>).do(report, unit=<span class="string">"24h"</span>)</div><div class="line">schedule.every().day.at(<span class="string">"12:00"</span>).do(report, unit=<span class="string">"12h"</span>)</div><div class="line"></div><div class="line"><span class="comment"># tomcat_ids</span></div><div class="line">schedule.every(<span class="number">1</span>).minutes.do(tomcat_check, unit=<span class="string">"1m"</span>, problem_threshold=<span class="number">50</span>)</div><div class="line">schedule.every(<span class="number">1</span>).hours.do(tomcat_check, unit=<span class="string">"1h"</span>, problem_threshold=<span class="number">500</span>)</div><div class="line">schedule.every(<span class="number">6</span>).hours.do(tomcat_check, unit=<span class="string">"6h"</span>, problem_threshold=<span class="number">1000</span>)</div><div class="line"></div><div class="line">schedule.every().day.at(<span class="string">"00:00"</span>).do(tomcat_report, unit=<span class="string">"24h"</span>)</div><div class="line">schedule.every().day.at(<span class="string">"12:00"</span>).do(tomcat_report, unit=<span class="string">"12h"</span>)</div><div class="line"></div><div class="line"><span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">    schedule.run_pending()</div><div class="line">    time.sleep(<span class="number">1</span>)</div></pre></td></tr></table></figure>
+<p>请根据相应的 ES 语法及实际情况, 来进行修改查询语句. 例如, 我上面的 <code>fields.level</code> 这些, 是在 filebeat 里的 <code>fields</code> 下面添加了 <code>level</code> 字段来区分不同类型的日志文件的.</p>
+<h2 id="setup-py-依赖配置"><a href="#setup-py-依赖配置" class="headerlink" title="setup.py 依赖配置"></a>setup.py 依赖配置</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> setuptools <span class="keyword">import</span> setup</div><div class="line"></div><div class="line">setup(</div><div class="line">    name=<span class="string">'wx-es-robot'</span>,</div><div class="line">    version=<span class="string">'1.0'</span>,</div><div class="line">    packages=[<span class="string">'robot'</span>],</div><div class="line">    url=<span class="string">''</span>,</div><div class="line">    license=<span class="string">''</span>,</div><div class="line">    author=<span class="string">'emacsist'</span>,</div><div class="line">    author_email=<span class="string">'emacsist@qq.com'</span>,</div><div class="line">    description=<span class="string">''</span>,</div><div class="line">    install_requires=[<span class="string">'elasticsearch'</span>, <span class="string">'requests'</span>, <span class="string">'schedule'</span>]</div><div class="line">)</div></pre></td></tr></table></figure>
+<p>有其他问题, 可以 email 我.</p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">Close</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
