@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java logback 中的 SocketAppender 的使用及与 RabbitMQ 的性能对比 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="java,logback," />
+  
+
+  <meta name="description" content="loback 中的 socketAppender 的配置及使用 配置文件都是用官网的示例  server1234567891011121314151617181920212223242526272829303132333435363738394041&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&amp;gt;&amp;lt;!-- ======================">
+<meta name="keywords" content="java,logback">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java logback 中的 SocketAppender 的使用及与 RabbitMQ 的性能对比">
+<meta property="og:url" content="https://emacsist.github.io/2018/02/23/Java-logback-中的-SocketAppender-的使用及与-RabbitMQ-的性能对比/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="loback 中的 socketAppender 的配置及使用 配置文件都是用官网的示例  server1234567891011121314151617181920212223242526272829303132333435363738394041&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&amp;gt;&amp;lt;!-- ======================">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-02-24T03:12:18.553Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java logback 中的 SocketAppender 的使用及与 RabbitMQ 的性能对比">
+<meta name="twitter:description" content="loback 中的 socketAppender 的配置及使用 配置文件都是用官网的示例  server1234567891011121314151617181920212223242526272829303132333435363738394041&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&amp;gt;&amp;lt;!-- ======================">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#loback-中的-socketAppender-的配置及使用"><span class="toc-text">loback 中的 socketAppender 的配置及使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#server"><span class="toc-text">server</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#client"><span class="toc-text">client</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#与-RabbitMQ-的性能对比"><span class="toc-text">与 RabbitMQ 的性能对比</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#rabbitmq-vs-socket-appender-vs-local-file"><span class="toc-text">rabbitmq vs socket appender vs local file</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Java-logback-中的-SocketAppender-的使用及与-RabbitMQ-的性能对比" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Java logback 中的 SocketAppender 的使用及与 RabbitMQ 的性能对比
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2018.02.23</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 124 )</span>
+    </a>
+    
+      <a class="tag-item" href="/tags/#logback">
+        <span class="tag-name">logback</span>
+    <span class="tag-size">( 2 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h1 id="loback-中的-socketAppender-的配置及使用"><a href="#loback-中的-socketAppender-的配置及使用" class="headerlink" title="loback 中的 socketAppender 的配置及使用"></a>loback 中的 socketAppender 的配置及使用</h1><blockquote>
+<p>配置文件都是用官网的示例</p>
+</blockquote>
+<h2 id="server"><a href="#server" class="headerlink" title="server"></a>server</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</div><div class="line"></div><div class="line"><span class="comment">&lt;!-- ==================================================================== --&gt;</span></div><div class="line"><span class="comment">&lt;!-- This config file is intended to be used by a SocketServer that logs  --&gt;</span></div><div class="line"><span class="comment">&lt;!-- events received from various clients on the console and to a file    --&gt;</span></div><div class="line"><span class="comment">&lt;!-- that is rolled over when appropriate. The interesting point to note  --&gt;</span></div><div class="line"><span class="comment">&lt;!-- is that it is a configuration file like any other.                   --&gt;</span></div><div class="line"><span class="comment">&lt;!-- ==================================================================== --&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></div><div class="line"></div><div class="line">  <span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"CONSOLE"</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.ConsoleAppender"</span>&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">layout</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.classic.PatternLayout"</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">Pattern</span>&gt;</span>%date %-5level [%thread] %logger - %message%n<span class="tag">&lt;/<span class="name">Pattern</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">layout</span>&gt;</span></div><div class="line"></div><div class="line">  <span class="tag">&lt;/<span class="name">appender</span>&gt;</span></div><div class="line"></div><div class="line">  <span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"ROLLING"</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.RollingFileAppender"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">File</span>&gt;</span>rolling.log<span class="tag">&lt;/<span class="name">File</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">rollingPolicy</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.FixedWindowRollingPolicy"</span>&gt;</span></div><div class="line">                        <span class="tag">&lt;<span class="name">FileNamePattern</span>&gt;</span>rolling.%i.log.gz<span class="tag">&lt;/<span class="name">FileNamePattern</span>&gt;</span></div><div class="line">                        <span class="tag">&lt;<span class="name">MinIndex</span>&gt;</span>1<span class="tag">&lt;/<span class="name">MinIndex</span>&gt;</span></div><div class="line">                <span class="tag">&lt;/<span class="name">rollingPolicy</span>&gt;</span></div><div class="line"></div><div class="line">                <span class="tag">&lt;<span class="name">triggeringPolicy</span></span></div><div class="line">                        <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy"</span>&gt;</div><div class="line">                        <span class="tag">&lt;<span class="name">MaxFileSize</span>&gt;</span>100MB<span class="tag">&lt;/<span class="name">MaxFileSize</span>&gt;</span></div><div class="line">                <span class="tag">&lt;/<span class="name">triggeringPolicy</span>&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">layout</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.classic.PatternLayout"</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">Pattern</span>&gt;</span>%relative %-5level %logger - %message%n<span class="tag">&lt;/<span class="name">Pattern</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">layout</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">appender</span>&gt;</span></div><div class="line"></div><div class="line">  <span class="tag">&lt;<span class="name">root</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">level</span> <span class="attr">value</span> =<span class="string">"debug"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"ROLLING"</span> /&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">root</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>server 端的启动</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">java -Dport=6000 -DincludeCallerData=<span class="literal">false</span> -cp <span class="string">"/home/yourname/test/lib/*:.:"</span>  ch.qos.logback.classic.net.SimpleSocketServer 6000 logback.xml</div></pre></td></tr></table></figure>
+<p>其中 <code>/home/yourname/test/lib/</code> 目录下, 存放了logback所依赖的 jar 包文件.</p>
+<h2 id="client"><a href="#client" class="headerlink" title="client"></a>client</h2><p>client 端(官网的例子) 的 <code>logback.xml</code></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"SOCKET"</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.classic.net.SocketAppender"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">remoteHost</span>&gt;</span>$&#123;host&#125;<span class="tag">&lt;/<span class="name">remoteHost</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">port</span>&gt;</span>$&#123;port&#125;<span class="tag">&lt;/<span class="name">port</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">reconnectionDelay</span>&gt;</span>10000<span class="tag">&lt;/<span class="name">reconnectionDelay</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">includeCallerData</span>&gt;</span>$&#123;includeCallerData&#125;<span class="tag">&lt;/<span class="name">includeCallerData</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">appender</span>&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">root</span> <span class="attr">level</span>=<span class="string">"DEBUG"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"SOCKET"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">root</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>启动时要添加的参数</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">java -Dhost=logback服务器的IP地址 -Dport=logback服务器的监听端口 -DincludeCallerData=<span class="literal">false</span> -jar demo-rabbit-0.0.1-SNAPSHOT.jar.original</div></pre></td></tr></table></figure>
+<h1 id="与-RabbitMQ-的性能对比"><a href="#与-RabbitMQ-的性能对比" class="headerlink" title="与 RabbitMQ 的性能对比"></a>与 RabbitMQ 的性能对比</h1><p>线上系统利用 rabbitmq 作为日志中转站. 所以想对比一下性能. 测试代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.example.demo.demorabbit;</div><div class="line"></div><div class="line"><span class="keyword">import</span> com.fasterxml.jackson.core.JsonProcessingException;</div><div class="line"><span class="keyword">import</span> com.fasterxml.jackson.databind.ObjectMapper;</div><div class="line"><span class="keyword">import</span> org.slf4j.Logger;</div><div class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</div><div class="line"><span class="keyword">import</span> org.springframework.amqp.rabbit.core.RabbitTemplate;</div><div class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</div><div class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</div><div class="line"></div><div class="line"><span class="keyword">import</span> javax.annotation.PostConstruct;</div><div class="line"></div><div class="line"><span class="meta">@Component</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestPerformance</span> </span>&#123;</div><div class="line">    <span class="meta">@Autowired</span></div><div class="line">    <span class="keyword">private</span> RabbitTemplate rabbitTemplate;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> ObjectMapper objectMapper = <span class="keyword">new</span> ObjectMapper();</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(TestPerformance.class);</div><div class="line"></div><div class="line">    <span class="meta">@PostConstruct</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> <span class="keyword">throws</span> JsonProcessingException </span>&#123;</div><div class="line">        System.out.println(<span class="string">"init test ...."</span>);</div><div class="line">        <span class="keyword">long</span> s = System.currentTimeMillis();</div><div class="line">        <span class="keyword">final</span> <span class="keyword">int</span> total = <span class="number">20000</span>;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; total; i++) &#123;</div><div class="line">            rabbitTemplate.convertAndSend(<span class="string">"test.performance.quque"</span>, objectMapper.writeValueAsString(<span class="keyword">new</span> BidLog()));</div><div class="line">        &#125;</div><div class="line">        System.out.println(<span class="string">"rabbi mq cost "</span> + (System.currentTimeMillis() - s) + <span class="string">" ms"</span>);</div><div class="line"></div><div class="line"></div><div class="line">        s = System.currentTimeMillis();</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; total; i++) &#123;</div><div class="line">            log.info(<span class="string">"entry &#123;&#125;"</span>, objectMapper.writeValueAsString(<span class="keyword">new</span> BidLog()));</div><div class="line">        &#125;</div><div class="line">        System.out.println(<span class="string">"logback socket cost "</span> + (System.currentTimeMillis() - s) + <span class="string">" ms"</span>);</div><div class="line">        System.out.println(<span class="string">"all done"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>结果</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">init <span class="built_in">test</span> ....</div><div class="line">rabbi mq cost 3419 ms</div><div class="line">logback socket cost 327 ms</div><div class="line">all <span class="keyword">done</span></div></pre></td></tr></table></figure>
+<p>经多次执行发现结果是, socket 的方式比 mq 的高 10 倍左右.</p>
+<h1 id="rabbitmq-vs-socket-appender-vs-local-file"><a href="#rabbitmq-vs-socket-appender-vs-local-file" class="headerlink" title="rabbitmq vs socket appender vs local file"></a>rabbitmq vs socket appender vs local file</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@PostConstruct</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> <span class="keyword">throws</span> JsonProcessingException </span>&#123;</div><div class="line">    System.out.println(<span class="string">"init test ...."</span>);</div><div class="line">    <span class="keyword">long</span> s = System.currentTimeMillis();</div><div class="line">    <span class="keyword">final</span> <span class="keyword">int</span> total = <span class="number">20000</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; total; i++) &#123;</div><div class="line">        rabbitTemplate.convertAndSend(<span class="string">"test.performance.quque"</span>, objectMapper.writeValueAsString(<span class="keyword">new</span> BidLog()));</div><div class="line">    &#125;</div><div class="line">    System.out.println(<span class="string">"rabbi mq cost "</span> + (System.currentTimeMillis() - s) + <span class="string">" ms"</span>);</div><div class="line"></div><div class="line"></div><div class="line">    s = System.currentTimeMillis();</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; total; i++) &#123;</div><div class="line">        log.info(<span class="string">"entry &#123;&#125;"</span>, objectMapper.writeValueAsString(<span class="keyword">new</span> BidLog()));</div><div class="line">    &#125;</div><div class="line">    System.out.println(<span class="string">"logback socket cost "</span> + (System.currentTimeMillis() - s) + <span class="string">" ms"</span>);</div><div class="line"></div><div class="line"></div><div class="line">    s = System.currentTimeMillis();</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; total; i++) &#123;</div><div class="line">        fileLogger.info(<span class="string">"entry &#123;&#125;"</span>, objectMapper.writeValueAsString(<span class="keyword">new</span> BidLog()));</div><div class="line">    &#125;</div><div class="line">    System.out.println(<span class="string">"local logger cost "</span> + (System.currentTimeMillis() - s) + <span class="string">" ms"</span>);</div><div class="line"></div><div class="line">    System.out.println(<span class="string">"all done"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>结果<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">init <span class="built_in">test</span> ....</div><div class="line">rabbi mq cost 2533 ms</div><div class="line">logback socket cost 253 ms</div><div class="line"><span class="built_in">local</span> logger cost 405 ms</div><div class="line">all <span class="keyword">done</span></div><div class="line"></div><div class="line"></div><div class="line">init <span class="built_in">test</span> ....</div><div class="line">rabbi mq cost 2924 ms</div><div class="line">logback socket cost 514 ms</div><div class="line"><span class="built_in">local</span> logger cost 365 ms</div><div class="line">all <span class="keyword">done</span></div><div class="line"></div><div class="line">init <span class="built_in">test</span> ....</div><div class="line">rabbi mq cost 2964 ms</div><div class="line">logback socket cost 405 ms</div><div class="line"><span class="built_in">local</span> logger cost 436 ms</div><div class="line">all <span class="keyword">done</span></div><div class="line"></div><div class="line">init <span class="built_in">test</span> ....</div><div class="line">rabbi mq cost 2436 ms</div><div class="line">logback socket cost 379 ms</div><div class="line"><span class="built_in">local</span> logger cost 385 ms</div><div class="line">all <span class="keyword">done</span></div></pre></td></tr></table></figure></p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
