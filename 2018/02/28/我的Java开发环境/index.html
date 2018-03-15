@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>我的Java开发环境 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="java," />
+  
+
+  <meta name="description" content="IDEA插件 alibaba code style CamelCase JVM Debugger Memory View Bytecode Viewer FindBugs  Maven, GradleGradle 的性能快的一逼~ 如果能选 Gradle 则尽可能选 Gradle Maven 性能加速 开启多线程以及分层编译(加快启动)  12set MAVEN_OPTS=&quot;-XX:+Tiered">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我的Java开发环境">
+<meta property="og:url" content="https://emacsist.github.io/2018/02/28/我的Java开发环境/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="IDEA插件 alibaba code style CamelCase JVM Debugger Memory View Bytecode Viewer FindBugs  Maven, GradleGradle 的性能快的一逼~ 如果能选 Gradle 则尽可能选 Gradle Maven 性能加速 开启多线程以及分层编译(加快启动)  12set MAVEN_OPTS=&quot;-XX:+Tiered">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-02-28T07:32:41.718Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的Java开发环境">
+<meta name="twitter:description" content="IDEA插件 alibaba code style CamelCase JVM Debugger Memory View Bytecode Viewer FindBugs  Maven, GradleGradle 的性能快的一逼~ 如果能选 Gradle 则尽可能选 Gradle Maven 性能加速 开启多线程以及分层编译(加快启动)  12set MAVEN_OPTS=&quot;-XX:+Tiered">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#IDEA"><span class="toc-text">IDEA</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#插件"><span class="toc-text">插件</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Maven-Gradle"><span class="toc-text">Maven, Gradle</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Maven-性能加速"><span class="toc-text">Maven 性能加速</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#代码质量"><span class="toc-text">代码质量</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#IDEA-的-inspect"><span class="toc-text">IDEA 的 inspect</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Sonar"><span class="toc-text">Sonar</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-我的Java开发环境" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            我的Java开发环境
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2018.02.28</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#java">
+        <span class="tag-name">java</span>
+    <span class="tag-size">( 127 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h1 id="IDEA"><a href="#IDEA" class="headerlink" title="IDEA"></a>IDEA</h1><h2 id="插件"><a href="#插件" class="headerlink" title="插件"></a>插件</h2><ul>
+<li><a href="https://plugins.jetbrains.com/plugin/10046-alibaba-java-coding-guidelines" target="_blank" rel="noopener">alibaba code style</a></li>
+<li>CamelCase</li>
+<li>JVM Debugger Memory View</li>
+<li>Bytecode Viewer</li>
+<li>FindBugs</li>
+</ul>
+<h1 id="Maven-Gradle"><a href="#Maven-Gradle" class="headerlink" title="Maven, Gradle"></a>Maven, Gradle</h1><p>Gradle 的性能快的一逼~</p>
+<p>如果能选 Gradle 则尽可能选 Gradle</p>
+<h2 id="Maven-性能加速"><a href="#Maven-性能加速" class="headerlink" title="Maven 性能加速"></a>Maven 性能加速</h2><blockquote>
+<p>开启多线程以及分层编译(加快启动)</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">set</span> MAVEN_OPTS=<span class="string">"-XX:+TieredCompilation -XX:TieredStopAtLevel=1"</span></div><div class="line">mvn -T 1C package [--offline]</div></pre></td></tr></table></figure>
+<h1 id="代码质量"><a href="#代码质量" class="headerlink" title="代码质量"></a>代码质量</h1><h2 id="IDEA-的-inspect"><a href="#IDEA-的-inspect" class="headerlink" title="IDEA 的 inspect"></a>IDEA 的 inspect</h2><p>IDEA 自带的代码分析功能也非常好~</p>
+<h2 id="Sonar"><a href="#Sonar" class="headerlink" title="Sonar"></a>Sonar</h2><p>部署一个自用的服务器(如果公司没有的话), 自己要常常分析一下项目的代码质量问题~</p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

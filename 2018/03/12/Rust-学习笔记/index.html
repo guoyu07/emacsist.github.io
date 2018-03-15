@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Rust 学习笔记 | emacsist</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="rust," />
+  
+
+  <meta name="description" content="安装1234curl https://sh.rustup.rs -sSf | sh成功后, 将下面代码加到 ~/.bash_profileexport PATH=&quot;$HOME/.cargo/bin:$PATH&quot; 更新: 1rustup update 卸载1rustup self uninstall 创建项目可执行项目1cargo new project_name --bin 构建项目1cargo">
+<meta name="keywords" content="rust">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rust 学习笔记">
+<meta property="og:url" content="https://emacsist.github.io/2018/03/12/Rust-学习笔记/index.html">
+<meta property="og:site_name" content="emacsist">
+<meta property="og:description" content="安装1234curl https://sh.rustup.rs -sSf | sh成功后, 将下面代码加到 ~/.bash_profileexport PATH=&quot;$HOME/.cargo/bin:$PATH&quot; 更新: 1rustup update 卸载1rustup self uninstall 创建项目可执行项目1cargo new project_name --bin 构建项目1cargo">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-15T11:25:15.007Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Rust 学习笔记">
+<meta name="twitter:description" content="安装1234curl https://sh.rustup.rs -sSf | sh成功后, 将下面代码加到 ~/.bash_profileexport PATH=&quot;$HOME/.cargo/bin:$PATH&quot; 更新: 1rustup update 卸载1rustup self uninstall 创建项目可执行项目1cargo new project_name --bin 构建项目1cargo">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?b870e52c6cd914cb42627e4a706700b7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header LEFT">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/books/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            阅读
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#安装"><span class="toc-text">安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#创建项目"><span class="toc-text">创建项目</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#可执行项目"><span class="toc-text">可执行项目</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#构建项目"><span class="toc-text">构建项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#构建并运行项目"><span class="toc-text">构建并运行项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#发布项目"><span class="toc-text">发布项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#更新依赖包版本"><span class="toc-text">更新依赖包版本</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#默认导入的包"><span class="toc-text">默认导入的包</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#crate"><span class="toc-text">crate</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#变量"><span class="toc-text">变量</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#常量和不可变的变量"><span class="toc-text">常量和不可变的变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#隐藏"><span class="toc-text">隐藏</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#数据类型"><span class="toc-text">数据类型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#函数"><span class="toc-text">函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#参数"><span class="toc-text">参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#语句和表达式"><span class="toc-text">语句和表达式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#返回值"><span class="toc-text">返回值</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#if-表达式"><span class="toc-text">if 表达式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#循环"><span class="toc-text">循环</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#loop"><span class="toc-text">loop</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#while"><span class="toc-text">while</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#for"><span class="toc-text">for</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#所有权-ownership"><span class="toc-text">所有权 ownership</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#所有权规则"><span class="toc-text">所有权规则</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数据的交互方式"><span class="toc-text">数据的交互方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#移动"><span class="toc-text">移动</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#克隆"><span class="toc-text">克隆</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#只在栈上的数据-拷贝"><span class="toc-text">只在栈上的数据: 拷贝</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#引用与借用"><span class="toc-text">引用与借用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#可变引用"><span class="toc-text">可变引用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#悬垂指针"><span class="toc-text">悬垂指针</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#引用规则"><span class="toc-text">引用规则</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#slices"><span class="toc-text">slices</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#字符串-slice"><span class="toc-text">字符串 slice</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#结构体"><span class="toc-text">结构体</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#定义"><span class="toc-text">定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用"><span class="toc-text">使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#变量与字段同名时的初始化简写法"><span class="toc-text">变量与字段同名时的初始化简写法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用结构体更新语法从其他对象创建"><span class="toc-text">使用结构体更新语法从其他对象创建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#没有字段名的结构体"><span class="toc-text">没有字段名的结构体</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方法"><span class="toc-text">方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关联函数"><span class="toc-text">关联函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多个-impl-块"><span class="toc-text">多个 impl 块</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#枚举"><span class="toc-text">枚举</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#定义-1"><span class="toc-text">定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用-1"><span class="toc-text">使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#空值与-Option-枚举"><span class="toc-text">空值与 Option 枚举</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#match-控制流运算符"><span class="toc-text">match 控制流运算符</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#匹配-Option"><span class="toc-text">匹配 Option</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#通配符"><span class="toc-text">_ 通配符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#if-let"><span class="toc-text">if let</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#模块"><span class="toc-text">模块</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#创建库模块"><span class="toc-text">创建库模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模块与文件系统的规则"><span class="toc-text">模块与文件系统的规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#私有性规则"><span class="toc-text">私有性规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用-super-访问父模块"><span class="toc-text">使用 super 访问父模块</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cargo-使用本地-crate"><span class="toc-text">cargo 使用本地 crate</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#集合"><span class="toc-text">集合</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#vector"><span class="toc-text">vector</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#字符串"><span class="toc-text">字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hash-map"><span class="toc-text">hash map</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#错误处理"><span class="toc-text">错误处理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#可恢复错误-Result-lt-T-E-gt"><span class="toc-text">可恢复错误: Result&lt;T, E&gt;</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#不可恢复错误-panic"><span class="toc-text">不可恢复错误: panic!</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#简写-unwrap-和-expect"><span class="toc-text">简写 unwrap 和 expect</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#传播错误"><span class="toc-text">传播错误</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#简写-问号运算符"><span class="toc-text">简写 ? 问号运算符</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#泛型"><span class="toc-text">泛型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#trait"><span class="toc-text">trait</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#定义-2"><span class="toc-text">定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现"><span class="toc-text">实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#默认实现"><span class="toc-text">默认实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#trait-bounds"><span class="toc-text">trait bounds</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#生命周期"><span class="toc-text">生命周期</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#何时不需要生命周期注解的规则"><span class="toc-text">何时不需要生命周期注解的规则</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#测试"><span class="toc-text">测试</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#执行-test"><span class="toc-text">执行 test</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#assert-宏检测-bool-结果"><span class="toc-text">assert! 宏检测 bool 结果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相等或不相等测试"><span class="toc-text">相等或不相等测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#并行或串行测试"><span class="toc-text">并行或串行测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试通过时也打印输出"><span class="toc-text">测试通过时也打印输出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#单元测试"><span class="toc-text">单元测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#忽略测试"><span class="toc-text">忽略测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#只运行那些忽略的测试函数"><span class="toc-text">只运行那些忽略的测试函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#组织结构"><span class="toc-text">组织结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#单元测试-1"><span class="toc-text">单元测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cfg-test"><span class="toc-text">#[cfg(test)]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#集成测试"><span class="toc-text">集成测试</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#命令行程序"><span class="toc-text">命令行程序</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#获取参数"><span class="toc-text">获取参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#读取和输出文件内容"><span class="toc-text">读取和输出文件内容</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#闭包-可以捕获环境的匿名函数"><span class="toc-text">闭包: 可以捕获环境的匿名函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#闭包类型推断和注解"><span class="toc-text">闭包类型推断和注解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多次调用闭包注意"><span class="toc-text">多次调用闭包注意</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#迭代器"><span class="toc-text">迭代器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#消费迭代器"><span class="toc-text">消费迭代器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#产生其他迭代器"><span class="toc-text">产生其他迭代器</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Cargo"><span class="toc-text">Cargo</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#发布配置"><span class="toc-text">发布配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#工作空间"><span class="toc-text">工作空间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装依赖"><span class="toc-text">安装依赖</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#智能指针"><span class="toc-text">智能指针</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Box-在堆上存储数据，并且可确定大小"><span class="toc-text">Box : 在堆上存储数据，并且可确定大小</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Deref-trait-将智能指针当作常规引用处理"><span class="toc-text">Deref trait : 将智能指针当作常规引用处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Drop-trait-运行清理代码"><span class="toc-text">Drop trait: 运行清理代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rc-引用计数智能指针"><span class="toc-text">Rc: 引用计数智能指针</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#并发"><span class="toc-text">并发</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#线程"><span class="toc-text">线程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建线程"><span class="toc-text">创建线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#join-等待线程结束"><span class="toc-text">join 等待线程结束</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#move-闭包"><span class="toc-text">move 闭包</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#消息传递"><span class="toc-text">消息传递</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#共享状态"><span class="toc-text">共享状态</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post LEFT">
+   <article id="post-Rust-学习笔记" class="article article-type-post" itemprop="blogPost">
+    <header class="article-header">
+        <h1 class="post-title">
+            Rust 学习笔记
+        </h1>
+
+        <div class="article-meta">
+            <span>
+        <i class="icon-calendar"></i>
+        <span>2018.03.12</span>
+            </span>
+
+            
+                <span class="article-author">
+          <i class="icon-user"></i>
+          <span>emacsist</span>
+                </span>
+                
+
+                    
+    <span class="article-category">
+    <i class="icon-list"></i>
+    
+      <a class="tag-item" href="/tags/#rust">
+        <span class="tag-name">rust</span>
+    <span class="tag-size">( 1 )</span>
+    </a>
+    
+
+        </span>
+        
+
+                        
+
+                                
+
+                                        
+
+        </div>
+    </header>
+
+    <div class="article-content">
+        
+                            <h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">curl https://sh.rustup.rs -sSf | sh</div><div class="line"></div><div class="line">成功后, 将下面代码加到 ~/.bash_profile</div><div class="line"><span class="built_in">export</span> PATH=<span class="string">"<span class="variable">$HOME</span>/.cargo/bin:<span class="variable">$PATH</span>"</span></div></pre></td></tr></table></figure>
+<p>更新:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rustup update</div></pre></td></tr></table></figure>
+<p>卸载<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rustup self uninstall</div></pre></td></tr></table></figure></p>
+<h1 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h1><h2 id="可执行项目"><a href="#可执行项目" class="headerlink" title="可执行项目"></a>可执行项目</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cargo new project_name --bin</div></pre></td></tr></table></figure>
+<h3 id="构建项目"><a href="#构建项目" class="headerlink" title="构建项目"></a>构建项目</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cargo build</div></pre></td></tr></table></figure>
+<p>它会打包到 <code>target/debug</code></p>
+<h3 id="构建并运行项目"><a href="#构建并运行项目" class="headerlink" title="构建并运行项目"></a>构建并运行项目</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cargo run</div></pre></td></tr></table></figure>
+<h3 id="发布项目"><a href="#发布项目" class="headerlink" title="发布项目"></a>发布项目</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cargo build --release</div></pre></td></tr></table></figure>
+<p>它会打包到 <code>target/release</code></p>
+<h3 id="更新依赖包版本"><a href="#更新依赖包版本" class="headerlink" title="更新依赖包版本"></a>更新依赖包版本</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cargo update</div></pre></td></tr></table></figure>
+<h1 id="默认导入的包"><a href="#默认导入的包" class="headerlink" title="默认导入的包"></a>默认导入的包</h1><p><a href="https://doc.rust-lang.org/std/prelude/index.html" target="_blank" rel="noopener">doc</a></p>
+<h1 id="crate"><a href="#crate" class="headerlink" title="crate"></a>crate</h1><blockquote>
+<p>它是一个 Rust 代码的包.</p>
+</blockquote>
+<p>可执行的项目, 称为 <code>二进制 crate</code>, 库项目(即可以被其他程序调用的代码) 称为 <code>库 crate</code></p>
+<h1 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h1><p>在 rust 中, 变量默认的情况下是 <code>不可变的 immutable</code> </p>
+<h2 id="常量和不可变的变量"><a href="#常量和不可变的变量" class="headerlink" title="常量和不可变的变量"></a>常量和不可变的变量</h2><p>在 rust 中, 常量是不能用 <code>mut</code> 来修饰的, 它不光默认不能变, 它总是不能变的.</p>
+<p>常量声明使用 <code>const</code> 而不是 <code>let</code>, 并且必须注明值的类型.</p>
+<p>常量只能用于常量表达式, 而不能作为函数调用的结果, 或任何其他只在运行时计算的值.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">const MAX_POINTS: u32 = 100_000;</div></pre></td></tr></table></figure>
+<h2 id="隐藏"><a href="#隐藏" class="headerlink" title="隐藏"></a>隐藏</h2><ul>
+<li>除非再次使用 <code>let</code> 关键字, 否则默认情况下对变量重新赋值会导致编译错误</li>
+<li>多次使用 <code>let</code> 时, 实际上创建了一个新的变量, 我们<code>可以改变值的类型</code>, 从而复用这个名字. 但一个 <code>mut</code> 的变量, 则不能修改它的类型, 否则会导致一个编译错误</li>
+</ul>
+<h1 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h1><blockquote>
+<p>Rust 是一种静态类型语言, 也就是说在编译时就必须知道所有变量的类型.</p>
+</blockquote>
+<ul>
+<li>scalar : 标量<ul>
+<li>整型(有符号的, 以 <code>i</code> 开头, 无符号的以 <code>u</code> 开头, 默认为 <code>i32</code>, 无论是在32位, 还是64位系统上, 默认都是 <code>i32</code>). 十六进制(0x开头), 八进制(0o开头), 二进制(0b开头), 字节(<code>b&#39;A&#39;</code>)</li>
+<li>浮点型(<code>f32</code>, <code>f64</code>, 默认为<code>f64</code>, 因为在现代CPU中, 它与 <code>f32</code>速度几乎一样快)</li>
+<li>布尔类型(<code>bool</code>, 它只有 <code>true</code> 或 <code>false</code>)</li>
+<li>字符类型(<code>char</code>, 它使用单引号指定. 不同与字符串使用双引号)</li>
+</ul>
+</li>
+<li>compound : 复合<ul>
+<li>元组(<code>tuple</code>), 它使用一个括号中的逗号分隔的值列表来创建一个元组.<code>let tup: (i32, f64, u8) = (500, 6.4, 1);</code>, 这元素的类型是不必相同的.可以使用模式匹配来解构元组. <code>let (x, y, z) = tup;</code></li>
+<li>数组(<code>array</code>), 元素类型必须相同. 而且数组长度是固定的.索引从0开始.</li>
+</ul>
+</li>
+</ul>
+<h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><p>Rust 使用 <code>snake case</code> 风格来命名函数的. 即所有字母都是小写, 并使用下划线分隔单词.</p>
+<p>Rust 可以调用定义过了的函数来调用(不管是在调用者之前还是之后定义, 都可以)</p>
+<h2 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">fn <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">    another_function(5);</div><div class="line">&#125;</div><div class="line"></div><div class="line">fn another_function(x: i32) &#123;</div><div class="line">    println!(<span class="string">"The value of x is: &#123;&#125;"</span>, x);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="语句和表达式"><a href="#语句和表达式" class="headerlink" title="语句和表达式"></a>语句和表达式</h2><p>语句: 执行一些操作但不返回值(如 <code>let</code> 语句)<br>表达式: 计算并产生一个值.它可以是语句的一部分. 例如函数调用, 宏调用.注意 <code>{}</code> 也是一个表达式.所以可以这样子:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">let</span> y = &#123;</div><div class="line">        <span class="built_in">let</span> x = 3;</div><div class="line">        x + 1</div><div class="line">    &#125;;</div></pre></td></tr></table></figure>
+<p>这里的<code>{}</code>表达式的值为4.所以 <code>y</code> 为 4</p>
+<h2 id="返回值"><a href="#返回值" class="headerlink" title="返回值"></a>返回值</h2><blockquote>
+<p>函数的返回值, 等同于函数体最后一个表达式的值.</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">fn five() -&gt; i32 &#123;</div><div class="line">    5</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注意, 如果是有分号的话, 则它是语句, 而不是表达式了.</p>
+<h1 id="if-表达式"><a href="#if-表达式" class="headerlink" title="if 表达式"></a>if 表达式</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">fn <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">    <span class="built_in">let</span> number = 6;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> number % 4 == 0 &#123;</div><div class="line">        println!(<span class="string">"number is divisible by 4"</span>);</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> number % 3 == 0 &#123;</div><div class="line">        println!(<span class="string">"number is divisible by 3"</span>);</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> number % 2 == 0 &#123;</div><div class="line">        println!(<span class="string">"number is divisible by 2"</span>);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        println!(<span class="string">"number is not divisible by 4, 3, or 2"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>因为它是一个表达式, 所以它是有返回值的, 所以可以这样子:</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">fn <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">    <span class="built_in">let</span> condition = <span class="literal">true</span>;</div><div class="line">    <span class="built_in">let</span> number = <span class="keyword">if</span> condition &#123;</div><div class="line">        5</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        6</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    println!(<span class="string">"The value of number is: &#123;&#125;"</span>, number);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h1><h2 id="loop"><a href="#loop" class="headerlink" title="loop"></a>loop</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">fn <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">    loop &#123;</div><div class="line">        println!(<span class="string">"again!"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="while"><a href="#while" class="headerlink" title="while"></a>while</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">fn <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">    <span class="built_in">let</span> mut number = 3;</div><div class="line"></div><div class="line">    <span class="keyword">while</span> number != 0 &#123;</div><div class="line">        println!(<span class="string">"&#123;&#125;!"</span>, number);</div><div class="line"></div><div class="line">        number = number - 1;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    println!(<span class="string">"LIFTOFF!!!"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="for"><a href="#for" class="headerlink" title="for"></a>for</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">fn <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">    <span class="built_in">let</span> a = [10, 20, 30, 40, 50];</div><div class="line"></div><div class="line">    <span class="keyword">for</span> element <span class="keyword">in</span> a.<span class="function"><span class="title">iter</span></span>() &#123;</div><div class="line">        println!(<span class="string">"the value is: &#123;&#125;"</span>, element);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">fn <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">    <span class="keyword">for</span> number <span class="keyword">in</span> (1..4).<span class="function"><span class="title">rev</span></span>() &#123;</div><div class="line">        println!(<span class="string">"&#123;&#125;!"</span>, number);</div><div class="line">    &#125;</div><div class="line">    println!(<span class="string">"LIFTOFF!!!"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>rev()</code> 用来反转.</p>
+<h1 id="所有权-ownership"><a href="#所有权-ownership" class="headerlink" title="所有权 ownership"></a>所有权 ownership</h1><p>一般程序管理内存的方式</p>
+<ol>
+<li>使用GC</li>
+<li>手工处理</li>
+</ol>
+<p>而 Rust 则使用第三种: 内存被一个所有权系统管理, 它拥有一系列的规则使编译器在编译时进行检查.并且不会导致运行时开销.</p>
+<h2 id="所有权规则"><a href="#所有权规则" class="headerlink" title="所有权规则"></a>所有权规则</h2><ul>
+<li>Rust 中每一个值都有一个称之为其 <code>所有者 owner</code> 的变量</li>
+<li>值有且只能有一个所有者</li>
+<li>当所有者(变量)离开作用域, 这个值将被丢弃.(当变量离开作用域时, Rust 为其调用一个特殊的函数, 这个函数叫 <code>drop</code>)</li>
+</ul>
+<p>之前提到的 <code>数据类型</code> 部分都是储存在 <code>栈</code> 上的并且离开作用域时被移出栈.</p>
+<p>注意, <code>Rust 永远也不会自动创建数据的 深拷贝</code>, 因此任何自动的复制可以被认为对运行时性能影响较小.</p>
+<h3 id="数据的交互方式"><a href="#数据的交互方式" class="headerlink" title="数据的交互方式"></a>数据的交互方式</h3><h4 id="移动"><a href="#移动" class="headerlink" title="移动"></a>移动</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">let</span> s1 = String::from(<span class="string">"hello"</span>);</div><div class="line"><span class="built_in">let</span> s2 = s1;</div></pre></td></tr></table></figure>
+<h4 id="克隆"><a href="#克隆" class="headerlink" title="克隆"></a>克隆</h4><p><code>String</code> 有个 <code>clone</code> 函数, 它会深度复制堆上的数据.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">let</span> s1 = String::from(<span class="string">"hello"</span>);</div><div class="line"><span class="built_in">let</span> s2 = s1.clone();</div></pre></td></tr></table></figure>
+<h5 id="只在栈上的数据-拷贝"><a href="#只在栈上的数据-拷贝" class="headerlink" title="只在栈上的数据: 拷贝"></a>只在栈上的数据: 拷贝</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">let</span> x = 5;</div><div class="line"><span class="built_in">let</span> y = x;</div></pre></td></tr></table></figure>
+<p>Rust 有一个 <code>Copy</code> trait 的特殊注解, 可以用在类似整型这样的储存在栈上的类型. 如果一个类型拥有 <code>Copy</code> trait, 一个旧的变量在将其赋值给其他变量后仍然可用. </p>
+<p>Rust 不允许自身或任何部分实现了 <code>Drop</code> trait 的类型使用 <code>Copy</code> trait . 以下是一些 <code>Copy</code> trait 的建议规则</p>
+<ul>
+<li>所有整数类型</li>
+<li>布尔类型</li>
+<li>浮点类型</li>
+<li>元组, 当且仅当其包含的类型也是 <code>Copy</code> 的时候.</li>
+</ul>
+<h2 id="引用与借用"><a href="#引用与借用" class="headerlink" title="引用与借用"></a>引用与借用</h2><blockquote>
+<p>&amp;s1 语法允许我们创建一个 指向 值 s1 的引用，但是并不拥有它。因为并不拥有这个值，当引用离开作用域时其指向的值也不会被丢弃。</p>
+</blockquote>
+<p>获取引用作为函数参数称为借用. 默认情况下, 引用也同样是不可变的.</p>
+<h3 id="可变引用"><a href="#可变引用" class="headerlink" title="可变引用"></a>可变引用</h3><blockquote>
+<p>限制: 在特定作用域中的特定数据, 有且只有一个可变引用.<br>也不能在拥有不可变引用的同时拥有可变引用.</p>
+</blockquote>
+<p><code>&amp;mut</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">fn <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">    <span class="built_in">let</span> mut s = String::from(<span class="string">"hello"</span>);</div><div class="line"></div><div class="line">    change(&amp;mut s);</div><div class="line">&#125;</div><div class="line"></div><div class="line">fn change(some_string: &amp;mut String) &#123;</div><div class="line">    some_string.push_str(<span class="string">", world"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这使用 Rust 在编译时就避免了数据竞争.</p>
+<h3 id="悬垂指针"><a href="#悬垂指针" class="headerlink" title="悬垂指针"></a>悬垂指针</h3><blockquote>
+<p>是其指向的内存可能已经被分配给其它持有者</p>
+</blockquote>
+<p>在 Rust 中, 编译器确保引用永远也不会变成悬垂指针.</p>
+<p>比如这代码在 Rust 中是编译不了的:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">fn <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">    <span class="built_in">let</span> reference_to_nothing = dangle();</div><div class="line">&#125;</div><div class="line"></div><div class="line">fn dangle() -&gt; &amp;String &#123;</div><div class="line">    <span class="built_in">let</span> s = String::from(<span class="string">"hello"</span>);</div><div class="line"></div><div class="line">    &amp;s</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>解决的办法是返回 String 而不是 <code>&amp;String</code> . 返回 String 就表示所有权被转移出去了, 所以值还没有释放.</p>
+<h3 id="引用规则"><a href="#引用规则" class="headerlink" title="引用规则"></a>引用规则</h3><ul>
+<li>在任意给定时间, 只能拥有以下中的一个<ul>
+<li>一个可变引用</li>
+<li>任意数量的不可变引用</li>
+</ul>
+</li>
+<li>引用必须总是有效的 </li>
+</ul>
+<h2 id="slices"><a href="#slices" class="headerlink" title="slices"></a>slices</h2><p>这也是一个没有所有权的类型.</p>
+<blockquote>
+<p>slice 允许你引用集合中一段连续的元素序列，而不用引用整个集合。</p>
+</blockquote>
+<h3 id="字符串-slice"><a href="#字符串-slice" class="headerlink" title="字符串 slice"></a>字符串 slice</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">let</span> s = String::from(<span class="string">"hello world"</span>);</div><div class="line"></div><div class="line"><span class="built_in">let</span> hello = &amp;s[0..5];</div><div class="line"><span class="built_in">let</span> world = &amp;s[6..11];</div></pre></td></tr></table></figure>
+<p>字符串字面值就是 slice, 即 <code>let s = &quot;Hello, world!&quot;;</code> 的类型是 <code>&amp;str</code>, 这是一个不可变的引用.</p>
+<h1 id="结构体"><a href="#结构体" class="headerlink" title="结构体"></a>结构体</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">struct User &#123;</div><div class="line">    username: String,</div><div class="line">    email: String,</div><div class="line">    sign_in_count: u64,</div><div class="line">    active: bool,</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">let</span> user1 = User &#123;</div><div class="line">    email: String::from(<span class="string">"someone@example.com"</span>),</div><div class="line">    username: String::from(<span class="string">"someusername123"</span>),</div><div class="line">    active: <span class="literal">true</span>,</div><div class="line">    sign_in_count: 1,</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>如果想改变 <code>user1</code> 的字段值, 则要声明为 <code>let mut user1 = xxx</code>. Rust 并不允许只将特定字段标记为可变.</p>
+<h3 id="变量与字段同名时的初始化简写法"><a href="#变量与字段同名时的初始化简写法" class="headerlink" title="变量与字段同名时的初始化简写法"></a>变量与字段同名时的初始化简写法</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">fn build_user(email: String, username: String) -&gt; User &#123;</div><div class="line">    User &#123;</div><div class="line">        email,</div><div class="line">        username,</div><div class="line">        active: <span class="literal">true</span>,</div><div class="line">        sign_in_count: 1,</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="使用结构体更新语法从其他对象创建"><a href="#使用结构体更新语法从其他对象创建" class="headerlink" title="使用结构体更新语法从其他对象创建"></a>使用结构体更新语法从其他对象创建</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">let</span> user2 = User &#123;</div><div class="line">    email: String::from(<span class="string">"another@example.com"</span>),</div><div class="line">    username: String::from(<span class="string">"anotherusername567"</span>),</div><div class="line">    ..user1</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="没有字段名的结构体"><a href="#没有字段名的结构体" class="headerlink" title="没有字段名的结构体"></a>没有字段名的结构体</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">struct Color(i32, i32, i32);</div><div class="line"></div><div class="line"><span class="built_in">let</span> black = Color(0, 0, 0);</div></pre></td></tr></table></figure>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>它的第一个参数总是 <code>self</code> </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#[derive(Debug)]</span></div><div class="line">struct Rectangle &#123;</div><div class="line">    width: u32,</div><div class="line">    height: u32,</div><div class="line">&#125;</div><div class="line"></div><div class="line">impl Rectangle &#123;</div><div class="line">    fn area(&amp;self) -&gt; u32 &#123;</div><div class="line">        self.width * self.height</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">fn <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">    <span class="built_in">let</span> rect1 = Rectangle &#123; width: 30, height: 50 &#125;;</div><div class="line"></div><div class="line">    println!(</div><div class="line">        <span class="string">"The area of the rectangle is &#123;&#125; square pixels."</span>,</div><div class="line">        rect1.area()</div><div class="line">    );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="关联函数"><a href="#关联函数" class="headerlink" title="关联函数"></a>关联函数</h2><p>在 <code>impl</code> 块中定义不以 <code>self</code> 作为参数的函数. 它们是函数, 而不是方法. 例如</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">impl Rectangle &#123;</div><div class="line">    fn square(size: u32) -&gt; Rectangle &#123;</div><div class="line">        Rectangle &#123; width: size, height: size &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="多个-impl-块"><a href="#多个-impl-块" class="headerlink" title="多个 impl 块"></a>多个 impl 块</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">impl Rectangle &#123;</div><div class="line">    fn area(&amp;self) -&gt; u32 &#123;</div><div class="line">        self.width * self.height</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">impl Rectangle &#123;</div><div class="line">    fn can_hold(&amp;self, other: &amp;Rectangle) -&gt; bool &#123;</div><div class="line">        self.width &gt; other.width &amp;&amp; self.height &gt; other.height</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="枚举"><a href="#枚举" class="headerlink" title="枚举"></a>枚举</h1><h2 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">enum IpAddrKind &#123;</div><div class="line">    V4,</div><div class="line">    V6,</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注意, 枚举也可以是这样子的:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">enum IpAddr &#123;</div><div class="line">    V4(u8, u8, u8, u8),</div><div class="line">    V6(String),</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="built_in">let</span> home = IpAddr::V4(127, 0, 0, 1);</div><div class="line"></div><div class="line"><span class="built_in">let</span> loopback = IpAddr::V6(String::from(<span class="string">"::1"</span>));</div></pre></td></tr></table></figure>
+<p>这与Java那种枚举不太一样..</p>
+<h2 id="使用-1"><a href="#使用-1" class="headerlink" title="使用"></a>使用</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">let</span> four = IpAddrKind::V4;</div><div class="line"><span class="built_in">let</span> six = IpAddrKind::V6;</div></pre></td></tr></table></figure>
+<h2 id="空值与-Option-枚举"><a href="#空值与-Option-枚举" class="headerlink" title="空值与 Option 枚举"></a>空值与 Option 枚举</h2><p>标准库的定义</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">enum Option&lt;T&gt; &#123;</div><div class="line">    Some(T),</div><div class="line">    None,</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="match-控制流运算符"><a href="#match-控制流运算符" class="headerlink" title="match 控制流运算符"></a>match 控制流运算符</h2><blockquote>
+<p>遇到第一个符合时就会执行相应的代码.</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">enum Coin &#123;</div><div class="line">    Penny,</div><div class="line">    Nickel,</div><div class="line">    Dime,</div><div class="line">    Quarter,</div><div class="line">&#125;</div><div class="line"></div><div class="line">fn value_in_cents(coin: Coin) -&gt; u32 &#123;</div><div class="line">    match coin &#123;</div><div class="line">        Coin::Penny =&gt; 1,</div><div class="line">        Coin::Nickel =&gt; 5,</div><div class="line">        Coin::Dime =&gt; 10,</div><div class="line">        Coin::Quarter =&gt; 25,</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="匹配-Option"><a href="#匹配-Option" class="headerlink" title="匹配 Option"></a>匹配 Option</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">fn plus_one(x: Option&lt;i32&gt;) -&gt; Option&lt;i32&gt; &#123;</div><div class="line">    match x &#123;</div><div class="line">        None =&gt; None,</div><div class="line">        Some(i) =&gt; Some(i + 1),</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="built_in">let</span> five = Some(5);</div><div class="line"><span class="built_in">let</span> six = plus_one(five);</div><div class="line"><span class="built_in">let</span> none = plus_one(None);</div></pre></td></tr></table></figure>
+<h3 id="通配符"><a href="#通配符" class="headerlink" title="_ 通配符"></a><code>_</code> 通配符</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">let</span> some_u8_value = 0u8;</div><div class="line">match some_u8_value &#123;</div><div class="line">    1 =&gt; println!(<span class="string">"one"</span>),</div><div class="line">    3 =&gt; println!(<span class="string">"three"</span>),</div><div class="line">    5 =&gt; println!(<span class="string">"five"</span>),</div><div class="line">    7 =&gt; println!(<span class="string">"seven"</span>),</div><div class="line">    _ =&gt; (),</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>它会匹配所有的值.</p>
+<h3 id="if-let"><a href="#if-let" class="headerlink" title="if let"></a>if let</h3><p>用来处理只匹配一个模式的值, 而忽略其他模式的情况.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">let</span> some_u8_value = Some(0u8);</div><div class="line">match some_u8_value &#123;</div><div class="line">    Some(3) =&gt; println!(<span class="string">"three"</span>),</div><div class="line">    _ =&gt; (),</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果我们只想处理 <code>Some(3)</code> 时, 可以这样子简写</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># let some_u8_value = Some(0u8);</span></div><div class="line"><span class="keyword">if</span> <span class="built_in">let</span> Some(3) = some_u8_value &#123;</div><div class="line">    println!(<span class="string">"three"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h1><h2 id="创建库模块"><a href="#创建库模块" class="headerlink" title="创建库模块"></a>创建库模块</h2><p>默认情况下 , cargo 就是创建库项目的, <code>--bin</code> 参数才是可执行项目.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cargo new lib_name</div></pre></td></tr></table></figure>
+<p>比较好的建议是:</p>
+<p>在 <code>src/lib.rs</code> 文件中声明模块:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mod client;</div><div class="line"></div><div class="line">mod network;</div></pre></td></tr></table></figure>
+<p>然后在其他的文件中, 提供模块的内容:</p>
+<p><code>src/network.rs</code> 的内容:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">fn <span class="function"><span class="title">connect</span></span>() &#123;</div><div class="line">&#125;</div><div class="line"></div><div class="line">mod server &#123;</div><div class="line">    fn <span class="function"><span class="title">connect</span></span>() &#123;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注意, 这里不需要在 <code>src/network.rs</code> 文件中声明 <code>mod network</code> 了!</p>
+<h2 id="模块与文件系统的规则"><a href="#模块与文件系统的规则" class="headerlink" title="模块与文件系统的规则"></a>模块与文件系统的规则</h2><ul>
+<li>如果一个叫 <code>foo</code> 的模块没有子模块, 应该将 <code>foo</code> 的声明放入叫做 <code>foo.rs</code> 的文件中</li>
+<li>如果一个叫 <code>foo</code> 的模块有子模块, 应该将 <code>foo</code> 的声明放入叫做 <code>foo/mod.rs</code> 的文件中</li>
+</ul>
+<h2 id="私有性规则"><a href="#私有性规则" class="headerlink" title="私有性规则"></a>私有性规则</h2><ul>
+<li>如果一个项是公有的, 它能被任何父模块访问</li>
+<li>如果一个项是私有的, 它能被其直接父模块及其子模块访问</li>
+</ul>
+<h2 id="使用-super-访问父模块"><a href="#使用-super-访问父模块" class="headerlink" title="使用 super 访问父模块"></a>使用 super 访问父模块</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">super::client::connect();</div></pre></td></tr></table></figure>
+<h1 id="cargo-使用本地-crate"><a href="#cargo-使用本地-crate" class="headerlink" title="cargo 使用本地 crate"></a>cargo 使用本地 crate</h1><p>假设项目名为 <code>rust-demo</code>,</p>
+<p>项目目录结构</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">.</div><div class="line">├── Cargo.lock</div><div class="line">├── Cargo.toml</div><div class="line">├── rust-demo.iml</div><div class="line">├── src</div><div class="line">│   ├── lib</div><div class="line">│   │   ├── hello.rs</div><div class="line">│   │   └── mod.rs</div><div class="line">│   ├── main</div><div class="line">│   └── main.rs</div></pre></td></tr></table></figure>
+<p><code>mod.rs</code> 文件内容:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pub mod hello;</div></pre></td></tr></table></figure>
+<p><code>hello.rs</code> 文件内容:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">pub fn <span class="function"><span class="title">say_hello</span></span>() &#123;</div><div class="line">    println!(<span class="string">"hello world"</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>main.rs</code> 文件内容:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">extern crate hello;</div><div class="line"></div><div class="line"></div><div class="line">fn <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">    hello::say_hello()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>Cargo.toml</code> 文件内容</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">[package]</div><div class="line">name = <span class="string">"rust-demo"</span></div><div class="line">version = <span class="string">"0.1.0"</span></div><div class="line">authors = [<span class="string">"emacsist &lt;emacsist@qq.com&gt;"</span>]</div><div class="line"></div><div class="line">[lib]</div><div class="line">name = <span class="string">"hello"</span></div><div class="line">path = <span class="string">"src/lib/hello.rs"</span></div><div class="line"></div><div class="line">[[bin]]</div><div class="line">name = <span class="string">"main"</span></div><div class="line">path = <span class="string">"src/main.rs"</span></div><div class="line"></div><div class="line">[dependencies]</div><div class="line"></div><div class="line">rand = <span class="string">"0.3.14"</span></div></pre></td></tr></table></figure>
+<h1 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h1><h2 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">let</span> v: Vec&lt;i32&gt; = Vec::new();</div><div class="line"></div><div class="line">或</div><div class="line"></div><div class="line"><span class="built_in">let</span> v = vec![1, 2, 3];</div></pre></td></tr></table></figure>
+<p>更新</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">v.push(5);</div></pre></td></tr></table></figure>
+<p>获取</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">let</span> third: &amp;i32 = &amp;v[2];</div><div class="line"><span class="built_in">let</span> third: Option&lt;&amp;i32&gt; = v.get(2);</div></pre></td></tr></table></figure>
+<p>遍历</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">只读:</div><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> &amp;v &#123;</div><div class="line">    println!(<span class="string">"&#123;&#125;"</span>, i);</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">修改:</div><div class="line"><span class="built_in">let</span> mut v = vec![100, 32, 57];</div><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> &amp;mut v &#123;</div><div class="line">    *i += 50;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h2><p>创建</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">let</span> mut s = String::new();</div><div class="line"></div><div class="line"><span class="built_in">let</span> s = String::from(<span class="string">"initial contents"</span>);</div></pre></td></tr></table></figure>
+<p>更新</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">let</span> mut s = String::from(<span class="string">"foo"</span>);</div><div class="line">s.push_str(<span class="string">"bar"</span>);</div></pre></td></tr></table></figure>
+<p>拼接</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">let</span> s1 = String::from(<span class="string">"Hello, "</span>);</div><div class="line"><span class="built_in">let</span> s2 = String::from(<span class="string">"world!"</span>);</div><div class="line"><span class="built_in">let</span> s3 = s1 + &amp;s2;</div><div class="line"></div><div class="line">或</div><div class="line"><span class="built_in">let</span> s = format!(<span class="string">"&#123;&#125;-&#123;&#125;-&#123;&#125;"</span>, s1, s2, s3);</div></pre></td></tr></table></figure>
+<p>不支持索引字符串, 如 <code>s[0]</code></p>
+<p>字符串 slice</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">let</span> hello = <span class="string">"Здравствуйте"</span>;</div><div class="line"><span class="built_in">let</span> s = &amp;hello[0..4];</div></pre></td></tr></table></figure>
+<p>遍历</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> c <span class="keyword">in</span> <span class="string">"नमस्ते"</span>.<span class="function"><span class="title">chars</span></span>() &#123;</div><div class="line">    println!(<span class="string">"&#123;&#125;"</span>, c);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="hash-map"><a href="#hash-map" class="headerlink" title="hash map"></a>hash map</h2><p>创建</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">use std::collections::HashMap;</div><div class="line"></div><div class="line"><span class="built_in">let</span> mut scores = HashMap::new();</div><div class="line"></div><div class="line">scores.insert(String::from(<span class="string">"Blue"</span>), 10);</div><div class="line">scores.insert(String::from(<span class="string">"Yellow"</span>), 50);</div></pre></td></tr></table></figure>
+<p>访问</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">use std::collections::HashMap;</div><div class="line"></div><div class="line"><span class="built_in">let</span> mut scores = HashMap::new();</div><div class="line"></div><div class="line">scores.insert(String::from(<span class="string">"Blue"</span>), 10);</div><div class="line">scores.insert(String::from(<span class="string">"Yellow"</span>), 50);</div><div class="line"></div><div class="line"><span class="built_in">let</span> team_name = String::from(<span class="string">"Blue"</span>);</div><div class="line"><span class="built_in">let</span> score = scores.get(&amp;team_name);</div></pre></td></tr></table></figure>
+<p>更新</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">插入一个相同的 key 名时, 会覆盖前一个值</div><div class="line"></div><div class="line">scores.insert(String::from(<span class="string">"Blue"</span>), 10);</div><div class="line">scores.insert(String::from(<span class="string">"Blue"</span>), 25);</div></pre></td></tr></table></figure>
+<p>只在键没有数据时插入</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">use std::collections::HashMap;</div><div class="line"></div><div class="line"><span class="built_in">let</span> mut scores = HashMap::new();</div><div class="line">scores.insert(String::from(<span class="string">"Blue"</span>), 10);</div><div class="line"></div><div class="line">scores.entry(String::from(<span class="string">"Yellow"</span>)).or_insert(50);</div><div class="line">scores.entry(String::from(<span class="string">"Blue"</span>)).or_insert(50);</div></pre></td></tr></table></figure>
+<p>根据旧值更新一个值</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">use std::collections::HashMap;</div><div class="line"></div><div class="line"><span class="built_in">let</span> text = <span class="string">"hello world wonderful world"</span>;</div><div class="line"></div><div class="line"><span class="built_in">let</span> mut map = HashMap::new();</div><div class="line"></div><div class="line"><span class="keyword">for</span> word <span class="keyword">in</span> text.<span class="function"><span class="title">split_whitespace</span></span>() &#123;</div><div class="line">    <span class="built_in">let</span> count = map.entry(word).or_insert(0);</div><div class="line">    *count += 1;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h1><h2 id="可恢复错误-Result-lt-T-E-gt"><a href="#可恢复错误-Result-lt-T-E-gt" class="headerlink" title="可恢复错误: Result&lt;T, E&gt;"></a>可恢复错误: <code>Result&lt;T, E&gt;</code></h2><h2 id="不可恢复错误-panic"><a href="#不可恢复错误-panic" class="headerlink" title="不可恢复错误: panic!"></a>不可恢复错误: <code>panic!</code></h2><p>默认下, <code>panic!</code> 宏会 unwinding 程序, 这意味着 Rust 会回溯栈并清理它遇到的每一个函数的数据. 另一种选择是终止 <code>abort</code>(这会使二进制文件更小). 可以在 <code>Cargo.toml</code> 文件中配置:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[profile.release]</div><div class="line">panic = <span class="string">'abort'</span></div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">fn <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">    panic!(<span class="string">"crash and burn"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="简写-unwrap-和-expect"><a href="#简写-unwrap-和-expect" class="headerlink" title="简写 unwrap 和 expect"></a>简写 unwrap 和 expect</h3><p><code>unwrap</code> , 如果 Result 是 Ok, 则返回 Ok 中的值, 如果是 Err, 则会调用 <code>panic!</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">use std::fs::File;</div><div class="line"></div><div class="line">fn <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">    <span class="built_in">let</span> f = File::open(<span class="string">"hello.txt"</span>).unwrap();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>expect</code> , 类似 <code>unwrap</code> , 但提供一个好的错误信息.</p>
+<h2 id="传播错误"><a href="#传播错误" class="headerlink" title="传播错误"></a>传播错误</h2><p>返回 <code>Result&lt;T, E&gt;</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; &#123;</div><div class="line">    <span class="built_in">let</span> f = File::open(<span class="string">"hello.txt"</span>);</div><div class="line"></div><div class="line">    <span class="built_in">let</span> mut f = match f &#123;</div><div class="line">        Ok(file) =&gt; file,</div><div class="line">        Err(e) =&gt; <span class="built_in">return</span> Err(e),</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    <span class="built_in">let</span> mut s = String::new();</div><div class="line"></div><div class="line">    match f.read_to_string(&amp;mut s) &#123;</div><div class="line">        Ok(_) =&gt; Ok(s),</div><div class="line">        Err(e) =&gt; Err(e),</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="简写-问号运算符"><a href="#简写-问号运算符" class="headerlink" title="简写 ? 问号运算符"></a>简写 <code>?</code> 问号运算符</h3><blockquote>
+<p>向调用者返回错误的函数</p>
+</blockquote>
+<p>并且要注意, 它只能被用于返回 Result 的函数</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; &#123;</div><div class="line">    <span class="built_in">let</span> mut s = String::new();</div><div class="line"></div><div class="line">    File::open(<span class="string">"hello.txt"</span>)?.read_to_string(&amp;mut s)?;</div><div class="line"></div><div class="line">    Ok(s)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h1><p>泛型的函数签名:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fn largest&lt;T&gt;(list: &amp;[T]) -&gt; T &#123;</div></pre></td></tr></table></figure>
+<p>结构体中的泛型:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">struct Point&lt;T, U&gt; &#123;</div><div class="line">    x: T,</div><div class="line">    y: U,</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="trait"><a href="#trait" class="headerlink" title="trait"></a>trait</h1><blockquote>
+<p>定义共享的行为</p>
+</blockquote>
+<h2 id="定义-2"><a href="#定义-2" class="headerlink" title="定义"></a>定义</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">pub trait Summarizable &#123;</div><div class="line">    fn summary(&amp;self) -&gt; String;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>一个 trait 可以有多个方法签名定义.</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">pub struct NewsArticle &#123;</div><div class="line">    pub headline: String,</div><div class="line">    pub location: String,</div><div class="line">    pub author: String,</div><div class="line">    pub content: String,</div><div class="line">&#125;</div><div class="line"></div><div class="line">impl Summarizable <span class="keyword">for</span> NewsArticle &#123;</div><div class="line">    fn summary(&amp;self) -&gt; String &#123;</div><div class="line">        format!(<span class="string">"&#123;&#125;, by &#123;&#125; (&#123;&#125;)"</span>, self.headline, self.author, self.location)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="默认实现"><a href="#默认实现" class="headerlink" title="默认实现"></a>默认实现</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">pub trait Summarizable &#123;</div><div class="line">    fn summary(&amp;self) -&gt; String &#123;</div><div class="line">        String::from(<span class="string">"(Read more...)"</span>)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">impl Summarizable <span class="keyword">for</span> NewsArticle &#123;&#125;</div></pre></td></tr></table></figure>
+<h2 id="trait-bounds"><a href="#trait-bounds" class="headerlink" title="trait bounds"></a>trait bounds</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">pub fn notify&lt;T: Summarizable&gt;(item: T) &#123;</div><div class="line">    println!(<span class="string">"Breaking news! &#123;&#125;"</span>, item.summary());</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h1><blockquote>
+<p>单个的生命周期注解本身没有多少意义：生命周期注解告诉 Rust 多个引用的泛型生命周期参数如何相互联系</p>
+</blockquote>
+<p>注解法 : <code>&#39;a</code> , 这表示 有一个名为 <code>&#39;a</code> 的生命周期参数.</p>
+<p><em>当从函数返回一个引用，返回值的生命周期参数需要与一个参数的生命周期参数相匹配。如果返回的引用 没有 指向任何一个参数，那么唯一的可能就是它指向一个函数内部创建的值，它将会是一个悬垂引用，因为它将会在函数结束时离开作用域</em></p>
+<p>结构体的生命周期:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">struct ImportantExcerpt&lt;<span class="string">'a&gt; &#123;</span></div><div class="line">    part: &amp;'a str,</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="何时不需要生命周期注解的规则"><a href="#何时不需要生命周期注解的规则" class="headerlink" title="何时不需要生命周期注解的规则"></a>何时不需要生命周期注解的规则</h2><ul>
+<li>每一个是引用的参数都有它自己的生命周期参数。换句话说就是，有一个引用参数的函数有一个生命周期参数：<code>fn foo&lt;&#39;a&gt;(x: &amp;&#39;a i32)</code>，有两个引用参数的函数有两个不同的生命周期参数，fn foo&lt;’a, ‘b&gt;(x: &amp;’a i32, y: &amp;’b i32)，依此类推</li>
+<li>如果只有一个输入生命周期参数，那么它被赋予所有输出生命周期参数：<code>fn foo&lt;&#39;a&gt;(x: &amp;&#39;a i32) -&gt; &amp;&#39;a i32</code> </li>
+<li>如果方法有多个输入生命周期参数，不过其中之一因为方法的缘故为 <code>&amp;self</code> 或 <code>&amp;mut self</code>，那么 <code>self</code> 的生命周期被赋给所有输出生命周期参数。这使得方法编写起来更简洁。</li>
+</ul>
+<h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><p>在 <code>fn</code> 行之前加上 <code>#[test]</code> 就会将当前的函数变成测试函数.</p>
+<h2 id="执行-test"><a href="#执行-test" class="headerlink" title="执行 test"></a>执行 test</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cargo <span class="built_in">test</span></div></pre></td></tr></table></figure>
+<h2 id="assert-宏检测-bool-结果"><a href="#assert-宏检测-bool-结果" class="headerlink" title="assert! 宏检测 bool 结果"></a><code>assert!</code> 宏检测 bool 结果</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">assert!(larger.can_hold(&amp;smaller));</div></pre></td></tr></table></figure>
+<h2 id="相等或不相等测试"><a href="#相等或不相等测试" class="headerlink" title="相等或不相等测试"></a>相等或不相等测试</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">assert_eq!(4, add_two(2));</div><div class="line"></div><div class="line">assert_ne!(4, add_two(2));</div></pre></td></tr></table></figure>
+<h2 id="并行或串行测试"><a href="#并行或串行测试" class="headerlink" title="并行或串行测试"></a>并行或串行测试</h2><p>默认会使用线程来并行的运行测试. 也可以指定线程数:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cargo <span class="built_in">test</span> -- --<span class="built_in">test</span>-threads=1</div></pre></td></tr></table></figure>
+<h2 id="测试通过时也打印输出"><a href="#测试通过时也打印输出" class="headerlink" title="测试通过时也打印输出"></a>测试通过时也打印输出</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cargo <span class="built_in">test</span> -- --nocapture</div></pre></td></tr></table></figure>
+<h2 id="单元测试"><a href="#单元测试" class="headerlink" title="单元测试"></a>单元测试</h2><p>通过测试函数名来进行测试</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cargo <span class="built_in">test</span> one_hundred</div></pre></td></tr></table></figure>
+<p>注意, 这种情况下, 默认会执行所有以 <code>one_hundred</code> 名字开头的函数的.</p>
+<h2 id="忽略测试"><a href="#忽略测试" class="headerlink" title="忽略测试"></a>忽略测试</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#[test]</span></div><div class="line"><span class="comment">#[ignore]</span></div><div class="line">fn <span class="function"><span class="title">expensive_test</span></span>() &#123;</div><div class="line">    // code that takes an hour to run</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="只运行那些忽略的测试函数"><a href="#只运行那些忽略的测试函数" class="headerlink" title="只运行那些忽略的测试函数"></a>只运行那些忽略的测试函数</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cargo <span class="built_in">test</span> -- --ignored</div></pre></td></tr></table></figure>
+<h2 id="组织结构"><a href="#组织结构" class="headerlink" title="组织结构"></a>组织结构</h2><h3 id="单元测试-1"><a href="#单元测试-1" class="headerlink" title="单元测试"></a>单元测试</h3><p>传统做法是在每个文件中创建包含测试函数的 <code>tests</code> 模块，并使用 <code>cfg(test)</code> 标注模块。</p>
+<h3 id="cfg-test"><a href="#cfg-test" class="headerlink" title="#[cfg(test)]"></a><code>#[cfg(test)]</code></h3><p>告诉 Rust 只在执行 cargo test 时才编译和运行测试代码，而在运行 cargo build 时不这么做.</p>
+<h3 id="集成测试"><a href="#集成测试" class="headerlink" title="集成测试"></a>集成测试</h3><p>在 <code>src</code> 目录下创建一个 <code>tests</code>  目录.</p>
+<p><code>tests/integration_test.rs</code>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">extern crate adder;</div><div class="line"></div><div class="line"><span class="comment">#[test]</span></div><div class="line">fn <span class="function"><span class="title">it_adds_two</span></span>() &#123;</div><div class="line">    assert_eq!(4, adder::add_two(2));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="命令行程序"><a href="#命令行程序" class="headerlink" title="命令行程序"></a>命令行程序</h1><h2 id="获取参数"><a href="#获取参数" class="headerlink" title="获取参数"></a>获取参数</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">use std::env;</div><div class="line"></div><div class="line">fn <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">    <span class="built_in">let</span> args: Vec&lt;String&gt; = env::args().collect();</div><div class="line">    println!(<span class="string">"&#123;:?&#125;"</span>, args);</div><div class="line">    </div><div class="line">    <span class="built_in">let</span> query = &amp;args[1];</div><div class="line">    <span class="built_in">let</span> filename = &amp;args[2];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注意. 第0个参数是程序路径和程序名.</p>
+<h2 id="读取和输出文件内容"><a href="#读取和输出文件内容" class="headerlink" title="读取和输出文件内容"></a>读取和输出文件内容</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">let</span> mut f = File::open(filename).expect(<span class="string">"file not found"</span>);</div><div class="line"></div><div class="line"><span class="built_in">let</span> mut contents = String::new();</div><div class="line">f.read_to_string(&amp;mut contents)</div><div class="line">    .expect(<span class="string">"something went wrong reading the file"</span>);</div><div class="line"></div><div class="line">println!(<span class="string">"With text:\n&#123;&#125;"</span>, contents);</div></pre></td></tr></table></figure>
+<h1 id="闭包-可以捕获环境的匿名函数"><a href="#闭包-可以捕获环境的匿名函数" class="headerlink" title="闭包: 可以捕获环境的匿名函数"></a>闭包: 可以捕获环境的匿名函数</h1><blockquote>
+<p>可以在一个地方创建闭包，然后在不同的上下文中执行闭包运算。不同于函数，闭包允许捕获调用者作用域中的值.</p>
+</blockquote>
+<h2 id="闭包类型推断和注解"><a href="#闭包类型推断和注解" class="headerlink" title="闭包类型推断和注解"></a>闭包类型推断和注解</h2><blockquote>
+<p>闭包不要求像 fn 函数那样在参数和返回值上注明类型.</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">let</span> expensive_closure = |num| &#123;</div><div class="line">        println!(<span class="string">"calculating slowly..."</span>);</div><div class="line">        thread::sleep(Duration::from_secs(2));</div><div class="line">        num</div><div class="line">    &#125;;</div></pre></td></tr></table></figure>
+<p>当然, 你也可以显式注明:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">let</span> expensive_closure = |num: u32| -&gt; u32 &#123;</div><div class="line">    println!(<span class="string">"calculating slowly..."</span>);</div><div class="line">    thread::sleep(Duration::from_secs(2));</div><div class="line">    num</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h2 id="多次调用闭包注意"><a href="#多次调用闭包注意" class="headerlink" title="多次调用闭包注意"></a>多次调用闭包注意</h2><blockquote>
+<p>可以创建一个存放闭包和调用闭包结果的结构体。该结构体只会在需要结果时执行闭包，并会缓存结果值，这样余下的代码就不必再负责保存结果并可以复用该值。你可能见过这种模式被称 memoization 或 lazy evaluation。</p>
+</blockquote>
+<p>可以使用带有 <code>Fn</code> 系列 trait 由标准库提供的闭包.这些都实现了 trait <code>Fn</code>, <code>FnMut</code>, <code>FnOnce</code> 中的一个.</p>
+<h1 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h1><blockquote>
+<p>它是惰性的.</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">let</span> v1 = vec![1, 2, 3];</div><div class="line"></div><div class="line"><span class="built_in">let</span> v1_iter = v1.iter();</div></pre></td></tr></table></figure>
+<h2 id="消费迭代器"><a href="#消费迭代器" class="headerlink" title="消费迭代器"></a>消费迭代器</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">let</span> v1 = vec![1, 2, 3];</div><div class="line"></div><div class="line">   <span class="built_in">let</span> v1_iter = v1.iter();</div><div class="line"></div><div class="line">   <span class="built_in">let</span> total: i32 = v1_iter.sum();</div></pre></td></tr></table></figure>
+<h2 id="产生其他迭代器"><a href="#产生其他迭代器" class="headerlink" title="产生其他迭代器"></a>产生其他迭代器</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">let</span> v1: Vec&lt;i32&gt; = vec![1, 2, 3];</div><div class="line"></div><div class="line"><span class="built_in">let</span> v2: Vec&lt;_&gt; = v1.iter().map(|x| x + 1).collect();</div></pre></td></tr></table></figure>
+<h1 id="Cargo"><a href="#Cargo" class="headerlink" title="Cargo"></a>Cargo</h1><h2 id="发布配置"><a href="#发布配置" class="headerlink" title="发布配置"></a>发布配置</h2><p>默认情况下下, 使用的是 <code>dev</code> 配置.即 (cargo build) 时, 使用的是 <code>dev</code> 配置.</p>
+<p>也可以使用 <code>release</code> :</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cargo build --release</div></pre></td></tr></table></figure>
+<p><code>Cargo.toml</code> 中默认的配置:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[profile.dev]</div><div class="line">opt-level = 0</div><div class="line"></div><div class="line">[profile.release]</div><div class="line">opt-level = 3</div></pre></td></tr></table></figure>
+<h2 id="工作空间"><a href="#工作空间" class="headerlink" title="工作空间"></a>工作空间</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ mkdir add</div><div class="line">$ <span class="built_in">cd</span> add</div><div class="line">$ vim Cargo.toml</div><div class="line"></div><div class="line">[workspace]</div><div class="line"></div><div class="line">members = [</div><div class="line">    <span class="string">"adder"</span>,</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>然后在 add 目录下执行命令创建一个二进制 crate. 然后在 <code>add</code> 中执行命令: <code>cargo build</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">cargo new --bin adder</div><div class="line"></div><div class="line">├── Cargo.lock</div><div class="line">├── Cargo.toml</div><div class="line">├── adder</div><div class="line">│   ├── Cargo.toml</div><div class="line">│   └── src</div><div class="line">│       └── main.rs</div><div class="line">└── target</div></pre></td></tr></table></figure>
+<p>可以这样子创建多个 crate.</p>
+<p>然后编译指定的 project:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cargo build -p adder</div></pre></td></tr></table></figure>
+<h2 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cargo install ripgrep</div></pre></td></tr></table></figure>
+<h1 id="智能指针"><a href="#智能指针" class="headerlink" title="智能指针"></a>智能指针</h1><blockquote>
+<p>在 Rust 中，普通引用和智能指针的一个额外的区别是引用是一类只借用数据的指针；相反大部分情况，智能指针 拥有 他们指向的数据。 智能指针通常使用结构体实现.</p>
+</blockquote>
+<h2 id="Box-在堆上存储数据，并且可确定大小"><a href="#Box-在堆上存储数据，并且可确定大小" class="headerlink" title="Box : 在堆上存储数据，并且可确定大小"></a>Box<t> : 在堆上存储数据，并且可确定大小</t></h2><h2 id="Deref-trait-将智能指针当作常规引用处理"><a href="#Deref-trait-将智能指针当作常规引用处理" class="headerlink" title="Deref trait : 将智能指针当作常规引用处理"></a>Deref trait : 将智能指针当作常规引用处理</h2><h2 id="Drop-trait-运行清理代码"><a href="#Drop-trait-运行清理代码" class="headerlink" title="Drop trait: 运行清理代码"></a>Drop trait: 运行清理代码</h2><h2 id="Rc-引用计数智能指针"><a href="#Rc-引用计数智能指针" class="headerlink" title="Rc: 引用计数智能指针"></a>Rc<t>: 引用计数智能指针</t></h2><h1 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h1><h2 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h2><h3 id="创建线程"><a href="#创建线程" class="headerlink" title="创建线程"></a>创建线程</h3><blockquote>
+<p>thread::spawn</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">use std::thread;</div><div class="line">use std::time::Duration;</div><div class="line"></div><div class="line">fn <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">    thread::spawn(|| &#123;</div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> 1..10 &#123;</div><div class="line">            println!(<span class="string">"hi number &#123;&#125; from the spawned thread!"</span>, i);</div><div class="line">            thread::sleep(Duration::from_millis(1));</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> 1..5 &#123;</div><div class="line">        println!(<span class="string">"hi number &#123;&#125; from the main thread!"</span>, i);</div><div class="line">        thread::sleep(Duration::from_millis(1));</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="join-等待线程结束"><a href="#join-等待线程结束" class="headerlink" title="join 等待线程结束"></a>join 等待线程结束</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">use std::thread;</div><div class="line">use std::time::Duration;</div><div class="line"></div><div class="line">fn <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">    <span class="built_in">let</span> handle = thread::spawn(|| &#123;</div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> 1..10 &#123;</div><div class="line">            println!(<span class="string">"hi number &#123;&#125; from the spawned thread!"</span>, i);</div><div class="line">            thread::sleep(Duration::from_millis(1));</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> 1..5 &#123;</div><div class="line">        println!(<span class="string">"hi number &#123;&#125; from the main thread!"</span>, i);</div><div class="line">        thread::sleep(Duration::from_millis(1));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    handle.join().unwrap();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="move-闭包"><a href="#move-闭包" class="headerlink" title="move 闭包"></a>move 闭包</h3><p>强制闭包获取其使用的环境值的所有权</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">use std::thread;</div><div class="line"></div><div class="line">fn <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">    <span class="built_in">let</span> v = vec![1, 2, 3];</div><div class="line"></div><div class="line">    <span class="built_in">let</span> handle = thread::spawn(move || &#123;</div><div class="line">        println!(<span class="string">"Here's a vector: &#123;:?&#125;"</span>, v);</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    handle.join().unwrap();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="消息传递"><a href="#消息传递" class="headerlink" title="消息传递"></a>消息传递</h2><p>创建通道</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">use std::sync::mpsc;</div><div class="line"></div><div class="line">fn <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">    <span class="built_in">let</span> (tx, rx) = mpsc::channel();</div><div class="line"><span class="comment">#     tx.send(()).unwrap();</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>mpsc 是 多个生产者，单个消费者</p>
+</blockquote>
+<p>生产者和消费者:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">use std::thread;</div><div class="line">use std::sync::mpsc;</div><div class="line"></div><div class="line">fn <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">    <span class="built_in">let</span> (tx, rx) = mpsc::channel();</div><div class="line"></div><div class="line">    thread::spawn(move || &#123;</div><div class="line">        <span class="built_in">let</span> val = String::from(<span class="string">"hi"</span>);</div><div class="line">        tx.send(val).unwrap();</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">use std::thread;</div><div class="line">use std::sync::mpsc;</div><div class="line">use std::time::Duration;</div><div class="line"></div><div class="line">fn <span class="function"><span class="title">main</span></span>() &#123;</div><div class="line">    <span class="built_in">let</span> (tx, rx) = mpsc::channel();</div><div class="line"></div><div class="line">    thread::spawn(move || &#123;</div><div class="line">        <span class="built_in">let</span> vals = vec![</div><div class="line">            String::from(<span class="string">"hi"</span>),</div><div class="line">            String::from(<span class="string">"from"</span>),</div><div class="line">            String::from(<span class="string">"the"</span>),</div><div class="line">            String::from(<span class="string">"thread"</span>),</div><div class="line">        ];</div><div class="line"></div><div class="line">        <span class="keyword">for</span> val <span class="keyword">in</span> vals &#123;</div><div class="line">            tx.send(val).unwrap();</div><div class="line">            thread::sleep(Duration::from_secs(1));</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    <span class="keyword">for</span> received <span class="keyword">in</span> rx &#123;</div><div class="line">        println!(<span class="string">"Got: &#123;&#125;"</span>, received);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="共享状态"><a href="#共享状态" class="headerlink" title="共享状态"></a>共享状态</h2><p>互斥器: <code>Mutex&lt;T&gt;</code></p>
+
+                                
+    </div>
+</article>
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 emacsist</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/img/wxpay.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/img/alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/books/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              阅读
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
